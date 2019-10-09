@@ -37,6 +37,11 @@ public class Car : Controller
         //Nothing for now
     }
 
+    public override void OnPossess()
+    {
+        //Nothing for now
+    }
+
     public override void OnToggleCrouch(bool crouching)
     {
         throw new System.NotImplementedException();

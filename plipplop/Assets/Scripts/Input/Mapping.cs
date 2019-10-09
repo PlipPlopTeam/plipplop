@@ -8,6 +8,7 @@ using XInputDotNetPure;
 public class Mapping : ScriptableObject
 {
     public PlayerIndex index;
+    [SerializeField]
     public List<MappedAction> map = new List<MappedAction>();
 
     MappingWrapper wrapper;
