@@ -25,9 +25,15 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
-        currentPosition = position = originPosition;
-        currentRotation = rotation = originRotation;
-        cam.fieldOfView = fieldOfView = originFOV;
+        currentPosition = position;
+        position = currentPosition;
+
+        currentRotation = rotation;
+        originRotation = currentRotation;
+
+        cam.fieldOfView = fieldOfView;
+        originFOV = cam.fieldOfView;
+
         originDistance = distance;
     }
 
