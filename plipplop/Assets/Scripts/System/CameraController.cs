@@ -4,127 +4,119 @@ public class CameraController : MonoBehaviour
 {
     [Header("Referencies")]
     public Camera cam;
-    public Transform target;
     [Header("Settings")]
     public float distance = 1f;
-    public Vector3 positionOffset;
+    public float fieldOfView = 75f;
+    [Space(15)]
+    public Transform target;
+    public Vector3 rotation;
+    public Vector3 position;
+    [Header("Lerps")]
+    public float fovLerpSpeed = 2f;
     public float positionLerpSpeed = 5f;
     public float rotationLerpSpeed = 1f;
-    [Header("FOV")]
-    public float fieldOfView = 75f;
-    public float fovLerpSpeed = 2f;
-    float originFOV;
 
+    float originFOV;
     float originDistance;
     Vector3 originPosition;
-    Vector3 targetPosition;
-    Vector3 directionToPivot;
-    Quaternion targetRotation;
-    Quaternion originRotation;
+    Vector3 originRotation;
+    Vector3 currentRotation;
+    Vector3 currentPosition;
 
     void Start()
     {
-        directionToPivot = (cam.transform.position - transform.position).normalized;
-        originDistance = (cam.transform.position - transform.position).magnitude;
-        originPosition = transform.position;
-        originRotation = cam.transform.rotation;
-        distance = originDistance;
-        originFOV = cam.fieldOfView = fieldOfView;
+        currentPosition = position = originPosition;
+        currentRotation = rotation = originRotation;
+        cam.fieldOfView = fieldOfView = originFOV;
+        originDistance = distance;
     }
 
+#region INSPECTOR 
     void OnDrawGizmosSelected()
     {
         Gizmos.color = new Color32(173, 216, 230, 255);
-
         if(target)
         {
-            UnityEditor.Handles.DrawWireDisc(
-                transform.position,
-                transform.up, 
-                0.5f
-            );
+            UnityEditor.Handles.DrawWireDisc(transform.position, transform.up, 0.5f);
             Gizmos.DrawLine(transform.position, target.position);
-            UnityEditor.Handles.DrawWireDisc(
-                target.position,
-                target.up, 
-                1f
-            );
+            UnityEditor.Handles.DrawWireDisc(target.position, target.up, 1f);
+        }
+        else
+        {
+            Gizmos.DrawLine(transform.position, position);
+            Gizmos.DrawWireCube(position, Vector3.one/10f);
         }
     }
-
+    
     // Execute when editing values in the inspector
     void OnValidate()
     {
-        directionToPivot = (cam.transform.position - transform.position).normalized;
-        
-        if(directionToPivot == Vector3.zero)
-            directionToPivot = -cam.transform.forward;
-
-        if(target != null)
-            transform.position = target.position + positionOffset;
-
-        if(distance < 0)
-            distance = 0;
-        
-        cam.transform.localPosition = directionToPivot * distance;
-        
-        if(cam.transform.localPosition.z > 0) 
-            cam.transform.localPosition = new Vector3(cam.transform.localPosition.x, cam.transform.localPosition.y, 0f);
-
+        currentPosition = position;
+        currentRotation = rotation;
         cam.fieldOfView = fieldOfView;
+        if(distance < 0) distance = 0;
+        if(target != null) currentPosition += target.position;
+        Apply();
     }
+#endregion
 
     void Update()
     {
-        // POSITION
-        if(target != null)
-            transform.position = Vector3.Lerp(transform.position, target.position + positionOffset, Time.deltaTime * positionLerpSpeed);
-            //transform.forward = Vector3.Lerp(transform.forward, target.forward, Time.deltaTime * rotationLerpSpeed);
+        Vector3 offset = Vector3.zero;
+        if(distance < 0) distance = 0;
+        if(target != null) offset = target.position;
 
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationLerpSpeed);
-
-        // DISTANCE
-        cam.transform.localPosition = Vector3.Lerp(cam.transform.localPosition, directionToPivot * distance, Time.deltaTime * positionLerpSpeed);
-        
-        // FOV
+        // Lerping current values
+        currentPosition = Vector3.Lerp(currentPosition, position + offset, Time.deltaTime * positionLerpSpeed);
+        currentRotation = Vector3.Lerp(currentRotation, rotation, Time.deltaTime * rotationLerpSpeed);
         cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, fieldOfView, Time.deltaTime * fovLerpSpeed);
+
+        // Applying current values
+        Apply();
     }
 
-    public void JumpTo(Vector3 newPoint, float newDistance)
+    void Apply()
     {
-        transform.position = newPoint;
-        cam.transform.localPosition = directionToPivot * distance;
-    }
+        transform.forward = -(transform.position - currentPosition).normalized;
+        transform.position = currentPosition + Quaternion.Euler(currentRotation) * Vector3.forward * distance;
+        cam.fieldOfView = fieldOfView;
+    } // Apply the values to the camera 
 
-    public void FocusOn(Vector3 newPosition, float newDistance)
+    public void Focus(Vector3 newPosition, float newDistance)
     {
-        targetPosition = newPosition;
+        position = newPosition;
         target = null;
         distance = newDistance;
-    }
-    public void FocusOn(Transform newTransform, float newDistance)
-    {
-        target = newTransform;
-        targetPosition = Vector3.zero;
-        distance = newDistance;
-    }
+    } // Focus camera on a new position (Vector3)
 
-    public void ZoomOn(Transform newTransform, float fov)
+    public void Focus(Transform newTarget, float newDistance)
     {
-        target = newTransform;
-        targetPosition = Vector3.zero;
-        fieldOfView = fov;
-    }
+        target = newTarget;
+        position = Vector3.zero;
+        distance = newDistance;
+    } // Focus camera on a new target (transform)
+
+    public void Teleport()
+    {
+        currentPosition = position;
+        currentRotation = rotation;
+        cam.fieldOfView = fieldOfView;
+
+        transform.forward = -(transform.position - currentPosition).normalized;
+        transform.position = currentPosition + Quaternion.Euler(currentRotation) * Vector3.forward * distance;
+        cam.fieldOfView = fieldOfView;
+    } // Teleport all the camera values instantly (to ignore lerp)
 
     public void ResetFov()
     {
         fieldOfView = originFOV;
-    }
+    } // Reset the FOV to the origin FOV
 
     public void Reset()
     {
         target = null;
-        targetPosition = originPosition;
+        position = originPosition;
+        rotation = originRotation;
         distance = originDistance;
-    }
+    } // Reset all the values to the origin values
 }
