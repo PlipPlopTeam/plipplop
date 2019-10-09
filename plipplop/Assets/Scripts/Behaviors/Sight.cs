@@ -44,7 +44,7 @@ public class Sight : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        Gizmos.color = new Color32(173, 216, 230, 255);
+        Gizmos.color = new Color32(255, 215, 0, 255);
 
         Quaternion right = Quaternion.AngleAxis(-fieldOfViewAngle/2, transform.up);
         Quaternion left = Quaternion.AngleAxis(fieldOfViewAngle/2, transform.up);
@@ -57,10 +57,17 @@ public class Sight : MonoBehaviour
         Gizmos.DrawLine(transform.position + offset, down * transform.forward * range + offset);
 
         Vector3 end = ((up * transform.forward * range) + (down * transform.forward * range)) / 2f;
+        
+        UnityEditor.Handles.color = new Color32(255, 215, 0, 255);
         UnityEditor.Handles.DrawWireDisc(
             end + offset,
             (transform.position - (transform.position + transform.forward * range)).normalized, 
             Vector3.Distance(end, up * transform.forward * range)
         );
+    }
+
+    void OnValidate()
+    {
+        if(range < 0f) range = 0f;
     }
 }

@@ -16,24 +16,26 @@ public class CameraController : MonoBehaviour
     public float positionLerpSpeed = 5f;
     public float rotationLerpSpeed = 1f;
 
+    // MOVEMENT
     float originFOV;
     float originDistance;
     Vector3 originPosition;
     Vector3 originRotation;
     Vector3 currentRotation;
     Vector3 currentPosition;
+    // SHAKE
+    private float timer = 0f;
+    private float intensity = 0.7f;
+    private float duration = 0f;
 
     void Start()
     {
         currentPosition = position;
         position = currentPosition;
-
         currentRotation = rotation;
         originRotation = currentRotation;
-
         cam.fieldOfView = fieldOfView;
         originFOV = cam.fieldOfView;
-
         originDistance = distance;
     }
 
@@ -77,8 +79,27 @@ public class CameraController : MonoBehaviour
         currentRotation = Vector3.Lerp(currentRotation, rotation, Time.deltaTime * rotationLerpSpeed);
         cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, fieldOfView, Time.deltaTime * fovLerpSpeed);
 
+        // Shake
+        if(timer > 0)
+        {
+            timer -= Time.deltaTime;
+            currentRotation += Random.insideUnitSphere * intensity;
+            intensity *= timer/duration;
+
+            if(timer <= 0) Teleport();
+        }
+        
         // Applying current values
         Apply();
+    }
+
+    [ContextMenu("Shake")]
+    public void DEBUG_Shake() {Shake(5f, 2f);}
+    public void Shake(float i = 0.5f, float d = 1f)
+    {   
+        intensity = i;
+        duration = d;
+        timer = duration;
     }
 
     void Apply()
@@ -107,10 +128,7 @@ public class CameraController : MonoBehaviour
         currentPosition = position;
         currentRotation = rotation;
         cam.fieldOfView = fieldOfView;
-
-        transform.forward = -(transform.position - currentPosition).normalized;
-        transform.position = currentPosition + Quaternion.Euler(currentRotation) * Vector3.forward * distance;
-        cam.fieldOfView = fieldOfView;
+        Apply();
     } // Teleport all the camera values instantly (to ignore lerp)
 
     public void ResetFov()
