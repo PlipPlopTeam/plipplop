@@ -28,13 +28,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1409258629170664864}
-  m_LocalRotation: {x: 0.000000107488226, y: 0.92387956, z: -0.38268343, w: 0.00000025949953}
-  m_LocalPosition: {x: 0, y: 7.0710683, z: 7.071067}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 45.000004, y: 179.99998, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &1409258629170664862
 Camera:
   m_ObjectHideFlags: 0
@@ -60,7 +60,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 70
+  field of view: 75
   orthographic: 0
   orthographic size: 100
   m_Depth: 0
@@ -115,11 +115,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 1409258629170664862}
-  distance: 10
-  fieldOfView: 70
+  settings: {fileID: 0}
+  defaultSettings: {fileID: 11400000, guid: 951be87389e447e4ea8391b41d7ca479, type: 2}
   target: {fileID: 0}
-  rotation: {x: -45, y: 0, z: 0}
-  position: {x: 0, y: 0, z: 0}
-  fovLerpSpeed: 2
-  positionLerpSpeed: 5
-  rotationLerpSpeed: 1
+  maxEffect: 2
+  multiplier: 1
+  distanceRange: {x: 5, y: 10}
+  fovRange: {x: 60, y: 70}
