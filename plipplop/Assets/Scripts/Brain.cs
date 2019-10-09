@@ -28,4 +28,9 @@ public class Brain
             mapping.Axis(ACTION.MOVE_RIGHT_LEFT)
         );
     }
+
+    public void Possess(Controller controller)
+    {
+        this.controller = controller;
+    }
 }

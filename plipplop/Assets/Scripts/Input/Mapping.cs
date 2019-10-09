@@ -30,7 +30,7 @@ public class Mapping : ScriptableObject
         public bool isPressed = false;
     }
 
-    public Mapping()
+    private void Awake()
     {
         wrapper = new MappingWrapper(index);
 
@@ -46,6 +46,7 @@ public class Mapping : ScriptableObject
                 }
             );
         }
+        Debug.Log(string.Format("Constructed {0} inputs", registeredInputs.Count));
         map.Clear();
     }
 
@@ -84,21 +85,33 @@ public class Mapping : ScriptableObject
 
     public bool IsHeld(ACTION a)
     {
-        return inputValues[a].isHeld;
+        try {
+            return inputValues[a].isHeld;
+        }
+        catch (KeyNotFoundException) { throw new System.Exception("UNKNOWN KEY " + a); }
     }
 
     public bool IsPressed(ACTION a)
     {
-        return inputValues[a].isPressed;
+        try {
+            return inputValues[a].isPressed;
+        }
+        catch (KeyNotFoundException) { throw new System.Exception("UNKNOWN KEY " + a); }
     }
 
     public bool IsReleased(ACTION a)
     {
-        return inputValues[a].isReleased;
+        try {
+            return inputValues[a].isReleased;
+        }
+        catch (KeyNotFoundException) { throw new System.Exception("UNKNOWN KEY " + a); }
     }
 
     public float Axis(ACTION a)
     {
-        return this[a];
+        try {
+            return this[a];
+        }
+        catch (KeyNotFoundException) { throw new System.Exception("UNKNOWN AXIS " + a); }
     }
 }

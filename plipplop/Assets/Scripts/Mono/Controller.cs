@@ -1,9 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
-public abstract class Controller
+public abstract class Controller : MonoBehaviour
 {
+    [Header("Inherited properties")]
+    public bool addRigidBody = false;
+
     public abstract void OnEject();
     public abstract void OnJump();
     public abstract void OnToggleCrouch(bool crouching);
@@ -11,5 +15,11 @@ public abstract class Controller
     public abstract void Move(Vector3 direction);
     public void Move(float fb, float rl) {
         Move(new Vector3(fb, 0f, rl));
+    }
+
+    private void Awake()
+    {
+        if (addRigidBody)
+            gameObject.AddComponent<Rigidbody>();
     }
 }

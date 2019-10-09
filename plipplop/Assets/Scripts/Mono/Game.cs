@@ -23,6 +23,8 @@ public class Game : MonoBehaviour
 
         i = this;
 
+        mapping = Instantiate<Mapping>(mapping);
+
         // Init
         player = new Brain(mapping);
     }
