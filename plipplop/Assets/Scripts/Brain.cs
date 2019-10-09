@@ -5,13 +5,27 @@ using UnityEngine;
 public class Brain
 {
     Controller controller = null;
+    Mapping mapping;
+
+    public Brain(Mapping mapping)
+    {
+        this.mapping = mapping;
+    }
 
     public void Update()
     {
-        if (controller != null) return;
+        UpdateController();
+    }
 
-        //controller.OnEject(Input.GetButton(""));
-        //controller.OnJump(Input.GetButton(""));
-        //controller.OnToggleCrouch(Input.GetButton(""));
+    public void UpdateController()
+    {
+        if (controller is null) return;
+
+        if (mapping.IsPressed(ACTION.POSSESS)) controller.OnEject();
+        if (mapping.IsPressed(ACTION.JUMP)) controller.OnJump();
+        controller.Move(
+            mapping.Axis(ACTION.MOVE_FORWARD_BACK),
+            mapping.Axis(ACTION.MOVE_RIGHT_LEFT)
+        );
     }
 }

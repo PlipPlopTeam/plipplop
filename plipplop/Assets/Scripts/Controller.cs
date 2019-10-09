@@ -7,5 +7,9 @@ public abstract class Controller
     public abstract void OnEject();
     public abstract void OnJump();
     public abstract void OnToggleCrouch(bool crouching);
-    public abstract void Direction(Vector2 direction);
+
+    public abstract void Move(Vector3 direction);
+    public void Move(float fb, float rl) {
+        Move(new Vector3(fb, 0f, rl));
+    }
 }

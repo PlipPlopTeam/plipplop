@@ -8,6 +8,8 @@ public class Game : MonoBehaviour
     public Brain player;
     public Mapping mapping;
 
+    static public Game i;
+
     private void Awake()
     {
         if (!FindObjectOfType<Kickstarter>()) {
@@ -18,5 +20,16 @@ public class Game : MonoBehaviour
             Destroy(gameObject);
             throw new System.Exception("!!! DUPLICATE \"GAME\" INSTANCE !!! THIS SHOULD NOT HAPPEN !!!");
         }
+
+        i = this;
+
+        // Init
+        player = new Brain(mapping);
+    }
+
+    private void Update()
+    {
+        mapping.Read();
+        player.Update();
     }
 }
