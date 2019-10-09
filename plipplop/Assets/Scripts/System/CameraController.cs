@@ -1,42 +1,71 @@
 ﻿using UnityEngine;
 
+[CreateAssetMenu]
+public class CameraSettings : ScriptableObject
+{
+    [Header("Basics")]
+    public float distance = 1f;
+    public float fieldOfView = 75f;
+    public Vector3 rotation;
+    public Vector3 offset;
+    [Header("Lerps")]
+    public float fovLerpSpeed = 1f;
+    public float positionLerpSpeed = 1f;
+    public float rotationLerpSpeed = 1f;
+    public float distanceLerpSpeed = 1f;
+    [Header("Speed Enhancer")]
+    public float speedEffectMultiplier = 1f;
+}
+
 public class CameraController : MonoBehaviour
 {
     [Header("Referencies")]
     public Camera cam;
-    [Header("Settings")]
-    public float distance = 1f;
-    public float fieldOfView = 75f;
-    [Space(15)]
+    public CameraSettings defaultSettings;
     public Transform target;
-    public Vector3 rotation;
-    public Vector3 position;
-    [Header("Lerps")]
-    public float fovLerpSpeed = 2f;
-    public float positionLerpSpeed = 5f;
-    public float rotationLerpSpeed = 1f;
 
+    [Header("Speed Enhancer")]
+    public float maxEffect = 2f;
+    public float multiplier = 1f;
+    public Vector2 distanceRange;
+    public Vector2 fovRange;
+    
     // MOVEMENT
-    float originFOV;
+    CameraSettings settings;
+    float originFieldOfView;
     float originDistance;
     Vector3 originPosition;
     Vector3 originRotation;
+    float currentFieldOfView;
+    float currentDistance;
     Vector3 currentRotation;
     Vector3 currentPosition;
+    float targetFieldOfView;
+    float targetDistance;
+    Vector3 targetPosition;
+    Vector3 targetRotation;
+
+    // SPEED
+    float distanceOffset;
+    Vector3 lastTargetPosition;
     // SHAKE
     private float timer = 0f;
     private float intensity = 0.7f;
     private float duration = 0f;
 
+    void Load(CameraSettings s)
+    {
+        settings = s;
+
+        originPosition = targetPosition = currentPosition = settings.offset;
+        originRotation = targetRotation = currentRotation = settings.rotation;
+        originFieldOfView = targetFieldOfView = currentFieldOfView = settings.fieldOfView;
+        originDistance = targetDistance = currentDistance = settings.distance;
+    }
+
     void Start()
     {
-        currentPosition = position;
-        position = currentPosition;
-        currentRotation = rotation;
-        originRotation = currentRotation;
-        cam.fieldOfView = fieldOfView;
-        originFOV = cam.fieldOfView;
-        originDistance = distance;
+        Load(defaultSettings);
     }
 
 #region INSPECTOR 
@@ -51,33 +80,43 @@ public class CameraController : MonoBehaviour
         }
         else
         {
-            Gizmos.DrawLine(transform.position, position);
-            Gizmos.DrawWireCube(position, Vector3.one/10f);
+            Gizmos.DrawLine(transform.position, targetPosition);
+            Gizmos.DrawWireCube(targetPosition, Vector3.one/10f);
         }
     }
     
     // Execute when editing values in the inspector
-    void OnValidate()
+    //void OnValidate()
+    /*
     {
-        currentPosition = position;
-        currentRotation = rotation;
-        cam.fieldOfView = fieldOfView;
-        if(distance < 0) distance = 0;
+        //Load(defaultSettings);
+        if(targetDistance < 0) targetDistance = 0;
         if(target != null) currentPosition += target.position;
         Apply();
     }
+    */
 #endregion
 
     void Update()
     {
         Vector3 offset = Vector3.zero;
-        if(distance < 0) distance = 0;
-        if(target != null) offset = target.position;
+        if(settings.distance < 0) settings.distance = 0;
+        if(target != null) 
+        {
+            offset = target.position;
+
+            float d = Vector3.Distance(target.position, lastTargetPosition);
+            lastTargetPosition = target.position;
+            float ratio = Mathf.Clamp(d / maxEffect, 0f, 1f);
+            targetFieldOfView = fovRange.x + (fovRange.y - fovRange.x) * ratio * multiplier;
+            distanceOffset = distanceRange.x + (distanceRange.y - distanceRange.x) * ratio * multiplier;
+        }
 
         // Lerping current values
-        currentPosition = Vector3.Lerp(currentPosition, position + offset, Time.deltaTime * positionLerpSpeed);
-        currentRotation = Vector3.Lerp(currentRotation, rotation, Time.deltaTime * rotationLerpSpeed);
-        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, fieldOfView, Time.deltaTime * fovLerpSpeed);
+        currentDistance = Mathf.Lerp(currentDistance, targetDistance + distanceOffset, Time.deltaTime * settings.distanceLerpSpeed);
+        currentPosition = Vector3.Lerp(currentPosition, targetPosition + offset, Time.deltaTime * settings.positionLerpSpeed);
+        currentRotation = Vector3.Lerp(currentRotation, targetRotation, Time.deltaTime * settings.rotationLerpSpeed);
+        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, targetFieldOfView, Time.deltaTime * settings.fovLerpSpeed);
 
         // Shake
         if(timer > 0)
@@ -85,7 +124,6 @@ public class CameraController : MonoBehaviour
             timer -= Time.deltaTime;
             currentRotation += Random.insideUnitSphere * intensity;
             intensity *= timer/duration;
-
             if(timer <= 0) Teleport();
         }
         
@@ -105,42 +143,37 @@ public class CameraController : MonoBehaviour
     void Apply()
     {
         transform.forward = -(transform.position - currentPosition).normalized;
-        transform.position = currentPosition + Quaternion.Euler(currentRotation) * Vector3.forward * distance;
-        cam.fieldOfView = fieldOfView;
+        transform.position = currentPosition + Quaternion.Euler(currentRotation) * Vector3.forward * currentDistance;
+        cam.fieldOfView = currentFieldOfView;
     } // Apply the values to the camera 
 
-    public void Focus(Vector3 newPosition, float newDistance)
+    public void Focus(Vector3 newPosition, CameraSettings set = null)
     {
-        position = newPosition;
+        targetPosition = newPosition;
         target = null;
-        distance = newDistance;
+        if(set != null) Load(set);
     } // Focus camera on a new position (Vector3)
 
-    public void Focus(Transform newTarget, float newDistance)
+    public void Focus(Transform newTarget, CameraSettings set = null)
     {
         target = newTarget;
-        position = Vector3.zero;
-        distance = newDistance;
+        if(set != null) Load(set);
     } // Focus camera on a new target (transform)
 
     public void Teleport()
     {
-        currentPosition = position;
-        currentRotation = rotation;
-        cam.fieldOfView = fieldOfView;
+        currentPosition = targetPosition;
+        currentRotation = targetRotation;
+        cam.fieldOfView = targetFieldOfView;
         Apply();
     } // Teleport all the camera values instantly (to ignore lerp)
-
-    public void ResetFov()
-    {
-        fieldOfView = originFOV;
-    } // Reset the FOV to the origin FOV
 
     public void Reset()
     {
         target = null;
-        position = originPosition;
-        rotation = originRotation;
-        distance = originDistance;
+        targetPosition = originPosition;
+        targetRotation = originRotation;
+        targetFieldOfView = originDistance;
+        targetDistance = originDistance;
     } // Reset all the values to the origin values
 }
