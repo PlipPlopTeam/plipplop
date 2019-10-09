@@ -33,4 +33,15 @@ public class Brain
     {
         this.controller = controller;
     }
+
+    public void Eject()
+    {
+        this.controller.OnEject();
+        controller = null;
+    }
+
+    public bool IsPossessing(Controller controller)
+    {
+        return controller == this.controller;
+    }
 }

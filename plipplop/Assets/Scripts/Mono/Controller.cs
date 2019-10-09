@@ -22,4 +22,17 @@ public abstract class Controller : MonoBehaviour
         if (addRigidBody)
             gameObject.AddComponent<Rigidbody>();
     }
+
+    // Draw a gizmo if i'm being possessed
+    void OnDrawGizmos()
+    {
+        if (EditorApplication.isPlaying) {
+            if (Game.i.player.IsPossessing(this)) {
+                Gizmos.DrawIcon(transform.position + Vector3.up * 2f, "Favorite Icon");
+            }
+            else {
+                Gizmos.DrawIcon(transform.position + Vector3.up * 2f, "d_CollabChangesConflict Icon");
+            }
+        }
+    }
 }

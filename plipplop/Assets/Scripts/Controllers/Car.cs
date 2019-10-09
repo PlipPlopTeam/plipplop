@@ -34,7 +34,7 @@ public class Car : Controller
 
     public override void OnEject()
     {
-        throw new System.NotImplementedException();
+        //Nothing for now
     }
 
     public override void OnToggleCrouch(bool crouching)
