@@ -17,16 +17,27 @@ public class Brain
         UpdateController();
     }
 
+    public void FixedUpdate()
+    {
+        UpdateControllerPhysics();
+    }
+
+    public void UpdateControllerPhysics()
+    {
+        if (controller is null) return;
+
+        controller.Move(
+            mapping.Axis(ACTION.MOVE_FORWARD_BACK),
+            mapping.Axis(ACTION.MOVE_RIGHT_LEFT)
+        );
+    }
+
     public void UpdateController()
     {
         if (controller is null) return;
 
         if (mapping.IsPressed(ACTION.POSSESS)) controller.OnEject();
         if (mapping.IsPressed(ACTION.JUMP)) controller.OnJump();
-        controller.Move(
-            mapping.Axis(ACTION.MOVE_FORWARD_BACK),
-            mapping.Axis(ACTION.MOVE_RIGHT_LEFT)
-        );
     }
 
     public void Possess(Controller controller)

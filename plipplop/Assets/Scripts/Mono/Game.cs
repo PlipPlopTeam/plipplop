@@ -34,4 +34,9 @@ public class Game : MonoBehaviour
         mapping.Read();
         player.Update();
     }
+
+    private void FixedUpdate()
+    {
+        player.FixedUpdate();
+    }
 }
