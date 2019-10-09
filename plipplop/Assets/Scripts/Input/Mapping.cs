@@ -7,14 +7,6 @@ using XInputDotNetPure;
 [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/Mapping", order = 1)]
 public class Mapping : ScriptableObject
 {
-    public PlayerIndex index;
-    [SerializeField]
-    public List<MappedAction> map = new List<MappedAction>();
-
-    MappingWrapper wrapper;
-    Dictionary<ACTION, List<InputWrapper>> registeredInputs = new Dictionary<ACTION, List<InputWrapper>>();
-    Dictionary<ACTION, Input> inputValues = new Dictionary<ACTION, Input>();
-
     [System.Serializable]
     public class MappedAction
     {
@@ -24,6 +16,13 @@ public class Mapping : ScriptableObject
         public uint factor = 1;
     }
 
+    public List<MappedAction> map;
+
+    PlayerIndex index;
+
+    MappingWrapper wrapper;
+    Dictionary<ACTION, List<InputWrapper>> registeredInputs = new Dictionary<ACTION, List<InputWrapper>>();
+    Dictionary<ACTION, Input> inputValues = new Dictionary<ACTION, Input>();
     class Input
     {
         public bool isHeld = false;
@@ -48,7 +47,6 @@ public class Mapping : ScriptableObject
             );
         }
         Debug.Log(string.Format("Constructed {0} inputs", registeredInputs.Count));
-        map.Clear();
     }
 
     float this[ACTION a] {

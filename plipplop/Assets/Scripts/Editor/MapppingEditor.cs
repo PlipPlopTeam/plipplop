@@ -10,7 +10,7 @@ public class MappingEditor : Editor
     SerializedObject targetList;
     SerializedProperty mappingList;
     Mapping list;
-
+       
     void OnEnable()
     {
         list = (Mapping)target;
@@ -65,8 +65,6 @@ public class MappingEditor : Editor
         EditorGUILayout.Space();
 
         targetList.ApplyModifiedProperties();
-        EditorUtility.SetDirty(target);
-
     }
 
 }

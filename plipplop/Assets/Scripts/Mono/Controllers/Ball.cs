@@ -6,13 +6,17 @@ public class Ball : Controller
 {
     [Header("Specific properties")]
     public float maxSpeed = 1000f;
-    public float acceleration = 100f;
 
+    new Rigidbody rigidbody;
     Renderer renderer;
+    GameObject childBall;
 
     public override void Move(Vector3 direction)
     {
-        throw new System.NotImplementedException();
+        rigidbody.AddForce(transform.forward * direction.z * maxSpeed * Time.deltaTime);
+        rigidbody.AddForce(transform.right * direction.x * maxSpeed * Time.deltaTime);
+
+        //throw new System.NotImplementedException();
     }
 
     public override void OnPossess()
@@ -37,8 +41,10 @@ public class Ball : Controller
 
     private void Start()
     {
+        rigidbody = GetComponent<Rigidbody>();
         renderer = GetComponentInChildren<MeshRenderer>();
         renderer.material = Instantiate<Material>(renderer.material);
+        childBall = transform.GetChild(0).gameObject;
     }
 
     private void Update()

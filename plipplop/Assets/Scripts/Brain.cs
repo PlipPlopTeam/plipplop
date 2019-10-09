@@ -31,6 +31,7 @@ public class Brain
 
     public void Possess(Controller controller)
     {
+        controller.OnPossess();
         this.controller = controller;
     }
 

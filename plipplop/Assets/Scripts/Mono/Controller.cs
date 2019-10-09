@@ -15,7 +15,7 @@ public abstract class Controller : MonoBehaviour
 
     public abstract void Move(Vector3 direction);
     public void Move(float fb, float rl) {
-        Move(new Vector3(fb, 0f, rl));
+        Move(new Vector3(rl, 0f, fb));
     }
 
     internal bool IsPossessed()
