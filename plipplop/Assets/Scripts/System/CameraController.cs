@@ -188,7 +188,6 @@ public class CameraController : MonoBehaviour
                 targetRotation.z);
             }
         }
-        Debug.Log(Vector3.SignedAngle(targetMovementDirection, Vector3.forward, Vector3.forward));
 
         // Shake
         if(timer > 0)
@@ -199,8 +198,6 @@ public class CameraController : MonoBehaviour
             if(timer <= 0) Teleport();
         }
 
-
-        
         // Applying current values
         Apply();
     }
