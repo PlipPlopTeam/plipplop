@@ -11,10 +11,11 @@ public abstract class Controller : MonoBehaviour
 
     public abstract void OnEject();
     public abstract void OnPossess();
-    public abstract void OnJump();
-    public abstract void OnToggleCrouch(bool crouching);
 
-    public abstract void Move(Vector3 direction);
+    internal virtual void OnJump() { }
+    internal virtual void OnToggleCrouch(bool crouching) { }
+
+    internal virtual void Move(Vector3 direction) { }
     public void Move(float fb, float rl) {
         Move(new Vector3(rl, 0f, fb));
     }

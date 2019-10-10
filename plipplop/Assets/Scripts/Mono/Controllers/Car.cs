@@ -19,7 +19,7 @@ public class Car : Controller
         rigidbody = GetComponent<Rigidbody>();
     }
 
-    public override void Move(Vector3 direction)
+    internal override void Move(Vector3 direction)
     {
         if (direction.magnitude > 0f) {
             speed += Time.deltaTime * acceleration;
@@ -28,7 +28,7 @@ public class Car : Controller
         rigidbody.AddForce(direction * speed * Time.deltaTime);
     }
 
-    public override void OnJump()
+    internal override void OnJump()
     {
         rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
@@ -42,10 +42,5 @@ public class Car : Controller
     public override void OnPossess()
     {
         //Nothing for now
-    }
-
-    public override void OnToggleCrouch(bool crouching)
-    {
-        throw new System.NotImplementedException();
     }
 }

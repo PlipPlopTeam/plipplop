@@ -42,6 +42,7 @@ public class Brain
 
     public void Possess(Controller controller)
     {
+        if (this.controller != null) Eject();
         controller.OnPossess();
         this.controller = controller;
     }
