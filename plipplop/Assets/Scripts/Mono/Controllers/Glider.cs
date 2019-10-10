@@ -13,4 +13,9 @@ public class Glider : Controller
     {
        // throw new System.NotImplementedException();
     }
+
+    internal override void OnHoldJump()
+    {
+        
+    }
 }

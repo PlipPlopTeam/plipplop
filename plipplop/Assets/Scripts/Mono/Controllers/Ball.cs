@@ -10,7 +10,6 @@ public class Ball : Controller
     public float jumpForce = 7f;
     public float airRollFactor = 4f;
 
-    new Rigidbody rigidbody;
     new Renderer renderer;
     new SphereCollider collider;
     Transform childBall;

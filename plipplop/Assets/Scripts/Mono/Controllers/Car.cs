@@ -9,7 +9,6 @@ public class Car : Controller
     public float acceleration = 100f;
     public float jumpForce = 100f;
     
-    new Rigidbody rigidbody;
     float speed;
 
     internal override void Start()
