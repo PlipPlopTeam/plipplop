@@ -120,15 +120,14 @@ MonoBehaviour:
   settings:
     distance: 6
     fieldOfView: 75
-    rotation: {x: -45, y: 0, z: 0}
-    offset: {x: 0, y: 0, z: 0}
-    fovLerpSpeed: 2
-    positionLerpSpeed: 5
-    rotationLerpSpeed: 3
-    distanceLerpSpeed: 2
-    speedEffectMultiplier: 1
+    rotationOffset: {x: -45, y: 0, z: 0}
+    positionOffset: {x: 0, y: 0, z: 0}
     range: {x: 1, y: 1.5}
+    fovLerp: 5
+    followLerp: 5
+    camLerp: 5
+    speedEffectMultiplier: 1
   maxEffect: 2
   multiplier: 1
-  distanceRange: {x: 5, y: 10}
-  fovRange: {x: 60, y: 70}
+  distanceRange: {x: 0, y: 1}
+  fovRange: {x: -5, y: 10}
