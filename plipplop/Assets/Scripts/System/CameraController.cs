@@ -110,7 +110,9 @@ public class CameraController : MonoBehaviour
             Gizmos.DrawLine(currentPosition, target.position);
             UnityEditor.Handles.Label(currentPosition + Vector3.right * settings.range.x, "Min " + settings.range.x.ToString(), style);
             UnityEditor.Handles.Label(currentPosition + Vector3.right * settings.range.y, "Max " + settings.range.y.ToString(), style);
-            UnityEditor.Handles.Label((transform.position + target.position)/2, "Dist " + settings.distance.ToString(), style);
+            UnityEditor.Handles.Label((transform.position + target.position)/2, "Dist " + currentDistance.ToString(), style);
+
+            Gizmos.DrawLine(transform.position, wantedCameraPosition);
         }
         else
         {
@@ -152,7 +154,7 @@ public class CameraController : MonoBehaviour
         Vector3 camDirection = new Vector3( transform.forward.x, 0f, transform.forward.z);
         float distanceFromTarget = 0f;
         float targetMovementVelocity = 0f;
-        float s = 1f;
+        float speed = 1f;
 
         // If Camera if following a target
         if(target != null) 
@@ -161,28 +163,30 @@ public class CameraController : MonoBehaviour
             distanceFromTarget = Vector3.Distance(currentPosition, target.position);
             targetMovementVelocity = Vector3.Distance(target.position, lastTargetPosition);
             float ratio = Mathf.Clamp(targetMovementVelocity / maxEffect, 0f, 1f);
-
+            speed = 1f + distanceFromTarget/distanceRange.y;
             targetFieldOfView = fovRange.x + (fovRange.y - fovRange.x) * ratio * multiplier;
-            //distanceOffset = distanceRange.x + (distanceRange.y - distanceRange.x) * ratio * multiplier;
-
+            distanceOffset = distanceRange.x + (distanceRange.y - distanceRange.x) * ratio * multiplier;
             targetMovementDirection = (target.position - lastTargetPosition).normalized;
-
             lastTargetPosition = target.position;
         }
 
-        currentPosition = Vector3.Lerp(currentPosition, targetPosition + offset, Time.deltaTime * settings.fovLerpSpeed);
+        currentPosition = Vector3.Lerp(currentPosition, targetPosition + offset, Time.deltaTime * settings.fovLerpSpeed * speed);
         currentDistance = targetDistance + distanceOffset;
         currentFieldOfView = Mathf.Lerp(cam.fieldOfView, targetFieldOfView, Time.deltaTime * settings.fovLerpSpeed);
         currentRotation = 
-            new Vector3(
-                targetRotation.x,
-                Vector3.SignedAngle(
-                    new Vector3(targetMovementDirection.x, targetMovementDirection.y, -targetMovementDirection.z),
-                    Vector3.forward,
-                    Vector3.up
-                ),
+        new Vector3(
+            targetRotation.x,
+            Vector3.SignedAngle(
+                new Vector3(targetMovementDirection.x, targetMovementDirection.y, -targetMovementDirection.z),
+                Vector3.forward,
+                Vector3.up
+            ),
             targetRotation.z
         );
+
+        // Applying current values
+        wantedCameraPosition = currentPosition + Quaternion.Euler(currentRotation) * Vector3.forward * currentDistance;
+        Apply();
 
         // Shake
         if(timer > 0)
@@ -192,11 +196,6 @@ public class CameraController : MonoBehaviour
             intensity *= timer/duration;
             if(timer <= 0) Teleport();
         }
-
-        wantedCameraPosition = currentPosition + Quaternion.Euler(currentRotation) * Vector3.forward * currentDistance;
-
-        // Applying current values
-        Apply();
     }
 
     [ContextMenu("Shake")]
