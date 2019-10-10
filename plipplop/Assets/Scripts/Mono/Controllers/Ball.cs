@@ -10,6 +10,8 @@ public class Ball : Controller
     public float jumpForce = 7f;
     public float airRollFactor = 4f;
 
+    public float moveLerp = 1;
+
     new Rigidbody rigidbody;
     new Renderer renderer;
     new SphereCollider collider;
@@ -18,17 +20,18 @@ public class Ball : Controller
     public override void Move(Vector3 direction)
     {
         var perimeter = 2 * Mathf.PI * (1f); //radius
-        var control = IsGrounded() ? 1f : 0.25f;
 
-        rigidbody.AddForce(control * transform.forward * direction.z * acceleration * Time.deltaTime);
-        rigidbody.AddForce(control * transform.right * direction.x * acceleration * Time.deltaTime);
+        Vector3 _velocity = transform.forward * direction.z * Time.deltaTime + transform.right * direction.x * Time.deltaTime;
+        _velocity *= maxSpeed;
 
-        if (rigidbody.velocity.magnitude > maxSpeed) {
-            rigidbody.velocity = rigidbody.velocity.normalized * maxSpeed;
-        }
+        _velocity = Vector3.ClampMagnitude(_velocity, maxSpeed);
 
-        var factor = IsGrounded() ? 1f : airRollFactor;
-
+        _velocity.y = rigidbody.velocity.y;
+        
+        rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, _velocity, Time.deltaTime * moveLerp);
+        
+        var factor = 1;
+        
         childBall.Rotate(new Vector3(
             (rigidbody.velocity.z / perimeter) * 10f,
             0f,
@@ -49,7 +52,7 @@ public class Ball : Controller
     public override void OnJump()
     {
         if (IsGrounded()) {
-            rigidbody.AddForce(Vector3.up * jumpForce);
+            rigidbody.velocity = new Vector3(rigidbody.velocity.x, jumpForce, rigidbody.velocity.z);
         }
     }
 
