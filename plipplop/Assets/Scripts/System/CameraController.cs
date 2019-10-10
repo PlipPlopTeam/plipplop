@@ -188,7 +188,6 @@ public class CameraController : MonoBehaviour
 
     void Apply()
     {
-        Debug.Log(currentDistance);
         transform.forward = -(transform.position - currentPosition).normalized;
         transform.position = currentPosition + Quaternion.Euler(currentRotation) * Vector3.forward * currentDistance;
         cam.fieldOfView = currentFieldOfView;
