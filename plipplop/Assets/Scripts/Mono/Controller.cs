@@ -8,13 +8,16 @@ public abstract class Controller : MonoBehaviour
     [Header("Inherited properties")]
     public bool addRigidBody = false;
     public bool autoPossess = false;
+    
+    new internal Rigidbody rigidbody;
 
     public abstract void OnEject();
     public abstract void OnPossess();
-    public abstract void OnJump();
-    public abstract void OnToggleCrouch(bool crouching);
 
-    public abstract void Move(Vector3 direction);
+    internal virtual void OnJump() { }
+    internal virtual void OnToggleCrouch(bool crouching) { }
+    internal virtual void OnHoldJump() { }
+    internal virtual void Move(Vector3 direction) { }
     public void Move(float fb, float rl) {
         Move(new Vector3(rl, 0f, fb));
     }
@@ -27,7 +30,7 @@ public abstract class Controller : MonoBehaviour
     virtual internal void Awake()
     {
         if (addRigidBody)
-            gameObject.AddComponent<Rigidbody>();
+            rigidbody = gameObject.AddComponent<Rigidbody>();
     }
 
     virtual internal void Start()

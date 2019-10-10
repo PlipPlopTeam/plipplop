@@ -17,12 +17,12 @@ public class Mapping : ScriptableObject
     }
 
     public List<MappedAction> map;
-
-    PlayerIndex index;
+    public PlayerIndex index;
 
     MappingWrapper wrapper;
     Dictionary<ACTION, List<InputWrapper>> registeredInputs = new Dictionary<ACTION, List<InputWrapper>>();
     Dictionary<ACTION, Input> inputValues = new Dictionary<ACTION, Input>();
+
     class Input
     {
         public bool isHeld = false;
@@ -46,7 +46,6 @@ public class Mapping : ScriptableObject
                 }
             );
         }
-        Debug.Log(string.Format("Constructed {0} inputs", registeredInputs.Count));
     }
 
     float this[ACTION a] {
