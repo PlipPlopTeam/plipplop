@@ -166,7 +166,7 @@ public class CameraController : MonoBehaviour
             targetMovementDirection = (target.position - lastTargetPosition).normalized;
 
             // Increasing the position lerp if the target go further the distanceRange
-            speed = 1f + distanceFromTarget/distanceRange.y;
+            speed = (distanceFromTarget - settings.range.x) / settings.range.y;
 
             // The Speed Enhancement effect
             float ratio = Mathf.Clamp(targetMovementVelocity / maxEffect, 0f, 1f);
@@ -176,23 +176,31 @@ public class CameraController : MonoBehaviour
             lastTargetPosition = target.position;
         }
 
-        currentPosition = Vector3.Lerp(currentPosition, targetPosition + offset, Time.deltaTime * settings.followLerp * speed);
+        if(distanceFromTarget > settings.range.x)
+        {
+            currentPosition = Vector3.Lerp(currentPosition, targetPosition + offset, Time.deltaTime * settings.followLerp * speed);
+        }
+
         currentFieldOfView = Mathf.Lerp(cam.fieldOfView, targetFieldOfView + fovOffset, Time.deltaTime * settings.fovLerp);
         currentDistance = targetDistance + distanceOffset;
-        Vector3 angleVector = new Vector3
+
+        if(targetMovementVelocity >= 0f)
+        {
+            Vector3 angleVector = new Vector3
             (0f, 
-            Vector3.SignedAngle(
+                Vector3.SignedAngle(
                 new Vector3(
                     targetMovementDirection.x,
-                    targetMovementDirection.y,
+                    0f,
                     -targetMovementDirection.z
                 ), 
                 Vector3.forward,
                 Vector3.up),
             0f);
-        currentRotation = targetRotation + angleVector;
+            currentRotation = targetRotation + angleVector;
+        }
 
-        // Applying current values
+        // Applying current values 
         wantedCameraPosition = currentPosition + Quaternion.Euler(currentRotation) * Vector3.forward * currentDistance;
         Apply();
 
