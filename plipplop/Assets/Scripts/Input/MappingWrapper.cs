@@ -21,6 +21,12 @@ public class MappingWrapper : Dictionary<INPUT, Func<float>>
         keyCorrespondances.Add(INPUT.KB_UP_ARROW, KeyCode.UpArrow);
         keyCorrespondances.Add(INPUT.KB_SPACE, KeyCode.Space);
         keyCorrespondances.Add(INPUT.KB_SHIFT, KeyCode.LeftShift);
+        keyCorrespondances.Add(INPUT.KB_A, KeyCode.A);
+        keyCorrespondances.Add(INPUT.KB_ALT, KeyCode.LeftAlt);
+        keyCorrespondances.Add(INPUT.KB_E, KeyCode.E);
+        keyCorrespondances.Add(INPUT.KB_F, KeyCode.F);
+        keyCorrespondances.Add(INPUT.KB_X, KeyCode.X);
+        keyCorrespondances.Add(INPUT.KB_CTRL, KeyCode.LeftControl);
 
 
         Add(INPUT.NONE, () => { return 0f; });
