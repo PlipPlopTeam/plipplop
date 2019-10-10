@@ -52,9 +52,14 @@ public class Mapping : ScriptableObject
         get {
             if (!registeredInputs.ContainsKey(a)) throw new System.Exception("Unknown input " + a);
             foreach (var input in registeredInputs[a]) {
-                var value = wrapper[input.input]()*(input.isInverted ? -1f : 1f) * input.factor;
-                if (value != 0f) {
-                    return value;
+                try {
+                    var value = wrapper[input.input]() * (input.isInverted ? -1f : 1f) * input.factor;
+                    if (value != 0f) {
+                        return value;
+                    }
+                }
+                catch (KeyNotFoundException) {
+                    throw new System.Exception(string.Format("Unregistered input: {0}. Check the mapping wrapper.", input.input));
                 }
             }
             return 0f;

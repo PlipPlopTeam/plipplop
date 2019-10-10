@@ -8,6 +8,7 @@ public abstract class Controller : MonoBehaviour
     [Header("Inherited properties")]
     public bool addRigidBody = false;
     public bool autoPossess = false;
+    public bool canCrouch = true;
     
     new internal Rigidbody rigidbody;
 
@@ -15,7 +16,7 @@ public abstract class Controller : MonoBehaviour
     public abstract void OnPossess();
 
     internal virtual void OnJump() { }
-    internal virtual void OnToggleCrouch(bool crouching) { }
+    internal virtual void OnToggleCrouch() { }
     internal virtual void OnHoldJump() { }
     internal virtual void Move(Vector3 direction) { }
     public void Move(float fb, float rl) {

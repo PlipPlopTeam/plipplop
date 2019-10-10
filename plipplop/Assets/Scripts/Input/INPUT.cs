@@ -27,4 +27,10 @@
     KB_DOWN_ARROW,
     KB_LEFT_ARROW,
     KB_RIGHT_ARROW,
+    KB_CTRL,
+    KB_ALT,
+    KB_F,
+    KB_X,
+    KB_A,
+    KB_E
 }
