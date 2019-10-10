@@ -54,6 +54,7 @@ public class CameraController : MonoBehaviour
     float targetDistance;
     Vector3 targetPosition;
     Vector3 targetRotation;
+    Vector3 wantedCameraPosition;
 
     // SPEED
     float distanceOffset;
@@ -132,6 +133,9 @@ public class CameraController : MonoBehaviour
         if(settings.range.y < settings.range.x) settings.range.y = settings.range.x;
         if(target != null) currentPosition += target.position;
 
+        wantedCameraPosition = currentPosition + Quaternion.Euler(currentRotation) * Vector3.forward * currentDistance;
+        transform.position = wantedCameraPosition;
+
         Apply();
     }
     
@@ -148,6 +152,7 @@ public class CameraController : MonoBehaviour
         Vector3 camDirection = new Vector3( transform.forward.x, 0f, transform.forward.z);
         float distanceFromTarget = 0f;
         float targetMovementVelocity = 0f;
+        float s = 1f;
 
         // If Camera if following a target
         if(target != null) 
@@ -158,36 +163,26 @@ public class CameraController : MonoBehaviour
             float ratio = Mathf.Clamp(targetMovementVelocity / maxEffect, 0f, 1f);
 
             targetFieldOfView = fovRange.x + (fovRange.y - fovRange.x) * ratio * multiplier;
-            distanceOffset = distanceRange.x + (distanceRange.y - distanceRange.x) * ratio * multiplier;
+            //distanceOffset = distanceRange.x + (distanceRange.y - distanceRange.x) * ratio * multiplier;
 
             targetMovementDirection = (target.position - lastTargetPosition).normalized;
 
             lastTargetPosition = target.position;
         }
 
-        // Lerping current values
-        currentDistance = Mathf.Lerp(currentDistance, targetDistance/* + distanceOffset*/, Time.deltaTime * settings.distanceLerpSpeed);
-        currentRotation = Vector3.Lerp(currentRotation, targetRotation, Time.deltaTime * settings.rotationLerpSpeed);
-        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, targetFieldOfView, Time.deltaTime * settings.fovLerpSpeed);
-
-        if(distanceFromTarget > settings.range.x)
-        {   
-            float s = (distanceFromTarget - settings.range.x) / settings.range.y;
-            currentPosition = Vector3.Lerp(currentPosition, targetPosition + offset, Time.deltaTime * settings.positionLerpSpeed * s);
-
-            if(targetMovementDirection.magnitude > 0.1f)
-            {
-                targetRotation = 
-                new Vector3(
-                    targetRotation.x,
-                    Vector3.SignedAngle(
-                        new Vector3(targetMovementDirection.x, targetMovementDirection.y, -targetMovementDirection.z),
-                        Vector3.forward,
-                        Vector3.up
-                    ),
-                targetRotation.z);
-            }
-        }
+        currentPosition = Vector3.Lerp(currentPosition, targetPosition + offset, Time.deltaTime * settings.fovLerpSpeed);
+        currentDistance = targetDistance + distanceOffset;
+        currentFieldOfView = Mathf.Lerp(cam.fieldOfView, targetFieldOfView, Time.deltaTime * settings.fovLerpSpeed);
+        currentRotation = 
+            new Vector3(
+                targetRotation.x,
+                Vector3.SignedAngle(
+                    new Vector3(targetMovementDirection.x, targetMovementDirection.y, -targetMovementDirection.z),
+                    Vector3.forward,
+                    Vector3.up
+                ),
+            targetRotation.z
+        );
 
         // Shake
         if(timer > 0)
@@ -197,6 +192,8 @@ public class CameraController : MonoBehaviour
             intensity *= timer/duration;
             if(timer <= 0) Teleport();
         }
+
+        wantedCameraPosition = currentPosition + Quaternion.Euler(currentRotation) * Vector3.forward * currentDistance;
 
         // Applying current values
         Apply();
@@ -214,7 +211,7 @@ public class CameraController : MonoBehaviour
     void Apply()
     {
         transform.forward = -(transform.position - currentPosition).normalized;
-        transform.position = currentPosition + Quaternion.Euler(currentRotation) * Vector3.forward * currentDistance;
+        transform.position = Vector3.Lerp(transform.position, wantedCameraPosition, Time.deltaTime * settings.distanceLerpSpeed);
         cam.fieldOfView = currentFieldOfView;
     } // Apply the values to the camera 
 
