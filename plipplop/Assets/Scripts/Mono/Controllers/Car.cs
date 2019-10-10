@@ -12,8 +12,10 @@ public class Car : Controller
     new Rigidbody rigidbody;
     float speed;
 
-    private void Start()
+    internal override void Start()
     {
+        base.Start();
+
         rigidbody = GetComponent<Rigidbody>();
     }
 

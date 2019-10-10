@@ -7,6 +7,7 @@ public abstract class Controller : MonoBehaviour
 {
     [Header("Inherited properties")]
     public bool addRigidBody = false;
+    public bool autoPossess = false;
 
     public abstract void OnEject();
     public abstract void OnPossess();
@@ -23,10 +24,27 @@ public abstract class Controller : MonoBehaviour
         return Game.i.player.IsPossessing(this);
     }
 
-    private void Awake()
+    virtual internal void Awake()
     {
         if (addRigidBody)
             gameObject.AddComponent<Rigidbody>();
+    }
+
+    virtual internal void Start()
+    {
+        if (autoPossess)
+            Game.i.player.Possess(this);
+    }
+
+    virtual internal void Update()
+    {
+
+    }
+
+
+    virtual internal void FixedUpdate()
+    {
+
     }
 
     // Draw a gizmo if i'm being possessed

@@ -97,7 +97,7 @@ public class CameraController : MonoBehaviour
     */
 #endregion
 
-    void Update()
+    void FixedUpdate()
     {
         Vector3 offset = Vector3.zero;
         if(settings.distance < 0) settings.distance = 0;
