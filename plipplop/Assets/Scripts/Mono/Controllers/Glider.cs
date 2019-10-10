@@ -16,6 +16,7 @@ public class Glider : Controller
     public float gravityWhenFlying = 2f;
     public float gravityPlungeFactor = 3f;
     public float restabilizationForce = 20f;
+    public float turnForce = 5f;
 
     float descentFactor = 0f;
     Vector3 inertedControls = new Vector3();
@@ -43,7 +44,7 @@ public class Glider : Controller
     {
         base.Update();
 
-        descentFactor = Mathf.Max(0f, (((transform.localEulerAngles.x + 180f) % 360f) / 270f - 0.5f))*4f; // Magic
+        descentFactor = Mathf.Max(0f, (((transform.localEulerAngles.x + 180f) % 360f) / 270f - 0.55f))*4f; // Magic
 
         if (!IsGrounded()) {
 
@@ -100,6 +101,8 @@ public class Glider : Controller
         normalizedRoll -= Mathf.Sign(normalizedRoll) * 0.75f;
         normalizedRoll *= 2f;
         rigidbody.AddTorque(- transform.forward * inertedControls.x * Mathf.Abs(normalizedRoll) * rollForce * Time.deltaTime);
+
+        rigidbody.AddTorque(Vector3.up * inertedControls.x * Mathf.Abs(normalizedRoll) * rollForce * turnForce * Time.deltaTime);
     }
 
     internal override void OnHoldJump()
