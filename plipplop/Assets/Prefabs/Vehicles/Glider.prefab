@@ -26,7 +26,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4009345996532297926}
-  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0.00000058114523}
+  m_LocalRotation: {x: -0, y: -1, z: 0, w: -0.0000001872535}
   m_LocalPosition: {x: 0.9997476, y: 5, z: 5.507818}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -49,11 +49,13 @@ MonoBehaviour:
   addRigidBody: 0
   autoPossess: 1
   canCrouch: 0
-  maxFlyingSpeed: 1000
-  thrust: 100
-  pitchForce: 5
-  rollForce: 8
-  gravityWhenFlying: 2
+  maxFlyingSpeed: 5000
+  thrust: 3000
+  baseThrust: 4000
+  pitchForce: 300
+  rollForce: 400
+  gravityWhenFlying: 10
+  gravityPlungeFactor: 60
 --- !u!65 &4009345996532297924
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -76,7 +78,7 @@ Rigidbody:
   m_GameObject: {fileID: 4009345996532297926}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 6
   m_AngularDrag: 10
   m_UseGravity: 1
   m_IsKinematic: 0
