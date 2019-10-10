@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu]
-public class CameraSettings : ScriptableObject
+[System.Serializable]
+public class CameraSettings
 {
     [Header("Basics")]
     public float distance = 1f;
-    public float fieldOfView = 75f;
+    [Range(2f, 200f)] public float fieldOfView = 75f;
     public Vector3 rotation;
     public Vector3 offset;
     [Header("Lerps")]
@@ -15,14 +15,25 @@ public class CameraSettings : ScriptableObject
     public float distanceLerpSpeed = 1f;
     [Header("Speed Enhancer")]
     public float speedEffectMultiplier = 1f;
+    [Header("Follow")]
+    public Vector2 range;
+}
+
+[CreateAssetMenu]
+public class CameraSettingsAsset : ScriptableObject
+{
+    public CameraSettings settings;
 }
 
 public class CameraController : MonoBehaviour
 {
     [Header("Referencies")]
     public Camera cam;
-    public CameraSettings defaultSettings;
     public Transform target;
+
+    [Header("Settings")]
+    public CameraSettingsAsset defaultSet;
+    public CameraSettings settings;
 
     [Header("Speed Enhancer")]
     public float maxEffect = 2f;
@@ -31,7 +42,6 @@ public class CameraController : MonoBehaviour
     public Vector2 fovRange;
     
     // MOVEMENT
-    CameraSettings settings;
     float originFieldOfView;
     float originDistance;
     Vector3 originPosition;
@@ -56,55 +66,84 @@ public class CameraController : MonoBehaviour
     void Load(CameraSettings s)
     {
         settings = s;
-
-        originPosition = targetPosition = currentPosition = settings.offset;
-        originRotation = targetRotation = currentRotation = settings.rotation;
-        originFieldOfView = targetFieldOfView = currentFieldOfView = settings.fieldOfView;
-        originDistance = targetDistance = currentDistance = settings.distance;
+        // POSITION
+        originPosition = settings.offset;
+        targetPosition = settings.offset;
+        currentPosition = settings.offset;
+        // ROTATION
+        originRotation = settings.rotation;
+        targetRotation = settings.rotation;
+        currentRotation = settings.rotation;
+        // FOV
+        originFieldOfView = settings.fieldOfView;
+        targetFieldOfView = settings.fieldOfView;
+        currentFieldOfView = settings.fieldOfView;
+        // DISTANCE
+        originDistance = settings.distance;
+        targetDistance = settings.distance;
+        currentDistance = settings.distance;
     }
 
     void Start()
     {
-        Load(defaultSettings);
+        Load(settings);
     }
 
 #region INSPECTOR 
     void OnDrawGizmosSelected()
     {
         Gizmos.color = new Color32(173, 216, 230, 255);
+        UnityEditor.Handles.color = Gizmos.color = new Color32(173, 216, 230, 255);
+        GUIStyle style = new GUIStyle();
+        style.normal.textColor = new Color32(173, 216, 230, 255);
+        style.alignment = TextAnchor.MiddleCenter;
+        style.fontStyle = FontStyle.Bold;
+        style.fontSize = 9;
+
         if(target)
         {
-            UnityEditor.Handles.DrawWireDisc(transform.position, transform.up, 0.5f);
-            Gizmos.DrawLine(transform.position, target.position);
-            UnityEditor.Handles.DrawWireDisc(target.position, target.up, 1f);
+            // Follow range draw
+            UnityEditor.Handles.DrawWireDisc(currentPosition, Vector3.up, settings.range.x);
+            UnityEditor.Handles.DrawWireDisc(currentPosition, Vector3.up, settings.range.y);
+            Gizmos.DrawLine(transform.position, currentPosition);
+            Gizmos.DrawLine(currentPosition, target.position);
+
+            UnityEditor.Handles.Label(currentPosition + Vector3.right * settings.range.x, "Min " + settings.range.x.ToString(), style);
+            UnityEditor.Handles.Label(currentPosition + Vector3.right * settings.range.y, "Max " + settings.range.y.ToString(), style);
+            UnityEditor.Handles.Label((transform.position + target.position)/2, "Dist " + settings.distance.ToString(), style);
         }
         else
         {
             Gizmos.DrawLine(transform.position, targetPosition);
-            Gizmos.DrawWireCube(targetPosition, Vector3.one/10f);
         }
     }
     
     // Execute when editing values in the inspector
-    //void OnValidate()
-    /*
+    void OnValidate()
     {
-        //Load(defaultSettings);
-        if(targetDistance < 0) targetDistance = 0;
+        Load(settings);
+
+        if(settings.distance < 0f) settings.distance = 0f;
+        if(settings.fieldOfView < 2f) settings.fieldOfView = 2f;
+        if(targetDistance < 0) targetDistance = 0f;
+        if(settings.range.y < settings.range.x) settings.range.y = settings.range.x;
         if(target != null) currentPosition += target.position;
+
         Apply();
     }
-    */
+    
 #endregion
 
     void FixedUpdate()
     {
         Vector3 offset = Vector3.zero;
+        float distanceFromTarget = 0f;
+
         if(settings.distance < 0) settings.distance = 0;
         if(target != null) 
         {
             offset = target.position;
-
+            distanceFromTarget = Vector3.Distance(currentPosition, target.position);
             float d = Vector3.Distance(target.position, lastTargetPosition);
             lastTargetPosition = target.position;
             float ratio = Mathf.Clamp(d / maxEffect, 0f, 1f);
@@ -113,8 +152,15 @@ public class CameraController : MonoBehaviour
         }
 
         // Lerping current values
-        currentDistance = Mathf.Lerp(currentDistance, targetDistance + distanceOffset, Time.deltaTime * settings.distanceLerpSpeed);
-        currentPosition = Vector3.Lerp(currentPosition, targetPosition + offset, Time.deltaTime * settings.positionLerpSpeed);
+        currentDistance = Mathf.Lerp(currentDistance, targetDistance/* + distanceOffset*/, Time.deltaTime * settings.distanceLerpSpeed);
+
+        if(distanceFromTarget > settings.range.x)
+        {   
+            float s = (distanceFromTarget - settings.range.x) / settings.range.y;
+            currentPosition = Vector3.Lerp(currentPosition, targetPosition + offset, Time.deltaTime * settings.positionLerpSpeed * s);
+        }
+            
+        
         currentRotation = Vector3.Lerp(currentRotation, targetRotation, Time.deltaTime * settings.rotationLerpSpeed);
         cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, targetFieldOfView, Time.deltaTime * settings.fovLerpSpeed);
 
@@ -142,6 +188,7 @@ public class CameraController : MonoBehaviour
 
     void Apply()
     {
+        Debug.Log(currentDistance);
         transform.forward = -(transform.position - currentPosition).normalized;
         transform.position = currentPosition + Quaternion.Euler(currentRotation) * Vector3.forward * currentDistance;
         cam.fieldOfView = currentFieldOfView;
