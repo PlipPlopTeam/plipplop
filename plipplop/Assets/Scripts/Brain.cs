@@ -38,10 +38,12 @@ public class Brain
 
         if (mapping.IsPressed(ACTION.POSSESS)) controller.OnEject();
         if (mapping.IsPressed(ACTION.JUMP)) controller.OnJump();
+        if (mapping.IsHeld(ACTION.JUMP)) controller.OnHoldJump();
     }
 
     public void Possess(Controller controller)
     {
+        if (this.controller != null) Eject();
         controller.OnPossess();
         this.controller = controller;
     }

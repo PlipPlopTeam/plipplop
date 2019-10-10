@@ -9,15 +9,23 @@ public class Ball : Controller
     public float acceleration = 1000f;
     public float jumpForce = 7f;
     public float airRollFactor = 4f;
-
     public float moveLerp = 1;
 
-    new Rigidbody rigidbody;
     new Renderer renderer;
     new SphereCollider collider;
     Transform childBall;
 
-    public override void Move(Vector3 direction)
+    public override void OnPossess()
+    {
+        renderer.material.color = Color.red;
+    }
+
+    public override void OnEject()
+    {
+        renderer.material.color = Color.white;
+    }
+
+    internal override void Move(Vector3 direction)
     {
         var perimeter = 2 * Mathf.PI * (1f); //radius
 
@@ -39,28 +47,13 @@ public class Ball : Controller
         ) * factor, Space.World);
     }
 
-    public override void OnPossess()
-    {
-        renderer.material.color = Color.red;
-    }
-
-    public override void OnEject()
-    {
-        renderer.material.color = Color.white;
-    }
-
-    public override void OnJump()
+    internal override void OnJump()
     {
         if (IsGrounded()) {
             rigidbody.velocity = new Vector3(rigidbody.velocity.x, jumpForce, rigidbody.velocity.z);
         }
     }
-
-    public override void OnToggleCrouch(bool crouching)
-    {
-        throw new System.NotImplementedException();
-    }
-
+    
 
     bool IsGrounded() {
        return Physics.Raycast(transform.position, Vector3.down, collider.bounds.extents.y + 0.1f);
@@ -77,6 +70,7 @@ public class Ball : Controller
         base.Start();
     }
 
+
     internal override void Update()
     {
         if (IsPossessed()) {
@@ -85,6 +79,4 @@ public class Ball : Controller
 
         base.Update();
     }
-
-
 }
