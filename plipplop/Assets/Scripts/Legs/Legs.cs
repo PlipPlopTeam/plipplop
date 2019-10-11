@@ -3,19 +3,14 @@ using UnityEngine;
 
 public class Legs : MonoBehaviour
 {
-    public float legFps = 4;
-
     public bool lerpLeg;
-
-    public Leg[] legs;
     public bool rightLeg;
-
-    public Vector3 velocity = Vector3.zero;
-    
-    //Body
-
     public bool lerpBody = true;
+    public Leg[] legs;
+    public Vector3 velocity = Vector3.zero;
     public Transform body;
+
+    public float legFps = 4;
     public float bodyAmp = .05f;
     public float bodyTilt = 1;
     public float bodyTurn = 10;
@@ -23,19 +18,18 @@ public class Legs : MonoBehaviour
     public float talkWobbleSpeedVariation = 0.5f;
     public float talkWobbleBaseSpeed = 1f;
 
+    bool up;
     Vector3 bodyStartPosition;
     Vector3 startLocalEulerAngles;
-    bool up;
-    Coroutine talkingEnumerator;
     float startTalkingTime;
     float talkWobbleSpeed;
+    Coroutine talkingEnumerator;
+    float timer;
     
     void Start()
     {
         bodyStartPosition = body.localPosition;
         startLocalEulerAngles = body.localEulerAngles;
-        StartCoroutine(UpdateLegs());
-        StartCoroutine(UpdateBody());
     }
 
     public void StartTalking()
@@ -52,70 +46,53 @@ public class Legs : MonoBehaviour
         body.localScale = new Vector3(1f, 1f, 1f);
     }
 
-    IEnumerator UpdateBody()
+    public void FixedUpdate()
     {
-        while (true)
+        if(timer > 0) timer -= Time.deltaTime;
+        else
         {
-            if (lerpBody)
-            {
-                
-                
-                if (up)
-                {
-                    body.localPosition = bodyStartPosition - new Vector3(0,bodyAmp,0) * (Vector3.ClampMagnitude(velocity,1).magnitude +.1f);
-                }
-                else
-                {
-                    body.localPosition = bodyStartPosition + new Vector3(0,bodyAmp,0) * (Vector3.ClampMagnitude(velocity,1).magnitude +.1f);
-                }
-                
-                up = !up;
-
-                yield return new WaitForSeconds(1/legFps/2);
-            }
-            else
-            {
-                yield return null;
-            }
+            UpdateBody();
+            UpdateLegs();
+            timer = 1/legFps;
         }
     }
 
-    IEnumerator UpdateLegs()
+    void UpdateBody()
     {
-        while (true)
+        if (lerpBody)
         {
-            if (rightLeg)
+            if (up)
             {
-                legs[0].UpdateLeg(velocity);
-
-                if (lerpBody) body.localEulerAngles = new Vector3(Random.Range(-bodyTilt,bodyTilt),Random.Range(-bodyTurn,-bodyTurn + .5f),Random.Range(-bodyTilt,bodyTilt))* (Vector3.ClampMagnitude(velocity,1).magnitude + .1f);
-
-
+                body.localPosition = bodyStartPosition - new Vector3(0,bodyAmp,0) * (Vector3.ClampMagnitude(velocity,1).magnitude +.1f);
             }
             else
             {
-                legs[1].UpdateLeg(velocity);
-                if (lerpBody) body.localEulerAngles = new Vector3(Random.Range(-bodyTilt,bodyTilt),Random.Range(bodyTurn,bodyTurn -5f),Random.Range(-bodyTilt,bodyTilt))* (Vector3.ClampMagnitude(velocity,1).magnitude + .1f);
+                body.localPosition = bodyStartPosition + new Vector3(0,bodyAmp,0) * (Vector3.ClampMagnitude(velocity,1).magnitude +.1f);
             }
-            rightLeg = !rightLeg;
-
-            
-            
-            
-            if (lerpLeg)
-            {
-                yield return new WaitForSeconds(1/legFps);
-            }
-            else
-            {
-                yield return null;
-            }
+            up = !up;
         }
+    }
+
+    void UpdateLegs()
+    {
+        if (rightLeg)
+        {
+            legs[0].UpdateLeg(velocity);
+            if(lerpBody) body.localEulerAngles = new Vector3(Random.Range(-bodyTilt,bodyTilt),Random.Range(-bodyTurn,-bodyTurn + .5f),Random.Range(-bodyTilt,bodyTilt))* (Vector3.ClampMagnitude(velocity,1).magnitude + .1f);
+        }
+        else
+        {
+            legs[1].UpdateLeg(velocity);
+            if(lerpBody) body.localEulerAngles = new Vector3(Random.Range(-bodyTilt,bodyTilt),Random.Range(bodyTurn,bodyTurn -5f),Random.Range(-bodyTilt,bodyTilt))* (Vector3.ClampMagnitude(velocity,1).magnitude + .1f);
+        }
+        
+        rightLeg = !rightLeg;
     }
 
     IEnumerator UpdateTalkingAnimation()
     {
-        while (true) {
+        while (true)
+        {
             var delta = System.DateTime.Now.Millisecond - startTalkingTime;
             var scale = 1f + scaleScale * (Mathf.Sin(delta * talkWobbleSpeed) + 1) * 0.5f;
             body.localScale = new Vector3(1f,1f,1f)* scale;

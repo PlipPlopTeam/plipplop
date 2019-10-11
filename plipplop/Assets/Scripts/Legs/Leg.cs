@@ -2,32 +2,23 @@
 
 public class Leg : MonoBehaviour
 {
+    [Header("Referencies")]
+    public Legs body;
+    public LayerMask raycastMask;
     public Transform foot;
     public Transform hip;
     public Transform knee;
-
-    private RaycastHit hit;
-
+    [Header("Settings")]
     public float forwardDistance = 1;
-
-    public float rayDistance = 2;
-
     public float maxFootDistance = 2;
-
     public float kneeNoise = .2f;
     public float kneeVelInfluence = 0;
 
-    public Legs body;
-
     private Vector3 kneeOffset;
-
-    public LayerMask raycastMask;
     
     private void Start()
     {
         foot.transform.parent = null;
-        //knee.transform.parent = null;
-        //StartCoroutine(UpdateBody());
     }
 
     private void Update()
@@ -53,22 +44,18 @@ public class Leg : MonoBehaviour
     {
         _vel.y = 0;
         _vel = Vector3.ClampMagnitude(_vel, 1);
-      
-        if (Physics.Raycast(transform.position, Vector3.down + _vel * forwardDistance, out hit, rayDistance, raycastMask))
+        RaycastHit[] hits = Physics.RaycastAll(transform.position, -Vector3.up, maxFootDistance, raycastMask);
+        foreach(RaycastHit hit in hits)
         {
-            foot.position = hit.point + GetNoise(0) * _vel.magnitude;
-            foot.transform.up = hit.normal;
-            foot.transform.eulerAngles = new Vector3(foot.transform.eulerAngles.x, transform.eulerAngles.y - 90 , foot.transform.eulerAngles.z);
-
-            if (foot.parent != null)
+            if(hit.transform != body.body)
             {
-                foot.parent = null;
-                //knee.parent = null;
+                foot.position = hit.point + GetNoise(0) * _vel.magnitude;
+                foot.transform.up = hit.normal;
+                foot.transform.eulerAngles = new Vector3(foot.transform.eulerAngles.x, transform.eulerAngles.y - 90 , foot.transform.eulerAngles.z);
+                if(foot.parent != null) foot.parent = null;
             }
         }
-
         kneeOffset = GetNoise();
-
         UpdateKnee(_vel); 
     }
 

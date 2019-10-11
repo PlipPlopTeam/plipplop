@@ -25,19 +25,14 @@ public class Ball : Controller
         renderer.material.color = Color.white;
     }
 
-    internal override void Move(Vector3 direction)
+    internal override void SpecificMove(Vector3 direction)
     {
         var perimeter = 2 * Mathf.PI * (1f); //radius
-
         Vector3 _velocity = transform.forward * direction.z * Time.deltaTime + transform.right * direction.x * Time.deltaTime;
         _velocity *= maxSpeed;
-
         _velocity = Vector3.ClampMagnitude(_velocity, maxSpeed);
-
         _velocity.y = rigidbody.velocity.y;
-        
         rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, _velocity, Time.deltaTime * moveLerp);
-        
         var factor = 1;
         
         childBall.Rotate(new Vector3(
@@ -52,6 +47,16 @@ public class Ball : Controller
         if (IsGrounded()) {
             rigidbody.velocity = new Vector3(rigidbody.velocity.x, jumpForce, rigidbody.velocity.z);
         }
+    }
+
+    internal override void Crouch()
+    {
+        collider.enabled = true;
+    }
+
+    internal override void Stand()
+    {
+        collider.enabled = false;
     }
     
 
@@ -73,11 +78,10 @@ public class Ball : Controller
 
     internal override void Update()
     {
-        if (IsPossessed()) {
+        if (IsPossessed())
+        {
 
         }
-
         base.Update();
     }
-
 }
