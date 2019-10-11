@@ -7,7 +7,6 @@ public class Glider : Controller
 {
     [Header("Specific properties")]
     public float maxFlyingSpeed = 1000f;
-    public float thrust = 100f;
     public float baseThrust = 70f;
     public float pitchForce = 10f;
     public float rollForce = 10f;
@@ -17,6 +16,7 @@ public class Glider : Controller
     public float gravityPlungeFactor = 3f;
     public float restabilizationForce = 20f;
     public float turnForce = 5f;
+    [Range(0,1)] public float pitchMaxAmplitude;
 
     float descentFactor = 0f;
     Vector3 inertedControls = new Vector3();
@@ -66,6 +66,10 @@ public class Glider : Controller
         else {
             rigidbody.useGravity = true;
         }
+
+        if (rigidbody.velocity.magnitude > maxFlyingSpeed) {
+            rigidbody.velocity = rigidbody.velocity.normalized * maxFlyingSpeed;
+        }
     }
 
     private void OnDrawGizmosSelected()
@@ -93,6 +97,7 @@ public class Glider : Controller
     {
         inertedControls.z = Mathf.Lerp(inertedControls.z, direction.z, pitchControlInertia * Time.deltaTime);
         inertedControls.x = Mathf.Lerp(inertedControls.x, direction.x, rollControlInertia * Time.deltaTime);
+        inertedControls.z = Mathf.Clamp(inertedControls.z, -pitchMaxAmplitude, pitchMaxAmplitude);
 
         rigidbody.AddTorque(transform.right * inertedControls.z * pitchForce * Time.deltaTime);
 
@@ -104,18 +109,7 @@ public class Glider : Controller
 
         rigidbody.AddTorque(Vector3.up * inertedControls.x * Mathf.Abs(normalizedRoll) * rollForce * turnForce * Time.deltaTime);
     }
-
-    internal override void OnHoldJump()
-    {
-        if (!IsGrounded() && !isCrouching) {
-            rigidbody.AddForce(transform.forward * descentFactor * thrust * Time.deltaTime);
-
-            if (rigidbody.velocity.magnitude > maxFlyingSpeed) {
-                rigidbody.velocity = rigidbody.velocity.normalized * maxFlyingSpeed;
-            }
-        }
-    }
-
+    
     internal override void OnJump()
     {
         isCrouching = false;
