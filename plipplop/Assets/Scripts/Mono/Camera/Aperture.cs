@@ -1,37 +1,31 @@
 ﻿using UnityEngine;
 
-[System.Serializable]
-public class CameraSettings
+public class Aperture : MonoBehaviour
 {
-    [Header("Basics")]
-    public float distance = 1f;
-    [Range(2f, 200f)] public float fieldOfView = 75f;
-    public Vector3 rotationOffset;
-    public Vector3 positionOffset;
-    public Vector2 range;
-    [Header("Lerps")]
-    public float fovLerp = 1f;
-    public float followLerp = 1f;
-    public float camLerp = 1f;
-    [Header("Speed Enhancer")]
-    public float speedEffectMultiplier = 1f;
-}
+    [System.Serializable]
+    public class Settings
+    {
+        [Header("Basics")]
+        public float distance = 1f;
+        [Range(2f, 200f)] public float fieldOfView = 75f;
+        public Vector3 rotationOffset;
+        public Vector3 positionOffset;
+        public Vector2 range;
+        [Header("Lerps")]
+        public float fovLerp = 1f;
+        public float followLerp = 1f;
+        public float camLerp = 1f;
+        [Header("Speed Enhancer")]
+        public float speedEffectMultiplier = 1f;
+    }
 
-[CreateAssetMenu]
-public class CameraSettingsAsset : ScriptableObject
-{
-    public CameraSettings settings;
-}
-
-public class CameraController : MonoBehaviour
-{
-    [Header("Referencies")]
+    [Header("References")]
     public Camera cam;
     public Transform target;
 
     [Header("Settings")]
-    public CameraSettingsAsset defaultSet;
-    public CameraSettings settings;
+    public AperturePreset defaultSet;
+    public Settings settings;
 
     [Header("Speed Enhancer")]
     public float maxEffect = 2f;
@@ -63,7 +57,7 @@ public class CameraController : MonoBehaviour
     private float intensity = 0.7f;
     private float duration = 0f;
 
-    void Load(CameraSettings s)
+    void Load(Settings s)
     {
         settings = s;
         // POSITION
@@ -82,6 +76,17 @@ public class CameraController : MonoBehaviour
         originDistance = settings.distance;
         targetDistance = settings.distance;
         currentDistance = settings.distance;
+    }
+
+    private void Awake()
+    {
+        if (FindObjectsOfType<Aperture>().Length > 2) {
+            DestroyImmediate(gameObject);
+            throw new System.Exception("DESTROYED duplicate CameraController. This should NOT happen. Check your scene.");
+        }
+
+        if (Camera.main) Camera.main.tag = "Untagged";
+        gameObject.tag = "MainCamera";
     }
 
     void Start()
@@ -230,14 +235,14 @@ public class CameraController : MonoBehaviour
         cam.fieldOfView = currentFieldOfView;
     } // Apply the values to the camera 
 
-    public void Focus(Vector3 newPosition, CameraSettings set = null)
+    public void Focus(Vector3 newPosition, Settings set = null)
     {
         targetPosition = newPosition;
         target = null;
         if(set != null) Load(set);
     } // Focus camera on a new position (Vector3)
 
-    public void Focus(Transform newTarget, CameraSettings set = null)
+    public void Focus(Transform newTarget, Settings set = null)
     {
         target = newTarget;
         if(set != null) Load(set);

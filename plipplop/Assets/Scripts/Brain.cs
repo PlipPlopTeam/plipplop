@@ -47,6 +47,8 @@ public class Brain
         if (this.controller != null) Eject();
         controller.OnPossess();
         this.controller = controller;
+        Game.i.aperture.target = controller.transform;
+        Game.i.aperture.settings = controller.customCamera ? controller.customCamera.settings : Game.i.aperture.defaultSet.settings;
     }
 
     public void Eject()

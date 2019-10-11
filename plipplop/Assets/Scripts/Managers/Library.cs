@@ -7,6 +7,9 @@ public class Library
 {
     [Header("Strings")]
     public string gameName = "Plip plop";
+
     [Header("Prefabs")]
     public GameObject legsPrefab;
+    public GameObject aperture;
+
 }

@@ -11,7 +11,8 @@ public abstract class Controller : MonoBehaviour
     public bool canCrouch = true;
     public float legsHeight = 1f;
     public Vector3 legsOffset;
-    
+    public AperturePreset customCamera = null;
+
     new internal Rigidbody rigidbody;
     new internal CapsuleCollider collider;
     internal bool crouching = false;

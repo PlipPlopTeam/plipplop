@@ -7,6 +7,7 @@ public class Game : MonoBehaviour
     public Library library;
     public Brain player;
     public Mapping mapping;
+    [HideInInspector] public Aperture aperture;
 
     static public Game i;
 
@@ -20,6 +21,8 @@ public class Game : MonoBehaviour
             Destroy(gameObject);
             throw new System.Exception("!!! DUPLICATE \"GAME\" INSTANCE !!! THIS SHOULD NOT HAPPEN !!!");
         }
+
+        aperture = FindObjectOfType<Aperture>() ?? Instantiate(library.aperture).GetComponent<Aperture>();
 
         i = this;
 

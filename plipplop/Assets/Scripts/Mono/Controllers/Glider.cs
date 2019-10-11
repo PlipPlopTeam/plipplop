@@ -44,7 +44,7 @@ public class Glider : Controller
     {
         base.Update();
 
-        descentFactor = Mathf.Max(0f, (((transform.localEulerAngles.x + 180f) % 360f) / 270f - 0.55f))*4f; // Magic
+        descentFactor = Mathf.Max(0f, (((transform.localEulerAngles.x + 180f) % 360f) / 270f - 0.55f) - Mathf.Clamp01(rigidbody.velocity.y)) *4f; // Magic
 
         if (!IsGrounded()) {
 
@@ -107,7 +107,8 @@ public class Glider : Controller
         normalizedRoll *= 2f;
         rigidbody.AddTorque(- transform.forward * inertedControls.x * Mathf.Abs(normalizedRoll) * rollForce * Time.deltaTime);
 
-        rigidbody.AddTorque(Vector3.up * inertedControls.x * Mathf.Abs(normalizedRoll) * rollForce * turnForce * Time.deltaTime);
+        rigidbody.AddTorque(Vector3.up * inertedControls.x * (Mathf.Abs(normalizedRoll) + 0.1f) * rollForce * turnForce * Time.deltaTime);
+
     }
     
     internal override void OnJump()
