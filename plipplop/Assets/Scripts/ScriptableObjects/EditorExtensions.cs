@@ -34,7 +34,7 @@ public class NewController : Controller
         return;
     }
 
-    internal override void Move(Vector3 direction)
+    internal override void SpecificMove(Vector3 direction)
     {
         base.Move(direction);
     }

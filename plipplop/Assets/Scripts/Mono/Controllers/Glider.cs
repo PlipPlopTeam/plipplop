@@ -46,7 +46,7 @@ public class Glider : Controller
 
         descentFactor = Mathf.Max(0f, (((transform.localEulerAngles.x + 180f) % 360f) / 270f - 0.55f) - Mathf.Clamp01(rigidbody.velocity.y)) *4f; // Magic
 
-        if (!IsGrounded()) {
+        if (!IsGrounded() && rigidbody.velocity.magnitude != 0f) {
 
             // Fake gravity
             rigidbody.useGravity = false;
