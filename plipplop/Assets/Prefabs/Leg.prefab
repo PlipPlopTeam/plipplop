@@ -44,14 +44,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f42ed7b16febb9d4eb08b989f252450f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  body: {fileID: 0}
+  raycastMask:
+    serializedVersion: 2
+    m_Bits: 0
   foot: {fileID: 2017412858371346185}
   hip: {fileID: 2017412858371346187}
   knee: {fileID: 2017412858371346177}
-  lerping: 1
-  fps: 4
   forwardDistance: 0.1
-  rayDistance: 2
+  rayDistance: 5
   maxFootDistance: 2
+  kneeNoise: 0.2
+  kneeVelInfluence: 0
 --- !u!1001 &2017412858370954633
 PrefabInstance:
   m_ObjectHideFlags: 0
