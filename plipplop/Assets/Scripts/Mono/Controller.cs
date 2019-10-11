@@ -15,7 +15,7 @@ public abstract class Controller : MonoBehaviour
 
     new internal Rigidbody rigidbody;
     internal CapsuleCollider legsCollider;
-    internal bool crouching = false;
+    internal bool isCrouching = false;
     internal Legs legs;
 
     public abstract void OnEject();
@@ -26,14 +26,14 @@ public abstract class Controller : MonoBehaviour
     {
         if(canCrouch)
         {
-            crouching = !crouching;
+            isCrouching = !isCrouching;
             RefreshCrouch();
         }
     }
 
     private void RefreshCrouch()
     {
-        if(crouching)
+        if(isCrouching)
         {
             Crouch();
             
@@ -83,7 +83,7 @@ public abstract class Controller : MonoBehaviour
 
     public void Move(Vector3 direction)
     {
-        if(crouching) SpecificMove(direction);
+        if(isCrouching) SpecificMove(direction);
         else
         {
             Vector3 camdir = new Vector3(Camera.main.transform.forward.x, 0f, Camera.main.transform.forward.z);
