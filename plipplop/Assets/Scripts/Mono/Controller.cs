@@ -11,12 +11,31 @@ public abstract class Controller : MonoBehaviour
     public bool canCrouch = true;
     public AperturePreset customCamera = null;
     new internal Rigidbody rigidbody;
+    internal bool crouching;
+    internal Legs legs;
 
     public abstract void OnEject();
     public abstract void OnPossess();
 
     internal virtual void OnJump() { }
-    internal virtual void OnToggleCrouch() { }
+    public void OnToggleCrouch()
+    {
+        if(canCrouch)
+        {
+            crouching = !crouching;
+            if(crouching)
+            {
+                Crouch();
+            }
+            else
+            {
+                Stand();
+            }   
+        }
+    }
+
+    internal virtual void Crouch() {}
+    internal virtual void Stand() {}
     internal virtual void OnHoldJump() { }
     internal virtual void Move(Vector3 direction) { }
     public void Move(float fb, float rl) {

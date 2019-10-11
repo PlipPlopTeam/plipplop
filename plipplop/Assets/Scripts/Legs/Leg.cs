@@ -17,7 +17,7 @@ public class Leg : MonoBehaviour
     public float kneeNoise = .2f;
     public float kneeVelInfluence = 0;
 
-    public BodyAnimations body;
+    public Legs body;
 
     private Vector3 kneeOffset;
 
