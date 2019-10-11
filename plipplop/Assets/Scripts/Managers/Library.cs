@@ -5,5 +5,6 @@ using UnityEngine;
 [System.Serializable]
 public class Library
 {
-    public string gameName = "Plip plop"; 
+    public string gameName = "Plip plop";
+    public GameObject cameraController;
 }

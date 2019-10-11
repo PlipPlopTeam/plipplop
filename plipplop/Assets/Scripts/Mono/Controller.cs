@@ -9,7 +9,7 @@ public abstract class Controller : MonoBehaviour
     public bool addRigidBody = false;
     public bool autoPossess = false;
     public bool canCrouch = true;
-    
+    public AperturePreset customCamera = null;
     new internal Rigidbody rigidbody;
 
     public abstract void OnEject();
