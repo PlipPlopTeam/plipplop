@@ -5,5 +5,8 @@ using UnityEngine;
 [System.Serializable]
 public class Library
 {
-    public string gameName = "Plip plop"; 
+    [Header("Strings")]
+    public string gameName = "Plip plop";
+    [Header("Prefabs")]
+    public GameObject legsPrefab;
 }

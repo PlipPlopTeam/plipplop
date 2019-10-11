@@ -1,8 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.AI;
 
-public class BodyAnimations : MonoBehaviour
+public class Legs : MonoBehaviour
 {
     public float legFps = 4;
 

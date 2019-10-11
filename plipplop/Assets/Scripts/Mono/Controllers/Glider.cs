@@ -121,27 +121,6 @@ public class Glider : Controller
         isCrouching = false;
     }
 
-    internal override void OnToggleCrouch()
-    {
-        isCrouching = !isCrouching;
-        if (isCrouching) {
-            Crouch();
-        }
-        else {
-            Stand();
-        }
-    }
-
-    void Crouch()
-    {
-
-    }
-
-    void Stand()
-    {
-
-    }
-
     bool IsGrounded()
     {
         return Physics.Raycast(transform.position, Vector3.down, collider.bounds.extents.y + 0.1f);
