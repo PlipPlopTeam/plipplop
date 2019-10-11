@@ -22,7 +22,7 @@ public class Game : MonoBehaviour
             throw new System.Exception("!!! DUPLICATE \"GAME\" INSTANCE !!! THIS SHOULD NOT HAPPEN !!!");
         }
 
-        aperture = FindObjectOfType<Aperture>() ?? Instantiate(library.cameraController).GetComponent<Aperture>();
+        aperture = FindObjectOfType<Aperture>() ?? Instantiate(library.aperture).GetComponent<Aperture>();
 
         i = this;
 

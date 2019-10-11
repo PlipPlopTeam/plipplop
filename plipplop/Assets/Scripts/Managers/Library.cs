@@ -10,6 +10,6 @@ public class Library
 
     [Header("Prefabs")]
     public GameObject legsPrefab;
-    public GameObject cameraController;
+    public GameObject aperture;
 
 }
