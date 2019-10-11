@@ -93,7 +93,7 @@ public class Glider : Controller
     }
 
 
-    internal override void Move(Vector3 direction)
+    internal override void SpecificMove(Vector3 direction)
     {
         inertedControls.z = Mathf.Lerp(inertedControls.z, direction.z, pitchControlInertia * Time.deltaTime);
         inertedControls.x = Mathf.Lerp(inertedControls.x, direction.x, rollControlInertia * Time.deltaTime);

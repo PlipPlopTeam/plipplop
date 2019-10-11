@@ -18,7 +18,7 @@ public class Car : Controller
         rigidbody = GetComponent<Rigidbody>();
     }
 
-    internal override void Move(Vector3 direction)
+    internal override void SpecificMove(Vector3 direction)
     {
         if (direction.magnitude > 0f) {
             speed += Time.deltaTime * acceleration;

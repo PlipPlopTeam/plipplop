@@ -25,7 +25,7 @@ public class Ball : Controller
         renderer.material.color = Color.white;
     }
 
-    internal override void Move(Vector3 direction)
+    internal override void SpecificMove(Vector3 direction)
     {
         var perimeter = 2 * Mathf.PI * (1f); //radius
         Vector3 _velocity = transform.forward * direction.z * Time.deltaTime + transform.right * direction.x * Time.deltaTime;
