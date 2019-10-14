@@ -69,7 +69,6 @@ public class Ball : Controller
     internal override void OnLegsExtended()
     {
         collider.enabled = false;
-        rigidbody.drag = locomotion.baseDrag;
     }
 
     internal override void Awake()
@@ -86,7 +85,7 @@ public class Ball : Controller
     internal override void Start()
     {
         base.Start();
-        originalLegHeight = legsHeight;
+        originalLegHeight = locomotion.legsHeight;
     }
 
     internal override void FixedUpdate() {}
@@ -97,7 +96,7 @@ public class Ball : Controller
 
         if (IsPossessed())
         {
-            legsHeight = originalLegHeight * (1f - rigidbody.velocity.magnitude / speedBeforeRoll);
+            locomotion.legsHeight = originalLegHeight * (1f - rigidbody.velocity.magnitude / speedBeforeRoll);
             if (rigidbody.velocity.magnitude > speedBeforeRoll) {
                 RetractLegs();
             }
