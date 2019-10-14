@@ -17,19 +17,33 @@ public abstract class Controller : MonoBehaviour
 
     new internal Rigidbody rigidbody;
     internal CapsuleCollider legsCollider;
-    internal bool isCrouching = false;
+    internal bool isCrouching = true;
     internal Legs legs;
+    internal ControllerSensor controllerSensor;
 
     public virtual void OnEject()
     {
+        if (controllerSensor) Destroy(controllerSensor.gameObject);
+        controllerSensor = null;
         isCrouching = true;
         RefreshCrouch();
+
+        //DEBUG
+        foreach (var renderer in GetComponentsInChildren<Renderer>()) {
+            renderer.material.color = new Color(70 / 255f, 100 / 255f, 160 / 255f);
+        }
     }
     
     public virtual void OnPossess()
     {
+        controllerSensor = Instantiate(Game.i.library.controllerSensor, gameObject.transform).GetComponent<ControllerSensor>();
         isCrouching = false;
         RefreshCrouch();
+
+        //DEBUG
+        foreach (var renderer in GetComponentsInChildren<Renderer>()) {
+            renderer.material.color = new Color(140 / 255f, 60 / 255f, 60 / 255f);
+        }
     }
 
     internal virtual void OnJump() { }
@@ -123,14 +137,16 @@ public abstract class Controller : MonoBehaviour
         legsCollider = gameObject.AddComponent<CapsuleCollider>();
         legsCollider.height = legsHeight;
         legsCollider.center = legsOffset + new Vector3(0f, -legsHeight/2, 0f);
+
+        //DEBUG
+        foreach (var renderer in GetComponentsInChildren<Renderer>()) {
+            renderer.material = Instantiate(renderer.material);
+        }
     }
 
     virtual internal void Start()
     {
         if(autoPossess) Game.i.player.Possess(this);
-
-        if(!IsPossessed()) OnEject();
-        else OnPossess();
 
         RefreshCrouch();
     }

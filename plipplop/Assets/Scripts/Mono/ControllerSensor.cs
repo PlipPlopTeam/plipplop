@@ -9,6 +9,7 @@ public class ControllerSensor : MonoBehaviour
 
     private void Awake()
     {
+        collisionEventTransmitter = GetComponent<CollisionEventTransmitter>();
         collisionEventTransmitter.onTriggerEnter += OnControllerEnter;
         collisionEventTransmitter.onTriggerExit += OnControllerExit;
     }
