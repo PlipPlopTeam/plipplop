@@ -39,7 +39,9 @@ public class Ball : Controller
         _velocity.y = rigidbody.velocity.y;
         rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, _velocity, Time.deltaTime * moveLerp);
 
-        if (rigidbody.velocity.magnitude > 0f) transform.forward = rigidbody.velocity.normalized;
+
+        if(rigidbody.velocity.magnitude > 0.2f) transform.forward = rigidbody.velocity.normalized;
+
 
         var factor = 1;
         
