@@ -47,13 +47,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   addRigidBody: 0
-  autoPossess: 0
-  canCrouch: 1
-  speed: 3
-  baseDrag: 15
+  autoPossess: 1
+  keepCrouchState: 0
+  speed: 50
   legsHeight: 1
-  legsOffset: {x: 0, y: 0, z: 0}
+  jump: 10
+  groundCheckRange: 1
+  legsOffset: {x: 0, y: -0.1, z: 0}
   customCamera: {fileID: 0}
+  baseDrag: 15
+  strength: 0.5
+  maxFallSpeed: 10
   maxFlyingSpeed: 100
   baseThrust: 600
   pitchForce: 200
@@ -64,7 +68,7 @@ MonoBehaviour:
   gravityPlungeFactor: 230
   restabilizationForce: 200
   turnForce: 2
-  drag: 10
+  drag: 1
   pitchMaxAmplitude: 0.6
 --- !u!65 &4009345996532297924
 BoxCollider:

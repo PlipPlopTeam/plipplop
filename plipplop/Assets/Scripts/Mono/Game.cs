@@ -7,6 +7,7 @@ public class Game : MonoBehaviour
     public Library library;
     public Brain player;
     public Mapping mapping;
+    public LocomotionPreset defaultLocomotion;
     [HideInInspector] public Aperture aperture;
 
     static public Game i;

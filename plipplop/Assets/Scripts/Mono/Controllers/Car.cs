@@ -38,8 +38,18 @@ public class Car : Controller
         //Nothing for now
     }
 
-    public override void OnPossess()
+    public override void OnPossess(bool wasCrouching = false)
     {
         //Nothing for now
+    }
+
+    internal override void OnLegsRetracted()
+    {
+        //throw new System.NotImplementedException();
+    }
+
+    internal override void OnLegsExtended()
+    {
+        //throw new System.NotImplementedException();
     }
 }

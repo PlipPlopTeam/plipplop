@@ -39,12 +39,15 @@ public class Brain
         if (mapping.IsPressed(ACTION.JUMP)) controller.OnJump();
         if (mapping.IsPressed(ACTION.POSSESS)) controller.OnTryPossess();
         if (mapping.IsHeld(ACTION.JUMP)) controller.OnHoldJump();
-        if (controller.canCrouch && mapping.IsPressed(ACTION.CROUCH)) controller.OnToggleCrouch();
     }
 
     public void Possess(Controller controller)
     {
-        if (this.controller != null) Eject();
+        var wasCrouching = false;
+        if (this.controller != null) {
+            wasCrouching = this.controller.AreLegsRetracted();
+            Eject();
+        }
         controller.OnPossess();
         this.controller = controller;
         Game.i.aperture.target = controller.transform;

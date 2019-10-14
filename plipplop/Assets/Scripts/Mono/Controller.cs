@@ -8,35 +8,30 @@ public abstract class Controller : MonoBehaviour
     [Header("Inherited properties")]
     public bool addRigidBody = false;
     public bool autoPossess = false;
-    public bool canCrouch = true;
+    public bool keepCrouchState = false;
 
     [Header("Locomotion")]
-    public float speed = 3f;
+    public LocomotionPreset customLocomotion;
     public float legsHeight = 1f;
     public float jump = 10f;
-    public float groundCheckRange = 0.5f;
+    public float groundCheckRange = 1f;
 
     public Vector3 legsOffset;
     public AperturePreset customCamera = null;
 
-    [Header("Gravity")]
-    public float baseDrag = 15f;
-    public float strength = 0.5f;
-    public float maxFallSpeed = 10f;
-    public float checkGroundDistance;
-
     new internal Rigidbody rigidbody;
     internal CapsuleCollider legsCollider;
-    internal bool isCrouching = true;
     internal Legs legs;
     internal ControllerSensor controllerSensor;
+    internal Vector3 targetDirection;
+    internal LocomotionPreset locomotion;
 
     public virtual void OnEject()
     {
         if (controllerSensor) Destroy(controllerSensor.gameObject);
         controllerSensor = null;
-        isCrouching = true;
-        RefreshCrouch();
+
+        RetractLegs();
 
         //DEBUG
         foreach (var renderer in GetComponentsInChildren<Renderer>()) {
@@ -44,12 +39,17 @@ public abstract class Controller : MonoBehaviour
         }
     }
     
-    public virtual void OnPossess()
+    public virtual void OnPossess(bool keepCrouched=false)
     {
         controllerSensor = Instantiate(Game.i.library.controllerSensor, gameObject.transform).GetComponent<ControllerSensor>();
         controllerSensor.transform.localPosition = new Vector3(0f, 0f, controllerSensor.sensorForwardPosition);
-        isCrouching = false;
-        RefreshCrouch();
+
+        if (keepCrouchState && keepCrouched) {
+            ExtendLegs();
+        }
+        else {
+            RetractLegs();
+        }
 
         //DEBUG
         foreach (var renderer in GetComponentsInChildren<Renderer>()) {
@@ -60,59 +60,31 @@ public abstract class Controller : MonoBehaviour
     internal virtual void SpecificJump() {}
     internal virtual void OnJump()
     { 
-        if(isCrouching) SpecificJump();
-        else
-        {
-            if(IsGrounded()) 
-                rigidbody.velocity = new Vector3(rigidbody.velocity.x, jump, rigidbody.velocity.z);
-        }
+        if(AreLegsRetracted()) 
+            SpecificJump();
+        else if (IsGrounded()) {
+            rigidbody.velocity = new Vector3(rigidbody.velocity.x, jump, rigidbody.velocity.z);
+        }            
     }
 
-    bool IsGrounded()
+    internal virtual bool IsGrounded()
     {
-        Debug.DrawRay(transform.position + legsOffset - new Vector3(10f, legsHeight - 0.1f, 0f), Vector3.down, Color.red, 1f);
-        return Physics.Raycast(transform.position + legsOffset - new Vector3(0f, legsHeight - 0.1f, 0f), Vector3.down, groundCheckRange);
+        return 
+            AreLegsRetracted() ?
+                Physics.Raycast(transform.position + legsOffset, -transform.up, groundCheckRange) :
+                                                                                            // Magic 0.1f so the raycast can start above ground and not inside ground
+                Physics.Raycast(transform.position + legsOffset - new Vector3(0f, legsHeight + 0.1f, 0f), -transform.up, groundCheckRange);
     }
 
-    public void OnToggleCrouch()
+    public bool AreLegsRetracted()
     {
-        if(canCrouch)
-        {
-            isCrouching = !isCrouching;
-            RefreshCrouch();
-        }
-    }
-
-    private void RefreshCrouch()
-    {
-        if(isCrouching)
-        {
-            Crouch();
-            
-            if(!legs) GrowLegs();
-            legs.gameObject.SetActive(false);
-            legsCollider.enabled = false;
-        }
-        else
-        {
-            Stand();
-
-            if(!legs) GrowLegs();
-            legs.gameObject.SetActive(true);
-            legsCollider.enabled = true;
-
-            Vector3 surfacePosition = GetBelowSurface();
-            if(surfacePosition != Vector3.zero)
-            {
-                transform.position = new Vector3(transform.position.x, surfacePosition.y + legsHeight, transform.position.z);
-            }
-        }   
+        return legs == null || !legs.gameObject.activeSelf;
     }
 
     private Vector3 GetBelowSurface()
     {
         RaycastHit hit;
-        if(Physics.Raycast(transform.position + legsOffset, -Vector3.up, out hit)) return hit.point;
+        if(Physics.Raycast(transform.position + legsOffset + new Vector3(0f, -legsHeight, 0f), Vector3.down, out hit)) return hit.point;
         return Vector3.zero;
     }
 
@@ -125,14 +97,33 @@ public abstract class Controller : MonoBehaviour
         foreach(Leg l in legs.legs) l.maxFootDistance = legsHeight + 1f;
     }
 
-    internal virtual void Crouch() {}
-    internal virtual void Stand() {}
+    internal void RetractLegs() {
+        if (!legs) GrowLegs();
+        legs.gameObject.SetActive(false);
+        legsCollider.enabled = false;
+        OnLegsRetracted();
+    }
+    internal void ExtendLegs()
+    {
+        if (!legs) GrowLegs();
+        legs.gameObject.SetActive(true);
+        legsCollider.enabled = true;
+
+        Vector3 surfacePosition = GetBelowSurface();
+        if (surfacePosition != Vector3.zero) {
+            transform.position = new Vector3(transform.position.x, surfacePosition.y + legsHeight, transform.position.z);
+        }
+
+        OnLegsExtended();
+    }
     internal virtual void OnHoldJump() { }
+    internal abstract void OnLegsRetracted();
+    internal abstract void OnLegsExtended();
     internal virtual void SpecificMove(Vector3 direction) {}
 
     public void Move(Vector3 direction)
     {
-        if(isCrouching) SpecificMove(direction);
+        if(AreLegsRetracted()) SpecificMove(direction);
         else
         {
             Vector3 clampDirection = Vector3.ClampMagnitude(direction, 1f);
@@ -141,11 +132,10 @@ public abstract class Controller : MonoBehaviour
             //Vector3 dir = new Vector3(clampDirection.x * Game.i.aperture.Right().x,  0f, clampDirection.z  * Game.i.aperture.Right().z);
             Vector3 dir = clampDirection.x * Game.i.aperture.Right() + clampDirection.z * Game.i.aperture.Forward();
             // Add Movement Force
-            rigidbody.AddForce(dir * Time.deltaTime * speed, ForceMode.Impulse);
-            transform.forward = Game.i.aperture.Forward();
+            rigidbody.AddForce(dir * Time.deltaTime * locomotion.speed, ForceMode.Impulse);
 
             // Rotate legs
-            if(legs != null && dir != Vector3.zero) legs.transform.forward = -dir;            
+            if(dir != Vector3.zero) targetDirection = dir;
         }
     }
 
@@ -177,11 +167,13 @@ public abstract class Controller : MonoBehaviour
     {
         if(autoPossess) Game.i.player.Possess(this);
 
-        RefreshCrouch();
+        locomotion = customLocomotion ? customLocomotion : Game.i.defaultLocomotion;
+
     }
 
     virtual internal void Update()
     {
+        transform.forward = Vector3.Lerp(transform.forward, targetDirection, Time.deltaTime * 5f);
 
         // DEBUG
         var lr = GetComponent<LineRenderer>();
@@ -211,8 +203,8 @@ public abstract class Controller : MonoBehaviour
     {
         if(rigidbody != null && !IsGrounded()) 
         {
-            Vector3 v = rigidbody.velocity + Vector3.down * strength;
-            if(v.y < -maxFallSpeed) v.y = -maxFallSpeed;
+            Vector3 v = rigidbody.velocity + Vector3.down * locomotion.strength;
+            if(v.y < -locomotion.maxFallSpeed) v.y = -locomotion.maxFallSpeed;
             rigidbody.velocity = v;
         }
     }
@@ -229,12 +221,28 @@ public abstract class Controller : MonoBehaviour
     void OnDrawGizmos()
     {
         if (EditorApplication.isPlaying) {
+
+            // Legs
+            Gizmos.color = Color.red;
+            if (AreLegsRetracted())
+                Gizmos.DrawLine(transform.position + legsOffset, transform.position + legsOffset + (-transform.up * groundCheckRange));
+            else
+                Gizmos.DrawLine(transform.position + legsOffset - new Vector3(0f, legsHeight, 0f), transform.position + legsOffset - new Vector3(0f, legsHeight, 0f) + (-transform.up * groundCheckRange));
+
+            // Possession
             if (IsPossessed()) {
                 Gizmos.DrawIcon(transform.position + Vector3.up * 2f, "Favorite Icon");
             }
             else {
                 Gizmos.DrawIcon(transform.position + Vector3.up * 2f, "d_CollabChangesConflict Icon");
             }
+
+
+            Handles.Label(transform.position + Vector3.up*2f, string.Join("\n", new string[] {
+                    string.Format("Grounded? {0}", IsGrounded()),
+                    string.Format("Retracted? {0}", AreLegsRetracted()),
+                })
+            );
         }
     }
 }
