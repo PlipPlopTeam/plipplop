@@ -73,7 +73,7 @@ public abstract class Controller : MonoBehaviour
             AreLegsRetracted() ?
                 Physics.Raycast(transform.position + legsOffset, -transform.up, groundCheckRange) :
                                                                                             // Magic 0.1f so the raycast can start above ground and not inside ground
-                Physics.Raycast(transform.position + legsOffset - new Vector3(0f, legsHeight + 0.1f, 0f), -transform.up, groundCheckRange);
+                Physics.Raycast(transform.position + legsOffset - new Vector3(0f, legsHeight - 0.25f, 0f), -transform.up, groundCheckRange);
     }
 
     public bool AreLegsRetracted()
@@ -174,7 +174,6 @@ public abstract class Controller : MonoBehaviour
     virtual internal void Update()
     {
         transform.forward = Vector3.Lerp(transform.forward, targetDirection, Time.deltaTime * 5f);
-
         // DEBUG
         var lr = GetComponent<LineRenderer>();
         if (controllerSensor) {
