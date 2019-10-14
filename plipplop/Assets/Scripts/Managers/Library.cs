@@ -11,5 +11,6 @@ public class Library
     [Header("Prefabs")]
     public GameObject legsPrefab;
     public GameObject aperture;
+    public GameObject possessingArea;
 
 }
