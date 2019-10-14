@@ -29,19 +29,19 @@ public class Glider : Controller
       //  throw new System.NotImplementedException();
     }
 
-    public override void OnPossess()
+    public override void OnPossess(bool wasCrouching = false)
     {
-        base.OnPossess();
+        base.OnPossess(wasCrouching);
        // throw new System.NotImplementedException();
     }
 
-    internal override void Crouch()
+    internal override void OnLegsRetracted()
     {
         collider.enabled = true;
         rigidbody.drag = drag;
     }
 
-    internal override void Stand()
+    internal override void OnLegsExtended()
     {
         collider.enabled = false;
         rigidbody.drag = baseDrag;
@@ -58,9 +58,19 @@ public class Glider : Controller
     {
         base.Update();
 
+        if (IsGrounded()) {
+            ExtendLegs();
+        }
+        else {
+            //RetractLegs();
+        }
+    }
+
+    internal override void FixedUpdate()
+    {
         descentFactor = Mathf.Max(0f, (((transform.localEulerAngles.x + 180f) % 360f) / 270f - 0.55f) - Mathf.Clamp01(rigidbody.velocity.y)) *4f; // Magic
 
-        if (!IsGrounded() && rigidbody.velocity.magnitude != 0f) {
+        if (AreLegsRetracted() && rigidbody.velocity.magnitude != 0f) {
 
             // Fake gravity
             rigidbody.useGravity = false;
@@ -77,8 +87,8 @@ public class Glider : Controller
             var angle = (transform.localEulerAngles.z - 180f)% 360f;
             rigidbody.AddTorque(transform.forward * (1f - Mathf.Abs(inertedControls.x)) * Mathf.Clamp(angle / 50f, -1f, 1f) * restabilizationForce * Time.deltaTime);
         }
-        else {
-            rigidbody.useGravity = true;
+        else if (!AreLegsRetracted()){
+
         }
 
         if (rigidbody.velocity.magnitude > maxFlyingSpeed) {
@@ -95,7 +105,6 @@ public class Glider : Controller
             normalizedRoll = Mathf.Sign(normalizedRoll) - normalizedRoll;
 
             Handles.Label(transform.position + Vector3.up, string.Join("\n", new string[] {
-                    string.Format("Gravity {0}", gravityWhenFlying/rigidbody.velocity.magnitude),
                     string.Format("Magnitude {0}", rigidbody.velocity.magnitude),
                     string.Format("Descent factor {0}", descentFactor),
                     string.Format("Target factor {0}", 1f - rigidbody.velocity.magnitude / 5f),
@@ -124,14 +133,10 @@ public class Glider : Controller
         rigidbody.AddTorque(Vector3.up * inertedControls.x * (Mathf.Abs(normalizedRoll) + 0.1f) * rollForce * turnForce * Time.deltaTime);
 
     }
-    
-    internal override void SpecificJump()
-    {
-        isCrouching = false;
-    }
 
-    bool IsGrounded()
+    internal override void OnJump()
     {
-        return Physics.Raycast(transform.position, Vector3.down, collider.bounds.extents.y + 0.1f);
+        base.OnJump();
+        RetractLegs();
     }
 }
