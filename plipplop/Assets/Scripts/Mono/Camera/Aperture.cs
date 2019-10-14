@@ -216,8 +216,6 @@ public class Aperture : MonoBehaviour
             }
         }
 
-
-
         currentFieldOfView = Mathf.Lerp(cam.fieldOfView, targetFieldOfView + fovOffset, Time.deltaTime * settings.fovLerp);
         currentDistance = targetDistance + distanceOffset;
         currentRotation = settings.rotationOffset + angleVector;
