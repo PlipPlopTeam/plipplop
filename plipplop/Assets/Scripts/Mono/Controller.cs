@@ -101,6 +101,7 @@ public abstract class Controller : MonoBehaviour
         if (!legs) GrowLegs();
         legs.gameObject.SetActive(false);
         legsCollider.enabled = false;
+
         OnLegsRetracted();
     }
     internal void ExtendLegs()
@@ -136,6 +137,9 @@ public abstract class Controller : MonoBehaviour
 
             // Rotate legs
             if(dir != Vector3.zero) targetDirection = dir;
+
+            transform.forward = Vector3.Lerp(transform.forward, targetDirection, Time.deltaTime * 4f);
+
         }
     }
 
@@ -173,7 +177,6 @@ public abstract class Controller : MonoBehaviour
 
     virtual internal void Update()
     {
-        transform.forward = Vector3.Lerp(transform.forward, targetDirection, Time.deltaTime * 5f);
         // DEBUG
         var lr = GetComponent<LineRenderer>();
         if (controllerSensor) {
@@ -200,7 +203,7 @@ public abstract class Controller : MonoBehaviour
 
     virtual internal void FixedUpdate()
     {
-        if(rigidbody != null && !IsGrounded()) 
+        if (rigidbody != null && !IsGrounded()) 
         {
             Vector3 v = rigidbody.velocity + Vector3.down * locomotion.strength;
             if(v.y < -locomotion.maxFallSpeed) v.y = -locomotion.maxFallSpeed;
