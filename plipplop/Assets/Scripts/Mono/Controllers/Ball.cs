@@ -8,6 +8,7 @@ public class Ball : Controller
     public float jumpForce = 7f;
     public float airRollFactor = 4f;
     public float moveLerp = 1;
+    public float drag = 1f;
 
     new Renderer renderer;
     new SphereCollider collider;
@@ -50,11 +51,13 @@ public class Ball : Controller
     internal override void Crouch()
     {
         collider.enabled = true;
+        rigidbody.drag = drag;
     }
 
     internal override void Stand()
     {
         collider.enabled = false;
+        rigidbody.drag = baseDrag;
     }
 
     bool IsGrounded() {

@@ -9,6 +9,8 @@ public abstract class Controller : MonoBehaviour
     public bool addRigidBody = false;
     public bool autoPossess = false;
     public bool canCrouch = true;
+    public float speed = 3f;
+    public float baseDrag = 15f;
     public float legsHeight = 1f;
     public Vector3 legsOffset;
     public AperturePreset customCamera = null;
@@ -18,8 +20,17 @@ public abstract class Controller : MonoBehaviour
     internal bool isCrouching = false;
     internal Legs legs;
 
-    public abstract void OnEject();
-    public abstract void OnPossess();
+    public virtual void OnEject()
+    {
+        isCrouching = true;
+        RefreshCrouch();
+    }
+    
+    public virtual void OnPossess()
+    {
+        isCrouching = false;
+        RefreshCrouch();
+    }
 
     internal virtual void OnJump() { }
     public void OnToggleCrouch()
@@ -60,11 +71,7 @@ public abstract class Controller : MonoBehaviour
     private Vector3 GetBelowSurface()
     {
         RaycastHit hit;
-        if(Physics.Raycast(transform.position + legsOffset, -Vector3.up, out hit))
-        {
-            return hit.point;
-        }
-
+        if(Physics.Raycast(transform.position + legsOffset, -Vector3.up, out hit)) return hit.point;
         return Vector3.zero;
     }
 
@@ -80,24 +87,25 @@ public abstract class Controller : MonoBehaviour
     internal virtual void Crouch() {}
     internal virtual void Stand() {}
     internal virtual void OnHoldJump() { }
+    internal virtual void SpecificMove(Vector3 direction) {}
 
     public void Move(Vector3 direction)
     {
         if(isCrouching) SpecificMove(direction);
         else
         {
-            Vector3 camdir = new Vector3(Camera.main.transform.forward.x, 0f, Camera.main.transform.forward.z);
-            Vector3 dir = new Vector3(camdir.x * direction.x, 0f, camdir.z * direction.z);
+            Vector3 clampDirection = Vector3.ClampMagnitude(direction, 1f);
+            //Vector3 camdir = Vector3.one;//new Vector3(Camera.main.transform.forward.x, 0f, Camera.main.transform.forward.z);
+            Vector3 dir = new Vector3(clampDirection.x, 0f, clampDirection.z);
 
-            Debug.Log(camdir.x * direction.x);
-            transform.transform.position += dir * Time.deltaTime * 5f;
+            // Add Movement Force
+            rigidbody.AddForce(dir * Time.deltaTime * speed, ForceMode.Impulse);
+
+            // Rotate legs
+            if(legs != null && dir != Vector3.zero) legs.transform.forward = -dir;            
         }
     }
 
-    internal virtual void SpecificMove(Vector3 direction)
-    {
-        
-    }
 
     public void Move(float fb, float rl)
     {
@@ -120,6 +128,10 @@ public abstract class Controller : MonoBehaviour
     virtual internal void Start()
     {
         if(autoPossess) Game.i.player.Possess(this);
+
+        if(!IsPossessed()) OnEject();
+        else OnPossess();
+
         RefreshCrouch();
     }
 

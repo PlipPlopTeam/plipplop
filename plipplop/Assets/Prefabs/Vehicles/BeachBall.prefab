@@ -48,10 +48,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   addRigidBody: 0
   autoPossess: 1
-  maxSpeed: 6
+  canCrouch: 1
+  speed: 50
+  baseDrag: 15
+  legsHeight: 2
+  legsOffset: {x: 0, y: 0, z: 0}
+  customCamera: {fileID: 0}
+  maxSpeed: 500
   acceleration: 500
-  jumpForce: 800
+  jumpForce: 8
   airRollFactor: 4
+  moveLerp: 1
+  drag: 1
 --- !u!135 &2932650472225342060
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -74,7 +82,7 @@ Rigidbody:
   m_GameObject: {fileID: 2932650472225342062}
   serializedVersion: 2
   m_Mass: 0.6
-  m_Drag: 0
+  m_Drag: 1
   m_AngularDrag: 0.03
   m_UseGravity: 1
   m_IsKinematic: 0

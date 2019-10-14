@@ -184,12 +184,17 @@ public class Aperture : MonoBehaviour
         if(distanceFromTarget > settings.range.x)
         {
             currentPosition = Vector3.Lerp(currentPosition, targetPosition + offset, Time.deltaTime * settings.followLerp * speed);
+
+            Vector3 look = -(transform.position - currentPosition).normalized;
+
+            transform.forward = Vector3.Lerp(transform.forward, look , Time.deltaTime);
+
         }
 
         currentFieldOfView = Mathf.Lerp(cam.fieldOfView, targetFieldOfView + fovOffset, Time.deltaTime * settings.fovLerp);
         currentDistance = targetDistance + distanceOffset;
 
-        if(targetMovementVelocity >= 0f)
+        if(targetMovementVelocity > 0f)
         {
             Vector3 angleVector = new Vector3
             (0f, 
@@ -207,6 +212,9 @@ public class Aperture : MonoBehaviour
 
         // Applying current values 
         wantedCameraPosition = currentPosition + Quaternion.Euler(currentRotation) * Vector3.forward * currentDistance;
+
+        
+        
         Apply();
 
         // Shake

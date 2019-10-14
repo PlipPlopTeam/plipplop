@@ -16,6 +16,7 @@ public class Glider : Controller
     public float gravityPlungeFactor = 3f;
     public float restabilizationForce = 20f;
     public float turnForce = 5f;
+    public float drag = 10f;
     [Range(0,1)] public float pitchMaxAmplitude;
 
     float descentFactor = 0f;
@@ -24,19 +25,33 @@ public class Glider : Controller
 
     public override void OnEject()
     {
+        base.OnEject();
       //  throw new System.NotImplementedException();
     }
 
     public override void OnPossess()
     {
+        base.OnPossess();
        // throw new System.NotImplementedException();
+    }
+
+    internal override void Crouch()
+    {
+        collider.enabled = true;
+        rigidbody.drag = drag;
+    }
+
+    internal override void Stand()
+    {
+        collider.enabled = false;
+        rigidbody.drag = baseDrag;
     }
 
     internal override void Start()
     {
-        base.Start();
         collider = GetComponent<Collider>();
         rigidbody = GetComponent<Rigidbody>();
+        base.Start();
     }
 
     internal override void Update()
