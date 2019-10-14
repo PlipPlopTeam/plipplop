@@ -186,7 +186,7 @@ public abstract class Controller : MonoBehaviour
 
     virtual internal void FixedUpdate()
     {
-        if(!IsGrounded()) 
+        if(rigidbody != null && !IsGrounded()) 
         {
             Vector3 v = rigidbody.velocity + Vector3.down * strength;
             if(v.y < -maxFallSpeed) v.y = -maxFallSpeed;
