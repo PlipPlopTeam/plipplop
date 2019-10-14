@@ -21,7 +21,7 @@ public class Leg : MonoBehaviour
         foot.transform.parent = null;
     }
 
-    private void Update()
+    void Update()
     {
         if (Vector3.Distance(foot.position, hip.position) > maxFootDistance)
         {
@@ -59,7 +59,7 @@ public class Leg : MonoBehaviour
         UpdateKnee(_vel); 
     }
 
-    void UpdateKnee(Vector3 _vel, float _noise = 1)
+    public void UpdateKnee(Vector3 _vel, float _noise = 1)
     {
         _vel = Vector3.ClampMagnitude(_vel, 1);
         _vel.y = 0;

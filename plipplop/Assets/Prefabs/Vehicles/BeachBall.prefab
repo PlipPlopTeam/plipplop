@@ -48,18 +48,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   addRigidBody: 0
   autoPossess: 1
-  canCrouch: 1
-  speed: 50
-  baseDrag: 15
+  keepCrouchState: 0
+  customLocomotion: {fileID: 0}
   legsHeight: 2
+  jump: 10
+  groundCheckRange: 1
   legsOffset: {x: 0, y: 0, z: 0}
   customCamera: {fileID: 0}
-  maxSpeed: 500
-  acceleration: 500
+  maxSpeed: 1200
+  acceleration: 800
   jumpForce: 8
   airRollFactor: 4
   moveLerp: 1
   drag: 1
+  speedBeforeRoll: 14
+  speedBeforeStandingUp: 1
 --- !u!135 &2932650472225342060
 SphereCollider:
   m_ObjectHideFlags: 0
