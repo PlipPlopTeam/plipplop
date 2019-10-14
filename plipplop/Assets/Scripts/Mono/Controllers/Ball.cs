@@ -26,8 +26,10 @@ public class Ball : Controller
 
     internal override void SpecificMove(Vector3 direction)
     {
+        Vector3 clampDirection = Vector3.ClampMagnitude(direction, 1f);
+        
         var perimeter = 2 * Mathf.PI * (1f); //radius
-        Vector3 _velocity = transform.forward * direction.z * Time.deltaTime + transform.right * direction.x * Time.deltaTime;
+        Vector3 _velocity = (Game.i.aperture.Right() * direction.x + Game.i.aperture.Forward() * direction.z) * Time.deltaTime;
         _velocity *= maxSpeed;
         _velocity = Vector3.ClampMagnitude(_velocity, maxSpeed);
         _velocity.y = rigidbody.velocity.y;
@@ -41,9 +43,10 @@ public class Ball : Controller
         ) * factor, Space.World);
     }
 
-    internal override void OnJump()
+    internal override void SpecificJump()
     {
-        if (IsGrounded()) {
+        if(IsGrounded()) 
+        {
             rigidbody.velocity = new Vector3(rigidbody.velocity.x, jumpForce, rigidbody.velocity.z);
         }
     }
@@ -60,9 +63,10 @@ public class Ball : Controller
         rigidbody.drag = baseDrag;
     }
 
-    bool IsGrounded() {
+    bool IsGrounded()
+    {
        return Physics.Raycast(transform.position, Vector3.down, collider.bounds.extents.y + 0.1f);
-     }
+    }
 
     internal override void Start()
     {
@@ -74,6 +78,7 @@ public class Ball : Controller
         base.Start();
     }
 
+    internal override void FixedUpdate() {}
 
     internal override void Update()
     {

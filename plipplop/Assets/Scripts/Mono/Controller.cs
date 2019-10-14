@@ -9,11 +9,21 @@ public abstract class Controller : MonoBehaviour
     public bool addRigidBody = false;
     public bool autoPossess = false;
     public bool canCrouch = true;
+
+    [Header("Locomotion")]
     public float speed = 3f;
-    public float baseDrag = 15f;
     public float legsHeight = 1f;
+    public float jump = 10f;
+    public float groundCheckRange = 0.5f;
+
     public Vector3 legsOffset;
     public AperturePreset customCamera = null;
+
+    [Header("Gravity")]
+    public float baseDrag = 15f;
+    public float strength = 0.5f;
+    public float maxFallSpeed = 10f;
+    public float checkGroundDistance;
 
     new internal Rigidbody rigidbody;
     internal CapsuleCollider legsCollider;
@@ -46,7 +56,23 @@ public abstract class Controller : MonoBehaviour
         }
     }
 
-    internal virtual void OnJump() { }
+    internal virtual void SpecificJump() {}
+    internal virtual void OnJump()
+    { 
+        if(isCrouching) SpecificJump();
+        else
+        {
+            if(IsGrounded()) 
+                rigidbody.velocity = new Vector3(rigidbody.velocity.x, jump, rigidbody.velocity.z);
+        }
+    }
+
+    bool IsGrounded()
+    {
+        Debug.DrawRay(transform.position + legsOffset - new Vector3(10f, legsHeight - 0.1f, 0f), Vector3.down, Color.red, 1f);
+        return Physics.Raycast(transform.position + legsOffset - new Vector3(0f, legsHeight - 0.1f, 0f), Vector3.down, groundCheckRange);
+    }
+
     public void OnToggleCrouch()
     {
         if(canCrouch)
@@ -110,8 +136,9 @@ public abstract class Controller : MonoBehaviour
         {
             Vector3 clampDirection = Vector3.ClampMagnitude(direction, 1f);
             //Vector3 camdir = Vector3.one;//new Vector3(Camera.main.transform.forward.x, 0f, Camera.main.transform.forward.z);
-            Vector3 dir = new Vector3(clampDirection.x, 0f, clampDirection.z);
 
+            //Vector3 dir = new Vector3(clampDirection.x * Game.i.aperture.Right().x,  0f, clampDirection.z  * Game.i.aperture.Right().z);
+            Vector3 dir = clampDirection.x * Game.i.aperture.Right() + clampDirection.z * Game.i.aperture.Forward();
             // Add Movement Force
             rigidbody.AddForce(dir * Time.deltaTime * speed, ForceMode.Impulse);
 
@@ -177,7 +204,12 @@ public abstract class Controller : MonoBehaviour
 
     virtual internal void FixedUpdate()
     {
-
+        if(rigidbody != null && !IsGrounded()) 
+        {
+            Vector3 v = rigidbody.velocity + Vector3.down * strength;
+            if(v.y < -maxFallSpeed) v.y = -maxFallSpeed;
+            rigidbody.velocity = v;
+        }
     }
 
     // Draw a gizmo if i'm being possessed

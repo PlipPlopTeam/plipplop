@@ -26,12 +26,12 @@ public class NewController : Controller
 {
     public override void OnEject()
     {
-        return;
+        base.Eject();
     }
 
     public override void OnPossess()
     {
-        return;
+        base.OnPossess();
     }
 
     internal override void SpecificMove(Vector3 direction)

@@ -125,7 +125,7 @@ public class Glider : Controller
 
     }
     
-    internal override void OnJump()
+    internal override void SpecificJump()
     {
         isCrouching = false;
     }
