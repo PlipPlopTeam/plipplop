@@ -45,29 +45,23 @@ public class Sight : MonoBehaviour
     void OnDrawGizmosSelected()
     {
         Gizmos.color = new Color32(255, 215, 0, 255);
-
-        Quaternion right = Quaternion.AngleAxis(-fieldOfViewAngle/2, transform.up);
-        Quaternion left = Quaternion.AngleAxis(fieldOfViewAngle/2, transform.up);
-        Quaternion up = Quaternion.AngleAxis(-fieldOfViewAngle/2, transform.right);
-        Quaternion down = Quaternion.AngleAxis(fieldOfViewAngle/2, transform.right);
-
-        Gizmos.DrawLine(transform.position + offset, right * transform.forward * range + offset);
-        Gizmos.DrawLine(transform.position + offset, left * transform.forward * range + offset);
-        Gizmos.DrawLine(transform.position + offset, up * transform.forward * range + offset);
-        Gizmos.DrawLine(transform.position + offset, down * transform.forward * range + offset);
-
-        Vector3 end = ((up * transform.forward * range) + (down * transform.forward * range)) / 2f;
-        
         UnityEditor.Handles.color = new Color32(255, 215, 0, 255);
+        Vector3 pos = transform.position + offset;
+        Vector3 end = pos + transform.forward * range;
+        float radius = range * Mathf.Tan((fieldOfViewAngle * Mathf.Deg2Rad)/2f);
+        Gizmos.DrawLine(pos, pos + transform.forward * range);
         UnityEditor.Handles.DrawWireDisc(
-            end + offset,
+            end,
             (transform.position - (transform.position + transform.forward * range)).normalized, 
-            Vector3.Distance(end, up * transform.forward * range)
+            radius
         );
     }
 
     void OnValidate()
     {
         if(range < 0f) range = 0f;
+
+        if(fieldOfViewAngle < 1f) fieldOfViewAngle = 1f;
+        else if(fieldOfViewAngle > 359f) fieldOfViewAngle = 359f;
     }
 }
