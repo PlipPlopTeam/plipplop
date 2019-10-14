@@ -11,7 +11,7 @@ public abstract class Controller : MonoBehaviour
     public bool keepCrouchState = false;
 
     [Header("Locomotion")]
-    public float speed = 3f;
+    public LocomotionPreset customLocomotion;
     public float legsHeight = 1f;
     public float jump = 10f;
     public float groundCheckRange = 1f;
@@ -19,16 +19,12 @@ public abstract class Controller : MonoBehaviour
     public Vector3 legsOffset;
     public AperturePreset customCamera = null;
 
-    [Header("Gravity")]
-    public float baseDrag = 15f;
-    public float strength = 0.5f;
-    public float maxFallSpeed = 10f;
-
     new internal Rigidbody rigidbody;
     internal CapsuleCollider legsCollider;
     internal Legs legs;
     internal ControllerSensor controllerSensor;
     internal Vector3 targetDirection;
+    internal LocomotionPreset locomotion;
 
     public virtual void OnEject()
     {
@@ -136,7 +132,7 @@ public abstract class Controller : MonoBehaviour
             //Vector3 dir = new Vector3(clampDirection.x * Game.i.aperture.Right().x,  0f, clampDirection.z  * Game.i.aperture.Right().z);
             Vector3 dir = clampDirection.x * Game.i.aperture.Right() + clampDirection.z * Game.i.aperture.Forward();
             // Add Movement Force
-            rigidbody.AddForce(dir * Time.deltaTime * speed, ForceMode.Impulse);
+            rigidbody.AddForce(dir * Time.deltaTime * locomotion.speed, ForceMode.Impulse);
 
             // Rotate legs
             if(dir != Vector3.zero) targetDirection = dir;
@@ -170,6 +166,9 @@ public abstract class Controller : MonoBehaviour
     virtual internal void Start()
     {
         if(autoPossess) Game.i.player.Possess(this);
+
+        locomotion = customLocomotion ? customLocomotion : Game.i.defaultLocomotion;
+
     }
 
     virtual internal void Update()
@@ -204,8 +203,8 @@ public abstract class Controller : MonoBehaviour
     {
         if(rigidbody != null && !IsGrounded()) 
         {
-            Vector3 v = rigidbody.velocity + Vector3.down * strength;
-            if(v.y < -maxFallSpeed) v.y = -maxFallSpeed;
+            Vector3 v = rigidbody.velocity + Vector3.down * locomotion.strength;
+            if(v.y < -locomotion.maxFallSpeed) v.y = -locomotion.maxFallSpeed;
             rigidbody.velocity = v;
         }
     }

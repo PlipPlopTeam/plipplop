@@ -63,7 +63,7 @@ public class Ball : Controller
     internal override void OnLegsExtended()
     {
         collider.enabled = false;
-        rigidbody.drag = baseDrag;
+        rigidbody.drag = locomotion.baseDrag;
     }
 
     internal override void Start()
