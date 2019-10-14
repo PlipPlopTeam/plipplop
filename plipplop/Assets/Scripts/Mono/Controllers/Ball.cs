@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Ball : Controller
 {
@@ -58,7 +56,6 @@ public class Ball : Controller
     {
         collider.enabled = false;
     }
-    
 
     bool IsGrounded() {
        return Physics.Raycast(transform.position, Vector3.down, collider.bounds.extents.y + 0.1f);
@@ -71,7 +68,6 @@ public class Ball : Controller
         collider = GetComponent<SphereCollider>();
         renderer.material = Instantiate<Material>(renderer.material);
         childBall = transform.GetChild(0);
-
         base.Start();
     }
 

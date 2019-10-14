@@ -14,8 +14,8 @@ public abstract class Controller : MonoBehaviour
     public AperturePreset customCamera = null;
 
     new internal Rigidbody rigidbody;
-    new internal CapsuleCollider collider;
-    internal bool crouching = false;
+    internal CapsuleCollider legsCollider;
+    internal bool isCrouching = false;
     internal Legs legs;
 
     public abstract void OnEject();
@@ -26,20 +26,20 @@ public abstract class Controller : MonoBehaviour
     {
         if(canCrouch)
         {
-            crouching = !crouching;
+            isCrouching = !isCrouching;
             RefreshCrouch();
         }
     }
 
     private void RefreshCrouch()
     {
-        if(crouching)
+        if(isCrouching)
         {
             Crouch();
             
             if(!legs) GrowLegs();
             legs.gameObject.SetActive(false);
-            collider.enabled = false;
+            legsCollider.enabled = false;
         }
         else
         {
@@ -47,7 +47,7 @@ public abstract class Controller : MonoBehaviour
 
             if(!legs) GrowLegs();
             legs.gameObject.SetActive(true);
-            collider.enabled = true;
+            legsCollider.enabled = true;
 
             Vector3 surfacePosition = GetBelowSurface();
             if(surfacePosition != Vector3.zero)
@@ -83,10 +83,14 @@ public abstract class Controller : MonoBehaviour
 
     public void Move(Vector3 direction)
     {
-        if(crouching) SpecificMove(direction);
+        if(isCrouching) SpecificMove(direction);
         else
         {
-            
+            Vector3 camdir = new Vector3(Camera.main.transform.forward.x, 0f, Camera.main.transform.forward.z);
+            Vector3 dir = new Vector3(camdir.x * direction.x, 0f, camdir.z * direction.z);
+
+            Debug.Log(camdir.x * direction.x);
+            transform.transform.position += dir * Time.deltaTime * 5f;
         }
     }
 
@@ -108,9 +112,9 @@ public abstract class Controller : MonoBehaviour
     virtual internal void Awake()
     {
         if(addRigidBody) rigidbody = gameObject.AddComponent<Rigidbody>();
-        collider = gameObject.AddComponent<CapsuleCollider>();
-        collider.height = legsHeight;
-        collider.center = legsOffset + new Vector3(0f, -legsHeight/2, 0f);
+        legsCollider = gameObject.AddComponent<CapsuleCollider>();
+        legsCollider.height = legsHeight;
+        legsCollider.center = legsOffset + new Vector3(0f, -legsHeight/2, 0f);
     }
 
     virtual internal void Start()

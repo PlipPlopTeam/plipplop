@@ -20,7 +20,6 @@ public class Glider : Controller
 
     float descentFactor = 0f;
     Vector3 inertedControls = new Vector3();
-    bool isCrouching = false;
     new Collider collider;
 
     public override void OnEject()
