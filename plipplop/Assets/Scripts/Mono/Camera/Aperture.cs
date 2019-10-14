@@ -158,6 +158,8 @@ public class Aperture : MonoBehaviour
         return transform.right;
     }
 
+
+    Vector3 angleVector;
     void FixedUpdate()
     {
         // Distance cannot be less than 0
@@ -195,31 +197,30 @@ public class Aperture : MonoBehaviour
         if(distanceFromTarget > settings.range.x)
         {
             currentPosition = Vector3.Lerp(currentPosition, targetPosition + offset, Time.deltaTime * settings.followLerp * speed);
-
             Vector3 look = -(transform.position - currentPosition).normalized;
-
             transform.forward = Vector3.Lerp(transform.forward, look , Time.deltaTime);
 
+            if(targetMovementVelocity > 0.05f)
+            {
+                angleVector = new Vector3
+                (0f, 
+                    Vector3.SignedAngle(
+                    new Vector3(
+                        targetMovementDirection.x,
+                        0f,
+                        -targetMovementDirection.z
+                    ), 
+                    Vector3.forward,
+                    Vector3.up),
+                0f);
+            }
         }
+
+
 
         currentFieldOfView = Mathf.Lerp(cam.fieldOfView, targetFieldOfView + fovOffset, Time.deltaTime * settings.fovLerp);
         currentDistance = targetDistance + distanceOffset;
-
-        if(targetMovementVelocity > 0.05f)
-        {
-            Vector3 angleVector = new Vector3
-            (0f, 
-                Vector3.SignedAngle(
-                new Vector3(
-                    targetMovementDirection.x,
-                    0f,
-                    -targetMovementDirection.z
-                ), 
-                Vector3.forward,
-                Vector3.up),
-            0f);
-            currentRotation = targetRotation + angleVector;
-        }
+        currentRotation = settings.rotationOffset + angleVector;
 
         // Clamping angle
         if(currentRotation.x > -settings.rotationClamp.x)
