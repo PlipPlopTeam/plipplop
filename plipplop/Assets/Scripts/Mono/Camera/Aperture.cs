@@ -188,8 +188,8 @@ public class Aperture : MonoBehaviour
 
             // The Speed Enhancement effect
             float ratio = Mathf.Clamp(targetMovementVelocity / maxEffect, 0f, 1f);
-            fovOffset = fovRange.x + (fovRange.y - fovRange.x) * ratio * multiplier;
-            distanceOffset = distanceRange.x + (distanceRange.y - distanceRange.x) * ratio * multiplier;
+            fovOffset = (fovRange.x + (fovRange.y - fovRange.x) * ratio) * multiplier;
+            distanceOffset = (distanceRange.x + (distanceRange.y - distanceRange.x) * ratio) * multiplier;
             
             lastTargetPosition = target.position;
         }
