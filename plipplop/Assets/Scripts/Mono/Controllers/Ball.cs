@@ -16,11 +16,13 @@ public class Ball : Controller
 
     public override void OnPossess()
     {
+        base.OnPossess();
         renderer.material.color = Color.red;
     }
 
     public override void OnEject()
     {
+        base.OnEject();
         renderer.material.color = Color.white;
     }
 
