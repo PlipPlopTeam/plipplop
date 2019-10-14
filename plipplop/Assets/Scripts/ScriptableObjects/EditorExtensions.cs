@@ -26,7 +26,7 @@ public class NewController : Controller
 {
     public override void OnEject()
     {
-        base.Eject();
+        base.OnEject();
     }
 
     public override void OnPossess()
@@ -47,6 +47,16 @@ public class NewController : Controller
     internal override void Update()
     {
         base.Update();
+    }
+
+    internal override void OnLegsRetracted()
+    {
+        //throw new System.NotImplementedException();
+    }
+
+    internal override void OnLegsExtended()
+    {
+        //throw new System.NotImplementedException();
     }
 }
 ");

@@ -11,9 +11,19 @@ public class Umbrella : Controller
         return;
     }
 
-    public override void OnPossess()
+    public override void OnPossess(bool wasCrouching = false)
     { 
         return;
+    }
+
+    internal override void OnLegsExtended()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    internal override void OnLegsRetracted()
+    {
+        throw new System.NotImplementedException();
     }
 
     internal override void SpecificMove(Vector3 direction)

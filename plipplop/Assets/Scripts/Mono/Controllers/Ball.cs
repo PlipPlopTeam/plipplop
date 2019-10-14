@@ -14,9 +14,9 @@ public class Ball : Controller
     new SphereCollider collider;
     Transform childBall;
 
-    public override void OnPossess()
+    public override void OnPossess(bool wasCrouching=false)
     {
-        base.OnPossess();
+        base.OnPossess(wasCrouching);
     }
 
     public override void OnEject()
@@ -54,21 +54,16 @@ public class Ball : Controller
         }
     }
 
-    internal override void Crouch()
+    internal override void OnLegsRetracted()
     {
         collider.enabled = true;
         rigidbody.drag = drag;
     }
 
-    internal override void Stand()
+    internal override void OnLegsExtended()
     {
         collider.enabled = false;
         rigidbody.drag = baseDrag;
-    }
-
-    bool IsGrounded()
-    {
-       return Physics.Raycast(transform.position, Vector3.down, collider.bounds.extents.y + 0.1f);
     }
 
     internal override void Start()

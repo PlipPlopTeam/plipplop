@@ -1,7 +1,6 @@
 ﻿public enum ACTION
 {
     POSSESS,
-    CROUCH,
     JUMP,
     ACTION,
     MOVE_FORWARD_BACK,
