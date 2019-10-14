@@ -30,6 +30,7 @@ public abstract class Controller : MonoBehaviour
     internal bool isCrouching = true;
     internal Legs legs;
     internal ControllerSensor controllerSensor;
+    internal Vector3 targetDirection;
 
     public virtual void OnEject()
     {
@@ -142,10 +143,9 @@ public abstract class Controller : MonoBehaviour
             Vector3 dir = clampDirection.x * Game.i.aperture.Right() + clampDirection.z * Game.i.aperture.Forward();
             // Add Movement Force
             rigidbody.AddForce(dir * Time.deltaTime * speed, ForceMode.Impulse);
-            transform.forward = Game.i.aperture.Forward();
 
             // Rotate legs
-            if(legs != null && dir != Vector3.zero) legs.transform.forward = -dir;            
+            if(dir != Vector3.zero) targetDirection = dir;
         }
     }
 
@@ -182,6 +182,7 @@ public abstract class Controller : MonoBehaviour
 
     virtual internal void Update()
     {
+        transform.forward = Vector3.Lerp(transform.forward, targetDirection, Time.deltaTime * 5f);
 
         // DEBUG
         var lr = GetComponent<LineRenderer>();
