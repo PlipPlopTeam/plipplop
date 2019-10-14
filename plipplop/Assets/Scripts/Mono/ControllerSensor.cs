@@ -16,12 +16,14 @@ public class ControllerSensor : MonoBehaviour
 
     private void OnControllerEnter(Collider obj)
     {
-        controllers.Add(obj.GetComponent<Controller>());
+        var ctrl = obj.GetComponent<Controller>();
+        if (ctrl) controllers.Add(ctrl);
     }
 
     private void OnControllerExit(Collider obj)
     {
-        controllers.RemoveAll( o=> o == obj.GetComponent<Controller>());
+        var ctrl = obj.GetComponent<Controller>();
+        if (ctrl) controllers.RemoveAll(o => o == ctrl);
     }
 
     public bool IsThereAnyController()

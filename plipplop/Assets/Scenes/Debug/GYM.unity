@@ -873,67 +873,10 @@ PrefabInstance:
     - target: {fileID: 2932650472225342061, guid: ddd968a89987eb147ae83974ec55e6fe,
         type: 3}
       propertyPath: autoPossess
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ddd968a89987eb147ae83974ec55e6fe, type: 3}
---- !u!1 &656476148
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 656476149}
-  - component: {fileID: 656476151}
-  - component: {fileID: 656476150}
-  m_Layer: 0
-  m_Name: PossessingArea
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &656476149
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 656476148}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1663626020}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &656476150
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 656476148}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 440794568d0dd514a91ce1b432f2e8a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!135 &656476151
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 656476148}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 3
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &660052546
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1004,6 +947,11 @@ PrefabInstance:
     - target: {fileID: 4009345996532297923, guid: 63b085a83f7f1f448a3783a5b97befd0,
         type: 3}
       propertyPath: autoPossess
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4009345996532297923, guid: 63b085a83f7f1f448a3783a5b97befd0,
+        type: 3}
+      propertyPath: drag
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1732,12 +1680,6 @@ Transform:
   m_Father: {fileID: 218021416}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: -180.00002, z: 0}
---- !u!4 &1663626020 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2932650472225342058, guid: ddd968a89987eb147ae83974ec55e6fe,
-    type: 3}
-  m_PrefabInstance: {fileID: 655769877}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1672018592
 GameObject:
   m_ObjectHideFlags: 0
@@ -2002,7 +1944,7 @@ PrefabInstance:
     - target: {fileID: 2932650472225342061, guid: ddd968a89987eb147ae83974ec55e6fe,
         type: 3}
       propertyPath: autoPossess
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ddd968a89987eb147ae83974ec55e6fe, type: 3}
@@ -2572,6 +2514,8 @@ MonoBehaviour:
   addRigidBody: 0
   autoPossess: 0
   canCrouch: 1
+  speed: 3
+  baseDrag: 15
   legsHeight: 1
   legsOffset: {x: 0, y: 0, z: 0}
   customCamera: {fileID: 0}

@@ -181,6 +181,24 @@ public abstract class Controller : MonoBehaviour
     virtual internal void Update()
     {
 
+        // DEBUG
+        if (controllerSensor) {
+            var lr = GetComponent<LineRenderer>();
+            if (!lr) lr = gameObject.AddComponent<LineRenderer>();
+            lr.material = new Material(Shader.Find("Lightweight Render Pipeline/Particles/Unlit"));
+            if (controllerSensor.IsThereAnyController()) {
+                lr.positionCount = 2;
+                lr.SetPosition(0, gameObject.transform.position);
+                lr.SetPosition(1, controllerSensor.GetFocusedController().transform.position);
+                lr.startColor = Color.red;
+                lr.endColor = Color.blue;
+                lr.startWidth = 0.1f;
+                lr.endWidth = 0.1f;
+            }
+            else {
+                Destroy(lr);
+            }
+        }
     }
 
 
