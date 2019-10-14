@@ -34,6 +34,9 @@ public class Ball : Controller
         _velocity = Vector3.ClampMagnitude(_velocity, maxSpeed);
         _velocity.y = rigidbody.velocity.y;
         rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, _velocity, Time.deltaTime * moveLerp);
+
+        transform.forward = rigidbody.velocity.normalized;
+
         var factor = 1;
         
         childBall.Rotate(new Vector3(

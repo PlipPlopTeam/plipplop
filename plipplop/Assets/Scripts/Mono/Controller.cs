@@ -47,6 +47,7 @@ public abstract class Controller : MonoBehaviour
     public virtual void OnPossess()
     {
         controllerSensor = Instantiate(Game.i.library.controllerSensor, gameObject.transform).GetComponent<ControllerSensor>();
+        controllerSensor.transform.localPosition = new Vector3(0f, 0f, controllerSensor.sensorForwardPosition);
         isCrouching = false;
         RefreshCrouch();
 
@@ -141,6 +142,7 @@ public abstract class Controller : MonoBehaviour
             Vector3 dir = clampDirection.x * Game.i.aperture.Right() + clampDirection.z * Game.i.aperture.Forward();
             // Add Movement Force
             rigidbody.AddForce(dir * Time.deltaTime * speed, ForceMode.Impulse);
+            transform.forward = Game.i.aperture.Forward();
 
             // Rotate legs
             if(legs != null && dir != Vector3.zero) legs.transform.forward = -dir;            
@@ -182,8 +184,8 @@ public abstract class Controller : MonoBehaviour
     {
 
         // DEBUG
+        var lr = GetComponent<LineRenderer>();
         if (controllerSensor) {
-            var lr = GetComponent<LineRenderer>();
             if (!lr) lr = gameObject.AddComponent<LineRenderer>();
             lr.material = new Material(Shader.Find("Lightweight Render Pipeline/Particles/Unlit"));
             if (controllerSensor.IsThereAnyController()) {
@@ -199,6 +201,9 @@ public abstract class Controller : MonoBehaviour
                 Destroy(lr);
             }
         }
+        else {
+            if (lr) Destroy(lr);
+        }
     }
 
 
@@ -209,6 +214,14 @@ public abstract class Controller : MonoBehaviour
             Vector3 v = rigidbody.velocity + Vector3.down * strength;
             if(v.y < -maxFallSpeed) v.y = -maxFallSpeed;
             rigidbody.velocity = v;
+        }
+    }
+
+    // Trying to possess something else
+    internal void OnTryPossess()
+    {
+        if (controllerSensor && controllerSensor.IsThereAnyController()) {
+            Game.i.player.Possess(controllerSensor.GetFocusedController());
         }
     }
 
