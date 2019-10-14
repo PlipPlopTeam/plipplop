@@ -11,6 +11,7 @@ public class Aperture : MonoBehaviour
         public Vector3 rotationOffset;
         public Vector3 positionOffset;
         public Vector2 range;
+        public Vector2 rotationClamp;
         [Header("Lerps")]
         public float fovLerp = 1f;
         public float followLerp = 1f;
@@ -219,6 +220,12 @@ public class Aperture : MonoBehaviour
             0f);
             currentRotation = targetRotation + angleVector;
         }
+
+        // Clamping angle
+        if(currentRotation.x > -settings.rotationClamp.x)
+            currentRotation.x = -settings.rotationClamp.x;
+        else if(currentRotation.x < -settings.rotationClamp.y)
+            currentRotation.x = -settings.rotationClamp.y;
 
         // Applying current values 
         wantedCameraPosition = currentPosition + Quaternion.Euler(currentRotation) * Vector3.forward * currentDistance;
