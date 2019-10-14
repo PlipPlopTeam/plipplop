@@ -147,6 +147,16 @@ public class Aperture : MonoBehaviour
     
 #endregion
 
+    public Vector3 Forward()
+    {
+        return Vector3.ClampMagnitude(new Vector3( transform.forward.x, 0f, transform.forward.z), 1f);
+    }
+
+    public Vector3 Right()
+    {
+        return transform.right;
+    }
+
     void FixedUpdate()
     {
         // Distance cannot be less than 0
@@ -155,7 +165,7 @@ public class Aperture : MonoBehaviour
         // Initializing values
         Vector3 offset = Vector3.zero;
         Vector3 targetMovementDirection = Vector3.zero;
-        Vector3 camDirection = new Vector3( transform.forward.x, 0f, transform.forward.z);
+        Vector3 camDirection = Forward();
         float distanceFromTarget = 0f;
         float targetMovementVelocity = 0f;
         float speed = 1f;
@@ -194,7 +204,7 @@ public class Aperture : MonoBehaviour
         currentFieldOfView = Mathf.Lerp(cam.fieldOfView, targetFieldOfView + fovOffset, Time.deltaTime * settings.fovLerp);
         currentDistance = targetDistance + distanceOffset;
 
-        if(targetMovementVelocity > 0f)
+        if(targetMovementVelocity > 0.05f)
         {
             Vector3 angleVector = new Vector3
             (0f, 
@@ -212,8 +222,6 @@ public class Aperture : MonoBehaviour
 
         // Applying current values 
         wantedCameraPosition = currentPosition + Quaternion.Euler(currentRotation) * Vector3.forward * currentDistance;
-
-        
         
         Apply();
 
