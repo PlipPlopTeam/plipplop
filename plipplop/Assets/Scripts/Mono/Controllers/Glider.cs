@@ -51,7 +51,8 @@ public class Glider : Controller
     {
         base.Update();
 
-        if (IsGrounded()) {
+        if (IsGrounded())
+        {
             ExtendLegs();
         }
     }
