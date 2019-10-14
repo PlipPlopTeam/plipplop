@@ -36,8 +36,8 @@ public class Brain
     {
         if (controller is null) return;
 
-        if (mapping.IsPressed(ACTION.POSSESS)) controller.OnEject();
         if (mapping.IsPressed(ACTION.JUMP)) controller.OnJump();
+        if (mapping.IsPressed(ACTION.POSSESS)) controller.OnTryPossess();
         if (mapping.IsHeld(ACTION.JUMP)) controller.OnHoldJump();
         if (controller.canCrouch && mapping.IsPressed(ACTION.CROUCH)) controller.OnToggleCrouch();
     }
