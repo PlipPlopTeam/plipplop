@@ -21,7 +21,6 @@ public class Glider : Controller
 
     float descentFactor = 0f;
     Vector3 inertedControls = new Vector3();
-    new Collider collider;
     
     public override void OnPossess(bool wasCrouching = false)
     {
@@ -29,20 +28,16 @@ public class Glider : Controller
        // throw new System.NotImplementedException();
     }
 
+    internal override void OnLegsExtended(){}
+
     internal override void OnLegsRetracted()
     {
         rigidbody.drag = drag;
         rigidbody.AddForce(transform.forward * 100 * Time.deltaTime, ForceMode.Impulse);
     }
-
-    internal override void OnLegsExtended()
-    {
-        rigidbody.drag = locomotion.baseDrag;
-    }
-
+    
     internal override void Start()
     {
-        collider = GetComponent<Collider>();
         rigidbody = GetComponent<Rigidbody>();
         base.Start();
     }
@@ -51,7 +46,7 @@ public class Glider : Controller
     {
         base.Update();
 
-        if (IsGrounded())
+        if (IsGrounded() && IsPossessed())
         {
             ExtendLegs();
         }
@@ -89,18 +84,21 @@ public class Glider : Controller
     {
         if (EditorApplication.isPlaying) {
 
-            var normalizedRoll = (((transform.localEulerAngles.z - 180f) % 360f) / 180f);
-            normalizedRoll -= Mathf.Sign(normalizedRoll) * 0.75f;
-            normalizedRoll *= 2f;
+            try {
+                var normalizedRoll = (((transform.localEulerAngles.z - 180f) % 360f) / 180f);
+                normalizedRoll -= Mathf.Sign(normalizedRoll) * 0.75f;
+                normalizedRoll *= 2f;
 
-            Handles.Label(transform.position + Vector3.up, string.Join("\n", new string[] {
+                Handles.Label(transform.position + Vector3.up, string.Join("\n", new string[] {
                     string.Format("Magnitude {0}", rigidbody.velocity.magnitude),
                     string.Format("Descent factor {0}", descentFactor),
                     string.Format("Target factor {0}", 1f - rigidbody.velocity.magnitude / 5f),
                     string.Format("Inerted {0}", inertedControls),
                     string.Format("Roll {0}", - transform.forward * inertedControls.x * Mathf.Abs(normalizedRoll) * rollForce * Time.deltaTime),
                 })
-            );
+                );
+            }
+            catch { }
         }
     }
 

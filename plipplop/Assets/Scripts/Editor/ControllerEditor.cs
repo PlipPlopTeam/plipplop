@@ -10,6 +10,11 @@ public class ControllerEditor : Editor
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
+
+        if (!((Controller)target).gameObject.GetComponent<Locomotion>() && GUILayout.Button("Add custom locomotion", EditorStyles.miniButton)) {
+            ((Controller)target).gameObject.AddComponent<Locomotion>();
+        }
+
         if (EditorApplication.isPlaying) {
 
             var obj = (Controller)this.target;
