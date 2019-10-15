@@ -119,7 +119,7 @@ public class Locomotion : MonoBehaviour
         Vector3 os = Vector3.zero;
 
         if(AreLegsRetracted())
-            os = legsOffset - new Vector3(0f, 0.1f, 0f);
+            os = legsOffset + new Vector3(0f, 0.1f, 0f);
         else
             os = legsOffset - new Vector3(0f, legsHeight - 0.1f, 0f);
 

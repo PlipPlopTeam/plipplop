@@ -17,8 +17,7 @@ public abstract class Controller : MonoBehaviour
     [HideInInspector] public Locomotion locomotion;
 
     new internal Rigidbody rigidbody;
-
-    ControllerSensor controllerSensor;
+    internal ControllerSensor controllerSensor;
 
     public virtual void OnEject()
     {
@@ -163,10 +162,15 @@ public abstract class Controller : MonoBehaviour
     }
 
     // Trying to possess something else
-    internal void OnTryPossess()
+    virtual internal void OnTryPossess()
     {
-        if (controllerSensor && controllerSensor.IsThereAnyController()) {
+        if (controllerSensor && controllerSensor.IsThereAnyController())
+        {
             Game.i.player.Possess(controllerSensor.GetFocusedController());
+        }
+        else
+        {
+            Game.i.player.PossessBaseController();
         }
     }
 

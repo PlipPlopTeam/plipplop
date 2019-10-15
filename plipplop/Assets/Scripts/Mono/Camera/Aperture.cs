@@ -16,6 +16,7 @@ public class Aperture : MonoBehaviour
         public float fovLerp = 1f;
         public float followLerp = 1f;
         public float camLerp = 1f;
+        public float rotSpeed = 1f;
         [Header("Speed Enhancer")]
         public float speedEffectMultiplier = 1f;
     }
@@ -208,7 +209,7 @@ public class Aperture : MonoBehaviour
             if(angleDifference >= 0) angleDifference -= 180f;
             else angleDifference += 180f;
             if(angleDifference > maxAngle || angleDifference < -maxAngle) angleDifference = 0f;
-            Rotate(0f, (-angleDifference/maxAngle) * 1f, 0f);
+            Rotate(0f, (-angleDifference/maxAngle) * settings.rotSpeed, 0f);
         }
 
         if(distanceFromTarget > settings.range.x)
