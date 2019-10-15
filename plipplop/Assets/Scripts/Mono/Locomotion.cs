@@ -108,7 +108,6 @@ public class Locomotion : MonoBehaviour
             Vector3.down,
             1f
         );
-
         foreach(RaycastHit h in hits)
         {
             foreach(Transform t in transform.GetComponentsInChildren<Transform>())
@@ -116,7 +115,6 @@ public class Locomotion : MonoBehaviour
                 if(t == h.transform) return h.point;
             }
         }
-
         return null;
     }
 

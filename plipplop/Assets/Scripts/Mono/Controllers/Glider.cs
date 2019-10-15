@@ -46,9 +46,13 @@ public class Glider : Controller
     {
         base.Update();
 
-        if (IsGrounded() && IsPossessed())
+        if (IsPossessed() && IsGrounded() && AreLegsRetracted())
         {
             ExtendLegs();
+        }
+
+        if ((!IsGrounded() || !IsPossessed()) && !AreLegsRetracted()){
+            RetractLegs();
         }
     }
 
