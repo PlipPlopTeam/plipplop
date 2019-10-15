@@ -112,7 +112,7 @@ public class Locomotion : MonoBehaviour
         {
             foreach(Transform t in transform.GetComponentsInChildren<Transform>())
             {
-                if(t == h.transform) return h.point;
+                if(t != h.transform) return h.point;
             }
         }
         return null;
