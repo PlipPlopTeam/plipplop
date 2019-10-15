@@ -22,9 +22,9 @@ public class Glider : Controller
     float descentFactor = 0f;
     Vector3 inertedControls = new Vector3();
     
-    public override void OnPossess(bool wasCrouching = false)
+    public override void OnPossess()
     {
-        base.OnPossess(wasCrouching);
+        base.OnPossess();
        // throw new System.NotImplementedException();
     }
 

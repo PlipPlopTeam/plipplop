@@ -23,9 +23,9 @@ public class Umbrella : Controller
         base.OnEject();
     }
 
-    public override void OnPossess(bool keepCrouched = false)
+    public override void OnPossess()
     {
-        base.OnPossess(keepCrouched);
+        base.OnPossess();
         ExtendLegs();
     }
     

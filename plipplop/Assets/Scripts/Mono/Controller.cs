@@ -8,7 +8,7 @@ public abstract class Controller : MonoBehaviour
     [Header("Inherited properties")]
     public bool addRigidBody = false;
     public bool autoPossess = false;
-    public bool keepCrouchState = false;
+    public bool beginCrouched = false;
     public bool canRetractLegs = true;
     public bool useGravity = true;
     [Range(1f, 200f)] public float gravityMultiplier = 8f;
@@ -33,12 +33,12 @@ public abstract class Controller : MonoBehaviour
         }
     }
     
-    public virtual void OnPossess(bool keepCrouched=false)
+    public virtual void OnPossess()
     {
         controllerSensor = Instantiate(Game.i.library.controllerSensor, gameObject.transform).GetComponent<ControllerSensor>();
         controllerSensor.transform.localPosition = new Vector3(0f, 0f, controllerSensor.sensorForwardPosition);
 
-        if (keepCrouchState && keepCrouched) {
+        if (beginCrouched) {
             RetractLegs();
         }
         else {
