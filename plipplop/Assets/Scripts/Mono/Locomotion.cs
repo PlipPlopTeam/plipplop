@@ -7,7 +7,6 @@ public class Locomotion : MonoBehaviour
 {
     public LocomotionPreset preset;
     public float legsHeight = 1f;
-    public float jump = 10f;
     public float groundCheckRange = 1f;
 
     public Vector3 legsOffset;
@@ -22,6 +21,7 @@ public class Locomotion : MonoBehaviour
     private void Awake()
     {
         legsCollider = gameObject.AddComponent<CapsuleCollider>();
+        legsCollider.material = new PhysicMaterial() { dynamicFriction = 0f, staticFriction = 0f, frictionCombine = PhysicMaterialCombine.Minimum };
         preset = preset ? preset : Game.i.defaultLocomotion;
         rigidbody = GetComponent<Rigidbody>();
     }
@@ -89,10 +89,11 @@ public class Locomotion : MonoBehaviour
 
     public void Fall()
     {
-        if (rigidbody != null && !IsGrounded() && !AreLegsRetracted()) {
-            Vector3 v = rigidbody.velocity + Vector3.down * preset.strength;
-            if (v.y < -preset.maxFallSpeed) v.y = -preset.maxFallSpeed;
-            rigidbody.velocity = v;
+        if (!IsGrounded() && !AreLegsRetracted()) {
+            rigidbody.AddForce(Vector3.down * preset.strength * Time.deltaTime);
+            if (rigidbody.velocity.y < -preset.maxFallSpeed) {
+                rigidbody.velocity = new Vector3(rigidbody.velocity.x, -preset.maxFallSpeed, rigidbody.velocity.z);
+            }
         }
     }
 
@@ -112,6 +113,10 @@ public class Locomotion : MonoBehaviour
                 Physics.Raycast(transform.position + legsOffset - new Vector3(0f, legsHeight - 0.25f, 0f), -transform.up, groundCheckRange);
     }
 
+    public void Jump()
+    {
+        rigidbody.AddForce(Vector3.up * preset.jump, ForceMode.Impulse);
+    }
 
     // Draw a gizmo if i'm being possessed
     void OnDrawGizmos()

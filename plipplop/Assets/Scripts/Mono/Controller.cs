@@ -55,7 +55,7 @@ public abstract class Controller : MonoBehaviour
         if(AreLegsRetracted()) 
             SpecificJump();
         else if (IsGrounded()) {
-            rigidbody.velocity = new Vector3(rigidbody.velocity.x, locomotion.jump, rigidbody.velocity.z);
+            locomotion.Jump();
         }
     }
 

@@ -7,6 +7,7 @@ public class LocomotionPreset : ScriptableObject
     [Header("Locomotion")]
     public float acceleration = 20f;
     public float speed = 200f;
+    public float jump = 50f;
 
     [Header("Gravity")]
     public float baseDrag = 15f;
