@@ -12,7 +12,7 @@ public abstract class Controller : MonoBehaviour
     public bool canRetractLegs = true;
 
     public AperturePreset customCamera = null;
-    public Locomotion locomotion;
+    [HideInInspector] public Locomotion locomotion;
 
     new internal Rigidbody rigidbody;
 

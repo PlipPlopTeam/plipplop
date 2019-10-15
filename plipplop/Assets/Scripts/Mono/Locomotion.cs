@@ -100,7 +100,9 @@ public class Locomotion : MonoBehaviour
     private Vector3 GetBelowSurface()
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position + legsOffset + new Vector3(0f, -legsHeight, 0f), Vector3.down, out hit)) return hit.point;
+        Debug.DrawRay(transform.position + legsOffset - new Vector3(0f, legsHeight - 1f, 0f), Vector3.down, Color.blue, 1f);
+                                                                                    // Magic 1f so the raycast can start above ground and not inside ground
+        if (Physics.Raycast(transform.position + legsOffset - new Vector3(0f, legsHeight - 1f, 0f), Vector3.down, out hit)) return hit.point;
         return Vector3.zero;
     }
 
@@ -109,13 +111,13 @@ public class Locomotion : MonoBehaviour
         return
             AreLegsRetracted() ?
                 Physics.Raycast(transform.position + legsOffset, -transform.up, groundCheckRange) :
-                // Magic 0.1f so the raycast can start above ground and not inside ground
+                                                                                        // Magic 0.25f so the raycast can start above ground and not inside ground
                 Physics.Raycast(transform.position + legsOffset - new Vector3(0f, legsHeight - 0.25f, 0f), -transform.up, groundCheckRange);
     }
 
     public void Jump()
     {
-        rigidbody.AddForce(Vector3.up * preset.jump, ForceMode.Impulse);
+        rigidbody.AddForce(Vector3.up * preset.jump, ForceMode.Force);
     }
 
     // Draw a gizmo if i'm being possessed
