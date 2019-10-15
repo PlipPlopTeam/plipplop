@@ -98,9 +98,9 @@ public class Locomotion : MonoBehaviour
     private Vector3 GetBelowSurface()
     {
         RaycastHit hit;
-        Debug.DrawRay(transform.position + legsOffset - new Vector3(0f, legsHeight - 1f, 0f), Vector3.down, Color.blue, 1f);
+        Debug.DrawRay(transform.position + legsOffset - new Vector3(0f, legsHeight - 0.25f, 0f), Vector3.down, Color.blue, 1f);
                                                                                     // Magic 1f so the raycast can start above ground and not inside ground
-        if (Physics.Raycast(transform.position + legsOffset - new Vector3(0f, legsHeight - 1f, 0f), Vector3.down, out hit)) return hit.point;
+        if (Physics.Raycast(transform.position + legsOffset - new Vector3(0f, legsHeight - 0.25f, 0f), Vector3.down, out hit)) return hit.point;
         return Vector3.zero;
     }
 
