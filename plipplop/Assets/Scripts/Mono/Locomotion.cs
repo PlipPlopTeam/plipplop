@@ -67,10 +67,8 @@ public class Locomotion : MonoBehaviour
         if(v != null) 
         {
             sp = (Vector3)v;
-            transform.position = new Vector3(transform.position.x, sp.y + legsHeight, transform.position.z);
+            transform.position = new Vector3(transform.position.x, sp.y + legsHeight + 0.1f, transform.position.z);
         }
-
-
     }
 
     public void Move(Vector3 direction)
@@ -86,7 +84,7 @@ public class Locomotion : MonoBehaviour
         // Rotate legs
         if (dir != Vector3.zero) targetDirection = dir;
 
-        transform.forward = Vector3.Lerp(transform.forward, targetDirection, Time.deltaTime * 4f);
+        transform.forward = Vector3.Lerp(transform.forward, targetDirection, Time.deltaTime * 10f);
 
         legs.velocity = rigidbody.velocity;
     }
@@ -103,15 +101,8 @@ public class Locomotion : MonoBehaviour
 
     private Vector3? GetBelowSurface()
     {
-        Debug.DrawRay(transform.position + legsOffset - new Vector3(0f, legsHeight - 1f, 0f), Vector3.down, Color.blue, 1f);
-        // Magic 1f so the raycast can start above ground and not inside ground
+        RaycastHit[] hits = RaycatAllToGround();
 
-        RaycastHit[] hits;
-        hits = Physics.RaycastAll(
-            transform.position + legsOffset - new Vector3(0f, legsHeight - 1f, 0f),
-            Vector3.down,
-            1f
-        );
         foreach(RaycastHit h in hits)
         {
             foreach(Transform t in transform.GetComponentsInChildren<Transform>())
@@ -119,16 +110,36 @@ public class Locomotion : MonoBehaviour
                 if(t != h.transform) return h.point;
             }
         }
+
         return null;
     }
 
-    public bool IsGrounded()
+    RaycastHit[] RaycatAllToGround()
     {
-        return
-            AreLegsRetracted() ?
-                Physics.Raycast(transform.position + legsOffset, -transform.up, groundCheckRange) :
-                                                                                        // Magic 0.25f so the raycast can start above ground and not inside ground
-                Physics.Raycast(transform.position + legsOffset - new Vector3(0f, legsHeight - 0.25f, 0f), -transform.up, groundCheckRange);
+        Vector3 os = Vector3.zero;
+
+        if(AreLegsRetracted())
+            os = legsOffset - new Vector3(0f, 0.1f, 0f);
+        else
+            os = legsOffset - new Vector3(0f, legsHeight - 0.1f, 0f);
+
+        Debug.DrawRay(transform.position + os, Vector3.down, Color.blue, 1f);
+        return Physics.RaycastAll(transform.position + os, Vector3.down, groundCheckRange);
+    }
+
+    public bool IsGrounded() // But better 😎
+    {
+        RaycastHit[] hits = RaycatAllToGround();
+
+        foreach(RaycastHit h in hits)
+        {
+            foreach(Transform t in transform.GetComponentsInChildren<Transform>())
+            {
+                if(t != h.transform) return true;
+            }
+        }
+        
+        return false;
     }
 
     public void Jump()
