@@ -5,9 +5,9 @@ using UnityEditor;
 
 public abstract class Controller : MonoBehaviour
 {
-    [Header("Inherited properties")]
-    public bool addRigidBody = false;
+    [Header("AUTO POSSESS")]
     public bool autoPossess = false;
+    [Header("Inherited properties")]
     public bool beginCrouched = false;
     public bool canRetractLegs = true;
     public bool useGravity = true;
@@ -102,8 +102,8 @@ public abstract class Controller : MonoBehaviour
 
     virtual internal void Awake()
     {
-        if (addRigidBody) rigidbody = gameObject.AddComponent<Rigidbody>();
-        else rigidbody = GetComponent<Rigidbody>();
+        rigidbody = GetComponent<Rigidbody>();
+        if (!rigidbody) rigidbody = gameObject.AddComponent<Rigidbody>();
 
         locomotion = GetComponent<Locomotion>();
         if (!locomotion) locomotion = gameObject.AddComponent<Locomotion>();
