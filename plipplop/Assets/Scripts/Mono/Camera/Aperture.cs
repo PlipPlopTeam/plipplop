@@ -290,4 +290,19 @@ public class Aperture : MonoBehaviour
         targetFieldOfView = originDistance;
         targetDistance = originDistance;
     } // Reset all the values to the origin values
+
+    public void SwitchCamera(Camera newCam)
+    {
+        cam.enabled = false;
+        newCam.enabled = true;
+    }
+
+    public void SwitchBack()
+    {
+        foreach(var c in FindObjectsOfType<Camera>()) {
+            c.enabled = false;
+        }
+
+        cam.enabled = true;
+    }
 }
