@@ -47,7 +47,8 @@ public class Aperture : MonoBehaviour
     float targetDistance;
     Vector3 targetPosition;
     Vector3 targetRotation;
-    Vector3 wantedCameraPosition;
+    Vector3 targetCameraPosition;
+    Vector3 rotation;
 
     // SPEED
     float distanceOffset;
@@ -115,7 +116,7 @@ public class Aperture : MonoBehaviour
             UnityEditor.Handles.Label(currentPosition + Vector3.right * settings.range.y, "Max " + settings.range.y.ToString(), style);
             UnityEditor.Handles.Label((transform.position + target.position)/2, "Dist " + currentDistance.ToString(), style);
 
-            Gizmos.DrawLine(transform.position, wantedCameraPosition);
+            Gizmos.DrawLine(transform.position, targetCameraPosition);
         }
         else
         {
@@ -138,8 +139,8 @@ public class Aperture : MonoBehaviour
         if(settings.range.y < settings.range.x) settings.range.y = settings.range.x;
         if(target != null) currentPosition += target.position;
 
-        wantedCameraPosition = currentPosition + Quaternion.Euler(currentRotation) * Vector3.forward * currentDistance;
-        transform.position = wantedCameraPosition;
+        targetCameraPosition = currentPosition + Quaternion.Euler(currentRotation) * Vector3.forward * currentDistance;
+        transform.position = targetCameraPosition;
 
         Apply();
     }
@@ -165,7 +166,7 @@ public class Aperture : MonoBehaviour
     }
     public void Rotate(float x = 0f, float y = 0f, float z = 0f)
     {
-        currentRotation += new Vector3(x, y, z);
+        rotation += new Vector3(x, y, z);
     }
 
     void FixedUpdate()
@@ -175,12 +176,12 @@ public class Aperture : MonoBehaviour
 
         // Initializing values
         Vector3 offset = Vector3.zero;
-        Vector3 rotation = Vector3.zero;
         Vector3 targetMovementDirection = Vector3.zero;
         float distanceFromTarget = 0f;
         float targetMovementVelocity = 0f;
         float speed = 1f;
-        float lookDifference = 0;
+        float angleDifference = 0f;
+        float maxAngle = 100f;
 
         // If Camera if following a target
         if(target != null) 
@@ -196,33 +197,38 @@ public class Aperture : MonoBehaviour
             float ratio = Mathf.Clamp(targetMovementVelocity / maxEffect, 0f, 1f);
             fovOffset = (fovRange.x + (fovRange.y - fovRange.x) * ratio) * multiplier;
             distanceOffset = (distanceRange.x + (distanceRange.y - distanceRange.x) * ratio) * multiplier;
+
             lastTargetPosition = target.position;
         }
 
-        if(targetMovementDirection.magnitude > 0.1f)
+        Vector3 horizontalDirection = new Vector3(targetMovementDirection.x, 0f, targetMovementDirection.z);
+        if(horizontalDirection.magnitude > 0.1f)
         {
-            lookDifference = Vector3.SignedAngle(Forward(), targetMovementDirection, Vector3.up);
-            if(lookDifference >= 0) lookDifference -= 180f;
-            else lookDifference += 180f;
-            lookDifference = Mathf.Clamp(lookDifference, -90f, 90f);
+            angleDifference = Vector3.SignedAngle(Forward(), horizontalDirection, Vector3.up);
+            if(angleDifference >= 0) angleDifference -= 180f;
+            else angleDifference += 180f;
+            if(angleDifference > maxAngle || angleDifference < -maxAngle) angleDifference = 0f;
+            Rotate(0f, (-angleDifference/maxAngle) * 1f, 0f);
         }
 
-        currentPosition = Vector3.Lerp(currentPosition, targetPosition + offset, Time.deltaTime * settings.followLerp * speed); 
-        transform.forward = -(transform.position - currentPosition).normalized;
-        Rotate(0f, -lookDifference/100f, 0f);
-        rotation += new Vector3(settings.angle, 0f, 0f) + currentRotation;
+        if(distanceFromTarget > settings.range.x)
+        {
+            currentPosition = Vector3.Lerp(currentPosition, targetPosition + offset, Time.deltaTime * settings.followLerp * speed); 
+        }
 
         currentFieldOfView = Mathf.Lerp(cam.fieldOfView, targetFieldOfView + fovOffset, Time.deltaTime * settings.fovLerp);
         currentDistance = targetDistance + distanceOffset;
 
-        // Clamping Rotation
-        if(rotation.x > -settings.rotationClamp.x)
-            rotation.x = -settings.rotationClamp.x;
-        else if(rotation.x < -settings.rotationClamp.y)
-            rotation.x = -settings.rotationClamp.y;
+        Vector3 rotOffset = new Vector3(settings.angle, 0f, 0f);
+
+        if(rotation.x + rotOffset.x > -settings.rotationClamp.x)
+            rotation.x = -settings.rotationClamp.x + rotOffset.x;
+        else if(rotation.x + rotOffset.x < -settings.rotationClamp.y)
+            rotation.x = -settings.rotationClamp.y + rotOffset.x;
 
         // Applying current values 
-        wantedCameraPosition = currentPosition + Quaternion.Euler(rotation) * Vector3.forward * currentDistance;
+        targetCameraPosition = currentPosition + Quaternion.Euler(rotation + rotOffset) * Vector3.forward * currentDistance;
+        transform.forward = -(transform.position - currentPosition).normalized;
 
         Apply();
         ShakeUpdate();
@@ -250,7 +256,7 @@ public class Aperture : MonoBehaviour
     void Apply()
     {
         transform.forward = -(transform.position - currentPosition).normalized;
-        transform.position = Vector3.Lerp(transform.position, wantedCameraPosition, Time.deltaTime * settings.camLerp);
+        transform.position = Vector3.Lerp(transform.position, targetCameraPosition, Time.deltaTime * settings.camLerp);
         cam.fieldOfView = currentFieldOfView;
     } // Apply the values to the camera 
 
