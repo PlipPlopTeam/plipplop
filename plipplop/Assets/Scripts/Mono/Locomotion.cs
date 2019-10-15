@@ -64,9 +64,13 @@ public class Locomotion : MonoBehaviour
         Vector3 sp = Vector3.zero;
 
         var v = GetBelowSurface();
-        if(v != null) sp = (Vector3)v;
+        if(v != null) 
+        {
+            sp = (Vector3)v;
+            transform.position = new Vector3(transform.position.x, sp.y + legsHeight, transform.position.z);
+        }
 
-        transform.position = new Vector3(transform.position.x, sp.y + legsHeight, transform.position.z);
+
     }
 
     public void Move(Vector3 direction)
@@ -99,12 +103,12 @@ public class Locomotion : MonoBehaviour
 
     private Vector3? GetBelowSurface()
     {
-        Debug.DrawRay(transform.position + legsOffset - new Vector3(0f, legsHeight - 0.25f, 0f), Vector3.down, Color.blue, 1f);
+        Debug.DrawRay(transform.position + legsOffset - new Vector3(0f, legsHeight - 1f, 0f), Vector3.down, Color.blue, 1f);
         // Magic 1f so the raycast can start above ground and not inside ground
 
         RaycastHit[] hits;
         hits = Physics.RaycastAll(
-            transform.position + legsOffset - new Vector3(0f, legsHeight - 0.25f, 0f),
+            transform.position + legsOffset - new Vector3(0f, legsHeight - 1f, 0f),
             Vector3.down,
             1f
         );
