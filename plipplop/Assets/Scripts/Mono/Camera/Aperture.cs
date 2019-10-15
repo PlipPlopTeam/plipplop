@@ -227,7 +227,7 @@ public class Aperture : MonoBehaviour
 
         currentFieldOfView = Mathf.Lerp(cam.fieldOfView, targetFieldOfView + fovOffset, Time.deltaTime * settings.fovLerp);
         currentDistance = targetDistance + distanceOffset;
-        currentRotation += settings.rotationOffset + angleVector;
+        currentRotation = settings.rotationOffset + angleVector;
 
         // Clamping angle
         if(currentRotation.x > -settings.rotationClamp.x)
@@ -238,7 +238,6 @@ public class Aperture : MonoBehaviour
         // Applying current values 
         wantedCameraPosition = currentPosition + Quaternion.Euler(currentRotation) * Vector3.forward * currentDistance;
         Apply();
-        currentRotation -= settings.rotationOffset + angleVector;
 
 
         // Shake
