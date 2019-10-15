@@ -33,11 +33,6 @@ public class Locomotion : MonoBehaviour
 
     }
 
-    private void Start()
-    {
-        RetractLegs();
-    }
-
     public bool AreLegsRetracted()
     {
         return legs == null || !legs.gameObject.activeSelf;
@@ -82,12 +77,14 @@ public class Locomotion : MonoBehaviour
         //Vector3 dir = new Vector3(clampDirection.x * Game.i.aperture.Right().x,  0f, clampDirection.z  * Game.i.aperture.Right().z);
         Vector3 dir = clampDirection.x * Game.i.aperture.Right() + clampDirection.z * Game.i.aperture.Forward();
         // Add Movement Force
-        GetComponent<Rigidbody>().AddForce(dir * Time.deltaTime * currentSpeed, ForceMode.Impulse);
+        rigidbody.AddForce(dir * Time.deltaTime * currentSpeed);
 
         // Rotate legs
         if (dir != Vector3.zero) targetDirection = dir;
 
         transform.forward = Vector3.Lerp(transform.forward, targetDirection, Time.deltaTime * 4f);
+
+        legs.velocity = rigidbody.velocity;
     }
 
     public void Fall()

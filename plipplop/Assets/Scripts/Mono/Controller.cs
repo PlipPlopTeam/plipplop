@@ -9,6 +9,7 @@ public abstract class Controller : MonoBehaviour
     public bool addRigidBody = false;
     public bool autoPossess = false;
     public bool keepCrouchState = false;
+    public bool canRetractLegs = true;
 
     public AperturePreset customCamera = null;
     public Locomotion locomotion;
@@ -36,10 +37,10 @@ public abstract class Controller : MonoBehaviour
         controllerSensor.transform.localPosition = new Vector3(0f, 0f, controllerSensor.sensorForwardPosition);
 
         if (keepCrouchState && keepCrouched) {
-            ExtendLegs();
+            RetractLegs();
         }
         else {
-            RetractLegs();
+            ExtendLegs();
         }
 
         //DEBUG
@@ -60,6 +61,7 @@ public abstract class Controller : MonoBehaviour
 
     internal void RetractLegs()
     {
+        if (!canRetractLegs) return;
         locomotion.RetractLegs();
         OnLegsRetracted();
     }
@@ -98,7 +100,8 @@ public abstract class Controller : MonoBehaviour
 
     virtual internal void Awake()
     {
-        if(addRigidBody) rigidbody = gameObject.AddComponent<Rigidbody>();
+        if (addRigidBody) rigidbody = gameObject.AddComponent<Rigidbody>();
+        else rigidbody = GetComponent<Rigidbody>();
 
         locomotion = GetComponent<Locomotion>();
         if (!locomotion) locomotion = gameObject.AddComponent<Locomotion>();
@@ -113,6 +116,7 @@ public abstract class Controller : MonoBehaviour
     {
         if (autoPossess) Game.i.player.Possess(this);
 
+        if (!IsPossessed()) RetractLegs();
     }
 
     virtual internal void Update()
