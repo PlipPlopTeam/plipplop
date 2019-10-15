@@ -123,8 +123,8 @@ public class Locomotion : MonoBehaviour
         else
             os = legsOffset - new Vector3(0f, legsHeight - 0.1f, 0f);
 
-        Debug.DrawRay(transform.position + os, Vector3.down, Color.blue, 1f);
-        return Physics.RaycastAll(transform.position + os, Vector3.down, groundCheckRange);
+        Debug.DrawRay(transform.position + transform.TransformDirection(os), Vector3.down, Color.blue, 1f);
+        return Physics.RaycastAll(transform.position + transform.TransformDirection(os), Vector3.down, groundCheckRange);
     }
 
     public bool IsGrounded() // But better 😎
@@ -154,9 +154,9 @@ public class Locomotion : MonoBehaviour
             // Legs
             Gizmos.color = Color.red;
             if (AreLegsRetracted())
-                Gizmos.DrawLine(transform.position + legsOffset, transform.position + legsOffset + (-transform.up * groundCheckRange));
-            else
-                Gizmos.DrawLine(transform.position + legsOffset - new Vector3(0f, legsHeight, 0f), transform.position + legsOffset - new Vector3(0f, legsHeight, 0f) + (-transform.up * groundCheckRange));
+                Gizmos.DrawLine(transform.position + transform.TransformDirection(legsOffset - new Vector3(0f, 0.1f, 0f)), transform.position + Vector3.down*groundCheckRange);
+            //else
+                //Gizmos.DrawLine(transform.position + legsOffset - new Vector3(0f, legsHeight, 0f), transform.position + legsOffset - new Vector3(0f, legsHeight, 0f) + (-transform.up * groundCheckRange));
 
         }
     }

@@ -36,8 +36,10 @@ public class GolfCar : Controller
 
     internal override void SpecificMove(Vector3 direction)  
     {
+        if (!IsGrounded()) direction = Vector3.zero;
+
         // Thrust
-        rigidbody.AddForce(transform.forward * direction.z * acceleration * Time.fixedDeltaTime);
+        rigidbody.AddForce(transform.forward * direction.z * acceleration * Time.fixedDeltaTime, ForceMode.Acceleration);
 
         var localSpeed = transform.InverseTransformDirection(rigidbody.velocity);
         var thrustObjective = localSpeed.z;
@@ -53,7 +55,9 @@ public class GolfCar : Controller
         // Steering + anti spin
         steering = Mathf.Lerp(steering, direction.x, steeringSpeed * Time.fixedDeltaTime) * maxSteering;
         var localSpin = transform.TransformDirection(rigidbody.angularVelocity);
-        localSpin.y = steering * steeringForce * Time.deltaTime;
+        localSpin.y = steering * steeringForce * (thrustObjective / maxSpeed) * Time.deltaTime;
+
+
         localSpin.y = Mathf.Lerp(localSpin.y, localSpin.y * Mathf.Abs(direction.x), antiSpinSpeed * Time.fixedDeltaTime);
 
         // Apply
@@ -67,7 +71,7 @@ public class GolfCar : Controller
         }
 
         // Tilt animation
-        currentTilt = Mathf.Lerp(currentTilt, (steering / maxSteering) * tiltAmount, 4f * Time.fixedDeltaTime);
+        currentTilt = Mathf.Lerp(currentTilt, (steering / maxSteering) * tiltAmount * (thrustObjective/maxSpeed), 4f * Time.fixedDeltaTime);
         visual.localEulerAngles = new Vector3(visual.localEulerAngles.x, visual.localEulerAngles.y, currentTilt);
 
     }
