@@ -9,6 +9,7 @@ public abstract class Controller : MonoBehaviour
     public bool addRigidBody = false;
     public bool autoPossess = false;
     public bool keepCrouchState = false;
+    public bool canRetractLegs = true;
 
     public AperturePreset customCamera = null;
     public Locomotion locomotion;
@@ -60,6 +61,8 @@ public abstract class Controller : MonoBehaviour
 
     internal void RetractLegs()
     {
+        if (!canRetractLegs) return;
+
         locomotion.RetractLegs();
         OnLegsRetracted();
     }
