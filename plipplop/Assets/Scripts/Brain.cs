@@ -20,7 +20,7 @@ public class Brain
             Input.GetAxis("Mouse Y") + mapping.Axis(ACTION.CAMERA_VERTICAL),
             Input.GetAxis("Mouse X") + mapping.Axis(ACTION.CAMERA_HORIZONTAL)
         );
-        //Game.i.aperture.Rotate(rot.x * 2f, rot.y * 2f);
+        Game.i.aperture.Rotate(rot.x * 2f, rot.y * 2f);
     }
 
     public void FixedUpdate()
