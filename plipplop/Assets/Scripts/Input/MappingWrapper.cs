@@ -49,6 +49,10 @@ public class MappingWrapper : Dictionary<INPUT, Func<float>>
         Add(INPUT.GP_LT, () => { return GamePad.GetState(index).Triggers.Left; });
         Add(INPUT.GP_RT, () => { return GamePad.GetState(index).Triggers.Right; });
 
+        // Mouse
+        Add(INPUT.MS_X, () => { return Input.GetAxis("Mouse X"); });
+        Add(INPUT.MS_Y, () => { return Input.GetAxis("Mouse Y"); });
+
         // Keyboard
         foreach(var c in keyCorrespondances) {
             Add(c.Key, () => { return Convert.ToSingle(Input.GetKey(c.Value)); });

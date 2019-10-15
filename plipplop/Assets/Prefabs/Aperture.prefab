@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1409258629170664861}
   - component: {fileID: 1409258629170664871}
   m_Layer: 0
-  m_Name: Camera
+  m_Name: Aperture
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26,8 +26,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1409258629170664864}
-  m_LocalRotation: {x: 0, y: 0.92387956, z: -0.38268346, w: -0}
-  m_LocalPosition: {x: 0, y: 4.242641, z: 4.2426405}
+  m_LocalRotation: {x: 0, y: 1, z: -0, w: -0}
+  m_LocalPosition: {x: 0, y: 0, z: 6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -102,9 +102,10 @@ MonoBehaviour:
   settings:
     distance: 6
     fieldOfView: 75
-    rotationOffset: {x: -45, y: 0, z: 0}
+    angle: 0
     positionOffset: {x: 0, y: 0, z: 0}
     range: {x: 1, y: 1.5}
+    rotationClamp: {x: 0, y: 0}
     fovLerp: 5
     followLerp: 5
     camLerp: 5
