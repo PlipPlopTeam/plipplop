@@ -27,36 +27,40 @@ public class NewController : Controller
     public override void OnEject()
     {
         base.OnEject();
+        // Code here
     }
 
-    public override void OnPossess()
+    public override void OnPossess(bool keepCrouched = false)
     {
-        base.OnPossess();
+        base.OnPossess(keepCrouched);
+        // Code here
     }
 
     internal override void SpecificMove(Vector3 direction)
     {
-        base.Move(direction);
+
     }
 
     internal override void Start()
     {
         base.Start();
+        // Code here
     }
 
     internal override void Update()
     {
         base.Update();
+        // Code here
     }
 
     internal override void OnLegsRetracted()
     {
-        //throw new System.NotImplementedException();
+        // Code here
     }
 
     internal override void OnLegsExtended()
     {
-        //throw new System.NotImplementedException();
+        // Code here
     }
 }
 ");
