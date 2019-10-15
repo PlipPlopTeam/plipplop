@@ -61,10 +61,12 @@ public class Locomotion : MonoBehaviour
         legsCollider.enabled = true;
         rigidbody.drag = preset.baseDrag;
 
-        Vector3 surfacePosition = GetBelowSurface();
-        if (surfacePosition != Vector3.zero) {
-            transform.position = new Vector3(transform.position.x, surfacePosition.y + legsHeight, transform.position.z);
-        }
+        Vector3 sp = Vector3.zero;
+
+        var v = GetBelowSurface();
+        if(v != null) sp = (Vector3)v;
+
+        transform.position = new Vector3(transform.position.x, sp.y + legsHeight, transform.position.z);
     }
 
     public void Move(Vector3 direction)
@@ -95,13 +97,27 @@ public class Locomotion : MonoBehaviour
         }
     }
 
-    private Vector3 GetBelowSurface()
+    private Vector3? GetBelowSurface()
     {
-        RaycastHit hit;
-        Debug.DrawRay(transform.position + legsOffset - new Vector3(0f, legsHeight - 1f, 0f), Vector3.down, Color.blue, 1f);
-                                                                                    // Magic 1f so the raycast can start above ground and not inside ground
-        if (Physics.Raycast(transform.position + legsOffset - new Vector3(0f, legsHeight - 1f, 0f), Vector3.down, out hit)) return hit.point;
-        return Vector3.zero;
+        Debug.DrawRay(transform.position + legsOffset - new Vector3(0f, legsHeight - 0.25f, 0f), Vector3.down, Color.blue, 1f);
+        // Magic 1f so the raycast can start above ground and not inside ground
+
+        RaycastHit[] hits;
+        hits = Physics.RaycastAll(
+            transform.position + legsOffset - new Vector3(0f, legsHeight - 0.25f, 0f),
+            Vector3.down,
+            1f
+        );
+
+        foreach(RaycastHit h in hits)
+        {
+            foreach(Transform t in transform.GetComponentsInChildren<Transform>())
+            {
+                if(t == h.transform) return h.point;
+            }
+        }
+
+        return null;
     }
 
     public bool IsGrounded()
