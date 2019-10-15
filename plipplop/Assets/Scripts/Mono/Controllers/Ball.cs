@@ -39,7 +39,6 @@ public class Ball : Controller
         _velocity.y = rigidbody.velocity.y;
         rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, _velocity, Time.deltaTime * moveLerp);
 
-
         if(rigidbody.velocity.magnitude > 0.2f) transform.forward = rigidbody.velocity.normalized;
 
 
@@ -95,10 +94,14 @@ public class Ball : Controller
         if (IsPossessed())
         {
             locomotion.legsHeight = originalLegHeight * (1f - rigidbody.velocity.magnitude / speedBeforeRoll);
-            if (rigidbody.velocity.magnitude > speedBeforeRoll) {
+            if(locomotion.legsHeight < 1f) locomotion.legsHeight = 1f;
+
+            if (rigidbody.velocity.magnitude > speedBeforeRoll)
+            {
                 RetractLegs();
             }
-            else if (IsGrounded() && rigidbody.velocity.magnitude < speedBeforeStandingUp) {
+            else if (IsGrounded() && rigidbody.velocity.magnitude < speedBeforeStandingUp)
+            {
                 ExtendLegs();
             }
         }
