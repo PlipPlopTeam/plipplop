@@ -17,9 +17,9 @@ public class Ball : Controller
     Transform childBall;
     float originalLegHeight = 2f;
 
-    public override void OnPossess(bool wasCrouching=false)
+    public override void OnPossess()
     {
-        base.OnPossess(wasCrouching);
+        base.OnPossess();
         ExtendLegs();
     }
 

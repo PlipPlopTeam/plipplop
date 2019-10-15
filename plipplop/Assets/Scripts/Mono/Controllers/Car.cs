@@ -38,7 +38,7 @@ public class Car : Controller
         //Nothing for now
     }
 
-    public override void OnPossess(bool wasCrouching = false)
+    public override void OnPossess()
     {
         //Nothing for now
     }
