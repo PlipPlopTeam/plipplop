@@ -60,7 +60,6 @@ public class Aperture : MonoBehaviour
 
     void Load(Settings s)
     {
-        settings = s;
         // POSITION
         originPosition = settings.positionOffset;
         targetPosition = settings.positionOffset;
@@ -92,6 +91,7 @@ public class Aperture : MonoBehaviour
 
     void Start()
     {
+        settings = defaultSet.settings;
         Load(settings);
     }
 
