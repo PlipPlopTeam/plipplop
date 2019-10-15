@@ -16,11 +16,10 @@ public class Brain
     {
         UpdateController();
 
-        Vector2 rot = new Vector2(
-            Input.GetAxis("Mouse Y") + mapping.Axis(ACTION.CAMERA_VERTICAL),
-            Input.GetAxis("Mouse X") + mapping.Axis(ACTION.CAMERA_HORIZONTAL)
+        Game.i.aperture.Rotate(
+            mapping.Axis(ACTION.CAMERA_VERTICAL) * 2f,
+            mapping.Axis(ACTION.CAMERA_HORIZONTAL) * 2f
         );
-        Game.i.aperture.Rotate(rot.x * 2f, rot.y * 2f);
     }
 
     public void FixedUpdate()

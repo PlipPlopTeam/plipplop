@@ -165,11 +165,9 @@ public class Aperture : MonoBehaviour
     }
     public void Rotate(float x = 0f, float y = 0f, float z = 0f)
     {
-        currentRotation += new Vector3(x, y, 0f);
+        currentRotation += new Vector3(x, y, z);
     }
 
-
-    Vector3 angleVector;
     void FixedUpdate()
     {
         // Distance cannot be less than 0
@@ -194,75 +192,40 @@ public class Aperture : MonoBehaviour
             targetMovementDirection = (target.position - lastTargetPosition).normalized;
             // Increasing the position lerp if the target go further the distanceRange
             speed = (distanceFromTarget - settings.range.x) / settings.range.y;
-
             // The Speed Enhancement effect
             float ratio = Mathf.Clamp(targetMovementVelocity / maxEffect, 0f, 1f);
             fovOffset = (fovRange.x + (fovRange.y - fovRange.x) * ratio) * multiplier;
             distanceOffset = (distanceRange.x + (distanceRange.y - distanceRange.x) * ratio) * multiplier;
-            
             lastTargetPosition = target.position;
         }
 
-        if(targetMovementDirection != Vector3.zero)
+        if(targetMovementDirection.magnitude > 0.1f)
         {
             lookDifference = Vector3.SignedAngle(Forward(), targetMovementDirection, Vector3.up);
-            
             if(lookDifference >= 0) lookDifference -= 180f;
             else lookDifference += 180f;
-            lookDifference = Mathf.Clamp(lookDifference, -90f, 90);
-
-            Debug.Log(lookDifference);
+            lookDifference = Mathf.Clamp(lookDifference, -90f, 90f);
         }
 
-
-        //if(distanceFromTarget > settings.range.x)
-        //{
-            currentPosition = Vector3.Lerp(currentPosition, targetPosition + offset, Time.deltaTime * settings.followLerp * speed);
-            
-            transform.forward = -(transform.position - currentPosition).normalized;
-
-            Rotate(0f, -lookDifference/100f, 0f);
-
-/*
-            if(targetMovementVelocity > 0.05f)
-            {
-                angleVector = new Vector3
-                (0f, 
-                    Vector3.SignedAngle(
-                    new Vector3(
-                        targetMovementDirection.x,
-                        0f,
-                        -targetMovementDirection.z
-                    ), 
-                    Vector3.forward,
-                    Vector3.up),
-                0f);
-            }
- */
-        //}
+        currentPosition = Vector3.Lerp(currentPosition, targetPosition + offset, Time.deltaTime * settings.followLerp * speed); 
+        transform.forward = -(transform.position - currentPosition).normalized;
+        Rotate(0f, -lookDifference/100f, 0f);
+        rotation += new Vector3(settings.angle, 0f, 0f) + currentRotation;
 
         currentFieldOfView = Mathf.Lerp(cam.fieldOfView, targetFieldOfView + fovOffset, Time.deltaTime * settings.fovLerp);
         currentDistance = targetDistance + distanceOffset;
-        rotation += new Vector3(settings.angle, 0f, 0f) + angleVector + currentRotation;
 
-        // Clamping angle
-        if(currentRotation.x > -settings.rotationClamp.x)
-            currentRotation.x = -settings.rotationClamp.x;
-        else if(currentRotation.x < -settings.rotationClamp.y)
-            currentRotation.x = -settings.rotationClamp.y;
+        // Clamping Rotation
+        if(rotation.x > -settings.rotationClamp.x)
+            rotation.x = -settings.rotationClamp.x;
+        else if(rotation.x < -settings.rotationClamp.y)
+            rotation.x = -settings.rotationClamp.y;
 
         // Applying current values 
         wantedCameraPosition = currentPosition + Quaternion.Euler(rotation) * Vector3.forward * currentDistance;
-        Apply();
 
-        // Shake
-        if(timer > 0)
-        {
-            timer -= Time.deltaTime;
-            currentRotation += Random.insideUnitSphere * intensity;
-            intensity *= timer/duration;
-            if(timer <= 0) Teleport();
-        }
+        Apply();
+        ShakeUpdate();
     }
 
     [ContextMenu("Shake")]
@@ -272,6 +235,16 @@ public class Aperture : MonoBehaviour
         intensity = i;
         duration = d;
         timer = duration;
+    }
+    public void ShakeUpdate()
+    {
+        if(timer > 0)
+        {
+            timer -= Time.deltaTime;
+            currentRotation += Random.insideUnitSphere * intensity;
+            intensity *= timer/duration;
+            if(timer <= 0) Teleport();
+        }
     }
 
     void Apply()
