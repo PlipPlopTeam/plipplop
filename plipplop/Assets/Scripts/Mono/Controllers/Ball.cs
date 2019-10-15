@@ -87,9 +87,7 @@ public class Ball : Controller
         base.Start();
         originalLegHeight = locomotion.legsHeight;
     }
-
-    internal override void FixedUpdate() {}
-
+    
     internal override void Update()
     {
         base.Update();

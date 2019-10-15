@@ -10,6 +10,8 @@ public abstract class Controller : MonoBehaviour
     public bool autoPossess = false;
     public bool keepCrouchState = false;
     public bool canRetractLegs = true;
+    public bool useGravity = true;
+    [Range(1f, 200f)] public float gravityMultiplier = 8f;
 
     public AperturePreset customCamera = null;
     [HideInInspector] public Locomotion locomotion;
@@ -81,7 +83,7 @@ public abstract class Controller : MonoBehaviour
     internal abstract void OnLegsExtended();
     internal virtual void SpecificMove(Vector3 direction) {}
 
-    public void Move(Vector3 direction)
+    virtual internal void BaseMove(Vector3 direction)
     {
         if (AreLegsRetracted()) SpecificMove(direction);
         else locomotion.Move(direction);
@@ -90,7 +92,7 @@ public abstract class Controller : MonoBehaviour
 
     public void Move(float fb, float rl)
     {
-        Move(new Vector3(rl, 0f, fb));
+        BaseMove(new Vector3(rl, 0f, fb).normalized);
     }
 
     internal bool IsPossessed()
@@ -117,10 +119,13 @@ public abstract class Controller : MonoBehaviour
         if (autoPossess) Game.i.player.Possess(this);
 
         if (!IsPossessed()) RetractLegs();
+
+        rigidbody.useGravity = false;
     }
 
     virtual internal void Update()
     {
+        rigidbody.useGravity = false;
 
         // DEBUG
         var lr = GetComponent<LineRenderer>();
@@ -148,7 +153,13 @@ public abstract class Controller : MonoBehaviour
 
     virtual internal void FixedUpdate()
     {
+        if (useGravity && AreLegsRetracted()) ApplyGravity();
         locomotion.Fall();
+    }
+
+    internal void ApplyGravity(float factor=1f)
+    {                                    // 9.81 is earth's gravity
+        rigidbody.AddForce(Vector3.down * 9.81f * gravityMultiplier * factor * Time.fixedDeltaTime, ForceMode.Acceleration);
     }
 
     // Trying to possess something else

@@ -72,10 +72,8 @@ public class Locomotion : MonoBehaviour
         currentSpeed = Mathf.Clamp(currentSpeed + preset.acceleration * Time.deltaTime, 0f, preset.speed * direction.magnitude);
 
         Vector3 clampDirection = Vector3.ClampMagnitude(direction, 1f);
-        //Vector3 camdir = Vector3.one;//new Vector3(Camera.main.transform.forward.x, 0f, Camera.main.transform.forward.z);
-
-        //Vector3 dir = new Vector3(clampDirection.x * Game.i.aperture.Right().x,  0f, clampDirection.z  * Game.i.aperture.Right().z);
         Vector3 dir = clampDirection.x * Game.i.aperture.Right() + clampDirection.z * Game.i.aperture.Forward();
+
         // Add Movement Force
         rigidbody.AddForce(dir * Time.deltaTime * currentSpeed);
 
@@ -87,10 +85,10 @@ public class Locomotion : MonoBehaviour
         legs.velocity = rigidbody.velocity;
     }
 
-    public void Fall()
+    public void Fall(float factor=1f)
     {
         if (!IsGrounded() && !AreLegsRetracted()) {
-            rigidbody.AddForce(Vector3.down * preset.strength * Time.deltaTime);
+            rigidbody.AddForce(Vector3.down * preset.strength * factor * Time.deltaTime);
             if (rigidbody.velocity.y < -preset.maxFallSpeed) {
                 rigidbody.velocity = new Vector3(rigidbody.velocity.x, -preset.maxFallSpeed, rigidbody.velocity.z);
             }
