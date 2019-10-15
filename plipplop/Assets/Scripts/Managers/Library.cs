@@ -13,5 +13,6 @@ public class Library
     public GameObject facePrefab;
     public GameObject aperture;
     public GameObject controllerSensor;
+    public GameObject baseControllerPrefab;
 
 }

@@ -29,8 +29,16 @@ public class Game : MonoBehaviour
 
         mapping = Instantiate<Mapping>(mapping);
 
+        SpawnPlayer(Vector3.zero);
+    }
+
+    private void SpawnPlayer(Vector3 position)
+    {
         // Init
         player = new Brain(mapping);
+        Controller c = Instantiate(library.baseControllerPrefab.GetComponent<Controller>(), position, Quaternion.identity);
+        player.Possess(c);
+        player.SetBaseController(c);
     }
 
     private void Update()

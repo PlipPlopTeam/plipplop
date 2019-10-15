@@ -51,7 +51,9 @@ public class Glider : Controller
             ExtendLegs();
         }
 
-        if ((!IsGrounded() || !IsPossessed()) && !AreLegsRetracted()){
+        Debug.Log(IsGrounded() + " " + AreLegsRetracted());
+        if ((!IsGrounded() || !IsPossessed()) && !AreLegsRetracted())
+        {
             RetractLegs();
         }
     }

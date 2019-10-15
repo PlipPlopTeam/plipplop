@@ -8,13 +8,13 @@ public class BaseController : Controller
     public override void OnEject()
     {
         base.OnEject();
-        // Code here
+        gameObject.SetActive(false);
     }
 
     public override void OnPossess()
     {
         base.OnPossess();
-        // Code here
+        gameObject.SetActive(true);
     }
 
     internal override void SpecificMove(Vector3 direction)
@@ -37,6 +37,14 @@ public class BaseController : Controller
     internal override void OnLegsRetracted()
     {
         // Code here
+    }
+
+    internal override void OnTryPossess()
+    {
+        if (controllerSensor && controllerSensor.IsThereAnyController())
+        {
+            Game.i.player.Possess(controllerSensor.GetFocusedController());
+        }
     }
 
     internal override void OnLegsExtended()
