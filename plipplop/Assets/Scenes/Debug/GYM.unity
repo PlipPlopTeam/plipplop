@@ -860,14 +860,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4009345996532297923, guid: 63b085a83f7f1f448a3783a5b97befd0,
+        type: 3}
+      propertyPath: autoPossess
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 63b085a83f7f1f448a3783a5b97befd0, type: 3}
---- !u!4 &685290778 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4009345996532297925, guid: 63b085a83f7f1f448a3783a5b97befd0,
-    type: 3}
-  m_PrefabInstance: {fileID: 660052546}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &719232974
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1050,17 +1049,17 @@ PrefabInstance:
     - target: {fileID: 1409258629170664867, guid: 340c3ec1f0e54894ba1cb689a308664a,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 12.44
+      value: -10.72
       objectReference: {fileID: 0}
     - target: {fileID: 1409258629170664867, guid: 340c3ec1f0e54894ba1cb689a308664a,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 23.54264
+      value: 3.6743054
       objectReference: {fileID: 0}
     - target: {fileID: 1409258629170664867, guid: 340c3ec1f0e54894ba1cb689a308664a,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 95.04264
+      value: 22.286608
       objectReference: {fileID: 0}
     - target: {fileID: 1409258629170664867, guid: 340c3ec1f0e54894ba1cb689a308664a,
         type: 3}
@@ -1070,12 +1069,12 @@ PrefabInstance:
     - target: {fileID: 1409258629170664867, guid: 340c3ec1f0e54894ba1cb689a308664a,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.92387944
+      value: 0.95371693
       objectReference: {fileID: 0}
     - target: {fileID: 1409258629170664867, guid: 340c3ec1f0e54894ba1cb689a308664a,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.38268366
+      value: -0.30070582
       objectReference: {fileID: 0}
     - target: {fileID: 1409258629170664867, guid: 340c3ec1f0e54894ba1cb689a308664a,
         type: 3}
@@ -1106,7 +1105,37 @@ PrefabInstance:
         type: 3}
       propertyPath: target
       value: 
-      objectReference: {fileID: 685290778}
+      objectReference: {fileID: 8685016911843636017}
+    - target: {fileID: 1409258629170664871, guid: 340c3ec1f0e54894ba1cb689a308664a,
+        type: 3}
+      propertyPath: settings.distance
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1409258629170664871, guid: 340c3ec1f0e54894ba1cb689a308664a,
+        type: 3}
+      propertyPath: settings.rotationOffset.x
+      value: -35
+      objectReference: {fileID: 0}
+    - target: {fileID: 1409258629170664871, guid: 340c3ec1f0e54894ba1cb689a308664a,
+        type: 3}
+      propertyPath: settings.range.y
+      value: 1.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 1409258629170664871, guid: 340c3ec1f0e54894ba1cb689a308664a,
+        type: 3}
+      propertyPath: settings.rotationClamp.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1409258629170664871, guid: 340c3ec1f0e54894ba1cb689a308664a,
+        type: 3}
+      propertyPath: settings.rotationClamp.y
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 1409258629170664871, guid: 340c3ec1f0e54894ba1cb689a308664a,
+        type: 3}
+      propertyPath: settings.camLerp
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 340c3ec1f0e54894ba1cb689a308664a, type: 3}
 --- !u!1001 &994235168
@@ -1760,6 +1789,11 @@ PrefabInstance:
     - target: {fileID: 2932650472225342058, guid: ddd968a89987eb147ae83974ec55e6fe,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2932650472225342061, guid: ddd968a89987eb147ae83974ec55e6fe,
+        type: 3}
+      propertyPath: autoPossess
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -2524,10 +2558,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   addRigidBody: 0
-  autoPossess: 0
+  autoPossess: 1
   keepCrouchState: 1
+  canRetractLegs: 1
   customCamera: {fileID: 0}
   locomotion: {fileID: 0}
+  renderer: {fileID: 1274823461}
 --- !u!135 &8685016911843636023
 SphereCollider:
   m_ObjectHideFlags: 0
