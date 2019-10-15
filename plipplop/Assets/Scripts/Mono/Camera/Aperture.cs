@@ -158,6 +158,15 @@ public class Aperture : MonoBehaviour
         return transform.right;
     }
 
+    public void Rotate(Vector3 rot)
+    {
+        currentRotation += rot;
+    }
+    public void Rotate(float x, float y)
+    {
+        currentRotation += new Vector3(x, y, 0f);
+    }
+
 
     Vector3 angleVector;
     void FixedUpdate()
@@ -228,8 +237,8 @@ public class Aperture : MonoBehaviour
 
         // Applying current values 
         wantedCameraPosition = currentPosition + Quaternion.Euler(currentRotation) * Vector3.forward * currentDistance;
-        
         Apply();
+
 
         // Shake
         if(timer > 0)
