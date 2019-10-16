@@ -21,7 +21,7 @@ public class Aperture
         public float followLerp = 1f;
         //TODO: Reimplement
         //public float camLerp = 1f;
-        //public float rotSpeed = 1f;
+        public float rotationSpeed = 1f;
 
         [Header("Speed Enhancer")]
         [Range(0.1f, 10)]  public float speedEffectMultiplier = 1f;
@@ -29,6 +29,7 @@ public class Aperture
 
         [Header("Advanced")]
         public float maximumCatchUpSpeed = 10f;
+        public float cameraRotateAroundSpeed = 4f;
     }
 
     public class Key<T>
@@ -83,8 +84,8 @@ public class Aperture
     float intensity = 0.7f;
     float duration = 0f;
 
-    // Look right look left
-    float leftRightAccumulator;
+    // Current angle on Y axis
+    float hAngle;
 
     void Load()
     {
@@ -141,11 +142,11 @@ public class Aperture
 
     public void Rotate(Vector3 rot)
     {
-        rotationAroundTarget.destination += rot;
+        hAngle += rot.y * settings.cameraRotateAroundSpeed;
     }
     public void Rotate(float x = 0f, float y = 0f, float z = 0f)
     {
-        rotationAroundTarget.destination += new Vector3(x, y, z);
+        hAngle += y * settings.cameraRotateAroundSpeed;
     }
 
     public void Update()
@@ -156,10 +157,11 @@ public class Aperture
     public void FixedUpdate()
     {
 
-        Vector3 hDirectionToTarget = Vector3.zero;
         float catchUpSpeed = 1f;
         float fovMultiplier = 0f;
-        float targetMovementVelocity = 0f;
+        float targetMovementVelocity;
+
+        hAngle = Mathf.Lerp(hAngle, 0f, Time.fixedDeltaTime * 3f);
 
         if (target != null) 
         {
@@ -170,12 +172,11 @@ public class Aperture
                 Vector3.Scale(new Vector3(1f, 0f, 1f), target.position)
             );
 
-            // Direction only on the X Z axis
-            hDirectionToTarget = (
-                Vector3.Scale(new Vector3(1f, 0f, 1f), position.current) - 
-                Vector3.Scale(new Vector3(1f, 0f, 1f), target.position)
-            ).normalized;
 
+            var bestHAngle = Vector3.SignedAngle(Vector3.forward, target.forward, Vector3.up);
+            //hAngle = bestHAngle;
+            var angle = hAngle + bestHAngle;
+            rotationAroundTarget.destination = -new Vector3(Mathf.Sin(Mathf.Deg2Rad * angle), 0f, Mathf.Cos(Mathf.Deg2Rad * angle));
 
             targetMovementVelocity = Vector3.Distance(target.position, lastTargetPosition);
 
@@ -190,28 +191,32 @@ public class Aperture
             lastTargetPosition = target.position;
         }
 
-        // TODO : REimplement angle limits
         /*
         Vector3 horizontalDirection = new Vector3(targetMovementDirection.x, 0f, targetMovementDirection.z);
-        hAngleDifference = Vector3.SignedAngle(Forward(), horizontalDirection, Vector3.up);
+        var hAngleDifference = Vector3.SignedAngle(Forward(), horizontalDirection, Vector3.up);
+
+
+        // TODO : REimplement angle limits
 
         if(hAngleDifference >= 0) hAngleDifference -= 180f;
         else hAngleDifference += 180f;
 
         if(hAngleDifference > maxAngle || hAngleDifference < -maxAngle) hAngleDifference = 0f;
         Rotate(0f, (-hAngleDifference / maxAngle) * settings.rotSpeed, 0f);
-
-
-        if(rotationAroundTarget.current.x + settings.angle > -settings.rotationClamp.min)
+        
+        if (rotationAroundTarget.current.x + settings.angle > -settings.rotationClamp.min)
             rotationAroundTarget.current.x = -settings.rotationClamp.min + settings.angle;
         else if(rotationAroundTarget.current.x + settings.angle < -settings.rotationClamp.max)
             rotationAroundTarget.current.x = -settings.rotationClamp.max + settings.angle;
         */
 
+
+        rotationAroundTarget.current = Vector3.Lerp(rotationAroundTarget.current, rotationAroundTarget.destination, Time.fixedDeltaTime * settings.rotationSpeed);
+
         position.destination = 
             target.position
             + settings.heightOffset * Vector3.up
-            + hDirectionToTarget * Mathf.Clamp(hDistanceToTarget, settings.distance.min, settings.distance.max);
+            + rotationAroundTarget.current * Mathf.Clamp(hDistanceToTarget, settings.distance.min, settings.distance.max);
         
         position.current = Vector3.Lerp(
             position.current, 
@@ -220,7 +225,7 @@ public class Aperture
         );
 
         fieldOfView.destination = fovMultiplier * settings.fieldOfView;
-        fieldOfView.current = Mathf.Lerp(fieldOfView.current, fieldOfView.destination, Time.deltaTime * settings.fovLerp);
+        fieldOfView.current = Mathf.Lerp(fieldOfView.current, fieldOfView.destination, Time.fixedDeltaTime * settings.fovLerp);
         
         Apply();
         ShakeUpdate();

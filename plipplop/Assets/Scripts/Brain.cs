@@ -28,8 +28,8 @@ public class Brain
     {
         UpdateController();
         Game.i.aperture.RotateWithGamepad(
-            mapping.Axis(ACTION.CAMERA_VERTICAL) * 2f,
-            mapping.Axis(ACTION.CAMERA_HORIZONTAL) * 2f
+            mapping.Axis(ACTION.CAMERA_VERTICAL),
+            mapping.Axis(ACTION.CAMERA_HORIZONTAL)
         );
     }
 

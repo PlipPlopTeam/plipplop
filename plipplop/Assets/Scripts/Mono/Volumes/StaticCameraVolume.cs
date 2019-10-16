@@ -13,6 +13,7 @@ public class StaticCameraVolume : MonoBehaviour
     void Start()
     {
         camera = GetComponentInChildren<Camera>();
+        camera.enabled = false;
         var col = GetComponent<CollisionEventTransmitter>();
 
         col.onTriggerEnter += Col_onTriggerEnter;
