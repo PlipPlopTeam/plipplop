@@ -67,7 +67,7 @@ public class Brain
         controller.OnPossess();
         this.controller = controller;
         Game.i.aperture.target = controller.transform;
-        Game.i.aperture.SetSettings(controller.customCamera ? controller.customCamera.settings : Game.i.aperture.defaultSet.settings);
+        Game.i.aperture.Load(controller.customCamera ? controller.customCamera.settings : Game.i.library.defaultAperture.settings);
     }
 
     public void Eject()

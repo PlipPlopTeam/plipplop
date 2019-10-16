@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using UnityEditor;
+using UnityEngine;
 
-public class Aperture : MonoBehaviour
+public class Aperture
 {
     [System.Serializable]
     public class Settings
@@ -52,7 +53,6 @@ public class Aperture : MonoBehaviour
     public Transform target;
 
     [Header("Settings")]
-    public AperturePreset defaultSet;
     Settings settings;
 
     [Header("Speed Enhancer")]
@@ -95,26 +95,16 @@ public class Aperture : MonoBehaviour
         distance = new Key<float>(settings.distance);
     }
 
-    void Load(Settings s)
+    public void Load(Settings s)
     {
         settings = s;
         Load();
     }
 
-    private void Awake()
+    public Aperture()
     {
-        if (FindObjectsOfType<Aperture>().Length > 2) {
-            DestroyImmediate(gameObject);
-            throw new System.Exception("DESTROYED duplicate CameraController. This should NOT happen. Check your scene.");
-        }
-
-        if (Camera.main) Camera.main.tag = "Untagged";
-        gameObject.tag = "MainCamera";
-    }
-
-    void Start()
-    {
-        Load(defaultSet.settings);
+        cam = Camera.main;
+        Load(Game.i.library.defaultAperture.settings);
     }
 
 #region INSPECTOR 
@@ -134,17 +124,17 @@ public class Aperture : MonoBehaviour
             // Follow range draw
             UnityEditor.Handles.DrawWireDisc(position.current, Vector3.up, settings.range.x);
             UnityEditor.Handles.DrawWireDisc(position.current, Vector3.up, settings.range.y);
-            Gizmos.DrawLine(transform.position, position.current);
+            Gizmos.DrawLine(cam.transform.position, position.current);
             Gizmos.DrawLine(position.current, target.position);
             UnityEditor.Handles.Label(position.current + Vector3.right * settings.range.x, "Min " + settings.range.x.ToString(), style);
             UnityEditor.Handles.Label(position.current + Vector3.right * settings.range.y, "Max " + settings.range.y.ToString(), style);
-            UnityEditor.Handles.Label((transform.position + target.position)/2, "Dist " + distance.current.ToString(), style);
+            UnityEditor.Handles.Label((cam.transform.position + target.position)/2, "Dist " + distance.current.ToString(), style);
 
-            Gizmos.DrawLine(transform.position, position.target);
+            Gizmos.DrawLine(cam.transform.position, position.target);
         }
         else
         {
-            Gizmos.DrawLine(transform.position, defaultTarget);
+            Gizmos.DrawLine(cam.transform.position, defaultTarget);
         }
 
         //Gizmos.DrawLine(transform.position,
@@ -155,46 +145,39 @@ public class Aperture : MonoBehaviour
     // Execute when editing values in the inspector
     void OnDrawGizmos()
     {
-        settings = defaultSet.settings;
-        var controller = target.GetComponent<Controller>();
-        if (controller && controller.customCamera) {
-            settings = controller.customCamera.settings;
+        if (!EditorApplication.isPlaying) {
+            settings = Game.i.library.defaultAperture.settings;
+            var controller = target.GetComponent<Controller>();
+            if (controller && controller.customCamera) {
+                settings = controller.customCamera.settings;
+            }
+
+            Load(settings);
+
+            if (settings.distance < 0f) settings.distance = 0f;
+            if (settings.fieldOfView < 2f) settings.fieldOfView = 2f;
+            if (distance.target < 0) distance.target = 0f;
+            if (settings.range.y < settings.range.x) settings.range.y = settings.range.x;
+            if (target != null) position.current += target.position;
+
+            position.target = position.current + Quaternion.Euler(rotation.current) * Vector3.forward * distance.current;
+            cam.transform.position = position.target;
         }
-
-        Load(settings);
-
-        if(settings.distance < 0f) settings.distance = 0f;
-        if(settings.fieldOfView < 2f) settings.fieldOfView = 2f;
-        if(distance.target < 0) distance.target = 0f;
-        if(settings.range.y < settings.range.x) settings.range.y = settings.range.x;
-        if(target != null) position.current += target.position;
-
-        position.target = position.current + Quaternion.Euler(rotation.current) * Vector3.forward * distance.current;
-        transform.position = position.target;
-
-        Apply();
     }
 
     #endregion
 
-    public void SetSettings(Settings s)
-    {
-        settings = s;
-        Load(s);
-       // Apply();
-    }
-
     public Vector3 Forward()
     {
         return Vector3.ClampMagnitude(
-            new Vector3(transform.forward.x, 0f, transform.forward.z),
+            new Vector3(cam.transform.forward.x, 0f, cam.transform.forward.z),
             1f
         );
     }
 
     public Vector3 Right()
     {
-        return transform.right;
+        return cam.transform.right;
     }
 
     public void RotateWithGamepad(float x = 0f, float y = 0f, float z = 0f)
@@ -211,7 +194,12 @@ public class Aperture : MonoBehaviour
         rotation.current += new Vector3(x, y, z);
     }
 
-    void FixedUpdate()
+    public void Update()
+    {
+
+    }
+
+    public void FixedUpdate()
     {
         // Distance cannot be less than 0
         if (settings.distance < 0) settings.distance = 0;
@@ -270,7 +258,7 @@ public class Aperture : MonoBehaviour
 
         // Applying current values 
         position.target = position.current + Quaternion.Euler(rotation.current + rotOffset) * Vector3.forward * distance.current;
-        transform.forward = -(transform.position - position.current).normalized;
+        cam.transform.forward = -(cam.transform.position - position.current).normalized;
 
         Apply();
         ShakeUpdate();
@@ -297,8 +285,8 @@ public class Aperture : MonoBehaviour
 
     void Apply()
     {
-        transform.forward = -(transform.position - position.current).normalized;
-        transform.position = Vector3.Lerp(transform.position, position.target, Time.deltaTime * settings.camLerp);
+        cam.transform.forward = -(cam.transform.position - position.current).normalized;
+        cam.transform.position = Vector3.Lerp(cam.transform.position, position.target, Time.deltaTime * settings.camLerp);
         cam.fieldOfView = fieldOfView.current;
     } // Apply the values to the camera 
 
@@ -336,14 +324,5 @@ public class Aperture : MonoBehaviour
     {
         cam.enabled = false;
         newCam.enabled = true;
-    }
-
-    public void SwitchBack()
-    {
-        foreach(var c in FindObjectsOfType<Camera>()) {
-            c.enabled = false;
-        }
-
-        cam.enabled = true;
     }
 }
