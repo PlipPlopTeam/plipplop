@@ -22,7 +22,7 @@ public class Locomotion : MonoBehaviour
     {
         legsCollider = gameObject.AddComponent<CapsuleCollider>();
         legsCollider.material = new PhysicMaterial() { dynamicFriction = 0f, staticFriction = 0f, frictionCombine = PhysicMaterialCombine.Minimum };
-        preset = preset ? preset : Game.i.defaultLocomotion;
+        preset = preset ? preset : Game.i.library.defaultLocomotion;
         rigidbody = GetComponent<Rigidbody>();
     }
     

@@ -8,10 +8,13 @@ public class Library
     [Header("Strings")]
     public string gameName = "Plip plop";
 
+    [Header("Scriptables")]
+    public AperturePreset defaultAperture;
+    public LocomotionPreset defaultLocomotion;
+
     [Header("Prefabs")]
     public GameObject legsPrefab;
     public GameObject facePrefab;
-    public GameObject aperture;
     public GameObject controllerSensor;
     public GameObject baseControllerPrefab;
 
