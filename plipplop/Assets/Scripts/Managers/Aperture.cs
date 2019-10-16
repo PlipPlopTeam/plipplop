@@ -13,7 +13,8 @@ public class Aperture
         [Range(2f, 200f)] public float fieldOfView = 75f;
         public float heightOffset;
         public Range distance;
-        public Range rotationClamp;
+        //TODO: Reimplement
+        //public Range rotationClamp;
 
         [Header("Lerps")]
         public float fovLerp = 1f;
@@ -211,13 +212,13 @@ public class Aperture
             target.position
             + settings.heightOffset * Vector3.up
             + hDirectionToTarget * Mathf.Clamp(hDistanceToTarget, settings.distance.min, settings.distance.max);
-
+        
         position.current = Vector3.Lerp(
             position.current, 
             position.destination, 
             Time.deltaTime * settings.followLerp * catchUpSpeed
         );
-        
+
         fieldOfView.destination = fovMultiplier * settings.fieldOfView;
         fieldOfView.current = Mathf.Lerp(fieldOfView.current, fieldOfView.destination, Time.deltaTime * settings.fovLerp);
         
