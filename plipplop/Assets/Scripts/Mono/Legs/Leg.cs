@@ -21,7 +21,7 @@ public class Leg : MonoBehaviour
         foot.transform.parent = null;
     }
 
-    private void Update()
+    void Update()
     {
         if (Vector3.Distance(foot.position, hip.position) > maxFootDistance)
         {
@@ -47,7 +47,7 @@ public class Leg : MonoBehaviour
         RaycastHit[] hits = Physics.RaycastAll(transform.position, -Vector3.up, maxFootDistance, raycastMask);
         foreach(RaycastHit hit in hits)
         {
-            if(hit.transform != body.body)
+            if(!hit.collider.isTrigger && hit.transform != body.body)
             {
                 foot.position = hit.point + GetNoise(0) * _vel.magnitude;
                 foot.transform.up = hit.normal;
@@ -59,7 +59,7 @@ public class Leg : MonoBehaviour
         UpdateKnee(_vel); 
     }
 
-    void UpdateKnee(Vector3 _vel, float _noise = 1)
+    public void UpdateKnee(Vector3 _vel, float _noise = 1)
     {
         _vel = Vector3.ClampMagnitude(_vel, 1);
         _vel.y = 0;

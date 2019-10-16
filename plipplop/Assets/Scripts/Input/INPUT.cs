@@ -32,5 +32,8 @@
     KB_F,
     KB_X,
     KB_A,
-    KB_E
+    KB_E,
+
+    MS_X,
+    MS_Y
 }

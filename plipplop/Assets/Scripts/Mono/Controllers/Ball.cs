@@ -9,14 +9,18 @@ public class Ball : Controller
     public float airRollFactor = 4f;
     public float moveLerp = 1;
     public float drag = 1f;
+    public float speedBeforeRoll = 12f;
+    public float speedBeforeStandingUp = 2f;
 
     new Renderer renderer;
     new SphereCollider collider;
     Transform childBall;
+    float originalLegHeight = 2f;
 
-    public override void OnPossess(bool wasCrouching=false)
+    public override void OnPossess()
     {
-        base.OnPossess(wasCrouching);
+        base.OnPossess();
+        ExtendLegs();
     }
 
     public override void OnEject()
@@ -35,7 +39,8 @@ public class Ball : Controller
         _velocity.y = rigidbody.velocity.y;
         rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, _velocity, Time.deltaTime * moveLerp);
 
-        transform.forward = rigidbody.velocity.normalized;
+        if(rigidbody.velocity.magnitude > 0.2f) transform.forward = rigidbody.velocity.normalized;
+
 
         var factor = 1;
         
@@ -63,27 +68,42 @@ public class Ball : Controller
     internal override void OnLegsExtended()
     {
         collider.enabled = false;
-        rigidbody.drag = locomotion.baseDrag;
     }
 
-    internal override void Start()
+    internal override void Awake()
     {
+        base.Awake();
+
         rigidbody = GetComponent<Rigidbody>();
         renderer = GetComponentInChildren<MeshRenderer>();
         collider = GetComponent<SphereCollider>();
         renderer.material = Instantiate<Material>(renderer.material);
         childBall = transform.GetChild(0);
-        base.Start();
     }
 
-    internal override void FixedUpdate() {}
-
+    internal override void Start()
+    {
+        base.Start();
+        originalLegHeight = locomotion.legsHeight;
+    }
+    
     internal override void Update()
     {
+        base.Update();
+
         if (IsPossessed())
         {
+            locomotion.legsHeight = originalLegHeight * (1f - rigidbody.velocity.magnitude / speedBeforeRoll);
+            if(locomotion.legsHeight < 1f) locomotion.legsHeight = 1f;
 
+            if (rigidbody.velocity.magnitude > speedBeforeRoll)
+            {
+                RetractLegs();
+            }
+            else if (IsGrounded() && rigidbody.velocity.magnitude < speedBeforeStandingUp)
+            {
+                ExtendLegs();
+            }
         }
-        base.Update();
     }
 }

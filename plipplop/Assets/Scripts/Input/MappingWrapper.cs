@@ -44,10 +44,14 @@ public class MappingWrapper : Dictionary<INPUT, Func<float>>
         /// Analogic buttons
         Add(INPUT.GP_LEFT_X, () => { return GamePad.GetState(index).ThumbSticks.Left.X; });
         Add(INPUT.GP_LEFT_Y, () => { return GamePad.GetState(index).ThumbSticks.Left.Y; });
-        Add(INPUT.GP_RIGHT_X, () => { return GamePad.GetState(index).ThumbSticks.Left.X; });
-        Add(INPUT.GP_RIGHT_Y, () => { return GamePad.GetState(index).ThumbSticks.Left.Y; });
+        Add(INPUT.GP_RIGHT_X, () => { return GamePad.GetState(index).ThumbSticks.Right.X; });
+        Add(INPUT.GP_RIGHT_Y, () => { return GamePad.GetState(index).ThumbSticks.Right.Y; });
         Add(INPUT.GP_LT, () => { return GamePad.GetState(index).Triggers.Left; });
         Add(INPUT.GP_RT, () => { return GamePad.GetState(index).Triggers.Right; });
+
+        // Mouse
+        Add(INPUT.MS_X, () => { return Input.GetAxis("Mouse X"); });
+        Add(INPUT.MS_Y, () => { return Input.GetAxis("Mouse Y"); });
 
         // Keyboard
         foreach(var c in keyCorrespondances) {

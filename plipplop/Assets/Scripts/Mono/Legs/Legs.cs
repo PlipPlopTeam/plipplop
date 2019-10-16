@@ -99,4 +99,12 @@ public class Legs : MonoBehaviour
             yield return null;
         }
     }
+
+    private void OnEnable()
+    {
+        foreach (var leg in legs) {
+            leg.foot.position = leg.hip.position + Vector3.down / 1.5f;
+            leg.UpdateKnee(Vector3.zero);
+        };
+    }
 }

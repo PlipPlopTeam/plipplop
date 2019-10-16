@@ -5,6 +5,7 @@ using UnityEngine;
 public class Brain
 {
     Controller controller = null;
+    Controller baseController = null;
     Mapping mapping;
 
     public Brain(Mapping mapping)
@@ -12,9 +13,24 @@ public class Brain
         this.mapping = mapping;
     }
 
+    public void SetBaseController(Controller c)
+    {
+        baseController = c;
+    }
+
+    public void PossessBaseController()
+    {
+        baseController.transform.position = controller.transform.position;
+        Possess(baseController);
+    }
+
     public void Update()
     {
         UpdateController();
+        Game.i.aperture.RotateWithGamepad(
+            mapping.Axis(ACTION.CAMERA_VERTICAL) * 2f,
+            mapping.Axis(ACTION.CAMERA_HORIZONTAL) * 2f
+        );
     }
 
     public void FixedUpdate()
@@ -51,7 +67,7 @@ public class Brain
         controller.OnPossess();
         this.controller = controller;
         Game.i.aperture.target = controller.transform;
-        Game.i.aperture.settings = controller.customCamera ? controller.customCamera.settings : Game.i.aperture.defaultSet.settings;
+        Game.i.aperture.Load(controller.customCamera ? controller.customCamera.settings : Game.i.library.defaultAperture.settings);
     }
 
     public void Eject()

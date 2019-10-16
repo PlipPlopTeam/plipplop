@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1409258629170664864
+--- !u!1 &4072996898634890325
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,10 +8,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1409258629170664867}
-  - component: {fileID: 1409258629170664862}
-  - component: {fileID: 1409258629170664861}
-  - component: {fileID: 1409258629170664871}
+  - component: {fileID: 4072996898634890329}
+  - component: {fileID: 4072996898634890330}
+  - component: {fileID: 4072996898634890331}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -19,27 +18,27 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1409258629170664867
+--- !u!4 &4072996898634890329
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1409258629170664864}
-  m_LocalRotation: {x: 0, y: 0.92387956, z: -0.38268346, w: -0}
-  m_LocalPosition: {x: 0, y: 4.242641, z: 4.2426405}
+  m_GameObject: {fileID: 4072996898634890325}
+  m_LocalRotation: {x: 0, y: 0.9659258, z: -0.2588191, w: -0}
+  m_LocalPosition: {x: -12.4, y: 6.94, z: 30.556152}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 45.000004, y: 179.99998, z: 0}
---- !u!20 &1409258629170664862
+--- !u!20 &4072996898634890330
 Camera:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1409258629170664864}
+  m_GameObject: {fileID: 4072996898634890325}
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
@@ -58,7 +57,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 75
+  field of view: 60
   orthographic: 0
   orthographic size: 100
   m_Depth: 0
@@ -76,40 +75,11 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &1409258629170664861
+--- !u!81 &4072996898634890331
 AudioListener:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1409258629170664864}
+  m_GameObject: {fileID: 4072996898634890325}
   m_Enabled: 1
---- !u!114 &1409258629170664871
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1409258629170664864}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: faa49babf9f5c4c9b95a2beaf1561475, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cam: {fileID: 1409258629170664862}
-  target: {fileID: 0}
-  defaultSet: {fileID: 11400000, guid: df6437ca0d9bc60498aeb18a4dd62019, type: 2}
-  settings:
-    distance: 6
-    fieldOfView: 75
-    rotationOffset: {x: -45, y: 0, z: 0}
-    positionOffset: {x: 0, y: 0, z: 0}
-    range: {x: 1, y: 1.5}
-    fovLerp: 5
-    followLerp: 5
-    camLerp: 5
-    speedEffectMultiplier: 1
-  maxEffect: 2
-  multiplier: 1
-  distanceRange: {x: 0, y: 1}
-  fovRange: {x: -5, y: 10}

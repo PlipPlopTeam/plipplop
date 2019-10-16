@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: DefaultAperture
   m_EditorClassIdentifier: 
   settings:
-    distance: 6
-    fieldOfView: 75
-    rotationOffset: {x: -35, y: 0, z: 0}
-    positionOffset: {x: 0, y: 0, z: 0}
-    range: {x: 1, y: 1.25}
-    rotationClamp: {x: 10, y: 30}
+    canBeControlled: 1
+    fieldOfView: 70
+    heightOffset: 0
+    distance:
+      min: 5
+      max: 8
     fovLerp: 5
     followLerp: 5
-    camLerp: 1
     speedEffectMultiplier: 1
+    catchUpSpeedMultiplier: 1
+    maximumCatchUpSpeed: 10

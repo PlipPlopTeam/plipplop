@@ -7,7 +7,6 @@ public class Game : MonoBehaviour
     public Library library;
     public Brain player;
     public Mapping mapping;
-    public LocomotionPreset defaultLocomotion;
     [HideInInspector] public Aperture aperture;
 
     static public Game i;
@@ -23,24 +22,33 @@ public class Game : MonoBehaviour
             throw new System.Exception("!!! DUPLICATE \"GAME\" INSTANCE !!! THIS SHOULD NOT HAPPEN !!!");
         }
 
-        aperture = FindObjectOfType<Aperture>() ?? Instantiate(library.aperture).GetComponent<Aperture>();
-
         i = this;
 
+        aperture = new Aperture();
         mapping = Instantiate<Mapping>(mapping);
 
+        SpawnPlayer(Vector3.zero);
+    }
+
+    private void SpawnPlayer(Vector3 position)
+    {
         // Init
         player = new Brain(mapping);
+        Controller c = Instantiate(library.baseControllerPrefab.GetComponent<Controller>(), position, Quaternion.identity);
+        player.Possess(c);
+        player.SetBaseController(c);
     }
 
     private void Update()
     {
         mapping.Read();
         player.Update();
+        aperture.Update();
     }
 
     private void FixedUpdate()
     {
         player.FixedUpdate();
+        aperture.FixedUpdate();
     }
 }
