@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2932650472225342061}
   - component: {fileID: 2932650472225342060}
   - component: {fileID: 2932650472225342063}
+  - component: {fileID: 2007550832}
   m_Layer: 0
   m_Name: BeachBall
   m_TagString: Untagged
@@ -46,7 +47,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 204a04f771aa6ec47859d83538a2553d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  addRigidBody: 0
   autoPossess: 0
   beginCrouched: 0
   canRetractLegs: 1
@@ -91,6 +91,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &2007550832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2932650472225342062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27bebb278a4489e489e5558d1c6671af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2932650472786296262
 GameObject:
   m_ObjectHideFlags: 0
