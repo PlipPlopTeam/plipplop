@@ -27,7 +27,8 @@ public abstract class Controller : MonoBehaviour
         RetractLegs();
 
         //DEBUG
-        foreach (var renderer in GetComponentsInChildren<Renderer>()) {
+        foreach (var renderer in GetComponentsInChildren<Renderer>())
+        {
             renderer.material.color = new Color(70 / 255f, 100 / 255f, 160 / 255f);
         }
     }

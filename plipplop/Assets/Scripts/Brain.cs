@@ -13,6 +13,11 @@ public class Brain
         this.mapping = mapping;
     }
 
+    public Controller GetCurrentController()
+    {
+        return controller;
+    }
+
     public void SetBaseController(Controller c)
     {
         baseController = c;

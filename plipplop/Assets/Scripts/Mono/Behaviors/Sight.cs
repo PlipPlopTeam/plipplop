@@ -7,15 +7,18 @@ public class Sight : MonoBehaviour
     public float fieldOfViewAngle = 110f;
     public float range = 5f;
 
-    public GameObject[] Scan()
+    public GameObject[] Scan(){
+        return Scan<GameObject>();
+    }
+
+    public T[] Scan<T>()
     {
-        List<GameObject> objects = new List<GameObject>();
+        List<T> objects = new List<T>();
         Vector3 headPosition = transform.position + offset;
 
         // Add object in range of being seen
         RaycastHit[] sphereHits;
         sphereHits = Physics.SphereCastAll(headPosition, range, transform.forward, range);
-
         for(int i = 0; i < sphereHits.Length; i++)
         {
             // Checks if the object is in front of the sight
@@ -36,7 +39,13 @@ public class Sight : MonoBehaviour
                         if(Vector3.Distance(headPosition, sphereHits[i].transform.position) > Vector3.Distance(headPosition, hit.point)) seen = false;
                     }
                 }
-                if(seen) objects.Add(sphereHits[i].transform.gameObject);
+                if(seen) 
+                {
+                    if(sphereHits[i].transform.gameObject.GetComponent<T>() != null)
+                    {
+                        objects.Add(sphereHits[i].transform.gameObject.GetComponent<T>());
+                    }
+                }
             }
         }
         return objects.ToArray();
