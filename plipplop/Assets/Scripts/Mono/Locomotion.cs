@@ -105,10 +105,7 @@ public class Locomotion : MonoBehaviour
 
         foreach(RaycastHit h in hits)
         {
-            foreach(Transform t in transform.GetComponentsInChildren<Transform>())
-            {
-                if(t != h.transform) return h.point;
-            }
+            if(!IsMe(h.transform) && !h.collider.isTrigger) return h.point;
         }
 
         return null;
@@ -133,12 +130,17 @@ public class Locomotion : MonoBehaviour
 
         foreach(RaycastHit h in hits)
         {
-            foreach(Transform t in transform.GetComponentsInChildren<Transform>())
-            {
-                if(t != h.transform) return true;
-            }
+            if(!IsMe(h.transform) && !h.collider.isTrigger) return true;
         }
-        
+        return false;
+    }
+
+    private bool IsMe(Transform thing)
+    {
+        foreach(Transform t in transform.GetComponentsInChildren<Transform>())
+        {
+            if(thing == t.transform) return true;
+        }
         return false;
     }
 
