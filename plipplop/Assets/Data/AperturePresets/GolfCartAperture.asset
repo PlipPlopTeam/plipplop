@@ -15,13 +15,17 @@ MonoBehaviour:
   settings:
     canBeControlled: 0
     distance: 6
-    fieldOfView: 60
-    angle: -30
+    fieldOfView: 65
+    angle: 30
     positionOffset: {x: 0, y: 2.38, z: 0}
-    range: {x: 1, y: 2}
-    rotationClamp: {x: 0, y: 90}
+    range:
+      min: 5
+      max: 8
+    rotationClamp:
+      min: 0
+      max: 90
     fovLerp: 1
-    followLerp: 53.62
+    followLerp: 1
     camLerp: 1
     rotSpeed: 1
     speedEffectMultiplier: 50.89
