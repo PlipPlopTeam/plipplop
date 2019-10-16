@@ -15,6 +15,14 @@ public class ControllerEditor : Editor
             ((Controller)target).gameObject.AddComponent<Locomotion>();
         }
 
+        if (((Controller)target).autoPossess) {
+            foreach(var c in Resources.FindObjectsOfTypeAll<Controller>()) {
+                if (c != target) {
+                    c.autoPossess = false;
+                }
+            }
+        }
+
         if (EditorApplication.isPlaying) {
 
             var obj = (Controller)this.target;
