@@ -27,7 +27,7 @@ public class Brain
     public void Update()
     {
         UpdateController();
-        Game.i.aperture.Rotate(
+        Game.i.aperture.RotateWithGamepad(
             mapping.Axis(ACTION.CAMERA_VERTICAL) * 2f,
             mapping.Axis(ACTION.CAMERA_HORIZONTAL) * 2f
         );
@@ -67,7 +67,7 @@ public class Brain
         controller.OnPossess();
         this.controller = controller;
         Game.i.aperture.target = controller.transform;
-        Game.i.aperture.settings = controller.customCamera ? controller.customCamera.settings : Game.i.aperture.defaultSet.settings;
+        Game.i.aperture.SetSettings(controller.customCamera ? controller.customCamera.settings : Game.i.aperture.defaultSet.settings);
     }
 
     public void Eject()

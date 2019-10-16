@@ -6,6 +6,7 @@ public class Aperture : MonoBehaviour
     public class Settings
     {
         [Header("Basics")]
+        public bool canBeControlled = true;
         public float distance = 1f;
         [Range(2f, 200f)] public float fieldOfView = 75f;
         public float angle;
@@ -21,61 +22,83 @@ public class Aperture : MonoBehaviour
         public float speedEffectMultiplier = 1f;
     }
 
+    class Key<T>
+    {
+        public T origin;
+        public T target;
+        public T current;
+
+        public Key() { }
+        public Key(T value)
+        {
+            origin = value;
+            target = value;
+            current = value;
+        }
+
+        public void Reset()
+        {
+            current = origin;
+        }
+
+        public void SetToTarget()
+        {
+            current = target;
+        }
+    }
+
     [Header("References")]
     public Camera cam;
     public Transform target;
 
     [Header("Settings")]
     public AperturePreset defaultSet;
-    public Settings settings;
+    Settings settings;
 
     [Header("Speed Enhancer")]
     public float maxEffect = 2f;
     public float multiplier = 1f;
     public Vector2 distanceRange;
     public Vector2 fovRange;
-    
+
     // MOVEMENT
-    float originFieldOfView;
-    float originDistance;
-    Vector3 originPosition;
-    Vector3 originRotation;
-    float currentFieldOfView;
-    float currentDistance;
-    Vector3 currentRotation;
-    Vector3 currentPosition;
-    float targetFieldOfView;
-    float targetDistance;
-    Vector3 targetPosition;
-    Vector3 targetRotation;
-    Vector3 targetCameraPosition;
-    Vector3 rotation;
+    Key<float> fieldOfView;
+    Key<float> distance;
+    
+    Vector3 defaultTarget;
+
+    Key<Vector3> position;
+    Key<Vector3> rotation;
 
     // SPEED
     float distanceOffset;
     float fovOffset;
     Vector3 lastTargetPosition;
+
     // SHAKE
-    private float timer = 0f;
-    private float intensity = 0.7f;
-    private float duration = 0f;
+    float timer = 0f;
+    float intensity = 0.7f;
+    float duration = 0f;
+
+    void Load()
+    {
+        // POSITION
+        position = new Key<Vector3>(settings.positionOffset);
+
+        // ROTATION
+        rotation = new Key<Vector3>() { current = new Vector3(settings.angle, 0f, 0f) };
+
+        // FOV
+        fieldOfView = new Key<float>(settings.fieldOfView);
+
+        // DISTANCE
+        distance = new Key<float>(settings.distance);
+    }
 
     void Load(Settings s)
     {
-        // POSITION
-        originPosition = settings.positionOffset;
-        targetPosition = settings.positionOffset;
-        currentPosition = settings.positionOffset;
-        // ROTATION
-        currentRotation = new Vector3(settings.angle, 0f, 0f);
-        // FOV
-        originFieldOfView = settings.fieldOfView;
-        targetFieldOfView = settings.fieldOfView;
-        currentFieldOfView = settings.fieldOfView;
-        // DISTANCE
-        originDistance = settings.distance;
-        targetDistance = settings.distance;
-        currentDistance = settings.distance;
+        settings = s;
+        Load();
     }
 
     private void Awake()
@@ -91,8 +114,7 @@ public class Aperture : MonoBehaviour
 
     void Start()
     {
-        settings = defaultSet.settings;
-        Load(settings);
+        Load(defaultSet.settings);
     }
 
 #region INSPECTOR 
@@ -108,20 +130,21 @@ public class Aperture : MonoBehaviour
 
         if(target)
         {
+            //Debug.Log(settings);
             // Follow range draw
-            UnityEditor.Handles.DrawWireDisc(currentPosition, Vector3.up, settings.range.x);
-            UnityEditor.Handles.DrawWireDisc(currentPosition, Vector3.up, settings.range.y);
-            Gizmos.DrawLine(transform.position, currentPosition);
-            Gizmos.DrawLine(currentPosition, target.position);
-            UnityEditor.Handles.Label(currentPosition + Vector3.right * settings.range.x, "Min " + settings.range.x.ToString(), style);
-            UnityEditor.Handles.Label(currentPosition + Vector3.right * settings.range.y, "Max " + settings.range.y.ToString(), style);
-            UnityEditor.Handles.Label((transform.position + target.position)/2, "Dist " + currentDistance.ToString(), style);
+            UnityEditor.Handles.DrawWireDisc(position.current, Vector3.up, settings.range.x);
+            UnityEditor.Handles.DrawWireDisc(position.current, Vector3.up, settings.range.y);
+            Gizmos.DrawLine(transform.position, position.current);
+            Gizmos.DrawLine(position.current, target.position);
+            UnityEditor.Handles.Label(position.current + Vector3.right * settings.range.x, "Min " + settings.range.x.ToString(), style);
+            UnityEditor.Handles.Label(position.current + Vector3.right * settings.range.y, "Max " + settings.range.y.ToString(), style);
+            UnityEditor.Handles.Label((transform.position + target.position)/2, "Dist " + distance.current.ToString(), style);
 
-            Gizmos.DrawLine(transform.position, targetCameraPosition);
+            Gizmos.DrawLine(transform.position, position.target);
         }
         else
         {
-            Gizmos.DrawLine(transform.position, targetPosition);
+            Gizmos.DrawLine(transform.position, defaultTarget);
         }
 
         //Gizmos.DrawLine(transform.position,
@@ -130,23 +153,36 @@ public class Aperture : MonoBehaviour
     }
     
     // Execute when editing values in the inspector
-    void OnValidate()
+    void OnDrawGizmos()
     {
+        settings = defaultSet.settings;
+        var controller = target.GetComponent<Controller>();
+        if (controller && controller.customCamera) {
+            settings = controller.customCamera.settings;
+        }
+
         Load(settings);
 
         if(settings.distance < 0f) settings.distance = 0f;
         if(settings.fieldOfView < 2f) settings.fieldOfView = 2f;
-        if(targetDistance < 0) targetDistance = 0f;
+        if(distance.target < 0) distance.target = 0f;
         if(settings.range.y < settings.range.x) settings.range.y = settings.range.x;
-        if(target != null) currentPosition += target.position;
+        if(target != null) position.current += target.position;
 
-        targetCameraPosition = currentPosition + Quaternion.Euler(currentRotation) * Vector3.forward * currentDistance;
-        transform.position = targetCameraPosition;
+        position.target = position.current + Quaternion.Euler(rotation.current) * Vector3.forward * distance.current;
+        transform.position = position.target;
 
         Apply();
     }
-    
-#endregion
+
+    #endregion
+
+    public void SetSettings(Settings s)
+    {
+        settings = s;
+        Load(s);
+       // Apply();
+    }
 
     public Vector3 Forward()
     {
@@ -161,19 +197,24 @@ public class Aperture : MonoBehaviour
         return transform.right;
     }
 
+    public void RotateWithGamepad(float x = 0f, float y = 0f, float z = 0f)
+    {
+        if (settings.canBeControlled) Rotate(x, y, z);
+    }
+
     public void Rotate(Vector3 rot)
     {
-        currentRotation += rot;
+        rotation.current += rot;
     }
     public void Rotate(float x = 0f, float y = 0f, float z = 0f)
     {
-        rotation += new Vector3(x, y, z);
+        rotation.current += new Vector3(x, y, z);
     }
 
     void FixedUpdate()
     {
         // Distance cannot be less than 0
-        if(settings.distance < 0) settings.distance = 0;
+        if (settings.distance < 0) settings.distance = 0;
 
         // Initializing values
         Vector3 offset = Vector3.zero;
@@ -189,7 +230,7 @@ public class Aperture : MonoBehaviour
         {
             offset = target.position;
             // Getting usefull values about target
-            distanceFromTarget = Vector3.Distance(currentPosition, target.position);
+            distanceFromTarget = Vector3.Distance(position.current, target.position);
             targetMovementVelocity = Vector3.Distance(target.position, lastTargetPosition);
             targetMovementDirection = (target.position - lastTargetPosition).normalized;
             // Increasing the position lerp if the target go further the distanceRange
@@ -214,22 +255,22 @@ public class Aperture : MonoBehaviour
 
         if(distanceFromTarget > settings.range.x)
         {
-            currentPosition = Vector3.Lerp(currentPosition, targetPosition + offset, Time.deltaTime * settings.followLerp * speed); 
+            position.current = Vector3.Lerp(position.current, defaultTarget + offset, Time.deltaTime * settings.followLerp * speed); 
         }
 
-        currentFieldOfView = Mathf.Lerp(cam.fieldOfView, targetFieldOfView + fovOffset, Time.deltaTime * settings.fovLerp);
-        currentDistance = targetDistance + distanceOffset;
+        fieldOfView.current = Mathf.Lerp(fieldOfView.current, fieldOfView.target + fovOffset, Time.deltaTime * settings.fovLerp);
+        distance.current = distance.target + distanceOffset;
 
         Vector3 rotOffset = new Vector3(settings.angle, 0f, 0f);
 
-        if(rotation.x + rotOffset.x > -settings.rotationClamp.x)
-            rotation.x = -settings.rotationClamp.x + rotOffset.x;
-        else if(rotation.x + rotOffset.x < -settings.rotationClamp.y)
-            rotation.x = -settings.rotationClamp.y + rotOffset.x;
+        if(rotation.current.x + rotOffset.x > -settings.rotationClamp.x)
+            rotation.current.x = -settings.rotationClamp.x + rotOffset.x;
+        else if(rotation.current.x + rotOffset.x < -settings.rotationClamp.y)
+            rotation.current.x = -settings.rotationClamp.y + rotOffset.x;
 
         // Applying current values 
-        targetCameraPosition = currentPosition + Quaternion.Euler(rotation + rotOffset) * Vector3.forward * currentDistance;
-        transform.forward = -(transform.position - currentPosition).normalized;
+        position.target = position.current + Quaternion.Euler(rotation.current + rotOffset) * Vector3.forward * distance.current;
+        transform.forward = -(transform.position - position.current).normalized;
 
         Apply();
         ShakeUpdate();
@@ -248,7 +289,7 @@ public class Aperture : MonoBehaviour
         if(timer > 0)
         {
             timer -= Time.deltaTime;
-            currentRotation += Random.insideUnitSphere * intensity;
+            rotation.current += Random.insideUnitSphere * intensity;
             intensity *= timer/duration;
             if(timer <= 0) Teleport();
         }
@@ -256,14 +297,14 @@ public class Aperture : MonoBehaviour
 
     void Apply()
     {
-        transform.forward = -(transform.position - currentPosition).normalized;
-        transform.position = Vector3.Lerp(transform.position, targetCameraPosition, Time.deltaTime * settings.camLerp);
-        cam.fieldOfView = currentFieldOfView;
+        transform.forward = -(transform.position - position.current).normalized;
+        transform.position = Vector3.Lerp(transform.position, position.target, Time.deltaTime * settings.camLerp);
+        cam.fieldOfView = fieldOfView.current;
     } // Apply the values to the camera 
 
     public void Focus(Vector3 newPosition, Settings set = null)
     {
-        targetPosition = newPosition;
+        defaultTarget = newPosition;
         target = null;
         if(set != null) Load(set);
     } // Focus camera on a new position (Vector3)
@@ -276,19 +317,19 @@ public class Aperture : MonoBehaviour
 
     public void Teleport()
     {
-        currentPosition = targetPosition;
-        currentRotation = targetRotation;
-        cam.fieldOfView = targetFieldOfView;
+        position.SetToTarget();
+        rotation.SetToTarget();
+        fieldOfView.SetToTarget();
         Apply();
     } // Teleport all the camera values instantly (to ignore lerp)
 
     public void Reset()
     {
         target = null;
-        targetPosition = originPosition;
-        targetRotation = originRotation;
-        targetFieldOfView = originDistance;
-        targetDistance = originDistance;
+        position.Reset();
+        rotation.Reset();
+        fieldOfView.Reset();
+        distance.Reset();
     } // Reset all the values to the origin values
 
     public void SwitchCamera(Camera newCam)
