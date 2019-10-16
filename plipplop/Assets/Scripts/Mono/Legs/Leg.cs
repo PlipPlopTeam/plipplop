@@ -47,7 +47,7 @@ public class Leg : MonoBehaviour
         RaycastHit[] hits = Physics.RaycastAll(transform.position, -Vector3.up, maxFootDistance, raycastMask);
         foreach(RaycastHit hit in hits)
         {
-            if(hit.transform != body.body)
+            if(!hit.collider.isTrigger && hit.transform != body.body)
             {
                 foot.position = hit.point + GetNoise(0) * _vel.magnitude;
                 foot.transform.up = hit.normal;

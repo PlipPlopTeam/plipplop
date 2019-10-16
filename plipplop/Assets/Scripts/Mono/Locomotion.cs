@@ -105,7 +105,7 @@ public class Locomotion : MonoBehaviour
 
         foreach(RaycastHit h in hits)
         {
-            if(!IsMe(h.transform)) return h.point;
+            if(!IsMe(h.transform) && !h.collider.isTrigger) return h.point;
         }
 
         return null;
@@ -130,7 +130,7 @@ public class Locomotion : MonoBehaviour
 
         foreach(RaycastHit h in hits)
         {
-            if(!IsMe(h.transform)) return true;
+            if(!IsMe(h.transform) && !h.collider.isTrigger) return true;
         }
         return false;
     }
