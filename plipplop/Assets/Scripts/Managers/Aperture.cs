@@ -4,37 +4,43 @@ using UnityEngine;
 
 public class Aperture
 {
-    [System.Serializable]
+    [Serializable]
     public class Settings
     {
         [Header("Basics")]
         public bool canBeControlled = true;
-        public float distance = 1f;
+
         [Range(2f, 200f)] public float fieldOfView = 75f;
-        public float angle;
-        public Vector3 positionOffset;
-        public Vector2 range;
-        public Vector2 rotationClamp;
+        public float heightOffset;
+        public Range distance;
+        public Range rotationClamp;
+
         [Header("Lerps")]
         public float fovLerp = 1f;
         public float followLerp = 1f;
-        public float camLerp = 1f;
-        public float rotSpeed = 1f;
+        //TODO: Reimplement
+        //public float camLerp = 1f;
+        //public float rotSpeed = 1f;
+
         [Header("Speed Enhancer")]
-        public float speedEffectMultiplier = 1f;
+        [Range(0.1f, 10)]  public float speedEffectMultiplier = 1f;
+        [Range(1f, 20f)] public float catchUpSpeedMultiplier = 1f;
+
+        [Header("Advanced")]
+        public float maximumCatchUpSpeed = 10f;
     }
 
     public class Key<T>
     {
         public T origin;
-        public T target;
+        public T destination;
         public T current;
 
         public Key() { }
         public Key(T value)
         {
             origin = value;
-            target = value;
+            destination = value;
             current = value;
         }
 
@@ -43,52 +49,52 @@ public class Aperture
             current = origin;
         }
 
-        public void SetToTarget()
+        public void SetToDestination()
         {
-            current = target;
+            current = destination;
         }
+    }
+
+    [Serializable]
+    public class Range
+    {
+        public float min;
+        public float max;
     }
 
     public Camera cam;
     public Transform target;
 
     public Key<float> fieldOfView;
-    public Key<float> distance;
     public Key<Vector3> position;
-    public Key<Vector3> rotation;
+    public Key<Vector3> rotationAroundTarget;
 
     Settings settings;
 
-    float maxEffect = 2f;
-    float multiplier = 1f;
-    Vector2 distanceRange;
-    Vector2 fovRange;
-    
     Vector3 defaultTarget;
 
     // SPEED
-    float distanceOffset;
-    float fovOffset;
     Vector3 lastTargetPosition;
+    float hDistanceToTarget = 0f;
 
     // SHAKE
     float timer = 0f;
     float intensity = 0.7f;
     float duration = 0f;
 
+    // Look right look left
+    float leftRightAccumulator;
+
     void Load()
     {
         // POSITION
-        position = new Key<Vector3>(settings.positionOffset);
+        position = new Key<Vector3>();
 
         // ROTATION
-        rotation = new Key<Vector3>() { current = new Vector3(settings.angle, 0f, 0f) };
+        rotationAroundTarget = new Key<Vector3>();
 
         // FOV
         fieldOfView = new Key<float>(settings.fieldOfView);
-
-        // DISTANCE
-        distance = new Key<float>(settings.distance);
     }
 
     public void Load(Settings s)
@@ -134,11 +140,11 @@ public class Aperture
 
     public void Rotate(Vector3 rot)
     {
-        rotation.current += rot;
+        rotationAroundTarget.destination += rot;
     }
     public void Rotate(float x = 0f, float y = 0f, float z = 0f)
     {
-        rotation.current += new Vector3(x, y, z);
+        rotationAroundTarget.destination += new Vector3(x, y, z);
     }
 
     public void Update()
@@ -148,74 +154,80 @@ public class Aperture
 
     public void FixedUpdate()
     {
-        // Distance cannot be less than 0
-        if (settings.distance < 0) settings.distance = 0;
 
-        // Initializing values
-        Vector3 offset = Vector3.zero;
-        Vector3 targetMovementDirection = Vector3.zero;
-        float distanceFromTarget = 0f;
+        Vector3 hDirectionToTarget = Vector3.zero;
+        float catchUpSpeed = 1f;
+        float fovMultiplier = 0f;
         float targetMovementVelocity = 0f;
-        float speed = 1f;
-        float angleDifference = 0f;
-        float maxAngle = 100f;
 
-        // If Camera if following a target
-        if(target != null) 
+        if (target != null) 
         {
-            offset = target.position;
+            // Distance based on X and Z axises only
+            // Distance between camera and target
+            hDistanceToTarget = Vector3.Distance(
+                Vector3.Scale(new Vector3(1f, 0f, 1f), position.current), 
+                Vector3.Scale(new Vector3(1f, 0f, 1f), target.position)
+            );
 
-            // Getting usefull values about target
-            distanceFromTarget = Vector3.Distance(position.current, target.position);
+            // Direction only on the X Z axis
+            hDirectionToTarget = (
+                Vector3.Scale(new Vector3(1f, 0f, 1f), position.current) - 
+                Vector3.Scale(new Vector3(1f, 0f, 1f), target.position)
+            ).normalized;
+
+
             targetMovementVelocity = Vector3.Distance(target.position, lastTargetPosition);
-            targetMovementDirection = (target.position - lastTargetPosition).normalized;
-
-            // Increasing the position lerp if the target go further the distanceRange
-            speed = (distanceFromTarget - settings.range.x) / settings.range.y;
 
             // The Speed Enhancement effect
-            /*
-            float ratio = Mathf.Clamp(targetMovementVelocity / maxEffect, 0f, 1f);
-            fovOffset = (fovRange.x + (fovRange.y - fovRange.x) * ratio) * multiplier;
-            distanceOffset = (distanceRange.x + (distanceRange.y - distanceRange.x) * ratio) * multiplier;
-            */
+            float ratio = targetMovementVelocity * settings.speedEffectMultiplier;
+            fovMultiplier = 1 + ratio/10f;
+
+            // The further the camera is, the fastest we want to catch up
+            catchUpSpeed = (hDistanceToTarget - settings.distance.min) / settings.distance.max;
+            catchUpSpeed = Mathf.Clamp(Mathf.Abs(catchUpSpeed * settings.catchUpSpeedMultiplier), 0.4f, settings.maximumCatchUpSpeed);
+
             lastTargetPosition = target.position;
         }
 
+        // TODO : REimplement angle limits
+        /*
         Vector3 horizontalDirection = new Vector3(targetMovementDirection.x, 0f, targetMovementDirection.z);
+        hAngleDifference = Vector3.SignedAngle(Forward(), horizontalDirection, Vector3.up);
 
-        angleDifference = Vector3.SignedAngle(Forward(), horizontalDirection, Vector3.up);
+        if(hAngleDifference >= 0) hAngleDifference -= 180f;
+        else hAngleDifference += 180f;
 
-        if(angleDifference >= 0) angleDifference -= 180f;
-        else angleDifference += 180f;
+        if(hAngleDifference > maxAngle || hAngleDifference < -maxAngle) hAngleDifference = 0f;
+        Rotate(0f, (-hAngleDifference / maxAngle) * settings.rotSpeed, 0f);
 
-        if(angleDifference > maxAngle || angleDifference < -maxAngle) angleDifference = 0f;
-        Rotate(0f, (-angleDifference/maxAngle) * settings.rotSpeed, 0f);
 
-        fieldOfView.current = Mathf.Lerp(fieldOfView.current, fieldOfView.target + fovOffset, Time.deltaTime * settings.fovLerp);
-        distance.current = distance.target + distanceOffset;
+        if(rotationAroundTarget.current.x + settings.angle > -settings.rotationClamp.min)
+            rotationAroundTarget.current.x = -settings.rotationClamp.min + settings.angle;
+        else if(rotationAroundTarget.current.x + settings.angle < -settings.rotationClamp.max)
+            rotationAroundTarget.current.x = -settings.rotationClamp.max + settings.angle;
+        */
 
-        Vector3 rotOffset = new Vector3(settings.angle, 0f, 0f);
-
-        if(rotation.current.x + rotOffset.x > -settings.rotationClamp.x)
-            rotation.current.x = -settings.rotationClamp.x + rotOffset.x;
-        else if(rotation.current.x + rotOffset.x < -settings.rotationClamp.y)
-            rotation.current.x = -settings.rotationClamp.y + rotOffset.x;
-
-        // Applying current values 
-        if (distanceFromTarget > settings.range.x) {
-            position.target = offset + Quaternion.Euler(rotation.current + rotOffset) * Vector3.forward * distance.current;
-        }
+        position.destination = 
+            target.position
+            + settings.heightOffset * Vector3.up
+            + hDirectionToTarget * Mathf.Clamp(hDistanceToTarget, settings.distance.min, settings.distance.max);
 
         position.current = Vector3.Lerp(
             position.current, 
-            position.target, 
-            Time.deltaTime * settings.followLerp * speed
+            position.destination, 
+            Time.deltaTime * settings.followLerp * catchUpSpeed
         );
-
-
+        
+        fieldOfView.destination = fovMultiplier * settings.fieldOfView;
+        fieldOfView.current = Mathf.Lerp(fieldOfView.current, fieldOfView.destination, Time.deltaTime * settings.fovLerp);
+        
         Apply();
         ShakeUpdate();
+    }
+
+    public float GetHDistanceToTarget()
+    {
+        return hDistanceToTarget;
     }
 
     [ContextMenu("Shake")]
@@ -231,7 +243,8 @@ public class Aperture
         if(timer > 0)
         {
             timer -= Time.deltaTime;
-            rotation.current += UnityEngine.Random.insideUnitSphere * intensity;
+            // TODO: Update
+            rotationAroundTarget.current += UnityEngine.Random.insideUnitSphere * intensity;
             intensity *= timer/duration;
             if(timer <= 0) Teleport();
         }
@@ -239,7 +252,9 @@ public class Aperture
 
     public void Apply()
     {
-        cam.transform.forward = -(position.current - target.position).normalized;
+        // Look at 
+        cam.transform.forward = -(position.current - (target.position + settings.heightOffset * Vector3.up)).normalized;
+
         cam.transform.position = position.current;
         cam.fieldOfView = fieldOfView.current;
     } // Apply the values to the camera 
@@ -259,9 +274,9 @@ public class Aperture
 
     public void Teleport()
     {
-        position.SetToTarget();
-        rotation.SetToTarget();
-        fieldOfView.SetToTarget();
+        position.SetToDestination();
+        rotationAroundTarget.SetToDestination();
+        fieldOfView.SetToDestination();
         Apply();
     } // Teleport all the camera values instantly (to ignore lerp)
 
@@ -269,9 +284,9 @@ public class Aperture
     {
         target = null;
         position.Reset();
-        rotation.Reset();
+        rotationAroundTarget.Reset();
         fieldOfView.Reset();
-        distance.Reset();
+
     } // Reset all the values to the origin values
 
     public void SwitchCamera(Camera newCam)
