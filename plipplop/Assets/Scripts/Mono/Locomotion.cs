@@ -30,6 +30,9 @@ public class Locomotion : MonoBehaviour
     private void Update()
     {
         locomotionAnimation.isJumping = !IsGrounded();
+        locomotionAnimation.legsOffset = legsOffset;
+        locomotionAnimation.legsHeight = legsHeight;
+        locomotionAnimation.Update();
     }
 
     public bool AreLegsRetracted()
@@ -48,7 +51,6 @@ public class Locomotion : MonoBehaviour
         rigidbody.drag = preset.baseDrag;
 
         Vector3 sp = Vector3.zero;
-
         var v = GetBelowSurface();
         if(v != null) 
         {

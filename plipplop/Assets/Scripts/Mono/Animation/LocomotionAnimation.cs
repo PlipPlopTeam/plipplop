@@ -24,6 +24,7 @@ public class LocomotionAnimation
 
     public void Update()
     {
+        legs.velocity = rigidbody.velocity;
         SetLegHeight();
     }
 
@@ -46,7 +47,7 @@ public class LocomotionAnimation
 
     void GrowLegs()
     {
-        legs = GameObject.Instantiate(Game.i.library.legsPrefab, parentTransform)
+        legs = Object.Instantiate(Game.i.library.legsPrefab, parentTransform)
         .GetComponent<Legs>();
         legs.body = parentTransform;
         legs.transform.localPosition = legsOffset;

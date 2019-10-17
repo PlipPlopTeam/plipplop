@@ -27,7 +27,7 @@ public class Legs : MonoBehaviour
         startLocalEulerAngles = body.localEulerAngles;
     }
 
-    public void FixedUpdate()
+    public void Update()
     {
         if(timer > 0) timer -= Time.deltaTime;
         else
