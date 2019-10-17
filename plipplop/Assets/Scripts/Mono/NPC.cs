@@ -66,9 +66,17 @@ public class NPC : MonoBehaviour
                 agent.speed = chaseSpeed;
                 break;
             case ActionState.Sort:
-                agent.speed = walkSpeed;
-                agent.destination = thing.origin;
-                animator.SetBool("Carrying", true);
+                if(!GoThere(thing.origin))
+                {
+                    thing.transform.position = transform.position + transform.forward;
+                    thing = null;
+                    ChangeState(ActionState.Walking);
+                }
+                else
+                {
+                    agent.speed = walkSpeed;
+                    animator.SetBool("Carrying", true); 
+                }
                 break;
         }
     }
@@ -104,19 +112,35 @@ public class NPC : MonoBehaviour
                 if(InRange(thing.gameObject))
                 {
                     emo.Show("suprised", 2f);
-                    ChangeState(ActionState.Sort);
                     Controller c = thing.gameObject.GetComponent<Controller>();
                     if(c != null)
                     {
                         if(Game.i.player.IsPossessing(c))
                             Game.i.player.PossessBaseController();
                     }
+                    ChangeState(ActionState.Sort);
                 }
                 break;
             case ActionState.Sort:
                 thing.transform.position = (skeleton.rightHandBone.position + skeleton.leftHandBone.position)/2f;
                 thing.transform.forward = transform.forward;
                 break;
+        }
+    }
+
+    bool GoThere(Vector3 pos)
+    {
+        NavMeshPath path = new NavMeshPath();
+        agent.CalculatePath(pos, path);
+        if(path.status == NavMeshPathStatus.PathPartial
+        || path.status == NavMeshPathStatus.PathInvalid)
+        {
+            return false;
+        }
+        else 
+        {
+            agent.SetDestination(pos);
+            return true;
         }
     }
 
@@ -140,7 +164,7 @@ public class NPC : MonoBehaviour
     void Go(int index)
     {
         if(path.Length == 0) return;
-        agent.destination = path[point];
+        agent.SetDestination(path[point]);
         point = index;
     }
 
