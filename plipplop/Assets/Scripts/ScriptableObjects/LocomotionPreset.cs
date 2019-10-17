@@ -5,9 +5,9 @@
 public class LocomotionPreset : ScriptableObject
 {
     [Header("Locomotion")]
-    public float acceleration = 50000;
-    public float speed = 800f;
+    public float maxSpeed = 800f;
     public float jump = 1200f;
+    public AnimationCurve accelerationCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
     [Header("Gravity")]
     public float baseDrag = 5f;

@@ -11,7 +11,7 @@ public abstract class Controller : MonoBehaviour
     public bool beginCrouched = false;
     public bool canRetractLegs = true;
     public bool useGravity = true;
-    [Range(1f, 200f)] public float gravityMultiplier = 8f;
+    [Range(1f, 200f)] public float gravityMultiplier = 100f;
 
     public AperturePreset customCamera = null;
     [HideInInspector] public Locomotion locomotion;
