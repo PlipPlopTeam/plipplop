@@ -14,11 +14,11 @@ public class Aperture
         public float heightOffset;
         [Range(0f, 40f)] public float additionalAngle = 20f;
         public Range distance;
-        public float absoluteMinimalDistance = 4f;
 
         [Header("Lerps")]
         public float fovLerp = 1f;
-        public float horizontalFollowLerp = 1f;
+        public float lateralFollowLerp = 1f;
+        public float longitudinalFollowLerp = 1f;
         public float verticalFollowLerp = 10f;
         public float rotationSpeed = 1f;
         public float lookAtLerp = 4f;
@@ -30,6 +30,7 @@ public class Aperture
         [Header("Advanced")]
         public float maximumCatchUpSpeed = 10f;
         public float cameraRotateAroundSpeed = 4f;
+        public float absoluteMinimalDistance = 4f;
     }
 
     public class Key<T>
@@ -156,100 +157,121 @@ public class Aperture
 
     public void FixedUpdate()
     {
-
-        float catchUpSpeed = 1f;
-        float fovMultiplier = 0f;
-        float targetMovementVelocity;
-
+        // TODO: This sucks and prevents camera from turning freely around player - fix by taking player input in consideration
         hAngle = Mathf.Lerp(hAngle, 0f, Time.fixedDeltaTime * 3f);
-
-        if (target != null) 
-        {
-            // Distance based on X and Z axises only
-            // Distance between camera and target
-            hDistanceToTarget = Vector3.Distance(
-                Vector3.Scale(new Vector3(1f, 0f, 1f), position.current), 
-                Vector3.Scale(new Vector3(1f, 0f, 1f), target.position)
-            );
-
-
-            var bestHAngle = Vector3.SignedAngle(Vector3.forward, target.forward, Vector3.up);
-            //hAngle = bestHAngle;
-            var angle = hAngle + bestHAngle;
-            rotationAroundTarget.destination = -new Vector3(Mathf.Sin(Mathf.Deg2Rad * angle), 0f, Mathf.Cos(Mathf.Deg2Rad * angle));
-
-            targetMovementVelocity = Vector3.Distance(target.position, lastTargetPosition);
-
-            // The Speed Enhancement effect
-            float ratio = targetMovementVelocity * settings.speedEffectMultiplier;
-            fovMultiplier = 1 + ratio/10f;
-
-            // The further the camera is, the fastest we want to catch up
-            catchUpSpeed = (hDistanceToTarget - settings.distance.min) / settings.distance.max;
-            catchUpSpeed = Mathf.Clamp(Mathf.Abs(catchUpSpeed * settings.catchUpSpeedMultiplier), 0.4f, settings.maximumCatchUpSpeed);
-
-            lastTargetPosition = target.position;
-        }
-
-        /*
-        Vector3 horizontalDirection = new Vector3(targetMovementDirection.x, 0f, targetMovementDirection.z);
-        var hAngleDifference = Vector3.SignedAngle(Forward(), horizontalDirection, Vector3.up);
-
-
-        // TODO : REimplement angle limits
-
-        if(hAngleDifference >= 0) hAngleDifference -= 180f;
-        else hAngleDifference += 180f;
-
-        if(hAngleDifference > maxAngle || hAngleDifference < -maxAngle) hAngleDifference = 0f;
-        Rotate(0f, (-hAngleDifference / maxAngle) * settings.rotSpeed, 0f);
         
-        if (rotationAroundTarget.current.x + settings.angle > -settings.rotationClamp.min)
-            rotationAroundTarget.current.x = -settings.rotationClamp.min + settings.angle;
-        else if(rotationAroundTarget.current.x + settings.angle < -settings.rotationClamp.max)
-            rotationAroundTarget.current.x = -settings.rotationClamp.max + settings.angle;
-        */
 
+        var targetPosition = target ? target.position : defaultTarget;
 
-        // Dark pythagorian mathematics allow us to position the camera correctly
-        Vector2 a = Vector3.Scale(new Vector3(0f, 1f, 1f), position.destination);
-        Vector2 b = Vector3.Scale(new Vector3(0f, 1f, 1f), target.position);
-        float t = settings.additionalAngle;
-        float ab = Vector2.Distance(a, b);
-        float bc = ab / Mathf.Cos(t*Mathf.Deg2Rad);
-        float acSquare = Mathf.Pow(bc, 2f) - Mathf.Pow(ab, 2f);
+        // Calculating "catch up"
+        ComputeHorizontalDistanceToTarget(targetPosition);
+        float catchUpSpeed = GetCatchUpSpeed();
 
-        float cameraHeight = Mathf.Sqrt(Mathf.Abs(acSquare));
+        // Rotation
+        ComputeRotation();
+        UpdateRotation();
 
-        rotationAroundTarget.current = Vector3.Lerp(rotationAroundTarget.current, rotationAroundTarget.destination, Time.fixedDeltaTime * settings.rotationSpeed);
+        // Position
+        ComputePosition(targetPosition);
+        UpdatePosition(catchUpSpeed);
+        EnsureMinimalCameraDistance();
 
-        position.destination = 
-            target.position
-            + (cameraHeight + settings.heightOffset) * Vector3.up
-            + rotationAroundTarget.current * Mathf.Clamp(hDistanceToTarget, settings.distance.min, settings.distance.max)
-            ;
-
-        var verticalFollow = Time.deltaTime * settings.verticalFollowLerp * catchUpSpeed;
-        var horizontalFollow = Time.deltaTime * settings.horizontalFollowLerp * catchUpSpeed;
-
-        position.current = new Vector3(
-            Mathf.Lerp(position.current.x, position.destination.x, horizontalFollow),
-            Mathf.Lerp(position.current.y, position.destination.y, verticalFollow),
-            Mathf.Lerp(position.current.z, position.destination.z, horizontalFollow)
-        );
-
-        // Absolute minimal distance so that whatever happens the camera can't be in my face
-        var cameraDirection = - (target.position - position.current);
-        if (cameraDirection.magnitude < settings.absoluteMinimalDistance) {
-            position.current = target.position + cameraDirection.normalized * settings.absoluteMinimalDistance;
-        }
-
-
-        fieldOfView.destination = fovMultiplier * settings.fieldOfView;
-        fieldOfView.current = Mathf.Lerp(fieldOfView.current, fieldOfView.destination, Time.fixedDeltaTime * settings.fovLerp);
+        // CameraFX
+        ComputeFieldOfView(targetPosition);
+        UpdateFieldOfView();
         
         Apply();
         ShakeUpdate();
+
+        lastTargetPosition = targetPosition;
+    }
+
+    public void ComputeHorizontalDistanceToTarget(Vector3 targetPosition)
+    {
+        hDistanceToTarget = Vector3.Distance(
+            Vector3.Scale(new Vector3(1f, 0f, 1f), position.current),
+            Vector3.Scale(new Vector3(1f, 0f, 1f), targetPosition)
+        );
+    }
+
+    public float GetCatchUpSpeed()
+    {
+        float catchUpSpeed;
+        catchUpSpeed = (hDistanceToTarget - settings.distance.min) / settings.distance.max;
+        catchUpSpeed = Mathf.Clamp(Mathf.Abs(catchUpSpeed * settings.catchUpSpeedMultiplier), 0.4f, settings.maximumCatchUpSpeed);
+
+        return catchUpSpeed;
+    }
+
+    public void ComputeRotation()
+    {
+        var bestHAngle = Vector3.SignedAngle(Vector3.forward, target.forward, Vector3.up);
+        var angle = hAngle + bestHAngle;
+        rotationAroundTarget.destination = -new Vector3(Mathf.Sin(Mathf.Deg2Rad * angle), 0f, Mathf.Cos(Mathf.Deg2Rad * angle));
+    }
+
+    public void ComputeFieldOfView(Vector3 targetPosition)
+    {
+        var targetMovementVelocity = Vector3.Distance(targetPosition, lastTargetPosition);
+        var ratio = targetMovementVelocity * settings.speedEffectMultiplier;
+        var fovMultiplier = 1 + ratio / 10f;
+        fieldOfView.destination = fovMultiplier * settings.fieldOfView;
+    }
+
+    public void UpdateRotation()
+    {
+        rotationAroundTarget.current = Vector3.Lerp(rotationAroundTarget.current, rotationAroundTarget.destination, Time.fixedDeltaTime * settings.rotationSpeed);
+    }
+
+    public void ComputePosition(Vector3 targetPosition)
+    {
+        // Dark pythagorian mathematics allow us to position the camera correctly
+        Vector2 a = Vector3.Scale(new Vector3(0f, 1f, 1f), position.destination);
+        Vector2 b = Vector3.Scale(new Vector3(0f, 1f, 1f), targetPosition);
+        float t = settings.additionalAngle;
+        float ab = Vector2.Distance(a, b);
+        float bc = ab / Mathf.Cos(t * Mathf.Deg2Rad);
+        float acSquare = Mathf.Pow(bc, 2f) - Mathf.Pow(ab, 2f);
+
+        float cameraHeight = Mathf.Sqrt(Mathf.Abs(acSquare)); // (ac)
+
+        position.destination =
+            targetPosition
+            + (cameraHeight + settings.heightOffset) * Vector3.up
+            + rotationAroundTarget.current * Mathf.Clamp(hDistanceToTarget, settings.distance.min, settings.distance.max)
+            ;
+    }
+
+    public void UpdatePosition(float catchUpSpeed)
+    {
+        var verticalFollow = Time.fixedDeltaTime * settings.verticalFollowLerp * catchUpSpeed;
+        position.current.y = Mathf.Lerp(position.current.y, position.destination.y, verticalFollow);
+
+        var lateralFollow = Time.fixedDeltaTime * settings.lateralFollowLerp * catchUpSpeed;
+        var longFollow = Time.fixedDeltaTime * settings.longitudinalFollowLerp * catchUpSpeed;
+
+        var rCurrent = cam.transform.InverseTransformPoint(position.current);
+        var rDestination = cam.transform.InverseTransformPoint(position.destination);
+
+        rCurrent.x = Mathf.Lerp(rCurrent.x, rDestination.x, lateralFollow);
+        rCurrent.z = Mathf.Lerp(rCurrent.z, rDestination.z, longFollow);
+
+        position.current = cam.transform.TransformPoint(rCurrent);
+    }
+
+    public void UpdateFieldOfView()
+    {
+        fieldOfView.current = Mathf.Lerp(fieldOfView.current, fieldOfView.destination, Time.fixedDeltaTime * settings.fovLerp);
+    }
+
+    public void EnsureMinimalCameraDistance()
+    {
+        // Absolute minimal distance so that whatever happens the camera can't be in my face
+        var cameraDirection = -(Vector3.Scale(Vector3.one - Vector3.up, target.position) - Vector3.Scale(Vector3.one - Vector3.up, position.current));
+        if (cameraDirection.magnitude < settings.absoluteMinimalDistance) {
+            position.current.x = target.position.x + cameraDirection.normalized.x * settings.absoluteMinimalDistance;
+            position.current.z = target.position.z + cameraDirection.normalized.z * settings.absoluteMinimalDistance;
+        }
     }
 
     public float GetHDistanceToTarget()
