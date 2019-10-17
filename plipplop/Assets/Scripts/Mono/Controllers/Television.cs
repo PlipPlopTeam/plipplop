@@ -19,11 +19,19 @@ public class Television : Controller
     public float rotationVelocityThreshold = 0.25f;
     public float rotationLerpSpeed = 2f;
     public float crouchCooldown = 2f;
+    public float drag = 1f;
     [Space(5)]
     [Header("Referencies")]
     public Animation anim;
     public ParticleSystem ps;
     public Valuable valuable;
+    public Renderer screenRenderer;
+
+    [Space(5)]
+    [Header("Screen")]
+    public Texture standScreenTexture;
+    public Texture crouchScreenTexture;
+    public Texture idleScreenTexture;
 
     float crouchTimer;
     float pushTimer;
@@ -33,6 +41,7 @@ public class Television : Controller
     public override void OnEject()
     {
         base.OnEject();
+        screenRenderer.material.mainTexture = idleScreenTexture;
         // Code here
     }
 
@@ -44,8 +53,6 @@ public class Television : Controller
 
     internal override void SpecificMove(Vector3 direction)
     {
-        //Vector3 v = (Game.i.aperture.Right() * direction.x + Game.i.aperture.Forward() * direction.z);
-        //rigidbody.AddForce(v * speed * Time.deltaTime);
         if(!pushed && direction.magnitude > pushThreshold)
         {
             Vector3 v = (Game.i.aperture.Right() * direction.x + Game.i.aperture.Forward() * direction.z) * pushMovementForce;
@@ -55,13 +62,18 @@ public class Television : Controller
             pushed = true;
             pushTimer = pushCooldown;
         }
-
     }
 
     internal override void Start()
     {
         base.Start();
+        screenRenderer.material = Instantiate(screenRenderer.material);
         // Code here
+    }
+
+    void OnDestroy() 
+    {
+        Destroy(screenRenderer.material);
     }
 
     internal override void Update()
@@ -77,24 +89,32 @@ public class Television : Controller
                     RetractLegs();
             }
         }
+        else
+        {
+            if(IsGrounded(0.5f))
+            {
+                if(jumped)
+                {
+                    jumped = false;
+                    ps.Play();
+                    valuable.hidden = true;
+                }
+            }
+            else
+            {
+                if(!jumped) 
+                {
+                    valuable.hidden = false;
+                    jumped = true;
+                }
+                
+            }
+        }
 
         if(pushed)
         {
             pushTimer -= Time.deltaTime;
             if(pushTimer <= 0f) pushed = false;
-        }
-
-        if(IsGrounded())
-        {
-            if(jumped)
-            {
-                jumped = false;
-                ps.Play();
-            }
-        }
-        else
-        {
-            if(!jumped) jumped = true;
         }
 
         if(rigidbody.velocity.magnitude > rotationVelocityThreshold)
@@ -107,24 +127,21 @@ public class Television : Controller
         }
     }
 
-    internal override void OnJump()
+    internal override void SpecificJump()
     {
         if(AreLegsRetracted())
         {
             ExtendLegs();
             rigidbody.AddForce(Vector3.up * jumpForce * Time.deltaTime, ForceMode.Impulse);
         }
-        else
-        {
-            rigidbody.AddForce(Vector3.up * jumpForce * 2f * Time.deltaTime, ForceMode.Impulse);
-        }
-
     }
 
     internal override void OnLegsRetracted()
     {
         // Code here
         valuable.hidden = true;
+        rigidbody.drag = drag;
+        screenRenderer.material.mainTexture = crouchScreenTexture;
     }
 
     internal override void OnLegsExtended()
@@ -132,5 +149,6 @@ public class Television : Controller
         // Code here
         crouchTimer = crouchCooldown;
         valuable.hidden = false;
+        screenRenderer.material.mainTexture = standScreenTexture;
     }
 }

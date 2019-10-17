@@ -47,7 +47,7 @@ public class Locomotion : MonoBehaviour
         .GetComponent<Legs>();
         legs.body = transform;
         legs.transform.localPosition = legsOffset;
-        foreach (Leg l in legs.legs) l.maxFootDistance = legsHeight + 1f;
+        foreach (Leg l in legs.legs) l.maxFootDistance = legsHeight + 2f;
     }
 
     public void RetractLegs()
@@ -133,22 +133,22 @@ public class Locomotion : MonoBehaviour
         return null;
     }
 
-    RaycastHit[] RaycatAllToGround()
+    RaycastHit[] RaycatAllToGround(float rangeMultiplier = 1f)
     {
         Vector3 os = Vector3.zero;
 
         if(AreLegsRetracted())
-            os = legsOffset + new Vector3(0f, 0.1f, 0f);
+            os = legsOffset + new Vector3(0f, 0.2f, 0f);
         else
-            os = legsOffset - new Vector3(0f, legsHeight - 0.1f, 0f);
+            os = legsOffset - new Vector3(0f, legsHeight - 0.2f, 0f);
 
         Debug.DrawRay(transform.position + transform.TransformDirection(os), Vector3.down, Color.blue, 1f);
-        return Physics.RaycastAll(transform.position + transform.TransformDirection(os), Vector3.down, groundCheckRange);
+        return Physics.RaycastAll(transform.position + transform.TransformDirection(os), Vector3.down, groundCheckRange * rangeMultiplier);
     }
 
-    public bool IsGrounded() // But better 😎
+    public bool IsGrounded(float rangeMultiplier = 1f) // But better 😎
     {
-        RaycastHit[] hits = RaycatAllToGround();
+        RaycastHit[] hits = RaycatAllToGround(rangeMultiplier);
 
         foreach(RaycastHit h in hits)
         {
@@ -171,6 +171,7 @@ public class Locomotion : MonoBehaviour
 
     public void Jump()
     {
+        Debug.Log("DEFAULT JUMP");
         rigidbody.AddForce(Vector3.up * preset.jump, ForceMode.Acceleration);
     }
 

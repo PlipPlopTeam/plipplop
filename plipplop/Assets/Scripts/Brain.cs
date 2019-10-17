@@ -25,7 +25,9 @@ public class Brain
 
     public void PossessBaseController()
     {
-        baseController.transform.position = controller.transform.position;
+        Vector3 dir = (controller.transform.position - Game.i.aperture.position.current).normalized;
+        dir = new Vector3(-dir.x, 0f, -dir.z);
+        baseController.transform.position = controller.transform.position + dir * 5f;
         Possess(baseController);
     }
 
