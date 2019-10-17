@@ -1,21 +1,27 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(CollisionEventTransmitter))]
-public class Volume : MonoBehaviour
+public abstract class Volume : MonoBehaviour
 {
-    public float height;
-    public float width;
-    public float length;
+    [Header("Volume options")]
+    public Color color = new Color(0f, 1f, 1f);
+
+    public float height=20f;
+    public float width=20f;
+    public float length=20f;
 
     public Vector3 size { get { return GetSize(); } }
 
+    bool isInside = false;
+
     private void OnDrawGizmos()
     {
-        Gizmos.color = new Color(0f, 1f, 1f, 0.1f);
+        Gizmos.color = new Color(color.r, color.g, color.b, 0.1f);
         Gizmos.DrawCube(transform.position, GetSize());
-        Gizmos.color = new Color(0f, 1f, 1f, 0.5f);
+        Gizmos.color = new Color(color.r, color.g, color.b, 0.5f);
         Gizmos.DrawWireCube(transform.position, GetSize());
     }
 
@@ -27,8 +33,37 @@ public class Volume : MonoBehaviour
     private void Awake()
     {
         transform.localScale = Vector3.one;
-        var col = gameObject.AddComponent<BoxCollider>();
-        col.size = GetSize();
-        col.isTrigger = true;
+        var box = gameObject.AddComponent<BoxCollider>();
+        box.size = GetSize();
+        box.isTrigger = true;
+
+        var col = GetComponent<CollisionEventTransmitter>();
+        col.onTriggerEnter += Col_onTriggerEnter;
+        col.onTriggerExit += Col_onTriggerExit;
     }
+
+
+    private void Col_onTriggerExit(Collider obj)
+    {
+        var c = obj.gameObject.GetComponent<Controller>();
+        if (isInside && c && Game.i.player.IsPossessing(c)) {
+            isInside = false;
+            OnPlayerExit(c);
+        }
+    }
+
+    private void Col_onTriggerEnter(Collider obj)
+    {
+        var c = obj.gameObject.GetComponent<Controller>();
+        if (!isInside && c && Game.i.player.IsPossessing(c)) {
+
+            isInside = true;
+            OnPlayerEnter(c);
+        }
+    }
+
+    public abstract void OnPlayerEnter(Controller player);
+
+    public abstract void OnPlayerExit(Controller player);
+
 }
