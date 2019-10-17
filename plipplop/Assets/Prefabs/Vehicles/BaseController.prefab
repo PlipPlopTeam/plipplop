@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 281994533271648099}
   - component: {fileID: 281994533271648108}
   - component: {fileID: 281994533271648110}
-  - component: {fileID: 1507986189375972570}
+  - component: {fileID: 2028188188699879106}
   m_Layer: 0
   m_Name: BaseController
   m_TagString: Untagged
@@ -64,7 +64,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   autoPossess: 0
-  beginCrouched: 0
+  beginCrouched: 1
   canRetractLegs: 1
   useGravity: 1
   gravityMultiplier: 50
@@ -88,18 +88,18 @@ MonoBehaviour:
   legsOffset: {x: 0, y: 0, z: 0}
   rigidbody: {fileID: 0}
   targetDirection: {x: 0, y: 0, z: 0}
---- !u!135 &1507986189375972570
-SphereCollider:
+--- !u!65 &2028188188699879106
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 281994533271648098}
-  m_Material: {fileID: 13400000, guid: 1ba9d71612f555b479275556f3dee594, type: 2}
+  m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!1 &4182015712966933053
 GameObject:
