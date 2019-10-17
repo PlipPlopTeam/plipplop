@@ -44,12 +44,12 @@ public class Leg : MonoBehaviour
     {
         _vel.y = 0;
         _vel = Vector3.ClampMagnitude(_vel, 1);
-        RaycastHit[] hits = Physics.RaycastAll(transform.position, -Vector3.up, maxFootDistance, raycastMask);
+        RaycastHit[] hits = Physics.RaycastAll(transform.position, -Vector3.up + Vector3.ClampMagnitude(body.velocity, 1f), maxFootDistance, raycastMask);
         foreach(RaycastHit hit in hits)
         {
             if(!hit.collider.isTrigger && hit.transform != body.body)
             {
-                foot.position = hit.point + GetNoise(0) * _vel.magnitude;
+                foot.position = hit.point ;
                 foot.transform.up = hit.normal;
                 foot.transform.eulerAngles = new Vector3(foot.transform.eulerAngles.x, transform.eulerAngles.y - 90 , foot.transform.eulerAngles.z);
                 if(foot.parent != null) foot.parent = null;
