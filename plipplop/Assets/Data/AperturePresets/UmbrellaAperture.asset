@@ -13,13 +13,20 @@ MonoBehaviour:
   m_Name: UmbrellaAperture
   m_EditorClassIdentifier: 
   settings:
-    distance: 5
-    fieldOfView: 75
-    angle: 0
-    positionOffset: {x: 0, y: 0, z: 0}
-    range: {x: 1, y: 2}
-    rotationClamp: {x: 10, y: 60}
+    canBeControlled: 1
+    fieldOfView: 60
+    heightOffset: 3
+    additionalAngle: 25
+    distance:
+      min: 3
+      max: 5
+    absoluteMinimalDistance: 3
     fovLerp: 5
-    followLerp: 1
-    camLerp: 5
+    horizontalFollowLerp: 1
+    verticalFollowLerp: 10
+    rotationSpeed: 1
+    lookAtLerp: 4
     speedEffectMultiplier: 1
+    catchUpSpeedMultiplier: 1
+    maximumCatchUpSpeed: 10
+    cameraRotateAroundSpeed: 4
