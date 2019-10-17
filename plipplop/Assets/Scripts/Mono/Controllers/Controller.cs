@@ -56,9 +56,8 @@ public abstract class Controller : MonoBehaviour
     { 
         if(AreLegsRetracted()) 
             SpecificJump();
-        else if (IsGrounded()) {
+        else if (IsGrounded())
             locomotion.Jump();
-        }
     }
 
     internal void RetractLegs()

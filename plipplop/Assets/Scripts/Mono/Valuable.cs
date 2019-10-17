@@ -2,9 +2,11 @@
 
 public class Valuable : MonoBehaviour
 {
-    [HideInInspector]
-    public Vector3 origin;
+    [HideInInspector] public Vector3 origin;
+    
+    [Header("Settings")]
     public float distanceThreshold = 1f;
+    public bool hidden = false;
 
     void Start()
     {
