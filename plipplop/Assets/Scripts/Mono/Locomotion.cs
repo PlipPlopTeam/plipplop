@@ -76,15 +76,13 @@ public class Locomotion : MonoBehaviour
 
     public void Move(Vector3 direction)
     {
-        Vector3 heading = new Vector3();
-
         if (IsGrounded()) {
             timePressed += Time.deltaTime;
             timePressed *= direction.magnitude;
             heading = direction;
         }
         else {
-            heading = (direction * (preset.airControl / 100f));
+            heading = Vector3.Lerp(heading, direction, preset.airControl / 100f);
         }
         var acceleration = preset.accelerationCurve.Evaluate(timePressed);
 
