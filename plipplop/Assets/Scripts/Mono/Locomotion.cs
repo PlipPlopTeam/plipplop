@@ -18,6 +18,7 @@ public class Locomotion : MonoBehaviour
     CapsuleCollider legsCollider;
     Legs legs;
     float timePressed = 0f;
+    float timeFalling = 0f;
 
     private void Awake()
     {
@@ -97,7 +98,10 @@ public class Locomotion : MonoBehaviour
     public void Fall(float factor=1f)
     {
         if (!IsGrounded() && !AreLegsRetracted()) {
-            rigidbody.AddForce(Vector3.down * preset.strength * factor * Time.deltaTime);
+            // 2F, 3F are constants to make gravity feel good
+            // Feel free to edit but DO NOT make public
+            timeFalling += Time.deltaTime*2f;
+            rigidbody.AddForce(Vector3.down * Mathf.Pow(9.81f, timeFalling+3f) * factor * Time.deltaTime, ForceMode.Acceleration);
             if (rigidbody.velocity.y < -preset.maxFallSpeed) {
                 rigidbody.velocity = new Vector3(rigidbody.velocity.x, -preset.maxFallSpeed, rigidbody.velocity.z);
             }
@@ -135,7 +139,10 @@ public class Locomotion : MonoBehaviour
 
         foreach(RaycastHit h in hits)
         {
-            if(!IsMe(h.transform) && !h.collider.isTrigger) return true;
+            if (!IsMe(h.transform) && !h.collider.isTrigger) {
+                timeFalling = 0f;
+                return true;
+            }
         }
         return false;
     }
