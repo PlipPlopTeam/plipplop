@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class Emotion
@@ -41,9 +43,9 @@ public class EmotionRenderer : MonoBehaviour
         newBoard.obj.name = "EmotionBoard";
         // Mesh Renderer
         newBoard.mr = newBoard.obj.AddComponent<MeshRenderer>();
-        //newBoard.mr.material = Instantiate(Library.instance.boardMaterial);
+        newBoard.mr.material = Instantiate(Game.i.library.emotionBoardMaterial);
         // Mesh Filter
-        //newBoard.obj.AddComponent<MeshFilter>().mesh = Library.instance.primitiveQuadMesh;
+        newBoard.obj.AddComponent<MeshFilter>().mesh = Game.i.library.primitiveQuadMesh;
         // Transform adjustment
         newBoard.obj.transform.localScale *= size;
 
@@ -68,7 +70,7 @@ public class EmotionRenderer : MonoBehaviour
         }
     }
 
-    public void Show(string emotionName)
+    public void Show(string emotionName, float duration = 0f)
     {
         emotion = FindEmotion(emotionName);
         if(emotion == null) return;
@@ -77,6 +79,14 @@ public class EmotionRenderer : MonoBehaviour
         frameIndex = 0;
         board.mr.material.mainTexture = emotion.frames[0];
         board.obj.SetActive(true);
+
+        if(duration > 0f) StartCoroutine(HideAfter(duration));
+    }
+
+    IEnumerator HideAfter(float time)
+    {
+        yield return new WaitForSeconds(time);
+        Hide();
     }
 
     public void Hide()
