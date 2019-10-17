@@ -66,7 +66,6 @@ public class Aperture
     public Key<Vector3> rotationAroundTarget = new Key<Vector3>();
 
     Settings settings;
-
     Vector3 defaultTarget;
 
     // SPEED
@@ -80,6 +79,9 @@ public class Aperture
 
     // Current angle on Y axis
     float hAngle;
+    bool freeze = false;
+    public void Freeze() {freeze = true;}
+    public void Unfreeze() {freeze = false;}
 
     public void Load(Settings s)
     {
@@ -137,6 +139,8 @@ public class Aperture
 
     public void FixedUpdate()
     {
+        if(freeze) return;
+
         // TODO: This sucks and prevents camera from turning freely around player - fix by taking player input in consideration
         hAngle = Mathf.Lerp(hAngle, 0f, Time.fixedDeltaTime * 3f);
 

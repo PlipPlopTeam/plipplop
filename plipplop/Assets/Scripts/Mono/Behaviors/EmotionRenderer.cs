@@ -55,19 +55,25 @@ public class EmotionRenderer : MonoBehaviour
     void Update()
     {
         // Face camera
-        board.obj.transform.forward = -(Camera.main.transform.position - board.obj.transform.position);
-        board.obj.transform.position = headTransform.position + adjustment;
-
-        // Animation
-        if(emotion != null)
+        if(board.obj.activeSelf && Camera.main != null)
         {
-            timer += Time.deltaTime;
-            if(timer > emotion.speed)
+            board.obj.transform.forward = -(Camera.main.transform.position - board.obj.transform.position);
+            board.obj.transform.position = headTransform.position + adjustment;
+
+            // Animation
+            if(emotion != null)
             {
-                NextFrame();
-                timer = 0f;
+                timer += Time.deltaTime;
+                if(timer > emotion.speed)
+                {
+                    NextFrame();
+                    timer = 0f;
+                }
             }
         }
+
+
+
     }
 
     public void Show(string emotionName, float duration = 0f)
