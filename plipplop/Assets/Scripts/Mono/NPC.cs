@@ -113,6 +113,7 @@ public class NPC : MonoBehaviour
                 break;
             case ActionState.Sort:
                 thing.transform.position = skeleton.rightHandBone.position;
+                thing.transform.forward = transform.forward;
                 break;
         }
     }
@@ -170,7 +171,7 @@ public class NPC : MonoBehaviour
         Valuable[] seens = sight.Scan<Valuable>();
         if(seens.Length > 0)
         {
-            if(seens[0].HasMoved())
+            if(seens[0].HasMoved() && !seens[0].hidden)
             {
                 Collect(seens[0]);
             }
