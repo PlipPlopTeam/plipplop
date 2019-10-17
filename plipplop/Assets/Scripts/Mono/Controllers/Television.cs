@@ -21,11 +21,12 @@ public class Television : Controller
     public float crouchCooldown = 2f;
     public float drag = 1f;
     [Space(5)]
-    [Header("Referencies")]
+    [Header("References")]
     public Animation anim;
     public ParticleSystem ps;
     public Valuable valuable;
     public Renderer screenRenderer;
+    public GameObject fakeLight;
 
     [Space(5)]
     [Header("Screen")]
@@ -42,6 +43,7 @@ public class Television : Controller
     {
         base.OnEject();
         screenRenderer.material.mainTexture = idleScreenTexture;
+        fakeLight.SetActive(true);
         // Code here
     }
 
@@ -143,6 +145,7 @@ public class Television : Controller
     {
         // Code here
         valuable.hidden = true;
+        fakeLight.SetActive(true);
         rigidbody.drag = drag;
         screenRenderer.material.mainTexture = crouchScreenTexture;
     }
@@ -153,5 +156,6 @@ public class Television : Controller
         crouchTimer = crouchCooldown;
         valuable.hidden = false;
         screenRenderer.material.mainTexture = standScreenTexture;
+        fakeLight.SetActive(false);
     }
 }
