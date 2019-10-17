@@ -18,4 +18,10 @@ public class Library
     public GameObject controllerSensor;
     public GameObject baseControllerPrefab;
 
+    [Header("Material")]
+    public Material emotionBoardMaterial;
+    
+    [Header("Meshs")]
+    public Mesh primitiveQuadMesh;
+
 }
