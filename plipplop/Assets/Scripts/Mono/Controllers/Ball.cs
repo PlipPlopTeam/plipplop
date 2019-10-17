@@ -30,8 +30,6 @@ public class Ball : Controller
 
     internal override void SpecificMove(Vector3 direction)
     {
-        Vector3 clampDirection = Vector3.ClampMagnitude(direction, 1f);
-        
         var perimeter = 2 * Mathf.PI * (1f); //radius
         Vector3 _velocity = (Game.i.aperture.Right() * direction.x + Game.i.aperture.Forward() * direction.z) * Time.deltaTime;
         _velocity *= maxSpeed;
