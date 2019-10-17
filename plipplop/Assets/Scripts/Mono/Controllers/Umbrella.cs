@@ -18,17 +18,6 @@ public class Umbrella : Controller
     Vector3 tiltAccumulation = Vector3.zero;
     Coroutine currentAnimationRoutine = null;
 
-    public override void OnEject()
-    {
-        base.OnEject();
-    }
-
-    public override void OnPossess()
-    {
-        base.OnPossess();
-        ExtendLegs();
-    }
-    
     void AirMove(Vector3 direction)
     {
         tiltAccumulation = Vector3.Lerp(tiltAccumulation, new Vector3(direction.x, 0f, direction.z), tiltLerpSpeed * Time.fixedDeltaTime);
@@ -110,9 +99,13 @@ public class Umbrella : Controller
                 visual.Rotate(new Vector3(-visual.eulerAngles.x, 0f, -visual.eulerAngles.z));
             }
         }
+        else if (!AreLegsRetracted()) {
+            RetractLegs();
+        }
     }
 
-    internal override void OnLegsExtended() {}
+    internal override void OnLegsExtended() { }
+    internal override void OnLegsRetracted() { }
 
     IEnumerator CloseUmbrella()
     {
@@ -140,8 +133,4 @@ public class Umbrella : Controller
         return GetCurrentClosure() < 0.5F;
     }
 
-    internal override void OnLegsRetracted()
-    {
-        throw new System.NotImplementedException();
-    }
 }

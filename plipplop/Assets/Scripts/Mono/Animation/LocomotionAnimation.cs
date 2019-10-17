@@ -8,6 +8,9 @@ public class LocomotionAnimation
     public Vector3 legsOffset;
     public bool isJumping;
 
+    float tiltAmplitude = 12f;
+    float tiltLerpSpeed = 4f;
+    float tilt = 0f;
     Transform parentTransform;
     Rigidbody rigidbody;
     CapsuleCollider legsCollider;
@@ -24,8 +27,22 @@ public class LocomotionAnimation
 
     public void Update()
     {
+        legs.isJumping = isJumping;
         legs.velocity = rigidbody.velocity;
         SetLegHeight();
+
+        var tiltDirection = Mathf.Clamp(rigidbody.velocity.magnitude/2f, 0f, 1f) * ((Mathf.Floor(Time.time * legs.legFps) % 2) * 2f - 1f); // Will give -1 or 1
+
+        tilt = Mathf.Lerp(tilt, tiltDirection, Time.deltaTime * tiltLerpSpeed);
+
+        if (isJumping) tilt = 0f;
+
+        parentTransform.localEulerAngles = 
+            new Vector3(tiltAmplitude * (Mathf.Abs(tilt) + (isJumping ? -0.25f : 0f)),
+                        parentTransform.localEulerAngles.y,
+                        tiltAmplitude * tilt
+            )
+        ;
     }
 
     public bool AreLegsRetracted()
