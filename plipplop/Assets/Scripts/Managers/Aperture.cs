@@ -17,10 +17,10 @@ public class Aperture
 
         [Header("Lerps")]
         public float fovLerp = 1f;
-        public float followLerp = 1f;
-        //TODO: Reimplement
-        //public float camLerp = 1f;
+        public float horizontalFollowLerp = 1f;
+        public float verticalFollowLerp = 10f;
         public float rotationSpeed = 1f;
+        public float lookAtLerp = 4f;
 
         [Header("Speed Enhancer")]
         [Range(0.1f, 10)]  public float speedEffectMultiplier = 1f;
@@ -227,12 +227,16 @@ public class Aperture
             + (cameraHeight + settings.heightOffset) * Vector3.up
             + rotationAroundTarget.current * Mathf.Clamp(hDistanceToTarget, settings.distance.min, settings.distance.max)
             ;
-        
-        position.current = Vector3.Lerp(
-            position.current, 
-            position.destination, 
-            Time.deltaTime * settings.followLerp * catchUpSpeed
+
+        var verticalFollow = Time.deltaTime * settings.verticalFollowLerp * catchUpSpeed;
+        var horizontalFollow = Time.deltaTime * settings.horizontalFollowLerp * catchUpSpeed;
+
+        position.current = new Vector3(
+            Mathf.Lerp(position.current.x, position.destination.x, horizontalFollow),
+            Mathf.Lerp(position.current.y, position.destination.y, verticalFollow),
+            Mathf.Lerp(position.current.z, position.destination.z, horizontalFollow)
         );
+
 
         fieldOfView.destination = fovMultiplier * settings.fieldOfView;
         fieldOfView.current = Mathf.Lerp(fieldOfView.current, fieldOfView.destination, Time.fixedDeltaTime * settings.fovLerp);
@@ -269,7 +273,11 @@ public class Aperture
     public void Apply()
     {
         // Look at 
-        cam.transform.forward = -(position.current - (target.position + settings.heightOffset * Vector3.up)).normalized;
+        cam.transform.forward = Vector3.Lerp(
+            cam.transform.forward, 
+            -(position.current - (target.position + settings.heightOffset * Vector3.up)).normalized, 
+            settings.lookAtLerp * Time.fixedDeltaTime
+        );
 
         cam.transform.position = position.current;
         cam.fieldOfView = fieldOfView.current;
