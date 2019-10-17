@@ -1,28 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using UnityEditor;
-using UnityEngine;
-
-public class EditorExtensions
-{
-
-    [MenuItem("Assets/Create/New Controller", priority = 1)]
-    static void CreateNewController()
-    {
-        var path = 
-            Path.Combine(
-                AssetDatabase.GetAssetPath(Selection.activeObject.GetInstanceID()),
-                "NewController.cs"
-            );
-
-        File.WriteAllText(path, @"
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class NewController : Controller
+public class Television : Controller
 {
     public override void OnEject()
     {
@@ -61,9 +42,5 @@ public class NewController : Controller
     internal override void OnLegsExtended()
     {
         // Code here
-    }
-}
-");
-        AssetDatabase.ImportAsset(path);
     }
 }
