@@ -67,9 +67,7 @@ public class Brain
 
     public void Possess(Controller controller)
     {
-        var wasCrouching = false;
         if (this.controller != null) {
-            wasCrouching = this.controller.AreLegsRetracted();
             Eject();
         }
         controller.OnPossess();

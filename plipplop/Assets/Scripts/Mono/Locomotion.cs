@@ -140,7 +140,6 @@ public class Locomotion : MonoBehaviour
         else
             os = legsOffset - new Vector3(0f, legsHeight - 0.2f, 0f);
 
-        Debug.DrawRay(transform.position + transform.TransformDirection(os), Vector3.down, Color.blue, 1f);
         return Physics.RaycastAll(transform.position + transform.TransformDirection(os), Vector3.down, groundCheckRange * rangeMultiplier);
     }
 
@@ -169,7 +168,6 @@ public class Locomotion : MonoBehaviour
 
     public void Jump()
     {
-        Debug.Log("DEFAULT JUMP");
         rigidbody.AddForce(Vector3.up * preset.jump, ForceMode.Acceleration);
     }
 

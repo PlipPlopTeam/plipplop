@@ -35,21 +35,14 @@ public class Aperture
 
     public class Key<T>
     {
-        public T origin;
         public T destination;
         public T current;
 
         public Key() { }
         public Key(T value)
         {
-            origin = value;
             destination = value;
             current = value;
-        }
-
-        public void Reset()
-        {
-            current = origin;
         }
 
         public void SetToDestination()
@@ -68,9 +61,9 @@ public class Aperture
     public Camera cam;
     public Transform target;
 
-    public Key<float> fieldOfView;
-    public Key<Vector3> position;
-    public Key<Vector3> rotationAroundTarget;
+    public Key<float> fieldOfView = new Key<float>();
+    public Key<Vector3> position = new Key<Vector3>();
+    public Key<Vector3> rotationAroundTarget = new Key<Vector3>();
 
     Settings settings;
 
@@ -88,22 +81,9 @@ public class Aperture
     // Current angle on Y axis
     float hAngle;
 
-    void Load()
-    {
-        // POSITION
-        position = new Key<Vector3>();
-
-        // ROTATION
-        rotationAroundTarget = new Key<Vector3>();
-
-        // FOV
-        fieldOfView = new Key<float>(settings.fieldOfView);
-    }
-
     public void Load(Settings s)
     {
         settings = s;
-        Load();
     }
 
     public Settings GetSettings()
@@ -159,7 +139,6 @@ public class Aperture
     {
         // TODO: This sucks and prevents camera from turning freely around player - fix by taking player input in consideration
         hAngle = Mathf.Lerp(hAngle, 0f, Time.fixedDeltaTime * 3f);
-        
 
         var targetPosition = target ? target.position : defaultTarget;
 
@@ -332,15 +311,6 @@ public class Aperture
         fieldOfView.SetToDestination();
         Apply();
     } // Teleport all the camera values instantly (to ignore lerp)
-
-    public void Reset()
-    {
-        target = null;
-        position.Reset();
-        rotationAroundTarget.Reset();
-        fieldOfView.Reset();
-
-    } // Reset all the values to the origin values
 
     public void SwitchCamera(Camera newCam)
     {
