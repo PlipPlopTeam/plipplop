@@ -48,14 +48,13 @@ public class CameraApertureDebugger : MonoBehaviour
         if (target) {
             //Debug.Log(settings);
             // Follow range draw
-            Handles.DrawWireDisc(position.current, Vector3.up, settings.distance.min);
-            Handles.DrawWireDisc(position.current, Vector3.up, settings.distance.max);
-            Gizmos.DrawLine(cam.transform.position, position.current);
-            Handles.Label(position.current + Vector3.right * settings.distance.min, "Min " + settings.distance.min.ToString(), style);
-            Handles.Label(position.current + Vector3.right * settings.distance.max, "Max " + settings.distance.max.ToString(), style);
-            Handles.Label((cam.transform.position + target.position) / 2, "Dist " + distance.ToString(), style);
+            Handles.DrawWireDisc(position.destination, Vector3.up, settings.distance.min);
+            Handles.DrawWireDisc(position.destination, Vector3.up, settings.distance.max);
+            Handles.Label(position.destination + Vector3.right * settings.distance.min, "Min " + settings.distance.min.ToString(), style);
+            Handles.Label(position.destination + Vector3.right * settings.distance.max, "Max " + settings.distance.max.ToString(), style);
+            Handles.Label((position.destination + target.position) / 2, "Dist " + distance.ToString(), style);
 
-            Gizmos.DrawLine(cam.transform.position, position.destination);
+            Gizmos.DrawLine(position.current, position.destination);
 
             Gizmos.DrawWireSphere(position.destination, 1f);
             Gizmos.DrawWireSphere(position.current, 0.6f);

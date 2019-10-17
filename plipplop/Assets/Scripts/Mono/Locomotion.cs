@@ -19,6 +19,7 @@ public class Locomotion : MonoBehaviour
     Legs legs;
     float timePressed = 0f;
     float timeFalling = 0f;
+    Vector3 heading = new Vector3();
 
     private void Awake()
     {
@@ -75,14 +76,21 @@ public class Locomotion : MonoBehaviour
 
     public void Move(Vector3 direction)
     {
-        timePressed += Time.deltaTime;
-        timePressed *= direction.magnitude;
+        Vector3 heading = new Vector3();
+
+        if (IsGrounded()) {
+            timePressed += Time.deltaTime;
+            timePressed *= direction.magnitude;
+            heading = direction;
+        }
+        else {
+            heading = (direction * (preset.airControl / 100f));
+        }
         var acceleration = preset.accelerationCurve.Evaluate(timePressed);
 
-        currentSpeed = Mathf.Clamp(preset.maxSpeed * acceleration, 0f, preset.maxSpeed * direction.magnitude);
+        currentSpeed = Mathf.Clamp(preset.maxSpeed * acceleration, 0f, preset.maxSpeed);
 
-        Vector3 clampDirection = Vector3.ClampMagnitude(direction, 1f);
-        Vector3 dir = clampDirection.x * Game.i.aperture.Right() + clampDirection.z * Game.i.aperture.Forward();
+        Vector3 dir = heading.x * Game.i.aperture.Right() + heading.z * Game.i.aperture.Forward();
 
         // Add Movement Force
         rigidbody.AddForce(dir * Time.deltaTime * currentSpeed);
@@ -90,7 +98,12 @@ public class Locomotion : MonoBehaviour
         // Rotate legs
         if (dir != Vector3.zero) targetDirection = dir;
 
-        transform.forward = Vector3.Lerp(transform.forward, targetDirection, Time.deltaTime * 10f);
+        if (IsGrounded()) {
+            transform.forward = Vector3.Lerp(transform.forward, targetDirection, Time.deltaTime * 10f);
+        }
+        else {
+
+        }
 
         legs.velocity = rigidbody.velocity;
     }
@@ -98,10 +111,10 @@ public class Locomotion : MonoBehaviour
     public void Fall(float factor=1f)
     {
         if (!IsGrounded() && !AreLegsRetracted()) {
-            // 2F, 3F are constants to make gravity feel good
+            // This code contains few constants to make gravity feel good
             // Feel free to edit but DO NOT make public
-            timeFalling += Time.deltaTime*2f;
-            rigidbody.AddForce(Vector3.down * Mathf.Pow(9.81f, timeFalling+3f) * factor * Time.deltaTime, ForceMode.Acceleration);
+            timeFalling += Time.deltaTime*1.6f;
+            rigidbody.AddForce(Vector3.down * Mathf.Pow(9.81f, timeFalling+2.8f) * factor * Time.deltaTime, ForceMode.Acceleration);
             if (rigidbody.velocity.y < -preset.maxFallSpeed) {
                 rigidbody.velocity = new Vector3(rigidbody.velocity.x, -preset.maxFallSpeed, rigidbody.velocity.z);
             }

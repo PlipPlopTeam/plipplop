@@ -11,6 +11,6 @@ public class LocomotionPreset : ScriptableObject
 
     [Header("Gravity")]
     public float baseDrag = 5f;
-    public float strength = 1000f;
     public float maxFallSpeed = 40f;
+    [Range(0f, 100f)] public float airControl = 65f;
 }

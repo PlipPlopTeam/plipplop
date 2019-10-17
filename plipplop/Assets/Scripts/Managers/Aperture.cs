@@ -14,6 +14,7 @@ public class Aperture
         public float heightOffset;
         [Range(0f, 40f)] public float additionalAngle = 20f;
         public Range distance;
+        public float absoluteMinimalDistance = 4f;
 
         [Header("Lerps")]
         public float fovLerp = 1f;
@@ -236,6 +237,12 @@ public class Aperture
             Mathf.Lerp(position.current.y, position.destination.y, verticalFollow),
             Mathf.Lerp(position.current.z, position.destination.z, horizontalFollow)
         );
+
+        // Absolute minimal distance so that whatever happens the camera can't be in my face
+        var cameraDirection = - (target.position - position.current);
+        if (cameraDirection.magnitude < settings.absoluteMinimalDistance) {
+            position.current = target.position + cameraDirection.normalized * settings.absoluteMinimalDistance;
+        }
 
 
         fieldOfView.destination = fovMultiplier * settings.fieldOfView;
