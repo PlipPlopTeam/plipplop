@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEditor;
 
 [CustomEditor(typeof(NPC)), CanEditMultipleObjects]
+[ExecuteInEditMode]
 public class NPCEditor : Editor
 {
     private void OnSceneGUI()
@@ -22,6 +23,7 @@ public class NPCEditor : Editor
         {
             Undo.RecordObject(npc, "Move NPC path point");
             npc.path = newPath;
+            EditorUtility.SetDirty(npc);
         }
     }
 }
