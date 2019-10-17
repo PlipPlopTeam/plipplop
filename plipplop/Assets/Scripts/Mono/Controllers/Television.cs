@@ -80,6 +80,24 @@ public class Television : Controller
     {
         base.Update();
 
+        if(IsPossessed())
+        {
+            if(pushed)
+            {
+                pushTimer -= Time.deltaTime;
+                if(pushTimer <= 0f) pushed = false;
+            }
+
+            if(rigidbody.velocity.magnitude > rotationVelocityThreshold)
+            {
+                Vector3 moveDirection = rigidbody.velocity.normalized;
+                transform.forward = Vector3.Lerp(
+                    transform.forward,
+                    new Vector3(moveDirection.x, 0f, moveDirection.z),
+                    Time.deltaTime * rotationLerpSpeed);
+            }
+        }
+        
         if(!AreLegsRetracted())
         {
             crouchTimer -= Time.deltaTime;
@@ -109,21 +127,6 @@ public class Television : Controller
                 }
                 
             }
-        }
-
-        if(pushed)
-        {
-            pushTimer -= Time.deltaTime;
-            if(pushTimer <= 0f) pushed = false;
-        }
-
-        if(rigidbody.velocity.magnitude > rotationVelocityThreshold)
-        {
-            Vector3 moveDirection = rigidbody.velocity.normalized;
-            transform.forward = Vector3.Lerp(
-                transform.forward,
-                new Vector3(moveDirection.x, 0f, moveDirection.z),
-                Time.deltaTime * rotationLerpSpeed);
         }
     }
 

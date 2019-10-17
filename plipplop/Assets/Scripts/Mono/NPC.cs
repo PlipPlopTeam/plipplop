@@ -112,7 +112,7 @@ public class NPC : MonoBehaviour
                     
                 break;
             case ActionState.Sort:
-                thing.transform.position = skeleton.rightHandBone.position;
+                thing.transform.position = (skeleton.rightHandBone.position + skeleton.leftHandBone.position)/2f;
                 thing.transform.forward = transform.forward;
                 break;
         }
