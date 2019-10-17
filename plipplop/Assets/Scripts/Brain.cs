@@ -26,7 +26,7 @@ public class Brain
     public void PossessBaseController()
     {
         Vector3 dir = (controller.transform.position - Game.i.aperture.position.current).normalized;
-        dir = new Vector3(-dir.x, 0f, -dir.z);
+        dir = new Vector3(dir.x, 0f, dir.z);
         baseController.transform.position = controller.transform.position + dir * 2f;
         // TODO : Faire un raycast pour empecher les speedrunners de passer à travers le mur
         Possess(baseController);

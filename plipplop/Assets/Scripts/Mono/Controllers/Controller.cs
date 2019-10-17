@@ -15,6 +15,7 @@ public abstract class Controller : MonoBehaviour
 
     public AperturePreset customCamera = null;
     [HideInInspector] public Locomotion locomotion;
+    GameObject face;
 
     new internal Rigidbody rigidbody;
     internal ControllerSensor controllerSensor;
@@ -31,6 +32,8 @@ public abstract class Controller : MonoBehaviour
         {
             renderer.material.color = new Color(70 / 255f, 100 / 255f, 160 / 255f);
         }
+
+        ToggleFace(false);
     }
     
     public virtual void OnPossess()
@@ -49,6 +52,8 @@ public abstract class Controller : MonoBehaviour
         foreach (var renderer in GetComponentsInChildren<Renderer>()) {
             renderer.material.color = new Color(140 / 255f, 60 / 255f, 60 / 255f);
         }
+
+        ToggleFace(true);
     }
 
     internal virtual void SpecificJump() {}
@@ -122,6 +127,20 @@ public abstract class Controller : MonoBehaviour
         rigidbody.useGravity = false;
     }
 
+    void AddFace()
+    {
+        face = Instantiate(Game.i.library.facePrefab, transform);
+        Vector3 bounds = GetComponent<Collider>().bounds.size;
+        face.transform.localPosition = new Vector3(0f, bounds.y/2, bounds.z/2);
+        face.transform.forward = transform.transform.forward;
+    }
+
+    void ToggleFace(bool isActive)
+    {
+        if(!face) AddFace();
+        face.SetActive(isActive);
+    }
+
     virtual internal void Update()
     {
         rigidbody.useGravity = false;
@@ -185,7 +204,6 @@ public abstract class Controller : MonoBehaviour
             else {
                 Gizmos.DrawIcon(transform.position + Vector3.up * 2f, "d_CollabChangesConflict Icon");
             }
-
 
             Handles.Label(transform.position + Vector3.up*2f, string.Join("\n", new string[] {
                     string.Format("Grounded? {0}", IsGrounded()),
