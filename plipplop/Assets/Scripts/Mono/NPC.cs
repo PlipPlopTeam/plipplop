@@ -131,6 +131,7 @@ public class NPC : MonoBehaviour
                 break;
             case ActionState.Sort:
                 thing.transform.position = thing.origin;
+                thing = null;
                 ChangeState(ActionState.Walking);
                 break;
         }
