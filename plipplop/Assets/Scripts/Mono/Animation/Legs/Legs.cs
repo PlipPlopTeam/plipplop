@@ -11,22 +11,12 @@ public class Legs : MonoBehaviour
     public Transform body;
 
     public float legFps = 4;
-    public float bodyAmp = .05f;
-    public float bodyTilt = 1;
-    public float bodyTurn = 10;
 
     public bool isJumping = false;
 
-    Vector3 bodyStartPosition;
-    Vector3 startLocalEulerAngles;
     float timer;
     
-    void Start()
-    {
-        bodyStartPosition = body.localPosition;
-        startLocalEulerAngles = body.localEulerAngles;
-    }
-
+    
     public void Update()
     {
         if(timer > 0) timer -= Time.deltaTime;

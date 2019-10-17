@@ -87,11 +87,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1706531758072179811}
-  - component: {fileID: 1706531758072179812}
   - component: {fileID: 1706531758072179813}
   - component: {fileID: 1706531758072179814}
   - component: {fileID: 1706531758072179815}
   - component: {fileID: 1706531758072179816}
+  - component: {fileID: 162950709}
+  - component: {fileID: 162950710}
   m_Layer: 0
   m_Name: GolfCart
   m_TagString: Untagged
@@ -114,19 +115,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &1706531758072179812
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1706531758072179810}
-  m_Material: {fileID: 13400000, guid: 1ba9d71612f555b479275556f3dee594, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 2, y: 2, z: 2}
-  m_Center: {x: 0, y: 0.6, z: 0}
 --- !u!114 &1706531758072179813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,10 +172,10 @@ CapsuleCollider:
   m_Material: {fileID: 13400000, guid: 1ba9d71612f555b479275556f3dee594, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.91
-  m_Height: 2.6
+  m_Radius: 0.6
+  m_Height: 2
   m_Direction: 2
-  m_Center: {x: 0, y: 1.52, z: 0}
+  m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!114 &1706531758072179816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -206,6 +194,34 @@ MonoBehaviour:
   legsOffset: {x: 0, y: -0.23, z: 0}
   rigidbody: {fileID: 0}
   targetDirection: {x: 0, y: 0, z: 0}
+--- !u!136 &162950709
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1706531758072179810}
+  m_Material: {fileID: 13400000, guid: 1ba9d71612f555b479275556f3dee594, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.4
+  m_Height: 2
+  m_Direction: 0
+  m_Center: {x: 0, y: -0.05, z: -0.6}
+--- !u!136 &162950710
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1706531758072179810}
+  m_Material: {fileID: 13400000, guid: 1ba9d71612f555b479275556f3dee594, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.4
+  m_Height: 2
+  m_Direction: 0
+  m_Center: {x: 0, y: -0.05, z: 0.6}
 --- !u!1 &1706531758141886333
 GameObject:
   m_ObjectHideFlags: 0
