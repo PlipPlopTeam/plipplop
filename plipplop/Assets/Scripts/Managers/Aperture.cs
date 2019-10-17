@@ -12,9 +12,8 @@ public class Aperture
 
         [Range(2f, 200f)] public float fieldOfView = 75f;
         public float heightOffset;
+        [Range(0f, 40f)] public float additionalAngle = 20f;
         public Range distance;
-        //TODO: Reimplement
-        //public Range rotationClamp;
 
         [Header("Lerps")]
         public float fovLerp = 1f;
@@ -211,12 +210,23 @@ public class Aperture
         */
 
 
+        // Dark pythagorian mathematics allow us to position the camera correctly
+        Vector2 a = Vector3.Scale(new Vector3(0f, 1f, 1f), position.destination);
+        Vector2 b = Vector3.Scale(new Vector3(0f, 1f, 1f), target.position);
+        float t = settings.additionalAngle;
+        float ab = Vector2.Distance(a, b);
+        float bc = ab / Mathf.Cos(t*Mathf.Deg2Rad);
+        float acSquare = Mathf.Pow(bc, 2f) - Mathf.Pow(ab, 2f);
+
+        float cameraHeight = Mathf.Sqrt(Mathf.Abs(acSquare));
+
         rotationAroundTarget.current = Vector3.Lerp(rotationAroundTarget.current, rotationAroundTarget.destination, Time.fixedDeltaTime * settings.rotationSpeed);
 
         position.destination = 
             target.position
-            + settings.heightOffset * Vector3.up
-            + rotationAroundTarget.current * Mathf.Clamp(hDistanceToTarget, settings.distance.min, settings.distance.max);
+            + (cameraHeight + settings.heightOffset) * Vector3.up
+            + rotationAroundTarget.current * Mathf.Clamp(hDistanceToTarget, settings.distance.min, settings.distance.max)
+            ;
         
         position.current = Vector3.Lerp(
             position.current, 
