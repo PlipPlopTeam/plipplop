@@ -13,22 +13,23 @@ public class Legs : MonoBehaviour
     public float legFps = 4;
 
     public bool isJumping = false;
-
-    float timer;
+    
+    bool canUpdate = false;
     
     
-    public void Update()
+    void Update()
     {
-        if(timer > 0) timer -= Time.deltaTime;
+        if (isJumping) foreach(var leg in legs) leg.PullLeg();
         else
-        {
-            UpdateLegs();
-            timer = 1/legFps;
-        }
+            if (Mathf.Floor(Time.time * legFps * 2f) % 2 == 0f) UpdateLegs();
+            else canUpdate = true;
     }
 
-    void UpdateLegs()
+    public void UpdateLegs()
     {
+        if (!canUpdate) return;
+        else canUpdate = false;
+
         if (rightLeg)
         {
             legs[0].UpdateLeg(velocity);        
@@ -40,6 +41,7 @@ public class Legs : MonoBehaviour
         
         rightLeg = !rightLeg;
     }
+
 
     private void OnEnable()
     {

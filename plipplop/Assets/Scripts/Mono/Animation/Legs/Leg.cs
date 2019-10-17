@@ -59,6 +59,13 @@ public class Leg : MonoBehaviour
         UpdateKnee(_vel); 
     }
 
+    public void PullLeg()
+    {
+        //foot.localPosition = Vector3.down / 2f;
+        //knee.localPosition = Vector3.down / 4f + Vector3.right;
+        //foot.transform.up = hip.transform.forward;
+    }
+
     public void UpdateKnee(Vector3 _vel, float _noise = 1)
     {
         _vel = Vector3.ClampMagnitude(_vel, 1);
