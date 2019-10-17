@@ -223,6 +223,7 @@ public class Aperture
 
     public void UpdatePosition(float catchUpSpeed)
     {
+        // Lerp on the up axis
         var verticalFollow = Time.fixedDeltaTime * settings.verticalFollowLerp * catchUpSpeed;
         position.current.y = Mathf.Lerp(position.current.y, position.destination.y, verticalFollow);
 
@@ -232,6 +233,7 @@ public class Aperture
         var rCurrent = cam.transform.InverseTransformPoint(position.current);
         var rDestination = cam.transform.InverseTransformPoint(position.destination);
 
+        // Lerp on the right axis and forward axis
         rCurrent.x = Mathf.Lerp(rCurrent.x, rDestination.x, lateralFollow);
         rCurrent.z = Mathf.Lerp(rCurrent.z, rDestination.z, longFollow);
 

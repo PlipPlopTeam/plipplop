@@ -14,11 +14,9 @@ public class Legs : MonoBehaviour
     public float bodyAmp = .05f;
     public float bodyTilt = 1;
     public float bodyTurn = 10;
-    public float scaleScale = 1f;
-    public float talkWobbleSpeedVariation = 0.5f;
-    public float talkWobbleBaseSpeed = 1f;
 
-    bool up;
+    public bool isJumping = false;
+
     Vector3 bodyStartPosition;
     Vector3 startLocalEulerAngles;
     float timer;
@@ -34,25 +32,8 @@ public class Legs : MonoBehaviour
         if(timer > 0) timer -= Time.deltaTime;
         else
         {
-            UpdateBody();
             UpdateLegs();
             timer = 1/legFps;
-        }
-    }
-
-    void UpdateBody()
-    {
-        if (lerpBody)
-        {
-            if (up)
-            {
-                body.localPosition = bodyStartPosition - new Vector3(0,bodyAmp,0) * (Vector3.ClampMagnitude(velocity,1).magnitude +.1f);
-            }
-            else
-            {
-                body.localPosition = bodyStartPosition + new Vector3(0,bodyAmp,0) * (Vector3.ClampMagnitude(velocity,1).magnitude +.1f);
-            }
-            up = !up;
         }
     }
 
@@ -60,13 +41,11 @@ public class Legs : MonoBehaviour
     {
         if (rightLeg)
         {
-            legs[0].UpdateLeg(velocity);
-            if(lerpBody) body.localEulerAngles = new Vector3(Random.Range(-bodyTilt,bodyTilt),Random.Range(-bodyTurn,-bodyTurn + .5f),Random.Range(-bodyTilt,bodyTilt))* (Vector3.ClampMagnitude(velocity,1).magnitude + .1f);
+            legs[0].UpdateLeg(velocity);        
         }
         else
         {
             legs[1].UpdateLeg(velocity);
-            if(lerpBody) body.localEulerAngles = new Vector3(Random.Range(-bodyTilt,bodyTilt),Random.Range(bodyTurn,bodyTurn -5f),Random.Range(-bodyTilt,bodyTilt))* (Vector3.ClampMagnitude(velocity,1).magnitude + .1f);
         }
         
         rightLeg = !rightLeg;

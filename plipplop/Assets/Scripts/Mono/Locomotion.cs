@@ -15,53 +15,36 @@ public class Locomotion : MonoBehaviour
     [HideInInspector] public Vector3 targetDirection;
 
     float currentSpeed = 0f;
-    CapsuleCollider legsCollider;
-    Legs legs;
+    LocomotionAnimation locomotionAnimation;
     float timePressed = 0f;
     float timeFalling = 0f;
     Vector3 heading = new Vector3();
 
     private void Awake()
     {
-        legsCollider = gameObject.AddComponent<CapsuleCollider>();
-        legsCollider.material = new PhysicMaterial() { dynamicFriction = 0f, staticFriction = 0f, frictionCombine = PhysicMaterialCombine.Minimum };
+        locomotionAnimation = new LocomotionAnimation(gameObject.AddComponent<CapsuleCollider>());
         preset = preset ? preset : Game.i.library.defaultLocomotion;
         rigidbody = GetComponent<Rigidbody>();
     }
     
     private void Update()
     {
-        legsCollider.height = legsHeight;
-        legsCollider.center = legsOffset + new Vector3(0f, -legsHeight / 2, 0f);
-
+        locomotionAnimation.isJumping = !IsGrounded();
     }
 
     public bool AreLegsRetracted()
     {
-        return legs == null || !legs.gameObject.activeSelf;
-    }
-
-    private void GrowLegs()
-    {
-        legs = Instantiate(Game.i.library.legsPrefab, transform)
-        .GetComponent<Legs>();
-        legs.body = transform;
-        legs.transform.localPosition = legsOffset;
-        foreach (Leg l in legs.legs) l.maxFootDistance = legsHeight + 2f;
+        return locomotionAnimation.AreLegsRetracted();;
     }
 
     public void RetractLegs()
     {
-        if (!legs) GrowLegs();
-
-        legs.gameObject.SetActive(false);
-        legsCollider.enabled = false;
+        locomotionAnimation.RetractLegs();
     }
     public void ExtendLegs()
     {
-        if (!legs) GrowLegs();
-        legs.gameObject.SetActive(true);
-        legsCollider.enabled = true;
+        locomotionAnimation.ExtendLegs();
+
         rigidbody.drag = preset.baseDrag;
 
         Vector3 sp = Vector3.zero;
@@ -102,8 +85,6 @@ public class Locomotion : MonoBehaviour
         else {
 
         }
-
-        legs.velocity = rigidbody.velocity;
     }
 
     public void Fall(float factor=1f)
