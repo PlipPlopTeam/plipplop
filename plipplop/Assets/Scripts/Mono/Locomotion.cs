@@ -29,10 +29,12 @@ public class Locomotion : MonoBehaviour
     
     private void Update()
     {
-        locomotionAnimation.isJumping = !IsGrounded();
-        locomotionAnimation.legsOffset = legsOffset;
-        locomotionAnimation.legsHeight = legsHeight;
-        locomotionAnimation.Update();
+        if (!AreLegsRetracted()) {
+            locomotionAnimation.isJumping = !IsGrounded();
+            locomotionAnimation.legsOffset = legsOffset;
+            locomotionAnimation.legsHeight = legsHeight;
+            locomotionAnimation.Update();
+        }
     }
 
     public bool AreLegsRetracted()
