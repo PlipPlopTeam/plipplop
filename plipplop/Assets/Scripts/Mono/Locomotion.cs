@@ -17,6 +17,7 @@ public class Locomotion : MonoBehaviour
     float currentSpeed = 0f;
     CapsuleCollider legsCollider;
     Legs legs;
+    float timePressed = 0f;
 
     private void Awake()
     {
@@ -73,7 +74,11 @@ public class Locomotion : MonoBehaviour
 
     public void Move(Vector3 direction)
     {
-        currentSpeed = Mathf.Clamp(currentSpeed + preset.acceleration * Time.deltaTime, 0f, preset.speed * direction.magnitude);
+        timePressed += Time.deltaTime;
+        timePressed *= direction.magnitude;
+        var acceleration = preset.accelerationCurve.Evaluate(timePressed);
+
+        currentSpeed = Mathf.Clamp(preset.maxSpeed * acceleration, 0f, preset.maxSpeed * direction.magnitude);
 
         Vector3 clampDirection = Vector3.ClampMagnitude(direction, 1f);
         Vector3 dir = clampDirection.x * Game.i.aperture.Right() + clampDirection.z * Game.i.aperture.Forward();
@@ -146,7 +151,7 @@ public class Locomotion : MonoBehaviour
 
     public void Jump()
     {
-        rigidbody.AddForce(Vector3.up * preset.jump, ForceMode.Force);
+        rigidbody.AddForce(Vector3.up * preset.jump, ForceMode.Acceleration);
     }
 
     // Draw a gizmo if i'm being possessed
