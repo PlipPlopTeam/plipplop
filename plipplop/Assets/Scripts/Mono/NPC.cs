@@ -28,6 +28,7 @@ public class NPC : MonoBehaviour
     Animator animator;
     Valuable thing;
     Skeleton skeleton;
+    EmotionRenderer emo;
     
     // Range
     CollisionEventTransmitter range;
@@ -40,6 +41,7 @@ public class NPC : MonoBehaviour
         look = GetComponent<FocusLook>();
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+        emo = GetComponent<EmotionRenderer>();
 
         range = GetComponentInChildren<CollisionEventTransmitter>();
         range.onTriggerEnter += (Collider other) => { inRange.Add(other.transform.gameObject); };
@@ -101,6 +103,7 @@ public class NPC : MonoBehaviour
                 agent.destination = thing.transform.position;
                 if(InRange(thing.gameObject))
                 {
+                    emo.Show("suprised", 2f);
                     ChangeState(ActionState.Sort);
                     Controller c = thing.gameObject.GetComponent<Controller>();
                     if(c != null)
@@ -109,7 +112,6 @@ public class NPC : MonoBehaviour
                             Game.i.player.PossessBaseController();
                     }
                 }
-                    
                 break;
             case ActionState.Sort:
                 thing.transform.position = (skeleton.rightHandBone.position + skeleton.leftHandBone.position)/2f;
@@ -173,6 +175,8 @@ public class NPC : MonoBehaviour
         {
             if(seens[0].HasMoved() && !seens[0].hidden)
             {
+                animator.SetTrigger("Suprised");
+                emo.Show("confused", 2f);
                 Collect(seens[0]);
             }
         }
