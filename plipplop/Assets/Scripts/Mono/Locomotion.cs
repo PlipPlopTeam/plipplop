@@ -76,7 +76,6 @@ public class Locomotion : MonoBehaviour
         currentSpeed = Mathf.Clamp(preset.maxSpeed * acceleration, 0f, preset.maxSpeed);
 
         Vector3 dir = heading.x * Game.i.aperture.Right() + heading.z * Game.i.aperture.Forward();
-        Debug.Log("Forward = " + Game.i.aperture.Forward() + "Right = " + Game.i.aperture.Right());
         // Add Movement Force
         rigidbody.AddForce(dir * Time.deltaTime * currentSpeed);
 
