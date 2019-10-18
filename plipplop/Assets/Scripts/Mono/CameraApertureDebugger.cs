@@ -16,6 +16,7 @@ public class CameraApertureDebugger : MonoBehaviour
         Destroy(dummyTarget.gameObject);
     }
 
+#if UNITY_EDITOR
     #region INSPECTOR 
     void OnDrawGizmos()
     {
@@ -81,4 +82,5 @@ public class CameraApertureDebugger : MonoBehaviour
         //);
     }
     #endregion
+#endif
 }

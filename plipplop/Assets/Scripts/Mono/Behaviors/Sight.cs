@@ -51,6 +51,7 @@ public class Sight : MonoBehaviour
         return objects.ToArray();
     }
 
+#if UNITY_EDITOR
     void OnDrawGizmosSelected()
     {
         Gizmos.color = new Color32(255, 215, 0, 255);
@@ -73,4 +74,5 @@ public class Sight : MonoBehaviour
         if(fieldOfViewAngle < 1f) fieldOfViewAngle = 1f;
         else if(fieldOfViewAngle > 359f) fieldOfViewAngle = 359f;
     }
+#endif
 }

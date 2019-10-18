@@ -193,6 +193,7 @@ public abstract class Controller : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
     // Draw a gizmo if i'm being possessed
     void OnDrawGizmos()
     {
@@ -212,4 +213,5 @@ public abstract class Controller : MonoBehaviour
             );
         }
     }
+#endif
 }
