@@ -13,7 +13,7 @@ public class Umbrella : Controller
     public float airLerpSpeed = 3f;
     public float tiltAmplitude = 20f;
     public float tiltLerpSpeed = 1f;
-    [Range(0f, 100f)] public float remainingGravityPercentWhenClosed = 25f;
+    [Range(0f, 100f)] public float remainingGravityPercentWhenOpened = 25f;
 
     Vector3 tiltAccumulation = Vector3.zero;
     Coroutine currentAnimationRoutine = null;
@@ -64,7 +64,7 @@ public class Umbrella : Controller
     internal override void FixedUpdate()
     {
         if (IsDeployed()) {
-            ApplyGravity(remainingGravityPercentWhenClosed / 100f + GetCurrentClosure() * (1f - remainingGravityPercentWhenClosed / 100f));
+            ApplyGravity(remainingGravityPercentWhenOpened / 100f + GetCurrentClosure() * (1f - remainingGravityPercentWhenOpened / 100f));
         }
         else {
             locomotion.Fall();
