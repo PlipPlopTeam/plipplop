@@ -163,7 +163,7 @@ public class Locomotion : MonoBehaviour
             // Legs
             Gizmos.color = Color.red;
             if (AreLegsRetracted())
-                Gizmos.DrawLine(transform.position + transform.TransformDirection(legsOffset - new Vector3(0f, 0.1f, 0f)), transform.position + Vector3.down*groundCheckRange);
+                Gizmos.DrawLine(transform.position + transform.TransformDirection(legsOffset - new Vector3(0f, 0.1f, 0f)), transform.position + transform.TransformDirection(legsOffset - new Vector3(0f, 0.1f, 0f)) + Vector3.down*groundCheckRange);
             //else
                 //Gizmos.DrawLine(transform.position + legsOffset - new Vector3(0f, legsHeight, 0f), transform.position + legsOffset - new Vector3(0f, legsHeight, 0f) + (-transform.up * groundCheckRange));
 

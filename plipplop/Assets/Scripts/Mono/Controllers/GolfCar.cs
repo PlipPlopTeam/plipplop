@@ -15,6 +15,7 @@ public class GolfCar : Controller
     public float autoBrakeSpeed = 1f;
     public float antiSpinSpeed = 1f;
     public float tiltAmount = 15f;
+    public float antiFlipForce = 5f;
 
     public Transform[] wheels;
     public Transform visual;
@@ -56,19 +57,12 @@ public class GolfCar : Controller
         steering = Mathf.Lerp(steering, direction.x, steeringSpeed * Time.fixedDeltaTime) * maxSteering;
         var localSpin = transform.TransformDirection(rigidbody.angularVelocity);
         localSpin.y = steering * steeringForce * (thrustObjective / maxSpeed) * Time.deltaTime;
-
-
         localSpin.y = Mathf.Lerp(localSpin.y, localSpin.y * Mathf.Abs(direction.x), antiSpinSpeed * Time.fixedDeltaTime);
 
         // Apply
         rigidbody.velocity = transform.TransformDirection(new Vector3(localSpeed.x, localSpeed.y, thrustObjective));
         rigidbody.angularVelocity = transform.InverseTransformDirection(localSpin);
 
-        // Wheel animation
-        var factor = 1;
-        foreach(var wheel in wheels) {
-            wheel.Rotate(new Vector3(0f, 1f, 0f) * localSpeed.z * factor);
-        }
 
         // Tilt animation
         currentTilt = Mathf.Lerp(currentTilt, (steering / maxSteering) * tiltAmount * (thrustObjective/maxSpeed), 4f * Time.fixedDeltaTime);
@@ -86,6 +80,45 @@ public class GolfCar : Controller
     {
         base.Update();
         // Code here
+    }
+
+    internal override void FixedUpdate()
+    {
+        base.FixedUpdate();
+
+        // Reorient the car to optimal rotation to avoid flipping
+        // (Anti spin)
+        if (!IsGrounded()) {
+            var y = transform.rotation.eulerAngles.y;
+            transform.rotation = Quaternion.Lerp(
+                transform.rotation,
+                Quaternion.Euler(
+                    0f, y, 0f
+                ),
+                antiFlipForce * Time.fixedDeltaTime
+            );
+        }
+
+        // Wheel animation
+        var localSpeed = transform.InverseTransformDirection(rigidbody.velocity);
+        var factor = 1;
+        foreach (var wheel in wheels) {
+            wheel.Rotate(new Vector3(0f, 1f, 0f) * localSpeed.z * factor);
+        }
+
+        // Even when not controlled, the car shouldn't drift away
+        if (IsPossessed()) {
+            rigidbody.drag = 0f;
+            rigidbody.angularDrag = 0f;
+        }
+        else {
+            rigidbody.drag = 4f;
+            rigidbody.angularDrag = 2f;
+
+            // No tilting
+            visual.localEulerAngles = new Vector3(visual.localEulerAngles.x, visual.localEulerAngles.y, 0f);
+        }
+
     }
 
     internal override void OnLegsRetracted()
