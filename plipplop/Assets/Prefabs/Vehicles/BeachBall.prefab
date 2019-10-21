@@ -54,13 +54,13 @@ MonoBehaviour:
   gravityMultiplier: 100
   customCamera: {fileID: 0}
   locomotion: {fileID: 0}
-  maxSpeed: 1600
-  acceleration: 700
-  jumpForce: 16
+  maxSpeed: 1800
+  acceleration: 800
+  jumpForce: 20
   airRollFactor: 4
   moveLerp: 1
   drag: 1
-  speedBeforeRoll: 14
+  speedBeforeRoll: 0.5
   speedBeforeStandingUp: 0.3
 --- !u!135 &2932650472225342060
 SphereCollider:
@@ -83,7 +83,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2932650472225342062}
   serializedVersion: 2
-  m_Mass: 0.6
+  m_Mass: 0.4
   m_Drag: 1
   m_AngularDrag: 0.03
   m_UseGravity: 1
@@ -103,6 +103,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27bebb278a4489e489e5558d1c6671af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  origin: {x: 0, y: 0, z: 0}
+  distanceThreshold: 1
+  hidden: 0
 --- !u!1 &2932650472786296262
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿/*using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
@@ -67,3 +67,4 @@ public class NewController : Controller
         AssetDatabase.ImportAsset(path);
     }
 }
+*/

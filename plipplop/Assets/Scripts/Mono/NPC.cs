@@ -207,6 +207,7 @@ public class NPC : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
     void OnDrawGizmosSelected()
     {
         GUIStyle style = new GUIStyle();
@@ -231,4 +232,5 @@ public class NPC : MonoBehaviour
             }
         }
     }
+#endif
 }

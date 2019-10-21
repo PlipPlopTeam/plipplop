@@ -149,7 +149,7 @@ public abstract class Controller : MonoBehaviour
         var lr = GetComponent<LineRenderer>();
         if (controllerSensor) {
             if (!lr) lr = gameObject.AddComponent<LineRenderer>();
-            lr.material = new Material(Shader.Find("Lightweight Render Pipeline/Particles/Unlit"));
+            lr.material = Game.i.library.lineRendererMaterial;//new Material(Shader.Find("Lightweight Render Pipeline/Particles/Unlit"));
             if (controllerSensor.IsThereAnyController()) {
                 lr.positionCount = 2;
                 lr.SetPosition(0, gameObject.transform.position);
@@ -193,6 +193,7 @@ public abstract class Controller : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
     // Draw a gizmo if i'm being possessed
     void OnDrawGizmos()
     {
@@ -212,4 +213,5 @@ public abstract class Controller : MonoBehaviour
             );
         }
     }
+#endif
 }

@@ -20,6 +20,7 @@ public class Library
 
     [Header("Material")]
     public Material emotionBoardMaterial;
+    public Material lineRendererMaterial;
     
     [Header("Meshs")]
     public Mesh primitiveQuadMesh;

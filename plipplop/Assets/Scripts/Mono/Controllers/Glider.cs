@@ -85,6 +85,7 @@ public class Glider : Controller
         }
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
         if (EditorApplication.isPlaying) {
@@ -106,6 +107,7 @@ public class Glider : Controller
             catch { }
         }
     }
+#endif
 
 
     internal override void SpecificMove(Vector3 direction)

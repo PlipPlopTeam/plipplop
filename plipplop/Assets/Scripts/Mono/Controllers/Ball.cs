@@ -57,6 +57,14 @@ public class Ball : Controller
         }
     }
 
+    internal override void OnJump()
+    {
+        base.OnJump();
+
+        // Added because didn't work properly in build
+        RetractLegs();
+    }
+
     internal override void OnLegsRetracted()
     {
         collider.enabled = true;

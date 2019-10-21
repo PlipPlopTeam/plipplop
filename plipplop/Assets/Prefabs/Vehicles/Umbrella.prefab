@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 871dab009776f564882b0292ee9805b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoPossess: 1
+  autoPossess: 0
   beginCrouched: 0
   canRetractLegs: 0
   useGravity: 1
@@ -116,11 +116,11 @@ MonoBehaviour:
   locomotion: {fileID: 8583417825178102319}
   renderer: {fileID: 1123944790706117170}
   visual: {fileID: 1123944791841484717}
-  airControlSpeed: 400
+  airControlSpeed: 700
   airLerpSpeed: 10
   tiltAmplitude: 15
   tiltLerpSpeed: 3
-  remainingGravityPercentWhenClosed: 25
+  remainingGravityPercentWhenOpened: 60
 --- !u!114 &8583417825178102319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -156,7 +156,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e5c78006594c0db48af8a0a2e7b86290, type: 2}
+  - {fileID: 670224309865224971, guid: c74eda5066c33a34ba6c430f8735e428, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -257,7 +257,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -1504981713932161579, guid: c74eda5066c33a34ba6c430f8735e428, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: c74eda5066c33a34ba6c430f8735e428, type: 3}
 --- !u!1 &8987180186206143293 stripped
 GameObject:
