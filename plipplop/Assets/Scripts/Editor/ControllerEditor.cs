@@ -32,7 +32,13 @@ public class ControllerEditor : Editor
         buttons.Add(CustomCameraField(colWidth));
         buttons.Add(CustomRigidbodyField(colWidth));
 
-        AutoPossessButton("AUTO-POSSESS").Invoke();
+
+        if (EditorApplication.isPlaying) {
+            EjectButton().Invoke();
+        }
+        else {
+            AutoPossessButton("AUTO-POSSESS").Invoke();
+        }
 
         unlockedProperties = EditorGUILayout.BeginFoldoutHeaderGroup(unlockedProperties, "Inherited properties");
         if (unlockedProperties) {
@@ -63,19 +69,31 @@ public class ControllerEditor : Editor
         }
 
         DrawDefaultInspector();
+    }
 
-        if (EditorApplication.isPlaying) {
+    System.Action EjectButton()
+    {
+        var obj = (Controller)target;
+        var isPossessing = Game.i.player.IsPossessing(obj);
 
-            var obj = (Controller)this.target;
-            var isPossessing = Game.i.player.IsPossessing(obj);
+        var possessTex = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_Possess");
+        var ejectText = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_Eject");
 
-            if (isPossessing && GUILayout.Button("\nEJECT\n", EditorStyles.miniButton)) {
-                Game.i.player.Eject();
+        var options = new List<GUILayoutOption>();
+
+        options.Add(GUILayout.Height(35f));
+
+
+        return delegate {
+            if (!isPossessing) {
+                if (GUILayout.Button(new GUIContent("POSSESS", possessTex), centeredNormalControl, options.ToArray()))
+                    Game.i.player.Possess(obj);
             }
-            if (!isPossessing && GUILayout.Button("\nPOSSESS\n", EditorStyles.miniButton)) {
-                Game.i.player.Possess(obj);
+            else {
+                if (GUILayout.Button(new GUIContent("EJECT", ejectText), centeredNormalControl, options.ToArray()))
+                    Game.i.player.PossessBaseController();
             }
-        }
+        };
     }
 
     void MakeStyles()
