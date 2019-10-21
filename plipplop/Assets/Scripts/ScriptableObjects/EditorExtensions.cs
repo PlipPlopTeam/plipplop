@@ -1,4 +1,4 @@
-﻿/*using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class EditorExtensions
 {
+#if UNITY_EDITOR
 
     [MenuItem("Assets/Create/New Controller", priority = 1)]
     static void CreateNewController()
@@ -66,5 +67,5 @@ public class NewController : Controller
 ");
         AssetDatabase.ImportAsset(path);
     }
+#endif
 }
-*/
