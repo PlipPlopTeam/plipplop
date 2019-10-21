@@ -63,10 +63,8 @@ public class Umbrella : Controller
 
     internal override void FixedUpdate()
     {
-        if (IsDeployed()) {
-            ApplyGravity(remainingGravityPercentWhenOpened / 100f + GetCurrentClosure() * (1f - remainingGravityPercentWhenOpened / 100f));
-        }
-        else {
+        ApplyGravity(remainingGravityPercentWhenOpened / 100f + GetCurrentClosure() * (1f - remainingGravityPercentWhenOpened / 100f));
+        if (!IsDeployed()) {
             locomotion.Fall();
         }
     }
@@ -92,15 +90,21 @@ public class Umbrella : Controller
         base.Update();
 
         if (IsPossessed()) {
+            rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
             if (IsGrounded()) {
                 if (currentAnimationRoutine != null) StopCoroutine(currentAnimationRoutine);
                 currentAnimationRoutine = StartCoroutine(CloseUmbrella());
-
-                visual.Rotate(new Vector3(-visual.eulerAngles.x, 0f, -visual.eulerAngles.z));
             }
         }
-        else if (!AreLegsRetracted()) {
-            RetractLegs();
+        else {
+            rigidbody.constraints = RigidbodyConstraints.None;
+            if (!AreLegsRetracted()) {
+                RetractLegs();
+            }
+            if (IsDeployed() && (Mathf.Abs(transform.rotation.eulerAngles.x) + Mathf.Abs(transform.rotation.eulerAngles.z)) > 30f) {
+                if (currentAnimationRoutine != null) StopCoroutine(currentAnimationRoutine);
+                currentAnimationRoutine = StartCoroutine(CloseUmbrella());
+            }
         }
     }
 
