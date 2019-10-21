@@ -24,7 +24,7 @@ public class Locomotion : MonoBehaviour
     {
         locomotionAnimation = new LocomotionAnimation(gameObject.AddComponent<CapsuleCollider>());
         preset = preset ? preset : Game.i.library.defaultLocomotion;
-        rigidbody = GetComponent<Rigidbody>();
+        rigidbody = GetComponent<Controller>().rigidbody;
     }
     
     private void Update()

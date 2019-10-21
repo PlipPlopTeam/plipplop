@@ -20,7 +20,7 @@ public class LocomotionAnimation
     {
         this.legsCollider = legsCollider;
         parentTransform = legsCollider.transform;
-        rigidbody = legsCollider.GetComponent<Rigidbody>();
+        rigidbody = legsCollider.GetComponent<Controller>().rigidbody;
         legsCollider.material = new PhysicMaterial() { dynamicFriction = 0f, staticFriction = 0f, frictionCombine = PhysicMaterialCombine.Minimum };
         GrowLegs();
     }

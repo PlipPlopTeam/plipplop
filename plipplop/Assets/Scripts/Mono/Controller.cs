@@ -11,6 +11,7 @@ public abstract class Controller : MonoBehaviour
     public bool beginCrouched = false;
     public bool canRetractLegs = true;
     public bool useGravity = true;
+    public Rigidbody customExternalRigidbody;
     [Range(1f, 200f)] public float gravityMultiplier = 100f;
 
     public AperturePreset customCamera = null;
@@ -106,7 +107,7 @@ public abstract class Controller : MonoBehaviour
 
     virtual internal void Awake()
     {
-        rigidbody = GetComponent<Rigidbody>();
+        rigidbody = customExternalRigidbody==null ? GetComponent<Rigidbody>() : customExternalRigidbody;
         if (!rigidbody) rigidbody = gameObject.AddComponent<Rigidbody>();
 
         locomotion = GetComponent<Locomotion>();
