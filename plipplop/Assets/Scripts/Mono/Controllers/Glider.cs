@@ -128,11 +128,4 @@ public class Glider : Controller
 
 
     }
-
-    internal override void OnJump()
-    {
-        if (!IsGrounded()) {
-            RetractLegs();
-        }
-    }
 }

@@ -29,6 +29,7 @@ public class LocomotionAnimation
     {
         legs.isJumping = isJumping;
         legs.velocity = rigidbody.velocity;
+        legs.transform.localPosition = legsOffset;
         SetLegHeight();
 
         var tiltDirection = Mathf.Clamp(rigidbody.velocity.magnitude/2f, 0f, 1f) * ((Mathf.Floor(Time.time * legs.legFps) % 2) * 2f - 1f); // Will give -1 or 1
