@@ -5,17 +5,17 @@ using UnityEditor;
 
 public abstract class Controller : MonoBehaviour
 {
-    [Header("AUTO POSSESS")]
-    public bool autoPossess = false;
-    [Header("Inherited properties")]
-    public bool beginCrouched = false;
-    public bool canRetractLegs = true;
-    public bool useGravity = true;
-    public Rigidbody customExternalRigidbody;
-    [Range(1f, 200f)] public float gravityMultiplier = 100f;
+    [HideInInspector] public bool autoPossess = false;
+    [HideInInspector] public bool beginCrouched = false;
+    [HideInInspector] public bool canRetractLegs = true;
+    [HideInInspector] public bool useGravity = true;
+    [HideInInspector] public float gravityMultiplier = 100f;
 
-    public AperturePreset customCamera = null;
+    [HideInInspector] public Rigidbody customExternalRigidbody;
+
+    [HideInInspector] public AperturePreset customCamera = null;
     [HideInInspector] public Locomotion locomotion;
+
     GameObject face;
 
     new internal Rigidbody rigidbody;

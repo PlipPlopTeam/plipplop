@@ -19,16 +19,21 @@ public class Locomotion : MonoBehaviour
     float timePressed = 0f;
     float timeFalling = 0f;
     Vector3 heading = new Vector3();
+    Controller parentController;
 
     private void Awake()
     {
         locomotionAnimation = new LocomotionAnimation(gameObject.AddComponent<CapsuleCollider>());
         preset = preset ? preset : Game.i.library.defaultLocomotion;
-        rigidbody = GetComponent<Controller>().rigidbody;
+        parentController = GetComponent<Controller>();
+        rigidbody = parentController.rigidbody;
     }
     
     private void Update()
     {
+        rigidbody = parentController.rigidbody;
+        locomotionAnimation.rigidbody = rigidbody;
+
         if (!AreLegsRetracted()) {
             locomotionAnimation.isJumping = !IsGrounded();
             locomotionAnimation.legsOffset = legsOffset;
@@ -49,7 +54,6 @@ public class Locomotion : MonoBehaviour
     public void ExtendLegs()
     {
         locomotionAnimation.ExtendLegs();
-
         rigidbody.drag = preset.baseDrag;
 
         Vector3 sp = Vector3.zero;

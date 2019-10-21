@@ -12,7 +12,7 @@ public class LocomotionAnimation
     float tiltLerpSpeed = 4f;
     float tilt = 0f;
     Transform parentTransform;
-    Rigidbody rigidbody;
+    public Rigidbody rigidbody;
     CapsuleCollider legsCollider;
     Legs legs;
 
