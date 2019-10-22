@@ -185,13 +185,10 @@ public class NPC : MonoBehaviour
     {
         StateUpdate();
         animator.SetFloat("Speed", agent.velocity.magnitude/maxSpeed);
-        if(Distance() < navTreshold) DestinationReached();
+        if(Vector3.Distance(transform.position, agent.destination) < navTreshold) DestinationReached();
     }
 
-    float Distance()
-    {
-        return Vector3.Distance(transform.position, agent.destination);
-    }
+
 
     void Search()
     {
