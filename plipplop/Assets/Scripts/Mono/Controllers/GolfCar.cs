@@ -119,6 +119,8 @@ public class GolfCar : Controller
             visual.localEulerAngles = new Vector3(visual.localEulerAngles.x, visual.localEulerAngles.y, 0f);
         }
 
+        // Adhere to wall if speed
+        locomotion.groundCheckDirection = Vector3.Lerp(Vector3.down, -transform.up, localSpeed.z/maxSpeed);
     }
 
     internal override void OnLegsRetracted()

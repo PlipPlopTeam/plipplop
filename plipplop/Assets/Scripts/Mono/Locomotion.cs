@@ -20,6 +20,7 @@ public class Locomotion : MonoBehaviour
     float timeFalling = 0f;
     Vector3 heading = new Vector3();
     Controller parentController;
+    internal Vector3 groundCheckDirection = Vector3.down;
 
     private void Awake()
     {
@@ -128,7 +129,7 @@ public class Locomotion : MonoBehaviour
         else
             os = legsOffset - new Vector3(0f, legsHeight - 0.2f, 0f);
 
-        return Physics.RaycastAll(transform.position + transform.TransformDirection(os), Vector3.down, groundCheckRange * rangeMultiplier);
+        return Physics.RaycastAll(transform.position + transform.TransformDirection(os), groundCheckDirection, groundCheckRange * rangeMultiplier);
     }
 
     public bool IsGrounded(float rangeMultiplier = 1f) // But better 😎
@@ -167,7 +168,7 @@ public class Locomotion : MonoBehaviour
             // Legs
             Gizmos.color = Color.red;
             if (AreLegsRetracted())
-                Gizmos.DrawLine(transform.position + transform.TransformDirection(legsOffset - new Vector3(0f, 0.1f, 0f)), transform.position + transform.TransformDirection(legsOffset - new Vector3(0f, 0.1f, 0f)) + Vector3.down*groundCheckRange);
+                Gizmos.DrawLine(transform.position + transform.TransformDirection(legsOffset - new Vector3(0f, 0.1f, 0f)), transform.position + transform.TransformDirection(legsOffset - new Vector3(0f, 0.1f, 0f)) + groundCheckDirection * groundCheckRange);
             //else
                 //Gizmos.DrawLine(transform.position + legsOffset - new Vector3(0f, legsHeight, 0f), transform.position + legsOffset - new Vector3(0f, legsHeight, 0f) + (-transform.up * groundCheckRange));
 
