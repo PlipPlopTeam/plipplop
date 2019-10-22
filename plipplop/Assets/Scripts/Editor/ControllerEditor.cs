@@ -63,12 +63,12 @@ public class ControllerEditor : Editor
 
         GUILayout.Label("Specific properties", title, GUILayout.Height(30f), GUILayout.ExpandWidth(true));
 
+        DrawDefaultInspector();
+
 
         if (!((Controller)target).gameObject.GetComponent<Locomotion>() && GUILayout.Button("Add custom locomotion...", EditorStyles.miniButton)) {
             ((Controller)target).gameObject.AddComponent<Locomotion>();
         }
-
-        DrawDefaultInspector();
     }
 
     System.Action EjectButton()
@@ -134,7 +134,7 @@ public class ControllerEditor : Editor
 
     void SetAutoPossess(bool value)
     {
-        ((Controller)target).autoPossess = value;
+        serializedObject.FindProperty("autoPossess").boolValue = value;
 
         foreach (var c in Resources.FindObjectsOfTypeAll<Controller>()) {
             if (c != target) {
@@ -163,6 +163,7 @@ public class ControllerEditor : Editor
                 if (GUILayout.Button(new GUIContent(txt, asNormalTex), centeredNormalControl, options.ToArray()))
                     SetAutoPossess(true);
             }
+            serializedObject.ApplyModifiedProperties();
         };
     }
 
@@ -181,12 +182,13 @@ public class ControllerEditor : Editor
             GUILayout.BeginVertical(options.ToArray());
             if (((Controller)target).beginCrouched) {
                 if (GUILayout.Button(new GUIContent(buttonSpace+"Begins crouched", asPressedTex), pressedControl))
-                    ((Controller)target).beginCrouched = false;
+                    serializedObject.FindProperty("beginCrouched").boolValue = false;
             }
             else {
                 if (GUILayout.Button(new GUIContent(buttonSpace + "Begins standing", asNormalTex), normalControl))
-                    ((Controller)target).beginCrouched = true;
+                    serializedObject.FindProperty("beginCrouched").boolValue = true;
             }
+            serializedObject.ApplyModifiedProperties();
             GUILayout.EndVertical();
         };
     }
@@ -206,12 +208,13 @@ public class ControllerEditor : Editor
             GUILayout.BeginVertical(options.ToArray());
             if (((Controller)target).canRetractLegs) {
                 if (GUILayout.Button(new GUIContent(buttonSpace + "Can retract legs", asPressedTex), pressedControl))
-                    ((Controller)target).canRetractLegs = false;
+                    serializedObject.FindProperty("canRetractLegs").boolValue = false;
             }
             else {
                 if (GUILayout.Button(new GUIContent(buttonSpace + "Cannot retract legs", asNormalTex), normalControl))
-                    ((Controller)target).canRetractLegs = true;
+                    serializedObject.FindProperty("canRetractLegs").boolValue = true;
             }
+            serializedObject.ApplyModifiedProperties();
             GUILayout.EndVertical();
         };
     }
@@ -231,12 +234,13 @@ public class ControllerEditor : Editor
             GUILayout.BeginVertical(options.ToArray());
             if (((Controller)target).useGravity) {
                 if (GUILayout.Button(new GUIContent(buttonSpace + "Uses gravity", asPressedTex), pressedControl))
-                    ((Controller)target).useGravity = false;
+                    serializedObject.FindProperty("useGravity").boolValue = false;
             }
             else {
                 if (GUILayout.Button(new GUIContent(buttonSpace + "No gravity", asNormalTex), normalControl))
-                    ((Controller)target).useGravity = true;
+                    serializedObject.FindProperty("useGravity").boolValue = false;
             }
+            serializedObject.ApplyModifiedProperties();
             GUILayout.EndVertical();
         };
     }
@@ -258,8 +262,8 @@ public class ControllerEditor : Editor
             GUILayout.BeginVertical(options.ToArray());
 
             GUILayout.Label(string.Format("Gravity: {0}%", Mathf.Round(g)), noBoldTitle, GUILayout.Height(20f), GUILayout.ExpandWidth(true));
-            ((Controller)target).gravityMultiplier = GUILayout.HorizontalSlider(g, 1f, 200f, GUILayout.Height(15f));
-
+            serializedObject.FindProperty("gravityMultiplier").floatValue = GUILayout.HorizontalSlider(g, 1f, 200f, GUILayout.Height(15f));
+            serializedObject.ApplyModifiedProperties();
             GUILayout.EndVertical();
         };
     }

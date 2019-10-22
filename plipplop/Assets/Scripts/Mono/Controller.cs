@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-
+[System.Serializable]
 public abstract class Controller : MonoBehaviour
 {
     [HideInInspector] public bool autoPossess = false;
@@ -177,7 +177,7 @@ public abstract class Controller : MonoBehaviour
     }
 
     internal void ApplyGravity(float factor=1f)
-    {                                    // 9.81 is earth's gravity
+    {
         rigidbody.AddForce(Vector3.down * 9.81f * gravityMultiplier * factor * Time.fixedDeltaTime, ForceMode.Acceleration);
     }
 
