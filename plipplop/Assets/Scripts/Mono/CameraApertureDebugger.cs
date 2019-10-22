@@ -13,12 +13,12 @@ public class CameraApertureDebugger : MonoBehaviour
 
     private void Start()
     {
-        Destroy(dummyTarget.gameObject);
+        if (dummyTarget) Destroy(dummyTarget.gameObject);
     }
 
 #if UNITY_EDITOR
     #region INSPECTOR 
-    void OnDrawGizmos()
+    void OnDrawGizmosSelected()
     {
         var target = dummyTarget;
 
@@ -38,10 +38,13 @@ public class CameraApertureDebugger : MonoBehaviour
         var position = aperture.position;
         var distance = aperture.GetHDistanceToTarget();
 
-        Gizmos.color = new Color32(173, 216, 230, 255);
-        Handles.color = Gizmos.color = new Color32(173, 216, 230, 255);
+        var blue = new Color32(173, 216, 230, 255);
+        var red = new Color32(230, 150, 160, 255);
+
+        Gizmos.color = blue;
+        Handles.color = Gizmos.color;
         GUIStyle style = new GUIStyle();
-        style.normal.textColor = new Color32(173, 216, 230, 255);
+        style.normal.textColor = blue;
         style.alignment = TextAnchor.MiddleCenter;
         style.fontStyle = FontStyle.Bold;
         style.fontSize = 12;
@@ -49,11 +52,29 @@ public class CameraApertureDebugger : MonoBehaviour
         if (target) {
             //Debug.Log(settings);
             // Follow range draw
-            Handles.DrawWireDisc(position.destination, Vector3.up, settings.distance.min);
-            Handles.DrawWireDisc(position.destination, Vector3.up, settings.distance.max);
-            Handles.Label(position.destination + Vector3.right * settings.distance.min, "Min " + settings.distance.min.ToString(), style);
-            Handles.Label(position.destination + Vector3.right * settings.distance.max, "Max " + settings.distance.max.ToString(), style);
+            var segments = 8;
+            
+            Handles.DrawWireDisc(target.position, Vector3.up, settings.distance.min);
+            Handles.DrawWireDisc(target.position, Vector3.up, settings.distance.max);
+
+            Handles.color = new Color32(blue.r, blue.g, blue.b, 70);
+            for (var i = 0; i<segments; i++) {
+                var portion = Mathf.Deg2Rad*((360f/segments)*i);
+                var x = Mathf.Sin(portion);
+                var y = Mathf.Cos(portion);
+                Handles.DrawLine(
+                    target.position + new Vector3(x * settings.distance.min, 0f, y * settings.distance.min), 
+                    target.position + new Vector3(x * settings.distance.max, 0f, y * settings.distance.max)
+                );
+            }
+            Handles.color = blue;
+            Handles.Label(target.position + Vector3.right * settings.distance.min, "Min " + settings.distance.min.ToString(), style);
+            Handles.Label(target.position + Vector3.right * settings.distance.max, "Max " + settings.distance.max.ToString(), style);
             Handles.Label((position.destination + target.position) / 2, "Dist " + distance.ToString(), style);
+
+
+            Handles.color = new Color32(red.r, red.g, red.b, 40);
+            Handles.DrawSolidDisc(target.position, Vector3.up, settings.absoluteMinimalDistance);
 
             Gizmos.DrawLine(position.current, position.destination);
 
@@ -61,8 +82,8 @@ public class CameraApertureDebugger : MonoBehaviour
             Gizmos.DrawWireSphere(position.current, 0.6f);
 
             Gizmos.color = new Color32(30, 30, 255, 255);
-            Gizmos.DrawWireCube(new Vector3(target.position.x, position.current.y, target.position.z), 0.5f * Vector3.one);
-            Gizmos.DrawLine(position.current, new Vector3(target.position.x, position.current.y, target.position.z));
+            Gizmos.DrawWireCube(new Vector3(position.current.x, target.position.y, position.current.z), 0.5f * Vector3.one);
+            Gizmos.DrawLine(position.current, new Vector3(position.current.x, target.position.y, position.current.z));
             /*
             Gizmos.color = new Color32(255, 130, 130, 255);
             style.normal.textColor = Gizmos.color;
