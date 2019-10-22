@@ -7,7 +7,6 @@ public class Game : MonoBehaviour
     public Library library;
     public Brain player;
     public Mapping mapping;
-    public Vector3 spawnPosition;
     [HideInInspector] public Aperture aperture;
 
     static public Game i;
@@ -28,7 +27,8 @@ public class Game : MonoBehaviour
         aperture = new Aperture();
         mapping = Instantiate<Mapping>(mapping);
 
-        SpawnPlayer(spawnPosition);
+        var spawn = FindObjectOfType<SpawnMarker>();
+        SpawnPlayer(spawn ? spawn.position : Vector3.up);
     }
 
     private void SpawnPlayer(Vector3 position)
