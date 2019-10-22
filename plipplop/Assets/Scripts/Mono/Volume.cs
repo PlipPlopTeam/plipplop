@@ -25,7 +25,7 @@ public abstract class Volume : MonoBehaviour
         Gizmos.DrawWireCube(transform.position, GetSize());
     }
 
-    Vector3 GetSize()
+    internal Vector3 GetSize()
     {
         return new Vector3(width, height, length);
     }
@@ -45,6 +45,7 @@ public abstract class Volume : MonoBehaviour
 
     private void Col_onTriggerExit(Collider obj)
     {
+        OnObjectExit(obj.gameObject);
         var c = obj.gameObject.GetComponent<Controller>();
         if (isInside && c && Game.i.player.IsPossessing(c)) {
             isInside = false;
@@ -54,6 +55,7 @@ public abstract class Volume : MonoBehaviour
 
     private void Col_onTriggerEnter(Collider obj)
     {
+        OnObjectEnter(obj.gameObject);
         var c = obj.gameObject.GetComponent<Controller>();
         if (!isInside && c && Game.i.player.IsPossessing(c)) {
 
@@ -61,6 +63,10 @@ public abstract class Volume : MonoBehaviour
             OnPlayerEnter(c);
         }
     }
+
+    public virtual void OnObjectEnter(GameObject g) {}
+
+    public virtual void OnObjectExit(GameObject g) {}
 
     public abstract void OnPlayerEnter(Controller player);
 

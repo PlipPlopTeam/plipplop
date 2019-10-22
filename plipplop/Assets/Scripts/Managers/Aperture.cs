@@ -139,7 +139,7 @@ public class Aperture
 
     public void FixedUpdate()
     {
-        if(freeze) return;
+        if (freeze) return;
 
         // TODO: This sucks and prevents camera from turning freely around player - fix by taking player input in consideration
         hAngle = Mathf.Lerp(hAngle, 0f, Time.fixedDeltaTime * 3f);
