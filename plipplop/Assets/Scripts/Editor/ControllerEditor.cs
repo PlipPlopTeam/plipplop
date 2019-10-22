@@ -135,8 +135,7 @@ public class ControllerEditor : Editor
     void SetAutoPossess(bool value)
     {
         ((Controller)target).autoPossess = value;
-        return;
-        if (!value) return;
+
         foreach (var c in Resources.FindObjectsOfTypeAll<Controller>()) {
             if (c != target) {
                 c.autoPossess = false;
