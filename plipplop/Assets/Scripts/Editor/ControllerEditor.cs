@@ -91,7 +91,7 @@ public class ControllerEditor : Editor
             }
             else {
                 if (GUILayout.Button(new GUIContent("EJECT", ejectText), centeredNormalControl, options.ToArray()))
-                    Game.i.player.PossessBaseController();
+                    Game.i.player.TeleportBaseControllerAndPossess();
             }
         };
     }
@@ -238,7 +238,7 @@ public class ControllerEditor : Editor
             }
             else {
                 if (GUILayout.Button(new GUIContent(buttonSpace + "No gravity", asNormalTex), normalControl))
-                    serializedObject.FindProperty("useGravity").boolValue = false;
+                    serializedObject.FindProperty("useGravity").boolValue = true;
             }
             serializedObject.ApplyModifiedProperties();
             GUILayout.EndVertical();

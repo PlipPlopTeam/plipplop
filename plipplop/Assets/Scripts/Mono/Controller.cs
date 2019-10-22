@@ -15,11 +15,12 @@ public abstract class Controller : MonoBehaviour
 
     [HideInInspector] public AperturePreset customCamera = null;
     [HideInInspector] public Locomotion locomotion;
-
+    
     GameObject face;
 
     new internal Rigidbody rigidbody;
     internal ControllerSensor controllerSensor;
+    internal bool isImmerged;
 
     public virtual void OnEject()
     {
@@ -62,7 +63,7 @@ public abstract class Controller : MonoBehaviour
     { 
         if(AreLegsRetracted()) 
             SpecificJump();
-        else if (IsGrounded())
+        else if (isImmerged || IsGrounded())
             locomotion.Jump();
     }
 
@@ -103,6 +104,21 @@ public abstract class Controller : MonoBehaviour
     internal bool IsPossessed()
     {
         return Game.i.player.IsPossessing(this);
+    }
+
+    public void SetUnderwater()
+    {
+        isImmerged = true;
+        locomotion.isImmerged = isImmerged;
+        if (!Game.i.player.IsPossessingBaseController()) {
+            Game.i.player.TeleportBaseControllerAndPossess();
+        }
+    }
+
+    public void SetOverwater()
+    {
+        isImmerged = false;
+        locomotion.isImmerged = isImmerged;
     }
 
     virtual internal void Awake()
@@ -172,8 +188,13 @@ public abstract class Controller : MonoBehaviour
 
     virtual internal void FixedUpdate()
     {
-        if (useGravity && AreLegsRetracted()) ApplyGravity();
-        locomotion.Fall();
+        if (useGravity && !isImmerged) {
+            if (AreLegsRetracted()) ApplyGravity();
+            locomotion.Fall();
+        }
+        else {
+            locomotion.ResetTimeFalling();
+        }
     }
 
     internal void ApplyGravity(float factor=1f)
@@ -190,7 +211,7 @@ public abstract class Controller : MonoBehaviour
         }
         else
         {
-            Game.i.player.PossessBaseController();
+            Game.i.player.TeleportBaseControllerAndPossess();
         }
     }
 

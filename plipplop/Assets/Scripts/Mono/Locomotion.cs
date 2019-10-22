@@ -8,7 +8,7 @@ public class Locomotion : MonoBehaviour
     public LocomotionPreset preset;
     public float legsHeight = 1f;
     public float groundCheckRange = 1f;
-
+    public bool isImmerged = false;
     public Vector3 legsOffset;
 
     [HideInInspector] new public Rigidbody rigidbody;
@@ -87,7 +87,7 @@ public class Locomotion : MonoBehaviour
         // Rotate legs
         if (dir != Vector3.zero) targetDirection = dir;
 
-        if (IsGrounded()) {
+        if (isImmerged || IsGrounded()) {
             transform.forward = Vector3.Lerp(transform.forward, targetDirection, Time.deltaTime * 10f);
         }
         else {
@@ -139,7 +139,7 @@ public class Locomotion : MonoBehaviour
         foreach(RaycastHit h in hits)
         {
             if (!IsMe(h.transform) && !h.collider.isTrigger) {
-                timeFalling = 0f;
+                ResetTimeFalling();
                 return true;
             }
         }
@@ -158,6 +158,11 @@ public class Locomotion : MonoBehaviour
     public void Jump()
     {
         rigidbody.AddForce(Vector3.up * preset.jump, ForceMode.Acceleration);
+    }
+
+    public void ResetTimeFalling()
+    {
+        timeFalling = 0f;
     }
 
 #if UNITY_EDITOR
