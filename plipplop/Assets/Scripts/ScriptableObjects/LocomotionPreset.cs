@@ -13,4 +13,5 @@ public class LocomotionPreset : ScriptableObject
     public float baseDrag = 5f;
     public float maxFallSpeed = 40f;
     [Range(0f, 100f)] public float airControl = 65f;
+    [Range(0f, 2f)] public float waterSpeedFactor = 0.6f;
 }

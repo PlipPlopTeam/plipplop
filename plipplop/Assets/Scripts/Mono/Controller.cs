@@ -167,7 +167,7 @@ public abstract class Controller : MonoBehaviour
         if (controllerSensor) {
             if (!lr) lr = gameObject.AddComponent<LineRenderer>();
             lr.material = Game.i.library.lineRendererMaterial;//new Material(Shader.Find("Lightweight Render Pipeline/Particles/Unlit"));
-            if (controllerSensor.IsThereAnyController()) {
+            if (!isImmerged && controllerSensor.IsThereAnyController()) {
                 lr.positionCount = 2;
                 lr.SetPosition(0, gameObject.transform.position);
                 lr.SetPosition(1, controllerSensor.GetFocusedController().transform.position);
@@ -205,7 +205,7 @@ public abstract class Controller : MonoBehaviour
     // Trying to possess something else
     virtual internal void OnTryPossess()
     {
-        if (controllerSensor && controllerSensor.IsThereAnyController())
+        if (!isImmerged && controllerSensor && controllerSensor.IsThereAnyController())
         {
             Game.i.player.Possess(controllerSensor.GetFocusedController());
         }

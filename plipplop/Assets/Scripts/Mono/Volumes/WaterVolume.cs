@@ -9,14 +9,16 @@ public class WaterVolume : Volume
     public bool isInvisible = false;
     public GameObject customVisual;
     public Material material;
-
+    public Mesh zoneMesh;
     public float waterForce = 10f;
+
     List<Rigidbody> objectsInWater = new List<Rigidbody>();
     float tractionToSurface = 4f;
 
     private void Start()
     {
         if (!customVisual) customVisual = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        if (zoneMesh) customVisual.GetComponent<MeshFilter>().mesh = zoneMesh;
 
         customVisual.transform.localScale = GetSize();
         customVisual.GetComponent<Renderer>().material = new Material(material);
