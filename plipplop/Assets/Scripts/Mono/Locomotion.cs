@@ -55,7 +55,7 @@ public class Locomotion : MonoBehaviour
     public void ExtendLegs()
     {
         locomotionAnimation.ExtendLegs();
-        rigidbody.drag = preset.baseDrag;
+        parentController.rigidbody.drag = preset.baseDrag;
 
         Vector3 sp = Vector3.zero;
         var v = GetBelowSurface();
@@ -82,7 +82,7 @@ public class Locomotion : MonoBehaviour
 
         Vector3 dir = heading.x * Game.i.aperture.Right() + heading.z * Game.i.aperture.Forward();
         // Add Movement Force
-        rigidbody.AddForce(dir * Time.deltaTime * currentSpeed);
+        parentController.rigidbody.AddForce(dir * Time.deltaTime * currentSpeed, ForceMode.Acceleration);
 
         // Rotate legs
         if (dir != Vector3.zero) targetDirection = dir;
@@ -101,9 +101,9 @@ public class Locomotion : MonoBehaviour
             // This code contains few constants to make gravity feel good
             // Feel free to edit but DO NOT make public
             timeFalling += Time.deltaTime*1.6f;
-            rigidbody.AddForce(Vector3.down * Mathf.Pow(9.81f, timeFalling+2.8f) * factor * Time.deltaTime, ForceMode.Acceleration);
-            if (rigidbody.velocity.y < -preset.maxFallSpeed) {
-                rigidbody.velocity = new Vector3(rigidbody.velocity.x, -preset.maxFallSpeed, rigidbody.velocity.z);
+            parentController.rigidbody.AddForce(Vector3.down * Mathf.Pow(9.81f, timeFalling+2.8f) * factor * Time.deltaTime, ForceMode.Acceleration);
+            if (parentController.rigidbody.velocity.y < -preset.maxFallSpeed) {
+                parentController.rigidbody.velocity = new Vector3(parentController.rigidbody.velocity.x, -preset.maxFallSpeed, parentController.rigidbody.velocity.z);
             }
         }
     }
