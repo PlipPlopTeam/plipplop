@@ -34,14 +34,18 @@ public abstract class Volume : MonoBehaviour
     {
         transform.localScale = Vector3.one;
         var box = gameObject.AddComponent<BoxCollider>();
-        box.size = GetSize();
         box.isTrigger = true;
+        UpdateSize();
 
         var col = GetComponent<CollisionEventTransmitter>();
         col.onTriggerEnter += Col_onTriggerEnter;
         col.onTriggerExit += Col_onTriggerExit;
     }
 
+    internal void UpdateSize()
+    {
+        GetComponent<BoxCollider>().size = GetSize();
+    }
 
     private void Col_onTriggerExit(Collider obj)
     {

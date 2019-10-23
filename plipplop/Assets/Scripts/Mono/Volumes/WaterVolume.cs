@@ -72,6 +72,7 @@ public class WaterVolume : Volume
 
     private void Start()
     {
+        if (isInvisible) return;
         if (!customVisual) customVisual = GameObject.CreatePrimitive(PrimitiveType.Cube);
         if (zoneMesh) customVisual.GetComponent<MeshFilter>().mesh = zoneMesh;
 
