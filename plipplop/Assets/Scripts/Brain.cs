@@ -59,6 +59,11 @@ public class Brain
             mapping.Axis(ACTION.MOVE_FORWARD_BACK),
             mapping.Axis(ACTION.MOVE_RIGHT_LEFT)
         );
+
+        controller.MoveCamera(
+            mapping.Axis(ACTION.CAMERA_HORIZONTAL),
+            mapping.Axis(ACTION.CAMERA_VERTICAL)
+        );
     }
 
     public void UpdateController()

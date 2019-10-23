@@ -87,7 +87,8 @@ public abstract class Controller : MonoBehaviour
     internal virtual void OnHoldJump() { }
     internal abstract void OnLegsRetracted();
     internal abstract void OnLegsExtended();
-    internal virtual void SpecificMove(Vector3 direction) {}
+    internal virtual void SpecificMove(Vector3 direction) { }
+    internal virtual void MoveCamera(Vector2 d) { }
 
     virtual internal void BaseMove(Vector3 direction)
     {
@@ -101,6 +102,10 @@ public abstract class Controller : MonoBehaviour
         BaseMove(new Vector3(rl, 0f, fb).normalized);
     }
 
+    public void MoveCamera(float h, float v)
+    {
+        MoveCamera(new Vector2(h, v));
+    }
     internal bool IsPossessed()
     {
         return Game.i.player.IsPossessing(this);
