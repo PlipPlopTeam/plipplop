@@ -377,7 +377,7 @@ namespace PP.Behavior
 
 		public static Node AddTransitionNode(Node enterNode, Vector3 pos)
 		{
-			Node transNode = settings.AddNodeOnGraph(settings.transitionNode, 200, 100, "Condition", pos);
+			Node transNode = settings.AddNodeOnGraph(settings.transitionNode, 200, 50, "Condition", pos);
 			transNode.enterNode = enterNode.id;
 			Transition t = settings.stateNode.AddTransition(enterNode);
 			transNode.transRef.transitionId = t.id;
@@ -411,7 +411,7 @@ namespace PP.Behavior
                 Handles.DrawBezier(startPos, endPos, startTan, endTan, shadow, null, 4);
             }
 
-            Handles.DrawBezier(startPos, endPos, startTan, endTan, curveColor, null, 3);
+            Handles.DrawBezier(startPos, endPos, startTan, endTan, curveColor, null, 10);
         }
 
         public static void ClearWindowsFromList(List<Node>l)

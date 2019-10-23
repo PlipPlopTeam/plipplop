@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace PP
 {
+    [CreateAssetMenu(menuName = "Behavior/State")]
     public class State : ScriptableObject
     {
     	public StateActions[] onFixed;

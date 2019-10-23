@@ -16,7 +16,6 @@ namespace PP.Behavior
 
         public override void DrawWindow(Node b)
         {
-            EditorGUILayout.LabelField("");
             Node enterNode = BehaviorEditor.settings.currentGraph.GetNodeWithIndex(b.enterNode);
 			if (enterNode == null)
 			{
@@ -36,17 +35,20 @@ namespace PP.Behavior
 
 
             transition.condition = 
-                (Condition)EditorGUILayout.ObjectField(transition.condition
-                , typeof(Condition), false);
+                (Condition)EditorGUILayout.ObjectField(transition.condition,
+                typeof(Condition),
+                false
+            );
 
             if(transition.condition == null)
-            {            
+            {     
+                b.windowRect.height = 60;       
                 EditorGUILayout.LabelField("No Condition!");
                 b.isAssigned = false;
             }
             else
             {
-
+                b.windowRect.height = 60;
                 b.isAssigned = true;
 				if (b.isDuplicate)
 				{
@@ -99,9 +101,9 @@ namespace PP.Behavior
             }
             else
             {
-                Color targetColor = Color.green;
+                Color targetColor = Color.white;
                 if (!b.isAssigned || b.isDuplicate)
-                    targetColor = Color.red;
+                    targetColor = Color.grey;
 
                 Rect r = e.windowRect;
                 BehaviorEditor.DrawNodeCurve(r, rect, true, targetColor);
@@ -119,29 +121,24 @@ namespace PP.Behavior
                 }
                 else
                 {
-					
-
                     rect = b.windowRect;
                     rect.x += rect.width;
                     Rect endRect = t.windowRect;
                     endRect.x -= endRect.width * .5f;
 
-                    Color targetColor = Color.green;
+                    Color targetColor = Color.white;
 
 					if (t.drawNode is StateNode)
 					{
-						if (!t.isAssigned || t.isDuplicate)
-							targetColor = Color.red;
+						if (!t.isAssigned || t.isDuplicate) targetColor = Color.red;
 					}
 					else
 					{
-						if (!t.isAssigned)
-							targetColor = Color.red;
-						else
-							targetColor = Color.yellow;
+						if (!t.isAssigned) targetColor = Color.grey;
+						else targetColor = Color.white;
 					}
                     
-                    BehaviorEditor.DrawNodeCurve(rect,endRect,false, targetColor);
+                    BehaviorEditor.DrawNodeCurve(rect, endRect, false, targetColor);
                 }
 
             }

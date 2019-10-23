@@ -10,12 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e09f12a9b8fb5e44eb81fa499afbecc4, type: 3}
-  m_Name: Normal
+  m_Name: Dancing
   m_EditorClassIdentifier: 
   onFixed: []
-  onUpdate:
-  - {fileID: 11400000, guid: 8c9e9ec29022b4543a5c8de25e73ab68, type: 2}
-  onEnter: []
+  onUpdate: []
+  onEnter:
+  - {fileID: 11400000, guid: f9063eae505a9d14fb9be47b015b9813, type: 2}
   onExit: []
   idCount: 2
-  transitions: []
+  transitions:
+  - id: 0
+    condition: {fileID: 11400000, guid: 0ff46f68791f66c46a287b34130aee2a, type: 2}
+    targetState: {fileID: 11400000, guid: 3cb2311cf9b6fcc488a0a7b62dc1b7c3, type: 2}
+    disable: 0

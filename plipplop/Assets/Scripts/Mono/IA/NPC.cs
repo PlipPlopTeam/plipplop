@@ -1,233 +1,113 @@
 ﻿using System.Collections.Generic;
-using System.Collections;
-using UnityEngine.AI;
 using UnityEngine;
+using PP;
+using UnityEngine.AI;
 
-public enum ActionState{ Walking, Collecting, Sort }
-
-public class NPC : MonoBehaviour
+public class NPC : StateManager
 {
-    
-    [Header("State")]
-    public ActionState state;
+	[HideInInspector] public Sight sight;
+	[HideInInspector] public FocusLook look;
+	[HideInInspector] public NavMeshAgent agent;
+	[HideInInspector] public AgentMovement agentMovement;
+	[HideInInspector] public Animator animator;
+	[HideInInspector] public Valuable thing;
+	[HideInInspector] public Skeleton skeleton;
+	[HideInInspector] public EmotionRenderer emo;
+	[HideInInspector] public CollisionEventTransmitter range;
+	[HideInInspector] public List<GameObject> inRange = new List<GameObject>();
 
-    [Header("Movement")]
-    public float walkSpeed = 5f;
-    public float chaseSpeed = 8f;
-    public float maxSpeed = 1f;
-    public float velocityLerpSpeed = 1f;
-    public float navTreshold = 1f;
-    
-    public bool loop = true;
-    public Vector3[] path;
-    int point = 0;
-
-    Sight sight;
-    FocusLook look;
-    NavMeshAgent agent;
-    Animator animator;
-    Valuable thing;
-    Skeleton skeleton;
-    EmotionRenderer emo;
-    
-    // Range
-    CollisionEventTransmitter range;
-    List<GameObject> inRange = new List<GameObject>();
-
-    void Awake()
-    {
-        skeleton = GetComponentInChildren<Skeleton>();
-        sight = GetComponent<Sight>();
-        look = GetComponent<FocusLook>();
-        agent = GetComponent<NavMeshAgent>();
-        animator = GetComponent<Animator>();
-        emo = GetComponent<EmotionRenderer>();
-
+	void Awake()
+	{
+		skeleton = GetComponentInChildren<Skeleton>();
+		sight = GetComponent<Sight>();
+		look = GetComponent<FocusLook>();
+		agent = GetComponent<NavMeshAgent>();
+		agentMovement = GetComponent<AgentMovement>();
+		animator = GetComponent<Animator>();
+		emo = GetComponent<EmotionRenderer>();
+		
         range = GetComponentInChildren<CollisionEventTransmitter>();
         range.onTriggerEnter += (Collider other) => { inRange.Add(other.transform.gameObject); };
         range.onTriggerExit += (Collider other) => { inRange.Remove(other.transform.gameObject); };
-    }
-
-    void Start()
-    {
-        Go(point);
-    }
-
-    void ChangeState(ActionState newState)
-    {
-        ExitState();
-        state = newState;
-        switch(state)
-        {
-            case ActionState.Walking:
-                agent.speed = walkSpeed;
-                break;
-            case ActionState.Collecting:
-                agent.speed = chaseSpeed;
-                break;
-            case ActionState.Sort:
-                if(!GoThere(thing.origin))
-                {
-                    thing.transform.position = transform.position + transform.forward;
-                    thing = null;
-                    ChangeState(ActionState.Walking);
-                }
-                else
-                {
-                    agent.speed = walkSpeed;
-                    animator.SetBool("Carrying", true); 
-                }
-                break;
-        }
-    }
-
-    bool InRange(GameObject obj)
-    {
-        return inRange.Contains(obj);
-    }
-
-    void ExitState()
-    {
-        switch(state)
-        {
-            case ActionState.Walking: 
-                break;
-            case ActionState.Collecting: 
-                break;
-            case ActionState.Sort:
-                animator.SetBool("Carrying", false);
-                break;
-        }
-    }
-
-    void StateUpdate()
-    {
-        switch(state)
-        {
-            case ActionState.Walking:
-                Search();
-                break;
-            case ActionState.Collecting:
-                agent.destination = thing.transform.position;
-                if(InRange(thing.gameObject))
-                {
-                    emo.Show("suprised", 2f);
-                    Controller c = thing.gameObject.GetComponent<Controller>();
-                    if(c != null)
-                    {
-                        if(Game.i.player.IsPossessing(c))
-                            Game.i.player.PossessBaseController();
-                    }
-                    ChangeState(ActionState.Sort);
-                }
-                break;
-            case ActionState.Sort:
-                thing.transform.position = (skeleton.rightHandBone.position + skeleton.leftHandBone.position)/2f;
-                thing.transform.forward = transform.forward;
-                break;
-        }
-    }
-
-    bool GoThere(Vector3 pos)
-    {
-        NavMeshPath path = new NavMeshPath();
-        agent.CalculatePath(pos, path);
-        if(path.status == NavMeshPathStatus.PathPartial
-        || path.status == NavMeshPathStatus.PathInvalid)
-        {
-            return false;
-        }
-        else 
-        {
-            agent.SetDestination(pos);
-            return true;
-        }
-    }
-
-    void DestinationReached()
-    {
-        switch(state)
-        {
-            case ActionState.Walking:
-                Go(Next());
-                break;
-            case ActionState.Collecting: 
-                break;
-            case ActionState.Sort:
-                thing.transform.position = thing.origin;
-                thing = null;
-                ChangeState(ActionState.Walking);
-                break;
-        }
-    }
-
-    void Go(int index)
-    {
-        if(path.Length == 0) return;
-        agent.SetDestination(path[point]);
-        point = index;
-    }
-
-    int Next()
-    {
-        int waypoint = point + 1;
-        if(waypoint >= path.Length) waypoint = 0;
-        return waypoint;
-    }
-
-    void Collect(Valuable v)
-    {
-        thing = v;
-        ChangeState(ActionState.Collecting);
-    }
-
-    void Update()
-    {
-        StateUpdate();
-        animator.SetFloat("Speed", agent.velocity.magnitude/maxSpeed);
-        if(Vector3.Distance(transform.position, agent.destination) < navTreshold) DestinationReached();
-    }
-
-
-
-    void Search()
-    {
-        Valuable[] seens = sight.Scan<Valuable>();
-        if(seens.Length > 0)
-        {
-            if(seens[0].HasMoved() && !seens[0].hidden)
-            {
-                animator.SetTrigger("Suprised");
-                emo.Show("confused", 2f);
-                Collect(seens[0]);
-            }
-        }
-    }
-
-#if UNITY_EDITOR
-    void OnDrawGizmosSelected()
-    {
-        GUIStyle style = new GUIStyle();
-        style.normal.textColor = new Color32(173, 216, 230, 255);
-        style.alignment = TextAnchor.MiddleCenter;
-        style.fontStyle = FontStyle.Bold;
-        style.fontSize = 9;
-        if(path != null && path.Length > 0)
-        {
-            Gizmos.DrawLine(transform.position, path[0]);
-            Gizmos.DrawIcon(path[0] + transform.up * 0.5f, "d_CollabMoved Icon");
-            UnityEditor.Handles.Label(path[0] + transform.up, "0", style);
-            
-            if(path.Length > 1)
-            {
-                for(int i = 1; i < path.Length; i++)
-                {
-                    Gizmos.DrawLine(path[i-1], path[i]);
-                    Gizmos.DrawIcon(path[i] + transform.up * 0.5f, "d_CollabMoved Icon");
-                    UnityEditor.Handles.Label(path[i] + transform.up, i.ToString(), style);
-                }
-            }
-        }
-    }
-#endif
+	}
 }
+
+#region Actions
+[CreateAssetMenu(menuName = "Behavior/Action/NPC/GoToNextPathPoint")]
+public class GoToNextPathPoint : StateActions
+{
+	public override void Execute(StateManager state)
+	{
+		NPC npc = (NPC)state;
+		if(npc != null) npc.agentMovement.GoToNextPoint();
+	}
+}
+
+[CreateAssetMenu(menuName = "Behavior/Action/NPC/GoThere")]
+public class GoThere : StateActions
+{
+    public Vector3 position;
+
+	public override void Execute(StateManager state)
+	{
+		NPC npc = (NPC)state;
+		if(npc != null) npc.agentMovement.GoThere(position);
+	}
+}
+[CreateAssetMenu(menuName = "Behavior/Action/NPC/SearchValuable")]
+public class SearchValuable : StateActions
+{
+	public override void Execute(StateManager state)
+	{
+		NPC npc = (NPC)state;
+		if(npc != null)
+		{
+			Valuable[] items = npc.sight.Scan<Valuable>();
+			if(items.Length > 0) npc.thing = items[0];
+		}
+	}
+}
+[CreateAssetMenu(menuName = "Behavior/Action/NPC/StopMovement")]
+public class StopMovement : StateActions
+{
+	public override void Execute(StateManager state)
+	{
+		NPC npc = (NPC)state;
+		if(npc != null)
+		{
+			npc.agentMovement.Stop();
+		}
+	}
+}
+#endregion
+
+#region Conditions
+[CreateAssetMenu(menuName = "Behavior/Condition/NPC/OnDestinationReached")]
+public class OnDestinationReached : Condition
+{
+	public override bool CheckCondition(StateManager state)
+	{
+		NPC npc = (NPC)state;
+		if(npc != null)
+		{
+			if(npc.agentMovement.reached) return true;
+		}
+		
+        return false;
+	}
+}
+
+[CreateAssetMenu(menuName = "Behavior/Condition/NPC/HasSeenValuable")]
+public class HasSeenValuable : Condition
+{
+	public override bool CheckCondition(StateManager state)
+	{
+		NPC npc = (NPC)state;
+		if(npc != null)
+		{
+			return npc.thing == true;
+		}
+        return false;
+	}
+}
+#endregion

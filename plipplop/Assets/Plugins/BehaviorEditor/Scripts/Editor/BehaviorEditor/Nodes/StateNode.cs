@@ -19,16 +19,18 @@ namespace PP.Behavior
             }
             else
             {
+                string collapseText = "";
                 if(!b.collapse)
                 {
-                 
+                    collapseText = "Collape";
                 }
                 else
                 {
-                    b.windowRect.height = 100;
+                    collapseText = "Expend";
+                    b.windowRect.height = 65;
                 }
 
-                b.collapse = EditorGUILayout.Toggle(" ", b.collapse);
+                b.collapse = EditorGUILayout.Toggle(collapseText, b.collapse);
             }
 
             b.stateRef.currentState = (State)EditorGUILayout.ObjectField(b.stateRef.currentState, typeof(State), false);
@@ -83,27 +85,22 @@ namespace PP.Behavior
 					//	SerializedObject serializedState = new SerializedObject(b.stateRef.currentState);
 					}
 
-					float standard = 150;
+					float standard = 100;
 					b.stateRef.serializedState.Update();
 					b.showActions = EditorGUILayout.Toggle("Show Actions ", b.showActions);
 					if (b.showActions)
 					{
-						EditorGUILayout.LabelField("");
 						b.stateRef.onFixedList.DoLayoutList();
-						EditorGUILayout.LabelField("");
 						b.stateRef.onUpdateList.DoLayoutList();
-						standard += 100 + 40 + (b.stateRef.onUpdateList.count + b.stateRef.onFixedList.count) * 20;
+						standard += 125 + (b.stateRef.onUpdateList.count + b.stateRef.onFixedList.count) * 20;
 					}
 					b.showEnterExit = EditorGUILayout.Toggle("Show Enter/Exit ", b.showEnterExit);
 					if (b.showEnterExit)
 					{
-						EditorGUILayout.LabelField("");
 						b.stateRef.onEnterList.DoLayoutList();
-						EditorGUILayout.LabelField("");
 						b.stateRef.onExitList.DoLayoutList();
-						standard += 100 + 40 + (b.stateRef.onEnterList.count + b.stateRef.onExitList.count) * 20;
+						standard += 125 + (b.stateRef.onEnterList.count + b.stateRef.onExitList.count) * 20;
 					}
-
 					b.stateRef.serializedState.ApplyModifiedProperties();
                     b.windowRect.height = standard;
                 }   
