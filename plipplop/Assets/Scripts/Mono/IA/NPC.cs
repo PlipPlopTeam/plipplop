@@ -79,6 +79,18 @@ public class StopMovement : StateActions
 		}
 	}
 }
+[CreateAssetMenu(menuName = "Behavior/Action/NPC/ForgetThing")]
+public class ForgetThing : StateActions
+{
+	public override void Execute(StateManager state)
+	{
+		NPC npc = (NPC)state;
+		if(npc != null)
+		{
+			npc.thing = null;
+		}
+	}
+}
 #endregion
 
 #region Conditions
