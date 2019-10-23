@@ -10,10 +10,65 @@ public class WaterVolume : Volume
     public GameObject customVisual;
     public Material material;
     public Mesh zoneMesh;
-    public float waterForce = 10f;
 
-    List<Rigidbody> objectsInWater = new List<Rigidbody>();
-    float tractionToSurface = 4f;
+    class Body
+    {
+        public readonly Rigidbody rigidbody;
+        public readonly List<Collider> colliders = new List<Collider>();
+
+        public Body(Rigidbody rigidbody, Collider collider)
+        {
+            this.rigidbody = rigidbody;
+            this.colliders.Add(collider);
+        }
+    }
+
+    class ImmergedBodies : List<Body>
+    {
+        public bool Contains(Rigidbody body)
+        {
+            return Find(o => o.rigidbody == body) != null;
+        }
+
+        public bool Contains(Collider body)
+        {
+            return Find(o => o.colliders.Contains(body)) != null;
+        }
+
+        public void Add(Rigidbody b, Collider c)
+        {
+            if (Contains(b)) {
+                Find(o => o.rigidbody == b).colliders.Add(c);
+            }
+            else {
+                Add(new Body(b, c));
+            }
+        }
+
+        public bool Remove(Collider c)
+        {
+            var b = Find(o => o.colliders.Contains(c));
+            if (b == null) return true;
+            b.colliders.Remove(c);
+            if (b.colliders.Count <= 0f) return true;
+            return false;
+        }
+
+        public void Remove(Rigidbody r)
+        {
+            RemoveAll(o => o.rigidbody == r);
+        }
+    }
+
+    ImmergedBodies objectsInWater = new ImmergedBodies();
+
+    // PARAMETERS
+    float tractionToSurface = 4f;   // The lower this value is, the more objects will slowdown when approaching the surface
+    float waterForce = 100f;        // The force that pushes objects upward
+    float maxUpSpeed = 6f;          // The maximum upward speed of immerged objects
+    float waterline = 1F;         // Objects will stop a bit below water instead of perfectly at the surface. This is the distance from surface (downwards)
+    public float artificialDrag = 2f;      // Objects will lerp to zero speed using this value to simulate a drag      
+    float aboveWaterSpeedReduction = 0.4f;   // Upon exiting water the vertical velocity of the object is altered to avoid bouncing
 
     private void Start()
     {
@@ -28,29 +83,36 @@ public class WaterVolume : Volume
     }
 
 
-    public override void OnObjectEnter(GameObject obj)
+    public override void OnObjectEnter(Collider obj)
     {
         var rb = obj.GetComponent<Rigidbody>();
         if (rb) {
-            if (objectsInWater.Contains(rb)) return;
-
-            objectsInWater.Add(rb);
+            objectsInWater.Add(rb, obj);
 
             var con = obj.GetComponent<Controller>();
-            if (con) {
+
+            if (con && !con.isImmerged) {
                 con.SetUnderwater();
             }
         }
     }
 
-    public override void OnObjectExit(GameObject obj)
+    public override void OnObjectExit(Collider obj)
     {
         var rb = obj.GetComponent<Rigidbody>();
         if (rb) {
-            objectsInWater.RemoveAll(o => o == rb);
-            var con = rb.GetComponent<Controller>();
-            if (con) {
-                con.SetOverwater();
+
+            var outOfWater = objectsInWater.Remove(obj);
+
+            if (outOfWater) {
+                objectsInWater.Remove(rb);
+
+                rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y * aboveWaterSpeedReduction, rb.velocity.z);
+
+                var con = rb.GetComponent<Controller>();
+                if (con) {
+                    con.SetOverwater();
+                }
             }
         }
     }
@@ -68,19 +130,39 @@ public class WaterVolume : Volume
     private void FixedUpdate()
     {
         foreach(var b in objectsInWater) {
-            var force = 10f / b.mass;
-            var cb = b.GetComponent<CustomBuyoyancy>();
+            var rb = b.rigidbody;
+            var force = 10f / Mathf.Max(1f, b.rigidbody.mass);
+            var customWaterline = waterline;
+            var cb = rb.GetComponent<CustomBuyoyancy>();
             if (cb) {
                 force = cb.buyoyancy;
+                customWaterline = cb.waterline;
             }
 
             //Reducing force as the object is surfacing to avoid permanent wobbling
-            var distanceBelowSurface = - (b.transform.position - transform.position - transform.up * (height/2f)).y;
-            distanceBelowSurface = Mathf.Max(distanceBelowSurface, 0f) * tractionToSurface;
+            var distanceBelowSurface = - (rb.transform.position - transform.position - transform.up * (height/2f)).y + customWaterline;
+            distanceBelowSurface = distanceBelowSurface * tractionToSurface;
 
-            b.AddForce(
-                transform.up * (1 / force) * waterForce * Mathf.Clamp01(distanceBelowSurface) * Time.fixedDeltaTime,
+
+            // If I cannot float, I shall sink
+            if (force < 1f) {
+                force *= -1f;
+                force -= 1f;
+                distanceBelowSurface = - force + Mathf.Abs(distanceBelowSurface);
+            }
+
+            rb.AddForce(
+                transform.up * (force) * waterForce * Mathf.Clamp(distanceBelowSurface, -1f, 1f) * Time.fixedDeltaTime,
                 ForceMode.Acceleration
+            );
+
+            rb.velocity = new Vector3(rb.velocity.x, 
+                Mathf.Lerp(
+                    Mathf.Min(rb.velocity.y, maxUpSpeed),
+                    0f,
+                    artificialDrag * Time.fixedDeltaTime
+                ),
+                rb.velocity.z
             );
         }
     }

@@ -45,7 +45,7 @@ public abstract class Volume : MonoBehaviour
 
     private void Col_onTriggerExit(Collider obj)
     {
-        OnObjectExit(obj.gameObject);
+        OnObjectExit(obj);
         var c = obj.gameObject.GetComponent<Controller>();
         if (isInside && c && Game.i.player.IsPossessing(c)) {
             isInside = false;
@@ -55,7 +55,7 @@ public abstract class Volume : MonoBehaviour
 
     private void Col_onTriggerEnter(Collider obj)
     {
-        OnObjectEnter(obj.gameObject);
+        OnObjectEnter(obj);
         var c = obj.gameObject.GetComponent<Controller>();
         if (!isInside && c && Game.i.player.IsPossessing(c)) {
 
@@ -64,9 +64,9 @@ public abstract class Volume : MonoBehaviour
         }
     }
 
-    public virtual void OnObjectEnter(GameObject g) {}
+    public virtual void OnObjectEnter(Collider g) {}
 
-    public virtual void OnObjectExit(GameObject g) {}
+    public virtual void OnObjectExit(Collider g) {}
 
     public abstract void OnPlayerEnter(Controller player);
 

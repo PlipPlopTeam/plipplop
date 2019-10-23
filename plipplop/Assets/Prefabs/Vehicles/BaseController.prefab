@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 281994533271648108}
   - component: {fileID: 281994533271648110}
   - component: {fileID: -6757618450328107466}
+  - component: {fileID: -5195385680787726798}
   m_Layer: 0
   m_Name: BaseController
   m_TagString: Untagged
@@ -45,7 +46,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 0.6
   m_Drag: 1
-  m_AngularDrag: 0.03
+  m_AngularDrag: 1
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -68,6 +69,7 @@ MonoBehaviour:
   canRetractLegs: 1
   useGravity: 1
   gravityMultiplier: 50
+  customExternalRigidbody: {fileID: 0}
   customCamera: {fileID: 0}
   locomotion: {fileID: 0}
 --- !u!114 &281994533271648110
@@ -88,6 +90,7 @@ MonoBehaviour:
   legsOffset: {x: 0, y: 0, z: 0}
   rigidbody: {fileID: 0}
   targetDirection: {x: 0, y: 0, z: 0}
+  isImmerged: 0
 --- !u!135 &-6757618450328107466
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -101,6 +104,20 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.6
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &-5195385680787726798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 281994533271648098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7f1354dc4d3d4a40bbb2a193721f212, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buyoyancy: 10
+  waterline: -0.4
 --- !u!1 &4182015712966933053
 GameObject:
   m_ObjectHideFlags: 0

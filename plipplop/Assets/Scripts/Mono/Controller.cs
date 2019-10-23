@@ -63,7 +63,7 @@ public abstract class Controller : MonoBehaviour
     { 
         if(AreLegsRetracted()) 
             SpecificJump();
-        else if (isImmerged || IsGrounded())
+        else if (IsGrounded())
             locomotion.Jump();
     }
 
@@ -212,9 +212,12 @@ public abstract class Controller : MonoBehaviour
     {
         if (!isImmerged && controllerSensor && controllerSensor.IsThereAnyController())
         {
-            Game.i.player.Possess(controllerSensor.GetFocusedController());
+            var focused = controllerSensor.GetFocusedController();
+            if (!focused.isImmerged) {
+                Game.i.player.Possess(focused);
+            }
         }
-        else
+        else if (!Game.i.player.IsPossessingBaseController())
         {
             Game.i.player.TeleportBaseControllerAndPossess();
         }
@@ -232,10 +235,11 @@ public abstract class Controller : MonoBehaviour
             else {
                 Gizmos.DrawIcon(transform.position + Vector3.up * 2f, "d_CollabChangesConflict Icon");
             }
-
+          
             Handles.Label(transform.position + Vector3.up*2f, string.Join("\n", new string[] {
                     string.Format("Grounded? {0}", IsGrounded()),
                     string.Format("Retracted? {0}", AreLegsRetracted()),
+                    string.Format("Immerged? {0}", isImmerged)
                 })
             );
         }
