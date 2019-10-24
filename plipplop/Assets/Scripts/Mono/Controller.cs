@@ -115,7 +115,7 @@ public abstract class Controller : MonoBehaviour
     {
         isImmerged = true;
         locomotion.isImmerged = isImmerged;
-        if (!Game.i.player.IsPossessingBaseController()) {
+        if (IsPossessed()) {
             Game.i.player.TeleportBaseControllerAndPossess();
         }
     }

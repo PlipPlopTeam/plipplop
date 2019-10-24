@@ -88,7 +88,7 @@ public class GolfCar : Controller
 
         // Reorient the car to optimal rotation to avoid flipping
         // (Anti spin)
-        if (!IsGrounded()) {
+        if (!IsGrounded() && !isImmerged && IsPossessed()) {
             var y = transform.rotation.eulerAngles.y;
             transform.rotation = Quaternion.Lerp(
                 transform.rotation,
