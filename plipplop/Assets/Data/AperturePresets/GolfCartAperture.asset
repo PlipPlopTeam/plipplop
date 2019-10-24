@@ -19,15 +19,17 @@ MonoBehaviour:
     additionalAngle: 35.4
     distance:
       min: 5
-      max: 8
+      max: 6
     fovLerp: 1
-    lateralFollowLerp: 1
-    longitudinalFollowLerp: 1
+    lateralFollowLerp: 20
+    longitudinalFollowLerp: 5
     verticalFollowLerp: 10
     rotationSpeed: 1
     lookAtLerp: 4
     speedEffectMultiplier: 3
-    catchUpSpeedMultiplier: 1
+    catchUpSpeedMultiplier: 20
     maximumCatchUpSpeed: 10
     cameraRotateAroundSpeed: 4
     absoluteMinimalDistance: 4
+    constraintToTarget: 0
+    targetConstraintLocalOffset: {x: 0, y: 0, z: 1}
