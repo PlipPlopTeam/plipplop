@@ -157,11 +157,11 @@ public class WaterVolume : Volume
             foreach(var col in b.colliders) {
                 forcePosition += col.bounds.center;
             }
-            forcePosition *= 1 / b.colliders.Count;
+            forcePosition /= b.colliders.Count;
 
             rb.AddForceAtPosition(
                 transform.up * (force) * waterForce * Mathf.Clamp(distanceBelowSurface, -1f, 1f) * Time.fixedDeltaTime,
-                transform.position + forcePosition,
+                forcePosition,
                 ForceMode.Acceleration
             );
 
