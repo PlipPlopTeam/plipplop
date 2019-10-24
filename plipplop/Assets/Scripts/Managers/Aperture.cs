@@ -31,6 +31,8 @@ public class Aperture
         public float maximumCatchUpSpeed = 10f;
         public float cameraRotateAroundSpeed = 4f;
         public float absoluteMinimalDistance = 4f;
+        public bool constraintToTarget = false;
+        public Vector3 targetConstraintLocalOffset;
     }
 
     public class Key<T>
@@ -139,7 +141,14 @@ public class Aperture
 
     public void FixedUpdate()
     {
-        if(freeze) return;
+        if (freeze) return;
+        if (settings.constraintToTarget) {
+            cam.transform.parent = target;
+            cam.transform.localPosition = settings.targetConstraintLocalOffset;
+            cam.transform.forward = target.forward;
+            return;
+        }
+        else cam.transform.parent = null;
 
         // TODO: This sucks and prevents camera from turning freely around player - fix by taking player input in consideration
         hAngle = Mathf.Lerp(hAngle, 0f, Time.fixedDeltaTime * 3f);

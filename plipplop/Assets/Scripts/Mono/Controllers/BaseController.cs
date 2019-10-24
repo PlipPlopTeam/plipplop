@@ -39,14 +39,6 @@ public class BaseController : Controller
         // Code here
     }
 
-    internal override void OnTryPossess()
-    {
-        if (controllerSensor && controllerSensor.IsThereAnyController())
-        {
-            Game.i.player.Possess(controllerSensor.GetFocusedController());
-        }
-    }
-
     internal override void OnLegsExtended()
     {
         // Code here

@@ -25,6 +25,11 @@ public class Brain
 
     public void PossessBaseController()
     {
+        Possess(baseController);
+    }
+
+    public void TeleportBaseControllerAndPossess()
+    {
         Vector3 dir = (controller.transform.position - Game.i.aperture.position.current).normalized;
         dir = new Vector3(dir.x, 0f, dir.z);
         baseController.transform.position = controller.transform.position + dir * 2f;
@@ -53,6 +58,11 @@ public class Brain
         controller.Move(
             mapping.Axis(ACTION.MOVE_FORWARD_BACK),
             mapping.Axis(ACTION.MOVE_RIGHT_LEFT)
+        );
+
+        controller.MoveCamera(
+            mapping.Axis(ACTION.CAMERA_HORIZONTAL),
+            mapping.Axis(ACTION.CAMERA_VERTICAL)
         );
     }
 
@@ -85,5 +95,10 @@ public class Brain
     public bool IsPossessing(Controller controller)
     {
         return controller == this.controller;
+    }
+
+    public bool IsPossessingBaseController()
+    {
+        return controller == baseController;
     }
 }

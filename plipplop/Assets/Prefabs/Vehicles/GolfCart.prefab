@@ -93,6 +93,7 @@ GameObject:
   - component: {fileID: 1706531758072179816}
   - component: {fileID: 162950709}
   - component: {fileID: 162950710}
+  - component: {fileID: 1500567177}
   m_Layer: 0
   m_Name: GolfCart
   m_TagString: Untagged
@@ -132,6 +133,7 @@ MonoBehaviour:
   canRetractLegs: 1
   useGravity: 1
   gravityMultiplier: 80
+  customExternalRigidbody: {fileID: 0}
   customCamera: {fileID: 11400000, guid: 8969720f50fe88747810df36fbf64696, type: 2}
   locomotion: {fileID: 0}
   acceleration: 3000
@@ -195,6 +197,7 @@ MonoBehaviour:
   legsOffset: {x: 0, y: -0.23, z: 0}
   rigidbody: {fileID: 0}
   targetDirection: {x: 0, y: 0, z: 0}
+  isImmerged: 0
 --- !u!136 &162950709
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -223,6 +226,20 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 0
   m_Center: {x: 0, y: -0.05, z: 0.6}
+--- !u!114 &1500567177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1706531758072179810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7f1354dc4d3d4a40bbb2a193721f212, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buyoyancy: 0
+  waterline: -1.64
 --- !u!1 &1706531758141886333
 GameObject:
   m_ObjectHideFlags: 0

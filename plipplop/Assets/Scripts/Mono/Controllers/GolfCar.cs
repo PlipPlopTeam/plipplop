@@ -16,6 +16,8 @@ public class GolfCar : Controller
     public float antiSpinSpeed = 1f;
     public float tiltAmount = 15f;
     public float antiFlipForce = 5f;
+    public float airRollForce = 3f;
+    public float airPitchForce = 3f;
 
     public Transform[] wheels;
     public Transform visual;
@@ -35,29 +37,41 @@ public class GolfCar : Controller
         // Code here
     }
 
-    internal override void SpecificMove(Vector3 direction)  
+    internal override void SpecificMove(Vector3 direction)
     {
-        if (!IsGrounded()) direction = Vector3.zero;
+        var localSpeed = transform.InverseTransformDirection(rigidbody.velocity);
+        var localSpin = transform.TransformDirection(rigidbody.angularVelocity);
+        var thrustObjective = localSpeed.z;
+
+        if (!IsGrounded()) {
+            // Pitch and roll
+            rigidbody.AddTorque(transform.right * direction.z * Time.fixedDeltaTime * airPitchForce, ForceMode.Acceleration);
+            rigidbody.AddTorque(- transform.forward * direction.x * Time.fixedDeltaTime * airRollForce, ForceMode.Acceleration);
+            direction = Vector3.zero;
+        }
 
         // Thrust
         rigidbody.AddForce(transform.forward * direction.z * acceleration * Time.fixedDeltaTime, ForceMode.Acceleration);
 
-        var localSpeed = transform.InverseTransformDirection(rigidbody.velocity);
-        var thrustObjective = localSpeed.z;
-
         if (Mathf.Abs(localSpeed.z) > maxSpeed) {
             thrustObjective = Mathf.Sign(localSpeed.z) * maxSpeed;
         }
-        
-        // Auto brake
-        thrustObjective = Mathf.Lerp(thrustObjective, thrustObjective*(Mathf.Abs(direction.z)), autoBrakeSpeed * Time.fixedDeltaTime);
-        localSpeed.x = 0f; // No strafing, good tires
 
         // Steering + anti spin
         steering = Mathf.Lerp(steering, direction.x, steeringSpeed * Time.fixedDeltaTime) * maxSteering;
-        var localSpin = transform.TransformDirection(rigidbody.angularVelocity);
         localSpin.y = steering * steeringForce * (thrustObjective / maxSpeed) * Time.deltaTime;
         localSpin.y = Mathf.Lerp(localSpin.y, localSpin.y * Mathf.Abs(direction.x), antiSpinSpeed * Time.fixedDeltaTime);
+
+        // Auto brake
+        thrustObjective = Mathf.Lerp(thrustObjective, thrustObjective * (Mathf.Abs(direction.z)), autoBrakeSpeed * Time.fixedDeltaTime);
+        localSpeed.x = 0f; // No strafing, good tires
+        
+        // Reorient the car to optimal rotation to avoid flipping
+        // (Anti flip)
+        if (!isImmerged && !IsGrounded() && IsPossessed()) {
+            localSpin.x = Mathf.Lerp(localSpin.x, 0f, antiFlipForce * Time.fixedDeltaTime);
+        }
+
 
         // Apply
         rigidbody.velocity = transform.TransformDirection(new Vector3(localSpeed.x, localSpeed.y, thrustObjective));
@@ -85,19 +99,6 @@ public class GolfCar : Controller
     internal override void FixedUpdate()
     {
         base.FixedUpdate();
-
-        // Reorient the car to optimal rotation to avoid flipping
-        // (Anti spin)
-        if (!IsGrounded()) {
-            var y = transform.rotation.eulerAngles.y;
-            transform.rotation = Quaternion.Lerp(
-                transform.rotation,
-                Quaternion.Euler(
-                    0f, y, 0f
-                ),
-                antiFlipForce * Time.fixedDeltaTime
-            );
-        }
 
         // Wheel animation
         var localSpeed = transform.InverseTransformDirection(rigidbody.velocity);

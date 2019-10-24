@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Game : MonoBehaviour
 {
+    [Range(0, -100)] public int killZ = -20;
     public Library library;
     public Brain player;
     public Mapping mapping;
-    public Vector3 spawnPosition;
     [HideInInspector] public Aperture aperture;
 
     static public Game i;
@@ -28,14 +28,22 @@ public class Game : MonoBehaviour
         aperture = new Aperture();
         mapping = Instantiate<Mapping>(mapping);
 
-        SpawnPlayer(spawnPosition);
+        var spawn = FindObjectOfType<SpawnMarker>();
+        if (!spawn) {
+            var g = new GameObject();
+            spawn = g.AddComponent<SpawnMarker>();
+            g.transform.position = Vector3.up;
+        }
+        SpawnPlayer(spawn);
+        CreateKillZ(spawn);
     }
 
-    private void SpawnPlayer(Vector3 position)
+    private void SpawnPlayer(SpawnMarker spawn)
     {
         // Init
         player = new Brain(mapping);
-        Controller c = Instantiate(library.baseControllerPrefab.GetComponent<Controller>(), position, Quaternion.identity);
+        Controller c = Instantiate(library.baseControllerPrefab.GetComponent<Controller>(), spawn.position, Quaternion.identity);
+        c.transform.forward = spawn.transform.forward;
         player.Possess(c);
         player.SetBaseController(c);
     }
@@ -51,5 +59,19 @@ public class Game : MonoBehaviour
     {
         player.FixedUpdate();
         aperture.FixedUpdate();
+    }
+
+    void CreateKillZ(SpawnMarker spawn)
+    {
+        var i = Instantiate(library.teleporterVolumePrefab);
+        i.name = "_KILLZ";
+        i.transform.position = Vector3.up * killZ * 2f;
+        var volume = i.GetComponent<TeleportVolume>();
+        volume.landingPoint = spawn.transform;
+        volume.material = new Material(library.killZMaterial);
+        volume.height = Mathf.Abs(killZ);
+        volume.width = 4096f;
+        volume.length = 4006f;
+        volume.isInvisible = true;
     }
 }

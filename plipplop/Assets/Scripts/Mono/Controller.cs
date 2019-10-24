@@ -15,11 +15,12 @@ public abstract class Controller : MonoBehaviour
 
     [HideInInspector] public AperturePreset customCamera = null;
     [HideInInspector] public Locomotion locomotion;
-
+    
     GameObject face;
 
     new internal Rigidbody rigidbody;
     internal ControllerSensor controllerSensor;
+    internal bool isImmerged;
 
     public virtual void OnEject()
     {
@@ -86,7 +87,8 @@ public abstract class Controller : MonoBehaviour
     internal virtual void OnHoldJump() { }
     internal abstract void OnLegsRetracted();
     internal abstract void OnLegsExtended();
-    internal virtual void SpecificMove(Vector3 direction) {}
+    internal virtual void SpecificMove(Vector3 direction) { }
+    internal virtual void MoveCamera(Vector2 d) { }
 
     virtual internal void BaseMove(Vector3 direction)
     {
@@ -100,9 +102,28 @@ public abstract class Controller : MonoBehaviour
         BaseMove(new Vector3(rl, 0f, fb).normalized);
     }
 
+    public void MoveCamera(float h, float v)
+    {
+        MoveCamera(new Vector2(h, v));
+    }
     internal bool IsPossessed()
     {
         return Game.i.player.IsPossessing(this);
+    }
+
+    public void SetUnderwater()
+    {
+        isImmerged = true;
+        locomotion.isImmerged = isImmerged;
+        if (IsPossessed()) {
+            Game.i.player.TeleportBaseControllerAndPossess();
+        }
+    }
+
+    public void SetOverwater()
+    {
+        isImmerged = false;
+        locomotion.isImmerged = isImmerged;
     }
 
     virtual internal void Awake()
@@ -151,7 +172,7 @@ public abstract class Controller : MonoBehaviour
         if (controllerSensor) {
             if (!lr) lr = gameObject.AddComponent<LineRenderer>();
             lr.material = Game.i.library.lineRendererMaterial;//new Material(Shader.Find("Lightweight Render Pipeline/Particles/Unlit"));
-            if (controllerSensor.IsThereAnyController()) {
+            if (!isImmerged && controllerSensor.IsThereAnyController()) {
                 lr.positionCount = 2;
                 lr.SetPosition(0, gameObject.transform.position);
                 lr.SetPosition(1, controllerSensor.GetFocusedController().transform.position);
@@ -172,8 +193,13 @@ public abstract class Controller : MonoBehaviour
 
     virtual internal void FixedUpdate()
     {
-        if (useGravity && AreLegsRetracted()) ApplyGravity();
-        locomotion.Fall();
+        if (useGravity && !isImmerged) {
+            if (AreLegsRetracted()) ApplyGravity();
+            locomotion.Fall();
+        }
+        else {
+            locomotion.ResetTimeFalling();
+        }
     }
 
     internal void ApplyGravity(float factor=1f)
@@ -184,13 +210,16 @@ public abstract class Controller : MonoBehaviour
     // Trying to possess something else
     virtual internal void OnTryPossess()
     {
-        if (controllerSensor && controllerSensor.IsThereAnyController())
+        if (!isImmerged && controllerSensor && controllerSensor.IsThereAnyController())
         {
-            Game.i.player.Possess(controllerSensor.GetFocusedController());
+            var focused = controllerSensor.GetFocusedController();
+            if (!focused.isImmerged) {
+                Game.i.player.Possess(focused);
+            }
         }
-        else
+        else if (!Game.i.player.IsPossessingBaseController())
         {
-            Game.i.player.PossessBaseController();
+            Game.i.player.TeleportBaseControllerAndPossess();
         }
     }
 
@@ -206,10 +235,11 @@ public abstract class Controller : MonoBehaviour
             else {
                 Gizmos.DrawIcon(transform.position + Vector3.up * 2f, "d_CollabChangesConflict Icon");
             }
-
+          
             Handles.Label(transform.position + Vector3.up*2f, string.Join("\n", new string[] {
                     string.Format("Grounded? {0}", IsGrounded()),
                     string.Format("Retracted? {0}", AreLegsRetracted()),
+                    string.Format("Immerged? {0}", isImmerged)
                 })
             );
         }

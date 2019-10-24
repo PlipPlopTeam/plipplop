@@ -116,7 +116,7 @@ public class NPCOLD : MonoBehaviour
                     if(c != null)
                     {
                         if(Game.i.player.IsPossessing(c))
-                            Game.i.player.PossessBaseController();
+                            Game.i.player.TeleportBaseControllerAndPossess();
                     }
                     ChangeState(ActionState.Sort);
                 }

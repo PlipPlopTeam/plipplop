@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2932650472225342060}
   - component: {fileID: 2932650472225342063}
   - component: {fileID: 2007550832}
+  - component: {fileID: -1206478011707942472}
   m_Layer: 0
   m_Name: BeachBall
   m_TagString: Untagged
@@ -61,7 +62,7 @@ MonoBehaviour:
   airRollFactor: 4
   moveLerp: 1
   drag: 1
-  speedBeforeRoll: 15
+  speedBeforeRoll: 10
   speedBeforeStandingUp: 0.3
 --- !u!135 &2932650472225342060
 SphereCollider:
@@ -107,6 +108,25 @@ MonoBehaviour:
   origin: {x: 0, y: 0, z: 0}
   distanceThreshold: 1
   hidden: 0
+--- !u!114 &-1206478011707942472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2932650472225342062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 011d63a14cf4d8347a5660a929242412, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  preset: {fileID: 11400000, guid: 6351e4fb2ae84444bad1ffb5c3c0824f, type: 2}
+  legsHeight: 1
+  groundCheckRange: 1
+  legsOffset: {x: 0, y: 0, z: 0}
+  rigidbody: {fileID: 0}
+  targetDirection: {x: 0, y: 0, z: 0}
+  isImmerged: 0
 --- !u!1 &2932650472786296262
 GameObject:
   m_ObjectHideFlags: 0

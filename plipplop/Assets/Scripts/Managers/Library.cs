@@ -17,10 +17,12 @@ public class Library
     public GameObject facePrefab;
     public GameObject controllerSensor;
     public GameObject baseControllerPrefab;
+    public GameObject teleporterVolumePrefab;
 
     [Header("Material")]
     public Material emotionBoardMaterial;
     public Material lineRendererMaterial;
+    public Material killZMaterial;
     
     [Header("Meshs")]
     public Mesh primitiveQuadMesh;

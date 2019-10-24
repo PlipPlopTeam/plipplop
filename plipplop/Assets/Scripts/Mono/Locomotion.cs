@@ -8,11 +8,11 @@ public class Locomotion : MonoBehaviour
     public LocomotionPreset preset;
     public float legsHeight = 1f;
     public float groundCheckRange = 1f;
-
     public Vector3 legsOffset;
 
     [HideInInspector] new public Rigidbody rigidbody;
     [HideInInspector] public Vector3 targetDirection;
+    [HideInInspector] public bool isImmerged = false;
 
     float currentSpeed = 0f;
     LocomotionAnimation locomotionAnimation;
@@ -68,27 +68,35 @@ public class Locomotion : MonoBehaviour
 
     public void Move(Vector3 direction)
     {
-        if (IsGrounded()) {
-            timePressed += Time.deltaTime;
+        if (IsGrounded() || isImmerged) {
+            timePressed += Time.fixedDeltaTime;
             timePressed *= direction.magnitude;
-            heading = direction;
+
+            if (direction != Vector3.zero) {
+                heading = direction;
+                if (isImmerged) heading = Vector3.Lerp(heading, direction, preset.waterSpeedFactor);
+            }
         }
         else {
             heading = Vector3.Lerp(heading, direction, preset.airControl / 100f);
         }
+
         var acceleration = preset.accelerationCurve.Evaluate(timePressed);
-
-        currentSpeed = Mathf.Clamp(preset.maxSpeed * acceleration, 0f, preset.maxSpeed);
-
+        if (acceleration <= 0f) {
+            currentSpeed = Mathf.Lerp(currentSpeed, 0f, 3f * Time.fixedDeltaTime);
+        }
+        else {
+            currentSpeed = Mathf.Clamp(preset.maxSpeed * acceleration * (isImmerged ? preset.waterSpeedFactor : 1f), 0f, preset.maxSpeed);
+        }
         Vector3 dir = heading.x * Game.i.aperture.Right() + heading.z * Game.i.aperture.Forward();
-        // Add Movement Force
-        parentController.rigidbody.AddForce(dir * Time.deltaTime * currentSpeed, ForceMode.Acceleration);
+        var speedTarget = dir * currentSpeed;
+        parentController.rigidbody.velocity = new Vector3(speedTarget.x, parentController.rigidbody.velocity.y, speedTarget.z);
 
         // Rotate legs
         if (dir != Vector3.zero) targetDirection = dir;
 
-        if (IsGrounded()) {
-            transform.forward = Vector3.Lerp(transform.forward, targetDirection, Time.deltaTime * 10f);
+        if (isImmerged || IsGrounded()) {
+            transform.forward = Vector3.Lerp(transform.forward, targetDirection, Time.fixedDeltaTime * 10f);
         }
         else {
 
@@ -139,7 +147,7 @@ public class Locomotion : MonoBehaviour
         foreach(RaycastHit h in hits)
         {
             if (!IsMe(h.transform) && !h.collider.isTrigger) {
-                timeFalling = 0f;
+                ResetTimeFalling();
                 return true;
             }
         }
@@ -158,6 +166,11 @@ public class Locomotion : MonoBehaviour
     public void Jump()
     {
         rigidbody.AddForce(Vector3.up * preset.jump, ForceMode.Acceleration);
+    }
+
+    public void ResetTimeFalling()
+    {
+        timeFalling = 0f;
     }
 
 #if UNITY_EDITOR
