@@ -17,12 +17,15 @@ public abstract class Volume : MonoBehaviour
 
     bool isInside = false;
 
-    private void OnDrawGizmos()
+    internal void OnDrawGizmos()
     {
-        Gizmos.color = new Color(color.r, color.g, color.b, 0.1f);
-        Gizmos.DrawCube(transform.position, GetSize());
-        Gizmos.color = new Color(color.r, color.g, color.b, 0.5f);
-        Gizmos.DrawWireCube(transform.position, GetSize());
+        Gizmos.matrix = transform.localToWorldMatrix;
+        Gizmos.color = color;
+        Gizmos.DrawWireCube(Vector3.zero, new Vector3(width, height, length));
+        Gizmos.color = new Color(color.r, color.g, color.b, 0.2f);
+        Gizmos.DrawCube(Vector3.zero, new Vector3(width, height, length));
+        Gizmos.color = color;
+        Gizmos.matrix = transform.worldToLocalMatrix;
     }
 
     internal Vector3 GetSize()

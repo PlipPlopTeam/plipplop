@@ -67,7 +67,7 @@ public class WaterVolume : Volume
     float waterForce = 100f;        // The force that pushes objects upward
     float maxUpSpeed = 6f;          // The maximum upward speed of immerged objects
     float waterline = 1F;         // Objects will stop a bit below water instead of perfectly at the surface. This is the distance from surface (downwards)
-    public float artificialDrag = 2f;      // Objects will lerp to zero speed using this value to simulate a drag      
+    float artificialDrag = 2f;      // Objects will lerp to zero speed using this value to simulate a drag      
     float aboveWaterSpeedReduction = 0.4f;   // Upon exiting water the vertical velocity of the object is altered to avoid bouncing
 
     private void Start()
@@ -152,8 +152,16 @@ public class WaterVolume : Volume
                 distanceBelowSurface = - force + Mathf.Abs(distanceBelowSurface);
             }
 
-            rb.AddForce(
+            // Mean of all positions of colliders
+            Vector3 forcePosition = Vector3.zero;
+            foreach(var col in b.colliders) {
+                forcePosition += col.bounds.center;
+            }
+            forcePosition *= 1 / b.colliders.Count;
+
+            rb.AddForceAtPosition(
                 transform.up * (force) * waterForce * Mathf.Clamp(distanceBelowSurface, -1f, 1f) * Time.fixedDeltaTime,
+                transform.position + forcePosition,
                 ForceMode.Acceleration
             );
 
