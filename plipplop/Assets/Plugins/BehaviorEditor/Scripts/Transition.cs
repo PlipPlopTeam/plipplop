@@ -8,7 +8,7 @@ namespace PP
     public class Transition
     {
         public int id;
-        public Condition condition;
+        public List<Condition> conditions = new List<Condition>();
         public State targetState;
         public bool disable;
     }

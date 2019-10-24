@@ -33,14 +33,17 @@ namespace PP.Behavior
 			if (transition == null)
 				return;
 
+            for(int i = 0; i < transition.conditions.Count; i++)
+            {
+                EditorGUILayout.BeginHorizontal();
+                transition.conditions[i] = (Condition)EditorGUILayout.ObjectField(transition.conditions[i] , typeof(Condition), false);
+                if(GUILayout.Button("-")) transition.conditions.RemoveAt(i);
+                EditorGUILayout.EndHorizontal();
+            }
 
-            transition.condition = 
-                (Condition)EditorGUILayout.ObjectField(transition.condition,
-                typeof(Condition),
-                false
-            );
+            if(GUILayout.Button("Add")) transition.conditions.Add(null);
 
-            if(transition.condition == null)
+            if(transition.conditions.Count == 0)
             {     
                 b.windowRect.height = 60;       
                 EditorGUILayout.LabelField("No Condition!");
@@ -48,7 +51,7 @@ namespace PP.Behavior
             }
             else
             {
-                b.windowRect.height = 60;
+                b.windowRect.height = 40 + transition.conditions.Count * 22;
                 b.isAssigned = true;
 				if (b.isDuplicate)
 				{
@@ -73,6 +76,7 @@ namespace PP.Behavior
 				}
 			}
             
+            /*
             if (b.transRef.previousCondition != transition.condition)
             {
                 b.transRef.previousCondition = transition.condition;
@@ -84,6 +88,7 @@ namespace PP.Behavior
 					// BehaviorEditor.settings.currentGraph.SetNode(this);   
 				}
             }
+            */
             
         }
 

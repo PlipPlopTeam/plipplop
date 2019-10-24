@@ -6,6 +6,6 @@ namespace PP
 {
     public abstract class Condition : ScriptableObject
     {
-        public abstract bool CheckCondition(StateManager state);
+        public abstract bool Check(StateManager state);
     }
 }

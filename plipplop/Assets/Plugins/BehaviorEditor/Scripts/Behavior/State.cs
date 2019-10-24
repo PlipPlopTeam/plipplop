@@ -44,7 +44,13 @@ namespace PP
                 if (transitions[i].disable)
                     continue;
 
-                if(transitions[i].condition != null && transitions[i].condition.CheckCondition(states))
+                bool check = true;
+                foreach(Condition c in transitions[i].conditions)
+                {
+                    if(!c.Check(states)) check = false;
+                }
+
+                if(check)
                 {
                     if (transitions[i].targetState != null)
                     {

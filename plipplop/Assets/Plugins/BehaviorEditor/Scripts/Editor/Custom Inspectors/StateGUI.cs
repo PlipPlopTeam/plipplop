@@ -106,7 +106,7 @@ namespace PP.CustomUI
 			list.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
 			{
 				var element = list.serializedProperty.GetArrayElementAtIndex(index);
-				EditorGUI.ObjectField(new Rect(rect.x, rect.y, rect.width * .3f, EditorGUIUtility.singleLineHeight), element.FindPropertyRelative("condition"), GUIContent.none);
+				//EditorGUI.ObjectField(new Rect(rect.x, rect.y, rect.width * .3f, EditorGUIUtility.singleLineHeight), element.FindPropertyRelative("conditions"), GUIContent.none);
 				EditorGUI.ObjectField(new Rect(rect.x + + (rect.width *.35f), rect.y, rect.width * .3f, EditorGUIUtility.singleLineHeight), element.FindPropertyRelative("targetState"), GUIContent.none);
 				EditorGUI.LabelField(new Rect(rect.x + +(rect.width * .75f), rect.y, rect.width * .2f, EditorGUIUtility.singleLineHeight), "Disable");
 				EditorGUI.PropertyField(new Rect(rect.x + +(rect.width * .90f), rect.y, rect.width * .2f, EditorGUIUtility.singleLineHeight), element.FindPropertyRelative("disable"), GUIContent.none);

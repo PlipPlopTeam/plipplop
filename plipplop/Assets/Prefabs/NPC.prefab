@@ -260,21 +260,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624b99fe1e8a4194caf25db18f2a8455, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  emotions:
-  - name: suprised
-    frames:
-    - {fileID: 2800000, guid: c6f0d5ebe6327eb4fb560e84ad48519a, type: 3}
-    - {fileID: 2800000, guid: 347893da202b63f43af43e034c393da4, type: 3}
-    - {fileID: 2800000, guid: 87c47b904f8e3bf4189f22a99dfa92d8, type: 3}
-    speed: 1
-  - name: confused
-    frames:
-    - {fileID: 2800000, guid: be4ef773d694a054ea629537cac57b12, type: 3}
-    - {fileID: 2800000, guid: 694ad7f74af60de45a48f3c0baac58a3, type: 3}
-    - {fileID: 2800000, guid: 773317dfb575f3c4e9408e82a4231d13, type: 3}
-    speed: 1
+  emotions: []
   headTransform: {fileID: 8966352950447059259}
-  adjustment: {x: 0, y: 1.5, z: 0}
+  adjustment: {x: 0, y: 1.25, z: 0}
   size: 1
 --- !u!114 &1684127436
 MonoBehaviour:
@@ -315,15 +303,16 @@ MonoBehaviour:
     loop: 1
     index: 0
     points:
-    - {x: 5.749563, y: 0, z: 4.065693}
-    - {x: 6.990223, y: 0, z: -12.178894}
+    - {x: 5, y: 0.5, z: 6}
+    - {x: 5, y: 0.5, z: -6}
   settings:
     speed: 5
-    maxSpeed: 1
+    maxSpeed: 6
     velocityLerpSpeed: 1
     navTreshold: 1
   going: 0
   reached: 0
+  animator: {fileID: 0}
 --- !u!1001 &7775290463906621715
 PrefabInstance:
   m_ObjectHideFlags: 0
