@@ -56,7 +56,7 @@ namespace PP.Behavior
 				}
 				else
 				{
-					GUILayout.Label(transition.condition.description);
+					//GUILayout.Label(transition.condition.description);
 
 					Node targetNode = BehaviorEditor.settings.currentGraph.GetNodeWithIndex(b.targetNode);
 					if (targetNode != null)

@@ -22,7 +22,7 @@ public class AgentMovementEditor : Editor
 
         if(EditorGUI.EndChangeCheck())
         {
-            Undo.RecordObject(am, "Move NPC path point");
+            Undo.RecordObject(am, "Move NonPlayableCharacter path point");
             am.path.points = newPath;
             EditorUtility.SetDirty(am);
         }
