@@ -32,6 +32,7 @@ public class Aperture
         public float cameraRotateAroundSpeed = 4f;
         public float absoluteMinimalDistance = 4f;
         public bool constraintToTarget = false;
+        public Vector3 targetConstraintLocalOffset;
     }
 
     public class Key<T>
@@ -143,7 +144,7 @@ public class Aperture
         if (freeze) return;
         if (settings.constraintToTarget) {
             cam.transform.parent = target;
-            cam.transform.localPosition = Vector3.zero;
+            cam.transform.localPosition = settings.targetConstraintLocalOffset;
             cam.transform.forward = target.forward;
             return;
         }
