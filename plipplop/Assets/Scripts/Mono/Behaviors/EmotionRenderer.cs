@@ -2,14 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 
-[System.Serializable]
-public class Emotion
-{
-    public string name;
-    public Texture[] frames;
-    public float speed;
-}
-
 class Board
 {
     public GameObject obj;
@@ -19,7 +11,7 @@ class Board
 public class EmotionRenderer : MonoBehaviour
 {
     [Header("Settings")]
-    public Emotion[] emotions;
+    public List<Emotion> emotions = new List<Emotion>();
     public Transform headTransform;
     public Vector3 adjustment;
     public float size = 1f;
@@ -29,7 +21,7 @@ public class EmotionRenderer : MonoBehaviour
     float timer;
     int frameIndex;
 
-    void Start()
+    public void Load()
     {
         board = CreateBoard();
         Hide();
@@ -55,11 +47,10 @@ public class EmotionRenderer : MonoBehaviour
     void Update()
     {
         // Face camera
-        if(board.obj.activeSelf && Camera.main != null)
+        if(board.obj.activeSelf && Game.i.aperture != null)
         {
-            board.obj.transform.forward = -(Camera.main.transform.position - board.obj.transform.position);
+            board.obj.transform.forward = -(Game.i.aperture.position.current - board.obj.transform.position);
             board.obj.transform.position = headTransform.position + adjustment;
-
             // Animation
             if(emotion != null)
             {
@@ -71,9 +62,6 @@ public class EmotionRenderer : MonoBehaviour
                 }
             }
         }
-
-
-
     }
 
     public void Show(string emotionName, float duration = 0f)
@@ -81,6 +69,17 @@ public class EmotionRenderer : MonoBehaviour
         emotion = FindEmotion(emotionName);
         if(emotion == null) return;
 
+        timer = 0f;
+        frameIndex = 0;
+        board.mr.material.mainTexture = emotion.frames[0];
+        board.obj.SetActive(true);
+
+        if(duration > 0f) StartCoroutine(HideAfter(duration));
+    }
+
+    public void Show(Emotion newEmotion, float duration = 0f)
+    {
+        emotion = newEmotion;
         timer = 0f;
         frameIndex = 0;
         board.mr.material.mainTexture = emotion.frames[0];
@@ -112,7 +111,7 @@ public class EmotionRenderer : MonoBehaviour
 
     Emotion FindEmotion(string name)
     {
-        if(emotions.Length == 0) return null;
+        if(emotions.Count == 0) return null;
 
         foreach(Emotion e in emotions)
         {

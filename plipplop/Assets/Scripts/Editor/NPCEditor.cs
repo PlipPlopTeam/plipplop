@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(NPC)), CanEditMultipleObjects]
+[CustomEditor(typeof(AgentMovement)), CanEditMultipleObjects]
 [ExecuteInEditMode]
-public class NPCEditor : Editor
+public class AgentMovementEditor : Editor
 {
     private void OnSceneGUI()
     {
         EditorGUI.BeginChangeCheck();
 
-        NPC npc = (NPC)target;
-
-        Vector3[] newPath = npc.path;
+        AgentMovement am = (AgentMovement)target;
+        if(am.path == null) return;
+        
+        Vector3[] newPath = am.path.points;
         for(int i = 0; i < newPath.Length; i++)
         {
             newPath[i] = Handles.PositionHandle(newPath[i], Quaternion.identity);
@@ -21,9 +22,9 @@ public class NPCEditor : Editor
 
         if(EditorGUI.EndChangeCheck())
         {
-            Undo.RecordObject(npc, "Move NPC path point");
-            npc.path = newPath;
-            EditorUtility.SetDirty(npc);
+            Undo.RecordObject(am, "Move NonPlayableCharacter path point");
+            am.path.points = newPath;
+            EditorUtility.SetDirty(am);
         }
     }
 }

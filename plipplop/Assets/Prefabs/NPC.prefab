@@ -116,11 +116,11 @@ GameObject:
   - component: {fileID: 6435800329755219703}
   - component: {fileID: 2617133042248759039}
   - component: {fileID: 64330847092521571}
-  - component: {fileID: 8787178700178400514}
   - component: {fileID: 4214280435943086885}
   - component: {fileID: 2459333794845294712}
-  - component: {fileID: 2617133043072381789}
   - component: {fileID: 817710063433153459}
+  - component: {fileID: 1684127436}
+  - component: {fileID: 1684127437}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Untagged
@@ -215,20 +215,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!114 &8787178700178400514
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6435800329755219697}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f3b6284ddfe0f843ad58b75ea19475e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  range: 4
-  multiplier: 1
 --- !u!114 &4214280435943086885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -258,32 +244,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 100767780e9659c4ab49a7634250c1ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0, y: 2.5, z: 0}
-  fieldOfViewAngle: 90
-  range: 6
---- !u!114 &2617133043072381789
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6435800329755219697}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c1f87a972dda384dbac94bd28c37c6e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  state: 0
-  walkSpeed: 3
-  chaseSpeed: 5
-  maxSpeed: 9
-  velocityLerpSpeed: 1
-  navTreshold: 0.1
-  loop: 1
-  path:
-  - {x: 11.873657, y: 0.5, z: 3.1409984}
-  - {x: 25.825588, y: 0.5, z: -15.011214}
-  - {x: 13.383239, y: 0.5, z: -27.111584}
+  settings:
+    offset: {x: 0, y: 0, z: 0}
+    fieldOfViewAngle: 110
+    range: 5
 --- !u!114 &817710063433153459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296,22 +260,59 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624b99fe1e8a4194caf25db18f2a8455, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  emotions:
-  - name: suprised
-    frames:
-    - {fileID: 2800000, guid: c6f0d5ebe6327eb4fb560e84ad48519a, type: 3}
-    - {fileID: 2800000, guid: 347893da202b63f43af43e034c393da4, type: 3}
-    - {fileID: 2800000, guid: 87c47b904f8e3bf4189f22a99dfa92d8, type: 3}
-    speed: 1
-  - name: confused
-    frames:
-    - {fileID: 2800000, guid: be4ef773d694a054ea629537cac57b12, type: 3}
-    - {fileID: 2800000, guid: 694ad7f74af60de45a48f3c0baac58a3, type: 3}
-    - {fileID: 2800000, guid: 773317dfb575f3c4e9408e82a4231d13, type: 3}
-    speed: 1
+  emotions: []
   headTransform: {fileID: 8966352950447059259}
-  adjustment: {x: 0, y: 1.5, z: 0}
+  adjustment: {x: 0, y: 1.25, z: 0}
   size: 1
+--- !u!114 &1684127436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6435800329755219697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a58137c1723f14d88b5a8b3488dd18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentState: {fileID: 11400000, guid: 3cb2311cf9b6fcc488a0a7b62dc1b7c3, type: 2}
+  sight: {fileID: 0}
+  look: {fileID: 0}
+  agent: {fileID: 0}
+  agentMovement: {fileID: 0}
+  animator: {fileID: 0}
+  thing: {fileID: 0}
+  skeleton: {fileID: 0}
+  emo: {fileID: 0}
+  range: {fileID: 0}
+  inRange: []
+--- !u!114 &1684127437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6435800329755219697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d32d2f021836fd4ab299067088d9cac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  path:
+    loop: 1
+    index: 0
+    points:
+    - {x: 5, y: 0.5, z: 6}
+    - {x: 5, y: 0.5, z: -6}
+  settings:
+    speed: 5
+    maxSpeed: 6
+    velocityLerpSpeed: 1
+    navTreshold: 1
+  going: 0
+  reached: 0
+  animator: {fileID: 0}
 --- !u!1001 &7775290463906621715
 PrefabInstance:
   m_ObjectHideFlags: 0

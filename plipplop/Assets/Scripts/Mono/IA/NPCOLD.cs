@@ -5,7 +5,7 @@ using UnityEngine;
 
 public enum ActionState{ Walking, Collecting, Sort }
 
-public class NPC : MonoBehaviour
+public class NPCOLD : MonoBehaviour
 {
     
     [Header("State")]
@@ -185,13 +185,10 @@ public class NPC : MonoBehaviour
     {
         StateUpdate();
         animator.SetFloat("Speed", agent.velocity.magnitude/maxSpeed);
-        if(Distance() < navTreshold) DestinationReached();
+        if(Vector3.Distance(transform.position, agent.destination) < navTreshold) DestinationReached();
     }
 
-    float Distance()
-    {
-        return Vector3.Distance(transform.position, agent.destination);
-    }
+
 
     void Search()
     {
