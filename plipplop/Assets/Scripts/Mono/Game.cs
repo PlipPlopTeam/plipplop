@@ -64,6 +64,7 @@ public class Game : MonoBehaviour
     void CreateKillZ(SpawnMarker spawn)
     {
         var i = Instantiate(library.teleporterVolumePrefab);
+        i.name = "_KILLZ";
         i.transform.position = Vector3.up * killZ * 2f;
         var volume = i.GetComponent<TeleportVolume>();
         volume.landingPoint = spawn.transform;
@@ -71,6 +72,6 @@ public class Game : MonoBehaviour
         volume.height = Mathf.Abs(killZ);
         volume.width = 4096f;
         volume.length = 4006f;
-        volume.isInvisible = false;
+        volume.isInvisible = true;
     }
 }
