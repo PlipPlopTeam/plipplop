@@ -473,31 +473,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e362031a56a4ed4ba1adeffdf97d2b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoPossess: 1
+  autoPossess: 0
   beginCrouched: 1
   canRetractLegs: 1
   useGravity: 1
-  gravityMultiplier: 50
+  gravityMultiplier: 99.75
+  customExternalRigidbody: {fileID: 0}
   customCamera: {fileID: 0}
   locomotion: {fileID: 0}
   pushMovementForce: 250
   pushCooldown: 1
   pushThreshold: 0.75
-  pushJumpForce: 100
-  jumpForce: 500
-  speedBeforeLegs: 1
+  pushJumpForce: 200
+  jumpForce: 400
+  speedBeforeLegs: 0.5
   rotationVelocityThreshold: 0.25
   rotationLerpSpeed: 10
   crouchCooldown: 1.5
   drag: 1
-  anim: {fileID: 2066171022}
-  ps: {fileID: 7856433826983111914}
   valuable: {fileID: 2066171021}
   screenRenderer: {fileID: 951155782816327044}
   fakeLight: {fileID: 1886630332709403819}
-  standScreenTexture: {fileID: 2800000, guid: 8f90f4aeecfb8ee4da3c95516fa4fd38, type: 3}
+  anim: {fileID: 2066171022}
+  ps: {fileID: 7856433826983111914}
+  standScreenTexture: {fileID: 2800000, guid: 1c5dc6fa5c3a70045b00039eb2647d79, type: 3}
   crouchScreenTexture: {fileID: 2800000, guid: 75cdfb784e7b40f4591970c04013a008, type: 3}
-  idleScreenTexture: {fileID: 2800000, guid: 75cdfb784e7b40f4591970c04013a008, type: 3}
+  idleScreenTexture: {fileID: 2800000, guid: 8fc9a49958e7a9a42be659b38f66a92f, type: 3}
 --- !u!114 &6636483350066690604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -512,10 +513,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   preset: {fileID: 11400000, guid: 81c5435995369f048ab3d3d178e1aa7c, type: 2}
   legsHeight: 0.25
-  groundCheckRange: 1
+  groundCheckRange: 0.5
   legsOffset: {x: 0, y: 0, z: 0}
   rigidbody: {fileID: 0}
   targetDirection: {x: 0, y: 0, z: 0}
+  isImmerged: 0
 --- !u!54 &6636483350066690593
 Rigidbody:
   m_ObjectHideFlags: 0
