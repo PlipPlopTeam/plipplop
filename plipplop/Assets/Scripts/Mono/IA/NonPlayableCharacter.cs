@@ -14,7 +14,7 @@ public class NonPlayableCharacter : StateManager
 	[HideInInspector] public Skeleton skeleton;
 	[HideInInspector] public EmotionRenderer emo;
 	[HideInInspector] public CollisionEventTransmitter range;
-	public List<GameObject> inRange = new List<GameObject>();
+	[HideInInspector] public List<GameObject> inRange = new List<GameObject>();
 
 	void Awake()
 	{
