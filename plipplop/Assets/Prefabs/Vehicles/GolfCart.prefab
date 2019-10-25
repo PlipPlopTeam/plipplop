@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 162950709}
   - component: {fileID: 162950710}
   - component: {fileID: 1500567177}
+  - component: {fileID: 1087231976}
   m_Layer: 0
   m_Name: GolfCart
   m_TagString: Untagged
@@ -128,7 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a62fdc21b1129545a9acb2225d20056, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoPossess: 1
+  autoPossess: 0
   beginCrouched: 1
   canRetractLegs: 1
   useGravity: 1
@@ -144,7 +145,9 @@ MonoBehaviour:
   autoBrakeSpeed: 1
   antiSpinSpeed: 6
   tiltAmount: 50
-  antiFlipForce: 5
+  antiFlipForce: 10
+  airRollForce: 600
+  airPitchForce: 600
   wheels:
   - {fileID: 1706531757574354176}
   - {fileID: 1706531758141886334}
@@ -175,8 +178,8 @@ CapsuleCollider:
   m_Material: {fileID: 13400000, guid: 1ba9d71612f555b479275556f3dee594, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.6
-  m_Height: 2
+  m_Radius: 0.7
+  m_Height: 2.5
   m_Direction: 2
   m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!114 &1706531758072179816
@@ -240,6 +243,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buyoyancy: 0
   waterline: -1.64
+--- !u!65 &1087231976
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1706531758072179810}
+  m_Material: {fileID: 13400000, guid: 1ba9d71612f555b479275556f3dee594, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.2, y: 1.8, z: 2}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &1706531758141886333
 GameObject:
   m_ObjectHideFlags: 0

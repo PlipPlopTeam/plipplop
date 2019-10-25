@@ -243,6 +243,25 @@ public abstract class Controller : MonoBehaviour
                 })
             );
         }
+        else {
+            if (autoPossess) {
+                var sf = Mathf.Clamp(HandleUtility.GetHandleSize(transform.position), 1f, 6f);
+                var style = new GUIStyle(GUI.skin.textField);
+                style.fontStyle = FontStyle.BoldAndItalic;
+                style.fontSize = Mathf.FloorToInt(12f / sf);
+                style.normal.textColor = Color.white;
+                style.alignment = TextAnchor.MiddleCenter;
+                style.imagePosition = style.fontSize > 3 ? ImagePosition.ImageAbove : ImagePosition.ImageOnly;
+
+                var asPressedTex = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_AutoPossess");
+                var content = new GUIContent();
+                content.image = asPressedTex;
+                content.text = "[AUTO-POSSESS]";
+
+                if (style.fontSize > 2) Handles.Label(transform.position + Vector3.up *2f, content, style);
+                else Gizmos.DrawIcon(transform.position + Vector3.up*2f, "SPR_GIZ_AUTOPOSSESS", false);
+            }
+        }
     }
 #endif
 }
