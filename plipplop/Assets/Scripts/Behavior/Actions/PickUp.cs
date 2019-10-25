@@ -21,7 +21,6 @@ namespace NPC
                 }
 
                 npc.animator.SetBool("Carrying", true);
-                npc.inRange.Remove(npc.thing.gameObject);
                 npc.thing.transform.position = (npc.skeleton.rightHandBone.position + npc.skeleton.leftHandBone.position)/2f;
                 npc.thing.transform.forward = npc.transform.forward;
 			}

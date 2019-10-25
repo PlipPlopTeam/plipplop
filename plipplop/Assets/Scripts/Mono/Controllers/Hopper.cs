@@ -7,14 +7,14 @@ public class Hopper : Controller
     [Header("HOPPER")]
     [Space(5)]
     [Header("Push")]
-    public float pushMovementForce = 10f;
+    public float pushMovementForce = 500f;
     public float pushCooldown = 2f;
     public float pushThreshold = 0.5f;
-    public float pushJumpForce = 10f;
+    public float pushJumpForce = 250f;
     [Space(5)]
     [Header("Others")]
     public float jumpForce = 10f;
-    public float speedBeforeLegs;
+    public float speedBeforeLegs = 1f;
     public float rotationVelocityThreshold = 0.25f;
     public float rotationLerpSpeed = 2f;
     public float crouchCooldown = 2f;
@@ -64,8 +64,8 @@ public class Hopper : Controller
         
         if(!AreLegsRetracted())
         {
-            crouchTimer -= Time.deltaTime;
-            if(crouchTimer <= 0)
+            if(crouchTimer > 0) crouchTimer -= Time.deltaTime;
+            else
             {
                 if(IsPossessed() && rigidbody.velocity.magnitude <= speedBeforeLegs)
                     RetractLegs();

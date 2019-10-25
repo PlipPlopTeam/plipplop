@@ -18,7 +18,8 @@ public class AgentMovement : MonoBehaviour
         public float speed = 5f;
         public float maxSpeed = 1f;
         public float velocityLerpSpeed = 1f;
-        public float navTreshold = 1f;  
+        public float navTreshold = 1f;
+        public float minimumCarrySpeed = 1f;  
     }
 
     public System.Action onDestinationReached;
@@ -35,7 +36,25 @@ public class AgentMovement : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         going = false;
+        SetSpeed(settings.speed);
     }
+
+    public void ApplyWeightToSpeed(float weight, float strength)
+    {
+        float s = (settings.speed - settings.minimumCarrySpeed) * Mathf.Max(strength/weight) + settings.minimumCarrySpeed;
+        SetSpeed(s);
+    }
+
+    public void ResetSpeed()
+    {
+        SetSpeed(settings.speed);
+    }
+
+    public void SetSpeed(float value)
+    {
+        agent.speed = value;
+    }
+    
 
     public void Chase(Transform target)
     {

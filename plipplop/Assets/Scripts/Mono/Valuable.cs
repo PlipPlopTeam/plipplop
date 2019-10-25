@@ -5,6 +5,7 @@ public class Valuable : MonoBehaviour
     [HideInInspector] public Vector3 origin;
     
     [Header("Settings")]
+    public float weight = 1f;
     public float distanceThreshold = 1f;
     public bool hidden = false;
 
