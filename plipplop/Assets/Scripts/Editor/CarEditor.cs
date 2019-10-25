@@ -3,32 +3,18 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(Controller), true)]
+[CustomEditor(typeof(Car), true)]
 [CanEditMultipleObjects]
-public class ControllerEditor : Editor
+public class CarEditor : ControllerEditor
 {
-    internal bool unlockedProperties = false;
-
-    internal float fieldsHeight = 35f;
-    internal float headerSeparatorHeight = 30f;
-    internal float wMargin = 60f;
-    internal int columns = 2;
-    internal GUIStyle title;
-
-    internal GUIStyle pressedControl;
-    internal GUIStyle normalControl;
-    internal GUIStyle centeredPressedControl;
-    internal GUIStyle centeredNormalControl;
-
-    internal string buttonSpace = "   ";
-
     public override void OnInspectorGUI()
     {
-        MakeStyles();
-
+        base.OnInspectorGUI();
+        return;
         List<System.Action> buttons = new List<System.Action>();
         var w = Screen.width - wMargin;
         var colWidth = w / columns;
+
         buttons.Add(BeginCrouchedButton(colWidth));
         buttons.Add(CanRetractLegsButton(colWidth));
         buttons.Add(UseGravityButton(colWidth));
@@ -49,13 +35,13 @@ public class ControllerEditor : Editor
             GUILayout.Label("Inherited properties", title, GUILayout.Height(20f), GUILayout.ExpandWidth(true));
 
             GUILayout.BeginVertical();
-            GUILayout.BeginHorizontal(GUILayout.Height(fieldsHeight));
+            GUILayout.BeginHorizontal(GUILayout.Height(35f));
 
             var currentLine = 0;
             for (int i = 0; i < buttons.Count; i++) {
                 if (Mathf.Floor(i/(float)columns) != currentLine) {
                     GUILayout.EndHorizontal();
-                    GUILayout.BeginHorizontal(GUILayout.Height(fieldsHeight));
+                    GUILayout.BeginHorizontal(GUILayout.Height(35f));
                     currentLine++;
                 }
                 buttons[i].Invoke();
@@ -65,7 +51,7 @@ public class ControllerEditor : Editor
         }
         EditorGUILayout.EndFoldoutHeaderGroup();
 
-        GUILayout.Label("Specific properties", title, GUILayout.Height(headerSeparatorHeight), GUILayout.ExpandWidth(true));
+        GUILayout.Label("Specific properties", title, GUILayout.Height(30f), GUILayout.ExpandWidth(true));
 
         DrawDefaultInspector();
 
@@ -85,7 +71,7 @@ public class ControllerEditor : Editor
 
         var options = new List<GUILayoutOption>();
 
-        options.Add(GUILayout.Height(fieldsHeight));
+        options.Add(GUILayout.Height(35f));
 
 
         return delegate {
@@ -155,7 +141,7 @@ public class ControllerEditor : Editor
 
         var options = new List<GUILayoutOption>();
 
-        options.Add(GUILayout.Height(fieldsHeight));
+        options.Add(GUILayout.Height(35f));
 
 
         return delegate {
@@ -179,7 +165,7 @@ public class ControllerEditor : Editor
 
         var options = new List<GUILayoutOption>();
 
-        options.Add(GUILayout.Height(fieldsHeight));
+        options.Add(GUILayout.Height(35f));
         options.Add(GUILayout.Width(width));
 
         return delegate {
@@ -205,7 +191,7 @@ public class ControllerEditor : Editor
 
         var options = new List<GUILayoutOption>();
 
-        options.Add(GUILayout.Height(fieldsHeight));
+        options.Add(GUILayout.Height(35f));
         options.Add(GUILayout.Width(width));
 
         return delegate {
@@ -231,7 +217,7 @@ public class ControllerEditor : Editor
 
         var options = new List<GUILayoutOption>();
 
-        options.Add(GUILayout.Height(fieldsHeight));
+        options.Add(GUILayout.Height(35f));
         options.Add(GUILayout.Width(width));
 
         return delegate {
@@ -254,7 +240,7 @@ public class ControllerEditor : Editor
         var options = new List<GUILayoutOption>();
 
         options.Add(GUILayout.Width(width));
-        options.Add(GUILayout.Height(fieldsHeight));
+        options.Add(GUILayout.Height(35f));
 
         var noBoldTitle = new GUIStyle(title);
         noBoldTitle.fontStyle = FontStyle.Normal;
@@ -265,8 +251,8 @@ public class ControllerEditor : Editor
 
             GUILayout.BeginVertical(options.ToArray());
 
-            GUILayout.Label(string.Format("Gravity: {0}%", Mathf.Round(g)), noBoldTitle, GUILayout.Height(fieldsHeight * 0.66f), GUILayout.ExpandWidth(true));
-            serializedObject.FindProperty("gravityMultiplier").floatValue = GUILayout.HorizontalSlider(g, 1f, 200f, GUILayout.Height(fieldsHeight*0.33f));
+            GUILayout.Label(string.Format("Gravity: {0}%", Mathf.Round(g)), noBoldTitle, GUILayout.Height(20f), GUILayout.ExpandWidth(true));
+            serializedObject.FindProperty("gravityMultiplier").floatValue = GUILayout.HorizontalSlider(g, 1f, 200f, GUILayout.Height(15f));
             serializedObject.ApplyModifiedProperties();
             GUILayout.EndVertical();
         };
@@ -277,7 +263,7 @@ public class ControllerEditor : Editor
         var options = new List<GUILayoutOption>();
 
         options.Add(GUILayout.Width(width));
-        options.Add(GUILayout.Height(fieldsHeight));
+        options.Add(GUILayout.Height(35f));
 
         var noBoldTitle = new GUIStyle(title);
         noBoldTitle.fontStyle = FontStyle.Normal;
@@ -286,7 +272,7 @@ public class ControllerEditor : Editor
         return delegate {
             GUILayout.BeginVertical(options.ToArray());
 
-            GUILayout.Label("Custom rigidbody", noBoldTitle, GUILayout.Height(fieldsHeight*0.66f), GUILayout.ExpandWidth(true));
+            GUILayout.Label("Custom rigidbody", noBoldTitle, GUILayout.Height(20f), GUILayout.ExpandWidth(true));
             ((Controller)target).customExternalRigidbody = (Rigidbody)EditorGUILayout.ObjectField(((Controller)target).customExternalRigidbody, typeof(Rigidbody), allowSceneObjects:true);
             GUILayout.EndVertical();
         };
@@ -297,7 +283,7 @@ public class ControllerEditor : Editor
         var options = new List<GUILayoutOption>();
 
         options.Add(GUILayout.Width(width));
-        options.Add(GUILayout.Height(fieldsHeight));
+        options.Add(GUILayout.Height(35f));
 
         var noBoldTitle = new GUIStyle(title);
         noBoldTitle.fontStyle = FontStyle.Normal;
@@ -306,7 +292,7 @@ public class ControllerEditor : Editor
         return delegate {
             GUILayout.BeginVertical(options.ToArray());
 
-            GUILayout.Label("Custom aperture preset", noBoldTitle, GUILayout.Height(fieldsHeight*0.66f), GUILayout.ExpandWidth(true));
+            GUILayout.Label("Custom aperture preset", noBoldTitle, GUILayout.Height(20f), GUILayout.ExpandWidth(true));
             ((Controller)target).customCamera = (AperturePreset)EditorGUILayout.ObjectField(((Controller)target).customCamera, typeof(AperturePreset), allowSceneObjects: true);
             GUILayout.EndVertical();
         };
