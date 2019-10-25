@@ -3,7 +3,7 @@
 [CreateAssetMenu(menuName="ScriptableObjects/Emotion")]
 public class Emotion : ScriptableObject
 {
-    public string name;
+    public string label;
     public Texture[] frames;
     public float speed;
 }

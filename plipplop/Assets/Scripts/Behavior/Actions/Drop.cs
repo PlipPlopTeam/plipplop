@@ -14,6 +14,7 @@ namespace NPC
 			if(npc != null && npc.thing != null)
 			{
 				npc.thing.transform.position = (npc.skeleton.rightHandBone.position + npc.skeleton.leftHandBone.position)/2f + npc.transform.forward;
+                npc.agentMovement.ResetSpeed();
                 npc.animator.SetBool("Carrying", false);
             }
         }

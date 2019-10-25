@@ -13,8 +13,11 @@ public class NonPlayableCharacter : StateManager
 	[HideInInspector] public Valuable thing;
 	[HideInInspector] public Skeleton skeleton;
 	[HideInInspector] public EmotionRenderer emo;
-	[HideInInspector] public CollisionEventTransmitter range;
-	[HideInInspector] public List<GameObject> inRange = new List<GameObject>();
+	//[HideInInspector] public CollisionEventTransmitter range;
+	//[HideInInspector] public List<GameObject> inRange = new List<GameObject>();
+	[HideInInspector] public Range range;
+
+	public float strength = 1f;
 
 	void Awake()
 	{
@@ -23,6 +26,7 @@ public class NonPlayableCharacter : StateManager
 		look = GetComponent<FocusLook>();
 		agent = GetComponent<NavMeshAgent>();
 		animator = GetComponent<Animator>();
+		range = GetComponent<Range>();
 
 		emo = GetComponent<EmotionRenderer>();
 		emo.Load();
@@ -30,13 +34,8 @@ public class NonPlayableCharacter : StateManager
 		agentMovement = GetComponent<AgentMovement>();
 		agentMovement.animator = animator;
 
-        range = GetComponentInChildren<CollisionEventTransmitter>();
-        range.onTriggerEnter += (Collider other) => { inRange.Add(other.transform.gameObject); };
-        range.onTriggerExit += (Collider other) => { inRange.Remove(other.transform.gameObject); };
+        //range = GetComponentInChildren<CollisionEventTransmitter>();
+        //range.onTriggerEnter += (Collider other) => { inRange.Add(other.transform.gameObject); };
+        //range.onTriggerExit += (Collider other) => { inRange.Remove(other.transform.gameObject); };
 	}
-
-	public bool InRange(GameObject obj)
-    {
-        return inRange.Contains(obj);
-    }
 }

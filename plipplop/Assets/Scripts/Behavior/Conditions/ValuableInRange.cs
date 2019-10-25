@@ -11,7 +11,7 @@ namespace NPC
 		public override bool Check(StateManager state)
 		{
 			NonPlayableCharacter npc = (NonPlayableCharacter)state;
-            return npc != null && npc.InRange(npc.thing.gameObject);
+            return npc != null && npc.range.IsInRange(npc.thing.gameObject);
 		}
 	}	
 }
