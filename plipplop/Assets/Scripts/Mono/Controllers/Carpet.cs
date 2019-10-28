@@ -99,10 +99,11 @@ public class Carpet : Controller
     {
         // Code here
     }
-
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         var style = new GUIStyle(GUI.skin.box);
         Handles.Label(transform.position + Vector3.up*2f, spring.minDistance.ToString(), style);
     }
+#endif
 }
