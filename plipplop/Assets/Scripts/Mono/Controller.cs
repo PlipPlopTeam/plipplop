@@ -100,7 +100,7 @@ public abstract class Controller : MonoBehaviour
 
     public void Move(float fb, float rl)
     {
-        BaseMove(new Vector3(rl, 0f, fb).normalized);
+        BaseMove(Vector3.ClampMagnitude(new Vector3(rl, 0f, fb), 1f));
     }
 
     public void MoveCamera(float h, float v)

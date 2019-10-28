@@ -11,5 +11,7 @@ public class LocomotionPreset : ScriptableObject
     [Range(0f, 1f)] public float groundFriction = 0.6f;
     public PhysicMaterialCombine frictionCombine = PhysicMaterialCombine.Minimum;
     [Range(0f, 100f)] public float airControl = 65f;
+    [Range(0f, 100f)] public float waterControl = 65f;
     [Range(0f, 2f)] public float waterSpeedFactor = 0.6f;
+    [Range(0f, 1f)] public float maxWalkableSteepness = 50f;
 }
