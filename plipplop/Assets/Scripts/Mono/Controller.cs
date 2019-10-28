@@ -132,14 +132,14 @@ public abstract class Controller : MonoBehaviour
         rigidbody = customExternalRigidbody==null ? GetComponent<Rigidbody>() : customExternalRigidbody;
         if (!rigidbody) rigidbody = gameObject.AddComponent<Rigidbody>();
 
-        if (!visuals) {
+        if(visuals == null)
+        {
             visuals = transform.GetChild(0);
             var msg = "No visual linked for controller " + gameObject.name + ", took the first TChild (" + visuals.gameObject.name + ") instead";
             if (visuals.gameObject.name != "Visuals")
                 Debug.LogWarning(msg);
             else
                 Debug.Log(msg);
-
         }
 
         locomotion = GetComponent<Locomotion>();
