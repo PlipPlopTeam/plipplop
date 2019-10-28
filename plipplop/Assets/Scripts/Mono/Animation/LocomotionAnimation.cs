@@ -39,12 +39,12 @@ public class LocomotionAnimation
 
         if (isJumping) tilt = 0f;
 
-        visualsTransform.localEulerAngles = 
+        if(visualsTransform != null)
+            visualsTransform.localEulerAngles = 
             new Vector3(tiltAmplitude * (Mathf.Abs(tilt) + (isJumping ? -0.25f : 0f)),
                         visualsTransform.localEulerAngles.y,
                         tiltAmplitude * tilt
-            )
-        ;
+            );
     }
 
     public bool AreLegsRetracted()
