@@ -41,7 +41,7 @@ public class LocomotionAnimation
 
         if(visualsTransform != null)
             visualsTransform.localEulerAngles = 
-            new Vector3(tiltAmplitude * (Mathf.Abs(tilt) + (isJumping ? -0.25f : 0f)),
+            new Vector3(tiltAmplitude * Mathf.Clamp(- rigidbody.velocity.y/5f, -1f, 1f),
                         visualsTransform.localEulerAngles.y,
                         tiltAmplitude * tilt
             );

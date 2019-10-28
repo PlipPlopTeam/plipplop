@@ -17,6 +17,7 @@ public class Locomotion : MonoBehaviour
     LocomotionAnimation locomotionAnimation;
     Controller parentController;
     float timePressed = 0f;
+    float lookForwardSpeed = 8f;
     Vector3 lastDirection = new Vector3();
 
     internal Vector3 groundCheckDirection = Vector3.down;
@@ -118,7 +119,11 @@ public class Locomotion : MonoBehaviour
 
         // Animation
         if ((isImmerged || IsGrounded()) && rigidbody.velocity.normalized.magnitude > 0) {
-            transform.forward = Vector3.Scale(Vector3.one - Vector3.up, rigidbody.velocity.normalized);
+            transform.forward = Vector3.Lerp(
+                Vector3.Scale(Vector3.one - Vector3.up, transform.forward),
+                Vector3.Scale(Vector3.one - Vector3.up, rigidbody.velocity.normalized),
+                Time.fixedDeltaTime * lookForwardSpeed
+            );
         }
     }
 
