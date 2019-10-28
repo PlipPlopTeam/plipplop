@@ -52,6 +52,7 @@ public class AgentMovement : MonoBehaviour
 
     public void SetSpeed(float value)
     {
+        if(value < 0) value = 0f;
         agent.speed = value;
     }
     
