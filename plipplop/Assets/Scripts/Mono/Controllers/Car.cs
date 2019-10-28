@@ -16,8 +16,6 @@ public class Car : Controller
     public float antiSpinSpeed = 6f;
     public float tiltAmount = 50f;
     public float antiFlipForce = 10f;
-    public float airRollForce = 600f;
-    public float airPitchForce = 600f;
     public bool canTiltWhenFree = false;
     [Range(0.0f, 5f)] public float highSpeedAdherenceBonusFactor = 1f;
 
@@ -42,11 +40,10 @@ public class Car : Controller
     internal override void SpecificMove(Vector3 direction)
     {
         var localSpeed = transform.InverseTransformDirection(rigidbody.velocity);
-        var localSpin = transform.TransformDirection(rigidbody.angularVelocity);
+        var localSpin = transform.InverseTransformDirection(rigidbody.angularVelocity);
         var thrustObjective = localSpeed.z;
 
         if (!IsGrounded()) {
-            AirPitchAndRoll(direction);
             direction = Vector3.zero;
         }
 
@@ -69,13 +66,12 @@ public class Car : Controller
         // Reorient the car to optimal rotation to avoid flipping
         // (Anti flip)
         if (!isImmerged && !IsGrounded() && IsPossessed()) {
-            localSpin.x = Mathf.Lerp(localSpin.x, 0f, antiFlipForce * Time.fixedDeltaTime);
+            localSpin.z = Mathf.Lerp(localSpin.z, 0f, antiFlipForce * Time.fixedDeltaTime);
         }
-
 
         // Apply
         rigidbody.velocity = transform.TransformDirection(new Vector3(localSpeed.x, localSpeed.y, thrustObjective));
-        rigidbody.angularVelocity = transform.InverseTransformDirection(localSpin);
+        rigidbody.angularVelocity = transform.TransformDirection(localSpin);
 
 
         // Tilt animation
@@ -86,13 +82,6 @@ public class Car : Controller
     {
         currentTilt = Mathf.Lerp(currentTilt, (steering / maxSteering) * tiltAmount * (amount), 4f * Time.fixedDeltaTime);
         visual.localEulerAngles = new Vector3(visual.localEulerAngles.x, visual.localEulerAngles.y, currentTilt);
-    }
-
-    internal virtual void AirPitchAndRoll(Vector3 direction)
-    {
-        // Pitch and roll
-        rigidbody.AddTorque(transform.right * direction.z * Time.fixedDeltaTime * airPitchForce, ForceMode.Acceleration);
-        rigidbody.AddTorque(-transform.forward * direction.x * Time.fixedDeltaTime * airRollForce, ForceMode.Acceleration);
     }
 
 
