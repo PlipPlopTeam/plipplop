@@ -18,12 +18,14 @@ public class Car : Controller
     public float antiFlipForce = 10f;
     public float airRollForce = 600f;
     public float airPitchForce = 600f;
+    public bool canTiltWhenFree = false;
+    [Range(0.0f, 5f)] public float highSpeedAdherenceBonusFactor = 1f;
 
     public Transform[] wheels;
     public Transform visual;
 
-    float currentTilt = 0f;
-    float steering = 0f;
+    internal float currentTilt = 0f;
+    internal float steering = 0f;
 
     public override void OnEject()
     {
@@ -44,9 +46,7 @@ public class Car : Controller
         var thrustObjective = localSpeed.z;
 
         if (!IsGrounded()) {
-            // Pitch and roll
-            rigidbody.AddTorque(transform.right * direction.z * Time.fixedDeltaTime * airPitchForce, ForceMode.Acceleration);
-            rigidbody.AddTorque(-transform.forward * direction.x * Time.fixedDeltaTime * airRollForce, ForceMode.Acceleration);
+            AirPitchAndRoll(direction);
             direction = Vector3.zero;
         }
 
@@ -64,7 +64,7 @@ public class Car : Controller
 
         // Auto brake
         thrustObjective = Mathf.Lerp(thrustObjective, thrustObjective * (Mathf.Abs(direction.z)), autoBrakeSpeed * Time.fixedDeltaTime);
-        localSpeed.x = 0f; // No strafing, good tires
+        if (IsGrounded()) localSpeed.x = 0f; // No strafing, good tires
 
         // Reorient the car to optimal rotation to avoid flipping
         // (Anti flip)
@@ -79,10 +79,23 @@ public class Car : Controller
 
 
         // Tilt animation
-        currentTilt = Mathf.Lerp(currentTilt, (steering / maxSteering) * tiltAmount * (thrustObjective / maxSpeed), 4f * Time.fixedDeltaTime);
-        visual.localEulerAngles = new Vector3(visual.localEulerAngles.x, visual.localEulerAngles.y, currentTilt);
-
+        TiltVisual(thrustObjective / maxSpeed);
     }
+
+    internal virtual void TiltVisual(float amount)
+    {
+        currentTilt = Mathf.Lerp(currentTilt, (steering / maxSteering) * tiltAmount * (amount), 4f * Time.fixedDeltaTime);
+        visual.localEulerAngles = new Vector3(visual.localEulerAngles.x, visual.localEulerAngles.y, currentTilt);
+    }
+
+    internal virtual void AirPitchAndRoll(Vector3 direction)
+    {
+        // Pitch and roll
+        rigidbody.AddTorque(transform.right * direction.z * Time.fixedDeltaTime * airPitchForce, ForceMode.Acceleration);
+        rigidbody.AddTorque(-transform.forward * direction.x * Time.fixedDeltaTime * airRollForce, ForceMode.Acceleration);
+    }
+
+
 
     internal override void Start()
     {
@@ -108,20 +121,19 @@ public class Car : Controller
         }
 
         // Even when not controlled, the car shouldn't drift away
-        if (IsPossessed()) {
-            rigidbody.drag = 0f;
-            rigidbody.angularDrag = 0f;
-        }
-        else {
+        rigidbody.drag = 0f;
+        rigidbody.angularDrag = 0f;
+        if (!IsGrounded()) rigidbody.angularDrag = 2f;
+        if (!IsPossessed()) {
             rigidbody.drag = 4f;
             rigidbody.angularDrag = 2f;
 
             // No tilting
-            visual.localEulerAngles = new Vector3(visual.localEulerAngles.x, visual.localEulerAngles.y, 0f);
+            if (!canTiltWhenFree) visual.localEulerAngles = new Vector3(visual.localEulerAngles.x, visual.localEulerAngles.y, 0f);
         }
 
         // Adhere to wall if speed
-        locomotion.groundCheckDirection = Vector3.Lerp(Vector3.down, -transform.up, localSpeed.z / maxSpeed);
+        locomotion.groundCheckDirection = Vector3.Lerp(Vector3.down, -transform.up, (localSpeed.z / maxSpeed) * highSpeedAdherenceBonusFactor);
     }
 
     internal override void OnLegsRetracted()
