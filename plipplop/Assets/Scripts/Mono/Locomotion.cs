@@ -17,17 +17,20 @@ public class Locomotion : MonoBehaviour
     float currentSpeed = 0f;
     LocomotionAnimation locomotionAnimation;
     float timePressed = 0f;
-    float timeFalling = 0f;
     Vector3 heading = new Vector3();
     Controller parentController;
     internal Vector3 groundCheckDirection = Vector3.down;
 
     private void Awake()
     {
-        locomotionAnimation = new LocomotionAnimation(gameObject.AddComponent<CapsuleCollider>());
+
         preset = preset ? preset : Game.i.library.defaultLocomotion;
         parentController = GetComponent<Controller>();
         rigidbody = parentController.rigidbody;
+
+        var legsCollider = gameObject.AddComponent<BoxCollider>();
+        legsCollider.material = new PhysicMaterial() { dynamicFriction = preset.groundFriction, staticFriction = preset.groundFriction, frictionCombine = preset.frictionCombine};
+        locomotionAnimation = new LocomotionAnimation(rigidbody, legsCollider, parentController.visuals);
     }
     
     private void Update()
@@ -55,7 +58,6 @@ public class Locomotion : MonoBehaviour
     public void ExtendLegs()
     {
         locomotionAnimation.ExtendLegs();
-        parentController.rigidbody.drag = preset.baseDrag;
 
         Vector3 sp = Vector3.zero;
         var v = GetBelowSurface();
@@ -81,6 +83,7 @@ public class Locomotion : MonoBehaviour
             heading = Vector3.Lerp(heading, direction, preset.airControl / 100f);
         }
 
+        // Accelerate over time and apply speed
         var acceleration = preset.accelerationCurve.Evaluate(timePressed);
         if (acceleration <= 0f) {
             currentSpeed = Mathf.Lerp(currentSpeed, 0f, 3f * Time.fixedDeltaTime);
@@ -92,8 +95,10 @@ public class Locomotion : MonoBehaviour
         var speedTarget = dir * currentSpeed;
         parentController.rigidbody.velocity = new Vector3(speedTarget.x, parentController.rigidbody.velocity.y, speedTarget.z);
 
+
         // Rotate legs
-        if (dir != Vector3.zero) targetDirection = dir;
+        targetDirection = dir * direction.magnitude;
+        if (targetDirection.magnitude <= 0) return;
 
         if (isImmerged || IsGrounded()) {
             transform.forward = Vector3.Lerp(transform.forward, targetDirection, Time.fixedDeltaTime * 10f);
@@ -103,41 +108,9 @@ public class Locomotion : MonoBehaviour
         }
     }
 
-    public void Fall(float factor=1f)
+    public void Jump()
     {
-        if (!IsGrounded() && !AreLegsRetracted()) {
-            // This code contains few constants to make gravity feel good
-            // Feel free to edit but DO NOT make public
-            timeFalling += Time.deltaTime*1.6f;
-            parentController.rigidbody.AddForce(Vector3.down * Mathf.Pow(9.81f, timeFalling+2.8f) * factor * Time.deltaTime, ForceMode.Acceleration);
-            if (parentController.rigidbody.velocity.y < -preset.maxFallSpeed) {
-                parentController.rigidbody.velocity = new Vector3(parentController.rigidbody.velocity.x, -preset.maxFallSpeed, parentController.rigidbody.velocity.z);
-            }
-        }
-    }
-
-    private Vector3? GetBelowSurface()
-    {
-        RaycastHit[] hits = RaycatAllToGround();
-
-        foreach(RaycastHit h in hits)
-        {
-            if(!IsMe(h.transform) && !h.collider.isTrigger) return h.point;
-        }
-
-        return null;
-    }
-
-    RaycastHit[] RaycatAllToGround(float rangeMultiplier = 1f)
-    {
-        Vector3 os = Vector3.zero;
-
-        if(AreLegsRetracted())
-            os = legsOffset + new Vector3(0f, 0.2f, 0f);
-        else
-            os = legsOffset - new Vector3(0f, legsHeight - 0.2f, 0f);
-
-        return Physics.RaycastAll(transform.position + transform.TransformDirection(os), groundCheckDirection, groundCheckRange * rangeMultiplier);
+        rigidbody.AddForce(Vector3.up * preset.jump, ForceMode.Acceleration);
     }
 
     public bool IsGrounded(float rangeMultiplier = 1f) // But better 😎
@@ -147,14 +120,13 @@ public class Locomotion : MonoBehaviour
         foreach(RaycastHit h in hits)
         {
             if (!IsMe(h.transform) && !h.collider.isTrigger) {
-                ResetTimeFalling();
                 return true;
             }
         }
         return false;
     }
 
-    private bool IsMe(Transform thing)
+    bool IsMe(Transform thing)
     {
         foreach(Transform t in transform.GetComponentsInChildren<Transform>())
         {
@@ -163,14 +135,27 @@ public class Locomotion : MonoBehaviour
         return false;
     }
 
-    public void Jump()
+    RaycastHit[] RaycatAllToGround(float rangeMultiplier = 1f)
     {
-        rigidbody.AddForce(Vector3.up * preset.jump, ForceMode.Acceleration);
+        Vector3 os = Vector3.zero;
+
+        if (AreLegsRetracted())
+            os = legsOffset + new Vector3(0f, 0.2f, 0f);
+        else
+            os = legsOffset - new Vector3(0f, legsHeight - 0.2f, 0f);
+
+        return Physics.RaycastAll(transform.position + transform.TransformDirection(os), groundCheckDirection, groundCheckRange * rangeMultiplier);
     }
 
-    public void ResetTimeFalling()
+    Vector3? GetBelowSurface()
     {
-        timeFalling = 0f;
+        RaycastHit[] hits = RaycatAllToGround();
+
+        foreach (RaycastHit h in hits) {
+            if (!IsMe(h.transform) && !h.collider.isTrigger) return h.point;
+        }
+
+        return null;
     }
 
 #if UNITY_EDITOR

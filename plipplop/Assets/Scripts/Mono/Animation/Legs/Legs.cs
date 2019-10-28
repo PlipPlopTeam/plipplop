@@ -19,6 +19,7 @@ public class Legs : MonoBehaviour
     
     void Update()
     {
+        return;
         if (isJumping) foreach(var leg in legs) leg.PullLeg();
         else
             if (Mathf.Floor(Time.time * legFps * 2f) % 2 == 0f) UpdateLegs();

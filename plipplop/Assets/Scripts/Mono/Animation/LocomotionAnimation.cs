@@ -13,15 +13,16 @@ public class LocomotionAnimation
     float tilt = 0f;
     Transform parentTransform;
     public Rigidbody rigidbody;
-    CapsuleCollider legsCollider;
+    BoxCollider legsCollider;
     Legs legs;
+    Transform visualsTransform;
 
-    public LocomotionAnimation(CapsuleCollider legsCollider)
+    public LocomotionAnimation(Rigidbody rb, BoxCollider legsCollider, Transform visualsTransform)
     {
+        this.rigidbody = rb;
         this.legsCollider = legsCollider;
         parentTransform = legsCollider.transform;
-        rigidbody = legsCollider.GetComponent<Controller>().rigidbody;
-        legsCollider.material = new PhysicMaterial() { dynamicFriction = 0f, staticFriction = 0f, frictionCombine = PhysicMaterialCombine.Minimum };
+        this.visualsTransform = visualsTransform;
         GrowLegs();
     }
 
@@ -38,9 +39,9 @@ public class LocomotionAnimation
 
         if (isJumping) tilt = 0f;
 
-        parentTransform.localEulerAngles = 
+        visualsTransform.localEulerAngles = 
             new Vector3(tiltAmplitude * (Mathf.Abs(tilt) + (isJumping ? -0.25f : 0f)),
-                        parentTransform.localEulerAngles.y,
+                        visualsTransform.localEulerAngles.y,
                         tiltAmplitude * tilt
             )
         ;
@@ -74,7 +75,7 @@ public class LocomotionAnimation
 
     void SetLegHeight()
     {
-        legsCollider.height = legsHeight;
+        legsCollider.size = new Vector3(1f, legsHeight*2f, 1f);
         legsCollider.center = legsOffset + new Vector3(0f, -legsHeight / 2, 0f);
     }
 }

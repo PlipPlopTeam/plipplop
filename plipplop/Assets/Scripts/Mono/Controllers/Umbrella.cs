@@ -64,9 +64,6 @@ public class Umbrella : Controller
     internal override void FixedUpdate()
     {
         ApplyGravity(remainingGravityPercentWhenOpened / 100f + GetCurrentClosure() * (1f - remainingGravityPercentWhenOpened / 100f));
-        if (!IsDeployed()) {
-            locomotion.Fall();
-        }
     }
 
     internal override void BaseMove(Vector3 direction)

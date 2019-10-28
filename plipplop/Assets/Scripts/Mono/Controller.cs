@@ -15,7 +15,8 @@ public abstract class Controller : MonoBehaviour
 
     [HideInInspector] public AperturePreset customCamera = null;
     [HideInInspector] public Locomotion locomotion;
-    
+    [HideInInspector] public Transform visuals;
+
     GameObject face;
 
     new internal Rigidbody rigidbody;
@@ -131,6 +132,16 @@ public abstract class Controller : MonoBehaviour
         rigidbody = customExternalRigidbody==null ? GetComponent<Rigidbody>() : customExternalRigidbody;
         if (!rigidbody) rigidbody = gameObject.AddComponent<Rigidbody>();
 
+        if (!visuals) {
+            visuals = transform.GetChild(0);
+            var msg = "No visual linked for controller " + gameObject.name + ", took the first TChild (" + visuals.gameObject.name + ") instead";
+            if (visuals.gameObject.name != "Visuals")
+                Debug.LogWarning(msg);
+            else
+                Debug.Log(msg);
+
+        }
+
         locomotion = GetComponent<Locomotion>();
         if (!locomotion) locomotion = gameObject.AddComponent<Locomotion>();
 
@@ -151,10 +162,10 @@ public abstract class Controller : MonoBehaviour
 
     void AddFace()
     {
-        face = Instantiate(Game.i.library.facePrefab, transform);
+        face = Instantiate(Game.i.library.facePrefab, visuals);
         Vector3 bounds = GetComponent<Collider>().bounds.size;
         face.transform.localPosition = new Vector3(0f, bounds.y/2, bounds.z/2);
-        face.transform.forward = transform.transform.forward;
+        face.transform.forward = visuals.forward;
     }
 
     void ToggleFace(bool isActive)
@@ -194,17 +205,14 @@ public abstract class Controller : MonoBehaviour
     virtual internal void FixedUpdate()
     {
         if (useGravity && !isImmerged) {
-            if (AreLegsRetracted()) ApplyGravity();
-            locomotion.Fall();
-        }
-        else {
-            locomotion.ResetTimeFalling();
+            ApplyGravity();
         }
     }
 
     internal void ApplyGravity(float factor=1f)
     {
-        rigidbody.AddForce(Vector3.down * 9.81f * gravityMultiplier * factor * Time.fixedDeltaTime, ForceMode.Acceleration);
+        var gravity = Vector3.down * 9.81f * (gravityMultiplier/100f) * factor;
+        rigidbody.AddForce(gravity, ForceMode.Acceleration);
     }
 
     // Trying to possess something else

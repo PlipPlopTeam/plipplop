@@ -9,10 +9,11 @@ public class ControllerEditor : Editor
 {
     internal bool unlockedProperties = false;
 
-    internal float fieldsHeight = 35f;
-    internal float headerSeparatorHeight = 30f;
-    internal float wMargin = 60f;
-    internal int columns = 2;
+    internal readonly float fieldsHeight = 35f;
+    internal readonly float hSpacing = 10f;
+    internal readonly float headerSeparatorHeight = 30f;
+    internal readonly float wMargin = 60f;
+    internal readonly int columns = 2;
     internal GUIStyle title;
 
     internal GUIStyle pressedControl;
@@ -25,7 +26,6 @@ public class ControllerEditor : Editor
     public override void OnInspectorGUI()
     {
         MakeStyles();
-
         List<System.Action> buttons = new List<System.Action>();
         var w = Screen.width - wMargin;
         var colWidth = w / columns;
@@ -35,6 +35,7 @@ public class ControllerEditor : Editor
         buttons.Add(GravityMultiplierSlider(colWidth));
         buttons.Add(CustomCameraField(colWidth));
         buttons.Add(CustomRigidbodyField(colWidth));
+        buttons.Add(CustomVisualsField(colWidth));
 
 
         if (EditorApplication.isPlaying) {
@@ -49,13 +50,14 @@ public class ControllerEditor : Editor
             GUILayout.Label("Inherited properties", title, GUILayout.Height(20f), GUILayout.ExpandWidth(true));
 
             GUILayout.BeginVertical();
-            GUILayout.BeginHorizontal(GUILayout.Height(fieldsHeight));
+            GUILayout.BeginHorizontal(GUILayout.MinHeight(fieldsHeight));
 
             var currentLine = 0;
             for (int i = 0; i < buttons.Count; i++) {
                 if (Mathf.Floor(i/(float)columns) != currentLine) {
                     GUILayout.EndHorizontal();
-                    GUILayout.BeginHorizontal(GUILayout.Height(fieldsHeight));
+                    GUILayout.Space(hSpacing);
+                    GUILayout.BeginHorizontal(GUILayout.MinHeight(fieldsHeight));
                     currentLine++;
                 }
                 buttons[i].Invoke();
@@ -179,7 +181,7 @@ public class ControllerEditor : Editor
 
         var options = new List<GUILayoutOption>();
 
-        options.Add(GUILayout.Height(fieldsHeight));
+        options.Add(GUILayout.MinHeight(fieldsHeight));
         options.Add(GUILayout.Width(width));
 
         return delegate {
@@ -277,16 +279,18 @@ public class ControllerEditor : Editor
         var options = new List<GUILayoutOption>();
 
         options.Add(GUILayout.Width(width));
-        options.Add(GUILayout.Height(fieldsHeight));
+        options.Add(GUILayout.MinHeight(fieldsHeight));
+        options.Add(GUILayout.ExpandHeight(false));
 
         var noBoldTitle = new GUIStyle(title);
         noBoldTitle.fontStyle = FontStyle.Normal;
 
+        var icon = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_ControllerRigidbody");
 
         return delegate {
             GUILayout.BeginVertical(options.ToArray());
 
-            GUILayout.Label("Custom rigidbody", noBoldTitle, GUILayout.Height(fieldsHeight*0.66f), GUILayout.ExpandWidth(true));
+            GUILayout.Label(new GUIContent("Custom rigidbody", icon), noBoldTitle, GUILayout.Height(fieldsHeight*0.66f), GUILayout.ExpandWidth(true));
             ((Controller)target).customExternalRigidbody = (Rigidbody)EditorGUILayout.ObjectField(((Controller)target).customExternalRigidbody, typeof(Rigidbody), allowSceneObjects:true);
             GUILayout.EndVertical();
         };
@@ -297,17 +301,42 @@ public class ControllerEditor : Editor
         var options = new List<GUILayoutOption>();
 
         options.Add(GUILayout.Width(width));
-        options.Add(GUILayout.Height(fieldsHeight));
+        options.Add(GUILayout.MinHeight(fieldsHeight));
+        options.Add(GUILayout.ExpandHeight(false));
 
         var noBoldTitle = new GUIStyle(title);
         noBoldTitle.fontStyle = FontStyle.Normal;
+
+        var icon = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_ControllerAperture");
+
+        return delegate {
+            GUILayout.BeginVertical(options.ToArray());
+
+            GUILayout.Label(new GUIContent("Custom aperture preset", icon), noBoldTitle, GUILayout.Height(fieldsHeight*0.66f), GUILayout.ExpandWidth(true));
+            ((Controller)target).customCamera = (AperturePreset)EditorGUILayout.ObjectField(((Controller)target).customCamera, typeof(AperturePreset), allowSceneObjects: true);
+            GUILayout.EndVertical();
+        };
+    }
+
+    System.Action CustomVisualsField(float width)
+    {
+        var options = new List<GUILayoutOption>();
+
+        options.Add(GUILayout.Width(width));
+        options.Add(GUILayout.MinHeight(fieldsHeight));
+        options.Add(GUILayout.ExpandHeight(false));
+
+        var noBoldTitle = new GUIStyle(title);
+        noBoldTitle.fontStyle = FontStyle.Normal;
+
+        var icon = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_ControllerVisuals");
 
 
         return delegate {
             GUILayout.BeginVertical(options.ToArray());
 
-            GUILayout.Label("Custom aperture preset", noBoldTitle, GUILayout.Height(fieldsHeight*0.66f), GUILayout.ExpandWidth(true));
-            ((Controller)target).customCamera = (AperturePreset)EditorGUILayout.ObjectField(((Controller)target).customCamera, typeof(AperturePreset), allowSceneObjects: true);
+            GUILayout.Label(new GUIContent("Custom visuals", icon), noBoldTitle, GUILayout.Height(fieldsHeight * 0.66f), GUILayout.ExpandWidth(true));
+            ((Controller)target).visuals = (Transform)EditorGUILayout.ObjectField(((Controller)target).visuals, typeof(Transform), allowSceneObjects: true);
             GUILayout.EndVertical();
         };
     }
