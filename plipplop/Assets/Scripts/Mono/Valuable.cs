@@ -6,7 +6,7 @@ public class Valuable : MonoBehaviour
     
     [Header("Settings")]
     public float weight = 1f;
-    public float distanceThreshold = 1f;
+    public float distanceThreshold = 2f;
     public bool hidden = false;
 
     void Start()

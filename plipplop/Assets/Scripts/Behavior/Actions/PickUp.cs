@@ -17,7 +17,7 @@ namespace NPC
                 if(c != null)
                 {
                     if(Game.i.player.IsPossessing(c))
-                        Game.i.player.PossessBaseController();
+                        Game.i.player.TeleportBaseControllerAndPossess();
                 }
 
                 npc.animator.SetBool("Carrying", true);
