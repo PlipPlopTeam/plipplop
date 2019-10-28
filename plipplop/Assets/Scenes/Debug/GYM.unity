@@ -1857,6 +1857,7 @@ GameObject:
   m_Component:
   - component: {fileID: 885780657}
   - component: {fileID: 885780658}
+  - component: {fileID: 885780659}
   m_Layer: 0
   m_Name: Shooter
   m_TagString: Untagged
@@ -1891,7 +1892,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74aa503b009d86446b1436c68f4a3297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoPossess: 0
+  autoPossess: 1
   beginCrouched: 0
   canRetractLegs: 1
   useGravity: 1
@@ -1900,6 +1901,25 @@ MonoBehaviour:
   customCamera: {fileID: 0}
   locomotion: {fileID: 0}
   visuals: {fileID: 0}
+--- !u!114 &885780659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 885780656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 011d63a14cf4d8347a5660a929242412, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  preset: {fileID: 11400000, guid: 1fd4bd979846d8d419a55b058d680ec3, type: 2}
+  legsHeight: 0.35
+  groundCheckRange: 1
+  legsOffset: {x: 0, y: 0, z: 0}
+  rigidbody: {fileID: 0}
+  targetDirection: {x: 0, y: 0, z: 0}
+  isImmerged: 0
 --- !u!1 &924610772
 GameObject:
   m_ObjectHideFlags: 0
@@ -5359,6 +5379,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1578349982989775250, guid: 0be4923e0ac40234da95e77fdcf55097,
+        type: 3}
+      propertyPath: legsHeight
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0be4923e0ac40234da95e77fdcf55097, type: 3}

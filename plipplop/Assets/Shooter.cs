@@ -9,4 +9,9 @@ public class Shooter : Controller
 
     internal override void OnLegsExtended()
     {}
+
+    internal override void OnJump()
+    {
+
+    }
 }
