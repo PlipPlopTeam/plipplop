@@ -109,15 +109,12 @@ public class Aperture
 
     public Vector3 Forward()
     {
-        return Vector3.ClampMagnitude(
-            new Vector3(cam.transform.forward.x, 0f, cam.transform.forward.z),
-            1f
-        );
+        return new Vector3(cam.transform.forward.x, 0f, cam.transform.forward.z).normalized;
     }
 
     public Vector3 Right()
     {
-        return cam.transform.right;
+        return new Vector3(cam.transform.right.x, 0f, cam.transform.right.z).normalized;
     }
 
     public void RotateWithGamepad(float x = 0f, float y = 0f, float z = 0f)
