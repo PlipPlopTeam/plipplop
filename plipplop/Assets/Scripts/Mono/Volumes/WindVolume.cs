@@ -9,57 +9,8 @@ public class WindVolume : Volume
     public bool isInvisible = false;
     public bool constantPushing = true;
     [Range(0.001f, 1f)] public float minimumProportionalPushFactor = 0.01f;
-    [Range(0.1f, 100f)]public float windForce = 10f;            
-
-    class Body
-    {
-        public readonly Rigidbody rigidbody;
-        public readonly List<Collider> colliders = new List<Collider>();
-
-        public Body(Rigidbody rigidbody, Collider collider)
-        {
-            this.rigidbody = rigidbody;
-            this.colliders.Add(collider);
-        }
-    }
-
-    class ImmergedBodies : List<Body>
-    {
-        public bool Contains(Rigidbody body)
-        {
-            return Find(o => o.rigidbody == body) != null;
-        }
-
-        public bool Contains(Collider body)
-        {
-            return Find(o => o.colliders.Contains(body)) != null;
-        }
-
-        public void Add(Rigidbody b, Collider c)
-        {
-            if (Contains(b)) {
-                Find(o => o.rigidbody == b).colliders.Add(c);
-            }
-            else {
-                Add(new Body(b, c));
-            }
-        }
-
-        public bool Remove(Collider c)
-        {
-            var b = Find(o => o.colliders.Contains(c));
-            if (b == null) return true;
-            b.colliders.Remove(c);
-            if (b.colliders.Count <= 0f) return true;
-            return false;
-        }
-
-        public void Remove(Rigidbody r)
-        {
-            RemoveAll(o => o.rigidbody == r);
-        }
-    }
-
+    [Range(0.1f, 100f)]public float windForce = 10f;         
+    
     ImmergedBodies objectsInVolume = new ImmergedBodies();
 
     private void Start()

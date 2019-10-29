@@ -79,4 +79,57 @@ public abstract class Volume : MonoBehaviour
 
     public abstract void OnPlayerExit(Controller player);
 
+
+
+    public class Body
+    {
+        public readonly Rigidbody rigidbody;
+        public readonly List<Collider> colliders = new List<Collider>();
+
+        public Body(Rigidbody rigidbody, Collider collider)
+        {
+            this.rigidbody = rigidbody;
+            this.colliders.Add(collider);
+        }
+    }
+
+    public class ImmergedBodies : List<Body>
+    {
+        public bool Contains(Rigidbody body)
+        {
+            return Find(o => o.rigidbody == body) != null;
+        }
+
+        public bool Contains(Collider body)
+        {
+            return Find(o => o.colliders.Contains(body)) != null;
+        }
+
+        public void Add(Rigidbody b, Collider c)
+        {
+            if (Contains(b)) {
+                var cols = Find(o => o.rigidbody == b).colliders;
+                cols.RemoveAll(o => o == c);
+                cols.Add(c);
+            }
+            else {
+                Add(new Body(b, c));
+            }
+        }
+
+        public bool Remove(Collider c)
+        {
+            var b = Find(o => o.colliders.Contains(c));
+            if (b == null) return true;
+            b.colliders.RemoveAll(o => o == c);
+            if (b.colliders.Count <= 0f) return true;
+            return false;
+        }
+
+        public void Remove(Rigidbody r)
+        {
+            RemoveAll(o => o.rigidbody == r);
+        }
+    }
+
 }
