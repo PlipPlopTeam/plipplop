@@ -38,7 +38,9 @@ public class WaterVolume : Volume
         public void Add(Rigidbody b, Collider c)
         {
             if (Contains(b)) {
-                Find(o => o.rigidbody == b).colliders.Add(c);
+                var cols = Find(o => o.rigidbody == b).colliders;
+                cols.RemoveAll(o => o == c);
+                cols.Add(c);
             }
             else {
                 Add(new Body(b, c));
@@ -49,7 +51,7 @@ public class WaterVolume : Volume
         {
             var b = Find(o => o.colliders.Contains(c));
             if (b == null) return true;
-            b.colliders.Remove(c);
+            b.colliders.RemoveAll(o=>o==c);
             if (b.colliders.Count <= 0f) return true;
             return false;
         }
@@ -91,7 +93,6 @@ public class WaterVolume : Volume
             objectsInWater.Add(rb, obj);
 
             var con = obj.GetComponent<Controller>();
-
             if (con && !con.isImmerged) {
                 con.SetUnderwater();
             }
@@ -102,7 +103,6 @@ public class WaterVolume : Volume
     {
         var rb = obj.GetComponent<Rigidbody>();
         if (rb) {
-
             var outOfWater = objectsInWater.Remove(obj);
 
             if (outOfWater) {
