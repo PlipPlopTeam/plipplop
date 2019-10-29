@@ -31,8 +31,8 @@ Transform:
   m_LocalPosition: {x: 29.91344, y: 5.508, z: 17.903702}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 599618244056942603}
   - {fileID: 599618243490890815}
+  - {fileID: 599618244056942603}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -56,6 +56,7 @@ MonoBehaviour:
   customExternalRigidbody: {fileID: 0}
   customCamera: {fileID: 11400000, guid: e28db491fa582f0409413fbec0456735, type: 2}
   locomotion: {fileID: 0}
+  visuals: {fileID: 0}
   speed: 10
   jumpForce: 20
   cameraSensi: 20
@@ -138,7 +139,7 @@ Transform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 599618243422713116}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &599618243490890813
 MeshFilter:
@@ -197,7 +198,6 @@ GameObject:
   - component: {fileID: 599618244056942603}
   - component: {fileID: 599618244056942606}
   - component: {fileID: 599618244056942601}
-  - component: {fileID: 599618244056942600}
   m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
@@ -217,7 +217,7 @@ Transform:
   m_LocalScale: {x: 1, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 599618243422713116}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &599618244056942606
 MeshFilter:
@@ -265,17 +265,3 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &599618244056942600
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 599618244056942602}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}

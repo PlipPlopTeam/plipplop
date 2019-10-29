@@ -60,6 +60,7 @@ public class LocomotionAnimation
 
     public void ExtendLegs()
     {
+        Debug.Log("Set legs active");
         legs.gameObject.SetActive(true);
         legsCollider.enabled = true;
     }

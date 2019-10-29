@@ -62,7 +62,8 @@ public class Locomotion : MonoBehaviour
 
         Vector3 sp = Vector3.zero;
         var v = GetBelowSurface();
-        if(v != null) 
+        Debug.Log(v);
+        if (v != null) 
         {
             sp = (Vector3)v;
             transform.position = new Vector3(transform.position.x, sp.y + legsHeight + 0.1f, transform.position.z);
