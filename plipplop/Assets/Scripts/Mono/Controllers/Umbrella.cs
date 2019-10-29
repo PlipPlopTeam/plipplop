@@ -13,6 +13,7 @@ public class Umbrella : Controller
     public float airLerpSpeed = 3f;
     public float tiltAmplitude = 20f;
     public float tiltLerpSpeed = 1f;
+    public float maxFallSpeed = 20f;
     [Range(0f, 100f)] public float remainingGravityPercentWhenOpened = 25f;
 
     Vector3 tiltAccumulation = Vector3.zero;
@@ -64,6 +65,9 @@ public class Umbrella : Controller
     internal override void FixedUpdate()
     {
         ApplyGravity(remainingGravityPercentWhenOpened / 100f + GetCurrentClosure() * (1f - remainingGravityPercentWhenOpened / 100f));
+        if (-rigidbody.velocity.y > maxFallSpeed * Mathf.Max(remainingGravityPercentWhenOpened/100f, GetCurrentClosure())) {
+            rigidbody.velocity = Vector3.Scale(Vector3.one - Vector3.up, rigidbody.velocity) + Vector3.down * (maxFallSpeed * Mathf.Max(remainingGravityPercentWhenOpened / 100f, GetCurrentClosure()));
+        }
     }
 
     internal override void BaseMove(Vector3 direction)
@@ -89,8 +93,12 @@ public class Umbrella : Controller
         if (IsPossessed()) {
             rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
             if (IsGrounded()) {
+                if (AreLegsRetracted()) ExtendLegs();
                 if (currentAnimationRoutine != null) StopCoroutine(currentAnimationRoutine);
                 currentAnimationRoutine = StartCoroutine(CloseUmbrella());
+            }
+            else {
+                if (!AreLegsRetracted()) RetractLegs();
             }
         }
         else {
