@@ -33,7 +33,7 @@ public class Glider : Controller
     internal override void OnLegsRetracted()
     {
         rigidbody.drag = drag;
-        rigidbody.AddForce(transform.forward * 100 * Time.deltaTime, ForceMode.Impulse);
+        rigidbody.AddForce(transform.forward * 150f * Time.deltaTime, ForceMode.Impulse);
     }
     
     internal override void Start()
