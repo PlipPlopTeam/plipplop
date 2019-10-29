@@ -290,7 +290,7 @@ public class ControllerEditor : Editor
         return delegate {
             GUILayout.BeginVertical(options.ToArray());
 
-            GUILayout.Label(new GUIContent("Custom rigidbody", icon), noBoldTitle, GUILayout.Height(fieldsHeight*0.66f), GUILayout.ExpandWidth(true));
+            GUILayout.Label(new GUIContent(buttonSpace + "Rigidbody", icon), noBoldTitle, GUILayout.Height(fieldsHeight*0.66f), GUILayout.ExpandWidth(true));
             ((Controller)target).customExternalRigidbody = (Rigidbody)EditorGUILayout.ObjectField(((Controller)target).customExternalRigidbody, typeof(Rigidbody), allowSceneObjects:true);
             GUILayout.EndVertical();
         };
@@ -312,7 +312,7 @@ public class ControllerEditor : Editor
         return delegate {
             GUILayout.BeginVertical(options.ToArray());
 
-            GUILayout.Label(new GUIContent("Custom aperture preset", icon), noBoldTitle, GUILayout.Height(fieldsHeight*0.66f), GUILayout.ExpandWidth(true));
+            GUILayout.Label(new GUIContent(buttonSpace + "Aperture preset", icon), noBoldTitle, GUILayout.Height(fieldsHeight*0.66f), GUILayout.ExpandWidth(true));
             ((Controller)target).customCamera = (AperturePreset)EditorGUILayout.ObjectField(((Controller)target).customCamera, typeof(AperturePreset), allowSceneObjects: true);
             GUILayout.EndVertical();
         };
@@ -335,7 +335,7 @@ public class ControllerEditor : Editor
         return delegate {
             GUILayout.BeginVertical(options.ToArray());
 
-            GUILayout.Label(new GUIContent("Custom visuals", icon), noBoldTitle, GUILayout.Height(fieldsHeight * 0.66f), GUILayout.ExpandWidth(true));
+            GUILayout.Label(new GUIContent(buttonSpace+"Visuals", icon), noBoldTitle, GUILayout.Height(fieldsHeight * 0.66f), GUILayout.ExpandWidth(true));
             ((Controller)target).visuals = (Transform)EditorGUILayout.ObjectField(((Controller)target).visuals, typeof(Transform), allowSceneObjects: true);
             GUILayout.EndVertical();
         };
