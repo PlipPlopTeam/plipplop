@@ -39,7 +39,6 @@ public class LocomotionAnimation
 
         if (isJumping) tilt = 0f;
 
-        Debug.Log(visualsTransform);
         if(visualsTransform != null)
         {
             visualsTransform.localEulerAngles = 
