@@ -19,8 +19,6 @@ namespace NPC
                     if(Game.i.player.IsPossessing(c))
                         Game.i.player.TeleportBaseControllerAndPossess();
                 }
-
-                npc.animator.SetBool("Carrying", true);
                 npc.thing.transform.position = (npc.skeleton.rightHandBone.position + npc.skeleton.leftHandBone.position)/2f;
                 npc.thing.transform.forward = npc.transform.forward;
 			}

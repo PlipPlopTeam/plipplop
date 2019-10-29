@@ -343,7 +343,7 @@ namespace PP.Behavior
             switch (a)
             {
                 case UserActions.addState:
-                    settings.AddNodeOnGraph(settings.stateNode, 200, 100, "State", mousePosition);                
+                    settings.AddNodeOnGraph(settings.stateNode, 300, 200, "State", mousePosition);                
                     break;
 				case UserActions.makePortal:
 					settings.AddNodeOnGraph(settings.portalNode, 100, 80, "Portal", mousePosition);
