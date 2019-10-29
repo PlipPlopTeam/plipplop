@@ -59,14 +59,14 @@ public class LocomotionAnimation
     {
         legs.gameObject.SetActive(false);
         legsCollider.enabled = false;
-        ResetVisualRotation();
+        ResetVisualRotation(); // TODO : Remove
     }
 
     public void ExtendLegs()
     {
         legs.gameObject.SetActive(true);
         legsCollider.enabled = true;
-        ResetVisualRotation();
+        ResetVisualRotation(); // TODO : Remove
     }
 
     void ResetVisualRotation()

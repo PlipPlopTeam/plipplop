@@ -41,12 +41,13 @@ public class Ball : Controller
 
 
         var factor = 1;
-        
-        childBall.Rotate(new Vector3(
+        var amount = new Vector3(
             (rigidbody.velocity.z / perimeter) * 10f,
             0f,
-            - (rigidbody.velocity.x / perimeter) * 10f
-        ) * factor, Space.World);
+            -(rigidbody.velocity.x / perimeter) * 10f
+        ) * factor;
+
+        childBall.Rotate(amount, Space.World);
     }
 
     internal override void SpecificJump()
@@ -60,9 +61,6 @@ public class Ball : Controller
     internal override void OnJump()
     {
         base.OnJump();
-
-        // Added because didn't work properly in build
-        RetractLegs();
     }
 
     internal override void OnLegsRetracted()
@@ -104,11 +102,11 @@ public class Ball : Controller
 
             if (rigidbody.velocity.magnitude > speedBeforeRoll)
             {
-                RetractLegs();
+                if (!AreLegsRetracted()) RetractLegs();
             }
             else if (IsGrounded() && rigidbody.velocity.magnitude < speedBeforeStandingUp)
             {
-                ExtendLegs();
+                if (AreLegsRetracted()) ExtendLegs();
             }
         }
     }
