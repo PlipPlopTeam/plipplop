@@ -39,12 +39,16 @@ public class LocomotionAnimation
 
         if (isJumping) tilt = 0f;
 
+        Debug.Log(visualsTransform);
         if(visualsTransform != null)
+        {
             visualsTransform.localEulerAngles = 
             new Vector3(tiltAmplitude * Mathf.Clamp(- rigidbody.velocity.y/5f, -1f, 1f),
                         visualsTransform.localEulerAngles.y,
                         tiltAmplitude * tilt
             );
+        }
+
     }
 
     public bool AreLegsRetracted()
@@ -56,12 +60,19 @@ public class LocomotionAnimation
     {
         legs.gameObject.SetActive(false);
         legsCollider.enabled = false;
+        ResetVisualRotation();
     }
 
     public void ExtendLegs()
     {
         legs.gameObject.SetActive(true);
         legsCollider.enabled = true;
+        ResetVisualRotation();
+    }
+
+    void ResetVisualRotation()
+    {
+        if(visualsTransform != null) visualsTransform.localEulerAngles = Vector3.zero;
     }
 
     void GrowLegs()
