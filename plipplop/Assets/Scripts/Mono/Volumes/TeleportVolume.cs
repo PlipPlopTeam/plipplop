@@ -9,7 +9,7 @@ public class TeleportVolume : Volume
     public Transform landingPoint;
     public bool isInvisible = true;
     [HideInInspector] public GameObject visual;
-    [HideInInspector] public Material material;
+    public Material material;
 
     private void Start()
     {

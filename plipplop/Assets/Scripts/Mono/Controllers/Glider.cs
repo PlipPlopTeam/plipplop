@@ -61,26 +61,29 @@ public class Glider : Controller
     {
         descentFactor = Mathf.Max(0f, (((transform.localEulerAngles.x + 180f) % 360f) / 270f - 0.55f) - Mathf.Clamp01(rigidbody.velocity.y)) *4f; // Magic
 
+        // To avoid the glider running away on spawn
+        float propulsionFactor = IsPossessed() ? 1f : 0.2f;
+
         if (AreLegsRetracted() && rigidbody.velocity.magnitude != 0f) {
 
             // Fake gravity
-            rigidbody.useGravity = false;
-            rigidbody.AddForce(Vector3.down * (gravityWhenFlying/rigidbody.velocity.magnitude) * Time.deltaTime);
+            // Must be on
+            if (useGravity) rigidbody.AddForce(Vector3.down * (gravityWhenFlying/rigidbody.velocity.magnitude) * Time.deltaTime);
             
             // Base thrust
-            rigidbody.AddForce(transform.forward * baseThrust * (descentFactor + 0.1f) * Time.deltaTime);
+            rigidbody.AddForce(transform.forward * propulsionFactor * baseThrust * (descentFactor + 0.1f) * Time.deltaTime);
 
             // Plunge
             var targetDescentFactor = 3f - rigidbody.velocity.magnitude / 2f;
-            rigidbody.AddTorque(transform.right * (0.85f - Mathf.Abs(inertedControls.z)) * (targetDescentFactor - descentFactor) * gravityPlungeFactor * Time.deltaTime);
+            rigidbody.AddTorque(transform.right * (0.85f - Mathf.Abs(inertedControls.z)) * (targetDescentFactor - descentFactor) * propulsionFactor * gravityPlungeFactor * Time.deltaTime);
 
             // Natural restabilization
             var angle = (transform.localEulerAngles.z - 180f)% 360f;
-            rigidbody.AddTorque(transform.forward * (1f - Mathf.Abs(inertedControls.x)) * Mathf.Clamp(angle / 50f, -1f, 1f) * restabilizationForce * Time.deltaTime);
+            rigidbody.AddTorque(transform.forward * (1f - Mathf.Abs(inertedControls.x)) * propulsionFactor * Mathf.Clamp(angle / 50f, -1f, 1f) * restabilizationForce * Time.deltaTime);
         }
         
 
-        if (rigidbody.velocity.magnitude > maxFlyingSpeed) {
+        if (rigidbody.velocity.magnitude > maxFlyingSpeed * propulsionFactor) {
             rigidbody.velocity = rigidbody.velocity.normalized * maxFlyingSpeed;
         }
     }
