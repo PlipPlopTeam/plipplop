@@ -25,6 +25,8 @@ public class Glider : Controller
     public override void OnPossess()
     {
         base.OnPossess();
+        // TODO : Fix the glider ground on possess issue
+        transform.position += Vector3.up * locomotion.legsHeight;
        // throw new System.NotImplementedException();
     }
 
@@ -33,7 +35,7 @@ public class Glider : Controller
     internal override void OnLegsRetracted()
     {
         rigidbody.drag = drag;
-        rigidbody.AddForce(transform.forward * 150f * Time.deltaTime, ForceMode.Impulse);
+        //rigidbody.AddForce(transform.forward * 150f * Time.deltaTime, ForceMode.Impulse);
     }
     
     internal override void Start()
