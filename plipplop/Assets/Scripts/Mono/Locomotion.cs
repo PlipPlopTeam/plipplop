@@ -62,7 +62,7 @@ public class Locomotion : MonoBehaviour
 
         Vector3 sp = Vector3.zero;
         var v = GetBelowSurface();
-        Debug.Log(v);
+
         if (v != null) 
         {
             sp = (Vector3)v;
