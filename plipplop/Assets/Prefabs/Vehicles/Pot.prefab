@@ -170,6 +170,7 @@ GameObject:
   - component: {fileID: 6234941143426916897}
   - component: {fileID: 6234941143426916911}
   - component: {fileID: 1342329540}
+  - component: {fileID: 3176293013898914783}
   m_Layer: 0
   m_Name: Pot
   m_TagString: Untagged
@@ -250,8 +251,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.75, y: 1, z: 0.75}
-  m_Center: {x: 0, y: 0.5, z: 0}
+  m_Size: {x: 1.4340419, y: 4.10793, z: 1.4637825}
+  m_Center: {x: -0.000000059604645, y: 2.0093532, z: 0}
 --- !u!114 &6234941143426916911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -287,6 +288,20 @@ MonoBehaviour:
   weight: 1
   distanceThreshold: 3
   hidden: 0
+--- !u!114 &3176293013898914783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6234941143426916900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7f1354dc4d3d4a40bbb2a193721f212, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buyoyancy: 10
+  waterline: -0.75
 --- !u!1 &6234941144914050892
 GameObject:
   m_ObjectHideFlags: 0

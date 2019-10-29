@@ -419,6 +419,7 @@ GameObject:
   - component: {fileID: 2095127333375553500}
   - component: {fileID: 2095127333375553503}
   - component: {fileID: 2095127333375553488}
+  - component: {fileID: -212437679873209963}
   m_Layer: 0
   m_Name: Statue
   m_TagString: Untagged
@@ -453,7 +454,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4194289d42295894e9edeb06fa29964c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoPossess: 1
+  autoPossess: 0
   beginCrouched: 0
   canRetractLegs: 1
   useGravity: 1
@@ -536,6 +537,20 @@ MonoBehaviour:
   weight: 10
   distanceThreshold: 5
   hidden: 0
+--- !u!114 &-212437679873209963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2095127333375553498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7f1354dc4d3d4a40bbb2a193721f212, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buyoyancy: 0
+  waterline: 0
 --- !u!1 &2095127333879700217
 GameObject:
   m_ObjectHideFlags: 0
