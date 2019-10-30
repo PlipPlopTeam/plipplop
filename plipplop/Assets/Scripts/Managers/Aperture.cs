@@ -26,11 +26,12 @@ public class Aperture
         [Header("Speed Enhancer")]
         [Range(0.1f, 10)]  public float speedEffectMultiplier = 1f;
         [Range(1f, 20f)] public float catchUpSpeedMultiplier = 1f;
+        [Range(0f, 400f)] public float angleIncrementOnSpeed = 10f;
 
         [Header("Advanced")]
         public float maximumCatchUpSpeed = 10f;
         public float cameraRotateAroundSpeed = 4f;
-        public float absoluteMinimalDistance = 4f;
+        public Range absoluteBoundaries = new Range() { min = 2f, max = 10f }; 
         public bool constraintToTarget = false;
         public Vector3 targetConstraintLocalOffset;
     }
@@ -217,7 +218,8 @@ public class Aperture
         // Dark pythagorian mathematics allow us to position the camera correctly
         Vector2 a = Vector3.Scale(new Vector3(0f, 1f, 1f), position.destination);
         Vector2 b = Vector3.Scale(new Vector3(0f, 1f, 1f), targetPosition);
-        float t = settings.additionalAngle;
+        float t = settings.additionalAngle + settings.angleIncrementOnSpeed * Vector3.Distance(targetPosition, lastTargetPosition);
+        t = Mathf.Clamp(t, 0f, 44f); // "Almost 45f". Don't put it to 45 or this algorithm will spit out NaNs
         float ab = Vector2.Distance(a, b);
         float bc = ab / Mathf.Cos(t * Mathf.Deg2Rad);
         float acSquare = Mathf.Pow(bc, 2f) - Mathf.Pow(ab, 2f);
@@ -259,9 +261,10 @@ public class Aperture
     {
         // Absolute minimal distance so that whatever happens the camera can't be in my face
         var cameraDirection = -(Vector3.Scale(Vector3.one - Vector3.up, target.position) - Vector3.Scale(Vector3.one - Vector3.up, position.current));
-        if (cameraDirection.magnitude < settings.absoluteMinimalDistance) {
-            position.current.x = target.position.x + cameraDirection.normalized.x * settings.absoluteMinimalDistance;
-            position.current.z = target.position.z + cameraDirection.normalized.z * settings.absoluteMinimalDistance;
+        float outOfBounds = cameraDirection.magnitude < settings.absoluteBoundaries.min ? settings.absoluteBoundaries.min : cameraDirection.magnitude > settings.absoluteBoundaries.max ? settings.absoluteBoundaries.max : 0f;
+        if (outOfBounds != 0f) {
+            position.current.x = target.position.x + cameraDirection.normalized.x * outOfBounds;
+            position.current.z = target.position.z + cameraDirection.normalized.z * outOfBounds;
         }
     }
 

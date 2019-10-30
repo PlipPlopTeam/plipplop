@@ -74,7 +74,9 @@ public class CameraApertureDebugger : MonoBehaviour
 
 
             Handles.color = new Color32(red.r, red.g, red.b, 40);
-            Handles.DrawSolidDisc(target.position, Vector3.up, settings.absoluteMinimalDistance);
+            Handles.DrawSolidDisc(target.position, Vector3.up, settings.absoluteBoundaries.min);
+            Handles.color = red;
+            Handles.DrawWireDisc(target.position, Vector3.up, settings.absoluteBoundaries.max);
 
             Gizmos.DrawLine(position.current, position.destination);
 
