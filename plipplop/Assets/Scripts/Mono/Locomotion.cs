@@ -73,6 +73,13 @@ public class Locomotion : MonoBehaviour
     public void Move(Vector3 direction)
     {
         var currentVelocity = rigidbody.velocity;
+
+        if (rigidbody.GetHorizontalVelocity().magnitude > 1f) {
+            locomotionAnimation.isWalking = true;
+        }
+        else {
+            locomotionAnimation.isWalking = false;
+        }
         
         // Brutal half turn
         if (direction.magnitude != 0f && Vector3.Distance(lastDirection, direction) > 0.9f)

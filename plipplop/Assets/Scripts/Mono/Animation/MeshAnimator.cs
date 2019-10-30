@@ -21,22 +21,13 @@ public class MeshAnimator : MonoBehaviour
         {
             animations.Add(_anim.animationName, _anim);
         }
-        
-        print(animations.Count);
-        
-        Play("Idle");
+
+        Play(_animations[0].animationName);
     }
 
-    void Update()
+    public string GetCurrentAnimation()
     {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            Play("Walk");
-        }
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            Play("Idle");
-        }
+        return currentAnimation == null ? null : currentAnimation.animationName;
     }
 
     public void Play(string _animationName)
@@ -50,7 +41,14 @@ public class MeshAnimator : MonoBehaviour
         }
         else
         {
-            print("animation doesn't exist or the name is incorrect");
+            throw new Exception("animation doesn't exist or the name is incorrect");
+        }
+    }
+
+    public void PlayOnce(string animationName)
+    {
+        if (GetCurrentAnimation() != animationName) {
+            Play(animationName);
         }
     }
 
