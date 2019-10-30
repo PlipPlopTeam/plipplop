@@ -7,7 +7,7 @@ public class Cheats : Dictionary<string, System.Action>
 {
     public Cheats()
     {
-        Add("R", ResetScene);
+        Add("RESET", ResetScene);
     }
 
     public void ResetScene()
