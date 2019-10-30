@@ -4,38 +4,6 @@ using UnityEngine;
 
 public class Aperture
 {
-    [Serializable]
-    public class Settings
-    {
-        [Header("Basics")]
-        public bool canBeControlled = true;
-
-        [Range(2f, 200f)] public float fieldOfView = 75f;
-        public float heightOffset;
-        [Range(0f, 40f)] public float additionalAngle = 20f;
-        public Range distance;
-
-        [Header("Lerps")]
-        public float fovLerp = 1f;
-        public float lateralFollowLerp = 1f;
-        public float longitudinalFollowLerp = 1f;
-        public float verticalFollowLerp = 10f;
-        public float rotationSpeed = 1f;
-        public float lookAtLerp = 4f;
-
-        [Header("Speed Enhancer")]
-        [Range(0.1f, 10)]  public float speedEffectMultiplier = 1f;
-        [Range(1f, 20f)] public float catchUpSpeedMultiplier = 1f;
-        [Range(0f, 400f)] public float angleIncrementOnSpeed = 10f;
-
-        [Header("Advanced")]
-        public float maximumCatchUpSpeed = 10f;
-        public float cameraRotateAroundSpeed = 4f;
-        public Range absoluteBoundaries = new Range() { min = 2f, max = 10f }; 
-        public bool constraintToTarget = false;
-        public Vector3 targetConstraintLocalOffset;
-    }
-
     public class Key<T>
     {
         public T destination;
@@ -68,7 +36,7 @@ public class Aperture
     public Key<Vector3> position = new Key<Vector3>();
     public Key<Vector3> rotationAroundTarget = new Key<Vector3>();
 
-    Settings settings;
+    AperturePreset settings;
     Vector3 defaultTarget;
 
     // SPEED
@@ -86,12 +54,12 @@ public class Aperture
     public void Freeze() {freeze = true;}
     public void Unfreeze() {freeze = false;}
 
-    public void Load(Settings s)
+    public void Load(AperturePreset s)
     {
         settings = s;
     }
 
-    public Settings GetSettings()
+    public AperturePreset GetSettings()
     {
         return settings;
     }
@@ -99,10 +67,10 @@ public class Aperture
     public Aperture()
     {
         cam = Camera.main;
-        Load(Game.i.library.defaultAperture.settings);
+        Load(Game.i.library.defaultAperture);
     }
 
-    public Aperture(Settings s)
+    public Aperture(AperturePreset s)
     {
         cam = Camera.main;
         Load(s);
@@ -306,14 +274,14 @@ public class Aperture
         cam.fieldOfView = fieldOfView.current;
     } // Apply the values to the camera 
 
-    public void Focus(Vector3 newPosition, Settings set = null)
+    public void Focus(Vector3 newPosition, AperturePreset set = null)
     {
         defaultTarget = newPosition;
         target = null;
         if(set != null) Load(set);
     } // Focus camera on a new position (Vector3)
 
-    public void Focus(Transform newTarget, Settings set = null)
+    public void Focus(Transform newTarget, AperturePreset set = null)
     {
         target = newTarget;
         if(set != null) Load(set);
