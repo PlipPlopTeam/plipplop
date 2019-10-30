@@ -137,7 +137,7 @@ public class Locomotion : MonoBehaviour
 
     public void Jump()
     {
-        rigidbody.AddForce(Vector3.up * preset.jump, ForceMode.Acceleration);
+        rigidbody.AddForce(Vector3.up * preset.jump * (parentController.gravityMultiplier/100f), ForceMode.Acceleration);
     }
 
     public bool IsGrounded(float rangeMultiplier = 1f) // But better 😎
