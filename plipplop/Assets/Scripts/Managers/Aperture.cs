@@ -102,7 +102,6 @@ public class Aperture
 
     public void Update()
     {
-
     }
 
     public void FixedUpdate()

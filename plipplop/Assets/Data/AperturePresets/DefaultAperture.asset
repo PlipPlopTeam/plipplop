@@ -13,26 +13,26 @@ MonoBehaviour:
   m_Name: DefaultAperture
   m_EditorClassIdentifier: 
   fallback: {fileID: 0}
-  canBeControlled: 0
-  fieldOfView: 75
-  heightOffset: 0
+  canBeControlled: 1
+  fieldOfView: 65
+  heightOffset: 1
   additionalAngle: 20
   distance:
-    min: 0
-    max: 0
-  fovLerp: 1
-  lateralFollowLerp: 1
-  longitudinalFollowLerp: 1
+    min: 7
+    max: 8
+  fovLerp: 3
+  lateralFollowLerp: 20
+  longitudinalFollowLerp: 6
   verticalFollowLerp: 10
-  rotationSpeed: 1
-  lookAtLerp: 4
+  rotationSpeed: 5
+  lookAtLerp: 10
   speedEffectMultiplier: 1
   catchUpSpeedMultiplier: 1
-  angleIncrementOnSpeed: 10
+  angleIncrementOnSpeed: 40
   maximumCatchUpSpeed: 10
   cameraRotateAroundSpeed: 4
   absoluteBoundaries:
-    min: 2
-    max: 10
+    min: 5
+    max: 8
   constraintToTarget: 0
   targetConstraintLocalOffset: {x: 0, y: 0, z: 0}

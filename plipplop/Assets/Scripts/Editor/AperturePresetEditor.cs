@@ -7,14 +7,7 @@ using UnityEngine;
 [CanEditMultipleObjects]
 public class AperturePresetEditor : Editor
 {
-    bool unlockedProperties = false;
-
-    readonly float fieldsHeight = 35f;
-    readonly float hSpacing = 10f;
     readonly float headerSeparatorHeight = 30f;
-    readonly float wMargin = 60f;
-    readonly int columns = 2;
-
     float overrideColumnWidth = 60f;
 
     GUIStyle title;
@@ -26,43 +19,27 @@ public class AperturePresetEditor : Editor
     GUIStyle centeredNormalControl;
     GUIStyle toggle;
 
-    string buttonSpace = "   ";
-
     Dictionary<string, InheritableProperties> inheritableProperties = new Dictionary<string, InheritableProperties>();
 
     class InheritableProperty
     {
         public bool inheritDefault = true;
-        public SerializedProperty property;
-        public string name { get { return property.name; } }
+        public string name;
     }
 
     class InheritableProperties : List<InheritableProperty>
     {
-        public InheritableProperties() { }
         public InheritableProperties(Dictionary<string, bool> overrides) { this.overrides = overrides; }
 
-        Dictionary<string, bool> overrides = new Dictionary<string, bool>();
+        public Dictionary<string, bool> overrides;
 
-        public void Add(SerializedProperty prop)
+        public void Add(string propName)
         {
-            if (Find(o=>o.property.name == prop.name) == null) {
+            if (Find(o=>o.name == propName) == null) {
                 Add(new InheritableProperty() { 
-                    property = prop, 
-                    inheritDefault = !overrides.ContainsKey(prop.name) || (overrides.ContainsKey(prop.name) && !overrides[prop.name])
+                    name = propName,
+                    inheritDefault = !overrides.ContainsKey(propName) || (overrides.ContainsKey(propName) && !overrides[propName])
                 });
-            }
-        }
-
-        public void Sanitize(SerializedObject obj)
-        {
-            foreach(var p in ToArray()) {
-                if (
-                    p.property == null || 
-                    obj.FindProperty(p.property.name) == null
-                ) {
-                   RemoveAll(o => o.property == p.property);
-                }
             }
         }
     }
@@ -71,7 +48,7 @@ public class AperturePresetEditor : Editor
     {
         MakeStyles();
         LoadProperties();
-
+        serializedObject.Update();
         bool isDefault = target.name == "DefaultAperture";
 
         EditorGUI.BeginDisabledGroup(isDefault);
@@ -95,7 +72,6 @@ public class AperturePresetEditor : Editor
             return;
         }
 
-        var overrides = ((AperturePreset)target).overrides;
         foreach (var category in inheritableProperties.Keys) {
 
             EditorGUILayout.BeginVertical(title);
@@ -113,22 +89,30 @@ public class AperturePresetEditor : Editor
 
             foreach (var ip in inheritableProperties[category]) {
                 var defaultProperty = fb == null ? null : serializedDefault.FindProperty(ip.name);
+                var property = serializedObject.FindProperty(ip.name);
                 EditorGUILayout.BeginHorizontal();
 
                 // Override Switch
                 if (isDefault) ip.inheritDefault = false;
-                if (ip.inheritDefault && GUILayout.Button("AUTO", normalControl, GUILayout.Width(overrideColumnWidth))) {
-                    ip.inheritDefault = false;
+                
+                if (ip.inheritDefault){
+                    if (GUILayout.Button("AUTO", normalControl, GUILayout.Width(overrideColumnWidth))) {
+                        ip.inheritDefault = false;
+                    }
                 }
-                if (!ip.inheritDefault && GUILayout.Button("OVERRIDE", pressedControl, GUILayout.Width(overrideColumnWidth))) {
-                    ip.inheritDefault = true;
+                else{
+                    if (GUILayout.Button("OVERRIDE", pressedControl, GUILayout.Width(overrideColumnWidth))) {
+                        ip.inheritDefault = true;
+                        serializedObject.CopyFromSerializedProperty(serializedDefault.FindProperty(ip.name));
+                    }
                 }
-                overrides[ip.name] = !ip.inheritDefault;
-                EditorGUI.BeginDisabledGroup(ip.inheritDefault);
+
+                inheritableProperties[category].overrides[ip.name] = !ip.inheritDefault;
 
                 // Field
-                if (ip.inheritDefault) ip.property = defaultProperty.Copy();
-                EditorGUILayout.PropertyField(ip.inheritDefault && fb ? defaultProperty : ip.property, new GUIContent(ip.property.displayName));
+                EditorGUI.BeginDisabledGroup(ip.inheritDefault);
+                EditorGUILayout.PropertyField(property, new GUIContent(property.displayName));
+
                 
                 EditorGUI.EndDisabledGroup();
                 EditorGUILayout.EndHorizontal();
@@ -139,42 +123,6 @@ public class AperturePresetEditor : Editor
         }
 
         serializedObject.ApplyModifiedProperties();
-        return;
-
-
-
-
-        List<System.Action> fields = new List<System.Action>();
-        var w = Screen.width - wMargin;
-        var colWidth = w / columns;
-
-        unlockedProperties = EditorGUILayout.BeginFoldoutHeaderGroup(unlockedProperties, "Inherited properties");
-        if (unlockedProperties) {
-            GUILayout.Label("Inherited properties", title, GUILayout.Height(20f), GUILayout.ExpandWidth(true));
-
-            GUILayout.BeginVertical();
-            GUILayout.BeginHorizontal(GUILayout.MinHeight(fieldsHeight));
-
-            var currentLine = 0;
-            for (int i = 0; i < fields.Count; i++) {
-                if (Mathf.Floor(i/(float)columns) != currentLine) {
-                    GUILayout.EndHorizontal();
-                    GUILayout.Space(hSpacing);
-                    GUILayout.BeginHorizontal(GUILayout.MinHeight(fieldsHeight));
-                    currentLine++;
-                }
-                fields[i].Invoke();
-            }
-            GUILayout.EndHorizontal();
-            GUILayout.EndVertical();
-        }
-        EditorGUILayout.EndFoldoutHeaderGroup();
-
-        GUILayout.Label("Specific properties", title, GUILayout.Height(headerSeparatorHeight), GUILayout.ExpandWidth(true));
-
-        DrawDefaultInspector();
-
-
     }
 
     void LoadProperties()
@@ -193,34 +141,29 @@ public class AperturePresetEditor : Editor
         if (!inheritableProperties.ContainsKey(speedFX)) inheritableProperties[speedFX] = new InheritableProperties(overrides);
         if (!inheritableProperties.ContainsKey(advanced)) inheritableProperties[advanced] = new InheritableProperties(overrides);
 
-        inheritableProperties[switches].Add(serializedObject.FindProperty("canBeControlled"));
-        inheritableProperties[switches].Sanitize(serializedObject);
+        inheritableProperties[switches].Add("canBeControlled");
 
-        inheritableProperties[basicParameters].Add(serializedObject.FindProperty("fieldOfView"));
-        inheritableProperties[basicParameters].Add(serializedObject.FindProperty("heightOffset"));
-        inheritableProperties[basicParameters].Add(serializedObject.FindProperty("additionalAngle"));
-        inheritableProperties[basicParameters].Add(serializedObject.FindProperty("distance"));
-        inheritableProperties[basicParameters].Sanitize(serializedObject);
+        inheritableProperties[basicParameters].Add("fieldOfView");
+        inheritableProperties[basicParameters].Add("heightOffset");
+        inheritableProperties[basicParameters].Add("additionalAngle");
+        inheritableProperties[basicParameters].Add("distance");
 
-        inheritableProperties[interpolations].Add(serializedObject.FindProperty("fovLerp"));
-        inheritableProperties[interpolations].Add(serializedObject.FindProperty("lateralFollowLerp"));
-        inheritableProperties[interpolations].Add(serializedObject.FindProperty("longitudinalFollowLerp"));
-        inheritableProperties[interpolations].Add(serializedObject.FindProperty("verticalFollowLerp"));
-        inheritableProperties[interpolations].Add(serializedObject.FindProperty("rotationSpeed"));
-        inheritableProperties[interpolations].Add(serializedObject.FindProperty("lookAtLerp"));
-        inheritableProperties[interpolations].Sanitize(serializedObject);
+        inheritableProperties[interpolations].Add("fovLerp");
+        inheritableProperties[interpolations].Add("lateralFollowLerp");
+        inheritableProperties[interpolations].Add("longitudinalFollowLerp");
+        inheritableProperties[interpolations].Add("verticalFollowLerp");
+        inheritableProperties[interpolations].Add("rotationSpeed");
+        inheritableProperties[interpolations].Add("lookAtLerp");
         
-        inheritableProperties[speedFX].Add(serializedObject.FindProperty("speedEffectMultiplier"));
-        inheritableProperties[speedFX].Add(serializedObject.FindProperty("catchUpSpeedMultiplier"));
-        inheritableProperties[speedFX].Add(serializedObject.FindProperty("angleIncrementOnSpeed"));
-        inheritableProperties[speedFX].Sanitize(serializedObject);
+        inheritableProperties[speedFX].Add("speedEffectMultiplier");
+        inheritableProperties[speedFX].Add("catchUpSpeedMultiplier");
+        inheritableProperties[speedFX].Add("angleIncrementOnSpeed");
 
-        inheritableProperties[advanced].Add(serializedObject.FindProperty("maximumCatchUpSpeed"));
-        inheritableProperties[advanced].Add(serializedObject.FindProperty("cameraRotateAroundSpeed"));
-        inheritableProperties[advanced].Add(serializedObject.FindProperty("absoluteBoundaries"));
-        inheritableProperties[advanced].Add(serializedObject.FindProperty("constraintToTarget"));
-        inheritableProperties[advanced].Add(serializedObject.FindProperty("targetConstraintLocalOffset"));
-        inheritableProperties[advanced].Sanitize(serializedObject);
+        inheritableProperties[advanced].Add("maximumCatchUpSpeed");
+        inheritableProperties[advanced].Add("cameraRotateAroundSpeed");
+        inheritableProperties[advanced].Add("absoluteBoundaries");
+        inheritableProperties[advanced].Add("constraintToTarget");
+        inheritableProperties[advanced].Add("targetConstraintLocalOffset");
     }
 
     void MakeStyles()

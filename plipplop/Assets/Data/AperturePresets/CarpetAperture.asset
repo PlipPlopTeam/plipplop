@@ -12,22 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a3262d062e5d48468ed5b87bf144ebc, type: 3}
   m_Name: CarpetAperture
   m_EditorClassIdentifier: 
-  settings:
-    canBeControlled: 1
-    fieldOfView: 30
-    heightOffset: 1
-    additionalAngle: 25
-    distance:
-      min: 8
-      max: 9
-    fovLerp: 3
-    lateralFollowLerp: 1
-    longitudinalFollowLerp: 8
-    verticalFollowLerp: 20
-    rotationSpeed: 30
-    lookAtLerp: 10
-    speedEffectMultiplier: 1
-    catchUpSpeedMultiplier: 1
-    maximumCatchUpSpeed: 10
-    cameraRotateAroundSpeed: 4
-    absoluteMinimalDistance: 5
+  fallback: {fileID: 11400000, guid: df6437ca0d9bc60498aeb18a4dd62019, type: 2}
+  canBeControlled: 1
+  fieldOfView: 75
+  heightOffset: 0
+  additionalAngle: 20
+  distance:
+    min: 0
+    max: 0
+  fovLerp: 1
+  lateralFollowLerp: 1
+  longitudinalFollowLerp: 1
+  verticalFollowLerp: 10
+  rotationSpeed: 1
+  lookAtLerp: 4
+  speedEffectMultiplier: 1
+  catchUpSpeedMultiplier: 1
+  angleIncrementOnSpeed: 10
+  maximumCatchUpSpeed: 10
+  cameraRotateAroundSpeed: 4
+  absoluteBoundaries:
+    min: 2
+    max: 10
+  constraintToTarget: 0
+  targetConstraintLocalOffset: {x: 0, y: 0, z: 0}
