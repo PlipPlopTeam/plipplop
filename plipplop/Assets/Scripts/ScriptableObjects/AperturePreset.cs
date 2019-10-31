@@ -1,9 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 [System.Serializable]
 [CreateAssetMenu(fileName = "AperturePreset", menuName = "ScriptableObjects/Aperture", order = 1)]
 public class AperturePreset : ScriptableObject
 {
+    [HideInInspector] public Dictionary<string, bool> overrides = new Dictionary<string, bool>();
+
     public AperturePreset fallback;
 
     public bool canBeControlled = true;

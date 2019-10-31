@@ -39,10 +39,15 @@ public class AperturePresetEditor : Editor
 
     class InheritableProperties : List<InheritableProperty>
     {
+        public InheritableProperties() { }
+        public InheritableProperties(Dictionary<string, bool> overrides) { this.overrides = overrides; }
+
+        Dictionary<string, bool> overrides = new Dictionary<string, bool>();
+
         public void Add(SerializedProperty prop)
         {
             if (Find(o=>o.property.name == prop.name) == null) {
-                Add(new InheritableProperty() { property = prop });
+                Add(new InheritableProperty() { property = prop, inheritDefault = overrides.ContainsKey(prop.name) && !overrides[prop.name] });
             }
         }
 
@@ -64,12 +69,24 @@ public class AperturePresetEditor : Editor
         MakeStyles();
         LoadProperties();
 
+        bool isDefault = target.name == "DefaultAperture";
+
+        EditorGUI.BeginDisabledGroup(isDefault);
         EditorGUILayout.BeginVertical(title);
         GUILayout.Label("default aperture".ToUpper(), title, GUILayout.Height(headerSeparatorHeight), GUILayout.ExpandWidth(true));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("fallback"));
         EditorGUILayout.EndVertical();
         EditorGUILayout.Space();
+        EditorGUI.EndDisabledGroup();
 
+        var fb = ((AperturePreset)target).fallback;
+        if (!fb && !isDefault) {
+            GUILayout.Label("Please pick a fallback for this aperture");
+            serializedObject.ApplyModifiedProperties();
+            return;
+        }
+
+        var overrides = ((AperturePreset)target).overrides;
         foreach (var category in inheritableProperties.Keys) {
 
             EditorGUILayout.BeginVertical(title);
@@ -80,17 +97,25 @@ public class AperturePresetEditor : Editor
             EditorGUILayout.LabelField("Property", EditorStyles.boldLabel, GUILayout.ExpandWidth(true), GUILayout.MinWidth(Screen.width * 0.8f));
             EditorGUILayout.EndHorizontal();
 
+            SerializedObject serializedDefault = null;
+            if (fb) {
+                serializedDefault = new SerializedObject(fb);
+            }
+
             foreach (var ip in inheritableProperties[category]) {
+                var defaultProperty = fb == null ? null : serializedDefault.FindProperty(ip.name);
                 EditorGUILayout.BeginHorizontal();
+                if (isDefault) ip.inheritDefault = false;
                 if (ip.inheritDefault && GUILayout.Button("AUTO", normalControl, GUILayout.Width(overrideColumnWidth))) {
                     ip.inheritDefault = false;
                 }
                 if (!ip.inheritDefault && GUILayout.Button("OVERRIDE", pressedControl, GUILayout.Width(overrideColumnWidth))) {
                     ip.inheritDefault = true;
                 }
+                overrides[ip.name] = !ip.inheritDefault;
 
                 EditorGUI.BeginDisabledGroup(ip.inheritDefault);
-                EditorGUILayout.PropertyField(ip.property, new GUIContent(ip.property.displayName), GUILayout.ExpandWidth(true));
+                EditorGUILayout.PropertyField(ip.inheritDefault && fb ? defaultProperty : ip.property, new GUIContent(ip.property.displayName), GUILayout.ExpandWidth(true));
                 EditorGUI.EndDisabledGroup();
                 EditorGUILayout.EndHorizontal();
             }
@@ -99,9 +124,7 @@ public class AperturePresetEditor : Editor
             EditorGUILayout.Space();
         }
 
-        Debug.Log(inheritableProperties["switches"][0].inheritDefault);
         serializedObject.ApplyModifiedProperties();
-        Debug.Log(inheritableProperties["switches"][0].inheritDefault);
         return;
 
 
@@ -145,8 +168,10 @@ public class AperturePresetEditor : Editor
         string switches = "switches";
         string basicParameters = "basic parameters";
 
-        if (!inheritableProperties.ContainsKey(switches)) inheritableProperties[switches] = new InheritableProperties();
-        if (!inheritableProperties.ContainsKey(basicParameters)) inheritableProperties[basicParameters] = new InheritableProperties();
+        var overrides = ((AperturePreset)target).overrides;
+
+        if (!inheritableProperties.ContainsKey(switches)) inheritableProperties[switches] = new InheritableProperties(overrides);
+        if (!inheritableProperties.ContainsKey(basicParameters)) inheritableProperties[basicParameters] = new InheritableProperties(overrides);
 
         inheritableProperties[switches].Add(serializedObject.FindProperty("canBeControlled"));
         inheritableProperties[switches].Sanitize(serializedObject);

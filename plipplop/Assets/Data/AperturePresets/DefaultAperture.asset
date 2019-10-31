@@ -12,27 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a3262d062e5d48468ed5b87bf144ebc, type: 3}
   m_Name: DefaultAperture
   m_EditorClassIdentifier: 
-  settings:
-    canBeControlled: 1
-    fieldOfView: 65
-    heightOffset: 1
-    additionalAngle: 20
-    distance:
-      min: 7
-      max: 8
-    fovLerp: 3
-    lateralFollowLerp: 20
-    longitudinalFollowLerp: 6
-    verticalFollowLerp: 10
-    rotationSpeed: 5
-    lookAtLerp: 10
-    speedEffectMultiplier: 1
-    catchUpSpeedMultiplier: 1
-    angleIncrementOnSpeed: 40
-    maximumCatchUpSpeed: 10
-    cameraRotateAroundSpeed: 4
-    absoluteBoundaries:
-      min: 5
-      max: 8
-    constraintToTarget: 0
-    targetConstraintLocalOffset: {x: 0, y: 0, z: 0}
+  fallback: {fileID: 0}
+  canBeControlled: 0
+  fieldOfView: 75
+  heightOffset: 0
+  additionalAngle: 20
+  distance:
+    min: 0
+    max: 0
+  fovLerp: 1
+  lateralFollowLerp: 1
+  longitudinalFollowLerp: 1
+  verticalFollowLerp: 10
+  rotationSpeed: 1
+  lookAtLerp: 4
+  speedEffectMultiplier: 1
+  catchUpSpeedMultiplier: 1
+  angleIncrementOnSpeed: 10
+  maximumCatchUpSpeed: 10
+  cameraRotateAroundSpeed: 4
+  absoluteBoundaries:
+    min: 2
+    max: 10
+  constraintToTarget: 0
+  targetConstraintLocalOffset: {x: 0, y: 0, z: 0}
