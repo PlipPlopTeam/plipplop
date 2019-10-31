@@ -47,7 +47,10 @@ public class AperturePresetEditor : Editor
         public void Add(SerializedProperty prop)
         {
             if (Find(o=>o.property.name == prop.name) == null) {
-                Add(new InheritableProperty() { property = prop, inheritDefault = overrides.ContainsKey(prop.name) && !overrides[prop.name] });
+                Add(new InheritableProperty() { 
+                    property = prop, 
+                    inheritDefault = !overrides.ContainsKey(prop.name) || (overrides.ContainsKey(prop.name) && !overrides[prop.name])
+                });
             }
         }
 
@@ -105,6 +108,8 @@ public class AperturePresetEditor : Editor
             foreach (var ip in inheritableProperties[category]) {
                 var defaultProperty = fb == null ? null : serializedDefault.FindProperty(ip.name);
                 EditorGUILayout.BeginHorizontal();
+
+                // Override Switch
                 if (isDefault) ip.inheritDefault = false;
                 if (ip.inheritDefault && GUILayout.Button("AUTO", normalControl, GUILayout.Width(overrideColumnWidth))) {
                     ip.inheritDefault = false;
@@ -113,9 +118,12 @@ public class AperturePresetEditor : Editor
                     ip.inheritDefault = true;
                 }
                 overrides[ip.name] = !ip.inheritDefault;
-
                 EditorGUI.BeginDisabledGroup(ip.inheritDefault);
-                EditorGUILayout.PropertyField(ip.inheritDefault && fb ? defaultProperty : ip.property, new GUIContent(ip.property.displayName), GUILayout.ExpandWidth(true));
+
+                // Field
+                if (ip.inheritDefault) ip.property = defaultProperty.Copy();
+                EditorGUILayout.PropertyField(ip.inheritDefault && fb ? defaultProperty : ip.property, new GUIContent(ip.property.displayName));
+                
                 EditorGUI.EndDisabledGroup();
                 EditorGUILayout.EndHorizontal();
             }
@@ -167,11 +175,17 @@ public class AperturePresetEditor : Editor
     {
         string switches = "switches";
         string basicParameters = "basic parameters";
+        string interpolations = "interpolations";
+        string speedFX = "speed effects";
+        string advanced = "advanced";
 
         var overrides = ((AperturePreset)target).overrides;
 
         if (!inheritableProperties.ContainsKey(switches)) inheritableProperties[switches] = new InheritableProperties(overrides);
         if (!inheritableProperties.ContainsKey(basicParameters)) inheritableProperties[basicParameters] = new InheritableProperties(overrides);
+        if (!inheritableProperties.ContainsKey(interpolations)) inheritableProperties[interpolations] = new InheritableProperties(overrides);
+        if (!inheritableProperties.ContainsKey(speedFX)) inheritableProperties[speedFX] = new InheritableProperties(overrides);
+        if (!inheritableProperties.ContainsKey(advanced)) inheritableProperties[advanced] = new InheritableProperties(overrides);
 
         inheritableProperties[switches].Add(serializedObject.FindProperty("canBeControlled"));
         inheritableProperties[switches].Sanitize(serializedObject);
@@ -182,6 +196,25 @@ public class AperturePresetEditor : Editor
         inheritableProperties[basicParameters].Add(serializedObject.FindProperty("distance"));
         inheritableProperties[basicParameters].Sanitize(serializedObject);
 
+        inheritableProperties[interpolations].Add(serializedObject.FindProperty("fovLerp"));
+        inheritableProperties[interpolations].Add(serializedObject.FindProperty("lateralFollowLerp"));
+        inheritableProperties[interpolations].Add(serializedObject.FindProperty("longitudinalFollowLerp"));
+        inheritableProperties[interpolations].Add(serializedObject.FindProperty("verticalFollowLerp"));
+        inheritableProperties[interpolations].Add(serializedObject.FindProperty("rotationSpeed"));
+        inheritableProperties[interpolations].Add(serializedObject.FindProperty("lookAtLerp"));
+        inheritableProperties[interpolations].Sanitize(serializedObject);
+        
+        inheritableProperties[speedFX].Add(serializedObject.FindProperty("speedEffectMultiplier"));
+        inheritableProperties[speedFX].Add(serializedObject.FindProperty("catchUpSpeedMultiplier"));
+        inheritableProperties[speedFX].Add(serializedObject.FindProperty("angleIncrementOnSpeed"));
+        inheritableProperties[speedFX].Sanitize(serializedObject);
+
+        inheritableProperties[advanced].Add(serializedObject.FindProperty("maximumCatchUpSpeed"));
+        inheritableProperties[advanced].Add(serializedObject.FindProperty("cameraRotateAroundSpeed"));
+        inheritableProperties[advanced].Add(serializedObject.FindProperty("absoluteBoundaries"));
+        inheritableProperties[advanced].Add(serializedObject.FindProperty("constraintToTarget"));
+        inheritableProperties[advanced].Add(serializedObject.FindProperty("targetConstraintLocalOffset"));
+        inheritableProperties[advanced].Sanitize(serializedObject);
     }
 
     void MakeStyles()
