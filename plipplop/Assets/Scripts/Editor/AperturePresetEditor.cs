@@ -82,6 +82,12 @@ public class AperturePresetEditor : Editor
         EditorGUILayout.Space();
         EditorGUI.EndDisabledGroup();
 
+        // Someone dragged me as my own fallback!
+        if (serializedObject.FindProperty("fallback").objectReferenceValue == target) {
+            serializedObject.FindProperty("fallback").objectReferenceValue = null;
+        }
+
+        // No fallback selected
         var fb = ((AperturePreset)target).fallback;
         if (!fb && !isDefault) {
             GUILayout.Label("Please pick a fallback for this aperture");
