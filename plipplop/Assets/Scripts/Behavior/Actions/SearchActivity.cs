@@ -18,7 +18,7 @@ namespace NPC
 				{
 					foreach(Activity a in activities)
 					{
-						if(!a.full && a.working && !a.users.Contains(npc)) 
+						if(!a.full && a != npc.previousActivity && a.working && !a.users.Contains(npc)) 
 						{
 							a.Enter(npc);
 							break;

@@ -16,8 +16,12 @@ public class NonPlayableCharacter : StateManager
 
 	[HideInInspector] public Valuable valuable;
 	[HideInInspector] public Activity activity;
+	[HideInInspector] public Activity previousActivity;
+	[HideInInspector] public Transform inHand;
 
 	public float strength = 1f;
+
+	[Range(0f, 100f)] public float boredom = 0f;
 
 	void Awake()
 	{
@@ -33,5 +37,42 @@ public class NonPlayableCharacter : StateManager
 
 		agentMovement = GetComponent<AgentMovement>();
 		agentMovement.animator = animator;
+	}
+
+	public override void Update()
+	{
+		base.Update();
+
+		if(inHand != null)
+		{
+			inHand.transform.position = (skeleton.rightHandBone.position + skeleton.leftHandBone.position)/2f;
+        	inHand.transform.forward = transform.forward;
+		}
+	}
+
+	public void Carry(Transform obj)
+	{
+		if(inHand != null) Drop();
+		inHand = obj;
+		animator.SetBool("Carrying", true);
+	}
+
+	public void Drop()
+	{
+		animator.SetBool("Carrying", false);
+		inHand = null;
+	}
+
+	public void AddBoredom(float amount)
+	{
+		boredom += amount;
+		if(boredom >= 100f)
+		{
+			// I'm bored as fuck
+			boredom = 100f;
+			if(activity != null) activity.Kick(this);
+			emo.Show("Bored", 3f);
+		}
+		else if(boredom < 0f) boredom = 0f;
 	}
 }
