@@ -7,6 +7,7 @@ public class LocomotionAnimation
     public float legsHeight;
     public Vector3 legsOffset;
     public bool isJumping;
+    public bool isWalking;
 
     float tiltAmplitude = 12f;
     float tiltLerpSpeed = 4f;
@@ -14,7 +15,7 @@ public class LocomotionAnimation
     Transform parentTransform;
     public Rigidbody rigidbody;
     BoxCollider legsCollider;
-    Legs legs;
+    MeshAnimator legs;
     Transform visualsTransform;
 
     public LocomotionAnimation(Rigidbody rb, BoxCollider legsCollider, Transform visualsTransform)
@@ -28,12 +29,15 @@ public class LocomotionAnimation
 
     public void Update()
     {
-        legs.isJumping = isJumping;
-        legs.velocity = rigidbody.velocity;
-        legs.transform.localPosition = legsOffset;
+      //  legs.isJumping = isJumping;
+      //  legs.velocity = rigidbody.velocity;       v  This will have to be removed when the legs pivot is fixed
+        legs.transform.localPosition = legsOffset - Vector3.up*(legsHeight);
         SetLegHeight();
 
-        var tiltDirection = Mathf.Clamp(rigidbody.velocity.magnitude/2f, 0f, 1f) * ((Mathf.Floor(Time.time * legs.legFps) % 2) * 2f - 1f); // Will give -1 or 1
+        var tiltDirection = Mathf.Clamp(rigidbody.velocity.magnitude/2f, 0f, 1f) * ((Mathf.Floor(Time.time * 2.6f) % 2) * 2f - 1f); // Will give -1 or 1
+
+        if (isWalking) legs.PlayOnce("Walk");
+        else legs.PlayOnce("Idle");
 
         tilt = Mathf.Lerp(tilt, tiltDirection, Time.deltaTime * tiltLerpSpeed);
 
@@ -77,15 +81,16 @@ public class LocomotionAnimation
     void GrowLegs()
     {
         legs = Object.Instantiate(Game.i.library.legsPrefab, parentTransform)
-        .GetComponent<Legs>();
-        legs.body = parentTransform;
+        .GetComponent<MeshAnimator>();
+     //   legs.body = parentTransform;
         legs.transform.localPosition = legsOffset;
-        foreach (Leg l in legs.legs) l.maxFootDistance = legsHeight + 2f;
+     //   foreach (Leg l in legs.legs) l.maxFootDistance = legsHeight + 2f;
     }
 
     void SetLegHeight()
     {
-        legsCollider.size = new Vector3(1f, legsHeight*2f, 1f);
+        legsCollider.size = new Vector3(1f, legsHeight, 1f);
         legsCollider.center = legsOffset + new Vector3(0f, -legsHeight / 2, 0f);
+        legs.transform.localScale = (Vector3.one - Vector3.up) + Vector3.up * legsHeight;
     }
 }
