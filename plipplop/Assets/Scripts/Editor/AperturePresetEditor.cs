@@ -72,6 +72,17 @@ public class AperturePresetEditor : Editor
             return;
         }
 
+        SerializedObject serializedDefault = null;
+        if (fb) {
+            serializedDefault = new SerializedObject(fb);
+        }
+        /*
+        var currentOverrides = serializedObject.FindProperty("overrides").Copy();
+        currentOverrides.Next(true); // Generic field
+        currentOverrides.Next(true); // Array size
+        currentOverrides.Next(true); // Advance to first element;
+
+    */
         foreach (var category in inheritableProperties.Keys) {
 
             EditorGUILayout.BeginVertical(title);
@@ -82,19 +93,19 @@ public class AperturePresetEditor : Editor
             EditorGUILayout.LabelField("Property", EditorStyles.boldLabel, GUILayout.ExpandWidth(true), GUILayout.MinWidth(Screen.width * 0.8f));
             EditorGUILayout.EndHorizontal();
 
-            SerializedObject serializedDefault = null;
-            if (fb) {
-                serializedDefault = new SerializedObject(fb);
-            }
 
             foreach (var ip in inheritableProperties[category]) {
                 var defaultProperty = fb == null ? null : serializedDefault.FindProperty(ip.name);
                 var property = serializedObject.FindProperty(ip.name);
+                
+
                 EditorGUILayout.BeginHorizontal();
 
                 // Override Switch
                 if (isDefault) ip.inheritDefault = false;
-                
+                //Debug.Log(currentOverrides);
+                //currentOverrides.Next(false);
+
                 if (ip.inheritDefault){
                     if (GUILayout.Button("AUTO", normalControl, GUILayout.Width(overrideColumnWidth))) {
                         ip.inheritDefault = false;
@@ -121,6 +132,8 @@ public class AperturePresetEditor : Editor
             EditorGUILayout.EndVertical();
             EditorGUILayout.Space();
         }
+
+        //serializedObject.FindProperty("overrides").objectReferenceValue = currentOverrides;
 
         serializedObject.ApplyModifiedProperties();
     }
