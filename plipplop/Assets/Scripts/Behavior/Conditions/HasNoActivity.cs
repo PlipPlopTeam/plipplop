@@ -5,13 +5,14 @@ using PP;
 
 namespace NPC
 {
-	[CreateAssetMenu(menuName = "Behavior/Condition/NonPlayableCharacter/ValuableInRange")]
-	public class ValuableInRange : Condition
+	[CreateAssetMenu(menuName = "Behavior/Condition/NonPlayableCharacter/HasNoActivity")]
+	public class HasNoActivity : Condition
 	{
 		public override bool Check(StateManager state)
 		{
 			NonPlayableCharacter npc = (NonPlayableCharacter)state;
-            return npc != null && npc.range.IsInRange(npc.valuable.gameObject);
+			return npc != null && npc.activity == null;
 		}
 	}	
 }
+

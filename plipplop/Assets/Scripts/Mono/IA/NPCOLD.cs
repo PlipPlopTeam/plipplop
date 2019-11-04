@@ -26,7 +26,7 @@ public class NPCOLD : MonoBehaviour
     FocusLook look;
     NavMeshAgent agent;
     Animator animator;
-    Valuable thing;
+    Valuable valuable;
     Skeleton skeleton;
     EmotionRenderer emo;
     
@@ -66,10 +66,10 @@ public class NPCOLD : MonoBehaviour
                 agent.speed = chaseSpeed;
                 break;
             case ActionState.Sort:
-                if(!GoThere(thing.origin))
+                if(!GoThere(valuable.origin))
                 {
-                    thing.transform.position = transform.position + transform.forward;
-                    thing = null;
+                    valuable.transform.position = transform.position + transform.forward;
+                    valuable = null;
                     ChangeState(ActionState.Walking);
                 }
                 else
@@ -108,11 +108,11 @@ public class NPCOLD : MonoBehaviour
                 Search();
                 break;
             case ActionState.Collecting:
-                agent.destination = thing.transform.position;
-                if(InRange(thing.gameObject))
+                agent.destination = valuable.transform.position;
+                if(InRange(valuable.gameObject))
                 {
                     emo.Show("suprised", 2f);
-                    Controller c = thing.gameObject.GetComponent<Controller>();
+                    Controller c = valuable.gameObject.GetComponent<Controller>();
                     if(c != null)
                     {
                         if(Game.i.player.IsPossessing(c))
@@ -122,8 +122,8 @@ public class NPCOLD : MonoBehaviour
                 }
                 break;
             case ActionState.Sort:
-                thing.transform.position = (skeleton.rightHandBone.position + skeleton.leftHandBone.position)/2f;
-                thing.transform.forward = transform.forward;
+                valuable.transform.position = (skeleton.rightHandBone.position + skeleton.leftHandBone.position)/2f;
+                valuable.transform.forward = transform.forward;
                 break;
         }
     }
@@ -154,8 +154,8 @@ public class NPCOLD : MonoBehaviour
             case ActionState.Collecting: 
                 break;
             case ActionState.Sort:
-                thing.transform.position = thing.origin;
-                thing = null;
+                valuable.transform.position = valuable.origin;
+                valuable = null;
                 ChangeState(ActionState.Walking);
                 break;
         }
@@ -177,7 +177,7 @@ public class NPCOLD : MonoBehaviour
 
     void Collect(Valuable v)
     {
-        thing = v;
+        valuable = v;
         ChangeState(ActionState.Collecting);
     }
 

@@ -92,14 +92,14 @@ namespace PP.Behavior
 					{
 						b.stateRef.onFixedList.DoLayoutList();
 						b.stateRef.onUpdateList.DoLayoutList();
-						standard += 125 + (b.stateRef.onUpdateList.count + b.stateRef.onFixedList.count) * 20;
+						standard += 125 + (b.stateRef.onUpdateList.count + b.stateRef.onFixedList.count) * 18;
 					}
 					b.showEnterExit = EditorGUILayout.Toggle("Show Enter/Exit ", b.showEnterExit);
 					if (b.showEnterExit)
 					{
 						b.stateRef.onEnterList.DoLayoutList();
 						b.stateRef.onExitList.DoLayoutList();
-						standard += 125 + (b.stateRef.onEnterList.count + b.stateRef.onExitList.count) * 20;
+						standard += 125 + (b.stateRef.onEnterList.count + b.stateRef.onExitList.count) * 18;
 					}
 					b.stateRef.serializedState.ApplyModifiedProperties();
                     b.windowRect.height = standard;

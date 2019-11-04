@@ -11,7 +11,7 @@ namespace NPC
 		public override bool Check(StateManager state)
 		{
 			NonPlayableCharacter npc = (NonPlayableCharacter)state;
-			return npc != null && npc.thing != null && npc.thing.HasMoved();
+			return npc != null && npc.valuable != null && npc.valuable.HasMoved();
 		}
     }
 }

@@ -13,14 +13,14 @@ namespace NPC
             NonPlayableCharacter npc = (NonPlayableCharacter)state;
 			if(npc != null)
 			{
-				Controller c = npc.thing.gameObject.GetComponent<Controller>();
+				Controller c = npc.valuable.gameObject.GetComponent<Controller>();
                 if(c != null)
                 {
                     if(Game.i.player.IsPossessing(c))
                         Game.i.player.TeleportBaseControllerAndPossess();
                 }
-                npc.thing.transform.position = (npc.skeleton.rightHandBone.position + npc.skeleton.leftHandBone.position)/2f;
-                npc.thing.transform.forward = npc.transform.forward;
+                npc.valuable.transform.position = (npc.skeleton.rightHandBone.position + npc.skeleton.leftHandBone.position)/2f;
+                npc.valuable.transform.forward = npc.transform.forward;
 			}
         }
     }

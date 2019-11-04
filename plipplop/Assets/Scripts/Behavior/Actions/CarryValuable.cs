@@ -11,15 +11,15 @@ namespace NPC
 			NonPlayableCharacter npc = (NonPlayableCharacter)state;
 			if(npc != null)
 			{
-				Controller c = npc.thing.gameObject.GetComponent<Controller>();
+				Controller c = npc.valuable.gameObject.GetComponent<Controller>();
                 if(c != null)
                 {
                     if(Game.i.player.IsPossessing(c))
                         Game.i.player.PossessBaseController();
                 }
-				npc.agentMovement.ApplyWeightToSpeed(npc.thing.weight, npc.strength);
-                npc.thing.transform.position = (npc.skeleton.rightHandBone.position + npc.skeleton.leftHandBone.position)/2f;
-                npc.thing.transform.forward = npc.transform.forward;
+				npc.agentMovement.ApplyWeightToSpeed(npc.valuable.weight, npc.strength);
+                npc.valuable.transform.position = (npc.skeleton.rightHandBone.position + npc.skeleton.leftHandBone.position)/2f;
+                npc.valuable.transform.forward = npc.transform.forward;
 			}
 		}
 	}

@@ -11,9 +11,9 @@ namespace NPC
         public override void Execute(StateManager state)
         {
             NonPlayableCharacter npc = (NonPlayableCharacter)state;
-			if(npc != null && npc.thing != null)
+			if(npc != null && npc.valuable != null)
 			{
-                npc.agentMovement.GoThere(npc.thing.origin);
+                npc.agentMovement.GoThere(npc.valuable.origin);
 			}
         }
     }

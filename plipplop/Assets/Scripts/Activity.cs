@@ -4,11 +4,26 @@ using UnityEngine;
 
 public class Activity : MonoBehaviour
 {
-    public NonPlayableCharacter user;
+    public List<NonPlayableCharacter> users = new List<NonPlayableCharacter>();
+    public bool full;
+    public bool working = true;
 
-    public void Use(NonPlayableCharacter npc)
+    public virtual void Enter(NonPlayableCharacter user)
     {
-        user = npc;
-        npc.agentMovement.Stop();
+        user.activity = this;
+        users.Add(user);
+    }
+
+    public virtual void Kick(NonPlayableCharacter user)
+    {
+        user.activity = null;
+        users.Remove(user);
+    }
+
+    [ContextMenu("Break")]
+    public virtual void Break()
+    {
+        foreach(NonPlayableCharacter user in users.ToArray()) Kick(user);
+        working = false;
     }
 }

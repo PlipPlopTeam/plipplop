@@ -13,7 +13,7 @@ namespace NPC
 			NonPlayableCharacter npc = (NonPlayableCharacter)state;
 			if(npc != null)
 			{
-				npc.thing = null;
+				npc.valuable = null;
 			}
 		}
 	}
