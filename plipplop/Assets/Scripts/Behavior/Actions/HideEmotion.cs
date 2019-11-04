@@ -5,16 +5,13 @@ using PP;
 
 namespace NPC
 {
-    [CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/ChaseValuable")]
-    public class ChaseValuable : StateActions
+    [CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/HideEmotion")]
+    public class HideEmotion : StateActions
     {
         public override void Execute(StateManager state)
         {
             NonPlayableCharacter npc = (NonPlayableCharacter)state;
-			if(npc != null && npc.valuable != null)
-			{
-                npc.agentMovement.Chase(npc.valuable.transform);
-			}
+			if(npc != null) npc.emo.Hide();
         }
     }
 }

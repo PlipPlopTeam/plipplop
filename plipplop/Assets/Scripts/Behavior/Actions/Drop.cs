@@ -11,9 +11,9 @@ namespace NPC
         public override void Execute(StateManager state)
         {
             NonPlayableCharacter npc = (NonPlayableCharacter)state;
-			if(npc != null && npc.thing != null)
+			if(npc != null && npc.valuable != null)
 			{
-				npc.thing.transform.position = (npc.skeleton.rightHandBone.position + npc.skeleton.leftHandBone.position)/2f + npc.transform.forward;
+				npc.valuable.transform.position = (npc.skeleton.rightHandBone.position + npc.skeleton.leftHandBone.position)/2f + npc.transform.forward;
                 npc.agentMovement.ResetSpeed();
                 npc.animator.SetBool("Carrying", false);
             }

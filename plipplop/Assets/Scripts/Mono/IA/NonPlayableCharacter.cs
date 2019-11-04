@@ -10,12 +10,12 @@ public class NonPlayableCharacter : StateManager
 	[HideInInspector] public NavMeshAgent agent;
 	[HideInInspector] public AgentMovement agentMovement;
 	[HideInInspector] public Animator animator;
-	[HideInInspector] public Valuable thing;
 	[HideInInspector] public Skeleton skeleton;
 	[HideInInspector] public EmotionRenderer emo;
-	//[HideInInspector] public CollisionEventTransmitter range;
-	//[HideInInspector] public List<GameObject> inRange = new List<GameObject>();
 	[HideInInspector] public Range range;
+
+	[HideInInspector] public Valuable valuable;
+	[HideInInspector] public Activity activity;
 
 	public float strength = 1f;
 
@@ -33,9 +33,5 @@ public class NonPlayableCharacter : StateManager
 
 		agentMovement = GetComponent<AgentMovement>();
 		agentMovement.animator = animator;
-
-        //range = GetComponentInChildren<CollisionEventTransmitter>();
-        //range.onTriggerEnter += (Collider other) => { inRange.Add(other.transform.gameObject); };
-        //range.onTriggerExit += (Collider other) => { inRange.Remove(other.transform.gameObject); };
 	}
 }
