@@ -23,7 +23,7 @@ public class CameraApertureDebugger : MonoBehaviour
         var target = dummyTarget;
 
         if (!EditorApplication.isPlaying) {
-            aperture = new Aperture(preset ? preset.settings : gamePrefab.library.defaultAperture.settings);
+            aperture = new Aperture(preset ?? gamePrefab.library.defaultAperture);
             aperture.target = target;
 
             aperture.Apply();

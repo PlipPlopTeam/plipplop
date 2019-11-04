@@ -12,24 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a3262d062e5d48468ed5b87bf144ebc, type: 3}
   m_Name: GolfCartAperture
   m_EditorClassIdentifier: 
-  settings:
-    canBeControlled: 0
-    fieldOfView: 50
-    heightOffset: 1
-    additionalAngle: 35.4
-    distance:
-      min: 5
-      max: 6
-    fovLerp: 1
-    lateralFollowLerp: 20
-    longitudinalFollowLerp: 5
-    verticalFollowLerp: 10
-    rotationSpeed: 5
-    lookAtLerp: 4
-    speedEffectMultiplier: 3
-    catchUpSpeedMultiplier: 20
-    maximumCatchUpSpeed: 10
-    cameraRotateAroundSpeed: 4
-    absoluteMinimalDistance: 4
-    constraintToTarget: 0
-    targetConstraintLocalOffset: {x: 0, y: 0, z: 1}
+  fallback: {fileID: 11400000, guid: df6437ca0d9bc60498aeb18a4dd62019, type: 2}
+  canBeControlled: 1
+  fieldOfView: 65
+  heightOffset: 1
+  additionalAngle: 20
+  distance:
+    min: 7
+    max: 8
+  fovLerp: 3
+  lateralFollowLerp: 20
+  longitudinalFollowLerp: 6
+  verticalFollowLerp: 10
+  rotationSpeed: 5
+  lookAtLerp: 10
+  speedEffectMultiplier: 1
+  catchUpSpeedMultiplier: 1
+  angleIncrementOnSpeed: 40
+  maximumCatchUpSpeed: 10
+  cameraRotateAroundSpeed: 4
+  absoluteBoundaries:
+    min: 5
+    max: 8
+  constraintToTarget: 0
+  targetConstraintLocalOffset: {x: 0, y: 0, z: 0}
