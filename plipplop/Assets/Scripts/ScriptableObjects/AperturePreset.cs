@@ -5,7 +5,14 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "AperturePreset", menuName = "ScriptableObjects/Aperture", order = 1)]
 public class AperturePreset : ScriptableObject
 {
-    public Dictionary<string, bool> overrides = new Dictionary<string, bool>();
+    [System.Serializable]
+    public class PropertyOverride
+    {
+        public string property;
+        public bool isOverriden;
+    }
+
+    public List<PropertyOverride> overrides = new List<PropertyOverride>();
 
     [HideInInspector] public AperturePreset fallback;
 

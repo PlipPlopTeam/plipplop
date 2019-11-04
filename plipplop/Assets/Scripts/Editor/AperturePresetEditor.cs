@@ -76,13 +76,9 @@ public class AperturePresetEditor : Editor
         if (fb) {
             serializedDefault = new SerializedObject(fb);
         }
-        /*
-        var currentOverrides = serializedObject.FindProperty("overrides").Copy();
-        currentOverrides.Next(true); // Generic field
-        currentOverrides.Next(true); // Array size
-        currentOverrides.Next(true); // Advance to first element;
 
-    */
+        var properties = new List<InheritableProperty>();
+
         foreach (var category in inheritableProperties.Keys) {
 
             EditorGUILayout.BeginVertical(title);
@@ -95,6 +91,10 @@ public class AperturePresetEditor : Editor
 
 
             foreach (var ip in inheritableProperties[category]) {
+
+                // Filling property list for later
+                properties.Add(ip);
+
                 var defaultProperty = fb == null ? null : serializedDefault.FindProperty(ip.name);
                 var property = serializedObject.FindProperty(ip.name);
                 
@@ -103,8 +103,6 @@ public class AperturePresetEditor : Editor
 
                 // Override Switch
                 if (isDefault) ip.inheritDefault = false;
-                //Debug.Log(currentOverrides);
-                //currentOverrides.Next(false);
 
                 if (ip.inheritDefault){
                     if (GUILayout.Button("AUTO", normalControl, GUILayout.Width(overrideColumnWidth))) {
@@ -133,7 +131,20 @@ public class AperturePresetEditor : Editor
             EditorGUILayout.Space();
         }
 
-        //serializedObject.FindProperty("overrides").objectReferenceValue = currentOverrides;
+        var serializedOverrides = serializedObject.FindProperty("overrides").Copy();
+        serializedOverrides.Next(true);
+        serializedOverrides.Next(true);
+        serializedOverrides.arraySize = properties.Count;
+        serializedOverrides.Next(true);
+
+        for (int i = 0; i < properties.Count; i++) {
+            var property = properties[i];
+            serializedOverrides.Next(true);     // Propertyname
+            serializedOverrides.stringValue = property.name;
+            serializedOverrides.Next(false);    // IsOverriden
+            serializedOverrides.boolValue = !property.inheritDefault;
+            serializedOverrides.Next(false);    // Next generic
+        }
 
         serializedObject.ApplyModifiedProperties();
     }
@@ -146,14 +157,18 @@ public class AperturePresetEditor : Editor
         string speedFX = "speed effects";
         string advanced = "advanced";
 
-        var overrides = ((AperturePreset)target).overrides;
+        var overridesList = ((AperturePreset)target).overrides;
+        Dictionary<string, bool> overrides = new Dictionary<string, bool>();
+        foreach(var overr in overridesList) {
+            overrides[overr.property] = overr.isOverriden;
+        }
 
         if (!inheritableProperties.ContainsKey(switches)) inheritableProperties[switches] = new InheritableProperties(overrides);
         if (!inheritableProperties.ContainsKey(basicParameters)) inheritableProperties[basicParameters] = new InheritableProperties(overrides);
         if (!inheritableProperties.ContainsKey(interpolations)) inheritableProperties[interpolations] = new InheritableProperties(overrides);
         if (!inheritableProperties.ContainsKey(speedFX)) inheritableProperties[speedFX] = new InheritableProperties(overrides);
         if (!inheritableProperties.ContainsKey(advanced)) inheritableProperties[advanced] = new InheritableProperties(overrides);
-
+        
         inheritableProperties[switches].Add("canBeControlled");
 
         inheritableProperties[basicParameters].Add("fieldOfView");
