@@ -52,7 +52,7 @@ public class Ball : Controller
 
     internal override void SpecificJump()
     {
-        if(IsGrounded()) 
+        if(WasGrounded()) 
         {
             rigidbody.velocity = new Vector3(rigidbody.velocity.x, jumpForce, rigidbody.velocity.z);
         }

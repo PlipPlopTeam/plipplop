@@ -19,6 +19,7 @@ public class Locomotion : MonoBehaviour
     float timePressed = 0f;
     float lookForwardSpeed = 8f;
     Vector3 lastDirection = new Vector3();
+    bool hasJumped = false;
 
     internal Vector3 groundCheckDirection = Vector3.down;
 
@@ -137,18 +138,23 @@ public class Locomotion : MonoBehaviour
 
     public void Jump()
     {
-        rigidbody.AddForce(Vector3.up * preset.jump * (parentController.gravityMultiplier/100f), ForceMode.Acceleration);
+        if (!hasJumped) {
+            rigidbody.AddForce(Vector3.up * preset.jump * (parentController.gravityMultiplier / 100f), ForceMode.Acceleration);
+            hasJumped = true;
+        }
     }
 
     public bool IsGrounded(float rangeMultiplier = 1f) // But better 😎
     {
         RaycastHit[] hits = RaycatAllToGround(rangeMultiplier);
-
         foreach(RaycastHit h in hits)
         {
             if (!IsMe(h.transform) && !h.collider.isTrigger) {
-                if (h.normal.y >= 1-(preset.maxWalkableSteepness/100f))
+                if (h.normal.y >= 1 - (preset.maxWalkableSteepness / 100f)) {
+                    if (rigidbody.velocity.y < 0f) 
+                        hasJumped = false; // Put HasJumped to false only if not grounded and falling
                     return true;
+                }
             }
         }
         return false;

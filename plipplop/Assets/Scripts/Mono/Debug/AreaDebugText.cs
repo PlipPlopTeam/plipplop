@@ -18,7 +18,7 @@ public class AreaDebugText : MonoBehaviour
         tmp = GetComponentInChildren<TextMeshPro>();
         tmp.text = text;
 
-        tmp.transform.rotation = facing == FACING.TOP ? Quaternion.Euler(90f, 180f, 0f) : Quaternion.Euler(0f, 180f, 0f);
+        tmp.transform.localRotation = facing == FACING.TOP ? Quaternion.Euler(90f, 180f, 0f) : Quaternion.Euler(0f, 180f, 0f);
         tmp.transform.localPosition = (Vector3.one - Vector3.right) * 0.01f;
     }
 }

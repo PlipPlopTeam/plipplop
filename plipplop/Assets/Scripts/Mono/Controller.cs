@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System;
+
 [System.Serializable]
 public abstract class Controller : MonoBehaviour
 {
@@ -18,6 +20,7 @@ public abstract class Controller : MonoBehaviour
     [HideInInspector] public Transform visuals;
 
     GameObject face;
+    float lastTimeGrounded = 0f;
 
     new internal Rigidbody rigidbody;
     internal ControllerSensor controllerSensor;
@@ -64,7 +67,7 @@ public abstract class Controller : MonoBehaviour
     { 
         if(AreLegsRetracted()) 
             SpecificJump();
-        else if (IsGrounded())
+        else if (WasGrounded())
             locomotion.Jump();
     }
 
@@ -84,6 +87,7 @@ public abstract class Controller : MonoBehaviour
     internal bool AreLegsRetracted() { return locomotion.AreLegsRetracted(); }
 
     internal virtual bool IsGrounded(float rangeMultiplier = 1f) { return locomotion.IsGrounded(rangeMultiplier); }
+    internal virtual bool WasGrounded() { return Time.time - locomotion.preset.groundedBufferToleranceSeconds < lastTimeGrounded; }
 
     internal virtual void OnHoldJump() { }
     internal abstract void OnLegsRetracted();
@@ -177,6 +181,7 @@ public abstract class Controller : MonoBehaviour
     virtual internal void Update()
     {
         rigidbody.useGravity = false;
+        UpdateLastTimeGrounded();
 
         // DEBUG
         var lr = GetComponent<LineRenderer>();
@@ -207,6 +212,11 @@ public abstract class Controller : MonoBehaviour
         if (useGravity && !isImmerged) {
             ApplyGravity();
         }
+    }
+
+    void UpdateLastTimeGrounded()
+    {
+        if (IsGrounded()) lastTimeGrounded = Time.time;
     }
 
     internal void ApplyGravity(float factor=1f)
