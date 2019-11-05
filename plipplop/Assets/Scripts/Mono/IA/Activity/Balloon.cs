@@ -12,7 +12,7 @@ public class Balloon : Activity
     Vector3 originPosition;
     private int slots = 2;
     private int carrier = 0;
-    private float timer;
+    private float throwTimer;
     private bool[] inPlace;
     private bool playing;
 
@@ -36,6 +36,30 @@ public class Balloon : Activity
         Initialize();
     }
 
+    public override void Enter(NonPlayableCharacter user)
+    {
+        base.Enter(user);
+        if(users.Count >= slots)
+        {
+            inPlace = new bool[slots];
+            full = true;
+            users[0].Carry(transform);
+            users[0].agentMovement.GoThere(originPosition + Vector3.forward * distanceBetween/2);
+            users[0].agentMovement.onDestinationReached += () =>
+            {
+                inPlace[0] = true;
+                IsAllInPlace();
+            };
+
+            users[1].agentMovement.GoThere(originPosition + Vector3.forward * -distanceBetween/2);
+            users[1].agentMovement.onDestinationReached += () =>
+            {
+                inPlace[1] = true;
+                IsAllInPlace();
+            };
+        }
+    }
+
     void Initialize()
     {
         full = false;
@@ -46,40 +70,17 @@ public class Balloon : Activity
     public override void Update()
     {
         base.Update();
-
-        if(!full)
+        
+        if(playing)
         {
-            if(users.Count >= slots)
-            {
-                inPlace = new bool[slots];
-                full = true;
-                users[0].Carry(transform);
-                users[0].agentMovement.GoThere(originPosition + Vector3.forward * distanceBetween/2);
-                users[0].agentMovement.onDestinationReached += () =>
-                {
-                    inPlace[0] = true;
-                    IsAllInPlace();
-                };
-
-                users[1].agentMovement.GoThere(originPosition + Vector3.forward * -distanceBetween/2);
-                users[1].agentMovement.onDestinationReached += () =>
-                {
-                    inPlace[1] = true;
-                    IsAllInPlace();
-                };
-            }
-        }
-        else if(playing)
-        {
-            if(timer > 0f) timer -= Time.deltaTime;
+            if(throwTimer > 0f) throwTimer -= Time.deltaTime;
             else
             {
                 LookAtEachOthers();
                 users[carrier].Drop();
                 Next();
                 users[carrier].Carry(transform);
-
-                timer = timeBetweenThrows;
+                throwTimer = timeBetweenThrows;
             }
         }
     }
