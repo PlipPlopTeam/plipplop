@@ -253,13 +253,6 @@ public abstract class Controller : MonoBehaviour
             else {
                 Gizmos.DrawIcon(transform.position + Vector3.up * 2f, "d_CollabChangesConflict Icon");
             }
-          
-            Handles.Label(transform.position + Vector3.up*2f, string.Join("\n", new string[] {
-                    string.Format("Grounded? {0}", IsGrounded()),
-                    string.Format("Retracted? {0}", AreLegsRetracted()),
-                    string.Format("Immerged? {0}", isImmerged)
-                })
-            );
         }
         else {
             if (autoPossess) {
@@ -279,6 +272,18 @@ public abstract class Controller : MonoBehaviour
                 if (style.fontSize > 2) Handles.Label(transform.position + Vector3.up *2f, content, style);
                 else Gizmos.DrawIcon(transform.position + Vector3.up*2f, "SPR_GIZ_AUTOPOSSESS", false);
             }
+        }
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        if (EditorApplication.isPlaying) {
+            Handles.Label(transform.position + Vector3.up*2f, string.Join("\n", new string[] {
+                    string.Format("Grounded? {0}", IsGrounded()),
+                    string.Format("Retracted? {0}", AreLegsRetracted()),
+                    string.Format("Immerged? {0}", isImmerged)
+                })
+            );
         }
     }
 #endif
