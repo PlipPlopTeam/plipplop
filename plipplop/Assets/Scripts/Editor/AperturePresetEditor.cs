@@ -14,6 +14,7 @@ public class AperturePresetEditor : Editor
     GUIStyle box;
     GUIStyle boxToggle;
     GUIStyle pressedControl;
+    GUIStyle defaultControl;
     GUIStyle normalControl;
     GUIStyle centeredPressedControl;
     GUIStyle centeredNormalControl;
@@ -90,29 +91,39 @@ public class AperturePresetEditor : Editor
             EditorGUILayout.EndHorizontal();
 
 
-            foreach (var ip in inheritableProperties[category]) {
+            foreach (var ip in inheritableProperties[category].ToArray()) {
 
                 // Filling property list for later
                 properties.Add(ip);
 
                 var defaultProperty = fb == null ? null : serializedDefault.FindProperty(ip.name);
                 var property = serializedObject.FindProperty(ip.name);
-                
+                if (property == null) {
+                    Debug.LogError("!! PLEASE UPDATE THE APERTURE EDITOR");
+                    Debug.LogError("!! THE FOLLOWING PROPERTY WAS NOT FOUND: "+ip.name+" !!");
+                    inheritableProperties[category].RemoveAll(o => o.name == ip.name);
+                    continue;
+                }
 
                 EditorGUILayout.BeginHorizontal();
 
                 // Override Switch
                 if (isDefault) ip.inheritDefault = false;
 
-                if (ip.inheritDefault){
-                    if (GUILayout.Button("AUTO", normalControl, GUILayout.Width(overrideColumnWidth))) {
-                        ip.inheritDefault = false;
-                    }
+                if (isDefault) {
+                    GUILayout.Button("DEFAULT", defaultControl, GUILayout.Width(overrideColumnWidth));
                 }
-                else{
-                    if (GUILayout.Button("OVERRIDE", pressedControl, GUILayout.Width(overrideColumnWidth))) {
-                        ip.inheritDefault = true;
-                        serializedObject.CopyFromSerializedProperty(serializedDefault.FindProperty(ip.name));
+                else {
+                    if (ip.inheritDefault) {
+                        if (GUILayout.Button("AUTO", normalControl, GUILayout.Width(overrideColumnWidth))) {
+                            ip.inheritDefault = false;
+                        }
+                    }
+                    else {
+                        if (GUILayout.Button("OVERRIDE", pressedControl, GUILayout.Width(overrideColumnWidth))) {
+                            ip.inheritDefault = true;
+                            serializedObject.CopyFromSerializedProperty(serializedDefault.FindProperty(ip.name));
+                        }
                     }
                 }
 
@@ -175,6 +186,8 @@ public class AperturePresetEditor : Editor
         inheritableProperties[basicParameters].Add("heightOffset");
         inheritableProperties[basicParameters].Add("additionalAngle");
         inheritableProperties[basicParameters].Add("distance");
+        inheritableProperties[basicParameters].Add("cameraRotateAroundSensivity");
+        inheritableProperties[basicParameters].Add("cameraRotateAboveSensivity");
 
         inheritableProperties[interpolations].Add("fovLerp");
         inheritableProperties[interpolations].Add("lateralFollowLerp");
@@ -182,16 +195,17 @@ public class AperturePresetEditor : Editor
         inheritableProperties[interpolations].Add("verticalFollowLerp");
         inheritableProperties[interpolations].Add("rotationSpeed");
         inheritableProperties[interpolations].Add("lookAtLerp");
-        
+        inheritableProperties[interpolations].Add("cameraResetSpeed");
+
         inheritableProperties[speedFX].Add("speedEffectMultiplier");
         inheritableProperties[speedFX].Add("catchUpSpeedMultiplier");
         inheritableProperties[speedFX].Add("angleIncrementOnSpeed");
 
         inheritableProperties[advanced].Add("maximumCatchUpSpeed");
-        inheritableProperties[advanced].Add("cameraRotateAroundSpeed");
         inheritableProperties[advanced].Add("absoluteBoundaries");
         inheritableProperties[advanced].Add("constraintToTarget");
         inheritableProperties[advanced].Add("targetConstraintLocalOffset");
+        inheritableProperties[advanced].Add("cameraResetAfterTime");
     }
 
     void MakeStyles()
@@ -222,6 +236,9 @@ public class AperturePresetEditor : Editor
         pressedControl.fontSize = 8;
         pressedControl.normal.textColor = Color.Lerp(Color.white, Color.green, 0.5f);
         pressedControl.alignment = TextAnchor.MiddleCenter;
+
+        defaultControl = new GUIStyle(pressedControl);
+        defaultControl.normal.textColor = Color.Lerp(Color.white, Color.black, 0.25f);
 
         centeredNormalControl = new GUIStyle(normalControl);
         centeredNormalControl.fontStyle = FontStyle.Bold;

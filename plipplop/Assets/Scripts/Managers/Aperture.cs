@@ -50,6 +50,12 @@ public class Aperture
 
     // Current angle on Y axis
     float hAngle;
+    // Current angle on X axis
+    float vAngle;
+    float vAngleAmount;
+    bool isCameraBeingRepositioned;
+    float lastCameraInput;
+
     bool freeze = false;
     public void Freeze() {freeze = true;}
     public void Unfreeze() {freeze = false;}
@@ -93,15 +99,24 @@ public class Aperture
 
     public void Rotate(Vector3 rot)
     {
-        hAngle += rot.y * settings.cameraRotateAroundSpeed;
+        hAngle += rot.y * settings.cameraRotateAroundSensivity * Time.deltaTime;
+        vAngleAmount = Mathf.Lerp(vAngleAmount, Mathf.Lerp(vAngleAmount, rot.x, settings.cameraRotateAboveSensivity * Time.deltaTime), Mathf.Abs(rot.x));
+
+        if (rot.magnitude > 0f) {
+            lastCameraInput = Time.time;
+            isCameraBeingRepositioned = false;
+        }
     }
     public void Rotate(float x = 0f, float y = 0f, float z = 0f)
     {
-        hAngle += y * settings.cameraRotateAroundSpeed;
+        Rotate(new Vector3(x, y, z));
     }
 
     public void Update()
     {
+        if (Time.time - lastCameraInput > settings.cameraResetAfterTime) {
+            isCameraBeingRepositioned = true;
+        }
     }
 
     public void FixedUpdate()
@@ -114,11 +129,17 @@ public class Aperture
             return;
         }
         else cam.transform.parent = null;
-
-        // TODO: This sucks and prevents camera from turning freely around player - fix by taking player input in consideration
-        hAngle = Mathf.Lerp(hAngle, 0f, Time.fixedDeltaTime * 3f);
-
+        
         var targetPosition = target ? target.position : defaultTarget;
+
+        // Camera trying to get in my back
+        var targetMovementVelocity = Vector3.Distance(targetPosition, lastTargetPosition);
+        if (targetMovementVelocity > 0 || isCameraBeingRepositioned) {
+            hAngle = Mathf.Lerp(hAngle, 0f, Time.fixedDeltaTime * settings.cameraResetSpeed);
+            vAngleAmount = Mathf.Lerp(vAngleAmount, 0f, Time.fixedDeltaTime * settings.cameraResetSpeed);
+        }
+        float vAngleAmplitude = 40f - settings.additionalAngle;
+        vAngle = vAngleAmount * vAngleAmplitude;
 
         // Calculating "catch up"
         ComputeHorizontalDistanceToTarget(targetPosition);
@@ -185,8 +206,8 @@ public class Aperture
         // Dark pythagorian mathematics allow us to position the camera correctly
         Vector2 a = Vector3.Scale(new Vector3(0f, 1f, 1f), position.destination);
         Vector2 b = Vector3.Scale(new Vector3(0f, 1f, 1f), targetPosition);
-        float t = settings.additionalAngle + settings.angleIncrementOnSpeed * Vector3.Distance(targetPosition, lastTargetPosition);
-        t = Mathf.Clamp(t, 0f, 44f); // "Almost 45f". Don't put it to 45 or this algorithm will spit out NaNs
+        float t = settings.additionalAngle + settings.angleIncrementOnSpeed * Vector3.Distance(targetPosition, lastTargetPosition) + vAngle;
+        t = Mathf.Clamp(t, -20f, 44f); // "Almost 45f". Don't put it to 45 or this algorithm will spit out NaNs
         float ab = Vector2.Distance(a, b);
         float bc = ab / Mathf.Cos(t * Mathf.Deg2Rad);
         float acSquare = Mathf.Pow(bc, 2f) - Mathf.Pow(ab, 2f);

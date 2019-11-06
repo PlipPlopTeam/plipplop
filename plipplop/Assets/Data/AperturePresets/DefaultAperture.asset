@@ -23,6 +23,10 @@ MonoBehaviour:
     isOverriden: 1
   - property: distance
     isOverriden: 1
+  - property: cameraRotateAroundSensivity
+    isOverriden: 1
+  - property: cameraRotateAboveSensivity
+    isOverriden: 1
   - property: fovLerp
     isOverriden: 1
   - property: lateralFollowLerp
@@ -35,6 +39,8 @@ MonoBehaviour:
     isOverriden: 1
   - property: lookAtLerp
     isOverriden: 1
+  - property: cameraResetSpeed
+    isOverriden: 1
   - property: speedEffectMultiplier
     isOverriden: 1
   - property: catchUpSpeedMultiplier
@@ -43,13 +49,13 @@ MonoBehaviour:
     isOverriden: 1
   - property: maximumCatchUpSpeed
     isOverriden: 1
-  - property: cameraRotateAroundSpeed
-    isOverriden: 1
   - property: absoluteBoundaries
     isOverriden: 1
   - property: constraintToTarget
     isOverriden: 1
   - property: targetConstraintLocalOffset
+    isOverriden: 1
+  - property: cameraResetAfterTime
     isOverriden: 1
   fallback: {fileID: 0}
   canBeControlled: 1
@@ -59,17 +65,20 @@ MonoBehaviour:
   distance:
     min: 7
     max: 8
+  cameraRotateAroundSensivity: 60
+  cameraRotateAboveSensivity: 5
   fovLerp: 3
   lateralFollowLerp: 20
   longitudinalFollowLerp: 6
   verticalFollowLerp: 10
   rotationSpeed: 5
   lookAtLerp: 10
+  cameraResetSpeed: 3
+  cameraResetAfterTime: 2
   speedEffectMultiplier: 1
   catchUpSpeedMultiplier: 1
   angleIncrementOnSpeed: 40
   maximumCatchUpSpeed: 10
-  cameraRotateAroundSpeed: 4
   absoluteBoundaries:
     min: 5
     max: 8
