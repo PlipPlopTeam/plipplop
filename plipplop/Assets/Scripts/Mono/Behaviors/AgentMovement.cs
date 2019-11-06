@@ -23,20 +23,31 @@ public class AgentMovement : MonoBehaviour
     }
 
     public System.Action onDestinationReached;
+    public System.Action onPathCompleted;
     public AgentMovement.Path path;
     public AgentMovement.Settings settings;
 
-    Transform chaseTarget;
     [HideInInspector] public bool going = false;
     [HideInInspector] public bool reached = false;
     [HideInInspector] public Animator animator;
 
-    NavMeshAgent agent;
+    private bool followingPath;
+    private Transform chaseTarget;
+    private NavMeshAgent agent;
+
     public void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         going = false;
         SetSpeed(settings.speed);
+    }
+
+    public void FollowPath(AgentMovement.Path newPath)
+    {
+        path = newPath;
+        followingPath = true;
+        onPathCompleted += () => {if(!path.loop) followingPath = false;};
+        GoAtPoint(0);
     }
 
     public void ApplyWeightToSpeed(float weight, float strength)
@@ -56,7 +67,6 @@ public class AgentMovement : MonoBehaviour
         agent.speed = value;
     }
     
-
     public void Chase(Transform target)
     {
         chaseTarget = target;
@@ -90,6 +100,7 @@ public class AgentMovement : MonoBehaviour
     void Update()
     {
         if(reached) reached = false;
+
         if(DestinationReached())
         {
             reached = true;
@@ -99,6 +110,17 @@ public class AgentMovement : MonoBehaviour
                 onDestinationReached.Invoke();
                 onDestinationReached = null;
             }
+
+            if(path.index == path.points.Length - 1)
+            {
+                if(onPathCompleted != null)
+                {
+                    onPathCompleted.Invoke();
+                    onPathCompleted = null;
+                }
+            }
+
+            if(followingPath) GoToNextPoint();
         }
         else
         {

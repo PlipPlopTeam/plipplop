@@ -19,8 +19,8 @@ public class NonPlayableCharacter : StateManager
 	[HideInInspector] public Activity previousActivity;
 	[HideInInspector] public Transform inHand;
 
+	[Header("Settings")]
 	public float strength = 1f;
-
 	[Range(0f, 100f)] public float boredom = 0f;
 
 	void Awake()
