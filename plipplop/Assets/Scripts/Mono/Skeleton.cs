@@ -17,14 +17,17 @@ public class Skeleton : MonoBehaviour
 			return item == null;
 		}
 
-		public void Attach(Transform obj, Vector3 offset = new Vector3())
+		public void Attach(Transform obj, Vector3 offset = new Vector3(), Vector3 rotate = new Vector3())
 		{
 			obj.SetParent(bone);
 			obj.transform.localPosition = offset;
+            obj.forward = bone.forward;
+            obj.localScale = Vector3.one;
+            item = obj;
+            obj.Rotate(rotate);
 		}
 	}
-
-    public void Attach(Transform t, string where, bool unequipCurrent)
+    public void Attach(Transform t, string where, bool unequipCurrent, Vector3 offset = new Vector3(), Vector3 rotate = new Vector3())
     {
         Socket s = GetSlotByName(where);
         if(s != null)
@@ -34,21 +37,12 @@ public class Skeleton : MonoBehaviour
                 if(unequipCurrent)
                 {
                     s.item.SetParent(null);
-                    Link(t, s);
+                    s.Attach(t, offset, rotate);
                 }
             }
-            else Link(t, s);
+            else s.Attach(t, offset, rotate);
         }
         else Debug.LogWarning("Bone name : " + where + "doesn't exist");
-    }
-
-    private void Link(Transform t, Socket socket)
-    {
-        t.SetParent(socket.bone);
-        t.transform.localPosition = socket.offset;
-        t.forward = socket.bone.forward;
-        t.localScale = Vector3.one;
-        socket.item = t;
     }
 
     public void Drop(string from)

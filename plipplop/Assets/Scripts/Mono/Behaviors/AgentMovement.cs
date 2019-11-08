@@ -141,7 +141,11 @@ public class AgentMovement : MonoBehaviour
                 }
             }
         }
-        if(animator) animator.SetFloat("Speed", agent.velocity.magnitude/settings.maxSpeed);
+
+        if(animator) 
+        {
+            animator.SetFloat("Speed", agent.velocity.magnitude/settings.maxSpeed);
+        }
     }
 
     public bool GoAtPoint(int index)
@@ -198,7 +202,7 @@ public class AgentMovement : MonoBehaviour
     void OnDrawGizmos()
     {
         Gizmos.color = new Color32(255, 215, 0, 255);
-        if(EditorApplication.isPlaying && agent.destination != null)
+        if(EditorApplication.isPlaying && agent != null && agent.destination != null)
         {
             UnityEditor.Handles.DrawLine(transform.position, agent.destination);
         }

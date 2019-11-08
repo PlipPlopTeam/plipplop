@@ -19,16 +19,23 @@ public class FishingBox : Activity
         user.agentMovement.GoThere(transform.position);
         user.agentMovement.onDestinationReached += () =>
         {
-            user.skeleton.Attach(Instantiate(fishingPole).transform, "rightHand", true);
+            user.skeleton.Attach(Instantiate(fishingPole).transform, "rightHand", true, Vector3.zero, new Vector3(180f, 0f, 90f));
 
             float angle = Random.Range(0f, 1f) * Mathf.PI * 2;
-            Vector3 pos = new Vector3(position.x + Mathf.Cos(angle) * radius, position.y, position.z + Mathf.Cos(angle) * radius);
+            Vector3 pos = new Vector3(position.x + Mathf.Cos(angle) * radius, position.y, position.z + Mathf.Sin(angle) * radius);
 
             user.agentMovement.GoThere(pos);
-            user.agentMovement.onDestinationReached += () =>
-            {
-                user.transform.LookAt(position);
-            };
+            StartCoroutine(DelayedSetup(user));
+        };
+    }
+    IEnumerator DelayedSetup(NonPlayableCharacter user)
+    {
+        yield return new WaitForEndOfFrame();
+        user.agentMovement.onDestinationReached += () =>
+        {
+            user.agentMovement.Stop();
+            user.animator.SetBool("Fishing", true);
+            user.transform.LookAt(position);
         };
     }
 
@@ -36,6 +43,7 @@ public class FishingBox : Activity
     {
         base.Exit(user);
         user.skeleton.Drop("rightHand");
+        user.animator.SetBool("Fishing", false);
     }
 
 
