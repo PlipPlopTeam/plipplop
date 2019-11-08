@@ -25,10 +25,31 @@ public class ControllerEditor : Editor
 
     public override void OnInspectorGUI()
     {
+        DrawControllerEditor();
+        DrawDefaultEditor();
+        DrawAddLocomotionButton();
+    }
+
+    virtual internal void DrawAddLocomotionButton()
+    {
+        if (!((Controller)target).gameObject.GetComponent<Locomotion>() && GUILayout.Button("Add custom locomotion...", EditorStyles.miniButton)) {
+            ((Controller)target).gameObject.AddComponent<Locomotion>();
+        }
+    }
+
+    virtual internal void DrawDefaultEditor()
+    {
+        GUILayout.Label("Specific properties", title, GUILayout.Height(headerSeparatorHeight), GUILayout.ExpandWidth(true));
+
+        DrawDefaultInspector();
+    }
+
+    internal void DrawControllerEditor()
+    {
         MakeStyles();
-        List<System.Action> buttons = new List<System.Action>();
         var w = Screen.width - wMargin;
         var colWidth = w / columns;
+        List<System.Action> buttons = new List<System.Action>();
         buttons.Add(BeginCrouchedButton(colWidth));
         buttons.Add(CanRetractLegsButton(colWidth));
         buttons.Add(UseGravityButton(colWidth));
@@ -37,7 +58,6 @@ public class ControllerEditor : Editor
         buttons.Add(CustomRigidbodyField(colWidth));
         buttons.Add(CustomVisualsField(colWidth));
 
-
         if (EditorApplication.isPlaying) {
             EjectButton().Invoke();
         }
@@ -45,16 +65,21 @@ public class ControllerEditor : Editor
             AutoPossessButton("AUTO-POSSESS").Invoke();
         }
 
-        unlockedProperties = EditorGUILayout.BeginFoldoutHeaderGroup(unlockedProperties, "Inherited properties");
-        if (unlockedProperties) {
-            GUILayout.Label("Inherited properties", title, GUILayout.Height(20f), GUILayout.ExpandWidth(true));
+        DrawCustomEditor(buttons);
+    }
+
+    virtual internal void DrawCustomEditor(List<System.Action> buttons, bool hasFoldout = true, string foldoutName = "Inherited properties")
+    {
+        if (hasFoldout) unlockedProperties = EditorGUILayout.BeginFoldoutHeaderGroup(unlockedProperties, foldoutName);
+        if (!hasFoldout || unlockedProperties) {
+            GUILayout.Label(foldoutName, title, GUILayout.Height(fieldsHeight), GUILayout.ExpandWidth(true));
 
             GUILayout.BeginVertical();
             GUILayout.BeginHorizontal(GUILayout.MinHeight(fieldsHeight));
 
             var currentLine = 0;
             for (int i = 0; i < buttons.Count; i++) {
-                if (Mathf.Floor(i/(float)columns) != currentLine) {
+                if (Mathf.Floor(i / (float)columns) != currentLine) {
                     GUILayout.EndHorizontal();
                     GUILayout.Space(hSpacing);
                     GUILayout.BeginHorizontal(GUILayout.MinHeight(fieldsHeight));
@@ -65,16 +90,7 @@ public class ControllerEditor : Editor
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();
         }
-        EditorGUILayout.EndFoldoutHeaderGroup();
-
-        GUILayout.Label("Specific properties", title, GUILayout.Height(headerSeparatorHeight), GUILayout.ExpandWidth(true));
-
-        DrawDefaultInspector();
-
-
-        if (!((Controller)target).gameObject.GetComponent<Locomotion>() && GUILayout.Button("Add custom locomotion...", EditorStyles.miniButton)) {
-            ((Controller)target).gameObject.AddComponent<Locomotion>();
-        }
+        if (hasFoldout) EditorGUILayout.EndFoldoutHeaderGroup();
     }
 
     System.Action EjectButton()
@@ -102,7 +118,7 @@ public class ControllerEditor : Editor
         };
     }
 
-    void MakeStyles()
+    internal void MakeStyles()
     {
         title = new GUIStyle(GUI.skin.box);
         title.fontSize = 12;
@@ -333,6 +349,61 @@ public class ControllerEditor : Editor
 
             GUILayout.Label(new GUIContent(buttonSpace+"Visuals", icon), noBoldTitle, GUILayout.Height(fieldsHeight * 0.66f), GUILayout.ExpandWidth(true));
             serializedObject.FindProperty("visuals").objectReferenceValue = EditorGUILayout.ObjectField(((Controller)target).visuals, typeof(Transform), allowSceneObjects: true);
+            serializedObject.ApplyModifiedProperties();
+            GUILayout.EndVertical();
+        };
+    }
+
+    internal System.Action GenericSlider(float width, string propertyName, float min, float max, string displayFormat, string spriteName)
+    {
+        var options = new List<GUILayoutOption>();
+
+        options.Add(GUILayout.Width(width));
+        options.Add(GUILayout.Height(fieldsHeight));
+
+        var noBoldTitle = new GUIStyle(title);
+        noBoldTitle.fontStyle = FontStyle.Normal;
+
+        var tex = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_"+ spriteName);
+
+        return delegate {
+            try {
+                var a = serializedObject.FindProperty(propertyName).floatValue;
+
+                GUILayout.BeginVertical(options.ToArray());
+
+                GUILayout.Label(new GUIContent(buttonSpace + string.Format(displayFormat, Mathf.Round(a)), tex), noBoldTitle, GUILayout.ExpandWidth(true));
+                serializedObject.FindProperty(propertyName).floatValue = GUILayout.HorizontalSlider(a, min, max, GUILayout.Height(fieldsHeight * 0.33f));
+                serializedObject.ApplyModifiedProperties();
+                GUILayout.EndVertical();
+            }
+            catch(System.NullReferenceException) {
+                Debug.LogError("!! INVALID PROPERTY FOR " + target.name + ": " + propertyName);
+            }
+        };
+    }
+
+    internal System.Action GenericToggleButton(float width, string propertyName, string nameActive, string nameInactive, string spriteNameActive, string spriteNameInactive)
+    {
+        // Auto possess
+        var asNormalTex = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_"+ spriteNameInactive);
+        var asPressedTex = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_" + spriteNameActive);
+
+        var options = new List<GUILayoutOption>();
+
+        options.Add(GUILayout.Height(fieldsHeight));
+        options.Add(GUILayout.Width(width));
+
+        return delegate {
+            GUILayout.BeginVertical(options.ToArray());
+            if (serializedObject.FindProperty(propertyName).boolValue) {
+                if (GUILayout.Button(new GUIContent(buttonSpace + nameActive, asPressedTex), pressedControl))
+                    serializedObject.FindProperty(propertyName).boolValue = false;
+            }
+            else {
+                if (GUILayout.Button(new GUIContent(buttonSpace + nameInactive, asNormalTex), normalControl))
+                    serializedObject.FindProperty(propertyName).boolValue = true;
+            }
             serializedObject.ApplyModifiedProperties();
             GUILayout.EndVertical();
         };

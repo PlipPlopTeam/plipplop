@@ -7,20 +7,23 @@ using UnityEngine;
 public class Car : Controller
 {
     [Header("CAR CONTROLLER properties")]
-    public float acceleration = 3000f;
-    public float maxSpeed = 14f;
-    public float steeringSpeed = 10f;
-    public float maxSteering = 0.5f;
-    public float steeringForce = 1000f;
-    public float autoBrakeSpeed = 1f;
-    public float antiSpinSpeed = 6f;
-    public float tiltAmount = 50f;
-    public float antiFlipForce = 10f;
-    public bool canTiltWhenFree = false;
-    [Range(0.0f, 5f)] public float highSpeedAdherenceBonusFactor = 1f;
+    [HideInInspector] public float acceleration = 3000f;
+    [HideInInspector] public float maxSpeed = 14f;
+    [HideInInspector] public float steeringSpeed = 10f;
+    [HideInInspector] public float maxSteering = 50f;
+    [HideInInspector] public float steeringForce = 1000f;
+    [HideInInspector] public float autoBrakeSpeed = 1f;
+    [HideInInspector] public float antiSpinSpeed = 6f;
+    [HideInInspector] public float tiltAmount = 50f;
+    [HideInInspector] public bool antiFlip = true;
+    [HideInInspector] public float antiFlipForce = 10f;
+    [HideInInspector] public float antiFlipMultiplier = 1f;
+    [HideInInspector] public float airStabilizationSpeed = 6f;
+    [HideInInspector] public float airStabilizationMultiplier = 0.1f;
+    [HideInInspector] public bool canTiltWhenFree = false;
+    [HideInInspector] public float highSpeedAdherenceBonusFactor = 1f;
 
     public Transform[] wheels;
-    public Transform visual;
 
     internal float currentTilt = 0f;
     internal float steering = 0f;
@@ -41,6 +44,13 @@ public class Car : Controller
     {
         var localSpeed = transform.InverseTransformDirection(rigidbody.velocity);
         var localSpin = transform.InverseTransformDirection(rigidbody.angularVelocity);
+        var rotation = transform.eulerAngles;
+
+        // 0<>360  to  -180<>180
+        rotation.x = rotation.x > 180f ? rotation.x - 360f : rotation.x;
+        rotation.y = rotation.y > 180f ? rotation.y - 360f : rotation.y;
+        rotation.z = rotation.z > 180f ? rotation.z - 360f : rotation.z;
+
         var thrustObjective = localSpeed.z;
 
         if (!IsGrounded()) {
@@ -55,7 +65,7 @@ public class Car : Controller
         }
 
         // Steering + anti spin
-        steering = Mathf.Lerp(steering, direction.x, steeringSpeed * Time.fixedDeltaTime) * maxSteering;
+        steering = Mathf.Lerp(steering, direction.x, steeringSpeed * Time.fixedDeltaTime) * (maxSteering/100f);
         localSpin.y = steering * steeringForce * (thrustObjective / maxSpeed) * Time.deltaTime;
         localSpin.y = Mathf.Lerp(localSpin.y, localSpin.y * Mathf.Abs(direction.x), antiSpinSpeed * Time.fixedDeltaTime);
 
@@ -65,13 +75,18 @@ public class Car : Controller
 
         // Reorient the car to optimal rotation to avoid flipping
         // (Anti flip)
-        if (!isImmerged && !IsGrounded() && IsPossessed()) {
-            localSpin.z = Mathf.Lerp(localSpin.z, 0f, antiFlipForce * Time.fixedDeltaTime);
+        if (antiFlip && !isImmerged && !IsGrounded() && IsPossessed()) {
+            localSpin.x = Mathf.Lerp(localSpin.x, 0f, airStabilizationSpeed * Time.fixedDeltaTime + airStabilizationMultiplier * Mathf.Abs(localSpin.x) * Time.fixedDeltaTime);
+            localSpin.z = Mathf.Lerp(localSpin.z, 0f, airStabilizationSpeed * Time.fixedDeltaTime + airStabilizationMultiplier * Mathf.Abs(localSpin.z) * Time.fixedDeltaTime);
+
+            rotation.x = Mathf.Lerp(rotation.x, 0f, antiFlipForce * Time.fixedDeltaTime + antiFlipMultiplier * Mathf.Abs(rotation.x) * Time.fixedDeltaTime);
+            rotation.z = Mathf.Lerp(rotation.z, 0f, antiFlipForce * Time.fixedDeltaTime + antiFlipMultiplier * Mathf.Abs(rotation.z) * Time.fixedDeltaTime);
         }
 
         // Apply
         rigidbody.velocity = transform.TransformDirection(new Vector3(localSpeed.x, localSpeed.y, thrustObjective));
         rigidbody.angularVelocity = transform.TransformDirection(localSpin);
+        transform.eulerAngles = rotation;
 
 
         // Tilt animation
@@ -80,8 +95,8 @@ public class Car : Controller
 
     internal virtual void TiltVisual(float amount)
     {
-        currentTilt = Mathf.Lerp(currentTilt, (steering / maxSteering) * tiltAmount * (amount), 4f * Time.fixedDeltaTime);
-        visual.localEulerAngles = new Vector3(visual.localEulerAngles.x, visual.localEulerAngles.y, currentTilt);
+        currentTilt = Mathf.Lerp(currentTilt, (steering * (maxSteering/100f)) * tiltAmount * (amount), 4f * Time.fixedDeltaTime);
+        visuals.localEulerAngles = new Vector3(visuals.localEulerAngles.x, visuals.localEulerAngles.y, currentTilt);
     }
 
 
@@ -118,7 +133,7 @@ public class Car : Controller
             rigidbody.angularDrag = 2f;
 
             // No tilting
-            if (!canTiltWhenFree) visual.localEulerAngles = new Vector3(visual.localEulerAngles.x, visual.localEulerAngles.y, 0f);
+            if (!canTiltWhenFree) visuals.localEulerAngles = new Vector3(visuals.localEulerAngles.x, visuals.localEulerAngles.y, 0f);
         }
 
         // Adhere to wall if speed
