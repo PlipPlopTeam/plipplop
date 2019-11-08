@@ -18,6 +18,7 @@ public class NonPlayableCharacter : StateManager
 	[HideInInspector] public Activity activity;
 	[HideInInspector] public Activity previousActivity;
 	[HideInInspector] public Transform inHand;
+	private Transform objectToCollect;
 
 	[Header("Settings")]
 	public float strength = 1f;
@@ -39,15 +40,50 @@ public class NonPlayableCharacter : StateManager
 		agentMovement.animator = animator;
 	}
 
+	public bool IsCarrying(Transform t)
+	{
+		return t == inHand;
+	}
+
 	public override void Update()
 	{
 		base.Update();
 
-		if(inHand != null)
+		if(inHand != null) Carrying(inHand.transform);
+
+		Collecting();
+	}
+
+	public void Carrying(Transform t)
+	{
+		t.position = (skeleton.rightHandBone.position + skeleton.leftHandBone.position)/2f;
+		t.forward = transform.forward;
+	}
+
+	public void Collecting()
+	{
+		if(objectToCollect != null)
 		{
-			inHand.transform.position = (skeleton.rightHandBone.position + skeleton.leftHandBone.position)/2f;
-        	inHand.transform.forward = transform.forward;
+			if(range.IsInRange(objectToCollect.gameObject))
+			{
+				agentMovement.StopChase();
+				Carry(objectToCollect);
+				objectToCollect = null;
+			}
 		}
+	}
+
+	public void Collect(Transform obj)
+	{
+		objectToCollect = obj;
+		agentMovement.Chase(objectToCollect);
+		/*
+		agentMovement.onTargetOffPath += () => 
+		{
+			agentMovement.StopChase();
+		};
+		*/
+		
 	}
 
 	public void Carry(Transform obj)

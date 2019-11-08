@@ -24,6 +24,7 @@ public class AgentMovement : MonoBehaviour
 
     public System.Action onDestinationReached;
     public System.Action onPathCompleted;
+    public System.Action onTargetOffPath;
     public AgentMovement.Path path;
     public AgentMovement.Settings settings;
 
@@ -126,7 +127,14 @@ public class AgentMovement : MonoBehaviour
         {
             if(chaseTarget != null)
             {
-                GoThere(chaseTarget.transform.position);
+                if(!GoThere(chaseTarget.transform.position))
+                {
+                    if(onTargetOffPath != null)
+                    {
+                        onTargetOffPath.Invoke();
+                        onTargetOffPath = null;
+                    }
+                }
             }
         }
         if(animator) animator.SetFloat("Speed", agent.velocity.magnitude/settings.maxSpeed);
@@ -144,6 +152,11 @@ public class AgentMovement : MonoBehaviour
             return true;
         }
         else return false;
+    }
+
+    public void StopChase()
+    {
+        chaseTarget = null;
     }
 
     public void Stop()
