@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 public class AgentMovement : MonoBehaviour
 {
     [System.Serializable]
@@ -24,6 +28,7 @@ public class AgentMovement : MonoBehaviour
 
     public System.Action onDestinationReached;
     public System.Action onPathCompleted;
+    public System.Action onTargetOffPath;
     public AgentMovement.Path path;
     public AgentMovement.Settings settings;
 
@@ -126,7 +131,14 @@ public class AgentMovement : MonoBehaviour
         {
             if(chaseTarget != null)
             {
-                GoThere(chaseTarget.transform.position);
+                if(!GoThere(chaseTarget.transform.position))
+                {
+                    if(onTargetOffPath != null)
+                    {
+                        onTargetOffPath.Invoke();
+                        onTargetOffPath = null;
+                    }
+                }
             }
         }
         if(animator) animator.SetFloat("Speed", agent.velocity.magnitude/settings.maxSpeed);
@@ -144,6 +156,11 @@ public class AgentMovement : MonoBehaviour
             return true;
         }
         else return false;
+    }
+
+    public void StopChase()
+    {
+        chaseTarget = null;
     }
 
     public void Stop()
@@ -175,4 +192,16 @@ public class AgentMovement : MonoBehaviour
     {
         return going && DistanceToDestination() < settings.navTreshold;
     }
+
+    
+#if UNITY_EDITOR
+    void OnDrawGizmos()
+    {
+        Gizmos.color = new Color32(255, 215, 0, 255);
+        if(EditorApplication.isPlaying && agent.destination != null)
+        {
+            UnityEditor.Handles.DrawLine(transform.position, agent.destination);
+        }
+    }
+#endif
 }

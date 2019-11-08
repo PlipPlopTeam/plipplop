@@ -7,6 +7,8 @@ public class Balloon : Activity
     [Header("BALLOON")]
     public float distanceBetween = 3f;
     public float timeBetweenThrows = 2f;
+    public float verticalForce = 50000f;
+    public float horizontalForce = 25000f;
 
     // SYSTEM
     Vector3 originPosition;
@@ -15,17 +17,27 @@ public class Balloon : Activity
     private float throwTimer;
     private bool[] inPlace;
     private bool playing;
+    private bool flying;
+
+    private Rigidbody rb;
+
+    void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
 
     void Start()
     {
         originPosition = transform.position;
     }
 
-    public override void Kick(NonPlayableCharacter user)
+    public override void Exit(NonPlayableCharacter user)
     {
         if(user == users[carrier]) user.Drop();
+
+        user.look.LooseFocus();
         
-        base.Kick(user);
+        base.Exit(user);
 
         if(users.Count > 0) 
         {
@@ -39,6 +51,7 @@ public class Balloon : Activity
     public override void Enter(NonPlayableCharacter user)
     {
         base.Enter(user);
+        user.look.FocusOn(transform);
         if(users.Count >= slots)
         {
             inPlace = new bool[slots];
@@ -76,11 +89,31 @@ public class Balloon : Activity
             if(throwTimer > 0f) throwTimer -= Time.deltaTime;
             else
             {
-                LookAtEachOthers();
-                users[carrier].Drop();
-                Next();
-                users[carrier].Carry(transform);
-                throwTimer = timeBetweenThrows;
+                if(!flying)
+                {
+                    LookAtEachOthers();
+                    users[carrier].Drop();
+
+                    // Throwing
+                    Vector3 throwVector = users[carrier].transform.forward;
+                    rb.AddForce(new Vector3(throwVector.x, 0f, throwVector.z)  * horizontalForce * Time.deltaTime);
+                    rb.AddForce(new Vector3(0f, 1f, 0f)  * verticalForce * Time.deltaTime);
+
+                    Next();
+                    users[carrier].Collect(transform);
+
+                    flying = true;
+                }
+                else
+                {
+                    if(users[carrier].IsCarrying(transform))
+                    {
+                        LookAtEachOthers();
+                        users[carrier].agentMovement.Stop();
+                        throwTimer = timeBetweenThrows;
+                        flying = false;
+                    }
+                }
             }
         }
     }

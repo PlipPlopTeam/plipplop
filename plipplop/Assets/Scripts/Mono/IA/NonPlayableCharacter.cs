@@ -18,6 +18,9 @@ public class NonPlayableCharacter : StateManager
 	[HideInInspector] public Activity activity;
 	[HideInInspector] public Activity previousActivity;
 	[HideInInspector] public Transform inHand;
+	private Transform objectToCollect;
+
+	public Skeleton.Socket[] slots;
 
 	[Header("Settings")]
 	public float strength = 1f;
@@ -39,15 +42,48 @@ public class NonPlayableCharacter : StateManager
 		agentMovement.animator = animator;
 	}
 
+	public bool IsCarrying(Transform t)
+	{
+		return t == inHand;
+	}
+
 	public override void Update()
 	{
 		base.Update();
+		if(inHand != null) Carrying(inHand.transform);
+		Collecting();
+	}
 
-		if(inHand != null)
+	public void Carrying(Transform t)
+	{
+		t.position = (skeleton.rightHandBone.position + skeleton.leftHandBone.position)/2f;
+		t.forward = transform.forward;
+	}
+
+	public void Collecting()
+	{
+		if(objectToCollect != null)
 		{
-			inHand.transform.position = (skeleton.rightHandBone.position + skeleton.leftHandBone.position)/2f;
-        	inHand.transform.forward = transform.forward;
+			if(range.IsInRange(objectToCollect.gameObject))
+			{
+				agentMovement.StopChase();
+				Carry(objectToCollect);
+				objectToCollect = null;
+			}
 		}
+	}
+
+	public void Collect(Transform obj)
+	{
+		objectToCollect = obj;
+		agentMovement.Chase(objectToCollect);
+		/*
+		agentMovement.onTargetOffPath += () => 
+		{
+			agentMovement.StopChase();
+		};
+		*/
+		
 	}
 
 	public void Carry(Transform obj)
@@ -70,7 +106,7 @@ public class NonPlayableCharacter : StateManager
 		{
 			// I'm bored as fuck
 			boredom = 100f;
-			if(activity != null) activity.Kick(this);
+			if(activity != null) activity.Exit(this);
 			emo.Show("Bored", 3f);
 		}
 		else if(boredom < 0f) boredom = 0f;

@@ -26,7 +26,7 @@ public class Bike : Activity
 /*
         user.agentMovement.onPathCompleted += () => 
         {
-            Kick(user);
+            Exit(user);
             user.agentMovement.ResetSpeed();
             user.agentMovement.GoThere(Vector3.zero);
         };
@@ -39,9 +39,9 @@ public class Bike : Activity
         rb.isKinematic = true;
     }
 
-    public override void Kick(NonPlayableCharacter user)
+    public override void Exit(NonPlayableCharacter user)
     {
-        base.Kick(user);
+        base.Exit(user);
 
         // TODO : Give him back a path road for his patrol (dependent of the scene ?)
 

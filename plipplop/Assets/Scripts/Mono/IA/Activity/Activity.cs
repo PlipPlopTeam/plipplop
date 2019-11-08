@@ -21,7 +21,7 @@ public class Activity : MonoBehaviour
         users.Add(user);
     }
 
-    public virtual void Kick(NonPlayableCharacter user)
+    public virtual void Exit(NonPlayableCharacter user)
     {
         user.activity = null;
         user.previousActivity = this;
@@ -31,7 +31,7 @@ public class Activity : MonoBehaviour
     public virtual void KickAll()
     {
         foreach(NonPlayableCharacter user in users.ToArray())
-            Kick(user);
+            Exit(user);
     }
 
     [ContextMenu("Break")]
