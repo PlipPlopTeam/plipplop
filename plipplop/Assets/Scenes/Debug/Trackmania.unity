@@ -428,7 +428,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 82ba9e25faac684448c4b2873c252afb, type: 2}
+      objectReference: {fileID: 2100000, guid: 6b425063f404a8e449c252242d779b23, type: 2}
     - target: {fileID: 384822015946496184, guid: 88b09e1e98cdc7741914e0785ebd74c9,
         type: 3}
       propertyPath: m_CastShadows
@@ -760,7 +760,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 82ba9e25faac684448c4b2873c252afb, type: 2}
+      objectReference: {fileID: 2100000, guid: 6b425063f404a8e449c252242d779b23, type: 2}
     - target: {fileID: 384822015946496184, guid: 88b09e1e98cdc7741914e0785ebd74c9,
         type: 3}
       propertyPath: m_CastShadows
@@ -1095,7 +1095,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 82ba9e25faac684448c4b2873c252afb, type: 2}
+      objectReference: {fileID: 2100000, guid: 6b425063f404a8e449c252242d779b23, type: 2}
     - target: {fileID: 384822015946496184, guid: 88b09e1e98cdc7741914e0785ebd74c9,
         type: 3}
       propertyPath: m_CastShadows
@@ -1343,7 +1343,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 82ba9e25faac684448c4b2873c252afb, type: 2}
+      objectReference: {fileID: 2100000, guid: 6b425063f404a8e449c252242d779b23, type: 2}
     - target: {fileID: 384822015946496184, guid: 88b09e1e98cdc7741914e0785ebd74c9,
         type: 3}
       propertyPath: m_CastShadows
@@ -2629,16 +2629,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1607776807780669754, guid: 42b8262875444bc41a761b4b2c0ba482,
-        type: 3}
-      propertyPath: maxSpeed
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 1607776807780669754, guid: 42b8262875444bc41a761b4b2c0ba482,
-        type: 3}
-      propertyPath: acceleration
-      value: 500
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42b8262875444bc41a761b4b2c0ba482, type: 3}
 --- !u!4 &1721345744 stripped
@@ -3298,8 +3288,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1706531758072179813, guid: 182b251430ab5c34c822ba44325a8626,
         type: 3}
-      propertyPath: antiFlipForce
-      value: 0
+      propertyPath: maxSteering
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 1706531758072179813, guid: 182b251430ab5c34c822ba44325a8626,
+        type: 3}
+      propertyPath: tiltAmount
+      value: 360
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 182b251430ab5c34c822ba44325a8626, type: 3}

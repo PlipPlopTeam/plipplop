@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9bfec5e614851241b1bed02e4145a79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoPossess: 1
+  autoPossess: 0
   beginCrouched: 1
   canRetractLegs: 1
   useGravity: 1
@@ -59,17 +59,19 @@ MonoBehaviour:
   customCamera: {fileID: 11400000, guid: c0f4fe5b7ecb977478ae8abf7109258b, type: 2}
   locomotion: {fileID: 1607776807780669747}
   visuals: {fileID: 1607776809343306127}
-  acceleration: 900
-  maxSpeed: 15
+  acceleration: 500
+  maxSpeed: 12
   steeringSpeed: 10
   maxSteering: 0.5
   steeringForce: 1000
   autoBrakeSpeed: 1
   antiSpinSpeed: 6
   tiltAmount: 80
+  antiFlip: 0
   antiFlipForce: 0
-  airRollForce: 900
-  airPitchForce: 600
+  antiFlipMultiplier: 1
+  airStabilizationSpeed: 6
+  airStabilizationMultiplier: 1
   canTiltWhenFree: 1
   highSpeedAdherenceBonusFactor: 2.08
   wheels:
@@ -78,6 +80,8 @@ MonoBehaviour:
   visual: {fileID: 1607776809343306127}
   jumpForce: 600
   airRollAccumulatorSpeed: 2
+  airRollForce: 900
+  airPitchForce: 600
 --- !u!54 &1607776807780669757
 Rigidbody:
   m_ObjectHideFlags: 0

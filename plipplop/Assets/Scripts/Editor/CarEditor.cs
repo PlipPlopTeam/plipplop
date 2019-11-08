@@ -9,291 +9,69 @@ public class CarEditor : ControllerEditor
 {
     public override void OnInspectorGUI()
     {
-        base.OnInspectorGUI();
-        return;
+        DrawControllerEditor();
+
         List<System.Action> buttons = new List<System.Action>();
         var w = Screen.width - wMargin;
         var colWidth = w / columns;
+        buttons.Add(AccelerationSlider(colWidth));
+        buttons.Add(MaxSpeedSlider(colWidth));
+        buttons.Add(SteeringSpeedSlider(colWidth));
+        buttons.Add(MaxSteeringSlider(colWidth));
+        buttons.Add(SteeringForceSlider(colWidth));
+        buttons.Add(AutoBrakeSpeedSlider(colWidth));
+        buttons.Add(AntiSpinSpeedSlider(colWidth));
+        buttons.Add(AdherenceSpeedSlider(colWidth));
 
-        buttons.Add(BeginCrouchedButton(colWidth));
-        buttons.Add(CanRetractLegsButton(colWidth));
-        buttons.Add(UseGravityButton(colWidth));
-        buttons.Add(GravityMultiplierSlider(colWidth));
-        buttons.Add(CustomCameraField(colWidth));
-        buttons.Add(CustomRigidbodyField(colWidth));
+        DrawCustomEditor(buttons, false, "Car properties - Speed & control");
 
+        buttons.Clear();
+        buttons.Add(UseAntiFlipButton(colWidth));
+        buttons.Add(AntiFlipForceSlider(colWidth));
+        buttons.Add(AntiFlipMultiplierSlider(colWidth));
+        buttons.Add(AirStabilizationSpeedSlider(colWidth));
+        buttons.Add(AirStabilizationSpeedMultiplier(colWidth));
+        buttons.Add(FreeFlipButton(colWidth));
+        DrawCustomEditor(buttons, false, "Car properties - Flip & tilt");
 
-        if (EditorApplication.isPlaying) {
-            EjectButton().Invoke();
-        }
-        else {
-            AutoPossessButton("AUTO-POSSESS").Invoke();
-        }
-
-        unlockedProperties = EditorGUILayout.BeginFoldoutHeaderGroup(unlockedProperties, "Inherited properties");
-        if (unlockedProperties) {
-            GUILayout.Label("Inherited properties", title, GUILayout.Height(20f), GUILayout.ExpandWidth(true));
-
-            GUILayout.BeginVertical();
-            GUILayout.BeginHorizontal(GUILayout.Height(35f));
-
-            var currentLine = 0;
-            for (int i = 0; i < buttons.Count; i++) {
-                if (Mathf.Floor(i/(float)columns) != currentLine) {
-                    GUILayout.EndHorizontal();
-                    GUILayout.BeginHorizontal(GUILayout.Height(35f));
-                    currentLine++;
-                }
-                buttons[i].Invoke();
-            }
-            GUILayout.EndHorizontal();
-            GUILayout.EndVertical();
-        }
-        EditorGUILayout.EndFoldoutHeaderGroup();
-
-        GUILayout.Label("Specific properties", title, GUILayout.Height(30f), GUILayout.ExpandWidth(true));
-
-        DrawDefaultInspector();
-
-
-        if (!((Controller)target).gameObject.GetComponent<Locomotion>() && GUILayout.Button("Add custom locomotion...", EditorStyles.miniButton)) {
-            ((Controller)target).gameObject.AddComponent<Locomotion>();
-        }
+        DrawDefaultEditor();
+        DrawAddLocomotionButton();
     }
 
-    System.Action EjectButton()
-    {
-        var obj = (Controller)target;
-        var isPossessing = Game.i.player.IsPossessing(obj);
-
-        var possessTex = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_Possess");
-        var ejectText = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_Eject");
-
-        var options = new List<GUILayoutOption>();
-
-        options.Add(GUILayout.Height(35f));
-
-
-        return delegate {
-            if (!isPossessing) {
-                if (GUILayout.Button(new GUIContent("POSSESS", possessTex), centeredNormalControl, options.ToArray()))
-                    Game.i.player.Possess(obj);
-            }
-            else {
-                if (GUILayout.Button(new GUIContent("EJECT", ejectText), centeredNormalControl, options.ToArray()))
-                    Game.i.player.TeleportBaseControllerAndPossess();
-            }
-        };
-    }
-
-    void MakeStyles()
-    {
-        title = new GUIStyle(GUI.skin.box);
-        title.fontSize = 12;
-        title.alignment = TextAnchor.MiddleCenter;
-        title.normal.textColor = Color.white;
-
-        normalControl = new GUIStyle(GUI.skin.button);
-        normalControl.fontSize = 12;
-        normalControl.normal.textColor = Color.white;
-        normalControl.margin = new RectOffset(14, 14, 14, 14);
-        normalControl.alignment = TextAnchor.MiddleLeft;
-
-        pressedControl = new GUIStyle(GUI.skin.button);
-        pressedControl.normal = GUI.skin.button.active;
-        pressedControl.fontSize = 12;
-        pressedControl.margin = new RectOffset(14, 14, 14, 14);
-        pressedControl.normal.textColor = Color.Lerp(Color.white, Color.green, 0.5f);
-        pressedControl.alignment = TextAnchor.MiddleLeft;
-
-        centeredNormalControl = new GUIStyle(normalControl);
-        centeredNormalControl.fontStyle = FontStyle.Bold;
-        centeredNormalControl.alignment = TextAnchor.MiddleCenter;
-
-        centeredPressedControl = new GUIStyle(pressedControl);
-        centeredPressedControl.fontStyle = FontStyle.Bold;
-        centeredPressedControl.alignment = TextAnchor.MiddleCenter;
-
-
-    }
-
-    bool IsAutoPossessing()
-    {
-        return ((Controller)target).autoPossess;
-    }
-
-    void SetAutoPossess(bool value)
-    {
-        serializedObject.FindProperty("autoPossess").boolValue = value;
-
-        foreach (var c in Resources.FindObjectsOfTypeAll<Controller>()) {
-            if (c != target) {
-                c.autoPossess = false;
-            }
-        }
-    }
-
-    System.Action AutoPossessButton(string txt)
-    {
-        // Auto possess
-        var asNormalTex = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_NoAutoPossess");
-        var asPressedTex = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_AutoPossess");
-
-        var options = new List<GUILayoutOption>();
-
-        options.Add(GUILayout.Height(35f));
-
-
-        return delegate {
-            if (IsAutoPossessing()) {
-                if (GUILayout.Button(new GUIContent(txt, asPressedTex), centeredPressedControl, options.ToArray()))
-                    SetAutoPossess(false);
-            }
-            else {
-                if (GUILayout.Button(new GUIContent(txt, asNormalTex), centeredNormalControl, options.ToArray()))
-                    SetAutoPossess(true);
-            }
-            serializedObject.ApplyModifiedProperties();
-        };
-    }
-
-    System.Action BeginCrouchedButton(float width)
-    {
-        // Auto possess
-        var asNormalTex = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_Standing");
-        var asPressedTex = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_Crouching");
-
-        var options = new List<GUILayoutOption>();
-
-        options.Add(GUILayout.Height(35f));
-        options.Add(GUILayout.Width(width));
-
-        return delegate {
-            GUILayout.BeginVertical(options.ToArray());
-            if (((Controller)target).beginCrouched) {
-                if (GUILayout.Button(new GUIContent(buttonSpace+"Begins crouched", asPressedTex), pressedControl))
-                    serializedObject.FindProperty("beginCrouched").boolValue = false;
-            }
-            else {
-                if (GUILayout.Button(new GUIContent(buttonSpace + "Begins standing", asNormalTex), normalControl))
-                    serializedObject.FindProperty("beginCrouched").boolValue = true;
-            }
-            serializedObject.ApplyModifiedProperties();
-            GUILayout.EndVertical();
-        };
-    }
-
-    System.Action CanRetractLegsButton(float width)
-    {
-        // Auto possess
-        var asNormalTex = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_CannotRetractLegs");
-        var asPressedTex = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_CanRetractLegs");
-
-        var options = new List<GUILayoutOption>();
-
-        options.Add(GUILayout.Height(35f));
-        options.Add(GUILayout.Width(width));
-
-        return delegate {
-            GUILayout.BeginVertical(options.ToArray());
-            if (((Controller)target).canRetractLegs) {
-                if (GUILayout.Button(new GUIContent(buttonSpace + "Can retract legs", asPressedTex), pressedControl))
-                    serializedObject.FindProperty("canRetractLegs").boolValue = false;
-            }
-            else {
-                if (GUILayout.Button(new GUIContent(buttonSpace + "Cannot retract legs", asNormalTex), normalControl))
-                    serializedObject.FindProperty("canRetractLegs").boolValue = true;
-            }
-            serializedObject.ApplyModifiedProperties();
-            GUILayout.EndVertical();
-        };
-    }
-
-    System.Action UseGravityButton(float width)
-    {
-        // Auto possess
-        var asNormalTex = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_NoGravity");
-        var asPressedTex = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_Gravity");
-
-        var options = new List<GUILayoutOption>();
-
-        options.Add(GUILayout.Height(35f));
-        options.Add(GUILayout.Width(width));
-
-        return delegate {
-            GUILayout.BeginVertical(options.ToArray());
-            if (((Controller)target).useGravity) {
-                if (GUILayout.Button(new GUIContent(buttonSpace + "Uses gravity", asPressedTex), pressedControl))
-                    serializedObject.FindProperty("useGravity").boolValue = false;
-            }
-            else {
-                if (GUILayout.Button(new GUIContent(buttonSpace + "No gravity", asNormalTex), normalControl))
-                    serializedObject.FindProperty("useGravity").boolValue = true;
-            }
-            serializedObject.ApplyModifiedProperties();
-            GUILayout.EndVertical();
-        };
-    }
-
-    System.Action GravityMultiplierSlider(float width)
-    {
-        var options = new List<GUILayoutOption>();
-
-        options.Add(GUILayout.Width(width));
-        options.Add(GUILayout.Height(35f));
-
-        var noBoldTitle = new GUIStyle(title);
-        noBoldTitle.fontStyle = FontStyle.Normal;
-
-        return delegate {
-
-            var g = ((Controller)target).gravityMultiplier;
-
-            GUILayout.BeginVertical(options.ToArray());
-
-            GUILayout.Label(string.Format("Gravity: {0}%", Mathf.Round(g)), noBoldTitle, GUILayout.Height(20f), GUILayout.ExpandWidth(true));
-            serializedObject.FindProperty("gravityMultiplier").floatValue = GUILayout.HorizontalSlider(g, 1f, 200f, GUILayout.Height(15f));
-            serializedObject.ApplyModifiedProperties();
-            GUILayout.EndVertical();
-        };
-    }
+    System.Action AccelerationSlider(float width) { return GenericSlider(width, "acceleration", 100f, 5000f, "Acceleration: {0}", "Car_Acceleration"); }
+    System.Action MaxSpeedSlider(float width) { return GenericSlider(width, "maxSpeed", 1f, 50f, "Speed: {0}", "Car_Speed"); }
+    System.Action SteeringSpeedSlider(float width) { return GenericSlider(width, "steeringSpeed", 1f, 10f, "Steering speed: {0}", "Car_SteeringSpeed"); }
+    System.Action MaxSteeringSlider(float width) { return GenericSlider(width, "maxSteering", 0f, 100f, "Max steering: {0}%", "Car_SteeringAmplitude"); }
+    System.Action SteeringForceSlider(float width) { return GenericSlider(width, "steeringForce", 50F, 5000f, "Steering force: {0}", "Car_SteeringForce"); }
+    System.Action AutoBrakeSpeedSlider(float width) { return GenericSlider(width, "autoBrakeSpeed", 0F, 5F, "Autobrake speed: {0}", "Car_AutoBrakeSpeed"); }
+    System.Action AntiSpinSpeedSlider(float width) { return GenericSlider(width, "antiSpinSpeed", 0F, 8F, "Antispin correction: {0}", "Car_AntiSpinSpeed"); }
+    System.Action UseAntiFlipButton(float width) { return GenericToggleButton(width, "antiFlip", "Flipping is countered", "Flipping is free", "Car_UseAntiFlip", "Car_UseAntiFlip"); }
+    System.Action AntiFlipForceSlider(float width) { return GenericSlider(width, "antiFlipForce", 0F, 3F, "Antiflip force: {0}", "Car_AntiFlipForce"); }
+    System.Action AntiFlipMultiplierSlider(float width) { return GenericSlider(width, "antiFlipMultiplier", 0F, 5F, "Antiflip multiplier: {0}", "Car_AntiFlipMultiplier"); }
+    System.Action AirStabilizationSpeedSlider(float width) { return GenericSlider(width, "airStabilizationSpeed", 0F, 10F, "Air stabilization speed: {0}", "Car_AirStabilizationSpeed"); }
+    System.Action AirStabilizationSpeedMultiplier(float width) { return GenericSlider(width, "airStabilizationMultiplier", 0F, 5F, "Air stabilization mul.: {0}", "Car_AirStabilizationMultiplier"); }
+    System.Action FreeFlipButton(float width) { return GenericToggleButton(width, "canTiltWhenFree", "Tilt resets when unposs.", "No tilt reset", "Car_CanTiltWhenFree", "Car_CanTiltWhenFree"); }
+    System.Action AdherenceSpeedSlider(float width) { return GenericSlider(width, "highSpeedAdherenceBonusFactor", 0F, 10F, "Speed increases adherence: {0}", "Car_HighSpeedAdherenceBonusFactor"); }
 
     System.Action CustomRigidbodyField(float width)
     {
         var options = new List<GUILayoutOption>();
 
         options.Add(GUILayout.Width(width));
-        options.Add(GUILayout.Height(35f));
+        options.Add(GUILayout.MinHeight(fieldsHeight));
+        options.Add(GUILayout.ExpandHeight(false));
 
         var noBoldTitle = new GUIStyle(title);
         noBoldTitle.fontStyle = FontStyle.Normal;
 
+        var icon = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_ControllerRigidbody");
 
         return delegate {
             GUILayout.BeginVertical(options.ToArray());
 
-            GUILayout.Label("Custom rigidbody", noBoldTitle, GUILayout.Height(20f), GUILayout.ExpandWidth(true));
-            ((Controller)target).customExternalRigidbody = (Rigidbody)EditorGUILayout.ObjectField(((Controller)target).customExternalRigidbody, typeof(Rigidbody), allowSceneObjects:true);
-            GUILayout.EndVertical();
-        };
-    }
-
-    System.Action CustomCameraField(float width)
-    {
-        var options = new List<GUILayoutOption>();
-
-        options.Add(GUILayout.Width(width));
-        options.Add(GUILayout.Height(35f));
-
-        var noBoldTitle = new GUIStyle(title);
-        noBoldTitle.fontStyle = FontStyle.Normal;
-
-
-        return delegate {
-            GUILayout.BeginVertical(options.ToArray());
-
-            GUILayout.Label("Custom aperture preset", noBoldTitle, GUILayout.Height(20f), GUILayout.ExpandWidth(true));
-            ((Controller)target).customCamera = (AperturePreset)EditorGUILayout.ObjectField(((Controller)target).customCamera, typeof(AperturePreset), allowSceneObjects: true);
+            GUILayout.Label(new GUIContent(buttonSpace + "Rigidbody", icon), noBoldTitle, GUILayout.Height(fieldsHeight * 0.66f), GUILayout.ExpandWidth(true));
+            serializedObject.FindProperty("customExternalRigidbody").objectReferenceValue = EditorGUILayout.ObjectField(((Controller)target).customExternalRigidbody, typeof(Rigidbody), allowSceneObjects: true);
+            serializedObject.ApplyModifiedProperties();
             GUILayout.EndVertical();
         };
     }

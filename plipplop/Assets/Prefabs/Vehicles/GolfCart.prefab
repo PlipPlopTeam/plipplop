@@ -129,7 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a62fdc21b1129545a9acb2225d20056, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoPossess: 0
+  autoPossess: 1
   beginCrouched: 1
   canRetractLegs: 1
   useGravity: 1
@@ -139,16 +139,20 @@ MonoBehaviour:
   locomotion: {fileID: 0}
   visuals: {fileID: 1706531759504800980}
   acceleration: 3000
-  maxSpeed: 16
+  maxSpeed: 25
   steeringSpeed: 10
   maxSteering: 0.5
   steeringForce: 1000
   autoBrakeSpeed: 1
   antiSpinSpeed: 6
   tiltAmount: 50
-  antiFlipForce: 10
+  antiFlip: 1
+  antiFlipForce: 1
+  antiFlipMultiplier: 0.5
+  airStabilizationSpeed: 10
+  airStabilizationMultiplier: 1
   canTiltWhenFree: 0
-  highSpeedAdherenceBonusFactor: 1
+  highSpeedAdherenceBonusFactor: 3
   wheels:
   - {fileID: 1706531757574354176}
   - {fileID: 1706531758141886334}
