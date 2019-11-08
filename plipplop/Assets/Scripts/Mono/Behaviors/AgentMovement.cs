@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 public class AgentMovement : MonoBehaviour
 {
     [System.Serializable]
@@ -188,4 +192,16 @@ public class AgentMovement : MonoBehaviour
     {
         return going && DistanceToDestination() < settings.navTreshold;
     }
+
+    
+#if UNITY_EDITOR
+    void OnDrawGizmos()
+    {
+        Gizmos.color = new Color32(255, 215, 0, 255);
+        if(EditorApplication.isPlaying && agent.destination != null)
+        {
+            UnityEditor.Handles.DrawLine(transform.position, agent.destination);
+        }
+    }
+#endif
 }

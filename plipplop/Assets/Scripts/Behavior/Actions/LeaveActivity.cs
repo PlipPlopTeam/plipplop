@@ -11,7 +11,7 @@ namespace NPC
 			NonPlayableCharacter npc = (NonPlayableCharacter)state;
 			if(npc != null && npc.activity != null)
 			{
-				npc.activity.Kick(npc);
+				npc.activity.Exit(npc);
 			}
 		}
 	}

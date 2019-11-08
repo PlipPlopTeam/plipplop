@@ -31,13 +31,13 @@ public class Balloon : Activity
         originPosition = transform.position;
     }
 
-    public override void Kick(NonPlayableCharacter user)
+    public override void Exit(NonPlayableCharacter user)
     {
         if(user == users[carrier]) user.Drop();
 
         user.look.LooseFocus();
         
-        base.Kick(user);
+        base.Exit(user);
 
         if(users.Count > 0) 
         {

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using System;
 
 [System.Serializable]
 public abstract class Controller : MonoBehaviour

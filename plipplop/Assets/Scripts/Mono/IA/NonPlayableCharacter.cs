@@ -20,6 +20,8 @@ public class NonPlayableCharacter : StateManager
 	[HideInInspector] public Transform inHand;
 	private Transform objectToCollect;
 
+	public Skeleton.Socket[] slots;
+
 	[Header("Settings")]
 	public float strength = 1f;
 	[Range(0f, 100f)] public float boredom = 0f;
@@ -48,9 +50,7 @@ public class NonPlayableCharacter : StateManager
 	public override void Update()
 	{
 		base.Update();
-
 		if(inHand != null) Carrying(inHand.transform);
-
 		Collecting();
 	}
 
@@ -106,7 +106,7 @@ public class NonPlayableCharacter : StateManager
 		{
 			// I'm bored as fuck
 			boredom = 100f;
-			if(activity != null) activity.Kick(this);
+			if(activity != null) activity.Exit(this);
 			emo.Show("Bored", 3f);
 		}
 		else if(boredom < 0f) boredom = 0f;
