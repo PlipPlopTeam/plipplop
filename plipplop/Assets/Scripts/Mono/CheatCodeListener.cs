@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class KeyboardBuffer
+public class CheatCodeListener
 {
 
     //////////////////////////
@@ -14,6 +14,11 @@ public class KeyboardBuffer
     int bufferLength = 20;
     string keyBuffer = string.Empty;
     Cheats cheats;
+
+    public CheatCodeListener(Cheats cheatList)
+    {
+        cheats = cheatList;
+    }
 
     public static KeyCode KeyDown(bool getDef = false)
     {
