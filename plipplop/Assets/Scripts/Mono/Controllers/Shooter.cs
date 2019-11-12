@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Shooter : Controller
 {
+    public Thrower[] throwers;
+    public Animation animation;
+
     internal override void OnLegsRetracted()
     {}
 
@@ -12,6 +15,11 @@ public class Shooter : Controller
 
     internal override void OnJump()
     {
-
+        foreach(Thrower t in throwers)
+        {
+            t.Reload();
+            t.Shoot();
+        }
+        animation.Play();
     }
 }
