@@ -13,8 +13,8 @@ public class AgentMovement : MonoBehaviour
     public class Path
     {
         public bool loop = true;
-        public int index = 0;
         public Vector3[] points;
+        [HideInInspector] public int index = 0;
     }
     [System.Serializable]
     public class Settings
@@ -49,10 +49,17 @@ public class AgentMovement : MonoBehaviour
 
     public void FollowPath(AgentMovement.Path newPath)
     {
-        path = newPath;
+        path.loop = newPath.loop;
+        path.points = newPath.points;
+        path.index = Random.Range(0, path.points.Length);
+
         followingPath = true;
         onPathCompleted += () => {if(!path.loop) followingPath = false;};
-        GoAtPoint(0);
+        GoAtPoint(path.index);
+    }
+    public void StopFollowingPath()
+    {
+        followingPath = false;
     }
 
     public void ApplyWeightToSpeed(float weight, float strength)
@@ -172,6 +179,7 @@ public class AgentMovement : MonoBehaviour
         going = false;
         reached = false;
         chaseTarget = null;
+        StopFollowingPath();
         agent.SetDestination(transform.position);
     }
 

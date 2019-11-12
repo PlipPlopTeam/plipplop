@@ -25,6 +25,7 @@ public class Activity : MonoBehaviour
     {
         user.activity = null;
         user.previousActivity = this;
+        user.agentMovement.FollowPath(Zone.i.GetRandomPath());
         users.Remove(user);
     }
 

@@ -4,13 +4,16 @@ using UnityEngine;
 
 public class Jukebox : Activity
 {
-    public override void Update()
+    public override void Enter(NonPlayableCharacter user)
     {
-        base.Update();
+        base.Enter(user);
+        user.agentMovement.Stop();
+        user.animator.SetBool("Dancing", true);
+    }
 
-        foreach(NonPlayableCharacter user in users)
-        {
-            user.transform.Rotate(user.transform.up * Time.deltaTime * 250f);
-        }
+    public override void Exit(NonPlayableCharacter user)
+    {
+        base.Exit(user);
+        user.animator.SetBool("Dancing", false);
     }
 }
