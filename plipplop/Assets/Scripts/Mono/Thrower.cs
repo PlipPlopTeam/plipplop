@@ -18,6 +18,7 @@ public class Thrower : MonoBehaviour
             arrow = Instantiate(prefabToThrow, gunEnd.position, gunEnd.rotation)
             .GetComponent<Projectile>();
             arrow.Stuck();
+            arrow.transform.SetParent(transform);
         }
     }
 
@@ -25,6 +26,7 @@ public class Thrower : MonoBehaviour
     {
         if(arrow != null)
         {
+            arrow.transform.SetParent(null);
             arrow.Throw(gunEnd.forward, force);
             arrow = null;
         }
