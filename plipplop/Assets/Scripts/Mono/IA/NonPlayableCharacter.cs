@@ -32,7 +32,7 @@ public class NonPlayableCharacter : StateManager
 		sight = GetComponent<Sight>();
 		look = GetComponent<FocusLook>();
 		agent = GetComponent<NavMeshAgent>();
-		animator = GetComponent<Animator>();
+		animator = GetComponentInChildren<Animator>();
 		range = GetComponent<Range>();
 
 		emo = GetComponent<EmotionRenderer>();
