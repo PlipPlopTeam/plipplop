@@ -57,7 +57,6 @@ public class AperturePresetEditor : Editor
         GUILayout.Label("default aperture".ToUpper(), title, GUILayout.Height(headerSeparatorHeight), GUILayout.ExpandWidth(true));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("fallback"));
         EditorGUILayout.EndVertical();
-        EditorGUILayout.Space();
         EditorGUI.EndDisabledGroup();
 
         // Someone dragged me as my own fallback!
@@ -68,6 +67,7 @@ public class AperturePresetEditor : Editor
         // No fallback selected
         var fb = ((AperturePreset)target).fallback;
         if (!fb && !isDefault) {
+            EditorGUILayout.Space();
             GUILayout.Label("Please pick a fallback for this aperture");
             serializedObject.ApplyModifiedProperties();
             return;
@@ -77,6 +77,35 @@ public class AperturePresetEditor : Editor
         if (fb) {
             serializedDefault = new SerializedObject(fb);
         }
+
+        if (!isDefault) {
+            // Let's display the fallback chain
+            var chain = new List<string>();
+            AperturePreset _fb = fb;
+            chain.Add(target.name);
+            chain.Add(_fb.name);
+            while (true) {
+                _fb = _fb.fallback;
+                if (!_fb) {
+                    break;
+                }
+                if (chain.Contains(_fb.name)) {
+                    EditorGUILayout.Space();
+                    GUILayout.Label("!! APERTURE FALLBACK CHAIN DETECTED !!");
+                    GUILayout.Label("Please do not create a loop in aperture fallbacks");
+                    serializedObject.ApplyModifiedProperties();
+                    return;
+                }
+                chain.Add(_fb.name);
+                break;
+            }
+            chain.Reverse();
+            GUILayout.Label(string.Join(" ► ", chain), box, GUILayout.ExpandWidth(true));
+        }
+        else {
+            GUILayout.Label("<This is the default aperture>", box, GUILayout.ExpandWidth(true));
+        }
+        EditorGUILayout.Space();
 
         var properties = new List<InheritableProperty>();
 
