@@ -27,4 +27,7 @@ public class Library
     [Header("Meshs")]
     public Mesh primitiveQuadMesh;
 
+    [Header("Sounds")]
+    public Sounds sounds;
+
 }
