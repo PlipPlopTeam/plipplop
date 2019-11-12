@@ -93,6 +93,7 @@ public class AperturePresetEditor : Editor
                     EditorGUILayout.Space();
                     GUILayout.Label("!! APERTURE FALLBACK CHAIN DETECTED !!");
                     GUILayout.Label("Please do not create a loop in aperture fallbacks");
+                    serializedObject.ApplyModifiedProperties();
                     return;
                 }
                 chain.Add(_fb.name);
