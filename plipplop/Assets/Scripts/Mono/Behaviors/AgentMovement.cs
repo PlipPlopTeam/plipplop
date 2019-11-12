@@ -52,9 +52,9 @@ public class AgentMovement : MonoBehaviour
         path.loop = newPath.loop;
         path.points = newPath.points;
         path.index = Random.Range(0, path.points.Length);
-
         followingPath = true;
         onPathCompleted += () => {if(!path.loop) followingPath = false;};
+        StopChase();
         GoAtPoint(path.index);
     }
     public void StopFollowingPath()
