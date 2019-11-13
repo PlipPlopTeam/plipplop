@@ -5,6 +5,7 @@ using UnityEngine;
 public class Jukebox : Activity
 {
     Transform visuals;
+    public ParticleSystem ps;
 
     private void Start()
     {
@@ -14,19 +15,18 @@ public class Jukebox : Activity
     private void OnEnable()
     {
         SoundPlayer.PlaySoundAttached("bgm_test", transform);
+        ps.Play();
     }
 
     private void OnDisable()
     {
         SoundPlayer.StopSound("bgm_test");
+        ps.Stop();
     }
 
-    public override void Update() {
+    public override void Update() 
+    {
         visuals.localScale = Vector3.one + Vector3.one * (1 + Mathf.Sin(Time.time * 10f)) * 0.25f;
-
-        foreach (NonPlayableCharacter user in users) {
-            user.transform.Rotate(user.transform.up * Time.deltaTime * 250f);
-        }
     }
 
 

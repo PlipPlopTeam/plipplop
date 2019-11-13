@@ -21,11 +21,12 @@ public class Clothes : MonoBehaviour
     public virtual void Create(ClothesData cloth, Skeleton target)
     {
         data = cloth;
+        transform.SetParent(target.transform);            
 
         // THREADABLE
         if(data.slot == Slot.Torso || data.slot == Slot.Legs || data.slot == Slot.RightFeet || data.slot == Slot.LeftFeet)
         {
-            root = Instantiate(data.prefab).transform;
+            root = Instantiate(data.prefab, transform).transform;
             foreach(Transform child in root.GetComponentsInChildren<Transform>())
                 if(child != root) attachs.Add(child);
             target.Enfold(root);
@@ -33,7 +34,7 @@ public class Clothes : MonoBehaviour
         // PAIRED
         else
         {
-            root = Instantiate(data.prefab).transform;
+            root = Instantiate(data.prefab, transform).transform;
             target.Attach(root, data.slot.ToString());
         }
     }
