@@ -151,7 +151,7 @@ public class Locomotion : MonoBehaviour
         {
             if (!IsMe(h.transform) && !h.collider.isTrigger) {
                 if (h.normal.y >= 1 - (preset.maxWalkableSteepness / 100f)) {
-                    if (rigidbody.velocity.y < 0f) 
+                    if (rigidbody != null && rigidbody.velocity.y < 0f) 
                         hasJumped = false; // Put HasJumped to false only if not grounded and falling
                     return true;
                 }

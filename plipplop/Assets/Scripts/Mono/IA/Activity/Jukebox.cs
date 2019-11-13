@@ -26,6 +26,7 @@ public class Jukebox : Activity
 
     public override void Update() 
     {
+        base.Update();
         visuals.localScale = Vector3.one + Vector3.one * (1 + Mathf.Sin(Time.time * 10f)) * 0.25f;
     }
 

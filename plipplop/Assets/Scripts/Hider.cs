@@ -63,9 +63,11 @@ public class Hider : MonoBehaviour
         sc.isTrigger = true;
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = new Color32(255, 215, 0, 255);
         UnityEditor.Handles.DrawWireDisc(transform.position, Vector3.up, range);
     }
+#endif
 }
