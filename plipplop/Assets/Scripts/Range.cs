@@ -20,6 +20,6 @@ public class Range : MonoBehaviour
     internal void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position + offset, radius);
+        Gizmos.DrawWireSphere(transform.TransformPoint(offset), radius);
     }
 }
