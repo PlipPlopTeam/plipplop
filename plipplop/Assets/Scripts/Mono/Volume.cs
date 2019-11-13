@@ -18,7 +18,7 @@ public abstract class Volume : MonoBehaviour
     bool isInside = false;
     internal Vector3 offset = new Vector3();
 
-    internal void OnDrawGizmos()
+    internal virtual void OnDrawGizmos()
     {
         Gizmos.matrix = transform.localToWorldMatrix;
         Gizmos.color = color;
