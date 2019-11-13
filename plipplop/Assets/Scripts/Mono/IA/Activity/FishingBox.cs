@@ -19,7 +19,7 @@ public class FishingBox : Activity
         user.agentMovement.GoThere(transform.position);
         user.agentMovement.onDestinationReached += () =>
         {
-            user.skeleton.Attach(Instantiate(fishingPole).transform, "rightHand", true, Vector3.zero, new Vector3(180f, 0f, 90f));
+            user.skeleton.Attach(Instantiate(fishingPole).transform, "RightHand", true, Vector3.zero, new Vector3(180f, 0f, 90f));
 
             float angle = Random.Range(0f, 1f) * Mathf.PI * 2;
             Vector3 pos = new Vector3(position.x + Mathf.Cos(angle) * radius, position.y, position.z + Mathf.Sin(angle) * radius);
@@ -42,7 +42,7 @@ public class FishingBox : Activity
     public override void Exit(NonPlayableCharacter user)
     {
         base.Exit(user);
-        user.skeleton.Drop("rightHand");
+        user.skeleton.Drop("RightHand");
         user.animator.SetBool("Fishing", false);
     }
 
