@@ -19,6 +19,9 @@ public class Skeleton : MonoBehaviour
 
 		public void Attach(Transform obj, Vector3 offset = new Vector3(), Vector3 rotate = new Vector3())
 		{
+            Carryable c = obj.gameObject.GetComponent<Carryable>();
+		    if(c != null) c.Carry();
+
 			obj.SetParent(bone);
 			obj.transform.localPosition = offset;
             obj.forward = bone.forward;
@@ -52,6 +55,9 @@ public class Skeleton : MonoBehaviour
         {
             if(s.item != null)
             {
+                Carryable c = s.item.gameObject.GetComponent<Carryable>();
+		        if(c != null) c.Drop();
+                
                 s.item.SetParent(null);
                 s.item = null;
             }

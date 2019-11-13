@@ -15,7 +15,7 @@ public class FishingBox : Activity
     public override void Enter(NonPlayableCharacter user)
     {
         base.Enter(user);
-
+        user.agentMovement.Stop();
         user.agentMovement.GoThere(transform.position);
         user.agentMovement.onDestinationReached += () =>
         {

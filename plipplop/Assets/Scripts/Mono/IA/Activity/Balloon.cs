@@ -120,7 +120,7 @@ public class Balloon : Activity
 
     void LookAtEachOthers()
     {
-        if(users.Count > 0)
+        if(users.Count >= 2)
         {
             users[0].transform.LookAt(users[1].transform);
             users[1].transform.LookAt(users[0].transform);
