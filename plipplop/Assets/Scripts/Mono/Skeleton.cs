@@ -17,6 +17,11 @@ public class Skeleton : MonoBehaviour
 			return item == null;
 		}
 
+        public Vector3 GetPosition()
+        {
+            return bone.position;
+        }
+
 		public void Attach(Transform obj, Vector3 offset = new Vector3(), Vector3 rotate = new Vector3())
 		{
             Carryable c = obj.gameObject.GetComponent<Carryable>();
@@ -30,7 +35,31 @@ public class Skeleton : MonoBehaviour
             obj.Rotate(rotate);
 		}
 	}
-    public void Attach(Transform t, string where, bool unequipCurrent, Vector3 offset = new Vector3(), Vector3 rotate = new Vector3())
+    public List<Socket> sockets = new List<Socket>();
+    List<Transform> bones = new List<Transform>();
+
+    public void Awake()
+    {
+        foreach(Transform t in gameObject.GetComponentsInChildren<Transform>())
+        {
+            if(t != transform && !IsSocket(t)) bones.Add(t);
+        }
+    }
+
+    bool IsSocket(Transform t)
+    {
+        foreach(Socket s in sockets)
+            if(t == s.bone) return true;
+
+        return false;
+    }
+
+    public Vector3 GetCenterOfHands()
+    {
+        return (GetSlotByName("LeftHand").GetPosition() + GetSlotByName("RightHand").GetPosition())/2f;
+    }
+
+    public void Attach(Transform t, string where, bool unequipCurrent = false, Vector3 offset = new Vector3(), Vector3 rotate = new Vector3())
     {
         Socket s = GetSlotByName(where);
         if(s != null)
@@ -45,7 +74,7 @@ public class Skeleton : MonoBehaviour
             }
             else s.Attach(t, offset, rotate);
         }
-        else Debug.LogWarning("Bone name : " + where + "doesn't exist");
+        else Debug.LogWarning("Socket : '" + where + "' doesn't exist");
     }
 
     public void Drop(string from)
@@ -67,16 +96,36 @@ public class Skeleton : MonoBehaviour
 
     public Socket GetSlotByName(string name)
     {
-        foreach(Socket s in slots) if(s.name == name) return s;
+        foreach(Socket s in sockets) 
+        {   
+            if(s.name == name) return s;
+        }
         return null;
     }
 
-    [Header("Bones")]
-    public Transform rightHandBone;
-    public Transform leftHandBone;
-    public Transform headBone;
-    [Header("Attachs")]
-    public Socket[] slots;
+    public void Enfold (Transform t)
+    {
+        t.SetParent(transform);
+        foreach(Transform child in t.GetComponentsInChildren<Transform>())
+        {
+            Transform target = GetBoneByName(child.name);
+            if(target != null)
+            {
+                child.SetParent(target);
+                child.localRotation = new Quaternion();
+                child.localPosition = Vector3.zero;
+            }
+        }
+    }
+
+    Transform GetBoneByName(string name)
+    {
+        foreach(Transform b in bones)
+        {
+            if(b.name == name) return b;
+        }
+        return null;
+    }
     
     void FootStep()
     {

@@ -24,7 +24,7 @@ public class Firepit : Activity
         foreach(NonPlayableCharacter u in users)
         {
             NonPlayableCharacter npc = users[Random.Range(0, users.Count)];
-            if(npc != user) u.look.FocusOn(npc.skeleton.headBone.transform);
+            if(npc != user) u.look.FocusOn(npc.skeleton.GetSlotByName("Head").bone);
         }
 
         if(chair == null)

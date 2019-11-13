@@ -18,7 +18,7 @@ namespace NPC
                         Game.i.player.PossessBaseController();
                 }
 				npc.agentMovement.ApplyWeightToSpeed(npc.valuable.weight, npc.strength);
-                npc.valuable.transform.position = (npc.skeleton.rightHandBone.position + npc.skeleton.leftHandBone.position)/2f;
+                npc.valuable.transform.position = npc.skeleton.GetCenterOfHands();
                 npc.valuable.transform.forward = npc.transform.forward;
 			}
 		}

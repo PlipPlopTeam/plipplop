@@ -21,12 +21,15 @@ public class NonPlayableCharacter : StateManager
 	private Transform objectToCollect;
 	private Chair chair;
 
+
 	public Skeleton.Socket[] slots;
+	public Dictionary<Clothes.Slot, Clothes> clothes = new Dictionary<Clothes.Slot, Clothes>();
 
 	[Header("Settings")]
 	public float strength = 1f;
 	[Range(0f, 100f)] public float boredom = 0f;
 	float assHeightWhenSitted = 0.51f;
+	public ClothesData[] stuff;
 
 	void Awake()
 	{
@@ -36,12 +39,31 @@ public class NonPlayableCharacter : StateManager
 		agent = GetComponent<NavMeshAgent>();
 		animator = GetComponentInChildren<Animator>();
 		range = GetComponent<Range>();
-
 		emo = GetComponent<EmotionRenderer>();
 		emo.Load();
-
 		agentMovement = GetComponent<AgentMovement>();
 		agentMovement.animator = animator;
+	}
+
+	public override void Start()
+	{
+		base.Start();
+
+		foreach (Clothes.Slot suit in (Clothes.Slot[]) Clothes.Slot.GetValues(typeof(Clothes.Slot)))
+			clothes.Add(suit, null);
+
+		foreach(ClothesData cd in stuff) Equip(cd);
+	}
+
+	public void Equip(ClothesData clothData, bool change = true)
+	{
+		Clothes c = clothes[clothData.slot];
+		if(c != null && change) c.Pulverize();
+
+		GameObject clothObject = new GameObject();
+		c = clothObject.AddComponent<Clothes>();
+		c.Create(clothData, skeleton);
+		clothes[clothData.slot] = c;
 	}
 
 	public bool IsCarrying(Transform t)
@@ -58,7 +80,7 @@ public class NonPlayableCharacter : StateManager
 
 	public void Carrying(Transform t)
 	{
-		t.position = (skeleton.rightHandBone.position + skeleton.leftHandBone.position)/2f;
+		t.position = (skeleton.GetSlotByName("RightHand").GetPosition() + skeleton.GetSlotByName("LeftHand").GetPosition())/2f;
 		t.forward = transform.forward;
 	}
 
