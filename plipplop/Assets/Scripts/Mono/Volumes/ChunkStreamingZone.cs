@@ -6,8 +6,7 @@ using UnityEngine;
 
 public class ChunkStreamingZone : MonoBehaviour
 {
-
-    [Header("Specific options")]
+    public string identifier;
     public List<Vector3> positions;
     public SceneAsset chunk;    
     public List<ChunkStreamingZone> neighborhood = new List<ChunkStreamingZone>();
@@ -27,6 +26,27 @@ public class ChunkStreamingZone : MonoBehaviour
     readonly float visualHeight = 50f;
 
     bool isSelected = false;
+    bool isPlayerInside = false;
+
+    private void Update()
+    {
+        isPlayerInside = false;
+        var c = Game.i.player.GetCurrentController();
+        if (c != null) {
+            var position = c.transform.position;
+            Vector2 position2d = new Vector2(position.x, position.z);
+            var inside = false;
+            for (int i = 0; i < positions.Count-2; i++) {
+                var p1 = positions[i];
+                var p2 = positions[i+1];
+                var p3 = positions[i+2];
+                inside = inside || Geometry.IsPointInTriangle(position2d, p1, p2, p3);
+            }
+
+            isPlayerInside = inside;
+        }
+    }
+
 
     Tuple<Vector3, Vector3>[] GetBasePolygon()
     {
@@ -76,7 +96,7 @@ public class ChunkStreamingZone : MonoBehaviour
         GUIStyle labelStyle = GUI.skin.label;
         labelStyle.normal.textColor = Color.Lerp(baseColor, Color.white, 0.2f); 
 
-        Handles.Label(transform.position + positions.ToArray().Mean(), new GUIContent(neighborhood.Count.ToString()), labelStyle);
+        Handles.Label(transform.TransformPoint(positions.ToArray().Mean()), new GUIContent(identifier + " ("+ neighborhood.Count + ")"), labelStyle);
         if(!isSelected) Draw(new Color(baseColor.r, baseColor.g, baseColor.b, baseAlpha), new Color(baseColor.r, baseColor.g, baseColor.b, baseFillAlpha));
         isSelected = false;
     }

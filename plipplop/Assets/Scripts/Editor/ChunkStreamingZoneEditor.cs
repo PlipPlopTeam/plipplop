@@ -87,12 +87,17 @@ public class ChunkStreamingZoneEditor : BaseEditor
             chunkVol.positions = new List<Vector3>(points);
             EditorUtility.SetDirty(chunkVol);
         }
+
+        target.name = "ChunkZone_" + ((ChunkStreamingZone)target).identifier;
     }
 
     public override void OnInspectorGUI()
     {
         MakeStyles();
 
+        EditorGUILayout.Space();
+
+        IdentifierField()();
         EditorGUILayout.Space();
 
         ChunkSceneField()();
@@ -104,6 +109,33 @@ public class ChunkStreamingZoneEditor : BaseEditor
         NeighborsField()();
         EditorGUILayout.Space();
 
+    }
+
+    System.Action IdentifierField()
+    {
+        var csz = (ChunkStreamingZone)target;
+
+        var options = new List<GUILayoutOption>();
+
+        options.Add(GUILayout.Height(fieldsHeight));
+
+        var noBoldTitle = new GUIStyle(title);
+        noBoldTitle.fontStyle = FontStyle.Normal;
+
+        var icon = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_ChunkID");
+
+        return delegate {
+            GUILayout.BeginHorizontal(options.ToArray());
+            GUILayout.Label(new GUIContent(buttonSpace + "Identifier", icon), noBoldTitle, GUILayout.Height(fieldsHeight), GUILayout.Width(Screen.width * 0.3f));
+
+            var id = serializedObject.FindProperty("identifier");
+            id.stringValue = EditorGUILayout.TextField(id.stringValue, GUILayout.Height(fieldsHeight));
+            if (id.stringValue.Length < 1) id.stringValue = "X";
+            id.stringValue = id.stringValue.Substring(0, 1);
+            GUILayout.EndHorizontal();
+
+            serializedObject.ApplyModifiedProperties();
+        };
     }
 
     System.Action PositionsField()
