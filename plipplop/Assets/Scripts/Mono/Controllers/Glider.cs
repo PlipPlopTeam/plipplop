@@ -128,9 +128,6 @@ public class Glider : Controller
         normalizedRoll -= Mathf.Sign(normalizedRoll) * 0.75f;
         normalizedRoll *= 2f;
         rigidbody.AddTorque(- transform.forward * inertedControls.x * Mathf.Abs(normalizedRoll) * rollForce * Time.deltaTime);
-
         rigidbody.AddTorque(Vector3.up * inertedControls.x * (Mathf.Abs(normalizedRoll) + 0.1f) * rollForce * turnForce * Time.deltaTime);
-
-
     }
 }
