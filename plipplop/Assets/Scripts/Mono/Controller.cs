@@ -39,6 +39,10 @@ public abstract class Controller : MonoBehaviour
         }
 
         ToggleFace(false);
+
+
+        Activity activity = gameObject.GetComponent<Activity>();
+        if(activity != null) activity.Repair();
     }
     
     public virtual void OnPossess()
@@ -59,6 +63,9 @@ public abstract class Controller : MonoBehaviour
         }
 
         ToggleFace(true);
+
+        Activity activity = gameObject.GetComponent<Activity>();
+        if(activity != null) activity.Break();
     }
 
     internal virtual void SpecificJump() {}

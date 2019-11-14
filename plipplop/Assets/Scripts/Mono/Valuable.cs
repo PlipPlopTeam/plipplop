@@ -20,7 +20,7 @@ public class Valuable : MonoBehaviour, Noticeable
     }
     public bool IsVisible()
     {
-        return hidden;
+        return !hidden;
     }
     public void SetVisible(bool value)
     {

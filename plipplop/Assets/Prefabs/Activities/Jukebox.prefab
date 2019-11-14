@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 7338784915185660216}
   - component: {fileID: 7338784915185660215}
   - component: {fileID: 7338784915185660214}
+  - component: {fileID: 497905235}
   m_Layer: 0
   m_Name: Jukebox
   m_TagString: Untagged
@@ -93,7 +94,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &7338784915185660214
 MonoBehaviour:
@@ -113,6 +114,37 @@ MonoBehaviour:
   boredomFrequency: 1
   users: []
   ps: {fileID: 3517644232397957827}
+--- !u!114 &497905235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7338784915185660219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4194289d42295894e9edeb06fa29964c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoPossess: 0
+  beginCrouched: 0
+  canRetractLegs: 1
+  useGravity: 1
+  gravityMultiplier: 100
+  customExternalRigidbody: {fileID: 0}
+  customCamera: {fileID: 0}
+  locomotion: {fileID: 0}
+  visuals: {fileID: 0}
+  pushMovementForce: 500
+  pushCooldown: 2
+  pushThreshold: 0.5
+  pushJumpForce: 250
+  jumpForce: 10
+  speedBeforeLegs: 1
+  rotationVelocityThreshold: 0.25
+  rotationLerpSpeed: 2
+  crouchCooldown: 2
+  drag: 1
 --- !u!1001 &6931142484490407034
 PrefabInstance:
   m_ObjectHideFlags: 0
