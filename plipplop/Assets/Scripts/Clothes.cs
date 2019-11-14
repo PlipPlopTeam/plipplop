@@ -13,7 +13,7 @@ public class Clothes : MonoBehaviour
     public virtual void Pulverize()
     {
         foreach(Transform a in attachs) Destroy(a.gameObject);
-        Destroy(root);
+        Destroy(root.gameObject);
         if(socket != null) socket.item = null;
         Destroy(this);
     }
