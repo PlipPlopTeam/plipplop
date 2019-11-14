@@ -24,19 +24,22 @@ public class Chair : MonoBehaviour
     public void Enter(NonPlayableCharacter user)
     {
         int s = GetFreeSpot();
-        spots[s].user = user;
-        user.agentMovement.GoThere(transform.position + spots[s].position);
-        user.agentMovement.onDestinationReached += () =>
+        if(s != -1)
         {
-            user.Sit(this, spots[s].position);
-            user.transform.forward = transform.forward;
-            user.transform.Rotate(user.transform.up * Random.Range(spots[s].orientation.x, spots[s].orientation.y));
-        };
+            spots[s].user = user;
+            user.agentMovement.GoThere(transform.position + spots[s].position);
+            user.agentMovement.onDestinationReached += () =>
+            {
+                user.Sit(this, spots[s].position);
+                user.transform.forward = transform.forward;
+                user.transform.Rotate(user.transform.up * Random.Range(spots[s].orientation.x, spots[s].orientation.y));
+            };
+        }
+
     }
 
     public void Exit(NonPlayableCharacter user)
     {
-        user.GetUp();
         foreach(Spot s in spots)
         {
             if(s.user == user) s.user = null;
@@ -60,8 +63,6 @@ public class Chair : MonoBehaviour
         foreach(Spot s in spots)
         {
             UnityEditor.Handles.DrawWireDisc(transform.TransformPoint(s.position), transform.up, 0.25f);
-
-            
 
             UnityEditor.Handles.DrawWireArc(
                 transform.TransformPoint(s.position),
