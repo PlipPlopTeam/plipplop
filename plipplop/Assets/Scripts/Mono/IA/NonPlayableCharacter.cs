@@ -61,6 +61,7 @@ public class NonPlayableCharacter : StateManager
 		if(c != null && change) c.Pulverize();
 
 		GameObject clothObject = new GameObject();
+		clothObject.name = clothData.name;
 		c = clothObject.AddComponent<Clothes>();
 		c.Create(clothData, skeleton);
 		clothes[clothData.slot] = c;
