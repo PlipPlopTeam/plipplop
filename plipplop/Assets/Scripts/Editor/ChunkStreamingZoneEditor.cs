@@ -32,8 +32,10 @@ public class ChunkStreamingZoneEditor : BaseEditor
         }
 
         // Handles
+        List<int> toRemove = new List<int>();
         for (int i = 0; i < points.Length; i++) {
             var op = points[i];
+            Handles.color = Color.white;
             points[i] = Handles.FreeMoveHandle(points[i], Quaternion.Euler(Vector3.up), 3f, Vector3.zero, Handles.ConeHandleCap);
             points[i].y = 0f;
 
@@ -62,6 +64,22 @@ public class ChunkStreamingZoneEditor : BaseEditor
                     }
                 }
             }
+
+            // Remove button
+            Handles.color = Color.red;
+            if (Handles.Button(
+                points[i] + Camera.current.transform.right * 3f,
+                Quaternion.LookRotation(Camera.current.transform.forward, Camera.current.transform.up),
+                1f,
+                1f,
+                Handles.DotHandleCap
+            )) {
+                toRemove.Add(i);
+            };
+        }
+
+        foreach(var index in toRemove) {
+            chunkVol.positions.RemoveAt(index);
         }
 
         if (EditorGUI.EndChangeCheck()) {
@@ -77,14 +95,42 @@ public class ChunkStreamingZoneEditor : BaseEditor
 
         EditorGUILayout.Space();
 
-        // Chunk 
         ChunkSceneField()();
         EditorGUILayout.Space();
+
+        PositionsField()();
+        EditorGUILayout.Space();
+
         NeighborsField()();
         EditorGUILayout.Space();
 
+    }
 
-        DrawDefaultInspector();
+    System.Action PositionsField()
+    {
+        var csz = (ChunkStreamingZone)target;
+
+        var options = new List<GUILayoutOption>();
+
+        options.Add(GUILayout.Height(fieldsHeight));
+
+        var noBoldTitle = new GUIStyle(title);
+        noBoldTitle.fontStyle = FontStyle.Normal;
+
+        var icon = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_Flag");
+
+        return delegate {
+            GUILayout.BeginHorizontal(options.ToArray());
+            GUILayout.Label(new GUIContent(buttonSpace + "Points", icon), noBoldTitle, GUILayout.Height(fieldsHeight), GUILayout.Width(Screen.width * 0.3f));
+
+            if (GUILayout.Button("Add point", style: normalControl)) {
+                csz.positions.Add(Vector3.one);
+            }
+
+            GUILayout.EndHorizontal();
+
+            serializedObject.ApplyModifiedProperties();
+        };
     }
        
     System.Action NeighborsField()
@@ -132,12 +178,10 @@ public class ChunkStreamingZoneEditor : BaseEditor
                 }
                 GUILayout.EndHorizontal();
             }
-            GUILayout.BeginHorizontal();
             if (GUILayout.Button("Add", style: normalControl)) {
                 array.InsertArrayElementAtIndex(arrSize);
                 array.GetArrayElementAtIndex(arrSize).objectReferenceValue = null;
             }
-            GUILayout.EndHorizontal();
             GUILayout.EndVertical();
                                     
             GUILayout.EndHorizontal();
