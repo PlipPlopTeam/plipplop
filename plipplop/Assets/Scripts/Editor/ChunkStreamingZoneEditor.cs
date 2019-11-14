@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(ChunkStreamingVolume)), CanEditMultipleObjects]
+[CustomEditor(typeof(ChunkStreamingZone)), CanEditMultipleObjects]
 [ExecuteInEditMode]
-public class ChunkStreamingVolumeEditor : Editor
+public class ChunkStreamingZoneEditor : BaseEditor
 {
     private void OnSceneGUI()
     {
         EditorGUI.BeginChangeCheck();
 
-        ChunkStreamingVolume chunkVol = (ChunkStreamingVolume)target;
+        ChunkStreamingZone chunkVol = (ChunkStreamingZone)target;
         Handles.matrix = chunkVol.transform.localToWorldMatrix;
 
         Vector3[] points = chunkVol.positions.ToArray();
@@ -26,7 +26,7 @@ public class ChunkStreamingVolumeEditor : Editor
             var angle = Vector2.SignedAngle(new Vector2(a.x, a.z), new Vector2(b.x, b.z));
             var wrongAngle = angle < 0;
             if (wrongAngle) {
-                var color = Color.Lerp(Color.red, Color.white, Mathf.Sin(Time.time*10f));
+                var color = Color.Lerp(Color.red, Color.white, Mathf.Sin(Time.time * 10f));
                 chunkVol.Draw(color, color);
             }
         }
@@ -34,7 +34,7 @@ public class ChunkStreamingVolumeEditor : Editor
         // Handles
         for (int i = 0; i < points.Length; i++) {
             var op = points[i];
-            points[i] = Handles.FreeMoveHandle(points[i], Quaternion.Euler(Vector3.up), 0.5f, Vector3.zero, Handles.ConeHandleCap);
+            points[i] = Handles.FreeMoveHandle(points[i], Quaternion.Euler(Vector3.up), 3f, Vector3.zero, Handles.ConeHandleCap);
             points[i].y = 0f;
 
             // Angle limit
@@ -52,9 +52,9 @@ public class ChunkStreamingVolumeEditor : Editor
             }
 
             // Snapping
-            foreach(var neighbor in chunkVol.neighbors) {
+            foreach (var neighbor in chunkVol.neighbors) {
                 if (neighbor == null) continue;
-                foreach(var nearPoint in neighbor.positions) {
+                foreach (var nearPoint in neighbor.positions) {
                     var np = neighbor.transform.TransformPoint(nearPoint);
                     var wp = chunkVol.transform.TransformPoint(points[i]);
                     if (Vector3.Distance(np, wp) < 4f) {
@@ -69,5 +69,14 @@ public class ChunkStreamingVolumeEditor : Editor
             chunkVol.positions = new List<Vector3>(points);
             EditorUtility.SetDirty(chunkVol);
         }
+    }
+
+    public override void OnInspectorGUI()
+    {
+        // Chunk 
+
+
+
+        DrawDefaultInspector();
     }
 }
