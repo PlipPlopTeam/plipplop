@@ -162,9 +162,9 @@ public class NonPlayableCharacter : StateManager
 	}
 	public void Sit(Chair c, Vector3 offset)
 	{
+		chair = c;
 		agentMovement.Stop();
 		agent.enabled = false;
-
 		transform.SetParent(c.transform);
 		transform.localPosition = new Vector3(offset.x, offset.y - assHeightWhenSitted, offset.z);
 
