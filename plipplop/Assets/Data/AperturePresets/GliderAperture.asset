@@ -12,31 +12,75 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a3262d062e5d48468ed5b87bf144ebc, type: 3}
   m_Name: GliderAperture
   m_EditorClassIdentifier: 
-  overrides: []
-  fallback: {fileID: 0}
-  canBeControlled: 1
-  fieldOfView: 75
-  heightOffset: 1
-  additionalAngle: 20
+  overrides:
+  - property: canBeControlled
+    isOverriden: 1
+  - property: fieldOfView
+    isOverriden: 1
+  - property: heightOffset
+    isOverriden: 1
+  - property: additionalAngle
+    isOverriden: 1
+  - property: distance
+    isOverriden: 1
+  - property: cameraRotateAroundSensivity
+    isOverriden: 1
+  - property: cameraRotateAboveSensivity
+    isOverriden: 1
+  - property: fovLerp
+    isOverriden: 1
+  - property: lateralFollowLerp
+    isOverriden: 1
+  - property: longitudinalFollowLerp
+    isOverriden: 1
+  - property: verticalFollowLerp
+    isOverriden: 1
+  - property: rotationSpeed
+    isOverriden: 0
+  - property: lookAtLerp
+    isOverriden: 0
+  - property: cameraResetSpeed
+    isOverriden: 0
+  - property: speedEffectMultiplier
+    isOverriden: 0
+  - property: catchUpSpeedMultiplier
+    isOverriden: 0
+  - property: angleIncrementOnSpeed
+    isOverriden: 1
+  - property: maximumCatchUpSpeed
+    isOverriden: 0
+  - property: absoluteBoundaries
+    isOverriden: 1
+  - property: constraintToTarget
+    isOverriden: 0
+  - property: targetConstraintLocalOffset
+    isOverriden: 0
+  - property: cameraResetAfterTime
+    isOverriden: 1
+  fallback: {fileID: 11400000, guid: df6437ca0d9bc60498aeb18a4dd62019, type: 2}
+  canBeControlled: 0
+  fieldOfView: 65
+  heightOffset: 1.5
+  additionalAngle: 7
   distance:
-    min: 0
-    max: 0
-  cameraRotateAroundSensivity: 4
+    min: 3
+    max: 5
+  cameraRotateAroundSensivity: 60
   cameraRotateAboveSensivity: 2
-  fovLerp: 1
-  lateralFollowLerp: 1
-  longitudinalFollowLerp: 1
-  verticalFollowLerp: 10
-  rotationSpeed: 1
-  lookAtLerp: 4
-  cameraResetSpeed: 3
-  cameraResetAfterTime: 2
+  fovLerp: 20
+  lateralFollowLerp: 40
+  longitudinalFollowLerp: 6
+  verticalFollowLerp: 5
+  rotationSpeed: 3
+  lookAtLerp: 7
+  cameraResetSpeed: 5
+  cameraResetAfterTime: 1.5
   speedEffectMultiplier: 1
   catchUpSpeedMultiplier: 1
-  angleIncrementOnSpeed: 10
+  angleIncrementOnSpeed: 15
   maximumCatchUpSpeed: 10
   absoluteBoundaries:
-    min: 2
+    min: 5
     max: 10
   constraintToTarget: 0
   targetConstraintLocalOffset: {x: 0, y: 0, z: 0}
