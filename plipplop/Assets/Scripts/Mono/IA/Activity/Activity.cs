@@ -25,7 +25,6 @@ public class Activity : MonoBehaviour
     {
         user.activity = null;
         user.previousActivity = this;
-        
         user.agentMovement.FollowPath(Zone.i.GetRandomPath());
         users.Remove(user);
     }
@@ -41,6 +40,12 @@ public class Activity : MonoBehaviour
     {
         KickAll();
         working = false;
+    }
+
+    [ContextMenu("Repair")]
+    public virtual void Repair()
+    {
+        working = true;
     }
 
     public virtual void Update()

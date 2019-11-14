@@ -14,7 +14,17 @@ namespace NPC
 			if(npc != null)
 			{
 				Valuable[] items = npc.sight.Scan<Valuable>();
-				if(items.Length > 0) npc.valuable = items[0];
+				if(items.Length > 0)
+				{
+					foreach(Valuable item in items)
+					{
+						if(item.IsVisible()) 
+						{
+							npc.valuable = item;
+							break;
+						}
+					}
+				}
 			}
 		}
 	}

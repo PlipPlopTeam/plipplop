@@ -5,7 +5,8 @@ using UnityEngine;
 public class Balloon : Activity
 {
     [Header("BALLOON")]
-    public float distanceBetween = 3f;
+    public float minDistanceBetween = 3f;
+    public float maxDistanceBetween = 5f;
     public float timeBetweenThrows = 2f;
     public float verticalForce = 50000f;
     public float horizontalForce = 25000f;
@@ -48,29 +49,41 @@ public class Balloon : Activity
         Initialize();
     }
 
+    float GetRandomDistance()
+    {
+        return Random.Range(minDistanceBetween, maxDistanceBetween);
+    }
+
     public override void Enter(NonPlayableCharacter user)
     {
         base.Enter(user);
         user.look.FocusOn(transform);
         if(users.Count >= slots)
         {
-            inPlace = new bool[slots];
             full = true;
-            users[0].Carry(transform);
-            users[0].agentMovement.GoThere(originPosition + Vector3.forward * distanceBetween/2);
-            users[0].agentMovement.onDestinationReached += () =>
-            {
-                inPlace[0] = true;
-                IsAllInPlace();
-            };
-
-            users[1].agentMovement.GoThere(originPosition + Vector3.forward * -distanceBetween/2);
-            users[1].agentMovement.onDestinationReached += () =>
-            {
-                inPlace[1] = true;
-                IsAllInPlace();
-            };
+            users[carrier].Carry(transform);
+            GetInPlace();
         }
+    }
+
+    void GetInPlace()
+    {
+        playing = false;
+        flying = false;
+        inPlace = new bool[slots];
+        users[0].agentMovement.GoThere(originPosition + Vector3.forward * GetRandomDistance()/2);
+        users[0].agentMovement.onDestinationReached += () =>
+        {
+            inPlace[0] = true;
+            IsAllInPlace();
+        };
+
+        users[1].agentMovement.GoThere(originPosition + Vector3.forward * -GetRandomDistance()/2);
+        users[1].agentMovement.onDestinationReached += () =>
+        {
+            inPlace[1] = true;
+            IsAllInPlace();
+        };
     }
 
     void Initialize()
@@ -91,18 +104,26 @@ public class Balloon : Activity
             {
                 if(!flying)
                 {
-                    LookAtEachOthers();
-                    users[carrier].Drop();
+                    if(DistanceBetweenPlayers() > minDistanceBetween
+                    && DistanceBetweenPlayers() < maxDistanceBetween)
+                    {
+                        LookAtEachOthers();
+                        users[carrier].Drop();
 
-                    // Throwing
-                    Vector3 throwVector = users[carrier].transform.forward;
-                    rb.AddForce(new Vector3(throwVector.x, 0f, throwVector.z)  * horizontalForce * Time.deltaTime);
-                    rb.AddForce(new Vector3(0f, 1f, 0f)  * verticalForce * Time.deltaTime);
+                        // Throwing
+                        Vector3 throwVector = users[carrier].transform.forward;
+                        rb.AddForce(new Vector3(throwVector.x, 0f, throwVector.z)  * horizontalForce * Time.deltaTime);
+                        rb.AddForce(new Vector3(0f, 1f, 0f)  * verticalForce * Time.deltaTime);
 
-                    Next();
-                    users[carrier].Collect(transform);
+                        Next();
+                        users[carrier].Collect(transform);
 
-                    flying = true;
+                        flying = true;
+                    }
+                    else 
+                    {
+                        GetInPlace();
+                    }
                 }
                 else
                 {
@@ -116,6 +137,11 @@ public class Balloon : Activity
                 }
             }
         }
+    }
+
+    float DistanceBetweenPlayers()
+    {
+        return Vector3.Distance(users[0].transform.position, users[1].transform.position);
     }
 
     void LookAtEachOthers()
