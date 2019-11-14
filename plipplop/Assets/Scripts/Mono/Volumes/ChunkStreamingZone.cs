@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ChunkStreamingZone : MonoBehaviour
 {
@@ -25,26 +27,40 @@ public class ChunkStreamingZone : MonoBehaviour
 
     readonly float visualHeight = 50f;
 
+    // Chunk play
+    public bool isPlayerInside = false;
+    public Scene? scene = null;
+
+    // Wrong references
+    bool isDisabled = false;
+
+    // Editor
     bool isSelected = false;
-    bool isPlayerInside = false;
 
-    private void Update()
+    private void Awake()
     {
-        isPlayerInside = false;
-        var c = Game.i.player.GetCurrentController();
-        if (c != null) {
-            var position = c.transform.position;
-            Vector2 position2d = new Vector2(position.x, position.z);
-            var inside = false;
-            for (int i = 0; i < positions.Count-2; i++) {
-                var p1 = positions[i];
-                var p2 = positions[i+1];
-                var p3 = positions[i+2];
-                inside = inside || Geometry.IsPointInTriangle(position2d, p1, p2, p3);
-            }
-
-            isPlayerInside = inside;
+        if (!chunk) {
+            Debug.LogWarning("Chunk " + identifier + " has NO SCENE ASSET linked to it! Disabling chunk zone.");
+            isDisabled = true;
+            return;
         }
+    }
+
+    private void Start()
+    {
+        if (!isDisabled) {
+            Game.i.chunkLoader.Register(this);
+        }
+    }
+
+    void LoadChunk()
+    {
+        SceneManager.LoadSceneAsync(chunk.name, LoadSceneMode.Additive);
+    }
+
+    void UnloadChunk()
+    {
+        
     }
 
 
@@ -93,10 +109,15 @@ public class ChunkStreamingZone : MonoBehaviour
 
     void OnDrawGizmos()
     {
+        var content = new StringBuilder();
+        content.AppendLine(identifier);
+        if (isPlayerInside) content.AppendLine("<PLAYER INSIDE>");
+        if (chunk!=null && scene != null) content.AppendLine("<LOADED>");
+
         GUIStyle labelStyle = GUI.skin.label;
         labelStyle.normal.textColor = Color.Lerp(baseColor, Color.white, 0.2f); 
 
-        Handles.Label(transform.TransformPoint(positions.ToArray().Mean()), new GUIContent(identifier + " ("+ neighborhood.Count + ")"), labelStyle);
+        Handles.Label(transform.TransformPoint(positions.ToArray().Mean()), new GUIContent(content.ToString()), labelStyle);
         if(!isSelected) Draw(new Color(baseColor.r, baseColor.g, baseColor.b, baseAlpha), new Color(baseColor.r, baseColor.g, baseColor.b, baseFillAlpha));
         isSelected = false;
     }
@@ -109,6 +130,20 @@ public class ChunkStreamingZone : MonoBehaviour
             if (neighbor == null) continue;
             neighbor.Draw(new Color(neighborColor.r, neighborColor.g, neighborColor.b, neighborAlpha), new Color(neighborColor.r, neighborColor.g, neighborColor.b, neighborFillAlpha));
         }
+    }
+
+    public bool IsInsideChunk(Vector3 worldPosition)
+    {
+        Vector3 position = transform.InverseTransformPoint(worldPosition);
+        Vector2 position2d = new Vector2(position.x, position.z);
+        var inside = false;
+        for (int i = 0; i < positions.Count; i++) {
+            var p1 = positions[i];
+            var p2 = i < positions.Count - 1 ? positions[i + 1] : positions[0];
+            var p3 = i < positions.Count - 2 ? positions[i + 2] : positions[1];
+            inside = inside || Geometry.IsPointInTriangle(position2d, new Vector2(p1.x, p1.z), new Vector2(p2.x, p2.z), new Vector2(p3.x, p3.z));
+        }
+        return inside;
     }
 
     public void Draw(Color wireColor, Color fillColor)
@@ -139,5 +174,10 @@ public class ChunkStreamingZone : MonoBehaviour
             Handles.DrawSolidRectangleWithOutline(new Rect(one, two, three), fillColor, wireColor);
         }
         */
+    }
+
+    public bool IsLoaded()
+    {
+        return scene != null;
     }
 }

@@ -7,6 +7,8 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class ChunkStreamingZoneEditor : BaseEditor
 {
+    readonly GUIStyle redStyle = GUIStyle.none;
+
     private void OnSceneGUI()
     {
         EditorGUI.BeginChangeCheck();
@@ -168,7 +170,7 @@ public class ChunkStreamingZoneEditor : BaseEditor
     System.Action NeighborsField()
     {
         var csz = (ChunkStreamingZone)target;
-
+        
         var options = new List<GUILayoutOption>();
 
         options.Add(GUILayout.Height(fieldsHeight));
@@ -227,6 +229,7 @@ public class ChunkStreamingZoneEditor : BaseEditor
 
     System.Action ChunkSceneField()
     {
+        var csz = (ChunkStreamingZone)target;
         var options = new List<GUILayoutOption>();
 
         options.Add(GUILayout.Height(fieldsHeight));
@@ -237,11 +240,13 @@ public class ChunkStreamingZoneEditor : BaseEditor
         var icon = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_ChunkScene");
 
         return delegate {
+            if (!csz.chunk) GUI.color = Color.red;
             GUILayout.BeginHorizontal(options.ToArray());
             GUILayout.Label(new GUIContent(buttonSpace + "Chunk scene", icon), noBoldTitle, GUILayout.Height(fieldsHeight), GUILayout.Width(Screen.width*0.3f));
             serializedObject.FindProperty("chunk").objectReferenceValue = EditorGUILayout.ObjectField(((ChunkStreamingZone)target).chunk, typeof(SceneAsset), allowSceneObjects: true, GUILayout.Height(fieldsHeight));
             serializedObject.ApplyModifiedProperties();
             GUILayout.EndHorizontal();
+            GUI.color = Color.white;
         };
     }
 }
