@@ -23,7 +23,7 @@ public abstract class Volume : MonoBehaviour
         Gizmos.matrix = transform.localToWorldMatrix;
         Gizmos.color = color;
         Gizmos.DrawWireCube(offset, GetSize());
-        Gizmos.color = new Color(color.r, color.g, color.b, 0.2f);
+        Gizmos.color = new Color(color.r, color.g, color.b, 0.2f*color.a);
         Gizmos.DrawCube(offset, GetSize());
         Gizmos.color = color;
         Gizmos.matrix = transform.worldToLocalMatrix;
