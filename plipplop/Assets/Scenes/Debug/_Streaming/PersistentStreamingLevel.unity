@@ -420,7 +420,7 @@ GameObject:
   - component: {fileID: 1471873733}
   - component: {fileID: 1471873732}
   m_Layer: 0
-  m_Name: ChunkVolume (1)
+  m_Name: ChunkZone_B
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -438,19 +438,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b14d45179cd831946afc744d59547206, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  color: {r: 0, g: 1, b: 1, a: 1}
-  height: 20
-  width: 20
-  length: 20
   positions:
-  - {x: -4.0531154, y: 0, z: -21.48691}
-  - {x: -13.103529, y: 0, z: -8.910214}
-  - {x: 8.776182, y: 0, z: 11.283283}
-  - {x: 33.997116, y: 0, z: -3.4240348}
-  - {x: 16.87877, y: 0, z: -20.25431}
-  - {x: 9.881357, y: 0, z: -22.512938}
+  - {x: -36.39208, y: 0, z: 0.4978733}
+  - {x: -14.512366, y: 0, z: 20.691374}
+  - {x: 21.279852, y: 0, z: 3.1888316}
+  - {x: -33.714767, y: 0, z: -16.511051}
   chunk: {fileID: 0}
-  neighbors:
+  neighborhood:
   - {fileID: 928165312633420088}
 --- !u!114 &1471873733
 MonoBehaviour:
@@ -472,7 +466,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1471873731}
   m_LocalRotation: {x: -0, y: 0.9914449, z: -0, w: 0.13052607}
-  m_LocalPosition: {x: 53.93, y: 0.5, z: 21.64}
+  m_LocalPosition: {x: 29, y: 0.5, z: 24.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -733,7 +727,7 @@ GameObject:
   - component: {fileID: 928165312633420082}
   - component: {fileID: 928165312633420088}
   m_Layer: 0
-  m_Name: ChunkVolume
+  m_Name: ChunkZone_A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -751,14 +745,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b14d45179cd831946afc744d59547206, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  color: {r: 0, g: 1, b: 1, a: 1}
-  height: 20
-  width: 20
-  length: 20
   positions:
   - {x: 4.390457, y: 0, z: -5.0731354}
-  - {x: -26.506813, y: 0, z: -4.230257}
+  - {x: -26.506813, y: 0, z: -4.230256}
   - {x: -10.599091, y: 0, z: 20.938046}
   chunk: {fileID: 0}
-  neighbors:
+  neighborhood:
   - {fileID: 1471873732}

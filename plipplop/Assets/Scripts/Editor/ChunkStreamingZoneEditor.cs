@@ -52,7 +52,7 @@ public class ChunkStreamingZoneEditor : BaseEditor
             }
 
             // Snapping
-            foreach (var neighbor in chunkVol.neighbors) {
+            foreach (var neighbor in chunkVol.neighborhood) {
                 if (neighbor == null) continue;
                 foreach (var nearPoint in neighbor.positions) {
                     var np = neighbor.transform.TransformPoint(nearPoint);
@@ -73,10 +73,99 @@ public class ChunkStreamingZoneEditor : BaseEditor
 
     public override void OnInspectorGUI()
     {
-        // Chunk 
+        MakeStyles();
 
+        EditorGUILayout.Space();
+
+        // Chunk 
+        ChunkSceneField()();
+        EditorGUILayout.Space();
+        NeighborsField()();
+        EditorGUILayout.Space();
 
 
         DrawDefaultInspector();
+    }
+       
+    System.Action NeighborsField()
+    {
+        var csz = (ChunkStreamingZone)target;
+
+        var options = new List<GUILayoutOption>();
+
+        options.Add(GUILayout.Height(fieldsHeight));
+
+        var noBoldTitle = new GUIStyle(title);
+        noBoldTitle.fontStyle = FontStyle.Normal;
+
+        var icon = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_ChunkNeighborhood");
+
+        return delegate {
+            GUILayout.BeginHorizontal(options.ToArray());
+            GUILayout.Label(new GUIContent(buttonSpace + "Neighborhood", icon), noBoldTitle, GUILayout.Height(fieldsHeight), GUILayout.Width(Screen.width * 0.3f));
+
+            // Draw property
+            GUILayout.BeginVertical();
+            var prop = serializedObject.FindProperty("neighborhood");
+            prop.Next(true);
+            var array = prop.Copy();
+            var arrSize = array.arraySize;
+            prop.Next(true);
+            for (int i = 0; i < arrSize; i++) {
+                GUILayout.BeginHorizontal();
+                if (!prop.Next(false)) break;
+
+                prop.objectReferenceValue = EditorGUILayout.ObjectField(prop.objectReferenceValue, typeof(ChunkStreamingZone), allowSceneObjects: true);
+
+                // Dupe
+                while (prop.objectReferenceValue != null && csz.neighborhood.FindAll(o => o == (ChunkStreamingZone)prop.objectReferenceValue).Count > 1) {
+                    csz.neighborhood.Remove((ChunkStreamingZone)prop.objectReferenceValue);
+                }
+
+                // Me! Me! Me!
+                if (prop.objectReferenceValue == target) prop.objectReferenceValue = null;
+
+                // Remove button
+                if (GUILayout.Button("-", GUILayout.Width(20f))) {
+                    if (prop.objectReferenceValue == null) array.DeleteArrayElementAtIndex(i);
+                    else csz.RemoveNeighbor((ChunkStreamingZone)prop.objectReferenceValue);
+                }
+                GUILayout.EndHorizontal();
+            }
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("Add", style: normalControl)) {
+                array.InsertArrayElementAtIndex(arrSize);
+                array.GetArrayElementAtIndex(arrSize).objectReferenceValue = null;
+            }
+            GUILayout.EndHorizontal();
+            GUILayout.EndVertical();
+                                    
+            GUILayout.EndHorizontal();
+
+            // Cleaning of the neighbors
+            csz.UpdateNeighborhood();
+
+            serializedObject.ApplyModifiedProperties();
+        };
+    }
+
+    System.Action ChunkSceneField()
+    {
+        var options = new List<GUILayoutOption>();
+
+        options.Add(GUILayout.Height(fieldsHeight));
+
+        var noBoldTitle = new GUIStyle(title);
+        noBoldTitle.fontStyle = FontStyle.Normal;
+
+        var icon = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_ChunkScene");
+
+        return delegate {
+            GUILayout.BeginHorizontal(options.ToArray());
+            GUILayout.Label(new GUIContent(buttonSpace + "Chunk scene", icon), noBoldTitle, GUILayout.Height(fieldsHeight), GUILayout.Width(Screen.width*0.3f));
+            serializedObject.FindProperty("chunk").objectReferenceValue = EditorGUILayout.ObjectField(((ChunkStreamingZone)target).chunk, typeof(SceneAsset), allowSceneObjects: true, GUILayout.Height(fieldsHeight));
+            serializedObject.ApplyModifiedProperties();
+            GUILayout.EndHorizontal();
+        };
     }
 }

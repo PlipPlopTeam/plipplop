@@ -9,8 +9,8 @@ public class ChunkStreamingZone : MonoBehaviour
 
     [Header("Specific options")]
     public List<Vector3> positions;
-    public SceneAsset chunk;
-    public List<ChunkStreamingZone> neighbors = new List<ChunkStreamingZone>();
+    public SceneAsset chunk;    
+    public List<ChunkStreamingZone> neighborhood = new List<ChunkStreamingZone>();
 
     readonly Color selectedColor = Color.green;
     readonly float selectedAlpha = 0.5f;
@@ -52,19 +52,23 @@ public class ChunkStreamingZone : MonoBehaviour
         return lines.ToArray();
     }
 
-    [ExecuteInEditMode]
     public void RemoveAllNeighbors()
     {
-        neighbors.Clear();
+        neighborhood.Clear();
     }
 
-
-    [ExecuteInEditMode]
-    public void AddNeighbor(ChunkStreamingZone chunkVol)
+    public void UpdateNeighborhood()
     {
-        chunkVol.neighbors.AddUnique(chunkVol);
+        foreach (var n in neighborhood.ToArray()) {
+            if (n == null) continue;
+            if (!n.neighborhood.Contains(this)) n.neighborhood.Add(this);
+        }
+    }
 
-        neighbors.AddUnique(chunkVol);
+    public void RemoveNeighbor(ChunkStreamingZone csz)
+    {
+        csz.neighborhood.RemoveAll(o => o == this);
+        neighborhood.RemoveAll(o => o == csz);
     }
 
     void OnDrawGizmos()
@@ -72,7 +76,7 @@ public class ChunkStreamingZone : MonoBehaviour
         GUIStyle labelStyle = GUI.skin.label;
         labelStyle.normal.textColor = Color.Lerp(baseColor, Color.white, 0.2f); 
 
-        Handles.Label(transform.position + positions.ToArray().Mean(), new GUIContent(neighbors.Count.ToString()), labelStyle);
+        Handles.Label(transform.position + positions.ToArray().Mean(), new GUIContent(neighborhood.Count.ToString()), labelStyle);
         if(!isSelected) Draw(new Color(baseColor.r, baseColor.g, baseColor.b, baseAlpha), new Color(baseColor.r, baseColor.g, baseColor.b, baseFillAlpha));
         isSelected = false;
     }
@@ -81,7 +85,7 @@ public class ChunkStreamingZone : MonoBehaviour
     {
         isSelected = true;
         Draw(new Color(selectedColor.r, selectedColor.g, selectedColor.b, selectedAlpha), new Color(selectedColor.r, selectedColor.g, selectedColor.b, selectedFillAlpha));
-        foreach(var neighbor in neighbors) {
+        foreach(var neighbor in neighborhood) {
             if (neighbor == null) continue;
             neighbor.Draw(new Color(neighborColor.r, neighborColor.g, neighborColor.b, neighborAlpha), new Color(neighborColor.r, neighborColor.g, neighborColor.b, neighborFillAlpha));
         }

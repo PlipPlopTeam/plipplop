@@ -107,4 +107,9 @@ public class BaseEditor : Editor
             GUILayout.EndVertical();
         };
     }
+
+    internal void DrawTitle(GUIContent content)
+    {
+        GUILayout.Label(content, title, GUILayout.Height(headerSeparatorHeight), GUILayout.ExpandWidth(true));
+    }
 }
