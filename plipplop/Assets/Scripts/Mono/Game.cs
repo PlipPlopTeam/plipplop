@@ -9,6 +9,7 @@ public class Game : MonoBehaviour
     public Brain player;
     public Mapping mapping;
     public CheatCodeListener cheatCodeListener;
+    public ChunkLoader chunkLoader;
     [HideInInspector] public Aperture aperture;
 
     static public Game i;
@@ -29,6 +30,7 @@ public class Game : MonoBehaviour
         aperture = new Aperture();
         mapping = Instantiate<Mapping>(mapping);
         cheatCodeListener = new CheatCodeListener(new Cheats());
+        chunkLoader = new ChunkLoader();
 
         var spawn = FindObjectOfType<SpawnMarker>();
         if (!spawn) {
@@ -55,6 +57,7 @@ public class Game : MonoBehaviour
         mapping.Read();
         player.Update();
         aperture.Update();
+        chunkLoader.Update();
         cheatCodeListener.ListenCheat();
     }
 
