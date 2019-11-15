@@ -30,7 +30,6 @@ public class Jukebox : Activity
         visuals.localScale = Vector3.one + Vector3.one * (1 + Mathf.Sin(Time.time * 10f)) * 0.25f;
     }
 
-
     public override void Enter(NonPlayableCharacter user)
     {
         base.Enter(user);
@@ -42,5 +41,6 @@ public class Jukebox : Activity
     {
         base.Exit(user);
         user.animator.SetBool("Dancing", false);
+        Debug.Log(user.gameObject.name);
     }
 }

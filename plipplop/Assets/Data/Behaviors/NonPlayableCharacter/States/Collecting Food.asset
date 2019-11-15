@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e09f12a9b8fb5e44eb81fa499afbecc4, type: 3}
+  m_Name: Collecting Food
+  m_EditorClassIdentifier: 
+  onFixed: []
+  onUpdate: []
+  onEnter:
+  - {fileID: 11400000, guid: 5f66a028606921249910fbe8f24f62eb, type: 2}
+  onExit: []
+  idCount: 1
+  transitions:
+  - id: 0
+    conditions:
+    - {fileID: 11400000, guid: 43608471a04265c489fde84db80baf8f, type: 2}
+    targetState: {fileID: 11400000, guid: 4e0860f64af36464dadb9d4ddb9cef29, type: 2}
+    disable: 0

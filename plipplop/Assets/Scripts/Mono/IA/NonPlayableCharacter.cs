@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using PP;
+using UnityEditor;
 using UnityEngine.AI;
 
 public class NonPlayableCharacter : StateManager
@@ -16,17 +17,20 @@ public class NonPlayableCharacter : StateManager
 
 	[HideInInspector] public Valuable valuable;
 	[HideInInspector] public Activity activity;
+	[HideInInspector] public Chair chair;
+	[HideInInspector] public Food food;
+	
 	[HideInInspector] public Activity previousActivity;
-	[HideInInspector] public Transform inHand;
-	private Transform objectToCollect;
-	private Chair chair;
-
+	[HideInInspector] public Carryable carried;
+	private Carryable carryableToCollect;
 	public Dictionary<Clothes.Slot, Clothes> clothes = new Dictionary<Clothes.Slot, Clothes>();
 
 	[Header("Settings")]
 	public float strength = 1f;
-	[Range(0f, 100f)] public float boredom = 0f;
 	float assHeightWhenSitted = 0.51f;
+
+	[Header("Stats")]
+	public Dictionary<string, float> stats = new Dictionary<string, float>();
 
 	public ClothesData[] headStuff;
 	public ClothesData[] torsoStuff;
@@ -48,14 +52,37 @@ public class NonPlayableCharacter : StateManager
 
 	public override void Start()
 	{
-		base.Start();
-
+		// Load Character Clothes Slots
 		foreach (Clothes.Slot suit in (Clothes.Slot[]) Clothes.Slot.GetValues(typeof(Clothes.Slot)))
 			clothes.Add(suit, null);
 
+		// Load Character Stats
+		stats.Add("boredom", 50f);
+		stats.Add("tiredness", 50f);
+		stats.Add("hunger", 75f);
+		
+		// Debug Equip Items
 		Equip(headStuff[Random.Range(0, headStuff.Length)]);
 		Equip(torsoStuff[Random.Range(0, torsoStuff.Length)]);
 		Equip(legsStuff[Random.Range(0, legsStuff.Length)]);
+
+		base.Start();
+	}
+
+	[ContextMenu("SetHungerTwentyFive")]
+	public void SetHungerTwentyFive()
+	{
+		SetStat("hunger", 25f);
+	}
+	[ContextMenu("SetHungerSeventyFive")]
+	public void SetHungerSeventyFive()
+	{
+		SetStat("hunger", 75f);
+	}
+	[ContextMenu("SetHungerHundred")]
+	public void SetHungerHundred()
+	{
+		SetStat("hunger", 100f);
 	}
 
 	public void Equip(ClothesData clothData, bool change = true)
@@ -70,77 +97,103 @@ public class NonPlayableCharacter : StateManager
 		clothes[clothData.slot] = c;
 	}
 
-	public bool IsCarrying(Transform t)
+	public bool IsCarrying(Carryable carryable)
 	{
-		return t == inHand;
+		return carryable == carried;
 	}
 
 	public override void Update()
 	{
 		base.Update();
-		if(inHand != null) Carrying(inHand.transform);
+		if(carried != null && carried.Mass() > 0.5f) Carrying(carried);
 		Collecting();
 	}
 
-	public void Carrying(Transform t)
+	public void Carrying(Carryable carryable)
 	{
-		t.position = (skeleton.GetSlotByName("RightHand").GetPosition() + skeleton.GetSlotByName("LeftHand").GetPosition())/2f;
-		t.forward = transform.forward;
+		carryable.Self().position = (skeleton.GetSlotByName("RightHand").GetPosition() + skeleton.GetSlotByName("LeftHand").GetPosition())/2f;
+		carryable.Self().forward = transform.forward;
 	}
 
 	public void Collecting()
 	{
-		if(objectToCollect != null)
+		if(carryableToCollect != null)
 		{
-			if(range.IsInRange(objectToCollect.gameObject))
+			if(range.IsInRange(carryableToCollect.Self().gameObject))
 			{
 				agentMovement.StopChase();
-				Carry(objectToCollect);
-				objectToCollect = null;
+				Carry(carryableToCollect);
+				carryableToCollect = null;
 			}
 		}
 	}
 
-	public void Collect(Transform obj)
+	public bool IsCollecting(Carryable carryable)
 	{
-		objectToCollect = obj;
-		agentMovement.Chase(objectToCollect);		
+		return carryable == carryableToCollect;
 	}
 
-	public void Carry(Transform obj)
+	public void Collect(Carryable carryable)
 	{
-		if(inHand != null) Drop();
-		inHand = obj;
+		carryableToCollect = carryable;
+		agentMovement.Chase(carryableToCollect.Self());		
+	}
 
-		Carryable c = inHand.gameObject.GetComponent<Carryable>();
-		if(c != null) c.Carry();
+	public void Consume(Food f)
+	{
+		food = f;
+		food.Consume();
+		food.onConsumeEnd += () =>
+		{
+			stats["hunger"] -= food.data.calory;
+			Drop();
+			food = null;
+		};
+	}
 
-		animator.SetBool("Carrying", true);
+	public void Carry(Carryable carryable)
+	{
+		if(carried != null) Drop();
+		carried = carryable;
+		carried.Carry();
+		if(carried.Mass() < 0.5f)
+		{
+			animator.SetBool("Holding", true);
+			skeleton.Attach(carried.Self(), "RightHand", true);
+		}
+		else 
+		{
+			animator.SetBool("Carrying", true);
+		}
 	}
 
 	public void Drop()
 	{
-		if(inHand == null) return;
-
-		animator.SetBool("Carrying", false);
-		
-		Carryable c = inHand.gameObject.GetComponent<Carryable>();
-		if(c != null) c.Drop();
-
-		inHand = null;
+		if(carried == null) return;
+		carried.Drop();
+		if(carried.Mass() < 0.5f)
+		{
+			animator.SetBool("Holding", false);
+			skeleton.Drop("RightHand");
+		}
+		else 
+		{
+			animator.SetBool("Carrying", false);
+		}
+		carried = null;
 	}
 
-	public void AddBoredom(float amount)
+	public void AddToStat(string name, float amount)
 	{
-		boredom += amount;
-		if(boredom >= 100f)
-		{
-			// I'm bored as fuck
-			boredom = 100f;
-			if(activity != null) activity.Exit(this);
-			emo.Show("Bored", 3f);
-		}
-		else if(boredom < 0f) boredom = 0f;
+		stats[name] += amount;
+		if(stats[name] >= 100f) stats[name] = 100f;
+		else if(stats[name] < 0f) stats[name] = 0f;
+	}
+	public void SetStat(string name, float value)
+	{
+		stats[name] = value;
+		if(stats[name] >= 100f) stats[name] = 100f;
+		else if(stats[name] < 0f) stats[name] = 0f;
 	}
 
 	public void GoSitThere(Vector3 where)
@@ -182,4 +235,19 @@ public class NonPlayableCharacter : StateManager
 		animator.SetBool("Sitting", false);
 		animator.SetBool("Chairing", false);
 	}
+
+#if UNITY_EDITOR
+	void OnDrawGizmosSelected()
+    {
+        if(EditorApplication.isPlaying)
+		{
+			float h = 0f;
+			foreach(KeyValuePair<string, float> entry in stats)
+			{
+				Handles.Label(transform.position + Vector3.up * (2f + h), entry.Key.ToString() + " = " + entry.Value.ToString());
+				h+= 0.1f;
+			}
+        }
+    }
+#endif
 }

@@ -3,7 +3,7 @@
 public class Projectile : MonoBehaviour
 {
     [Header("Referencies")]
-    public Collider collider;
+    public Collider cd;
     public Rigidbody rb;
 
     [Header("Settings")]
@@ -34,7 +34,7 @@ public class Projectile : MonoBehaviour
 
     public virtual void Stuck(Transform on = null)
     {
-        collider.isTrigger = true;
+        cd.isTrigger = true;
         rb.isKinematic = true;
         rb.useGravity = false;
 
@@ -51,7 +51,7 @@ public class Projectile : MonoBehaviour
 
     public virtual void Unstuck()
     {
-        collider.isTrigger = false;
+        cd.isTrigger = false;
         rb.isKinematic = false;
         rb.useGravity = true;
         transform.SetParent(null);

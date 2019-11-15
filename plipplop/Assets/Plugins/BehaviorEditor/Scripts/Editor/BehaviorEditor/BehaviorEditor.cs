@@ -396,23 +396,104 @@ namespace PP.Behavior
 		#region Helper Methods
 		public static void DrawNodeCurve(Rect start, Rect end, bool left, Color curveColor)
         {
-            Vector3 startPos = new Vector3(
-                (left) ? start.x + start.width : start.x,
-                start.y + (start.height *.5f),
-                0);
+			Vector3 startPos = Vector3.zero;
+			Color c = Handles.color;
+			Handles.Label(start.position, "0");
+			if(start.center.x >= end.center.x) // RIGHT
+			{
+				if(start.center.y >= end.center.y) // RIGHT
+					startPos = new Vector3(start.position.x, start.position.y, 0f);
+				else
+					startPos = new Vector3(start.position.x, start.position.y + start.size.y, 0f);
+			}
+			else // LEFT
+			{
+				if(start.center.y >= end.center.y) // RIGHT
+					startPos = new Vector3(start.position.x + start.size.x, start.position.y, 0f);
+				else
+					startPos = new Vector3(start.position.x + start.size.x, start.position.y + start.size.y, 0f);
+			}
 
-            Vector3 endPos = new Vector3(end.x + (end.width * .5f), end.y + (end.height * .5f), 0);
-            Vector3 startTan = startPos + Vector3.right * 50;
-            Vector3 endTan = endPos + Vector3.left * 50;
+			Vector3 endPos = Vector3.zero;
+			if(end.center.x >= start.center.x) // RIGHT
+			{
+				if(end.center.y >= start.center.y) // RIGHT
+				{
+					c = Color.blue;
+					endPos = new Vector3(end.position.x + end.size.x/2, end.position.y, 0f);
+				}
+				else
+				{
+					c = Color.green;
+					endPos = new Vector3(end.position.x + end.size.x/2, end.position.y + end.size.y, 0f);
+				}
+			}
+			else // LEFT
+			{
+				if(end.center.y >= start.center.y) // RIGHT
+				{
+					c = Color.red;
+					endPos = new Vector3(end.position.x + end.size.x*1.5f, end.position.y, 0f);
+				}
+				else
+				{
+					c = Color.black;
+					endPos = new Vector3(end.position.x + end.size.x*1.5f, end.position.y + end.size.y, 0f);
+				}
+			}
 
+			Handles.color = c;
+
+            //Vector3 endPos = new Vector3(end.x + (end.width * .5f), end.y + (end.height * .5f), 0);
+            //Vector3 startTan = startPos + Vector3.right * 50;
+            //Vector3 endTan = endPos + Vector3.left * 50;
+
+			/*
             Color shadow = new Color(0, 0, 0, 1);
             for (int i = 0; i < 1; i++)
             {
                 Handles.DrawBezier(startPos, endPos, startTan, endTan, shadow, null, 4);
-            }
 
-            Handles.DrawBezier(startPos, endPos, startTan, endTan, curveColor, null, 10);
+            }
+			*/
+			Vector3 dir = (startPos - endPos).normalized;
+			Vector3 right = Quaternion.AngleAxis(-90, Vector3.forward) * dir;
+
+			Handles.DrawAAConvexPolygon(new Vector3[] {startPos - right * 2, startPos + right * 2, endPos - right * 2, endPos + right * 2} );
+
+			DrawTriangle(endPos, -dir, 10, c, true);
+
+			//Handles.DrawLine(startPos, endPos);
+			//Handles.DrawCube(0, endPos, Quaternion.identity, 10f);
+            //Handles.DrawBezier(startPos, endPos, startTan, endTan, curveColor, null, 10);
         }
+
+		public static void DrawTriangle(Vector3 position, Vector3 direction, float size, Color color, bool pivotOnPointyEdge)
+		{
+			Handles.color = color;
+			Vector3 right = Quaternion.AngleAxis(-90, Vector3.forward) * direction;
+			if(!pivotOnPointyEdge)
+			{
+				Handles.DrawAAConvexPolygon(
+					new Vector3[]{
+						position - right * size,
+						position + right * size,
+						position + direction * size * 2
+					} 
+				);
+
+			}
+			else
+			{
+				Handles.DrawAAConvexPolygon(
+					new Vector3[]{
+						position,
+						position - (direction * size * 2) + right * size,
+						position - (direction * size * 2) - right * size,
+					}
+				);
+			}
+		}
 
         public static void ClearWindowsFromList(List<Node>l)
         {

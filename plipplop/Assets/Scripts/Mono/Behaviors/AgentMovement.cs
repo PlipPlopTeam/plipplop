@@ -40,6 +40,13 @@ public class AgentMovement : MonoBehaviour
     private Transform chaseTarget;
     private NavMeshAgent agent;
 
+    public void ClearEvents()
+    {
+        onDestinationReached = null;
+        onPathCompleted = null;
+        onTargetOffPath = null;
+    }
+
     public void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -53,6 +60,7 @@ public class AgentMovement : MonoBehaviour
         path.points = newPath.points;
         path.index = Random.Range(0, path.points.Length);
         followingPath = true;
+        ClearEvents();
         onPathCompleted += () => {if(!path.loop) followingPath = false;};
         StopChase();
         GoAtPoint(path.index);

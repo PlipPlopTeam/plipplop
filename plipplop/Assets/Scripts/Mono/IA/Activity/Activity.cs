@@ -7,8 +7,10 @@ public class Activity : MonoBehaviour
     [Header("ACTIVITY")]
     public bool full = false;
     public bool working = true;
-    public float boredomMultipler = 1f;
-    public float boredomFrequency = 1f;
+    [Header("Stats Modifiers")]
+    public float boredomMultiplier = 1f;
+    public float tirednessMultiplier = 0f;
+    public float hungerMultiplier = 0f;
     [Space(5)]
     public List<NonPlayableCharacter> users = new List<NonPlayableCharacter>();
 
@@ -16,7 +18,7 @@ public class Activity : MonoBehaviour
 
     public virtual void Enter(NonPlayableCharacter user)
     {
-        user.boredom = 0f;
+        user.stats["boredom"] = 0f;
         user.activity = this;
         users.Add(user);
     }
@@ -25,7 +27,6 @@ public class Activity : MonoBehaviour
     {
         user.activity = null;
         user.previousActivity = this;
-        user.agentMovement.FollowPath(Zone.i.GetRandomPath());
         users.Remove(user);
     }
 
@@ -53,11 +54,12 @@ public class Activity : MonoBehaviour
         if(timer > 0f) timer -= Time.deltaTime;
         else
         {
-            timer = boredomFrequency;
-
+            timer = 1f;
             foreach(NonPlayableCharacter user in users.ToArray())
             {
-                user.AddBoredom(boredomMultipler);
+                user.AddToStat("boredom", boredomMultiplier);
+                user.AddToStat("tiredness", tirednessMultiplier);
+                user.AddToStat("hunger", hungerMultiplier);
             }
         }
     }

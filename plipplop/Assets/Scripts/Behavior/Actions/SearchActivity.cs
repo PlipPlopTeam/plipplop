@@ -20,7 +20,7 @@ namespace NPC
 					{
 						if(!a.full && a != npc.previousActivity && a.working && !a.users.Contains(npc)) 
 						{
-							a.Enter(npc);
+							npc.activity = a;
 							break;
 						}
 					}

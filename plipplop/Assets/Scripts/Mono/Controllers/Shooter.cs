@@ -5,7 +5,7 @@ using UnityEngine;
 public class Shooter : Controller
 {
     public Thrower[] throwers;
-    public Animation animation;
+    public Animation anim;
 
     public override void OnPossess()
     {
@@ -30,6 +30,6 @@ public class Shooter : Controller
             t.Shoot();
             t.Reload();
         }
-        if(animation != null) animation.Play();
+        if(anim != null) anim.Play();
     }
 }

@@ -6,4 +6,6 @@ public interface Carryable
 {
     void Carry();
     void Drop();
+    float Mass();
+    Transform Self();
 }

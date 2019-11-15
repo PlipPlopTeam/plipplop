@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Balloon : Activity
+public class Balloon : Activity, Carryable
 {
     [Header("BALLOON")]
     public float minDistanceBetween = 3f;
@@ -27,6 +27,23 @@ public class Balloon : Activity
         rb = GetComponent<Rigidbody>();
     }
 
+    public void Carry()
+    {
+
+    }
+    public void Drop()
+    {
+
+    }
+    public float Mass()
+    {
+        return rb.mass;
+    }
+    public Transform Self()
+    {
+        return transform;
+    }
+
     void Start()
     {
         originPosition = transform.position;
@@ -43,7 +60,7 @@ public class Balloon : Activity
         if(users.Count > 0) 
         {
             Next();
-            users[carrier].Carry(transform);
+            users[carrier].Carry(this);
         }
 
         Initialize();
@@ -61,7 +78,7 @@ public class Balloon : Activity
         if(users.Count >= slots)
         {
             full = true;
-            users[carrier].Carry(transform);
+            users[carrier].Carry(this);
             GetInPlace();
         }
     }
@@ -116,7 +133,7 @@ public class Balloon : Activity
                         rb.AddForce(new Vector3(0f, 1f, 0f)  * verticalForce * Time.deltaTime);
 
                         Next();
-                        users[carrier].Collect(transform);
+                        users[carrier].Collect(this);
 
                         flying = true;
                     }
@@ -127,7 +144,7 @@ public class Balloon : Activity
                 }
                 else
                 {
-                    if(users[carrier].IsCarrying(transform))
+                    if(users[carrier].IsCarrying(this))
                     {
                         LookAtEachOthers();
                         users[carrier].agentMovement.Stop();

@@ -142,7 +142,8 @@ namespace PP.Behavior
 						if (!t.isAssigned) targetColor = Color.grey;
 						else targetColor = Color.white;
 					}
-                    
+
+                    rect.position = new Vector2(rect.position.x - rect.size.x, rect.position.y);
                     BehaviorEditor.DrawNodeCurve(rect, endRect, false, targetColor);
                 }
 
