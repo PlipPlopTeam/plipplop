@@ -120,76 +120,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &76589033
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 76589036}
-  - component: {fileID: 76589035}
-  - component: {fileID: 76589034}
-  m_Layer: 0
-  m_Name: ChunkZone_H
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &76589034
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 76589033}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b14d45179cd831946afc744d59547206, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  identifier: H
-  positions:
-  - {x: -74.943184, y: 0, z: -4.665264}
-  - {x: 46.895786, y: 0, z: 13.114567}
-  - {x: 39.23382, y: 0, z: -33.163902}
-  - {x: -68.28808, y: 0, z: -43.25244}
-  chunk: {fileID: 102900000, guid: a8796b5b0d4aea945a2c8e78df066408, type: 3}
-  neighborhood:
-  - {fileID: 840011630}
-  - {fileID: 1105290472}
-  - {fileID: 1471873732}
-  - {fileID: 266654160}
-  - {fileID: 632975981}
-  isPlayerInside: 0
---- !u!114 &76589035
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 76589033}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 440794568d0dd514a91ce1b432f2e8a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &76589036
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 76589033}
-  m_LocalRotation: {x: -0, y: 0.9914449, z: -0, w: 0.13052607}
-  m_LocalPosition: {x: -41.6, y: 0.5, z: 30.2}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 14
-  m_LocalEulerAnglesHint: {x: 0, y: 165.00002, z: 0}
 --- !u!1 &243969457
 GameObject:
   m_ObjectHideFlags: 0
@@ -262,7 +192,6 @@ MonoBehaviour:
   - {fileID: 1471873732}
   - {fileID: 719674212}
   - {fileID: 840011630}
-  - {fileID: 76589034}
   isPlayerInside: 0
 --- !u!114 &266654161
 MonoBehaviour:
@@ -421,7 +350,6 @@ MonoBehaviour:
   neighborhood:
   - {fileID: 840011630}
   - {fileID: 719674212}
-  - {fileID: 76589034}
   isPlayerInside: 0
 --- !u!114 &632975982
 MonoBehaviour:
@@ -556,7 +484,6 @@ MonoBehaviour:
   - {x: 66.19097, y: 0, z: 29.885551}
   chunk: {fileID: 102900000, guid: 02735ac721d58ea4fb8c1aa6684cd5db, type: 3}
   neighborhood:
-  - {fileID: 76589034}
   - {fileID: 632975981}
   - {fileID: 1471873732}
   - {fileID: 266654160}
@@ -670,73 +597,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 30.000002, y: 0, z: 0}
---- !u!1 &1105290471
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1105290474}
-  - component: {fileID: 1105290473}
-  - component: {fileID: 1105290472}
-  m_Layer: 0
-  m_Name: ChunkZone_G
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1105290472
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1105290471}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b14d45179cd831946afc744d59547206, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  identifier: G
-  positions:
-  - {x: -76.7099, y: 0, z: 49.812416}
-  - {x: -47.806477, y: 0, z: 20.881739}
-  - {x: -41.151375, y: 0, z: -17.705437}
-  - {x: -104.62664, y: 0, z: 9.541188}
-  chunk: {fileID: 102900000, guid: 451a5da4ccb1b3d45bb981fa5666a6ed, type: 3}
-  neighborhood:
-  - {fileID: 76589034}
-  - {fileID: 1471873732}
-  isPlayerInside: 0
---- !u!114 &1105290473
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1105290471}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 440794568d0dd514a91ce1b432f2e8a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1105290474
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1105290471}
-  m_LocalRotation: {x: -0, y: 0.9914449, z: -0, w: 0.13052607}
-  m_LocalPosition: {x: -22, y: 0.5, z: 61.9}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 13
-  m_LocalEulerAnglesHint: {x: 0, y: 165.00002, z: 0}
 --- !u!1001 &1222006786
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -872,8 +732,6 @@ MonoBehaviour:
   - {fileID: 840011630}
   - {fileID: 266654160}
   - {fileID: 928165312633420088}
-  - {fileID: 1105290472}
-  - {fileID: 76589034}
   isPlayerInside: 0
 --- !u!114 &1471873733
 MonoBehaviour:
