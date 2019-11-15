@@ -12,10 +12,79 @@ public class ChunkLoader
 
     List<ChunkProp> props = new List<ChunkProp>();
 
+
+    class Footprint
+    {
+        class Comparable
+        {
+            public object p1;
+            public object p2;
+            public string name;
+        }
+
+        readonly Vector3 position;
+        readonly Quaternion rotation;
+        readonly Vector3 scale;
+        readonly string name;
+        readonly int childrenCount;
+        readonly int componentCount;
+        readonly string identifier;
+
+        public Footprint(GameObject obj, string identifier)
+        {
+            
+            name = obj.name;
+            List<Transform> children = new List<Transform>();
+            for (int i = 0; i < obj.transform.childCount; i++) {
+                children.Add(obj.transform.GetChild(i));
+            }
+            childrenCount = children.Count;
+            componentCount = obj.GetComponents(typeof(Component)).Length;
+            position = obj.transform.position;
+            rotation = obj.transform.rotation;
+            scale = obj.transform.localScale;
+            this.identifier = identifier;
+        }
+
+        public float Compare(Footprint fp)
+        {
+            var discriminants = new List<Comparable>();
+            int same = 0;
+
+            discriminants.Add(new Comparable() { name = "position", p1 = position, p2 = fp.position });
+            discriminants.Add(new Comparable() { name = "rotation", p1 = rotation, p2 = fp.rotation });
+            discriminants.Add(new Comparable() { name = "scale", p1 = scale, p2 = fp.scale });
+            discriminants.Add(new Comparable() { name = "name", p1 = name, p2 = fp.name });
+            discriminants.Add(new Comparable() { name = "children", p1 = childrenCount, p2 = fp.childrenCount });
+            discriminants.Add(new Comparable() { name = "components", p1 = componentCount, p2 = fp.componentCount });
+            discriminants.Add(new Comparable() { name = "identifier", p1 = identifier, p2 = fp.identifier });
+
+            foreach (var d in discriminants) {
+                same += d.p1.Equals(d.p2) ? 1 : 0;
+                // Debug.Log("COMPARING " + d.name + " => " + d.p1 + "=?=" + d.p2 + " >> " + (d.p1.Equals(d.p2)));
+            }
+
+            return ((float)same) / discriminants.Count;
+        }
+
+        public bool Equals(Footprint fp)
+        {
+            return Compare(fp) == 1f;
+        }
+    }
+
     class ChunkProp
     {
         public GameObject prop;
         public string chunkIdentifier;
+        public readonly Footprint footprint;
+
+        public ChunkProp(GameObject prop, string identifier)
+        {
+            footprint = new Footprint(prop, identifier);
+            this.prop = prop;
+            this.chunkIdentifier = identifier;
+        }
     }
 
     public ChunkLoader()
@@ -119,13 +188,15 @@ public class ChunkLoader
         foreach(var id in chunkZones.Keys) {
             if (scene.name == chunkZones[id].chunk.name) {
                 chunkZones[id].scene = scene;
-
-                foreach(var prop in scene.GetRootGameObjects()) {
-                    if (props.FindAll(o=>o.prop == prop).Count > 0){
-                        Object.DestroyImmediate(prop); // Destroy clones (object is still here)
+                foreach (var prop in scene.GetRootGameObjects()) {
+                    var chp = new ChunkProp(prop, id); 
+                    // Destroy clones (object is still here)
+                    if (props.FindAll(o=> o.footprint.Equals(chp.footprint)).Count > 0) {
+                        Debug.LogWarning("Destroyed clone of roaming prop: " + prop.name);
+                        Object.DestroyImmediate(prop);
                         continue;
                     }
-                    props.Add(new ChunkProp() { chunkIdentifier = id, prop = prop });
+                    props.Add(chp);
                 }
 
                 break;

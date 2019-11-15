@@ -130,6 +130,15 @@ public class ChunkStreamingZone : MonoBehaviour
             if (neighbor == null) continue;
             neighbor.Draw(new Color(neighborColor.r, neighborColor.g, neighborColor.b, neighborAlpha), new Color(neighborColor.r, neighborColor.g, neighborColor.b, neighborFillAlpha));
         }
+
+        if (IsLoaded()) {
+            foreach (var prop in FindObjectsOfType<GameObject>()) {
+                if (prop.scene == scene) {
+                    Gizmos.color = selectedColor;
+                    Gizmos.DrawWireSphere(prop.transform.position, prop.transform.localScale.magnitude);
+                }
+            }
+        }
     }
 
     public bool IsInsideChunk(Vector3 worldPosition)
