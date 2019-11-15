@@ -53,17 +53,6 @@ public class ChunkStreamingZone : MonoBehaviour
         }
     }
 
-    void LoadChunk()
-    {
-        SceneManager.LoadSceneAsync(chunk.name, LoadSceneMode.Additive);
-    }
-
-    void UnloadChunk()
-    {
-        
-    }
-
-
     Tuple<Vector3, Vector3>[] GetBasePolygon()
     {
         var lines = new List<Tuple<Vector3, Vector3>>();
