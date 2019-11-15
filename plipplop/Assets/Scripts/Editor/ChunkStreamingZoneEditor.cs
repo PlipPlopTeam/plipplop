@@ -7,8 +7,6 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class ChunkStreamingZoneEditor : BaseEditor
 {
-    readonly GUIStyle redStyle = GUIStyle.none;
-
     private void OnSceneGUI()
     {
         EditorGUI.BeginChangeCheck();
@@ -36,10 +34,6 @@ public class ChunkStreamingZoneEditor : BaseEditor
         // Handles
         List<int> toRemove = new List<int>();
         for (int i = 0; i < points.Length; i++) {
-            var op = points[i];
-            Handles.color = Color.white;
-            points[i] = Handles.FreeMoveHandle(points[i], Quaternion.Euler(Vector3.up), 3f, Vector3.zero, Handles.ConeHandleCap);
-            points[i].y = 0f;
 
             // Angle limit
             var previousPoint = i == 0 ? points[points.Length - 1] : points[i - 1];
@@ -50,8 +44,26 @@ public class ChunkStreamingZoneEditor : BaseEditor
             var angle = Vector2.SignedAngle(new Vector2(a.x, a.z), new Vector2(b.x, b.z));
             var wrongAngle = angle < 0;
 
-            if (angle < 0) {
-                points[i] = op;
+            var op = points[i];
+            Handles.color = wrongAngle ? Color.red : Color.white;
+            points[i] = Handles.FreeMoveHandle(points[i], Quaternion.Euler(Vector3.up), 3f, Vector3.zero, Handles.ConeHandleCap);
+            points[i].y = 0f;
+
+            if (points[i] != op) {
+                Handles.color = Color.magenta;
+                Handles.DrawDottedLine(previousPoint, nextPoint, 4f);
+            }
+            if (wrongAngle && points[i] != op) {
+                var distanceFromAToPoint = Vector3.Distance(previousPoint, points[i]);
+                var totalDistanceToPoint = distanceFromAToPoint + Vector3.Distance(nextPoint, points[i]);
+
+                var percentageDistanceFromATP = distanceFromAToPoint / totalDistanceToPoint;
+
+                var distanceFromAToB = Vector3.Distance(previousPoint, nextPoint);
+                var newDistance = distanceFromAToB * percentageDistanceFromATP;
+                var pointDirection = (nextPoint - previousPoint);
+
+                points[i] = previousPoint + pointDirection.normalized * newDistance;
                 points[i].y = 0f;
             }
 
