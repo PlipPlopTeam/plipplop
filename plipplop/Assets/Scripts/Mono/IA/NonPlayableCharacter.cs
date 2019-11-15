@@ -21,12 +21,16 @@ public class NonPlayableCharacter : StateManager
 	private Transform objectToCollect;
 	private Chair chair;
 
-	public Skeleton.Socket[] slots;
+	public Dictionary<Clothes.Slot, Clothes> clothes = new Dictionary<Clothes.Slot, Clothes>();
 
 	[Header("Settings")]
 	public float strength = 1f;
 	[Range(0f, 100f)] public float boredom = 0f;
 	float assHeightWhenSitted = 0.51f;
+
+	public ClothesData[] headStuff;
+	public ClothesData[] torsoStuff;
+	public ClothesData[] legsStuff;
 
 	void Awake()
 	{
@@ -36,12 +40,34 @@ public class NonPlayableCharacter : StateManager
 		agent = GetComponent<NavMeshAgent>();
 		animator = GetComponentInChildren<Animator>();
 		range = GetComponent<Range>();
-
 		emo = GetComponent<EmotionRenderer>();
 		emo.Load();
-
 		agentMovement = GetComponent<AgentMovement>();
 		agentMovement.animator = animator;
+	}
+
+	public override void Start()
+	{
+		base.Start();
+
+		foreach (Clothes.Slot suit in (Clothes.Slot[]) Clothes.Slot.GetValues(typeof(Clothes.Slot)))
+			clothes.Add(suit, null);
+
+		Equip(headStuff[Random.Range(0, headStuff.Length)]);
+		Equip(torsoStuff[Random.Range(0, torsoStuff.Length)]);
+		Equip(legsStuff[Random.Range(0, legsStuff.Length)]);
+	}
+
+	public void Equip(ClothesData clothData, bool change = true)
+	{
+		Clothes c = clothes[clothData.slot];
+		if(c != null && change) c.Pulverize();
+
+		GameObject clothObject = new GameObject();
+		clothObject.name = clothData.name;
+		c = clothObject.AddComponent<Clothes>();
+		c.Create(clothData, skeleton);
+		clothes[clothData.slot] = c;
 	}
 
 	public bool IsCarrying(Transform t)
@@ -58,7 +84,7 @@ public class NonPlayableCharacter : StateManager
 
 	public void Carrying(Transform t)
 	{
-		t.position = (skeleton.rightHandBone.position + skeleton.leftHandBone.position)/2f;
+		t.position = (skeleton.GetSlotByName("RightHand").GetPosition() + skeleton.GetSlotByName("LeftHand").GetPosition())/2f;
 		t.forward = transform.forward;
 	}
 
@@ -136,9 +162,9 @@ public class NonPlayableCharacter : StateManager
 	}
 	public void Sit(Chair c, Vector3 offset)
 	{
+		chair = c;
 		agentMovement.Stop();
 		agent.enabled = false;
-
 		transform.SetParent(c.transform);
 		transform.localPosition = new Vector3(offset.x, offset.y - assHeightWhenSitted, offset.z);
 

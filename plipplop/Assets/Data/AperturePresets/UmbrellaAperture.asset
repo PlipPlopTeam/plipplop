@@ -22,33 +22,33 @@ MonoBehaviour:
   - property: additionalAngle
     isOverriden: 0
   - property: distance
-    isOverriden: 0
+    isOverriden: 1
   - property: cameraRotateAroundSensivity
     isOverriden: 0
   - property: cameraRotateAboveSensivity
     isOverriden: 0
   - property: fovLerp
-    isOverriden: 0
+    isOverriden: 1
   - property: lateralFollowLerp
     isOverriden: 0
   - property: longitudinalFollowLerp
-    isOverriden: 0
+    isOverriden: 1
   - property: verticalFollowLerp
-    isOverriden: 0
+    isOverriden: 1
   - property: rotationSpeed
     isOverriden: 0
   - property: lookAtLerp
-    isOverriden: 0
+    isOverriden: 1
   - property: cameraResetSpeed
-    isOverriden: 0
+    isOverriden: 1
   - property: speedEffectMultiplier
     isOverriden: 0
   - property: catchUpSpeedMultiplier
     isOverriden: 0
   - property: angleIncrementOnSpeed
-    isOverriden: 0
+    isOverriden: 1
   - property: maximumCatchUpSpeed
-    isOverriden: 0
+    isOverriden: 1
   - property: absoluteBoundaries
     isOverriden: 0
   - property: constraintToTarget
@@ -57,30 +57,30 @@ MonoBehaviour:
     isOverriden: 0
   - property: cameraResetAfterTime
     isOverriden: 0
-  fallback: {fileID: 11400000, guid: df6437ca0d9bc60498aeb18a4dd62019, type: 2}
-  canBeControlled: 1
-  fieldOfView: 75
-  heightOffset: 0
-  additionalAngle: 20
+  fallback: {fileID: 11400000, guid: 08166ba5a773ad646aef31a961bf98ed, type: 2}
+  canBeControlled: 0
+  fieldOfView: 55
+  heightOffset: 2
+  additionalAngle: 25
   distance:
-    min: 0
-    max: 0
-  cameraRotateAroundSensivity: 4
-  cameraRotateAboveSensivity: 2
-  fovLerp: 1
-  lateralFollowLerp: 1
-  longitudinalFollowLerp: 1
-  verticalFollowLerp: 10
-  rotationSpeed: 1
-  lookAtLerp: 4
-  cameraResetSpeed: 3
-  cameraResetAfterTime: 2
-  speedEffectMultiplier: 1
+    min: 10
+    max: 30
+  cameraRotateAroundSensivity: 90
+  cameraRotateAboveSensivity: 20
+  fovLerp: 80
+  lateralFollowLerp: 3
+  longitudinalFollowLerp: 30
+  verticalFollowLerp: 60
+  rotationSpeed: 3
+  lookAtLerp: 60
+  cameraResetSpeed: 60
+  cameraResetAfterTime: 1.5
+  speedEffectMultiplier: 2
   catchUpSpeedMultiplier: 1
-  angleIncrementOnSpeed: 10
-  maximumCatchUpSpeed: 10
+  angleIncrementOnSpeed: 20
+  maximumCatchUpSpeed: 50
   absoluteBoundaries:
-    min: 2
+    min: 5
     max: 10
   constraintToTarget: 0
   targetConstraintLocalOffset: {x: 0, y: 0, z: 0}

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Valuable : MonoBehaviour
+public class Valuable : MonoBehaviour, Noticeable
 {
     [HideInInspector] public Vector3 origin;
     
@@ -12,6 +12,19 @@ public class Valuable : MonoBehaviour
     void Start()
     {
         origin = transform.position;
+    }
+
+    public void Notice()
+    {
+        // Does things..
+    }
+    public bool IsVisible()
+    {
+        return !hidden;
+    }
+    public void SetVisible(bool value)
+    {
+        hidden = value;
     }
 
     public bool HasMoved()

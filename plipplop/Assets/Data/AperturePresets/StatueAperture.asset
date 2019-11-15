@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a3262d062e5d48468ed5b87bf144ebc, type: 3}
+  m_Name: StatueAperture
+  m_EditorClassIdentifier: 
+  overrides:
+  - property: canBeControlled
+    isOverriden: 0
+  - property: fieldOfView
+    isOverriden: 1
+  - property: heightOffset
+    isOverriden: 1
+  - property: additionalAngle
+    isOverriden: 1
+  - property: distance
+    isOverriden: 0
+  - property: cameraRotateAroundSensivity
+    isOverriden: 0
+  - property: cameraRotateAboveSensivity
+    isOverriden: 0
+  - property: fovLerp
+    isOverriden: 0
+  - property: lateralFollowLerp
+    isOverriden: 0
+  - property: longitudinalFollowLerp
+    isOverriden: 0
+  - property: verticalFollowLerp
+    isOverriden: 0
+  - property: rotationSpeed
+    isOverriden: 0
+  - property: lookAtLerp
+    isOverriden: 0
+  - property: cameraResetSpeed
+    isOverriden: 0
+  - property: speedEffectMultiplier
+    isOverriden: 0
+  - property: catchUpSpeedMultiplier
+    isOverriden: 0
+  - property: angleIncrementOnSpeed
+    isOverriden: 0
+  - property: maximumCatchUpSpeed
+    isOverriden: 0
+  - property: absoluteBoundaries
+    isOverriden: 0
+  - property: constraintToTarget
+    isOverriden: 0
+  - property: targetConstraintLocalOffset
+    isOverriden: 0
+  - property: cameraResetAfterTime
+    isOverriden: 0
+  fallback: {fileID: 11400000, guid: 8cdba5ee6a6f1b44c8bc8249afd47e90, type: 2}
+  canBeControlled: 1
+  fieldOfView: 65
+  heightOffset: 2
+  additionalAngle: 20
+  distance:
+    min: 8
+    max: 10
+  cameraRotateAroundSensivity: 90
+  cameraRotateAboveSensivity: 20
+  fovLerp: 20
+  lateralFollowLerp: 20
+  longitudinalFollowLerp: 30
+  verticalFollowLerp: 2
+  rotationSpeed: 3
+  lookAtLerp: 20
+  cameraResetSpeed: 5
+  cameraResetAfterTime: 3
+  speedEffectMultiplier: 1
+  catchUpSpeedMultiplier: 1
+  angleIncrementOnSpeed: 15
+  maximumCatchUpSpeed: 10
+  absoluteBoundaries:
+    min: 5
+    max: 10
+  constraintToTarget: 0
+  targetConstraintLocalOffset: {x: 0, y: 0, z: 0}

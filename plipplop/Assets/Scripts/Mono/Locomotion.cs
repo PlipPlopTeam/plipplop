@@ -73,13 +73,14 @@ public class Locomotion : MonoBehaviour
 
     public void Move(Vector3 direction)
     {
-        var currentVelocity = rigidbody.velocity;
-
-        if (rigidbody.GetHorizontalVelocity().magnitude > 1f) {
-            locomotionAnimation.isWalking = true;
-        }
-        else {
-            locomotionAnimation.isWalking = false;
+        var currentVelocity = Vector3.zero;
+        if(rigidbody != null)
+        {
+            currentVelocity = rigidbody.velocity;
+            if(rigidbody.GetHorizontalVelocity().magnitude > 1f)
+                locomotionAnimation.isWalking = true;
+            else
+                locomotionAnimation.isWalking = false;
         }
         
         // Brutal half turn
@@ -100,45 +101,50 @@ public class Locomotion : MonoBehaviour
 
         float controlAmount = IsGrounded() ? 1f : isImmerged ? preset.waterControl : preset.airControl / 100f;
 
-        // Making a virtual stick to avoid the player to stop in the air when stick reaches 0 magnitude
-        Vector3 virtualStick = Vector3.Lerp(
-            Vector3.Scale(Vector3.one - Vector3.up, Game.i.aperture.cam.transform.InverseTransformDirection(rigidbody.velocity).normalized),
-            direction,
-            IsGrounded() ? 1f : direction.magnitude
-        ).normalized;
 
-        Vector3 velocity =
-            currentSpeedToDistribute * (
-                virtualStick.z * Game.i.aperture.Forward() +
-                virtualStick.x * Game.i.aperture.Right()
-            )
-            + Vector3.up * rigidbody.velocity.y
-        ;
+        if(rigidbody != null)
+        {
+            // Making a virtual stick to avoid the player to stop in the air when stick reaches 0 magnitude
+            Vector3 virtualStick = Vector3.Lerp(
+                Vector3.Scale(Vector3.one - Vector3.up, Game.i.aperture.cam.transform.InverseTransformDirection(rigidbody.velocity).normalized),
+                direction,
+                IsGrounded() ? 1f : direction.magnitude
+            ).normalized;
 
-        // Prevents brutal air stops
-        float anyControlAmount = (IsGrounded() || isImmerged) ? controlAmount : controlAmount * direction.magnitude;
-        velocity.x = Mathf.Lerp(rigidbody.velocity.x, velocity.x, anyControlAmount);
-        velocity.z = Mathf.Lerp(rigidbody.velocity.z, velocity.z, anyControlAmount);
+            Vector3 velocity =
+                currentSpeedToDistribute * (
+                    virtualStick.z * Game.i.aperture.Forward() +
+                    virtualStick.x * Game.i.aperture.Right()
+                )
+                + Vector3.up * rigidbody.velocity.y
+            ;
 
-        // Apply changes
-        rigidbody.velocity = velocity;
+            // Prevents brutal air stops
+            float anyControlAmount = (IsGrounded() || isImmerged) ? controlAmount : controlAmount * direction.magnitude;
+            velocity.x = Mathf.Lerp(rigidbody.velocity.x, velocity.x, anyControlAmount);
+            velocity.z = Mathf.Lerp(rigidbody.velocity.z, velocity.z, anyControlAmount);
 
-        // Save last direction
-        lastDirection = direction;
+            // Apply changes
+            rigidbody.velocity = velocity;
 
-        // Animation
-        if ((isImmerged || IsGrounded()) && rigidbody.velocity.normalized.magnitude > 0) {
-            transform.forward = Vector3.Lerp(
-                Vector3.Scale(Vector3.one - Vector3.up, transform.forward),
-                Vector3.Scale(Vector3.one - Vector3.up, rigidbody.velocity.normalized),
-                Time.fixedDeltaTime * lookForwardSpeed
-            );
+            // Save last direction
+            lastDirection = direction;
+
+            // Animation
+            if ((isImmerged || IsGrounded()) && rigidbody.velocity.normalized.magnitude > 0) {
+                transform.forward = Vector3.Lerp(
+                    Vector3.Scale(Vector3.one - Vector3.up, transform.forward),
+                    Vector3.Scale(Vector3.one - Vector3.up, rigidbody.velocity.normalized),
+                    Time.fixedDeltaTime * lookForwardSpeed
+                );
+            }
         }
     }
 
     public void Jump()
     {
-        if (!hasJumped) {
+        if(!hasJumped) 
+        {
             rigidbody.AddForce(Vector3.up * preset.jump * (parentController.gravityMultiplier / 100f), ForceMode.Acceleration);
             hasJumped = true;
         }
@@ -151,7 +157,7 @@ public class Locomotion : MonoBehaviour
         {
             if (!IsMe(h.transform) && !h.collider.isTrigger) {
                 if (h.normal.y >= 1 - (preset.maxWalkableSteepness / 100f)) {
-                    if (rigidbody.velocity.y < 0f) 
+                    if (rigidbody != null && rigidbody.velocity.y < 0f) 
                         hasJumped = false; // Put HasJumped to false only if not grounded and falling
                     return true;
                 }

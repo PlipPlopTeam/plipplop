@@ -13,7 +13,7 @@ namespace NPC
             NonPlayableCharacter npc = (NonPlayableCharacter)state;
 			if(npc != null && npc.valuable != null)
 			{
-				npc.valuable.transform.position = (npc.skeleton.rightHandBone.position + npc.skeleton.leftHandBone.position)/2f + npc.transform.forward;
+				npc.valuable.transform.position = npc.skeleton.GetCenterOfHands();
                 npc.agentMovement.ResetSpeed();
                 npc.animator.SetBool("Carrying", false);
             }

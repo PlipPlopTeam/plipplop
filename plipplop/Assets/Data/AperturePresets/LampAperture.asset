@@ -10,25 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a3262d062e5d48468ed5b87bf144ebc, type: 3}
-  m_Name: GolfCartAperture
+  m_Name: LampAperture
   m_EditorClassIdentifier: 
   overrides:
   - property: canBeControlled
-    isOverriden: 1
+    isOverriden: 0
   - property: fieldOfView
-    isOverriden: 0
+    isOverriden: 1
   - property: heightOffset
-    isOverriden: 0
+    isOverriden: 1
   - property: additionalAngle
-    isOverriden: 0
+    isOverriden: 1
   - property: distance
-    isOverriden: 0
+    isOverriden: 1
   - property: cameraRotateAroundSensivity
-    isOverriden: 0
+    isOverriden: 1
   - property: cameraRotateAboveSensivity
     isOverriden: 0
   - property: fovLerp
-    isOverriden: 0
+    isOverriden: 1
   - property: lateralFollowLerp
     isOverriden: 0
   - property: longitudinalFollowLerp
@@ -50,37 +50,37 @@ MonoBehaviour:
   - property: maximumCatchUpSpeed
     isOverriden: 0
   - property: absoluteBoundaries
-    isOverriden: 0
+    isOverriden: 1
   - property: constraintToTarget
     isOverriden: 0
   - property: targetConstraintLocalOffset
     isOverriden: 0
   - property: cameraResetAfterTime
-    isOverriden: 0
-  fallback: {fileID: 11400000, guid: c0f4fe5b7ecb977478ae8abf7109258b, type: 2}
-  canBeControlled: 0
-  fieldOfView: 65
+    isOverriden: 1
+  fallback: {fileID: 11400000, guid: df6437ca0d9bc60498aeb18a4dd62019, type: 2}
+  canBeControlled: 1
+  fieldOfView: 40
   heightOffset: 1
   additionalAngle: 20
   distance:
-    min: 7
-    max: 8
-  cameraRotateAroundSensivity: 4
-  cameraRotateAboveSensivity: 2
-  fovLerp: 3
-  lateralFollowLerp: 20
+    min: 1
+    max: 3
+  cameraRotateAroundSensivity: 60
+  cameraRotateAboveSensivity: 20
+  fovLerp: 10
+  lateralFollowLerp: 40
   longitudinalFollowLerp: 6
-  verticalFollowLerp: 10
-  rotationSpeed: 5
-  lookAtLerp: 10
-  cameraResetSpeed: 3
-  cameraResetAfterTime: 2
+  verticalFollowLerp: 5
+  rotationSpeed: 3
+  lookAtLerp: 7
+  cameraResetSpeed: 5
+  cameraResetAfterTime: 4
   speedEffectMultiplier: 1
   catchUpSpeedMultiplier: 1
-  angleIncrementOnSpeed: 40
+  angleIncrementOnSpeed: 30
   maximumCatchUpSpeed: 10
   absoluteBoundaries:
-    min: 5
-    max: 8
+    min: 3
+    max: 10
   constraintToTarget: 0
   targetConstraintLocalOffset: {x: 0, y: 0, z: 0}
