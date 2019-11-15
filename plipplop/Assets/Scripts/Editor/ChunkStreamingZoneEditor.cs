@@ -48,11 +48,6 @@ public class ChunkStreamingZoneEditor : BaseEditor
             var angle = Vector2.SignedAngle(new Vector2(a.x, a.z), new Vector2(b.x, b.z));
             var wrongAngle = angle < 0;
 
-
-            if (points[i] != op) {
-                Handles.color = Color.magenta;
-                Handles.DrawDottedLine(previousPoint, nextPoint, 4f);
-            }
             if (wrongAngle && points[i] != op) {
                 var distanceFromAToPoint = Vector3.Distance(previousPoint, points[i]);
                 var totalDistanceToPoint = distanceFromAToPoint + Vector3.Distance(nextPoint, points[i]);
