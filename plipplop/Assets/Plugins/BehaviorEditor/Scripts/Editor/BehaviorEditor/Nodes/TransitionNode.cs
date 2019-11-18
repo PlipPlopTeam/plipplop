@@ -89,15 +89,15 @@ namespace PP.Behavior
 				}
             }
             */
-            
         }
 
         public override void DrawCurve(Node b)
         {
             Rect rect = b.windowRect;
-            rect.y += b.windowRect.height * .5f;
-            rect.width = 1;
-            rect.height = 1;
+            //rect.y += b.windowRect.height * .5f;
+            //rect.position = new Vector2(rect.position.x - rect.size.x, rect.position.y);
+            //rect.width = 1;
+            //rect.height = 1;
 
             Node e = BehaviorEditor.settings.currentGraph.GetNodeWithIndex(b.enterNode);
             if (e == null)
@@ -111,7 +111,7 @@ namespace PP.Behavior
                     targetColor = Color.grey;
 
                 Rect r = e.windowRect;
-                BehaviorEditor.DrawNodeCurve(r, rect, true, targetColor);
+                BehaviorEditor.DrawNodeCurve(r, rect, true, Color.white);
             }
 
             if (b.isDuplicate)
@@ -127,9 +127,9 @@ namespace PP.Behavior
                 else
                 {
                     rect = b.windowRect;
-                    rect.x += rect.width;
+                    //rect.x += rect.width;
                     Rect endRect = t.windowRect;
-                    endRect.x -= endRect.width * .5f;
+                    //endRect.x -= endRect.width * .5f;
 
                     Color targetColor = Color.white;
 
@@ -143,8 +143,8 @@ namespace PP.Behavior
 						else targetColor = Color.white;
 					}
 
-                    rect.position = new Vector2(rect.position.x - rect.size.x, rect.position.y);
-                    BehaviorEditor.DrawNodeCurve(rect, endRect, false, targetColor);
+                    //rect.position = new Vector2(rect.position.x - rect.size.x, rect.position.y);
+                    BehaviorEditor.DrawNodeCurve(rect, endRect, false, Color.white);
                 }
 
             }
