@@ -11,6 +11,7 @@ namespace PP.Behavior
         Vector3 mousePosition;
         bool clickedOnWindow;
         Node selectedNode;
+		float zoom = 1f;
 
         public static Settings settings;
         int transitFromId;
@@ -139,29 +140,23 @@ namespace PP.Behavior
                 for (int i = 0; i < settings.currentGraph.nodes.Count; i++)
                 {
 					Node b = settings.currentGraph.nodes[i];
-
 					if (b.drawNode is StateNode)
 					{
 						if (currentStateManager != null && b.stateRef.currentState == currentStateManager.currentState)
 						{
-							b.windowRect = GUI.Window(i, b.windowRect,
-								DrawNodeWindow, b.windowTitle,activeStyle);
+							b.windowRect = GUI.Window(i, b.windowRect, DrawNodeWindow, b.windowTitle,activeStyle);
 						}
 						else
 						{
-							b.windowRect = GUI.Window(i, b.windowRect,
-								DrawNodeWindow, b.windowTitle);
+							b.windowRect = GUI.Window(i, b.windowRect, DrawNodeWindow, b.windowTitle);
 						}
 					}
 					else
 					{
-						b.windowRect = GUI.Window(i, b.windowRect,
-							DrawNodeWindow, b.windowTitle);
+						b.windowRect = GUI.Window(i, b.windowRect, DrawNodeWindow, b.windowTitle);
 					}
                 }
-
                 foreach (Node n in settings.currentGraph.nodes) n.DrawCurve();
-
             }
 			EndWindows();
 			GUILayout.EndArea();
