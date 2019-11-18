@@ -42,11 +42,16 @@ public class ControllerSensor : MonoBehaviour
         float bestMatch = Mathf.Infinity;
 
         foreach (var c in controllers) {
-            var position = Game.i.aperture.cam.WorldToScreenPoint(c.transform.position);
-            var dist = Vector3.Distance(position, new Vector3(Screen.width/2f, Screen.height/2f, 0f));
-            if (dist < bestMatch) {
-                bestMatch = dist;
-                focused = c;
+            try {
+                var position = Game.i.aperture.cam.WorldToScreenPoint(c.transform.position);
+                var dist = Vector3.Distance(position, new Vector3(Screen.width / 2f, Screen.height / 2f, 0f));
+                if (dist < bestMatch) {
+                    bestMatch = dist;
+                    focused = c;
+                }
+            }
+            catch (MissingReferenceException e) {
+                Debug.LogError("A controller was destroyed while at possessing range, which should never happen. Check the level streaming chunks and make sure neighbors are properly configured");
             }
         }
 

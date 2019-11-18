@@ -8,11 +8,13 @@ public class Game : MonoBehaviour
     public Library library;
     public Brain player;
     public Mapping mapping;
+    public Switches switches;
     public CheatCodeListener cheatCodeListener;
     public ChunkLoader chunkLoader;
     [HideInInspector] public Aperture aperture;
 
     static public Game i;
+    static public Switches s;
 
     private void Awake()
     {
@@ -26,6 +28,7 @@ public class Game : MonoBehaviour
         }
 
         i = this;
+        s = switches;
 
         aperture = new Aperture();
         mapping = Instantiate<Mapping>(mapping);
