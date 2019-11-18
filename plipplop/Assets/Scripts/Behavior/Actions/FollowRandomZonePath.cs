@@ -4,7 +4,7 @@ using PP;
 namespace NPC
 {
 	[CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/FollowRandomZonePath")]
-	public class FollowRandomZonePath : StateActions
+	public class FollowRandomZonePath : Action
 	{
 		public override void Execute(StateManager state)
 		{

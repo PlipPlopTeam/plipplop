@@ -6,7 +6,7 @@ using PP;
 namespace NPC
 {
     [CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/GoToValuableOriginPosition")]
-    public class GoToValuableOriginPosition : StateActions
+    public class GoToValuableOriginPosition : Action
     {
         public override void Execute(StateManager state)
         {

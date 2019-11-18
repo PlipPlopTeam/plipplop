@@ -7,10 +7,10 @@ namespace PP
     [CreateAssetMenu(menuName = "Behavior/State")]
     public class State : ScriptableObject
     {
-    	public StateActions[] onFixed;
-        public StateActions[] onUpdate;
-        public StateActions[] onEnter;
-        public StateActions[] onExit;
+    	public Action[] onFixed;
+        public Action[] onUpdate;
+        public Action[] onEnter;
+        public Action[] onExit;
 
         public int idCount;
 		[SerializeField]
@@ -63,7 +63,7 @@ namespace PP
             }
         }
         
-        public void ExecuteActions(StateManager states, StateActions[] l)
+        public void ExecuteActions(StateManager states, Action[] l)
         {
             for (int i = 0; i < l.Length; i++)
             {
