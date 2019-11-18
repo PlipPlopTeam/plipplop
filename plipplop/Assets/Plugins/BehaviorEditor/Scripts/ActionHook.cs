@@ -11,10 +11,10 @@ namespace PP
 
 		void FixedUpdate()
 		{
-			if (fixedUpdateActions == null)
+			if(fixedUpdateActions == null)
 				return;
 
-			for (int i = 0; i < fixedUpdateActions.Length; i++)
+			for(int i = 0; i < fixedUpdateActions.Length; i++)
 			{
 				fixedUpdateActions[i].Execute();
 			}
@@ -22,10 +22,10 @@ namespace PP
 
 		void Update()
         {
-			if (updateActions == null)
+			if(updateActions == null)
 				return;
 
-            for (int i = 0; i < updateActions.Length; i++)
+            for(int i = 0; i < updateActions.Length; i++)
             {
                 updateActions[i].Execute();
             }

@@ -6,7 +6,7 @@ using PP;
 namespace NPC
 {
     [CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/Set Animator Boolean")]
-    public class SetAnimatorBool : StateActions
+    public class SetAnimatorBool : Action
     {
         public string boolName;
         public bool boolValue;

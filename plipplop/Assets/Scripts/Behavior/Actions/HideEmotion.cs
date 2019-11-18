@@ -6,7 +6,7 @@ using PP;
 namespace NPC
 {
     [CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/HideEmotion")]
-    public class HideEmotion : StateActions
+    public class HideEmotion : Action
     {
         public override void Execute(StateManager state)
         {

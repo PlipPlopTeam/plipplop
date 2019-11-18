@@ -6,7 +6,7 @@ using PP;
 namespace NPC
 {
 	[CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/GoToNextPathPoint")]
-	public class GoToNextPoint : StateActions
+	public class GoToNextPoint : Action
 	{
 		public bool overrideMovement = false;
 		public AgentMovement.Settings overrideMovementSettings;

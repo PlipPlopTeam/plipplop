@@ -4,7 +4,7 @@ using PP;
 namespace NPC
 {
 	[CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/LeaveActivity")]
-	public class LeaveActivity : StateActions
+	public class LeaveActivity : Action
 	{
 		public override void Execute(StateManager state)
 		{

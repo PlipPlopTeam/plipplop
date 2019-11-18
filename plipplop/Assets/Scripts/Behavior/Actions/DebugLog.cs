@@ -4,7 +4,7 @@ using UnityEngine;
 using PP;
 
 [CreateAssetMenu(menuName = "Behavior/Action/DebugLogString")]
-public class DebugLogString : StateActions
+public class DebugLogString : Action
 {
     public string logString = "LOG";
     public override void Execute(StateManager state)

@@ -6,7 +6,7 @@ using PP;
 namespace NPC
 {
     [CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/PickUp")]
-    public class PickUp : StateActions
+    public class PickUp : Action
     {
         public override void Execute(StateManager state)
         {
