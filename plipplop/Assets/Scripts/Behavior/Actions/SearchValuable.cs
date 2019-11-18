@@ -6,7 +6,7 @@ using PP;
 namespace NPC
 {
 	[CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/SearchValuable")]
-	public class SearchValuable : StateActions
+	public class SearchValuable : Action
 	{
 		public override void Execute(StateManager state)
 		{

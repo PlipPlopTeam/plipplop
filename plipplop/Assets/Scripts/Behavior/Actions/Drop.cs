@@ -6,7 +6,7 @@ using PP;
 namespace NPC
 {
     [CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/Drop")]
-    public class Drop : StateActions
+    public class Drop : Action
     {
         public override void Execute(StateManager state)
         {

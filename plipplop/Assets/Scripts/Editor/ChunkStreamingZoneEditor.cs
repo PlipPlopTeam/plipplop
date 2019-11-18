@@ -75,16 +75,18 @@ public class ChunkStreamingZoneEditor : BaseEditor
             }
 
             // Remove button
-            Handles.color = Color.red;
-            if (Handles.Button(
-                points[i] + Camera.current.transform.right * 3f,
-                Quaternion.LookRotation(Camera.current.transform.forward, Camera.current.transform.up),
-                1f,
-                1f,
-                Handles.DotHandleCap
-            )) {
-                toRemove.Add(i);
-            };
+            if (points.Length > 3) {
+                Handles.color = Color.red;
+                if (Handles.Button(
+                    points[i] + Camera.current.transform.right * 3f,
+                    Quaternion.LookRotation(Camera.current.transform.forward, Camera.current.transform.up),
+                    1f,
+                    1f,
+                    Handles.DotHandleCap
+                )) {
+                    toRemove.Add(i);
+                };
+            }
         }
 
         foreach(var index in toRemove) {
@@ -140,7 +142,6 @@ public class ChunkStreamingZoneEditor : BaseEditor
             var id = serializedObject.FindProperty("identifier");
             id.stringValue = EditorGUILayout.TextField(id.stringValue, GUILayout.Height(fieldsHeight));
             if (id.stringValue.Length < 1) id.stringValue = "X";
-            id.stringValue = id.stringValue.Substring(0, 1);
             GUILayout.EndHorizontal();
 
             serializedObject.ApplyModifiedProperties();
@@ -249,7 +250,7 @@ public class ChunkStreamingZoneEditor : BaseEditor
         return delegate {
             if (!csz.chunk) GUI.color = Color.red;
             GUILayout.BeginHorizontal(options.ToArray());
-            GUILayout.Label(new GUIContent(buttonSpace + "Chunk scene", icon), noBoldTitle, GUILayout.Height(fieldsHeight), GUILayout.Width(Screen.width*0.3f));
+            GUILayout.Label(new GUIContent(buttonSpace + "Chunk", icon), noBoldTitle, GUILayout.Height(fieldsHeight), GUILayout.Width(Screen.width*0.3f));
             serializedObject.FindProperty("chunk").objectReferenceValue = EditorGUILayout.ObjectField(((ChunkStreamingZone)target).chunk, typeof(SceneAsset), allowSceneObjects: true, GUILayout.Height(fieldsHeight));
             serializedObject.ApplyModifiedProperties();
             GUILayout.EndHorizontal();

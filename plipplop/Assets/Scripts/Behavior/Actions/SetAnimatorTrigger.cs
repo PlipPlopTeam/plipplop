@@ -6,7 +6,7 @@ using PP;
 namespace NPC
 {
     [CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/Set Animator Trigger")]
-    public class SetAnimatorTrigger : StateActions
+    public class SetAnimatorTrigger : Action
     {
         public string triggerName;
 

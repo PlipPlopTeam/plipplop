@@ -6,6 +6,6 @@ namespace PP
 {
     public abstract class Action : ScriptableObject
     {
-        public abstract void Execute();
+        public abstract void Execute(StateManager states = null);
     }
 }
