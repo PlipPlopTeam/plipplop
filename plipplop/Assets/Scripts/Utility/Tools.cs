@@ -17,7 +17,12 @@ public static class Tools
 
     public static void AddUnique<T>(this List<T> list, T element)
     {
-        list.RemoveAll(o => !EqualityComparer<T>.Default.Equals(element, o));
+        if (typeof(T) is object) {
+            list.RemoveAll(o => ReferenceEquals(o, element));
+        }
+        else {
+            list.RemoveAll(o => !EqualityComparer<T>.Default.Equals(element, o));
+        }
         list.Add(element);
     }
 }
