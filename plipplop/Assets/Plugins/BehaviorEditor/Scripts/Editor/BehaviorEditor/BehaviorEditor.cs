@@ -135,7 +135,6 @@ namespace PP.Behavior
             settings.currentGraph = (BehaviorGraph)EditorGUILayout.ObjectField(settings.currentGraph, typeof(BehaviorGraph), false, GUILayout.Width(200));
 			if (settings.currentGraph != null)
             {
-                foreach (Node n in settings.currentGraph.nodes) n.DrawCurve();
 
                 for (int i = 0; i < settings.currentGraph.nodes.Count; i++)
                 {
@@ -160,6 +159,9 @@ namespace PP.Behavior
 							DrawNodeWindow, b.windowTitle);
 					}
                 }
+
+                foreach (Node n in settings.currentGraph.nodes) n.DrawCurve();
+
             }
 			EndWindows();
 			GUILayout.EndArea();
@@ -396,79 +398,47 @@ namespace PP.Behavior
 		#region Helper Methods
 		public static void DrawNodeCurve(Rect start, Rect end, bool left, Color curveColor)
         {
-			Vector3 startPos = Vector3.zero;
+			Vector3 startPos = GetBestArrowPosition(start, end);
+			Vector3 endPos = GetBestArrowPosition(end, start);
 			Color c = Handles.color;
-			Handles.Label(start.position, "0");
-			if(start.center.x >= end.center.x) // RIGHT
-			{
-				if(start.center.y >= end.center.y) // RIGHT
-					startPos = new Vector3(start.position.x, start.position.y, 0f);
-				else
-					startPos = new Vector3(start.position.x, start.position.y + start.size.y, 0f);
-			}
-			else // LEFT
-			{
-				if(start.center.y >= end.center.y) // RIGHT
-					startPos = new Vector3(start.position.x + start.size.x, start.position.y, 0f);
-				else
-					startPos = new Vector3(start.position.x + start.size.x, start.position.y + start.size.y, 0f);
-			}
+			c = curveColor;
 
-			Vector3 endPos = Vector3.zero;
-			if(end.center.x >= start.center.x) // RIGHT
-			{
-				if(end.center.y >= start.center.y) // RIGHT
-				{
-					c = Color.blue;
-					endPos = new Vector3(end.position.x + end.size.x/2, end.position.y, 0f);
-				}
-				else
-				{
-					c = Color.green;
-					endPos = new Vector3(end.position.x + end.size.x/2, end.position.y + end.size.y, 0f);
-				}
-			}
-			else // LEFT
-			{
-				if(end.center.y >= start.center.y) // RIGHT
-				{
-					c = Color.red;
-					endPos = new Vector3(end.position.x + end.size.x*1.5f, end.position.y, 0f);
-				}
-				else
-				{
-					c = Color.black;
-					endPos = new Vector3(end.position.x + end.size.x*1.5f, end.position.y + end.size.y, 0f);
-				}
-			}
-
-			Handles.color = c;
-
-            //Vector3 endPos = new Vector3(end.x + (end.width * .5f), end.y + (end.height * .5f), 0);
-            //Vector3 startTan = startPos + Vector3.right * 50;
-            //Vector3 endTan = endPos + Vector3.left * 50;
-
-			/*
-            Color shadow = new Color(0, 0, 0, 1);
-            for (int i = 0; i < 1; i++)
-            {
-                Handles.DrawBezier(startPos, endPos, startTan, endTan, shadow, null, 4);
-
-            }
-			*/
 			Vector3 dir = (startPos - endPos).normalized;
 			Vector3 right = Quaternion.AngleAxis(-90, Vector3.forward) * dir;
-
 			Handles.DrawAAConvexPolygon(new Vector3[] {startPos - right * 2, startPos + right * 2, endPos - right * 2, endPos + right * 2} );
-
-			DrawTriangle(endPos, -dir, 10, c, true);
-
-			//Handles.DrawLine(startPos, endPos);
-			//Handles.DrawCube(0, endPos, Quaternion.identity, 10f);
-            //Handles.DrawBezier(startPos, endPos, startTan, endTan, curveColor, null, 10);
+			Vector3 center = (startPos + endPos) * 0.5f;
+			DrawTriangle(center, -dir, 10, c);
         }
 
-		public static void DrawTriangle(Vector3 position, Vector3 direction, float size, Color color, bool pivotOnPointyEdge)
+		public static Vector3 GetBestArrowPosition(Rect start, Rect end)
+		{
+			float posx = 0;
+			float posy = 0;
+			// IS INSIDE WIDTH
+			if(start.center.x <= end.center.x + end.width/2 && start.center.x >= end.center.x - end.width/2)
+			{
+				posx = start.center.x;
+			}
+			else
+			{
+				if(start.center.x >= end.center.x + end.width/2) posx = start.position.x;
+				else if(start.center.x <= end.center.x - end.width/2) posx = start.position.x + start.width;
+			}
+
+			// IS INSIDE HEIGHT
+			if(start.center.y <= end.center.y + end.height/2 && start.center.y >= end.center.y - end.height/2)
+			{
+				posy = start.center.y;
+			}
+			else
+			{
+				if(start.center.y >= end.center.y + end.height/2) posy = start.position.y;
+				else if(start.center.y <= end.center.y - end.height/2) posy = start.position.y + start.height;
+			}
+			return new Vector3(posx, posy, 0f);
+		}
+
+		public static void DrawTriangle(Vector3 position, Vector3 direction, float size, Color color, bool pivotOnPointyEdge = false)
 		{
 			Handles.color = color;
 			Vector3 right = Quaternion.AngleAxis(-90, Vector3.forward) * direction;
