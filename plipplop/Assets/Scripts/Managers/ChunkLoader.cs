@@ -12,6 +12,8 @@ public class ChunkLoader
 
     List<ChunkProp> props = new List<ChunkProp>();
 
+    List<FadedApparition> fadedProps = new List<FadedApparition>();
+    List<Persistent> persistentProps = new List<Persistent>();
 
     class Footprint
     {
@@ -75,14 +77,15 @@ public class ChunkLoader
 
     class ChunkProp
     {
-        public GameObject prop;
+        public GameObject propObject;
         public string chunkIdentifier;
         public readonly Footprint footprint;
+        public bool isFadingOut = false;
 
-        public ChunkProp(GameObject prop, string identifier)
+        public ChunkProp(GameObject propObject, string identifier)
         {
-            footprint = new Footprint(prop, identifier);
-            this.prop = prop;
+            footprint = new Footprint(propObject, identifier);
+            this.propObject = propObject;
             this.chunkIdentifier = identifier;
         }
     }
@@ -137,6 +140,16 @@ public class ChunkLoader
         chunkZones[csz.identifier] = csz;
     }
 
+    public void Register(FadedApparition fa)
+    {
+        fadedProps.AddUnique(fa);
+    }
+
+    public void Register(Persistent p)
+    {
+        persistentProps.AddUnique(p);
+    }
+
     void Load(string identifier)
     {
         if (!loadingChunks.Contains(identifier) && !chunkZones[identifier].IsLoaded()) {
@@ -151,11 +164,10 @@ public class ChunkLoader
     {
         var csz = chunkZones[identifier];
         if (csz.IsLoaded()) {
-            foreach(var prop in csz.scene.Value.GetRootGameObjects()) {
-                if (!csz.GetComponent<Persistent>()) {
-                    if (csz.IsInsideChunk(prop.transform.position)) {
-                        Object.Destroy(prop);
-                        props.RemoveAll(o => o.prop == prop);
+            foreach(var propObject in csz.scene.Value.GetRootGameObjects()) {
+                if (!persistentProps.Find(o=>o.gameObject==csz)){
+                    if (csz.IsInsideChunk(propObject.transform.position)) {
+                        DestroyProp(propObject);
                     }
                     else {
                         foreach(var id in chunkZones.Keys) {
@@ -163,11 +175,15 @@ public class ChunkLoader
                                 continue;
 
                             var newChunk = chunkZones[id];
-                            if (newChunk.IsInsideChunk(prop.transform.position)) {
-                                SceneManager.MoveGameObjectToScene(prop, newChunk.scene.Value);
+                            if (newChunk.IsInsideChunk(propObject.transform.position)) {
+                                SceneManager.MoveGameObjectToScene(propObject, newChunk.scene.Value);
                             }
                         }
                     }
+                }
+                else {
+                    // If it's persistent, let's move it to the active scene
+                    SceneManager.MoveGameObjectToScene(propObject, SceneManager.GetActiveScene());
                 }
             }
             SceneManager.UnloadSceneAsync(csz.scene.Value);
@@ -189,13 +205,27 @@ public class ChunkLoader
             if (scene.name == chunkZones[id].chunk.name) {
                 chunkZones[id].scene = scene;
                 foreach (var prop in scene.GetRootGameObjects()) {
-                    var chp = new ChunkProp(prop, id); 
+                    var chp = new ChunkProp(prop, id);
+
+                    /////////
                     // Destroy clones (object is still here)
-                    if (props.FindAll(o=> o.footprint.Equals(chp.footprint)).Count > 0) {
-                        Debug.LogWarning("Destroyed clone of roaming prop: " + prop.name);
-                        Object.DestroyImmediate(prop);
+                    var potentialOriginals = props.FindAll(o => o.footprint.Equals(chp.footprint));
+
+                    if (Game.s.FADE_CHUNK_PROPS) {
+                        foreach (var potentialOriginal in potentialOriginals.ToArray()) {
+                            // an object was "fading out" - let's kill it immediatly instead so we can spawn a new one
+                            if (potentialOriginal.isFadingOut) {
+                                Object.DestroyImmediate(potentialOriginal.propObject);
+                                potentialOriginals.Remove(potentialOriginal);
+                            }
+                        }
+                    }
+                    if (potentialOriginals.Count > 0) {
+                        Object.DestroyImmediate(prop); // And then just cancel that object
                         continue;
                     }
+                    //
+                    ///////////
                     props.Add(chp);
                 }
 
@@ -203,4 +233,35 @@ public class ChunkLoader
             }
         }
     }
+
+    void DestroyProp(GameObject propObject, bool destroyImmediatly=false)
+    {
+        // Removing components of objects that don't exist anymore
+        // 🤷‍
+        fadedProps.RemoveAll(o => o == null);
+
+        var fa = fadedProps.Find(o => { return o.gameObject == propObject; });
+        var chunkProp = props.Find(o => { return o.propObject == propObject; });
+
+        if (fa) {
+            fadedProps.Remove(fa);
+            if (!destroyImmediatly && Game.s.FADE_CHUNK_PROPS) {
+                chunkProp.isFadingOut = true;
+                SceneManager.MoveGameObjectToScene(propObject, SceneManager.GetActiveScene());
+                fa.FadeOutThenDestroy(delegate {
+                    props.RemoveAll(o => o.propObject == propObject);
+                });
+            }
+            else {
+                props.RemoveAll(o => o.propObject == propObject);
+                Object.Destroy(propObject);
+            }
+        }
+        else {
+            props.RemoveAll(o => o.propObject == propObject);
+            Object.Destroy(propObject);
+        }
+    }
+
+    
 }

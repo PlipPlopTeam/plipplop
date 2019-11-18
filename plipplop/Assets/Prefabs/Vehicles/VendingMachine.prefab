@@ -362,6 +362,7 @@ GameObject:
   - component: {fileID: 8395368528950029218}
   - component: {fileID: 6665907460514541257}
   - component: {fileID: 535352308131647234}
+  - component: {fileID: 8231066622640970221}
   m_Layer: 0
   m_Name: VendingMachine
   m_TagString: Untagged
@@ -408,7 +409,7 @@ MonoBehaviour:
   visuals: {fileID: 5348957800398331629}
   throwers:
   - {fileID: 6665907460514541257}
-  animation: {fileID: 535352308131647234}
+  anim: {fileID: 0}
 --- !u!114 &5348957801613606141
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -504,6 +505,18 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
+--- !u!114 &8231066622640970221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5348957801613606142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a15cd58957a760249a3a123767c2237a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7233166334585222326
 GameObject:
   m_ObjectHideFlags: 0

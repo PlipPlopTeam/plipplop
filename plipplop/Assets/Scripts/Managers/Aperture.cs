@@ -72,7 +72,8 @@ public class Aperture
 
     public Aperture()
     {
-        cam = Camera.main;
+        cam = Camera.main ?? new GameObject().AddComponent<Camera>();
+        cam.gameObject.name = "_CAMERA";
         Load(Game.i.library.defaultAperture);
     }
 
