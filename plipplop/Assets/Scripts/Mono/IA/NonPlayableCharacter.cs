@@ -19,6 +19,7 @@ public class NonPlayableCharacter : StateManager
 	[HideInInspector] public Activity activity;
 	[HideInInspector] public Chair chair;
 	[HideInInspector] public Food food;
+	[HideInInspector] public Feeder feeder;
 	
 	[HideInInspector] public Activity previousActivity;
 	[HideInInspector] public Carryable carried;

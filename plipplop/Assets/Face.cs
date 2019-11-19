@@ -17,15 +17,24 @@ public class Face : MonoBehaviour
     [Header("Happiness")]
     public float happiness = 100f;
 
-
     bool eyeClosed;
     float speakTimer = 0f;
     float winkTimer = 0f;
 
-    int blendShapeCount = 0;
     public void Start()
     {
-        smr.SetBlendShapeWeight(0, 50f);
+        if(speaking) Speak();
+    }
+
+    public void Speak()
+    {
+        speaking = true;
+    }
+    public void Shut()
+    {
+        speaking = false;
+        smr.SetBlendShapeWeight(1, 0f);
+        smr.SetBlendShapeWeight(2, 0f);
     }
 
     public void Happiness(float value)

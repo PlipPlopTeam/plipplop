@@ -18,7 +18,7 @@ namespace NPC
 				{
                     foreach(Food f in foods)
                     {
-                        if(!f.consumed) npc.food = f;
+                        if(!f.consumed && !f.carried) npc.food = f;
                         break;
                     }
 				}

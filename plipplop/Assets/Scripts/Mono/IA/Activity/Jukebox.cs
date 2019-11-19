@@ -41,6 +41,5 @@ public class Jukebox : Activity
     {
         base.Exit(user);
         user.animator.SetBool("Dancing", false);
-        Debug.Log(user.gameObject.name);
     }
 }
