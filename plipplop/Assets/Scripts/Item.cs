@@ -16,7 +16,6 @@ public class Item : MonoBehaviour, Carryable
     [Header("Item")]
     public GameObject visual;
 
-
     public virtual void Start()
     {
         //if(visual == null) Visual(TODO);
@@ -29,9 +28,15 @@ public class Item : MonoBehaviour, Carryable
 
     public virtual float Mass()
     {
-        if(rb == null || visual == null) return 0;
-        Mesh m = visual.GetComponentInChildren<MeshFilter>().mesh;
-        return visual.transform.localScale.magnitude * m.bounds.size.magnitude * rb.mass;
+        if(rb == null) return 0;
+        MeshFilter[] meshFilters = gameObject.GetComponentsInChildren<MeshFilter>();
+        Vector3 size = Vector3.one;
+        foreach(MeshFilter mf in meshFilters)
+        {
+            if(mf.mesh.bounds.size.magnitude > size.magnitude)
+                size = mf.mesh.bounds.size;
+        }
+        return transform.localScale.magnitude * size.magnitude * rb.mass;
     }
 
     public virtual void Visual(GameObject go)
