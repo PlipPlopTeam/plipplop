@@ -50,7 +50,7 @@ public class ControllerSensor : MonoBehaviour
                     focused = c;
                 }
             }
-            catch (MissingReferenceException e) {
+            catch (MissingReferenceException) {
                 Debug.LogError("A controller was destroyed while at possessing range, which should never happen. Check the level streaming chunks and make sure neighbors are properly configured");
             }
         }
