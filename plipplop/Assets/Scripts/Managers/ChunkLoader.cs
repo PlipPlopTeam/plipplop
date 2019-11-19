@@ -18,7 +18,7 @@ public class ChunkLoader
 
     List<ChunkProp> disabledProps = new List<ChunkProp>();
     Scene cacheScene;
-    readonly float deferringDelay = 0.1f;
+    readonly float deferringDelay = 0.2f;
     Task currentDeferringTask = null;
 
     class Footprint
@@ -223,6 +223,9 @@ public class ChunkLoader
                 if (Game.s.DEFERRED_CHUNK_PROPS_LOADING) {
                     // Deferred loading
                     var props = scene.GetRootGameObjects();
+                    if (Game.i.player.GetCurrentController() != null) 
+                        props = props.OrderBy(prop => { return Vector3.Distance(prop.transform.position, Game.i.player.GetCurrentController().transform.position); }).ToArray();
+
                     foreach (var prop in props) {
                         prop.SetActive(false);
                     }
@@ -381,7 +384,7 @@ public class ChunkLoader
 
     Task ExecuteListDeferred<T>(IEnumerable<T> elements, System.Action<T> exe)
     {
-        var dt = Time.deltaTime;
+        var dt = 1/60f;
         return Task.Run(async delegate {
             foreach (var element in elements) {
                 UnityMainThreadDispatcher.Instance().Enqueue(delegate {
