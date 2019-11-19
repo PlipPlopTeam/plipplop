@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 846874144413937109}
   - component: {fileID: 846874144413937107}
+  - component: {fileID: 8763860431207000014}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -25,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 846874144413937110}
   m_LocalRotation: {x: 0.19134168, y: 0.80010307, z: -0.46194035, w: 0.33141315}
-  m_LocalPosition: {x: -11.76, y: 21.36, z: 11.760002}
+  m_LocalPosition: {x: -8.5, y: 5.7, z: 8.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 846874145606191314}
@@ -56,7 +57,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 40
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -74,6 +75,19 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &8763860431207000014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 846874144413937110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2adc56aaca052d34ba9990e4b8335401, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  componentsToKill: []
 --- !u!1 &846874145606191316
 GameObject:
   m_ObjectHideFlags: 0
@@ -135,4 +149,5 @@ MonoBehaviour:
   height: 20
   width: 20
   length: 20
-  aim: {fileID: 0}
+  aim: {fileID: 846874144413937109}
+  FOV: 60
