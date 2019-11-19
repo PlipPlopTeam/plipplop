@@ -21,23 +21,37 @@ public class Balloon : Activity, Carryable
     private bool flying;
 
     private Rigidbody rb;
+    private Collider col;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        col = GetComponent<Collider>();
     }
 
-    public void Carry()
+    public virtual void Carry()
     {
-
+        if(col != null) col.enabled = false;
+        if(rb != null) rb.isKinematic = true;
     }
-    public void Drop()
+
+    public virtual void Drop()
     {
-
+        if(col != null) col.enabled = true;
+        if(rb != null) rb.isKinematic = false;
     }
+
     public float Mass()
     {
-        return rb.mass;
+        if(rb == null) return 0;
+        MeshFilter[] meshFilters = gameObject.GetComponentsInChildren<MeshFilter>();
+        Vector3 size = Vector3.one;
+        foreach(MeshFilter mf in meshFilters)
+        {
+            if(mf.mesh.bounds.size.magnitude > size.magnitude)
+                size = mf.mesh.bounds.size;
+        }
+        return transform.localScale.magnitude * size.magnitude * rb.mass;
     }
     public Transform Self()
     {
@@ -128,6 +142,7 @@ public class Balloon : Activity, Carryable
                         users[carrier].Drop();
 
                         // Throwing
+                        transform.position += users[carrier].transform.forward * 2f;
                         Vector3 throwVector = users[carrier].transform.forward;
                         rb.AddForce(new Vector3(throwVector.x, 0f, throwVector.z)  * horizontalForce * Time.deltaTime);
                         rb.AddForce(new Vector3(0f, 1f, 0f)  * verticalForce * Time.deltaTime);
