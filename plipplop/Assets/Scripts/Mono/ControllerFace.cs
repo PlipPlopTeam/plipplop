@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Face : MonoBehaviour
+public class ControllerFace : MonoBehaviour
 {
     public Transform holder;
     public Vector3 offset;
