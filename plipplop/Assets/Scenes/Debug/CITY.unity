@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -1403,11 +1403,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 144.20401
       objectReference: {fileID: 0}
-    - target: {fileID: 817710063433153459, guid: fa5f0935db8e39a41b60d0037a32d3f9,
-        type: 3}
-      propertyPath: adjustment.y
-      value: 0.35
-      objectReference: {fileID: 0}
     - target: {fileID: 7003007216273469174, guid: fa5f0935db8e39a41b60d0037a32d3f9,
         type: 3}
       propertyPath: m_LocalRotation.x
@@ -1822,6 +1817,31 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.8723654
+      objectReference: {fileID: 0}
+    - target: {fileID: 817710063433153459, guid: fa5f0935db8e39a41b60d0037a32d3f9,
+        type: 3}
+      propertyPath: adjustment.y
+      value: 0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 6821963683738862286, guid: fa5f0935db8e39a41b60d0037a32d3f9,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6821963683738862286, guid: fa5f0935db8e39a41b60d0037a32d3f9,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6821963683738862286, guid: fa5f0935db8e39a41b60d0037a32d3f9,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6821963683738862286, guid: fa5f0935db8e39a41b60d0037a32d3f9,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa5f0935db8e39a41b60d0037a32d3f9, type: 3}
@@ -2040,11 +2060,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 144.20401
       objectReference: {fileID: 0}
-    - target: {fileID: 817710063433153459, guid: fa5f0935db8e39a41b60d0037a32d3f9,
-        type: 3}
-      propertyPath: adjustment.y
-      value: 0.35
-      objectReference: {fileID: 0}
     - target: {fileID: 7003007216273469174, guid: fa5f0935db8e39a41b60d0037a32d3f9,
         type: 3}
       propertyPath: m_LocalRotation.x
@@ -2459,6 +2474,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.8723654
+      objectReference: {fileID: 0}
+    - target: {fileID: 817710063433153459, guid: fa5f0935db8e39a41b60d0037a32d3f9,
+        type: 3}
+      propertyPath: adjustment.y
+      value: 0.35
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa5f0935db8e39a41b60d0037a32d3f9, type: 3}
@@ -3129,21 +3149,6 @@ PrefabInstance:
       propertyPath: m_LocalRotation.w
       value: 0.9998529
       objectReference: {fileID: 0}
-    - target: {fileID: 6924774960117691117, guid: fa5f0935db8e39a41b60d0037a32d3f9,
-        type: 3}
-      propertyPath: sockets.Array.size
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 6924774960117691117, guid: fa5f0935db8e39a41b60d0037a32d3f9,
-        type: 3}
-      propertyPath: sockets.Array.data[7].name
-      value: LeftHand
-      objectReference: {fileID: 0}
-    - target: {fileID: 6924774960117691117, guid: fa5f0935db8e39a41b60d0037a32d3f9,
-        type: 3}
-      propertyPath: sockets.Array.data[7].bone
-      value: 
-      objectReference: {fileID: 698201055}
     - target: {fileID: 4725263027935356838, guid: fa5f0935db8e39a41b60d0037a32d3f9,
         type: 3}
       propertyPath: m_LocalRotation.x
@@ -3344,6 +3349,21 @@ PrefabInstance:
       propertyPath: m_LocalRotation.w
       value: 0.8723654
       objectReference: {fileID: 0}
+    - target: {fileID: 6924774960117691117, guid: fa5f0935db8e39a41b60d0037a32d3f9,
+        type: 3}
+      propertyPath: sockets.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6924774960117691117, guid: fa5f0935db8e39a41b60d0037a32d3f9,
+        type: 3}
+      propertyPath: sockets.Array.data[7].name
+      value: LeftHand
+      objectReference: {fileID: 0}
+    - target: {fileID: 6924774960117691117, guid: fa5f0935db8e39a41b60d0037a32d3f9,
+        type: 3}
+      propertyPath: sockets.Array.data[7].bone
+      value: 
+      objectReference: {fileID: 698201055}
     - target: {fileID: 1385490482280150025, guid: fa5f0935db8e39a41b60d0037a32d3f9,
         type: 3}
       propertyPath: m_LocalScale.x
