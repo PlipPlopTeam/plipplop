@@ -34,6 +34,7 @@ public class Game : MonoBehaviour
         mapping = Instantiate<Mapping>(mapping);
         cheatCodeListener = new CheatCodeListener(new Cheats());
         chunkLoader = new ChunkLoader();
+        new GameObject().AddComponent<UnityMainThreadDispatcher>().gameObject.name="_THREAD_DISPATCHER";
 
         var spawn = FindObjectOfType<SpawnMarker>();
         if (!spawn) {

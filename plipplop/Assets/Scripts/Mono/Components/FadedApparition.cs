@@ -36,6 +36,12 @@ public class FadedApparition : MonoBehaviour
         coro = StartCoroutine(FadeOut());
     }
 
+    public void FadeOutThen(System.Action del)
+    {
+        if (coro != null) StopCoroutine(coro);
+        coro = StartCoroutine(FadeOut(del));
+    }
+
     public void StartFadeIn()
     {
         if (coro != null) StopCoroutine(coro);
