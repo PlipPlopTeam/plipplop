@@ -363,6 +363,7 @@ GameObject:
   - component: {fileID: 6665907460514541257}
   - component: {fileID: 535352308131647234}
   - component: {fileID: 8231066622640970221}
+  - component: {fileID: 848478960637475023}
   m_Layer: 0
   m_Name: VendingMachine
   m_TagString: Untagged
@@ -517,6 +518,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a15cd58957a760249a3a123767c2237a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &848478960637475023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5348957801613606142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0e296fc585c090479b01f5aea8fc139, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  givePoint: {fileID: 1418834894459689619}
+  food: {fileID: 11400000, guid: 61eba148cd4ebff42b0e9d6a829269b7, type: 2}
+  stock: 100
+  clients: []
+  next: {fileID: 0}
+  timeToServe: 1
 --- !u!1 &7233166334585222326
 GameObject:
   m_ObjectHideFlags: 0

@@ -15,6 +15,7 @@ public class Item : MonoBehaviour, Carryable
 
     [Header("Item")]
     public GameObject visual;
+    [HideInInspector] public bool carried = false;
 
     public virtual void Start()
     {
@@ -65,11 +66,11 @@ public class Item : MonoBehaviour, Carryable
             cc.radius = m.bounds.size.x;
             break;  
         }
-        
     }
 
     public virtual void Carry()
     {
+        carried = true;
         if(sc != null) sc.enabled = false;
         if(bc != null) bc.enabled = false;
         if(rb != null) rb.isKinematic = true;
@@ -77,6 +78,7 @@ public class Item : MonoBehaviour, Carryable
 
     public virtual void Drop()
     {
+        carried = false;
         if(sc != null) sc.enabled = true;
         if(sc != null) sc.enabled = true;
         if(rb != null) rb.isKinematic = false;

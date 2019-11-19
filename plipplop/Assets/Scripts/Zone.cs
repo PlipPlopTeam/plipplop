@@ -6,6 +6,7 @@ public class Zone : MonoBehaviour
 {
     public static Zone i;
     public List<Activity> activities = new List<Activity>();
+    public List<Feeder> feeders = new List<Feeder>();
     public List<NonPlayableCharacter> actors = new List<NonPlayableCharacter>();
     
     public AgentMovement.Path[] paths;
@@ -20,6 +21,9 @@ public class Zone : MonoBehaviour
 
         foreach(NonPlayableCharacter npc in FindObjectsOfType<NonPlayableCharacter>())
             actors.Add(npc);
+
+        foreach(Feeder f in FindObjectsOfType<Feeder>())
+            feeders.Add(f);
     }
     
     private void OnDrawGizmosSelected() 

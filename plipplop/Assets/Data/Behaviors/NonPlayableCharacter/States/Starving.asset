@@ -18,8 +18,9 @@ MonoBehaviour:
   onEnter:
   - {fileID: 11400000, guid: a323ad7ab86a25149832dd565d55b855, type: 2}
   - {fileID: 11400000, guid: 78fc731d50e220243aa168a34b2a5092, type: 2}
+  - {fileID: 11400000, guid: d824d7f70c4683e4ca2e83af5a156763, type: 2}
   onExit: []
-  idCount: 4
+  idCount: 6
   transitions:
   - id: 0
     conditions:
@@ -35,4 +36,14 @@ MonoBehaviour:
     conditions:
     - {fileID: 11400000, guid: aae45e85b089ccc47800950e5b229fd0, type: 2}
     targetState: {fileID: 11400000}
+    disable: 0
+  - id: 4
+    conditions:
+    - {fileID: 11400000, guid: 02934e882a4c31e4fbaefe9a81b2f5dc, type: 2}
+    targetState: {fileID: 11400000, guid: 4e0860f64af36464dadb9d4ddb9cef29, type: 2}
+    disable: 0
+  - id: 5
+    conditions:
+    - {fileID: 11400000, guid: 761793234f6200544b4c4cc0378b8e48, type: 2}
+    targetState: {fileID: 11400000, guid: d4af7e3797463234da49ed469c157162, type: 2}
     disable: 0
