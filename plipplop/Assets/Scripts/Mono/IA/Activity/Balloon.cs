@@ -51,7 +51,7 @@ public class Balloon : Activity, Carryable
             if(mf.mesh.bounds.size.magnitude > size.magnitude)
                 size = mf.mesh.bounds.size;
         }
-        return transform.localScale.magnitude * size.magnitude * rb.mass;
+        return (transform.localScale.magnitude * 3f) * size.magnitude * rb.mass;
     }
     public Transform Self()
     {

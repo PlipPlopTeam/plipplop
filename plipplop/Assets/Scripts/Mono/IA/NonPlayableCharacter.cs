@@ -14,12 +14,14 @@ public class NonPlayableCharacter : StateManager
 	[HideInInspector] public Skeleton skeleton;
 	[HideInInspector] public EmotionRenderer emo;
 	[HideInInspector] public Range range;
+	[HideInInspector] public Face face;
+	
 
-	[HideInInspector] public Valuable valuable;
-	[HideInInspector] public Activity activity;
-	[HideInInspector] public Chair chair;
-	[HideInInspector] public Food food;
-	[HideInInspector] public Feeder feeder;
+	public Valuable valuable;
+	public Activity activity;
+	public Chair chair;
+	public Food food;
+	public Feeder feeder;
 	
 	[HideInInspector] public Activity previousActivity;
 	[HideInInspector] public Carryable carried;
@@ -49,6 +51,7 @@ public class NonPlayableCharacter : StateManager
 		emo.Load();
 		agentMovement = GetComponent<AgentMovement>();
 		agentMovement.animator = animator;
+		face = GetComponent<Face>();
 	}
 
 	public override void Start()
@@ -106,7 +109,7 @@ public class NonPlayableCharacter : StateManager
 	public override void Update()
 	{
 		base.Update();
-		if(carried != null && carried.Mass() > 0.5f) Carrying(carried);
+		if(carried != null && carried.Mass() > strength) Carrying(carried);
 		Collecting();
 	}
 
@@ -157,9 +160,9 @@ public class NonPlayableCharacter : StateManager
 		if(carried != null) Drop();
 		carried = carryable;
 		carried.Carry();
-		if(carried.Mass() < 0.5f)
+		if(carried.Mass() <= strength)
 		{
-			animator.SetBool("Holding", true);
+			//animator.SetBool("Holding", true);
 			skeleton.Attach(carried.Self(), "RightHand", true);
 		}
 		else 
@@ -172,15 +175,13 @@ public class NonPlayableCharacter : StateManager
 	{
 		if(carried == null) return;
 		carried.Drop();
-		if(carried.Mass() < 0.5f)
-		{
-			animator.SetBool("Holding", false);
+
+		if(carried.Mass() <= strength)
 			skeleton.Drop("RightHand");
-		}
-		else 
-		{
-			animator.SetBool("Carrying", false);
-		}
+
+		//animator.SetBool("Holding", false);
+		animator.SetBool("Carrying", false);
+
 		carried = null;
 	}
 
@@ -243,6 +244,8 @@ public class NonPlayableCharacter : StateManager
         if(EditorApplication.isPlaying)
 		{
 			float h = 0f;
+			Handles.Label(transform.position + Vector3.up * (2f + h), currentState.name);
+			h+= 0.1f;
 			foreach(KeyValuePair<string, float> entry in stats)
 			{
 				Handles.Label(transform.position + Vector3.up * (2f + h), entry.Key.ToString() + " = " + entry.Value.ToString());

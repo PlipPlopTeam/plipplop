@@ -7,29 +7,24 @@ public class Food : Item
     [Header("Food")]
     public FoodData data;
     public bool consumed = false;
-
     public System.Action onConsumeEnd;
     private bool beingConsumed = false;
     private float timer;
 
-    public override void Start()
-    {
-        base.Start();
+    public float mass;
 
+    public override void Awake()
+    {
+        base.Awake();
         if(data != null) Create(data);
         if(consumed) Consumed();
     }
 
     public void Create(FoodData foodData)
     {
+        gameObject.name = foodData.name;
         data = foodData;
         if(visual == null) Visual(foodData.visual);
-    }
-
-    public override void Destroy()
-    {
-        Drop();
-        base.Destroy();
     }
 
     public void Consume()
@@ -43,24 +38,28 @@ public class Food : Item
 
     public void Consumed()
     {
+        if(onConsumeEnd != null)
+        {
+            onConsumeEnd.Invoke();
+            onConsumeEnd = null;
+        }
         consumed = true;
+        visual.transform.localScale = Vector3.one;
         if(data.destroyAfterConsumed) Destroy();
+        else Drop();
     }
 
     public void Update()
     {
+        mass = Mass();
         if(beingConsumed)
         {
-            if(timer > 0) timer -= Time.deltaTime;
-            else
+            if(timer > 0)
             {
-                if(onConsumeEnd != null)
-                {
-                    onConsumeEnd.Invoke();
-                    onConsumeEnd = null;
-                }
-                Consumed();
+                timer -= Time.deltaTime;
+                visual.transform.localScale = Vector3.one * (timer/data.timeToConsume);
             }
+            else Consumed();
         }
     }
 }

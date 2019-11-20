@@ -11,5 +11,4 @@ public class FoodData : ScriptableObject
     [Range(0f, 100f)] public float calory = 10f;
     public float timeToConsume = 1f;
     public bool destroyAfterConsumed;
-    public float weight = 1f; 
 }

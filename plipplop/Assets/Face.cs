@@ -10,6 +10,10 @@ public class Face : MonoBehaviour
     public bool speaking = false;
     public float speakFrequency = 1f;
     public float speakRandomRange = 1f;
+    [Header("Eat")]
+    public bool eating = false;
+    public float eatFrequency = 1f;
+    public float eatRandomRange = 1f;
     [Header("Wink")]
     public bool winking = true;
     public float winkFrequency = 1f;
@@ -18,12 +22,21 @@ public class Face : MonoBehaviour
     public float happiness = 100f;
 
     bool eyeClosed;
+    bool mouseClosed;
     float speakTimer = 0f;
+    float eatTimer = 0f;
     float winkTimer = 0f;
 
     public void Start()
     {
         if(speaking) Speak();
+    }
+
+    public void Set(bool speak, bool eat, bool wink)
+    {
+        speaking = speak;
+        eating = eat;
+        winking = wink;
     }
 
     public void Speak()
@@ -77,6 +90,25 @@ public class Face : MonoBehaviour
                     winkTimer = winkFrequency + Mathf.Min(0f, Random.Range(-winkRandomRange, winkRandomRange));
                     smr.SetBlendShapeWeight(0, 0f);
                     eyeClosed = false;
+                }
+            }
+        }
+
+        if(eating)
+        {
+            if(eatTimer > 0) eatTimer -= Time.deltaTime;
+            else
+            {
+                eatTimer = eatFrequency + Mathf.Min(0f, Random.Range(-eatRandomRange, eatRandomRange));
+                if(!mouseClosed)
+                {
+                    smr.SetBlendShapeWeight(4, Random.Range(0f, 15f));
+                    mouseClosed = true;
+                }
+                else
+                {
+                    smr.SetBlendShapeWeight(4, Random.Range(85f, 10f));
+                    mouseClosed = false;
                 }
             }
         }
