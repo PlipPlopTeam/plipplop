@@ -123,8 +123,9 @@ public class ChunkStreamingZone : MonoBehaviour
         if (IsLoaded()) {
             foreach (var prop in FindObjectsOfType<GameObject>()) {
                 if (prop.scene == scene) {
-                    Gizmos.color = selectedColor;
-                    Gizmos.DrawWireSphere(prop.transform.position, prop.transform.localScale.magnitude);
+                    Gizmos.color = new Color(selectedColor.r, selectedColor.g, selectedColor.b, 0.2f);
+                    Gizmos.DrawCube(prop.transform.position, prop.transform.localScale);
+                    Gizmos.DrawLine(prop.transform.position, transform.TransformPoint(positions.ToArray().Mean()));
                 }
             }
         }
