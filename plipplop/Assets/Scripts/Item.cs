@@ -17,9 +17,12 @@ public class Item : MonoBehaviour, Carryable
     public GameObject visual;
     [HideInInspector] public bool carried = false;
 
-    public virtual void Start()
+    public virtual void Awake()
     {
-        //if(visual == null) Visual(TODO);
+        if(rb == null) rb = GetComponent<Rigidbody>();
+        if(rb == null) rb = gameObject.AddComponent<Rigidbody>();
+        if(carried) Carry();
+        else Drop();
     }
 
     public Transform Self()
@@ -71,17 +74,21 @@ public class Item : MonoBehaviour, Carryable
     public virtual void Carry()
     {
         carried = true;
-        if(sc != null) sc.enabled = false;
         if(bc != null) bc.enabled = false;
+        if(sc != null) sc.enabled = false;
+        if(cc != null) cc.enabled = false;
         if(rb != null) rb.isKinematic = true;
+        if(rb != null) rb.useGravity = false;
     }
 
     public virtual void Drop()
     {
         carried = false;
+        if(bc != null) bc.enabled = true;
         if(sc != null) sc.enabled = true;
-        if(sc != null) sc.enabled = true;
+        if(cc != null) cc.enabled = true;
         if(rb != null) rb.isKinematic = false;
+        if(rb != null) rb.useGravity = true;
     }
     
     public virtual void Destroy()

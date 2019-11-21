@@ -14,12 +14,14 @@ public class NonPlayableCharacter : StateManager
 	[HideInInspector] public Skeleton skeleton;
 	[HideInInspector] public EmotionRenderer emo;
 	[HideInInspector] public Range range;
-
-	[HideInInspector] public Valuable valuable;
-	[HideInInspector] public Activity activity;
-	[HideInInspector] public Chair chair;
-	[HideInInspector] public Food food;
-	[HideInInspector] public Feeder feeder;
+	[HideInInspector] public Face face;
+	
+	[Header("Read-Only")]
+	public Valuable valuable;
+	public Activity activity;
+	public Chair chair;
+	public Food food;
+	public Feeder feeder;
 	
 	[HideInInspector] public Activity previousActivity;
 	[HideInInspector] public Carryable carried;
@@ -37,6 +39,48 @@ public class NonPlayableCharacter : StateManager
 	public ClothesData[] torsoStuff;
 	public ClothesData[] legsStuff;
 
+	// Wait timer
+	[HideInInspector] public bool hasWaited;
+	private float waitTimer;
+	private bool endWait;
+
+	public System.Action onWaitEnded;
+
+	public override void Update()
+	{
+		Waiting();
+		base.Update();
+		if(carried != null && carried.Mass() > strength) Carrying(carried);
+		Collecting();
+	}
+
+	private void Waiting()
+	{
+		if(hasWaited) hasWaited = false;
+		if(!endWait)
+		{
+			if(waitTimer > 0) waitTimer -= Time.deltaTime;
+			else
+			{
+				if(onWaitEnded != null)
+				{
+					onWaitEnded.Invoke();
+					onWaitEnded = null;
+				}
+
+				endWait = true;
+				hasWaited = true;
+			}
+		}
+	}
+
+	public void Wait(float time = 1f, System.Action end = null)
+	{
+		waitTimer = time;
+		endWait = false;
+		onWaitEnded = end;
+	}
+
 	void Awake()
 	{
 		skeleton = GetComponentInChildren<Skeleton>();
@@ -49,6 +93,7 @@ public class NonPlayableCharacter : StateManager
 		emo.Load();
 		agentMovement = GetComponent<AgentMovement>();
 		agentMovement.animator = animator;
+		face = GetComponent<Face>();
 	}
 
 	public override void Start()
@@ -103,13 +148,6 @@ public class NonPlayableCharacter : StateManager
 		return carryable == carried;
 	}
 
-	public override void Update()
-	{
-		base.Update();
-		if(carried != null && carried.Mass() > 0.5f) Carrying(carried);
-		Collecting();
-	}
-
 	public void Carrying(Carryable carryable)
 	{
 		carryable.Self().position = (skeleton.GetSlotByName("RightHand").GetPosition() + skeleton.GetSlotByName("LeftHand").GetPosition())/2f;
@@ -157,9 +195,9 @@ public class NonPlayableCharacter : StateManager
 		if(carried != null) Drop();
 		carried = carryable;
 		carried.Carry();
-		if(carried.Mass() < 0.5f)
+		if(carried.Mass() <= strength)
 		{
-			animator.SetBool("Holding", true);
+			//animator.SetBool("Holding", true);
 			skeleton.Attach(carried.Self(), "RightHand", true);
 		}
 		else 
@@ -172,15 +210,13 @@ public class NonPlayableCharacter : StateManager
 	{
 		if(carried == null) return;
 		carried.Drop();
-		if(carried.Mass() < 0.5f)
-		{
-			animator.SetBool("Holding", false);
+
+		if(carried.Mass() <= strength)
 			skeleton.Drop("RightHand");
-		}
-		else 
-		{
-			animator.SetBool("Carrying", false);
-		}
+
+		//animator.SetBool("Holding", false);
+		animator.SetBool("Carrying", false);
+
 		carried = null;
 	}
 
@@ -243,6 +279,8 @@ public class NonPlayableCharacter : StateManager
         if(EditorApplication.isPlaying)
 		{
 			float h = 0f;
+			Handles.Label(transform.position + Vector3.up * (2f + h), currentState.name);
+			h+= 0.1f;
 			foreach(KeyValuePair<string, float> entry in stats)
 			{
 				Handles.Label(transform.position + Vector3.up * (2f + h), entry.Key.ToString() + " = " + entry.Value.ToString());

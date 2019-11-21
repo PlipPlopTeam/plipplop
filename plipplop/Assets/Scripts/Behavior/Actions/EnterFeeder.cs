@@ -11,7 +11,7 @@ namespace NPC
 			NonPlayableCharacter npc = (NonPlayableCharacter)state;
 			if(npc != null && npc.feeder != null)
 			{
-				npc.feeder.Enter(npc);
+				npc.feeder.Catch(npc);
 			}
 		}
 	}
