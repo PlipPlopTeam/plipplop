@@ -12,18 +12,29 @@ public class Feeder : MonoBehaviour
 
     public virtual void Catch(NonPlayableCharacter npc)
     {
-        if(stock <= 0) npc.feeder = null;
+        if(stock <= 0) 
+            npc.feeder = null;
     }
 
     public virtual void Serve(NonPlayableCharacter npc)
     {
+        if(stock <= 0)
+        {
+            npc.feeder = null;
+            Empty();
+            return;
+        }
+        else stock--;
+
         Vector3 pos = givePoint == null ? transform.position : givePoint.position;
         Food fo = new GameObject().AddComponent<Food>();
         fo.transform.position = pos;
         fo.Create(food);
         npc.food = fo;
         npc.Carry(fo);
-        stock--;
+
         if(stock <= 0 && destroyOnceEmpty) Destroy(gameObject);
     }
+
+    public virtual void Empty(){}
 }

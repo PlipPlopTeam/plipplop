@@ -16,7 +16,7 @@ public class NonPlayableCharacter : StateManager
 	[HideInInspector] public Range range;
 	[HideInInspector] public Face face;
 	
-
+	[Header("Read-Only")]
 	public Valuable valuable;
 	public Activity activity;
 	public Chair chair;
@@ -38,6 +38,48 @@ public class NonPlayableCharacter : StateManager
 	public ClothesData[] headStuff;
 	public ClothesData[] torsoStuff;
 	public ClothesData[] legsStuff;
+
+	// Wait timer
+	[HideInInspector] public bool hasWaited;
+	private float waitTimer;
+	private bool endWait;
+
+	public System.Action onWaitEnded;
+
+	public override void Update()
+	{
+		Waiting();
+		base.Update();
+		if(carried != null && carried.Mass() > strength) Carrying(carried);
+		Collecting();
+	}
+
+	private void Waiting()
+	{
+		if(hasWaited) hasWaited = false;
+		if(!endWait)
+		{
+			if(waitTimer > 0) waitTimer -= Time.deltaTime;
+			else
+			{
+				if(onWaitEnded != null)
+				{
+					onWaitEnded.Invoke();
+					onWaitEnded = null;
+				}
+
+				endWait = true;
+				hasWaited = true;
+			}
+		}
+	}
+
+	public void Wait(float time = 1f, System.Action end = null)
+	{
+		waitTimer = time;
+		endWait = false;
+		onWaitEnded = end;
+	}
 
 	void Awake()
 	{
@@ -104,13 +146,6 @@ public class NonPlayableCharacter : StateManager
 	public bool IsCarrying(Carryable carryable)
 	{
 		return carryable == carried;
-	}
-
-	public override void Update()
-	{
-		base.Update();
-		if(carried != null && carried.Mass() > strength) Carrying(carried);
-		Collecting();
 	}
 
 	public void Carrying(Carryable carryable)

@@ -57,7 +57,9 @@ public class Food : Item
             if(timer > 0)
             {
                 timer -= Time.deltaTime;
-                visual.transform.localScale = Vector3.one * (timer/data.timeToConsume);
+                
+                if(data.scaleDownAsEaten)
+                    visual.transform.localScale = Vector3.one * (timer/data.timeToConsume);
             }
             else Consumed();
         }

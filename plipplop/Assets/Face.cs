@@ -32,13 +32,6 @@ public class Face : MonoBehaviour
         if(speaking) Speak();
     }
 
-    public void Set(bool speak, bool eat, bool wink)
-    {
-        speaking = speak;
-        eating = eat;
-        winking = wink;
-    }
-
     public void Speak()
     {
         speaking = true;

@@ -12,13 +12,17 @@ namespace NPC
         public bool speaking;
         public bool eating;
         public bool winking = true;
+        public float happiness = 50f;
 
         public override void Execute(StateManager state)
         {
             NonPlayableCharacter npc = (NonPlayableCharacter)state;
 			if(npc != null)
 			{
-                npc.face.Set(speaking, eating, winking);
+                npc.face.speaking = speaking;
+                npc.face.eating = eating;
+                npc.face.winking = winking;
+                npc.face.happiness = happiness;
 			}
         }
     }
