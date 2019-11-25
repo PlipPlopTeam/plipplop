@@ -37,7 +37,7 @@ public class ChunkLoader
         readonly string name;
         readonly int childrenCount;
         readonly int componentCount;
-        readonly string identifier;
+        public readonly string identifier;
 
         public Footprint(GameObject obj, string identifier)
         {
@@ -95,6 +95,11 @@ public class ChunkLoader
             footprint = new Footprint(propObject, identifier);
             this.propObject = propObject;
             this.chunkIdentifier = identifier;
+        }
+
+        public override string ToString()
+        {
+            return propObject.name + "_" + chunkIdentifier + "_" + footprint.GetHashCode();
         }
     }
 
@@ -163,7 +168,6 @@ public class ChunkLoader
 
     void Load(string identifier)
     {
-        Debug.Log("Loading " + identifier);
         if (!loadingChunks.Contains(identifier) && !chunkZones[identifier].IsLoaded()) {
             loadingChunks.Add(identifier);
             SceneManager.LoadSceneAsync(chunkZones[identifier].chunk.name, LoadSceneMode.Additive).completed += delegate {
@@ -174,15 +178,15 @@ public class ChunkLoader
 
     void Unload(string identifier)
     {
-        Debug.Log("Unloading " + identifier);
         var csz = chunkZones[identifier];
         if (csz.IsLoaded()) {
             var rootGameObjects = csz.scene.Value.GetRootGameObjects();
             // When chunk A with prop X is unloaded...
-            Debug.Log("Checking for "+rootGameObjects.Length+" root objects of " + identifier + "...");
             foreach (var prop in props.FindAll(o=>rootGameObjects.Contains(o.propObject))) {
                 // If prop X is still in chunk A
                 if (csz.IsInsideChunk(prop.propObject.transform.position)) {
+
+                    prop.chunkIdentifier = csz.identifier;
 
                     // If prop is in a persistence zone
                     if (IsStored(prop)) {
@@ -334,10 +338,14 @@ public class ChunkLoader
                 // Create / restore it !
                 if (IsPropCached(chp.footprint)) {
                     chp = GetPropFromCache(chp.footprint);
-                    EnableProp(chp.footprint, chp.preserveState ? null : prop.transform);
-
+                    if (chunkZones[chp.chunkIdentifier].IsLoaded()) {
+                        EnableProp(chp.footprint, chp.preserveState ? null : prop.transform);
+                        Debug.LogWarning("Canceled prop " + prop.name + " to restore it from cache instead");
+                    }
+                    else {
+                        Debug.LogWarning("Canceled prop " + prop.name + " because it exists in the unloaded chunk "+chp.chunkIdentifier+" already");
+                    }
                     // Destroy the "new copy"
-                    Debug.LogWarning("Canceled prop " + prop.name + " to restore it from cache instead");
                     Object.DestroyImmediate(prop);
                 }
                 else {
@@ -379,10 +387,17 @@ public class ChunkLoader
     {
         var p = disabledProps.Find(o => o.footprint.Equals(fp));
         if (p != null) {
+            Debug.Log("Enabling prop " + p + "");
             disabledProps.Remove(p);
             props.Add(p);
             p.propObject.SetActive(true);
-            if (originalT) p.propObject.transform.SetPositionAndRotation(originalT.position, originalT.rotation);
+            if (originalT) {
+                p.propObject.transform.SetPositionAndRotation(originalT.position, originalT.rotation);
+                var rb = p.propObject.GetComponent<Rigidbody>();
+                if (rb) {
+                    rb.velocity = Vector3.zero;
+                }
+            }
             SceneManager.MoveGameObjectToScene(p.propObject, chunkZones[p.chunkIdentifier].scene.Value);
         }
         else {
@@ -401,8 +416,12 @@ public class ChunkLoader
         var fa = fadedProps.Find(o => { return o.gameObject == prop.propObject; });
         var chunkProp = props.Find(o => { return o.propObject == prop.propObject; });
 
+        if (!prop.preserveState) {
+            // Reset identifier so that it respawns in its original chunk
+            prop.chunkIdentifier = prop.footprint.identifier;
+        }
         SceneManager.MoveGameObjectToScene(prop.propObject, cacheScene);
-        prop.propObject.name = "_" + prop.chunkIdentifier + "_" + prop.footprint.GetHashCode();
+
         if (fa) {
             if (!destroyImmediatly && Game.s.FADE_CHUNK_PROPS) {
                 chunkProp.isFadingOut = true;
