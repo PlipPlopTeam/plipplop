@@ -264,12 +264,17 @@ public class ChunkStreamingZoneEditor : BaseEditor
                     EditorGUILayout.HelpBox("WARNING: Null sector are not allowed in the neighborhood", MessageType.Error, true);
                 }
                 var otherChunkDeserialized = (ChunkStreamingZone)otherChunk;
-                if (!otherChunkDeserialized.neighborhood.Contains((ChunkStreamingZone)target)) {
+                if (otherChunkDeserialized != null && !otherChunkDeserialized.neighborhood.Contains((ChunkStreamingZone)target)) {
                     EditorGUILayout.HelpBox("WARNING: Neighbor ["+otherChunkDeserialized.identifier+"] doesn't have chunk ["+csz.identifier+"] registered in its neighborhood", MessageType.Warning, true);
                 }
             }
 
-
+            // Identifier uniqueness check
+            foreach(var otherCsz in FindObjectsOfType<ChunkStreamingZone>()) {
+                if (csz != otherCsz && otherCsz.identifier == csz.identifier) {
+                    EditorGUILayout.HelpBox("WARNING: Identifier ["+csz.identifier+"] is ALREADY TAKEN by another chunk on the scene. This must be fixed before playing.", MessageType.Error, true);
+                }
+            }
 
             serializedObject.ApplyModifiedProperties();
         };
