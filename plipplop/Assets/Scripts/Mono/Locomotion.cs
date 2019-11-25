@@ -111,6 +111,7 @@ public class Locomotion : MonoBehaviour
                 IsGrounded() ? 1f : direction.magnitude
             ).normalized;
 
+
             Vector3 velocity =
                 currentSpeedToDistribute * (
                     virtualStick.z * Game.i.aperture.Forward() +
