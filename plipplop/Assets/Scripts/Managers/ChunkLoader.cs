@@ -19,8 +19,8 @@ public class ChunkLoader
 
     List<ChunkProp> disabledProps = new List<ChunkProp>();
     Scene cacheScene;
-    readonly float deferringDelay = 0.2f;
-    Task currentDeferringTask = null;
+    readonly float deferringDelay = 1f;
+    List<Task> queue = new List<Task>();
 
     class Footprint
     {
@@ -149,6 +149,24 @@ public class ChunkLoader
 
         }
 
+        ExecuteQueue();
+    }
+
+    // Executing deffered list jobs
+    void ExecuteQueue()
+    {
+        if (queue.Count > 0) {
+            var task = queue.First();
+            if (task.IsCompleted) {
+                queue.RemoveAt(0);
+            }
+            else if (task.Status != TaskStatus.Running) {
+                task.Start();
+            }
+            else {
+                // Waiting for the task to complete
+            }
+        }
     }
 
     public void Register(ChunkStreamingZone csz)
@@ -277,14 +295,24 @@ public class ChunkLoader
                         prop.SetActive(false);
                     }
 
-                    if (currentDeferringTask != null) {
-                        currentDeferringTask.Wait();
-                    }
+                    queue.Add(
+                        ExecuteListDeferred(props, g => {
+                            if (g != null) {
+                                g.SetActive(true);
+                                RegularizeProp(g, id);
+                            }
+                        })
+                    );
 
-                    currentDeferringTask = ExecuteListDeferred(props, g => {
-                        g.SetActive(true);
-                        RegularizeProp(g, id);
-                    });
+                    queue.Add(
+                        ExecuteListDeferred(storedProps[id].ToArray(), prop => {
+                            if (prop != null) {
+                                Log("Restoring (async) " + prop + " from storage area");
+                                RemoveFromStorage(prop.propObject, id);
+                                EnableProp(prop.footprint);
+                            }
+                        })
+                    );
                 }
                 else {
                     // All at once loading
@@ -526,12 +554,12 @@ public class ChunkLoader
     Task ExecuteListDeferred<T>(IEnumerable<T> elements, System.Action<T> exe)
     {
         var dt = 1/60f;
-        return Task.Run(async delegate {
+        return new Task(delegate {
             foreach (var element in elements) {
                 UnityMainThreadDispatcher.Instance().Enqueue(delegate {
                     exe.Invoke(element);
                 });
-                await Task.Delay(Mathf.RoundToInt(dt * 1000f * deferringDelay));
+                Task.Delay(Mathf.RoundToInt(dt * 1000f * deferringDelay)).Wait();
             }
         });
     }
