@@ -10,7 +10,7 @@ public class Switches : ScriptableObject
     private bool S_FADE_CHUNK_PROPS = false;
     public bool FADE_CHUNK_PROPS { get {return S_FADE_CHUNK_PROPS;} }
 
-    [ColorField(0f, 1f, 0f)] [SerializeField] [ReadOnlyInGame] 
+    [ColorField(1f, 1f, 0f)] [SerializeField] [ReadOnlyInGame] 
     private bool S_CACHE_CHUNK_PROPS = true;
     public bool CACHE_CHUNK_PROPS { get { return S_CACHE_CHUNK_PROPS; } }
 
