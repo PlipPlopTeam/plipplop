@@ -49,13 +49,13 @@ public class NonPlayableCharacter : StateManager
 
 	public override void Update()
 	{
-		Waiting();
+        StartWaiting();
 		base.Update();
-		if(carried != null && carried.Mass() > strength) Carrying(carried);
-		Collecting();
+		if(carried != null && carried.Mass() > strength) StartCarrying(carried);
+        StartCollecting();
 	}
 
-	private void Waiting()
+	private void StartWaiting()
 	{
 		if(hasWaited) hasWaited = false;
 		if(!endWait)
@@ -149,13 +149,13 @@ public class NonPlayableCharacter : StateManager
 		return carryable == carried;
 	}
 
-	public void Carrying(ICarryable carryable)
+	public void StartCarrying(ICarryable carryable)
 	{
 		carryable.Self().position = (skeleton.GetSocketBySlot(Clothes.ESlot.RIGHT_HAND).GetPosition() + skeleton.GetSocketBySlot(Clothes.ESlot.LEFT_HAND).GetPosition())/2f;
 		carryable.Self().forward = transform.forward;
 	}
 
-	public void Collecting()
+	public void StartCollecting()
 	{
 		if(carryableToCollect != null)
 		{
