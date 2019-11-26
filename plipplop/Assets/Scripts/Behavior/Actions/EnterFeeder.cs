@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
-using PP;
 
-namespace NPC
+namespace Behavior.NPC
 {
 	[CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/EnterFeeder")]
-	public class EnterFeeder : Action
-	{
+	public class EnterFeeder : AIAction
+    {
 		public override void Execute(StateManager state)
 		{
 			NonPlayableCharacter npc = (NonPlayableCharacter)state;

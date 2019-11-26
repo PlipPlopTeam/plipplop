@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Clothes : MonoBehaviour
 {
-    public enum Slot {Head, Face, Neck, Torso, LeftWrist, RightWrist, RightHand, LeftHand, Legs, RightFeet, LeftFeet};
+    public enum ESlot {HEAD, FACE, NECK, TORSO, LEFT_WRIST, RIGHT_WRIST, RIGHT_HAND, LEFT_HAND, LEGS, RIGHT_FOOT, LEFT_FOOT};
     public ClothesData data;
     public Transform root;
     public List<Transform> attachs = new List<Transform>();
@@ -24,7 +24,7 @@ public class Clothes : MonoBehaviour
         transform.SetParent(target.transform);            
 
         // THREADABLE
-        if(data.slot == Slot.Torso || data.slot == Slot.Legs || data.slot == Slot.RightFeet || data.slot == Slot.LeftFeet)
+        if(data.slot == ESlot.TORSO || data.slot == ESlot.LEGS || data.slot == ESlot.RIGHT_FOOT || data.slot == ESlot.LEFT_FOOT)
         {
             root = Instantiate(data.prefab, transform).transform;
             foreach(Transform child in root.GetComponentsInChildren<Transform>())
@@ -35,7 +35,7 @@ public class Clothes : MonoBehaviour
         else
         {
             root = Instantiate(data.prefab, transform).transform;
-            target.Attach(root, data.slot.ToString());
+            target.Attach(root, data.slot);
         }
     }
 }

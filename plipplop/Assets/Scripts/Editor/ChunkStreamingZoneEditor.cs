@@ -305,7 +305,7 @@ public class ChunkStreamingZoneEditor : BaseEditor
 
     internal override void MakeStyles()
     {
-        redStyle = GUI.skin.box;
+        redStyle = new GUIStyle(GUI.skin.box);
         redStyle.normal.textColor = Color.red;
         base.MakeStyles();
     }

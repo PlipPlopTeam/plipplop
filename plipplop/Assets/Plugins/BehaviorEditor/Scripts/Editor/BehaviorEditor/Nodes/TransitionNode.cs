@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using PP;
 
-namespace PP.Behavior
+namespace Behavior.Editor
 {
     public class TransitionNode : DrawNode
     {

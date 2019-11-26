@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace PP.Behavior
+namespace Behavior.Editor
 {
     [System.Serializable]
     public class Node 

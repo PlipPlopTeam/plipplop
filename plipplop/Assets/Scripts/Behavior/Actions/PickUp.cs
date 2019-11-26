@@ -1,12 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PP;
 
-namespace NPC
+namespace Behavior.NPC
 {
     [CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/PickUp")]
-    public class PickUp : Action
+    public class PickUp : AIAction
     {
         public override void Execute(StateManager state)
         {

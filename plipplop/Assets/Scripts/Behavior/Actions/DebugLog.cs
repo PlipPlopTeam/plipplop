@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PP;
+using Behavior;
 
 [CreateAssetMenu(menuName = "Behavior/Action/DebugLogString")]
-public class DebugLogString : Action
+public class DebugLogString : AIAction
 {
     public string logString = "LOG";
     public override void Execute(StateManager state)

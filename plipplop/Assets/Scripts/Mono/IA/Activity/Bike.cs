@@ -10,7 +10,7 @@ public class Bike : Activity
 {
     [Header("BIKE")]
     public float speed = 10f;
-    public AgentMovement.Path path;
+    public AIPath path;
 
     public Collider col;
     public Rigidbody rb;
@@ -65,7 +65,7 @@ public class BikeEditor : Editor
         Bike b = (Bike)target;
         if(b.path == null) return;
         
-        Vector3[] newPath = b.path.points;
+        Vector3[] newPath = b.path.points.ToArray();
         if(newPath.Length == 0) return;
         for(int i = 0; i < newPath.Length; i++)
         {
@@ -75,7 +75,7 @@ public class BikeEditor : Editor
         if(EditorGUI.EndChangeCheck())
         {
             Undo.RecordObject(b, "Move Bike path point");
-            b.path.points = newPath;
+            b.path.points = new List<Vector3>(newPath);
             EditorUtility.SetDirty(b);
         }
     }

@@ -1,12 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PP;
 
-namespace NPC
-{
-	[CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/SearchActivity")]
-	public class SearchActivity : Action
+namespace Behavior.NPC {
+
+    [CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/SearchActivity")]
+	public class SearchActivity : AIAction
 	{
 		public override void Execute(StateManager state)
 		{

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public static class Tools
@@ -25,4 +26,13 @@ public static class Tools
         }
         list.Add(element);
     }
+
+    public static T PickRandom<T>(this IEnumerable<T> list)
+    {
+        if (list.Count() <= 0) {
+            throw new System.Exception("The provided array is of zero size.");
+        }
+        return list.ElementAt(Random.Range(0, list.Count()));
+    }
+
 }

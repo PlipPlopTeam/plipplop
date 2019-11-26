@@ -1,4 +1,4 @@
-﻿public enum INPUT
+﻿public enum EInput
 {
     NONE,
 

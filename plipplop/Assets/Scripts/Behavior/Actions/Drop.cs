@@ -1,12 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PP;
 
-namespace NPC
+namespace Behavior.NPC
 {
     [CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/Drop")]
-    public class Drop : Action
+    public class Drop : AIAction
     {
         public override void Execute(StateManager state)
         {

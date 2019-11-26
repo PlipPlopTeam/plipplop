@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
-using PP;
 
-namespace NPC
+namespace Behavior.NPC
 {
 	[CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/GoThere")]
-	public class GoThere : Action
+	public class GoThere : AIAction
 	{
 		public Vector3 position;
 		public override void Execute(StateManager state)

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ColliderShape { BOX, SPHERE, CAPSULE }
+public enum EColliderShape { BOX, SPHERE, CAPSULE }
 
-public class Item : MonoBehaviour, Carryable
+public class Item : MonoBehaviour, ICarryable
 {
     [Header("Physics")]
-    public ColliderShape shape;
+    public EColliderShape shape;
     public BoxCollider bc;
     public SphereCollider sc;
     public CapsuleCollider cc;
@@ -54,16 +54,16 @@ public class Item : MonoBehaviour, Carryable
         Mesh m = visual.GetComponentInChildren<MeshFilter>().mesh;
         switch(shape)
         {
-            case ColliderShape.BOX:
+            case EColliderShape.BOX:
             bc = gameObject.AddComponent<BoxCollider>();
             bc.size = m.bounds.size;
             break;
-            case ColliderShape.SPHERE:
+            case EColliderShape.SPHERE:
             sc = gameObject.AddComponent<SphereCollider>();
             sc.radius = (m.bounds.size.x + m.bounds.size.y) * 0.5f;
             
             break;
-            case ColliderShape.CAPSULE:
+            case EColliderShape.CAPSULE:
             cc = gameObject.AddComponent<CapsuleCollider>();
             cc.height = m.bounds.size.y;
             cc.radius = m.bounds.size.x;

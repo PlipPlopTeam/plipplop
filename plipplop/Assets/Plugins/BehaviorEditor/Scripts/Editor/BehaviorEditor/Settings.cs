@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace PP.Behavior
+namespace Behavior.Editor
 {
     [CreateAssetMenu(menuName ="Behavior/Editor/Settings")]
     public class Settings : ScriptableObject
@@ -11,7 +11,7 @@ namespace PP.Behavior
         public StateNode stateNode;
 		public PortalNode portalNode;
         public TransitionNode transitionNode;
-        public bool makeTransition;
+        public bool MAKE_TRANSITION;
         public GUISkin skin;
 		public GUISkin activeSkin;
         

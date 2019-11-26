@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Valuable : MonoBehaviour, Noticeable
+public class Valuable : MonoBehaviour, INoticeable
 {
     [HideInInspector] public Vector3 origin;
     

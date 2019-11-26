@@ -1,12 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PP;
 
-namespace NPC
+namespace Behavior.NPC
 {
 	[CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/WaitBetween")]
-	public class WaitBetween : Action
+	public class WaitBetween : AIAction
 	{
 		public Vector2 range;
 		public override void Execute(StateManager state)

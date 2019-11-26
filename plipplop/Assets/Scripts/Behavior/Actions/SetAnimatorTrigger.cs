@@ -1,12 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PP;
 
-namespace NPC
+namespace Behavior.NPC
 {
+    
     [CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/Set Animator Trigger")]
-    public class SetAnimatorTrigger : Action
+    public class SetAnimatorTrigger : AIAction
     {
         public string triggerName;
 

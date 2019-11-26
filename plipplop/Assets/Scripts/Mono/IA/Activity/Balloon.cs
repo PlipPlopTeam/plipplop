@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Balloon : Activity, Carryable
+public class Balloon : Activity, ICarryable
 {
     [Header("BALLOON")]
     public float minDistanceBetween = 3f;

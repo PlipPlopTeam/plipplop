@@ -1,4 +1,4 @@
-﻿public enum ACTION
+﻿public enum EAction
 {
     POSSESS,
     JUMP,

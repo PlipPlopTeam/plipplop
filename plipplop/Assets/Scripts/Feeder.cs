@@ -10,6 +10,11 @@ public class Feeder : MonoBehaviour
     public int stock;
     public bool destroyOnceEmpty = false;
 
+    private void Start()
+    {
+        Game.i.aiZone.Register(this);
+    }
+
     public virtual void Catch(NonPlayableCharacter npc)
     {
         if(stock <= 0) 

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace PP
+namespace Behavior
 {
-    public abstract class Action : ScriptableObject
+    public abstract class AIAction : ScriptableObject
     {
         public abstract void Execute(StateManager states = null);
     }

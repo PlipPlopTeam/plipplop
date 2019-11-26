@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using PP;
+using Behavior;
 using UnityEditor;
 using UnityEngine.AI;
+
 
 public class NonPlayableCharacter : StateManager
 {
@@ -24,9 +25,9 @@ public class NonPlayableCharacter : StateManager
 	public Feeder feeder;
 	
 	[HideInInspector] public Activity previousActivity;
-	[HideInInspector] public Carryable carried;
-	private Carryable carryableToCollect;
-	public Dictionary<Clothes.Slot, Clothes> clothes = new Dictionary<Clothes.Slot, Clothes>();
+	[HideInInspector] public ICarryable carried;
+	private ICarryable carryableToCollect;
+	public Dictionary<Clothes.ESlot, Clothes> clothes = new Dictionary<Clothes.ESlot, Clothes>();
 
 	[Header("Settings")]
 	public float strength = 1f;
@@ -48,13 +49,13 @@ public class NonPlayableCharacter : StateManager
 
 	public override void Update()
 	{
-		Waiting();
+        StartWaiting();
 		base.Update();
-		if(carried != null && carried.Mass() > strength) Carrying(carried);
-		Collecting();
+		if(carried != null && carried.Mass() > strength) StartCarrying(carried);
+        StartCollecting();
 	}
 
-	private void Waiting()
+	private void StartWaiting()
 	{
 		if(hasWaited) hasWaited = false;
 		if(!endWait)
@@ -99,7 +100,7 @@ public class NonPlayableCharacter : StateManager
 	public override void Start()
 	{
 		// Load Character Clothes Slots
-		foreach (Clothes.Slot suit in (Clothes.Slot[]) Clothes.Slot.GetValues(typeof(Clothes.Slot)))
+		foreach (Clothes.ESlot suit in (Clothes.ESlot[]) Clothes.ESlot.GetValues(typeof(Clothes.ESlot)))
 			clothes.Add(suit, null);
 
 		// Load Character Stats
@@ -143,18 +144,18 @@ public class NonPlayableCharacter : StateManager
 		clothes[clothData.slot] = c;
 	}
 
-	public bool IsCarrying(Carryable carryable)
+	public bool IsCarrying(ICarryable carryable)
 	{
 		return carryable == carried;
 	}
 
-	public void Carrying(Carryable carryable)
+	public void StartCarrying(ICarryable carryable)
 	{
-		carryable.Self().position = (skeleton.GetSlotByName("RightHand").GetPosition() + skeleton.GetSlotByName("LeftHand").GetPosition())/2f;
+		carryable.Self().position = (skeleton.GetSocketBySlot(Clothes.ESlot.RIGHT_HAND).GetPosition() + skeleton.GetSocketBySlot(Clothes.ESlot.LEFT_HAND).GetPosition())/2f;
 		carryable.Self().forward = transform.forward;
 	}
 
-	public void Collecting()
+	public void StartCollecting()
 	{
 		if(carryableToCollect != null)
 		{
@@ -167,12 +168,12 @@ public class NonPlayableCharacter : StateManager
 		}
 	}
 
-	public bool IsCollecting(Carryable carryable)
+	public bool IsCollecting(ICarryable carryable)
 	{
 		return carryable == carryableToCollect;
 	}
 
-	public void Collect(Carryable carryable)
+	public void Collect(ICarryable carryable)
 	{
 		carryableToCollect = carryable;
 		agentMovement.Chase(carryableToCollect.Self());		
@@ -190,7 +191,7 @@ public class NonPlayableCharacter : StateManager
 		};
 	}
 
-	public void Carry(Carryable carryable)
+	public void Carry(ICarryable carryable)
 	{
 		if(carried != null) Drop();
 		carried = carryable;
@@ -198,7 +199,7 @@ public class NonPlayableCharacter : StateManager
 		if(carried.Mass() <= strength)
 		{
 			//animator.SetBool("Holding", true);
-			skeleton.Attach(carried.Self(), "RightHand", true);
+			skeleton.Attach(carried.Self(), Clothes.ESlot.RIGHT_HAND, true);
 		}
 		else 
 		{
@@ -212,7 +213,7 @@ public class NonPlayableCharacter : StateManager
 		carried.Drop();
 
 		if(carried.Mass() <= strength)
-			skeleton.Drop("RightHand");
+			skeleton.Drop(Clothes.ESlot.RIGHT_HAND);
 
 		//animator.SetBool("Holding", false);
 		animator.SetBool("Carrying", false);

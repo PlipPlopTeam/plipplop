@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace PP
+namespace Behavior
 {
     public class ActionHook : MonoBehaviour
     {
-		public Action[] fixedUpdateActions;
-		public Action[] updateActions;
+		public AIAction[] fixedUpdateActions;
+		public AIAction[] updateActions;
 
 		void FixedUpdate()
 		{
