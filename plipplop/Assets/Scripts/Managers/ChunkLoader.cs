@@ -15,11 +15,12 @@ public class ChunkLoader
 
     List<FadedApparition> fadedProps = new List<FadedApparition>();
     List<Persistent> persistentProps = new List<Persistent>();
+    Dictionary<string, List<ChunkProp>> storedProps = new Dictionary<string, List<ChunkProp>>();
 
     List<ChunkProp> disabledProps = new List<ChunkProp>();
     Scene cacheScene;
-    readonly float deferringDelay = 0.2f;
-    Task currentDeferringTask = null;
+    readonly float deferringDelay = 1f;
+    List<Task> queue = new List<Task>();
 
     class Footprint
     {
@@ -36,7 +37,7 @@ public class ChunkLoader
         readonly string name;
         readonly int childrenCount;
         readonly int componentCount;
-        readonly string identifier;
+        public readonly string identifier;
 
         public Footprint(GameObject obj, string identifier)
         {
@@ -87,12 +88,18 @@ public class ChunkLoader
         public string chunkIdentifier;
         public readonly Footprint footprint;
         public bool isFadingOut = false;
+        public bool preserveState = false;
 
         public ChunkProp(GameObject propObject, string identifier)
         {
             footprint = new Footprint(propObject, identifier);
             this.propObject = propObject;
             this.chunkIdentifier = identifier;
+        }
+
+        public override string ToString()
+        {
+            return propObject.name + "_" + chunkIdentifier + "_" + footprint.GetHashCode();
         }
     }
 
@@ -121,19 +128,19 @@ public class ChunkLoader
                 // Check what I have to load and unload
                 var loadedChunks = chunkZones.Values.ToList().Where(o => { return o.IsLoaded(); });
                 var neighbors = playerCZ.neighborhood;
-                var chunksToLoad = neighbors.Where(o=> { return !loadedChunks.Contains(o); }).ToList();
-                var chunksToUnload = loadedChunks.Where(o => { return !neighbors.Contains(o); }).ToList();
+                var chunksToLoad = neighbors.Where(o=> { return !loadedChunks.Contains(o) && !o.IsLoaded(); }).ToList();
+                var chunksToUnload = loadedChunks.Where(o => { return !neighbors.Contains(o) && o.IsLoaded(); }).ToList();
 
                 // Always load player chunk
                 chunksToUnload.RemoveAll(o => o.identifier == playerCZ.identifier);
-                chunksToLoad.Add(playerCZ);
+                if (!playerCZ.IsLoaded()) chunksToLoad.Add(playerCZ);
 
                 // Commit
-                foreach (var cz in chunksToLoad) {
-                    Load(cz.identifier);
-                }
                 foreach (var cz in chunksToUnload) {
                     Unload(cz.identifier);
+                }
+                foreach (var cz in chunksToLoad) {
+                    Load(cz.identifier);
                 }
 
                 if (playerChunkZone != null)  playerChunkZone.isPlayerInside = false;
@@ -142,11 +149,30 @@ public class ChunkLoader
 
         }
 
+        ExecuteQueue();
+    }
+
+    // Executing deffered list jobs
+    void ExecuteQueue()
+    {
+        if (queue.Count > 0) {
+            var task = queue.First();
+            if (task.IsCompleted) {
+                queue.RemoveAt(0);
+            }
+            else if (task.Status != TaskStatus.Running) {
+                task.Start();
+            }
+            else {
+                // Waiting for the task to complete
+            }
+        }
     }
 
     public void Register(ChunkStreamingZone csz)
     {
         chunkZones[csz.identifier] = csz;
+        storedProps[csz.identifier] = new List<ChunkProp>();
     }
 
     public void Register(FadedApparition fa)
@@ -174,9 +200,30 @@ public class ChunkLoader
         var csz = chunkZones[identifier];
         if (csz.IsLoaded()) {
             var rootGameObjects = csz.scene.Value.GetRootGameObjects();
+            // When chunk A with prop X is unloaded...
             foreach (var prop in props.FindAll(o=>rootGameObjects.Contains(o.propObject))) {
-                if (!persistentProps.Find(o=>o.gameObject==csz)){
-                    if (csz.IsInsideChunk(prop.propObject.transform.position)) {
+                // If prop X is still in chunk A
+                if (csz.IsInsideChunk(prop.propObject.transform.position)) {
+                    prop.chunkIdentifier = csz.identifier;
+
+                    // If prop is in a persistence zone
+                    if (IsStored(prop, csz.identifier)) {
+                        // Disabled but kept in memory
+                        prop.preserveState = true;
+                        DisableProp(prop);
+                        Log(prop + " is going to the storage");
+                    }
+
+                    // Else if prop is naturally persistent
+                    else if (IsPersistent(prop.propObject)) {
+                        // do nothing!
+                        // just move it to the Rootscene just in case
+                        SceneManager.MoveGameObjectToScene(prop.propObject, SceneManager.GetActiveScene());
+                    }
+
+                    // Else, the object should be destroyed or cached
+                    // (basically we don't care)
+                    else {
                         if (Game.s.CACHE_CHUNK_PROPS) {
                             DisableProp(prop);
                         }
@@ -184,21 +231,37 @@ public class ChunkLoader
                             DestroyProp(prop.propObject);
                         }
                     }
-                    else {
-                        foreach(var id in chunkZones.Keys) {
-                            if (!chunkZones[id].IsLoaded())
-                                continue;
+                }
 
-                            var newChunk = chunkZones[id];
-                            if (newChunk.IsInsideChunk(prop.propObject.transform.position)) {
-                                SceneManager.MoveGameObjectToScene(prop.propObject, newChunk.scene.Value);
-                            }
+                // Else, if prop X is not in chunk A
+                else {
+                    // Let's check if it's still in a loaded chunk at least
+                    Log(prop.propObject.name + " is no longer in its identified chunk, let's transfer it");
+                    bool hasMoved = false;
+                    foreach (var id in chunkZones.Keys) {
+                        if (!chunkZones[id].IsLoaded())
+                            continue;
+
+                        var newChunk = chunkZones[id];
+                        if (newChunk.IsInsideChunk(prop.propObject.transform.position)) {
+                            // Prop is a new loaded chunk, let's transfer it to that chunk
+                            prop.chunkIdentifier = id;
+                            SceneManager.MoveGameObjectToScene(prop.propObject, newChunk.scene.Value);
+                            hasMoved = true;
+                            Warn("Transferred roaming prop " + prop.propObject.name + " to " + newChunk.identifier);
                         }
                     }
-                }
-                else {
-                    // If it's persistent, let's move it to the active scene
-                    SceneManager.MoveGameObjectToScene(prop.propObject, SceneManager.GetActiveScene());
+
+                    // Prop is in a zone that is not loaded, or out of the chunks, it should be destroyed or cached for future re-placement
+                    if (!hasMoved) {
+                        Warn("Object "+prop+" could not be moved to a loaded chunk, will be disposed instead");
+                        if (Game.s.CACHE_CHUNK_PROPS) {
+                            DisableProp(prop);
+                        }
+                        else {
+                            DestroyProp(prop.propObject);
+                        }
+                    }
                 }
             }
             SceneManager.UnloadSceneAsync(csz.scene.Value);
@@ -211,6 +274,7 @@ public class ChunkLoader
         loadingChunks.RemoveAll(o => o == identifier);
     }
 
+    // This is the real LOAD function
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (mode != LoadSceneMode.Additive) 
@@ -223,6 +287,7 @@ public class ChunkLoader
                 if (Game.s.DEFERRED_CHUNK_PROPS_LOADING) {
                     // Deferred loading
                     var props = scene.GetRootGameObjects();
+                    // Nearest prop should load first
                     if (Game.i.player.GetCurrentController() != null) 
                         props = props.OrderBy(prop => { return Vector3.Distance(prop.transform.position, Game.i.player.GetCurrentController().transform.position); }).ToArray();
 
@@ -230,19 +295,37 @@ public class ChunkLoader
                         prop.SetActive(false);
                     }
 
-                    if (currentDeferringTask != null) {
-                      //  currentDeferringTask
-                    }
+                    queue.Add(
+                        ExecuteListDeferred(props, g => {
+                            if (g != null) {
+                                g.SetActive(true);
+                                RegularizeProp(g, id);
+                            }
+                        })
+                    );
 
-                    currentDeferringTask = ExecuteListDeferred(props, g => {
-                        g.SetActive(true);
-                        RegularizeProp(g, id);
-                    });
+                    queue.Add(
+                        ExecuteListDeferred(storedProps[id].ToArray(), prop => {
+                            if (prop != null) {
+                                Log("Restoring (async) " + prop + " from storage area");
+                                RemoveFromStorage(prop.propObject, id);
+                                EnableProp(prop.footprint);
+                            }
+                        })
+                    );
                 }
                 else {
                     // All at once loading
-                    foreach (var prop in scene.GetRootGameObjects()) {
-                        RegularizeProp(prop, id);
+                    // When a chunk B with prop Y is loaded...
+                    foreach (var propObject in scene.GetRootGameObjects()) {
+                        RegularizeProp(propObject, id);
+                    }
+
+                    // Also restore props from the persistence volume, if any
+                    foreach(var prop in storedProps[id].ToArray()) {
+                        Log("Restoring " + prop + " from storage area");
+                        RemoveFromStorage(prop.propObject, id);
+                        EnableProp(prop.footprint);
                     }
                 }
 
@@ -253,12 +336,64 @@ public class ChunkLoader
 
     void RegularizeProp(GameObject prop, string identifier)
     {
-        var chp = new ChunkProp(prop, identifier);
 
-        /////////
-        // Destroy clones (object is still here)
+        // Check if Y is already here
+        var chp = new ChunkProp(prop, identifier);
         var potentialOriginals = props.FindAll(o => o.footprint.Equals(chp.footprint));
 
+        // If object is already in the play area...
+        if (potentialOriginals.Count > 0) {
+            if (prop.GetComponent<Cloneable>()) {
+                // Object is marked as cloneable, let's spawn it anyway
+                props.Add(chp);
+                return;
+            }
+            else {
+                // Object is not cloneable, destroying it
+                Warn("Canceled spawn of clone " + prop.name + " because there exists " + potentialOriginals.Count + " clones in the scene");
+                Object.DestroyImmediate(prop); // So we just cancel that object
+            }
+        }
+        // Else, if the object is not currently in play
+        else {
+            // If it was previously stored in a persistence volume
+            if (IsStored(chp)) {
+                // If it is cloneable
+                if (prop.GetComponent<Cloneable>()) {
+                    // Clone it
+                    props.Add(chp);
+                    return;
+                }
+                else {
+                    // Cancel it
+                    Warn("Canceled spawn of clone " + prop.name + " because it is already stored in a storage volume");
+                    Object.DestroyImmediate(prop);
+                }
+            }
+            else {
+                // Create / restore it !
+                if (IsPropCached(chp.footprint)) {
+                    chp = GetPropFromCache(chp.footprint);
+                    if (chunkZones[chp.chunkIdentifier].IsLoaded()) {
+                        Warn("Canceled recreation of prop " + prop.name + " to restore it from cache instead");
+                        EnableProp(chp.footprint, chp.preserveState ? null : prop.transform);
+                    }
+                    else {
+                        Warn("Canceled recreation of prop " + prop.name + " because it exists in the unloaded chunk "+chp.chunkIdentifier+" already");
+                    }
+                    // Destroy the "new copy"
+                    Object.DestroyImmediate(prop);
+                }
+                else {
+                    // Adding needs not to be done if the prop is restored from cache
+                    // because EnableProp() automatically adds it already
+                    props.Add(chp);
+                }
+                return;
+            }
+        }
+
+        /*
         // Getting rid of objects that are "fading away"
         if (Game.s.FADE_CHUNK_PROPS) {
             foreach (var potentialOriginal in potentialOriginals.ToArray()) {
@@ -270,25 +405,7 @@ public class ChunkLoader
             }
         }
 
-        // If there are still clones, it means this object is a clone, so we shouldn't spawn it
-        if (potentialOriginals.Count > 0) {
-            Object.DestroyImmediate(prop); // So we just cancel that object
-            return;
-        }
-        //
-        /////////
-
-
-        // Check if object is in cache, if so restore it
-        if (IsPropCached(chp.footprint)) {
-            chp = GetPropFromCache(chp.footprint);
-            EnableProp(chp.footprint);
-
-            // Destroy the "new copy"
-            Object.DestroyImmediate(prop);
-        }
-
-        props.Add(chp);
+        */
     }
 
     bool IsPropCached(Footprint fp)
@@ -302,19 +419,25 @@ public class ChunkLoader
         return disabledProps.Find(o => o.footprint.Equals(fp));
     }
 
-    void EnableProp(Footprint fp)
+    void EnableProp(Footprint fp, Transform originalT=null)
     {
         var p = disabledProps.Find(o => o.footprint.Equals(fp));
         if (p != null) {
-            if (!chunkZones[p.chunkIdentifier].IsLoaded()) return; // Safety in case of asynchronous scene unloading
-
+            Log("Enabling prop " + p + "");
             disabledProps.Remove(p);
             props.Add(p);
             p.propObject.SetActive(true);
+            if (originalT) {
+                p.propObject.transform.SetPositionAndRotation(originalT.position, originalT.rotation);
+                var rb = p.propObject.GetComponent<Rigidbody>();
+                if (rb) {
+                    rb.velocity = Vector3.zero;
+                }
+            }
             SceneManager.MoveGameObjectToScene(p.propObject, chunkZones[p.chunkIdentifier].scene.Value);
         }
         else {
-            Debug.LogWarning("Tried to enable object with footprint " + fp.GetHashCode() + " but did not find anything to enable (??)");
+            Error("Tried to enable object with footprint " + fp.GetHashCode() + " but did not find anything to enable (??)");
         }
     }
 
@@ -329,6 +452,10 @@ public class ChunkLoader
         var fa = fadedProps.Find(o => { return o.gameObject == prop.propObject; });
         var chunkProp = props.Find(o => { return o.propObject == prop.propObject; });
 
+        if (!prop.preserveState) {
+            // Reset identifier so that it respawns in its original chunk
+            prop.chunkIdentifier = prop.footprint.identifier;
+        }
         SceneManager.MoveGameObjectToScene(prop.propObject, cacheScene);
 
         if (fa) {
@@ -355,6 +482,8 @@ public class ChunkLoader
 
     void DestroyProp(GameObject propObject, bool destroyImmediatly=false)
     {
+        Log("Destroying " + propObject.name + "...");
+
         // Removing components of objects that don't exist anymore
         // 🤷‍
         fadedProps.RemoveAll(o => o == null);
@@ -372,26 +501,105 @@ public class ChunkLoader
                 });
             }
             else {
+                Log("Removing " + propObject.name + " from the prop list");
                 props.RemoveAll(o => o.propObject == propObject);
                 Object.Destroy(propObject);
+                Log("Prop list now contains "+props.Count+" objects");
             }
         }
         else {
+            Log("Removing " + propObject.name + " from the prop list");
             props.RemoveAll(o => o.propObject == propObject);
             Object.Destroy(propObject);
+            Log("Prop list now contains " + props.Count + " objects");
         }
     }
+
+    public bool IsPersistent(GameObject obj)
+    {
+        return persistentProps.Find(o => o.gameObject == obj);
+    }
+
+    bool IsStored(ChunkProp obj)
+    {
+        foreach(var chunkID in chunkZones.Keys) {
+            if (storedProps[chunkID].Find(o => o.footprint.Equals(obj.footprint)) != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bool IsStored(ChunkProp obj, string identifier)
+    {
+        return storedProps[identifier].Find(o => o.footprint.Equals(obj.footprint)) != null;
+    }
+
+    public void Store(GameObject obj, string identifier)
+    {
+        var prop = props.Find(o => o.propObject == obj);
+        if (prop != null) {
+            Log("Storing " + prop + " in a zone from " + identifier);
+            storedProps[identifier].AddUnique(prop);
+            prop.chunkIdentifier = identifier;
+            SceneManager.MoveGameObjectToScene(prop.propObject, chunkZones[prop.chunkIdentifier].scene.Value);
+        }
+    }
+
+    public void RemoveFromStorage(GameObject obj, string identifier)
+    {
+        storedProps[identifier].RemoveAll(o=>o == props.Find(p => p.propObject == obj));
+    }    
 
     Task ExecuteListDeferred<T>(IEnumerable<T> elements, System.Action<T> exe)
     {
         var dt = 1/60f;
-        return Task.Run(async delegate {
+        return new Task(delegate {
             foreach (var element in elements) {
                 UnityMainThreadDispatcher.Instance().Enqueue(delegate {
                     exe.Invoke(element);
                 });
-                await Task.Delay(Mathf.RoundToInt(dt * 1000f * deferringDelay));
+                Task.Delay(Mathf.RoundToInt(dt * 1000f * deferringDelay)).Wait();
             }
         });
     }
+
+    public int GetPropCount()
+    {
+        return props.Count;
+    }
+
+    public int GetStorageCount()
+    {
+        int count = 0;
+        foreach(var id in chunkZones.Keys) {
+            count += storedProps[id].Count;
+        }
+        return count;
+    }
+
+    public Dictionary<string, int> GetStoragesCount()
+    {
+        Dictionary<string, int> count = new Dictionary<string, int>();
+        foreach (var id in chunkZones.Keys) {
+            count[id] = storedProps[id].Count;
+        }
+        return count;
+    }
+
+    void Warn(string msg)
+    {
+        if (Game.s.LOG_CHUNK_LOADER) Debug.LogWarning(msg);
+    }
+
+    void Log(string msg)
+    {
+        if (Game.s.LOG_CHUNK_LOADER) Debug.Log(msg);
+    }
+
+    void Error(string msg)
+    {
+        Debug.LogError(msg);
+    }
 }
+

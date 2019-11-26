@@ -7,10 +7,11 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class ChunkStreamingZoneEditor : BaseEditor
 {
+    GUIStyle redStyle;
+
     private void OnSceneGUI()
     {
         EditorGUI.BeginChangeCheck();
-
         ChunkStreamingZone chunkVol = (ChunkStreamingZone)target;
         Handles.matrix = chunkVol.transform.localToWorldMatrix;
 
@@ -198,7 +199,11 @@ public class ChunkStreamingZoneEditor : BaseEditor
             prop.Next(true);
             var array = prop.Copy();
             var arrSize = array.arraySize;
+
             prop.Next(true);
+            List<Object> knownNeighbors = new List<Object>();
+            List<int> toDestroy = new List<int>();
+
             for (int i = 0; i < arrSize; i++) {
                 GUILayout.BeginHorizontal();
                 if (!prop.Next(false)) break;
@@ -206,20 +211,42 @@ public class ChunkStreamingZoneEditor : BaseEditor
                 prop.objectReferenceValue = EditorGUILayout.ObjectField(prop.objectReferenceValue, typeof(ChunkStreamingZone), allowSceneObjects: true);
 
                 // Dupe
-                while (prop.objectReferenceValue != null && csz.neighborhood.FindAll(o => o == (ChunkStreamingZone)prop.objectReferenceValue).Count > 1) {
-                    csz.neighborhood.Remove((ChunkStreamingZone)prop.objectReferenceValue);
+                if (knownNeighbors.Contains(prop.objectReferenceValue)) {
+                    toDestroy.Add(i);
                 }
 
                 // Me! Me! Me!
-                if (prop.objectReferenceValue == target) prop.objectReferenceValue = null;
+                if (prop.objectReferenceValue == target) {
+                    toDestroy.Add(i);
+                }
 
                 // Remove button
                 if (GUILayout.Button("-", GUILayout.Width(20f))) {
-                    if (prop.objectReferenceValue == null) array.DeleteArrayElementAtIndex(i);
-                    else csz.RemoveNeighbor((ChunkStreamingZone)prop.objectReferenceValue);
+                    toDestroy.Add(i);
+                }
+
+                // OK, valid neighbor
+                if (prop.objectReferenceValue != null) {
+                    knownNeighbors.Add(prop.objectReferenceValue);
                 }
                 GUILayout.EndHorizontal();
             }
+
+            // Cleaning
+            array = serializedObject.FindProperty("neighborhood");
+            array.Next(true);
+            int shift = 0;
+            for (int i = 0; i < arrSize; i++) {
+                if (toDestroy.Contains(i+shift)) {
+                    array.DeleteArrayElementAtIndex(i);
+                    if (array.arraySize == arrSize) array.DeleteArrayElementAtIndex(i);
+                    i--;
+                    arrSize--;
+                    shift++; 
+                }
+            }
+            arrSize = knownNeighbors.Count;
+
             if (GUILayout.Button("Add", style: normalControl)) {
                 array.InsertArrayElementAtIndex(arrSize);
                 array.GetArrayElementAtIndex(arrSize).objectReferenceValue = null;
@@ -228,8 +255,26 @@ public class ChunkStreamingZoneEditor : BaseEditor
                                     
             GUILayout.EndHorizontal();
 
-            // Cleaning of the neighbors
-            csz.UpdateNeighborhood();
+            // Reciprocity check
+            array = serializedObject.FindProperty("neighborhood");
+            array.Next(true);
+            for (int i = 0; i < array.arraySize; i++) {
+                var otherChunk = array.GetArrayElementAtIndex(i).objectReferenceValue;
+                if (otherChunk == null) {
+                    EditorGUILayout.HelpBox("WARNING: Null sector are not allowed in the neighborhood", MessageType.Error, true);
+                }
+                var otherChunkDeserialized = (ChunkStreamingZone)otherChunk;
+                if (otherChunkDeserialized != null && !otherChunkDeserialized.neighborhood.Contains((ChunkStreamingZone)target)) {
+                    EditorGUILayout.HelpBox("WARNING: Neighbor ["+otherChunkDeserialized.identifier+"] doesn't have chunk ["+csz.identifier+"] registered in its neighborhood", MessageType.Warning, true);
+                }
+            }
+
+            // Identifier uniqueness check
+            foreach(var otherCsz in FindObjectsOfType<ChunkStreamingZone>()) {
+                if (csz != otherCsz && otherCsz.identifier == csz.identifier) {
+                    EditorGUILayout.HelpBox("WARNING: Identifier ["+csz.identifier+"] is ALREADY TAKEN by another chunk on the scene. This must be fixed before playing.", MessageType.Error, true);
+                }
+            }
 
             serializedObject.ApplyModifiedProperties();
         };
@@ -256,5 +301,12 @@ public class ChunkStreamingZoneEditor : BaseEditor
             GUILayout.EndHorizontal();
             GUI.color = Color.white;
         };
+    }
+
+    internal override void MakeStyles()
+    {
+        redStyle = GUI.skin.box;
+        redStyle.normal.textColor = Color.red;
+        base.MakeStyles();
     }
 }

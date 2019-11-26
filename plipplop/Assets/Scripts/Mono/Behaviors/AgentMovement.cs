@@ -99,8 +99,9 @@ public class AgentMovement : MonoBehaviour
         chaseTarget = null;
     }
 
-    public bool GoThere(Vector3 pos)
+    public bool GoThere(Vector3 pos, bool clearEvents = false)
     {
+        if(clearEvents) ClearEvents();
         NavMeshPath path = new NavMeshPath();
         agent.CalculatePath(pos, path);
         if(path.status == NavMeshPathStatus.PathPartial
@@ -110,9 +111,9 @@ public class AgentMovement : MonoBehaviour
         }
         else 
         {
+            agent.SetDestination(pos);
             going = true;
             reached = false;
-            agent.SetDestination(pos);
             return true;
         }
     }

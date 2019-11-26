@@ -16,7 +16,7 @@ namespace NPC
                     Feeder feeder = null;
                     foreach(Feeder f in Zone.i.feeders)
                     {
-                        if(feeder == null)
+                        if(feeder == null) 
                         {
                             if(f.stock > 0) feeder = f;
                         }
