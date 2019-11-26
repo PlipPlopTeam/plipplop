@@ -210,6 +210,7 @@ public class AperturePresetEditor : Editor
         if (!inheritableProperties.ContainsKey(advanced)) inheritableProperties[advanced] = new InheritableProperties(overrides);
         
         inheritableProperties[switches].Add("canBeControlled");
+        inheritableProperties[switches].Add("resetable");
 
         inheritableProperties[basicParameters].Add("fieldOfView");
         inheritableProperties[basicParameters].Add("heightOffset");
@@ -224,7 +225,8 @@ public class AperturePresetEditor : Editor
         inheritableProperties[interpolations].Add("verticalFollowLerp");
         inheritableProperties[interpolations].Add("rotationSpeed");
         inheritableProperties[interpolations].Add("lookAtLerp");
-        inheritableProperties[interpolations].Add("cameraResetSpeed");
+        inheritableProperties[interpolations].Add("cameraAlignSpeed");
+        inheritableProperties[interpolations].Add("cameraResetAlignSpeed");
 
         inheritableProperties[speedFX].Add("speedEffectMultiplier");
         inheritableProperties[speedFX].Add("catchUpSpeedMultiplier");
