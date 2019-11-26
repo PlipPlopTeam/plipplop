@@ -29,8 +29,7 @@ public class Firepit : Activity
 
         if(chair == null)
         {
-            float angle = Random.Range(0f, 1f) * Mathf.PI * 2;
-            Vector3 pos = new Vector3(transform.position.x + Mathf.Cos(angle) * radius, transform.position.y, transform.position.z + Mathf.Sin(angle) * radius);
+            Vector3 pos = Geometry.GetRandomPointAround(radius) + transform.position;
 
             user.GoSitThere(pos);
             user.agentMovement.onDestinationReached += () =>
