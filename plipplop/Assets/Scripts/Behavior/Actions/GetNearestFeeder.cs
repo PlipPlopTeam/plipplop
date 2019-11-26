@@ -9,12 +9,13 @@ namespace NPC
 		public override void Execute(StateManager state)
 		{
 			NonPlayableCharacter npc = (NonPlayableCharacter)state;
-			if(npc != null && Zone.i != null)
+			if(npc != null)
             {
-                if(Zone.i.feeders.Count > 0)
+                var feeders = Game.i.aiZone.GetFeeders();
+                if (feeders.Length > 0)
                 {
                     Feeder feeder = null;
-                    foreach(Feeder f in Zone.i.feeders)
+                    foreach(Feeder f in feeders)
                     {
                         if(feeder == null) 
                         {

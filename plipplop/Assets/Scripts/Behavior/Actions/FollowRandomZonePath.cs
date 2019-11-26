@@ -12,7 +12,7 @@ namespace NPC
 			if(npc != null)
 			{
 				npc.agentMovement.ClearEvents();
-                npc.agentMovement.FollowPath(Zone.i.GetRandomPath());
+                npc.agentMovement.FollowPath(Game.i.aiZone.GetRandomPath());
 			}
 		}
 	}

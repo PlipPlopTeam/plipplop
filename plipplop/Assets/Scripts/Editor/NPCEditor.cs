@@ -14,7 +14,7 @@ public class AgentMovementEditor : Editor
         AgentMovement am = (AgentMovement)target;
         if(am.path == null) return;
         
-        Vector3[] newPath = am.path.points;
+        Vector3[] newPath = am.path.points.ToArray();
         for(int i = 0; i < newPath.Length; i++)
         {
             newPath[i] = Handles.PositionHandle(newPath[i], Quaternion.identity);
@@ -23,7 +23,7 @@ public class AgentMovementEditor : Editor
         if(EditorGUI.EndChangeCheck())
         {
             Undo.RecordObject(am, "Move NonPlayableCharacter path point");
-            am.path.points = newPath;
+            am.path.points = new List<Vector3>(newPath);
             EditorUtility.SetDirty(am);
         }
     }

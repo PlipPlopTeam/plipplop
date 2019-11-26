@@ -4,6 +4,7 @@ using PP;
 using UnityEditor;
 using UnityEngine.AI;
 
+
 public class NonPlayableCharacter : StateManager
 {
 	[HideInInspector] public Sight sight;

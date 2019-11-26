@@ -10,13 +10,6 @@ using UnityEditor;
 public class AgentMovement : MonoBehaviour
 {
     [System.Serializable]
-    public class Path
-    {
-        public bool loop = true;
-        public Vector3[] points;
-        [HideInInspector] public int index = 0;
-    }
-    [System.Serializable]
     public class Settings
     {
         public float speed = 5f;
@@ -29,7 +22,7 @@ public class AgentMovement : MonoBehaviour
     public System.Action onDestinationReached;
     public System.Action onPathCompleted;
     public System.Action onTargetOffPath;
-    public AgentMovement.Path path;
+    public AIPath path;
     public AgentMovement.Settings settings;
 
     [HideInInspector] public bool going = false;
@@ -54,11 +47,11 @@ public class AgentMovement : MonoBehaviour
         SetSpeed(settings.speed);
     }
 
-    public void FollowPath(AgentMovement.Path newPath)
+    public void FollowPath(AIPath newPath)
     {
         path.loop = newPath.loop;
         path.points = newPath.points;
-        path.index = Random.Range(0, path.points.Length);
+        path.index = Random.Range(0, path.points.Count);
         followingPath = true;
         ClearEvents();
         onPathCompleted += () => {if(!path.loop) followingPath = false;};
@@ -132,7 +125,7 @@ public class AgentMovement : MonoBehaviour
                 onDestinationReached = null;
             }
 
-            if(path.index == path.points.Length - 1)
+            if(path.index == path.points.Count - 1)
             {
                 if(onPathCompleted != null)
                 {
@@ -166,9 +159,9 @@ public class AgentMovement : MonoBehaviour
 
     public bool GoAtPoint(int index)
     {
-        if(path.points.Length == 0
+        if(path.points.Count == 0
         || index < 0
-        || index >= path.points.Length) return false;
+        || index >= path.points.Count) return false;
 
         if(GoThere(path.points[index]))
         {
@@ -200,7 +193,7 @@ public class AgentMovement : MonoBehaviour
     public int GetNextPointIndex()
     {
         int waypoint = path.index + 1;
-        if(waypoint >= path.points.Length) waypoint = 0;
+        if(waypoint >= path.points.Count) waypoint = 0;
         return waypoint;
     }
 

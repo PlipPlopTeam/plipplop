@@ -7,6 +7,7 @@ public class Game : MonoBehaviour
     [Range(0, -100)] public int killZ = -20;
     public Library library;
     public Brain player;
+    public AIZone aiZone;
     public Mapping mapping;
     public Switches switches;
     public CheatCodeListener cheatCodeListener;
@@ -34,6 +35,7 @@ public class Game : MonoBehaviour
         mapping = Instantiate<Mapping>(mapping);
         cheatCodeListener = new CheatCodeListener(new Cheats());
         chunkLoader = new ChunkLoader();
+        aiZone = new AIZone();
         new GameObject().AddComponent<UnityMainThreadDispatcher>().gameObject.name="_THREAD_DISPATCHER";
 
         var spawn = FindObjectOfType<SpawnMarker>();

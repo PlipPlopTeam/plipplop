@@ -103,7 +103,7 @@ public class ChunkStreamingZone : MonoBehaviour
         if (isPlayerInside) content.AppendLine("<PLAYER INSIDE>");
         if (chunk!=null && scene != null) content.AppendLine("<LOADED>");
 
-        GUIStyle labelStyle = GUI.skin.label;
+        GUIStyle labelStyle = new GUIStyle(GUI.skin.label);
         labelStyle.normal.textColor = Color.Lerp(baseColor, Color.white, 0.2f); 
 
         Handles.Label(transform.TransformPoint(positions.ToArray().Mean()), new GUIContent(content.ToString()), labelStyle);

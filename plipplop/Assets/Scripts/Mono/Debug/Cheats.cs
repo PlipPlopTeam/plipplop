@@ -19,7 +19,7 @@ public class Cheats : Dictionary<string, System.Action>
 
     public void SetAllHunderToHundred()
     {
-        foreach(NonPlayableCharacter npc in Zone.i.actors)
+        foreach(NonPlayableCharacter npc in Object.FindObjectsOfType<NonPlayableCharacter>())
             npc.SetStat("hunger", 100f);
     }
 }
