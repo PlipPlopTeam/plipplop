@@ -29,9 +29,10 @@ public class AgentMovement : MonoBehaviour
     [HideInInspector] public bool reached = false;
     [HideInInspector] public Animator animator;
 
-    private bool followingPath;
-    private Transform chaseTarget;
-    private NavMeshAgent agent;
+    bool followingPath;
+    Transform chaseTarget;
+    NavMeshAgent agent;
+    int currentIndexOnPath;
 
     public void ClearEvents()
     {
@@ -49,14 +50,13 @@ public class AgentMovement : MonoBehaviour
 
     public void FollowPath(AIPath newPath)
     {
-        path.loop = newPath.loop;
-        path.points = newPath.points;
-        path.index = Random.Range(0, path.points.Count);
+        path = newPath;
+        currentIndexOnPath = Random.Range(0, path.points.Count);
         followingPath = true;
         ClearEvents();
         onPathCompleted += () => {if(!path.loop) followingPath = false;};
         StopChase();
-        GoAtPoint(path.index);
+        GoAtPoint(currentIndexOnPath);
     }
     public void StopFollowingPath()
     {
@@ -125,7 +125,7 @@ public class AgentMovement : MonoBehaviour
                 onDestinationReached = null;
             }
 
-            if(path.index == path.points.Count - 1)
+            if(currentIndexOnPath == path.points.Count - 1)
             {
                 if(onPathCompleted != null)
                 {
@@ -165,7 +165,7 @@ public class AgentMovement : MonoBehaviour
 
         if(GoThere(path.points[index]))
         {
-            path.index = index;
+            currentIndexOnPath = index;
             return true;
         }
         else return false;
@@ -192,7 +192,7 @@ public class AgentMovement : MonoBehaviour
 
     public int GetNextPointIndex()
     {
-        int waypoint = path.index + 1;
+        int waypoint = currentIndexOnPath + 1;
         if(waypoint >= path.points.Count) waypoint = 0;
         return waypoint;
     }

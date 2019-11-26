@@ -6,7 +6,7 @@ using PP;
 namespace NPC
 {
     [CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/Wait")]
-    public class Wait : Action
+    public class Wait : AIAction
     {
         public float time = 1f;
         public override void Execute(StateManager state)

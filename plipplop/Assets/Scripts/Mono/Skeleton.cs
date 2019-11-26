@@ -7,7 +7,7 @@ public class Skeleton : MonoBehaviour
 	[System.Serializable]
 	public class Socket
 	{
-		public string name;
+		public Clothes.ESlot slot;
 		public Transform bone;
         public Vector3 offset;
 		[HideInInspector] public Transform item;
@@ -56,12 +56,12 @@ public class Skeleton : MonoBehaviour
 
     public Vector3 GetCenterOfHands()
     {
-        return (GetSlotByName("LeftHand").GetPosition() + GetSlotByName("RightHand").GetPosition())/2f;
+        return (GetSocketBySlot(Clothes.ESlot.LEFT_HAND).GetPosition() + GetSocketBySlot(Clothes.ESlot.RIGHT_HAND).GetPosition())/2f;
     }
 
-    public void Attach(Transform t, string where, bool unequipCurrent = false, Vector3 offset = new Vector3(), Vector3 rotate = new Vector3())
+    public void Attach(Transform t, Clothes.ESlot where, bool unequipCurrent = false, Vector3 offset = new Vector3(), Vector3 rotate = new Vector3())
     {
-        Socket s = GetSlotByName(where);
+        Socket s = GetSocketBySlot(where);
         if(s != null)
         {
             if(!s.IsFree())
@@ -77,9 +77,9 @@ public class Skeleton : MonoBehaviour
         else Debug.LogWarning("Socket : '" + where + "' doesn't exist");
     }
 
-    public void Drop(string from)
+    public void Drop(Clothes.ESlot from)
     {
-        Socket s = GetSlotByName(from);
+        Socket s = GetSocketBySlot(from);
         if(s != null)
         {
             if(s.item != null)
@@ -94,13 +94,9 @@ public class Skeleton : MonoBehaviour
         else Debug.LogWarning("Bone name : " + from + "doesn't exist");
     }
 
-    public Socket GetSlotByName(string name)
+    public Socket GetSocketBySlot(Clothes.ESlot slot)
     {
-        foreach(Socket s in sockets) 
-        {   
-            if(s.name == name) return s;
-        }
-        return null;
+        return sockets.Find(o => o.slot == slot);
     }
 
     public void Enfold (Transform t)

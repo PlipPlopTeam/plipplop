@@ -10,8 +10,8 @@ public class Mapping : ScriptableObject
     [System.Serializable]
     public class MappedAction
     {
-        public ACTION action;
-        public INPUT input;
+        public EAction action;
+        public EInput input;
         public bool isInverted;
         public uint factor = 1;
     }
@@ -20,8 +20,8 @@ public class Mapping : ScriptableObject
     public PlayerIndex index;
 
     MappingWrapper wrapper;
-    Dictionary<ACTION, List<InputWrapper>> registeredInputs = new Dictionary<ACTION, List<InputWrapper>>();
-    Dictionary<ACTION, Input> inputValues = new Dictionary<ACTION, Input>();
+    Dictionary<EAction, List<InputWrapper>> registeredInputs = new Dictionary<EAction, List<InputWrapper>>();
+    Dictionary<EAction, Input> inputValues = new Dictionary<EAction, Input>();
 
     class Input
     {
@@ -48,7 +48,7 @@ public class Mapping : ScriptableObject
         }
     }
 
-    float this[ACTION a] {
+    float this[EAction a] {
         get {
             if (!registeredInputs.ContainsKey(a)) throw new System.Exception("Unknown input " + a);
             foreach (var input in registeredInputs[a]) {
@@ -86,7 +86,7 @@ public class Mapping : ScriptableObject
         return this;
     }
 
-    public bool IsHeld(ACTION a)
+    public bool IsHeld(EAction a)
     {
         try {
             return inputValues[a].isHeld;
@@ -94,7 +94,7 @@ public class Mapping : ScriptableObject
         catch (KeyNotFoundException) { throw new System.Exception("UNKNOWN KEY " + a); }
     }
 
-    public bool IsPressed(ACTION a)
+    public bool IsPressed(EAction a)
     {
         try {
             return inputValues[a].isPressed;
@@ -102,7 +102,7 @@ public class Mapping : ScriptableObject
         catch (KeyNotFoundException) { throw new System.Exception("UNKNOWN KEY " + a); }
     }
 
-    public bool IsReleased(ACTION a)
+    public bool IsReleased(EAction a)
     {
         try {
             return inputValues[a].isReleased;
@@ -110,7 +110,7 @@ public class Mapping : ScriptableObject
         catch (KeyNotFoundException) { throw new System.Exception("UNKNOWN KEY " + a); }
     }
 
-    public float Axis(ACTION a)
+    public float Axis(EAction a)
     {
         try {
             return this[a];

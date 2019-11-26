@@ -27,7 +27,7 @@ public class NonPlayableCharacter : StateManager
 	[HideInInspector] public Activity previousActivity;
 	[HideInInspector] public Carryable carried;
 	private Carryable carryableToCollect;
-	public Dictionary<Clothes.Slot, Clothes> clothes = new Dictionary<Clothes.Slot, Clothes>();
+	public Dictionary<Clothes.ESlot, Clothes> clothes = new Dictionary<Clothes.ESlot, Clothes>();
 
 	[Header("Settings")]
 	public float strength = 1f;
@@ -100,7 +100,7 @@ public class NonPlayableCharacter : StateManager
 	public override void Start()
 	{
 		// Load Character Clothes Slots
-		foreach (Clothes.Slot suit in (Clothes.Slot[]) Clothes.Slot.GetValues(typeof(Clothes.Slot)))
+		foreach (Clothes.ESlot suit in (Clothes.ESlot[]) Clothes.ESlot.GetValues(typeof(Clothes.ESlot)))
 			clothes.Add(suit, null);
 
 		// Load Character Stats
@@ -151,7 +151,7 @@ public class NonPlayableCharacter : StateManager
 
 	public void Carrying(Carryable carryable)
 	{
-		carryable.Self().position = (skeleton.GetSlotByName("RightHand").GetPosition() + skeleton.GetSlotByName("LeftHand").GetPosition())/2f;
+		carryable.Self().position = (skeleton.GetSocketBySlot(Clothes.ESlot.RIGHT_HAND).GetPosition() + skeleton.GetSocketBySlot(Clothes.ESlot.LEFT_HAND).GetPosition())/2f;
 		carryable.Self().forward = transform.forward;
 	}
 
@@ -199,7 +199,7 @@ public class NonPlayableCharacter : StateManager
 		if(carried.Mass() <= strength)
 		{
 			//animator.SetBool("Holding", true);
-			skeleton.Attach(carried.Self(), "RightHand", true);
+			skeleton.Attach(carried.Self(), Clothes.ESlot.RIGHT_HAND, true);
 		}
 		else 
 		{
@@ -213,7 +213,7 @@ public class NonPlayableCharacter : StateManager
 		carried.Drop();
 
 		if(carried.Mass() <= strength)
-			skeleton.Drop("RightHand");
+			skeleton.Drop(Clothes.ESlot.RIGHT_HAND);
 
 		//animator.SetBool("Holding", false);
 		animator.SetBool("Carrying", false);

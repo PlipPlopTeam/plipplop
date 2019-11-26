@@ -4,7 +4,7 @@ using PP;
 namespace NPC
 {
     [CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/Set Sight Settings")]
-    public class SetSightSettings : Action
+    public class SetSightSettings : AIAction
     {
         public Sight.Settings settings;
 

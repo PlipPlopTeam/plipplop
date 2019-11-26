@@ -6,7 +6,7 @@ using PP;
 namespace NPC
 {
 	[CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/StopMovement")]
-	public class StopMovement : Action
+	public class StopMovement : AIAction
 	{
 		public override void Execute(StateManager state)
 		{

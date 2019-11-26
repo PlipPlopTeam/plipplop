@@ -7,11 +7,11 @@ namespace NPC
     [CreateAssetMenu(menuName = "Behavior/Condition/NonPlayableCharacter/StatCheck")]
     public class StatCheck : Condition
     {
-        public enum NumCond {EQUAL, SUPERIOR, INFERIOR, SUPERIOR_OR_EQUAL, INFERIOR_OR_EQUAL}
+        public enum EOperator {EQUAL, SUPERIOR, INFERIOR, SUPERIOR_OR_EQUAL, INFERIOR_OR_EQUAL}
 
         [Header("Settings")]
         public string statName;
-        public NumCond condition;
+        public EOperator condition;
         [Range(0f, 100f)] public float value = 0;
 
 		public override bool Check(StateManager state)
@@ -23,19 +23,19 @@ namespace NPC
                 {
                     switch(condition)
                     {
-                        case NumCond.EQUAL:
+                        case EOperator.EQUAL:
                             if(npc.stats[statName] == value) return true;
                             break;
-                        case NumCond.SUPERIOR:
+                        case EOperator.SUPERIOR:
                             if(npc.stats[statName] > value) return true;
                             break;
-                        case NumCond.SUPERIOR_OR_EQUAL:
+                        case EOperator.SUPERIOR_OR_EQUAL:
                             if(npc.stats[statName] >= value) return true;
                             break;
-                        case NumCond.INFERIOR:
+                        case EOperator.INFERIOR:
                             if(npc.stats[statName] < value) return true;
                             break;
-                        case NumCond.INFERIOR_OR_EQUAL:
+                        case EOperator.INFERIOR_OR_EQUAL:
                             if(npc.stats[statName] <= value) return true;
                             break;
                     }

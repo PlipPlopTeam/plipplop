@@ -6,7 +6,7 @@ using PP;
 namespace NPC
 {
 	[CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/WaitBetween")]
-	public class WaitBetween : Action
+	public class WaitBetween : AIAction
 	{
 		public Vector2 range;
 		public override void Execute(StateManager state)

@@ -4,15 +4,16 @@ using PP;
 namespace NPC
 {
 	[CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/FollowRandomZonePath")]
-	public class FollowRandomZonePath : Action
+	public class FollowRandomZonePath : AIAction
 	{
 		public override void Execute(StateManager state)
 		{
 			NonPlayableCharacter npc = (NonPlayableCharacter)state;
-			if(npc != null)
+            var randomPath = Game.i.aiZone.GetRandomPath();
+            if (npc != null && randomPath)
 			{
 				npc.agentMovement.ClearEvents();
-                npc.agentMovement.FollowPath(Game.i.aiZone.GetRandomPath());
+                npc.agentMovement.FollowPath(randomPath);
 			}
 		}
 	}

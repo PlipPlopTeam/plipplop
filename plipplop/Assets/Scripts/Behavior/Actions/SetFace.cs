@@ -6,7 +6,7 @@ using PP;
 namespace NPC
 {
     [CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/SetFace")]
-    public class SetFace : Action
+    public class SetFace : AIAction
     {
         [Header("Settings")]
         public bool speaking;

@@ -6,8 +6,8 @@ namespace PP
 {
     public class ActionHook : MonoBehaviour
     {
-		public Action[] fixedUpdateActions;
-		public Action[] updateActions;
+		public AIAction[] fixedUpdateActions;
+		public AIAction[] updateActions;
 
 		void FixedUpdate()
 		{

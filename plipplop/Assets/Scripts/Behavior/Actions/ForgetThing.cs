@@ -6,8 +6,8 @@ using PP;
 namespace NPC
 {
 	[CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/ForgetThing")]
-	public class ForgetThing : Action
-	{
+	public class ForgetThing : AIAction
+    {
 		public override void Execute(StateManager state)
 		{
 			NonPlayableCharacter npc = (NonPlayableCharacter)state;

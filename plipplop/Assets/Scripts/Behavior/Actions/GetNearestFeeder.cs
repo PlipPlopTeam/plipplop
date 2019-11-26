@@ -4,7 +4,7 @@ using PP;
 namespace NPC
 {
 	[CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/GetNearestFeeder")]
-    public class GetNearestFeeder : Action
+    public class GetNearestFeeder : AIAction
     {
 		public override void Execute(StateManager state)
 		{

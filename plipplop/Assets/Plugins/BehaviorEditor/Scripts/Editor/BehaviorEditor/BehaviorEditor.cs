@@ -28,9 +28,15 @@ namespace PP.Behavior
 		static State previousState;
 		int nodesToDelete;
 
-		public enum UserActions
+		public enum EUserActions
         {
-            addState,addTransitionNode,deleteNode,commentNode,makeTransition,makePortal,resetPan
+            ADD_STATE,
+            ADD_TRANSITION_NODE,
+            DELETE_NODE,
+            COMMENT_NODE,
+            MAKE_TRANSITION,
+            MAKE_PORTAL,
+            RESET_PAN
         }
         #endregion
 
@@ -104,7 +110,7 @@ namespace PP.Behavior
 				Repaint();
 			}
 
-            if(settings.makeTransition)
+            if(settings.MAKE_TRANSITION)
             {
                 mouseRect.x = mousePosition.x;
                 mouseRect.y = mousePosition.y;
@@ -176,14 +182,14 @@ namespace PP.Behavior
 			{
 				if (e.type == EventType.MouseDown)
 				{
-					if (settings.makeTransition) MakeTransition();
+					if (settings.MAKE_TRANSITION) MAKE_TRANSITION();
 				}
 			}
 			else if (e.button == 1) // RIGHT CLICK
 			{
 				if (e.type == EventType.MouseDown)
 				{
-					if (!settings.makeTransition) RightClick(e);
+					if (!settings.MAKE_TRANSITION) RightClick(e);
 				}
 			}
 			else if (e.button == 2) // MIDDLE CLICK
@@ -243,9 +249,9 @@ namespace PP.Behavior
             else ModifyNode(e);
         }
        
-        void MakeTransition()
+        void MAKE_TRANSITION()
         {
-            settings.makeTransition = false;
+            settings.MAKE_TRANSITION = false;
             clickedOnWindow = false;
             for (int i = 0; i < settings.currentGraph.nodes.Count; i++)
             {
@@ -283,10 +289,10 @@ namespace PP.Behavior
 			menu.AddSeparator("");
             if (settings.currentGraph != null)
             {
-                menu.AddItem(new GUIContent("Add State"), false, ContextCallback, UserActions.addState);
-				menu.AddItem(new GUIContent("Add Portal"), false, ContextCallback, UserActions.makePortal);
+                menu.AddItem(new GUIContent("Add State"), false, ContextCallback, EUserActions.ADD_STATE);
+				menu.AddItem(new GUIContent("Add Portal"), false, ContextCallback, EUserActions.MAKE_PORTAL);
 				menu.AddSeparator("");
-				menu.AddItem(new GUIContent("Reset Panning"), false, ContextCallback, UserActions.resetPan);
+				menu.AddItem(new GUIContent("Reset Panning"), false, ContextCallback, EUserActions.RESET_PAN);
 			}
             else
             {
@@ -305,18 +311,18 @@ namespace PP.Behavior
             {
                 if (selectedNode.stateRef.currentState != null)
                 {
-                    menu.AddItem(new GUIContent("Add Condition"), false, ContextCallback, UserActions.addTransitionNode);
+                    menu.AddItem(new GUIContent("Add Condition"), false, ContextCallback, EUserActions.ADD_TRANSITION_NODE);
                 }
                 else
                 {
                     menu.AddDisabledItem(new GUIContent("Add Condition"));
                 }
-                menu.AddItem(new GUIContent("Delete"), false, ContextCallback, UserActions.deleteNode);
+                menu.AddItem(new GUIContent("Delete"), false, ContextCallback, EUserActions.DELETE_NODE);
             }
 			else if (selectedNode.drawNode is PortalNode)
 			{
 				menu.AddSeparator("");
-				menu.AddItem(new GUIContent("Delete"), false, ContextCallback, UserActions.deleteNode);
+				menu.AddItem(new GUIContent("Delete"), false, ContextCallback, EUserActions.DELETE_NODE);
 			}
 			else if (selectedNode.drawNode is TransitionNode)
             {
@@ -326,9 +332,9 @@ namespace PP.Behavior
                 }
                 else
                 {
-                    menu.AddItem(new GUIContent("Make Transition"), false, ContextCallback, UserActions.makeTransition);
+                    menu.AddItem(new GUIContent("Make Transition"), false, ContextCallback, EUserActions.MAKE_TRANSITION);
                 }
-                menu.AddItem(new GUIContent("Delete"), false, ContextCallback, UserActions.deleteNode);
+                menu.AddItem(new GUIContent("Delete"), false, ContextCallback, EUserActions.DELETE_NODE);
             }
             menu.ShowAsContext();
             e.Use();
@@ -336,21 +342,21 @@ namespace PP.Behavior
         
         void ContextCallback(object o)
         {
-            UserActions a = (UserActions)o;
+            EUserActions a = (EUserActions)o;
             switch (a)
             {
-                case UserActions.addState:
+                case EUserActions.ADD_STATE:
                     settings.AddNodeOnGraph(settings.stateNode, 300, 200, "State", mousePosition);                
                     break;
-				case UserActions.makePortal:
+				case EUserActions.MAKE_PORTAL:
 					settings.AddNodeOnGraph(settings.portalNode, 100, 80, "Portal", mousePosition);
 					break;
-                case UserActions.addTransitionNode:
+                case EUserActions.ADD_TRANSITION_NODE:
 					AddTransitionNode(selectedNode, mousePosition);
 					break;           
                 default:
                     break;
-                case UserActions.deleteNode:
+                case EUserActions.DELETE_NODE:
 					if (selectedNode.drawNode is TransitionNode)
 					{
 						Node enterNode = settings.currentGraph.GetNodeWithIndex(selectedNode.enterNode);
@@ -361,11 +367,11 @@ namespace PP.Behavior
 					nodesToDelete++;
                     settings.currentGraph.DeleteNode(selectedNode.id);
                     break;
-                case UserActions.makeTransition:
+                case EUserActions.MAKE_TRANSITION:
                     transitFromId = selectedNode.id;
-                    settings.makeTransition = true;
+                    settings.MAKE_TRANSITION = true;
                     break;
-				case UserActions.resetPan:
+				case EUserActions.RESET_PAN:
 					ResetScroll();
 					break;
             }
