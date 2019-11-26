@@ -21,7 +21,7 @@ public class BaseEditor : Editor
     internal GUIStyle centeredNormalControl;
 
 
-    internal void MakeStyles()
+    internal virtual void MakeStyles()
     {
         title = new GUIStyle(GUI.skin.box);
         title.fontSize = 12;
