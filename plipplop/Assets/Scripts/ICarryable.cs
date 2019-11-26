@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface Carryable
+public interface ICarryable
 {
     void Carry();
     void Drop();

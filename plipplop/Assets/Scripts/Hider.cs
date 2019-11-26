@@ -35,24 +35,24 @@ public class Hider : MonoBehaviour
         activated = false;
     }
 
-    public virtual void Enter(Noticeable n)
+    public virtual void Enter(INoticeable n)
     {
         n.SetVisible(false);
     }
 
-    public virtual void Exit(Noticeable n)
+    public virtual void Exit(INoticeable n)
     {
         n.SetVisible(true);
     }
 
     void OnTriggerEnter(Collider other)
     {
-        Noticeable n = other.GetComponent<Noticeable>();
+        INoticeable n = other.GetComponent<INoticeable>();
         if(n != null) Enter(n);
     }
     void OnTriggerExit(Collider other)
     {
-        Noticeable n = other.GetComponent<Noticeable>();
+        INoticeable n = other.GetComponent<INoticeable>();
         if(n != null) Exit(n);
     }
 

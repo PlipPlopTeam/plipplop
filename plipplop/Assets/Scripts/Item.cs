@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum EColliderShape { BOX, SPHERE, CAPSULE }
 
-public class Item : MonoBehaviour, Carryable
+public class Item : MonoBehaviour, ICarryable
 {
     [Header("Physics")]
     public EColliderShape shape;

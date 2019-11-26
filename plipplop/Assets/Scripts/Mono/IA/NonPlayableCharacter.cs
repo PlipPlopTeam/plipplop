@@ -25,8 +25,8 @@ public class NonPlayableCharacter : StateManager
 	public Feeder feeder;
 	
 	[HideInInspector] public Activity previousActivity;
-	[HideInInspector] public Carryable carried;
-	private Carryable carryableToCollect;
+	[HideInInspector] public ICarryable carried;
+	private ICarryable carryableToCollect;
 	public Dictionary<Clothes.ESlot, Clothes> clothes = new Dictionary<Clothes.ESlot, Clothes>();
 
 	[Header("Settings")]
@@ -144,12 +144,12 @@ public class NonPlayableCharacter : StateManager
 		clothes[clothData.slot] = c;
 	}
 
-	public bool IsCarrying(Carryable carryable)
+	public bool IsCarrying(ICarryable carryable)
 	{
 		return carryable == carried;
 	}
 
-	public void Carrying(Carryable carryable)
+	public void Carrying(ICarryable carryable)
 	{
 		carryable.Self().position = (skeleton.GetSocketBySlot(Clothes.ESlot.RIGHT_HAND).GetPosition() + skeleton.GetSocketBySlot(Clothes.ESlot.LEFT_HAND).GetPosition())/2f;
 		carryable.Self().forward = transform.forward;
@@ -168,12 +168,12 @@ public class NonPlayableCharacter : StateManager
 		}
 	}
 
-	public bool IsCollecting(Carryable carryable)
+	public bool IsCollecting(ICarryable carryable)
 	{
 		return carryable == carryableToCollect;
 	}
 
-	public void Collect(Carryable carryable)
+	public void Collect(ICarryable carryable)
 	{
 		carryableToCollect = carryable;
 		agentMovement.Chase(carryableToCollect.Self());		
@@ -191,7 +191,7 @@ public class NonPlayableCharacter : StateManager
 		};
 	}
 
-	public void Carry(Carryable carryable)
+	public void Carry(ICarryable carryable)
 	{
 		if(carried != null) Drop();
 		carried = carryable;
