@@ -1,9 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PP;
 
-namespace NPC
+namespace Behavior.NPC
 {
 	[CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/StopMovement")]
 	public class StopMovement : AIAction

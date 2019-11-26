@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace PP.Behavior
+namespace Behavior.Editor
 {
     [CreateAssetMenu(menuName ="Behavior/Editor/Settings")]
     public class Settings : ScriptableObject

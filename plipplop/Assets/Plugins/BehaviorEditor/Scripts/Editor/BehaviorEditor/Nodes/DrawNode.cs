@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace PP.Behavior
+namespace Behavior.Editor
 {
     public abstract class DrawNode : ScriptableObject
     {

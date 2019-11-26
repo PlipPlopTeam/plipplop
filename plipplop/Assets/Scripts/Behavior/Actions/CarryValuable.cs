@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using PP;
+using Behavior;
 
-namespace NPC
+namespace Behavior.NPC
 {
 	[CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/CarryValuable")]
 	public class CarryValuable : AIAction

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
-using PP;
+
 using System;
 using System.IO;
 
-namespace PP.Behavior
+namespace Behavior.Editor
 {
     public class StateNode : DrawNode
     {

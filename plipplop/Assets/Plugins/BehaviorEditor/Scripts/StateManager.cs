@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace PP
+namespace Behavior
 {
     public class StateManager : MonoBehaviour
     {

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using PP;
 
-namespace NPC
+
+namespace Behavior.NPC
 {
 	[CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/ConsumeFood")]
 	public class ConsumeFood : AIAction

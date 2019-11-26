@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace PP.Behavior
+namespace Behavior.Editor
 {
     [CreateAssetMenu(menuName = "Behavior/Graph")]
     public class BehaviorGraph : ScriptableObject

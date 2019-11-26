@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PP;
 
-namespace NPC
+
+namespace Behavior.NPC
 {
     [CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/ChaseFood")]
     public class ChaseFood : AIAction
