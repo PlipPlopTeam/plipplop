@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
-using PP;
 
-namespace NPC
+namespace Behavior.NPC
 {
     [CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/Set Sight Settings")]
-    public class SetSightSettings : Action
+    public class SetSightSettings : AIAction
     {
         public Sight.Settings settings;
 

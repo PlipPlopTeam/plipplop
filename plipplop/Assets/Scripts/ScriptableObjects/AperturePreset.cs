@@ -18,6 +18,7 @@ public class AperturePreset : ScriptableObject
 
     // Switches
     [HideInInspector] public bool canBeControlled = true;
+    [HideInInspector] public bool resetable = true;
 
     // Basic parameters
     [HideInInspector] [Range(2f, 200f)] public float fieldOfView = 75f;
@@ -34,7 +35,8 @@ public class AperturePreset : ScriptableObject
     [HideInInspector] public float verticalFollowLerp = 10f;
     [HideInInspector] public float rotationSpeed = 1f;
     [HideInInspector] public float lookAtLerp = 4f;
-    [HideInInspector] public float cameraResetSpeed = 3f;
+    [HideInInspector] public float cameraAlignSpeed = 3f;
+    [HideInInspector] public float cameraResetAlignSpeed = 3f;
     [HideInInspector] public float cameraResetAfterTime = 2f;
 
     // Speed FX

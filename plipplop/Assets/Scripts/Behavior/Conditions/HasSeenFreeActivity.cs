@@ -1,11 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PP;
 
-namespace NPC
+namespace Behavior.NPC
 {
-	[CreateAssetMenu(menuName = "Behavior/Condition/NonPlayableCharacter/HasSeenFreeActivity")]
+    
+    [CreateAssetMenu(menuName = "Behavior/Condition/NonPlayableCharacter/HasSeenFreeActivity")]
 	public class HasSeenFreeActivity : Condition
 	{
 		public override bool Check(StateManager state)

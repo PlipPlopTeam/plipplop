@@ -49,6 +49,11 @@ public class Activity : MonoBehaviour
         working = true;
     }
 
+    private void Start()
+    {
+        Game.i.aiZone.Register(this);
+    }
+
     public virtual void Update()
     {
         if(timer > 0f) timer -= Time.deltaTime;

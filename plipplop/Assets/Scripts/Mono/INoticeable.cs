@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public interface Noticeable
+public interface INoticeable
 {
     void Notice();
     bool IsVisible();

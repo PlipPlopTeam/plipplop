@@ -1,12 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PP;
 
-namespace NPC
+namespace Behavior.NPC
 {
     [CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/ShowEmotion")]
-    public class ShowEmotion : Action
+    public class ShowEmotion : AIAction
     {
         public Emotion emotion = null;
         public float duration = 1f;

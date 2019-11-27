@@ -1,15 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PP;
+
 using UnityEditor;
 using UnityEditorInternal;
 
-namespace PP.CustomUI
+namespace Behavior.Editor
 {
 	[CustomEditor(typeof(State))]
-	public class StateGUI : Editor
-	{
+	public class StateGUI : UnityEditor.Editor
+    {
 		SerializedObject serializedState;
 		ReorderableList onFixedList;
 		ReorderableList onUpdateList;

@@ -1,4 +1,4 @@
-﻿public enum ACTION
+﻿public enum EAction
 {
     POSSESS,
     JUMP,
@@ -6,6 +6,6 @@
     MOVE_FORWARD_BACK,
     MOVE_RIGHT_LEFT,
     CAMERA_HORIZONTAL,
-    CAMERA_VERTICAL
+    CAMERA_VERTICAL,
+    CAMERA_RESET
 }
-

@@ -15,6 +15,8 @@ MonoBehaviour:
   overrides:
   - property: canBeControlled
     isOverriden: 0
+  - property: resetable
+    isOverriden: 0
   - property: fieldOfView
     isOverriden: 0
   - property: heightOffset
@@ -39,8 +41,10 @@ MonoBehaviour:
     isOverriden: 0
   - property: lookAtLerp
     isOverriden: 1
-  - property: cameraResetSpeed
-    isOverriden: 1
+  - property: cameraAlignSpeed
+    isOverriden: 0
+  - property: cameraResetAlignSpeed
+    isOverriden: 0
   - property: speedEffectMultiplier
     isOverriden: 0
   - property: catchUpSpeedMultiplier
@@ -59,6 +63,7 @@ MonoBehaviour:
     isOverriden: 0
   fallback: {fileID: 11400000, guid: 08166ba5a773ad646aef31a961bf98ed, type: 2}
   canBeControlled: 0
+  resetable: 1
   fieldOfView: 55
   heightOffset: 2
   additionalAngle: 25
@@ -73,7 +78,8 @@ MonoBehaviour:
   verticalFollowLerp: 60
   rotationSpeed: 3
   lookAtLerp: 60
-  cameraResetSpeed: 60
+  cameraAlignSpeed: 3
+  cameraResetAlignSpeed: 3
   cameraResetAfterTime: 1.5
   speedEffectMultiplier: 2
   catchUpSpeedMultiplier: 1

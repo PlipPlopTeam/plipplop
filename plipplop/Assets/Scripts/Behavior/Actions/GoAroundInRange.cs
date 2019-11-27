@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
-using PP;
 
-namespace NPC
+namespace Behavior.NPC
 {
 	[CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/GoAroundInRange")]
-	public class GoAroundInRange : Action
-	{
+	public class GoAroundInRange : AIAction
+    {
 		public float range;
 		public float minRange;
 		public float maxRange;

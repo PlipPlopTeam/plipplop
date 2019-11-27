@@ -1,12 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PP;
 
-namespace NPC
+namespace Behavior.NPC
 {
     [CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/SetFace")]
-    public class SetFace : Action
+    public class SetFace : AIAction
     {
         [Header("Settings")]
         public bool speaking;

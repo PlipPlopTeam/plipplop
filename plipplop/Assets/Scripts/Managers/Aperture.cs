@@ -116,8 +116,13 @@ public class Aperture
     public void Update()
     {
         if (Time.time - lastCameraInput > settings.cameraResetAfterTime) {
-            isCameraBeingRepositioned = true;
+            Realign();
         }
+    }
+
+    public void Realign()
+    {
+        isCameraBeingRepositioned = true;
     }
 
     public void FixedUpdate()
@@ -135,11 +140,17 @@ public class Aperture
 
         // Camera trying to get in my back
         var targetMovementVelocity = Vector3.Distance(targetPosition, lastTargetPosition);
-        if (targetMovementVelocity > 0 || isCameraBeingRepositioned) {
-            hAngle = Mathf.Lerp(hAngle, 0f, Time.fixedDeltaTime * settings.cameraResetSpeed);
-            vAngleAmount = Mathf.Lerp(vAngleAmount, 0f, Time.fixedDeltaTime * settings.cameraResetSpeed);
-        }
-        float vAngleAmplitude = 40f - settings.additionalAngle;
+		if(isCameraBeingRepositioned || targetMovementVelocity > 0f)
+		{
+			hAngle = Vector3.SignedAngle(Vector3.forward, target.forward, Vector3.up);
+			vAngleAmount = 0f;
+
+			// Lerps here are kinda useless they don't have a huge impact on the real speed
+			//Mathf.Lerp(hAngle, 0f, Time.fixedDeltaTime * settings.cameraResetSpeed);
+			//Mathf.Lerp(vAngleAmount, 0f, Time.fixedDeltaTime * settings.cameraResetSpeed);
+		}
+
+		float vAngleAmplitude = 40f - settings.additionalAngle;
         vAngle = vAngleAmount * vAngleAmplitude;
 
         // Calculating "catch up"
@@ -184,7 +195,7 @@ public class Aperture
 
     public void ComputeRotation()
     {
-        var bestHAngle = Vector3.SignedAngle(Vector3.forward, target.forward, Vector3.up);
+		var bestHAngle = 0f; //
         var angle = hAngle + bestHAngle;
         rotationAroundTarget.destination = -new Vector3(Mathf.Sin(Mathf.Deg2Rad * angle), 0f, Mathf.Cos(Mathf.Deg2Rad * angle));
     }

@@ -7,10 +7,10 @@ using TMPro;
 
 public class AreaDebugText : MonoBehaviour
 {
-    public enum FACING { TOP, FRONT}
+    public enum EFacing { TOP, FRONT}
 
     public string text;
-    public FACING facing;
+    public EFacing facing;
     TextMeshPro tmp;
 
     private void OnValidate()
@@ -18,7 +18,7 @@ public class AreaDebugText : MonoBehaviour
         tmp = GetComponentInChildren<TextMeshPro>();
         tmp.text = text;
 
-        tmp.transform.localRotation = facing == FACING.TOP ? Quaternion.Euler(90f, 180f, 0f) : Quaternion.Euler(0f, 180f, 0f);
+        tmp.transform.localRotation = facing == EFacing.TOP ? Quaternion.Euler(90f, 180f, 0f) : Quaternion.Euler(0f, 180f, 0f);
         tmp.transform.localPosition = (Vector3.one - Vector3.right) * 0.01f;
     }
 }

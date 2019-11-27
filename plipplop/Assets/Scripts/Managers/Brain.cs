@@ -41,8 +41,8 @@ public class Brain
     {
         UpdateController();
         Game.i.aperture.RotateWithGamepad(
-            mapping.Axis(ACTION.CAMERA_VERTICAL),
-            mapping.Axis(ACTION.CAMERA_HORIZONTAL)
+            mapping.Axis(EAction.CAMERA_VERTICAL),
+            mapping.Axis(EAction.CAMERA_HORIZONTAL)
         );
     }
 
@@ -56,13 +56,13 @@ public class Brain
         if (controller is null) return;
 
         controller.Move(
-            mapping.Axis(ACTION.MOVE_FORWARD_BACK),
-            mapping.Axis(ACTION.MOVE_RIGHT_LEFT)
+            mapping.Axis(EAction.MOVE_FORWARD_BACK),
+            mapping.Axis(EAction.MOVE_RIGHT_LEFT)
         );
 
         controller.MoveCamera(
-            mapping.Axis(ACTION.CAMERA_HORIZONTAL),
-            mapping.Axis(ACTION.CAMERA_VERTICAL)
+            mapping.Axis(EAction.CAMERA_HORIZONTAL),
+            mapping.Axis(EAction.CAMERA_VERTICAL)
         );
     }
 
@@ -70,12 +70,13 @@ public class Brain
     {
         if (controller is null) return;
 
-        if (mapping.IsPressed(ACTION.JUMP)) controller.OnJump();
-        if (mapping.IsPressed(ACTION.POSSESS)) controller.OnTryPossess();
-        if (mapping.IsHeld(ACTION.JUMP)) controller.OnHoldJump();
-    }
+        if (mapping.IsPressed(EAction.JUMP)) controller.OnJump();
+        if (mapping.IsPressed(EAction.POSSESS)) controller.OnTryPossess();
+        if (mapping.IsHeld(EAction.JUMP)) controller.OnHoldJump();
+        if (mapping.IsPressed(EAction.CAMERA_RESET)) Game.i.aperture.Realign();
+	}
 
-    public void Possess(Controller controller)
+	public void Possess(Controller controller)
     {
         if (this.controller != null) {
             Eject();

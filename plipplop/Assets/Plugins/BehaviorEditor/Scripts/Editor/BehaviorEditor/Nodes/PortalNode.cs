@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 
 
-namespace PP.Behavior
+namespace Behavior.Editor
 {
 	public class PortalNode : DrawNode
 	{

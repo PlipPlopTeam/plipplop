@@ -1,13 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PP;
 
-namespace NPC
+namespace Behavior.NPC
 {
 	[CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/GoToNextPathPoint")]
-	public class GoToNextPoint : Action
-	{
+	public class GoToNextPoint : AIAction
+    {
 		public bool overrideMovement = false;
 		public AgentMovement.Settings overrideMovementSettings;
 		public override void Execute(StateManager state)

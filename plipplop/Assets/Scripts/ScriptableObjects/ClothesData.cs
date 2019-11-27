@@ -6,6 +6,6 @@ using UnityEngine;
 public class ClothesData : ScriptableObject
 {
     public string noun;
-    public Clothes.Slot slot;
+    public Clothes.ESlot slot;
     public GameObject prefab;
 }

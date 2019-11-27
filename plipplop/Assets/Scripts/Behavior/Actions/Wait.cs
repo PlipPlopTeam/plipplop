@@ -1,12 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PP;
 
-namespace NPC
+namespace Behavior.NPC
 {
     [CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/Wait")]
-    public class Wait : Action
+    public class Wait : AIAction
     {
         public float time = 1f;
         public override void Execute(StateManager state)

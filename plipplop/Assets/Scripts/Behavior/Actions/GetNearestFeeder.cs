@@ -1,20 +1,20 @@
 ﻿using UnityEngine;
-using PP;
 
-namespace NPC
+namespace Behavior.NPC
 {
 	[CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/GetNearestFeeder")]
-    public class GetNearestFeeder : Action
+    public class GetNearestFeeder : AIAction
     {
 		public override void Execute(StateManager state)
 		{
 			NonPlayableCharacter npc = (NonPlayableCharacter)state;
-			if(npc != null && Zone.i != null)
+			if(npc != null)
             {
-                if(Zone.i.feeders.Count > 0)
+                var feeders = Game.i.aiZone.GetFeeders();
+                if (feeders.Length > 0)
                 {
                     Feeder feeder = null;
-                    foreach(Feeder f in Zone.i.feeders)
+                    foreach(Feeder f in feeders)
                     {
                         if(feeder == null) 
                         {

@@ -1,12 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PP;
 
-namespace NPC
+namespace Behavior.NPC
 {
     [CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/Set Animator Boolean")]
-    public class SetAnimatorBool : Action
+    public class SetAnimatorBool : AIAction
     {
         public string boolName;
         public bool boolValue;

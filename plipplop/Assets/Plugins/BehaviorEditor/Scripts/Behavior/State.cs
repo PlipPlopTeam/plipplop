@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace PP
+namespace Behavior
 {
     [CreateAssetMenu(menuName = "Behavior/State")]
     public class State : ScriptableObject
     {
-    	public Action[] onFixed;
-        public Action[] onUpdate;
-        public Action[] onEnter;
-        public Action[] onExit;
+    	public AIAction[] onFixed;
+        public AIAction[] onUpdate;
+        public AIAction[] onEnter;
+        public AIAction[] onExit;
 
         public int idCount;
 		[SerializeField]
@@ -63,7 +63,7 @@ namespace PP
             }
         }
         
-        public void ExecuteActions(StateManager states, Action[] l)
+        public void ExecuteActions(StateManager states, AIAction[] l)
         {
             for (int i = 0; i < l.Length; i++)
             {
