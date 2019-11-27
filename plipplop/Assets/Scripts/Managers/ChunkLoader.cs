@@ -88,7 +88,7 @@ public class ChunkLoader
         public string chunkIdentifier;
         public readonly Footprint footprint;
         public bool isFadingOut = false;
-        public bool preserveState = false;
+        public bool preserveAIState = false;
 
         public ChunkProp(GameObject propObject, string identifier)
         {
@@ -209,7 +209,7 @@ public class ChunkLoader
                     // If prop is in a persistence zone
                     if (IsStored(prop, csz.identifier)) {
                         // Disabled but kept in memory
-                        prop.preserveState = true;
+                        prop.preserveAIState = true;
                         DisableProp(prop);
                         Log(prop + " is going to the storage");
                     }
@@ -376,7 +376,7 @@ public class ChunkLoader
                     chp = GetPropFromCache(chp.footprint);
                     if (chunkZones[chp.chunkIdentifier].IsLoaded()) {
                         Warn("Canceled recreation of prop " + prop.name + " to restore it from cache instead");
-                        EnableProp(chp.footprint, chp.preserveState ? null : prop.transform);
+                        EnableProp(chp.footprint, chp.preserveAIState ? null : prop.transform);
                     }
                     else {
                         Warn("Canceled recreation of prop " + prop.name + " because it exists in the unloaded chunk "+chp.chunkIdentifier+" already");
@@ -452,7 +452,7 @@ public class ChunkLoader
         var fa = fadedProps.Find(o => { return o.gameObject == prop.propObject; });
         var chunkProp = props.Find(o => { return o.propObject == prop.propObject; });
 
-        if (!prop.preserveState) {
+        if (!prop.preserveAIState) {
             // Reset identifier so that it respawns in its original chunk
             prop.chunkIdentifier = prop.footprint.identifier;
         }

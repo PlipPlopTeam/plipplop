@@ -1,0 +1,123 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 711dbd0dcc0707448ad710a82f0aa6b6, type: 3}
+  m_Name: NPC_Debug
+  m_EditorClassIdentifier: 
+  nodes:
+  - id: -1
+    drawNode: {fileID: 11400000, guid: 3de6cb72c5d54a842957b3d8754294e2, type: 2}
+    windowRect:
+      serializedVersion: 2
+      x: -211.90028
+      y: 255.70007
+      width: 300
+      height: 64
+    windowTitle: START
+    enterNode: 0
+    exitNodes: 
+    isDuplicate: 0
+    comment: 
+    isAssigned: 0
+    showDescription: 0
+    isOnCurrent: 0
+    collapse: 0
+    showActions: 1
+    showEnterExit: 0
+    previousCollapse: 0
+    stateRef:
+      currentAIState: {fileID: 11400000, guid: 4ef42141a48b9ca498eb8c32dab0c933, type: 2}
+      previousAIState: {fileID: 0}
+    transRef:
+      previousCondition: {fileID: 0}
+      transitionId: 0
+  - id: 328
+    drawNode: {fileID: 11400000, guid: 3de6cb72c5d54a842957b3d8754294e2, type: 2}
+    windowRect:
+      serializedVersion: 2
+      x: 467.2
+      y: 350.3997
+      width: 300
+      height: 100
+    windowTitle: AIState
+    enterNode: 0
+    exitNodes: 00000000
+    isDuplicate: 1
+    comment: 
+    isAssigned: 0
+    showDescription: 0
+    isOnCurrent: 0
+    collapse: 0
+    showActions: 1
+    showEnterExit: 0
+    previousCollapse: 0
+    stateRef:
+      currentAIState: {fileID: 11400000, guid: 4ef42141a48b9ca498eb8c32dab0c933, type: 2}
+      previousAIState: {fileID: 11400000, guid: 4ef42141a48b9ca498eb8c32dab0c933,
+        type: 2}
+    transRef:
+      previousCondition: {fileID: 0}
+      transitionId: 0
+  - id: 329
+    drawNode: {fileID: 11400000, guid: 3de6cb72c5d54a842957b3d8754294e2, type: 2}
+    windowRect:
+      serializedVersion: 2
+      x: 485.7999
+      y: 102.00006
+      width: 300
+      height: 100
+    windowTitle: AIState
+    enterNode: 0
+    exitNodes: 00000000
+    isDuplicate: 1
+    comment: 
+    isAssigned: 0
+    showDescription: 0
+    isOnCurrent: 0
+    collapse: 0
+    showActions: 1
+    showEnterExit: 0
+    previousCollapse: 0
+    stateRef:
+      currentAIState: {fileID: 11400000, guid: 4ef42141a48b9ca498eb8c32dab0c933, type: 2}
+      previousAIState: {fileID: 11400000, guid: 4ef42141a48b9ca498eb8c32dab0c933,
+        type: 2}
+    transRef:
+      previousCondition: {fileID: 0}
+      transitionId: 0
+  - id: 331
+    drawNode: {fileID: 11400000, guid: 02d1192eec6276044a75147866515bb8, type: 2}
+    windowRect:
+      serializedVersion: 2
+      x: 162.40004
+      y: 272.99988
+      width: 200
+      height: 62
+    windowTitle: Condition
+    enterNode: -1
+    exitNodes: 4901000048010000
+    isDuplicate: 0
+    comment: 
+    isAssigned: 1
+    showDescription: 0
+    isOnCurrent: 0
+    collapse: 0
+    showActions: 1
+    showEnterExit: 0
+    previousCollapse: 0
+    stateRef:
+      currentAIState: {fileID: 0}
+      previousAIState: {fileID: 0}
+    transRef:
+      previousCondition: {fileID: 0}
+      transitionId: 332
+  idCount: 333
+  initialState: {fileID: 11400000, guid: 4ef42141a48b9ca498eb8c32dab0c933, type: 2}

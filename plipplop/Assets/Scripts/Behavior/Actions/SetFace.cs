@@ -13,10 +13,10 @@ namespace Behavior.NPC
         public bool winking = true;
         public float happiness = 50f;
 
-        public override void Execute(StateManager state)
+        public override void Execute(NonPlayableCharacter target)
         {
-            NonPlayableCharacter npc = (NonPlayableCharacter)state;
-			if(npc != null)
+            NonPlayableCharacter npc = target;
+            if (npc != null)
 			{
                 npc.face.speaking = speaking;
                 npc.face.eating = eating;

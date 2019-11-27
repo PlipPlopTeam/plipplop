@@ -6,10 +6,10 @@ namespace Behavior.NPC
 	public class GoThere : AIAction
 	{
 		public Vector3 position;
-		public override void Execute(StateManager state)
-		{
-			NonPlayableCharacter npc = (NonPlayableCharacter)state;
-			if(npc != null) npc.agentMovement.GoThere(position);
+		public override void Execute(NonPlayableCharacter target)
+        {
+            NonPlayableCharacter npc = target;
+            if (npc != null) npc.agentMovement.GoThere(position);
 		}
 	}
 }

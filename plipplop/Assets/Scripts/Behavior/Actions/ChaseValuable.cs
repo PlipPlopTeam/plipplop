@@ -8,10 +8,10 @@ namespace Behavior.NPC
     [CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/ChaseValuable")]
     public class ChaseValuable : AIAction
     {
-        public override void Execute(StateManager state)
+        public override void Execute(NonPlayableCharacter target)
         {
-            NonPlayableCharacter npc = (NonPlayableCharacter)state;
-			if(npc != null && npc.valuable != null)
+            NonPlayableCharacter npc = target;
+            if (npc != null && npc.valuable != null)
 			{
                 npc.agentMovement.Chase(npc.valuable.transform);
 			}

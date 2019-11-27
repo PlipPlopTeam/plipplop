@@ -5,10 +5,10 @@ namespace Behavior.NPC
 	[CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/GetNearestFeeder")]
     public class GetNearestFeeder : AIAction
     {
-		public override void Execute(StateManager state)
-		{
-			NonPlayableCharacter npc = (NonPlayableCharacter)state;
-			if(npc != null)
+		public override void Execute(NonPlayableCharacter target)
+        {
+            NonPlayableCharacter npc = target;
+            if (npc != null)
             {
                 var feeders = Game.i.aiZone.GetFeeders();
                 if (feeders.Length > 0)
