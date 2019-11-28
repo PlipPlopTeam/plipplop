@@ -24,7 +24,14 @@ namespace Behavior.Editor
             baseNode.windowTitle = title;
             baseNode.windowRect.x = pos.x;
             baseNode.windowRect.y = pos.y;
-            currentGraph.nodes.Add(baseNode);
+
+
+            if (baseNode is AIStateNode) {
+                currentGraph.stateNodes.Add((AIStateNode)baseNode);
+            }
+            else if (baseNode is AIStateTransitionNode) {
+                currentGraph.transitionNodes.Add((AIStateTransitionNode)baseNode);
+            }
             baseNode.id = currentGraph.idCount;
             currentGraph.idCount++;
 

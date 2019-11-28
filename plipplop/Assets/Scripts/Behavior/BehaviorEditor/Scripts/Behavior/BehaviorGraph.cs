@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using UnityEngine;
 
@@ -9,11 +10,16 @@ namespace Behavior.Editor
     [CreateAssetMenu(menuName = "Behavior/Graph")]
     public class BehaviorGraph : ScriptableObject
     {
-        [SerializeField] public List<Node> nodes = new List<Node>();
+        // This part will be saved
+        [SerializeField] public List<AIStateNode> stateNodes = new List<AIStateNode>();
+        [SerializeField] public List<AIStateTransitionNode> transitionNodes = new List<AIStateTransitionNode>();
         [SerializeField] public int idCount;
         [SerializeField] public Dictionary<AIStateNode, AIStateTransitionNode> stateTransitions = new Dictionary<AIStateNode, AIStateTransitionNode>();
-        public List<AIStateTransitionNode> transitions { get { return nodes.FindAll(o => o is AIStateTransitionNode).Select(o => { return (AIStateTransitionNode)o; }).ToList(); } }
-        public AIState initialState;
+        [SerializeField] public AIState initialState;
+
+        // These are helpers
+        public List<AIStateTransitionNode> transitions { get { return nodes.Where(o => { return (o is AIStateTransitionNode); }).Select(o => { return (AIStateTransitionNode)o; }).ToList(); } }
+        public ReadOnlyCollection<Node> nodes { get{ return stateNodes.Select(o => { return (Node)o; }).Concat(transitionNodes.Select(o => { return (Node)o; })).ToList().AsReadOnly(); } }
         List<int> indexToDelete = new List<int>();
 
         // Runtime
@@ -40,8 +46,14 @@ namespace Behavior.Editor
         {
             for (int i = 0; i < indexToDelete.Count; i++) {
                 Node b = GetNodeWithIndex(indexToDelete[i]);
-                if (b != null)
-                    nodes.Remove(b);
+                if (b != null) {
+                    if (b is AIStateNode) {
+                        stateNodes.RemoveAll(o => o.id == b.id);
+                    }
+                    else {
+                        transitionNodes.RemoveAll(o => o.id == b.id);
+                    }
+                }
             }
 
             indexToDelete.Clear();
@@ -54,7 +66,7 @@ namespace Behavior.Editor
 
         public bool IsAIStateDuplicate(AIStateNode b)
         {
-            foreach(var node in nodes.FindAll(o=>o is AIStateNode)) {
+            foreach(var node in nodes.Where(o=>o is AIStateNode)) {
 
                 var aiNode = (AIStateNode)node;
                 if (aiNode.id == b.id) continue;

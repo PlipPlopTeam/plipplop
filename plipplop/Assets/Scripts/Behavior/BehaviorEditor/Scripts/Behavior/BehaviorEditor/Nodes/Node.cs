@@ -21,7 +21,7 @@ namespace Behavior.Editor
 		public bool showDescription;
 		public bool isOnCurrent;
         public BehaviorGraph graph;
-
+        
         public bool collapse;
 		public bool showActions = true;
 		public bool showEnterExit = false;

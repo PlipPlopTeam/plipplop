@@ -13,21 +13,27 @@ namespace Behavior
             Vector3 mousePosition;
             bool clickedOnWindow;
             Node selectedNode;
-            float zoom = 1f;
 
             public static Settings settings;
+            public static float zoom = 1f;
             public static readonly int startNodeId = -1;
+
+            readonly float minWindowSize = 50f;
+            readonly float minimapSize = 64f;
+            readonly float minimapMargin = 5f;
+            Texture2D minimapTexture;
 
             int transitFromId;
             Rect mouseRect = new Rect(0, 0, 1, 1);
-            Rect all = new Rect(-5, -5, 10000, 10000);
+            readonly Rect all = new Rect(0, 0, 5000, 5000);
+
             GUIStyle style;
             GUIStyle activeStyle;
             Vector2 scrollPos;
             Vector2 scrollStartPos;
             static BehaviorEditor editor;
-            static AIState previousAIState;
             int nodesToDelete;
+            SerializedObject serializedGraph;
 
             public enum EUserActions
             {
@@ -55,6 +61,8 @@ namespace Behavior
                 settings = Resources.Load("Settings") as Settings;
                 style = settings.skin.GetStyle("window");
                 activeStyle = settings.activeSkin.GetStyle("window");
+                serializedGraph = new SerializedObject(settings.currentGraph);
+                minimapTexture = new Texture2D((int)minimapSize, (int)minimapSize);
 
             }
             #endregion
@@ -74,7 +82,7 @@ namespace Behavior
                 else {
                     // Making sure we have only 1 start node
                     bool pastFirstNode = false;
-                    foreach(var node in settings.currentGraph.nodes.ToArray()) {
+                    foreach(var node in settings.currentGraph.nodes) {
                         if (node.id == startNodeId) {
                             if (!pastFirstNode) {
                                 pastFirstNode = true;
@@ -82,15 +90,20 @@ namespace Behavior
                             }
                             else {
                                 settings.currentGraph.DeleteNode(node.id);
-                            }
+                            } 
                         }
                     }
                 }
 
                 // Updating all nodes
 
-                foreach (var node in settings.currentGraph.nodes.ToArray()) {
+                foreach (var node in settings.currentGraph.nodes) {
                     node.SetGraph(settings.currentGraph);
+                    node.windowRect.size = new Vector2(Mathf.Max(node.windowRect.size.x, minWindowSize), Mathf.Max(node.windowRect.size.y, minWindowSize));
+                    node.windowRect.position = new Vector2(
+                          Mathf.Clamp(node.windowRect.x, 0f, all.width),
+                          Mathf.Clamp(node.windowRect.y, 0f, all.height)
+                    );
                 }
                 /*
                 if (currentAIStateManager != null)
@@ -116,6 +129,8 @@ namespace Behavior
             #region GUI Methods
             private void OnGUI()
             {
+                serializedGraph.Update();
+
                 /*
                 if (Selection.activeTransform != null)
                 {
@@ -133,6 +148,7 @@ namespace Behavior
                 UserInput(e);
 
                 DrawWindows();
+                DrawMiniMap();
 
                 if (e.type == EventType.MouseDrag) {
                     if (settings.currentGraph != null) Repaint();
@@ -151,6 +167,29 @@ namespace Behavior
                     Repaint();
                 }
 
+                SaveChanges();
+            }
+
+            void SaveChanges()
+            {
+               // Debug.Log("SAVING ========");
+                var newSG = new SerializedObject(settings.currentGraph);
+                var it = newSG.GetIterator();
+                for(; ;) {
+                    try {
+                        if (!it.NextVisible(true) && !it.NextVisible(false)) {
+                            break;
+                        }
+                    }
+                    catch (System.InvalidOperationException) {
+                        break;
+                    }
+                    if (serializedGraph.FindProperty(it.propertyPath) != null) {
+                        //Debug.Log("Saving (if different) " + it.propertyPath);
+                        serializedGraph.CopyFromSerializedPropertyIfDifferent(it);
+                    } 
+                }
+                serializedGraph.ApplyModifiedProperties();
             }
 
             void DrawWindows()
@@ -166,21 +205,74 @@ namespace Behavior
                         if (b.drawNode is AIStateDrawNode) {
                             var bS = (AIStateNode)b;
                             if (bS.currentAIState != null && bS.currentAIState.id == settings.currentGraph.GetCurrentAIStateID()) {
-                                b.windowRect = GUI.Window(i, b.windowRect, DrawNodeWindow, b.windowTitle, activeStyle);
+                                b.windowRect = GUI.Window(i, b.windowRect.Shift(-scrollPos), DrawNodeWindow, b.windowTitle, activeStyle).Shift(scrollPos);
                             }
                             else {
-                                b.windowRect = GUI.Window(i, b.windowRect, DrawNodeWindow, b.windowTitle);
+                                b.windowRect = GUI.Window(i, b.windowRect.Shift(-scrollPos), DrawNodeWindow, b.windowTitle).Shift(scrollPos);
                             }
                         }
                         else {
-                            b.windowRect = GUI.Window(i, b.windowRect, DrawNodeWindow, b.windowTitle);
+                            b.windowRect = GUI.Window(i, b.windowRect.Shift(-scrollPos), DrawNodeWindow, b.windowTitle).Shift(scrollPos);
                         }
                     }
                     foreach (Node n in settings.currentGraph.nodes) n.DrawCurve();
                 }
-                EditorGUILayout.LabelField(string.Format("x:{0} y:{1}", scrollPos.x, scrollPos.y));
+                EditorGUILayout.LabelField(string.Format("x:{0} y:{1} zoom:{2}", scrollPos.x, scrollPos.y, zoom));
                 EndWindows();
                 GUILayout.EndArea();
+            }
+
+            void DrawMiniMap()
+            {
+                var rect = new Rect(new Vector2(minimapMargin, Screen.height - minimapMargin - minimapSize - 20), new Vector2(minimapSize, minimapSize));
+                
+                for (int x = 0; x < minimapTexture.width; x++) {
+                    for (int y = 0; y < minimapTexture.height; y++) {
+                        minimapTexture.SetPixel(x, y, new Color(1f, 1F, 1f, 0.2f));
+                    }
+                }
+                
+                minimapTexture.SetPencilColor(Color.black);
+
+
+                foreach (var node in settings.currentGraph.nodes) {
+                    var position = new Vector2(
+                        (node.windowRect.x / all.width),
+                        1f - (node.windowRect.y / all.height)
+                    );
+                    var wSizeUV = new Vector2(node.windowRect.width / all.width, node.windowRect.width / all.height);
+                    try {
+                        minimapTexture.SetPencilColor(Color.black);
+                        minimapTexture.Polygon(
+                            new List<Vector2>() {
+                                position,
+                                new Vector2(position.x+wSizeUV.x, position.y),
+                                new Vector2(position.x+wSizeUV.x, position.y - wSizeUV.y),
+                                new Vector2(position.x, position.y-wSizeUV.y)
+                            }, 0.2f
+                        );
+                    }
+                    catch (Pencil.OutOfUVException) {
+                        // Ignore
+                    }
+                }
+
+                var viewPos = Vector2.one - new Vector2(
+                    1f - (scrollPos.x / all.width),
+                    (scrollPos.y / all.height)
+                );
+                var sizeUV = new Vector2(Screen.width/all.width, Screen.height/all.height);
+
+                minimapTexture.SetPencilColor(Color.white);
+                minimapTexture.Polygon(new List<Vector2>() {
+                    viewPos, 
+                    new Vector2(viewPos.x+sizeUV.x, viewPos.y),
+                    new Vector2(viewPos.x+sizeUV.x, viewPos.y - sizeUV.y), 
+                    new Vector2(viewPos.x, viewPos.y-sizeUV.y)
+                }, 0.1f);
+
+                minimapTexture.Apply();
+                GUI.DrawTexture(rect, minimapTexture);
             }
 
             void DrawNodeWindow(int id)
@@ -193,7 +285,10 @@ namespace Behavior
             {
                 if (settings.currentGraph == null) return;
 
-                if (e.button == 0) // LEFT CLICK
+                if (e.isScrollWheel) {
+                    zoom += Mathf.Sign(e.delta.y) / 10f;
+                } 
+                else if (e.button == 0) // LEFT CLICK
                 {
                     if (e.type == EventType.MouseDown) {
                         if (settings.MAKE_TRANSITION) {
@@ -224,24 +319,17 @@ namespace Behavior
                 Vector2 diff = e.mousePosition - scrollStartPos;
                 diff *= .6f;
                 scrollStartPos = e.mousePosition;
-                scrollPos += diff;
+                scrollPos -= diff;
 
-                for (int i = 0; i < settings.currentGraph.nodes.Count; i++) {
-                    Node b = settings.currentGraph.nodes[i];
-                    b.windowRect.x += diff.x;
-                    b.windowRect.y += diff.y;
-                }
+                scrollPos = new Vector2(
+                    Mathf.Clamp(scrollPos.x, 0f, all.width),
+                    Mathf.Clamp(scrollPos.y, 0f, all.height)
+                );
             }
 
             void ResetScroll()
             {
-                for (int i = 0; i < settings.currentGraph.nodes.Count; i++) {
-                    Node b = settings.currentGraph.nodes[i];
-                    b.windowRect.x -= scrollPos.x;
-                    b.windowRect.y -= scrollPos.y;
-                }
-
-                scrollPos = Vector2.zero;
+                scrollPos = Vector2.Scale(Vector2.one*0.5f, all.size);
             }
 
             void RightClick(Event e)
@@ -392,13 +480,13 @@ namespace Behavior
                         ResetScroll();
                         break;
                 }
-                // Set dirty here
+
             }
 
             public static Node AddTransitionNode(AIStateNode originNode, Vector3 pos)
             {
                 Node transNode = settings.AddNodeOnGraph(settings.transitionNode, 200, 50, "Condition", pos);
-                transNode.enterNode = originNode.id;
+                transNode.enterNode = originNode.id; 
                 AIStateTransitionNode t = settings.currentGraph.AddTransition(originNode);
                 return transNode;
             }
