@@ -194,8 +194,9 @@ public class AperturePresetEditor : Editor
         string switches = "switches";
         string basicParameters = "basic parameters";
         string interpolations = "interpolations";
+        string alignment = "alignment";
         string speedFX = "speed effects";
-        string advanced = "advanced";
+		string advanced = "advanced";
 
         var overridesList = ((AperturePreset)target).overrides;
         Dictionary<string, bool> overrides = new Dictionary<string, bool>();
@@ -206,10 +207,11 @@ public class AperturePresetEditor : Editor
         if (!inheritableProperties.ContainsKey(switches)) inheritableProperties[switches] = new InheritableProperties(overrides);
         if (!inheritableProperties.ContainsKey(basicParameters)) inheritableProperties[basicParameters] = new InheritableProperties(overrides);
         if (!inheritableProperties.ContainsKey(interpolations)) inheritableProperties[interpolations] = new InheritableProperties(overrides);
-        if (!inheritableProperties.ContainsKey(speedFX)) inheritableProperties[speedFX] = new InheritableProperties(overrides);
+		if (!inheritableProperties.ContainsKey(alignment)) inheritableProperties[alignment] = new InheritableProperties(overrides);
+		if (!inheritableProperties.ContainsKey(speedFX)) inheritableProperties[speedFX] = new InheritableProperties(overrides);
         if (!inheritableProperties.ContainsKey(advanced)) inheritableProperties[advanced] = new InheritableProperties(overrides);
-        
-        inheritableProperties[switches].Add("canBeControlled");
+
+		inheritableProperties[switches].Add("canBeControlled");
         inheritableProperties[switches].Add("resetable");
 
         inheritableProperties[basicParameters].Add("fieldOfView");
@@ -225,9 +227,12 @@ public class AperturePresetEditor : Editor
         inheritableProperties[interpolations].Add("verticalFollowLerp");
         inheritableProperties[interpolations].Add("rotationSpeed");
 
-		inheritableProperties[interpolations].Add("angleMaxConsideredAlign");
-		inheritableProperties[interpolations].Add("alignAfter");
-		inheritableProperties[interpolations].Add("alignSpeedMultiplier");
+		inheritableProperties[alignment].Add("alignAfter");
+		inheritableProperties[alignment].Add("angleConsideredAlign");
+		inheritableProperties[alignment].Add("minTargetVelocity");
+		inheritableProperties[alignment].Add("alignMultiplierByUser");
+		inheritableProperties[alignment].Add("alignMultiplierByStick");
+		inheritableProperties[alignment].Add("alignMultiplierByVelocity");
 
 		inheritableProperties[speedFX].Add("speedEffectMultiplier");
         inheritableProperties[speedFX].Add("catchUpSpeedMultiplier");

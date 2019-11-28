@@ -39,11 +39,17 @@ MonoBehaviour:
     isOverriden: 1
   - property: rotationSpeed
     isOverriden: 1
-  - property: angleMaxConsideredAlign
-    isOverriden: 1
   - property: alignAfter
     isOverriden: 1
-  - property: alignSpeedMultiplier
+  - property: angleConsideredAlign
+    isOverriden: 1
+  - property: minTargetVelocity
+    isOverriden: 1
+  - property: alignMultiplierByUser
+    isOverriden: 1
+  - property: alignMultiplierByStick
+    isOverriden: 1
+  - property: alignMultiplierByVelocity
     isOverriden: 1
   - property: speedEffectMultiplier
     isOverriden: 1
@@ -68,17 +74,20 @@ MonoBehaviour:
   distance:
     min: 5
     max: 9
-  cameraRotateAroundSensivity: 90
+  cameraRotateAroundSensivity: 100
   cameraRotateAboveSensivity: 20
   fovLerp: 20
   lateralFollowLerp: 40
   longitudinalFollowLerp: 6
   verticalFollowLerp: 5
-  rotationSpeed: 0.8
+  rotationSpeed: 5
   lookAtLerp: 7
-  angleMaxConsideredAlign: 10
-  alignAfter: 3
-  alignSpeedMultiplier: 10
+  alignAfter: 5
+  angleConsideredAlign: 10
+  minTargetVelocity: 0.1
+  alignMultiplierByUser: 2
+  alignMultiplierByStick: 50
+  alignMultiplierByVelocity: 2
   speedEffectMultiplier: 1
   catchUpSpeedMultiplier: 1
   angleIncrementOnSpeed: 30
