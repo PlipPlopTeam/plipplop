@@ -16,7 +16,6 @@ namespace Behavior
             float zoom = 1f;
 
             public static Settings settings;
-            public static bool forceSetDirty;
             public static readonly int startNodeId = -1;
 
             int transitFromId;
@@ -38,7 +37,6 @@ namespace Behavior
                 COMMENT_NODE,
                 MAKE_TRANSITION_TRUE,
                 MAKE_TRANSITION_FALSE,
-                MAKE_PORTAL,
                 RESET_PAN
             }
             #endregion
@@ -65,10 +63,10 @@ namespace Behavior
             {
                 // Safety check 
                 if (settings.currentGraph.GetNodeWithIndex(startNodeId) == null) {
-                   settings.currentGraph.initialState.SetGraph(settings.currentGraph);
-                   var node = settings.AddNodeOnGraph(settings.stateNode, 300, 64, "START", Vector3.one*0.5f);
+                    settings.currentGraph.initialState.SetGraph(settings.currentGraph);
+                    var node = (AIStateNode)settings.AddNodeOnGraph(settings.stateNode, 300, 64, "START", Vector3.one*0.5f);
                     node.id = startNodeId;
-                    settings.currentGraph.GetNodeWithIndex(startNodeId).stateRef.currentAIState = settings.currentGraph.initialState;
+                    node.currentAIState = settings.currentGraph.initialState;
                     if (!settings.currentGraph.initialState) {
                         Debug.LogError("No initial state set for " + settings.currentGraph + ", this should be fixed urgently.");
                     }
@@ -89,6 +87,11 @@ namespace Behavior
                     }
                 }
 
+                // Updating all nodes
+
+                foreach (var node in settings.currentGraph.nodes.ToArray()) {
+                    node.SetGraph(settings.currentGraph);
+                }
                 /*
                 if (currentAIStateManager != null)
                 {
@@ -101,12 +104,12 @@ namespace Behavior
                 */
 
                 if (settings.currentGraph.AreSomeNodesPendingDeletion()) {
-                    if (settings.currentGraph != null) {
-                        settings.currentGraph.DeleteWindowsThatNeedTo();
-                        Debug.Log("Deleting " + nodesToDelete + " windows that needs to");
-                        Repaint();
-                    }
-                    nodesToDelete = 0;
+                if (settings.currentGraph != null) {
+                    settings.currentGraph.DeleteWindowsThatNeedTo();
+                    Debug.Log("Deleting " + nodesToDelete + " windows that needs to");
+                    Repaint();
+                }
+                nodesToDelete = 0;
                 }
             }
 
@@ -148,17 +151,6 @@ namespace Behavior
                     Repaint();
                 }
 
-                if (forceSetDirty) {
-                    forceSetDirty = false;
-                    EditorUtility.SetDirty(settings);
-                    EditorUtility.SetDirty(settings.currentGraph);
-
-                    for (int i = 0; i < settings.currentGraph.nodes.Count; i++) {
-                        Node n = settings.currentGraph.nodes[i];
-                        if (n.stateRef.currentAIState != null)
-                            EditorUtility.SetDirty(n.stateRef.currentAIState);
-                    }
-                }
             }
 
             void DrawWindows()
@@ -171,8 +163,9 @@ namespace Behavior
 
                     for (int i = 0; i < settings.currentGraph.nodes.Count; i++) {
                         Node b = settings.currentGraph.nodes[i];
-                        if (b.drawNode is AIStateNode) {
-                            if (b.stateRef.currentAIState != null && b.stateRef.currentAIState.id == settings.currentGraph.GetCurrentAIStateID()) {
+                        if (b.drawNode is AIStateDrawNode) {
+                            var bS = (AIStateNode)b;
+                            if (bS.currentAIState != null && bS.currentAIState.id == settings.currentGraph.GetCurrentAIStateID()) {
                                 b.windowRect = GUI.Window(i, b.windowRect, DrawNodeWindow, b.windowTitle, activeStyle);
                             }
                             else {
@@ -266,7 +259,7 @@ namespace Behavior
                 else ModifyNode(e);
             }
 
-            void MakeTransition(System.Action<Node, AIStateTransition, int, AIState> setTargetAndId)
+            void MakeTransition(System.Action<Node, Node> setTargetAndId)
             {
                 settings.MAKE_TRANSITION = false;
                 clickedOnWindow = false;
@@ -279,18 +272,14 @@ namespace Behavior
                 }
 
                 if (clickedOnWindow) {
-                    if (selectedNode.drawNode is AIStateNode || selectedNode.drawNode is PortalNode) {
-                        if (selectedNode.id != transitFromId) {
-                            Node transNode = settings.currentGraph.GetNodeWithIndex(transitFromId);
+                    if (selectedNode.id != transitFromId) {
+                        Node transitionOriginNode = settings.currentGraph.GetNodeWithIndex(transitFromId);
 
-                            Node enterNode = BehaviorEditor.settings.currentGraph.GetNodeWithIndex(transNode.enterNode);
-                            AIStateTransition transition = enterNode.stateRef.currentAIState.GetTransition();
-                            if (transition == null) {
-                                Debug.LogWarning("I cannot create a transition to an empty AIState! Please fill it with a state first.");
-                            }
-                            else {
-                                setTargetAndId.Invoke(transNode, transition, selectedNode.id, selectedNode.stateRef.currentAIState);
-                            }
+                        if (selectedNode == null) {
+                            Debug.LogWarning("I cannot create a transition to an empty node!");
+                        }
+                        else {
+                            setTargetAndId.Invoke(transitionOriginNode, selectedNode) ;
                         }
                     }
                 }
@@ -298,17 +287,15 @@ namespace Behavior
 
             void MakeTransitionIfFalse()
             {
-                MakeTransition((node, transition, targetId, targetState) => {
-                    node.exitNodes[1] = targetId;
-                    transition.outputIfFalse = targetState;
+                MakeTransition((transitionNode, targetNode) => {
+                    transitionNode.exitNodes[1] = targetNode.id;
                 });
             }
 
             void MakeTransitionIfTrue()
             {
-                MakeTransition((node, transition, targetId, targetState) => {
-                    node.exitNodes[0] = targetId;
-                    transition.outputIfTrue = targetState;
+                MakeTransition((transitionNode, targetNode) => {
+                    transitionNode.exitNodes[0] = targetNode.id;
                 });
             }
             #endregion
@@ -320,7 +307,6 @@ namespace Behavior
                 menu.AddSeparator("");
                 if (settings.currentGraph != null) {
                     menu.AddItem(new GUIContent("Add AIState"), false, ContextCallback, EUserActions.ADD_STATE);
-                    menu.AddItem(new GUIContent("Add Portal"), false, ContextCallback, EUserActions.MAKE_PORTAL);
                     menu.AddSeparator("");
                     menu.AddItem(new GUIContent("Reset Panning"), false, ContextCallback, EUserActions.RESET_PAN);
                 }
@@ -336,20 +322,16 @@ namespace Behavior
             {
                 GenericMenu menu = new GenericMenu();
                 menu.AddSeparator("");
-                if (selectedNode.drawNode is AIStateNode) {
-                    if (selectedNode.stateRef.currentAIState != null) {
-                        menu.AddItem(new GUIContent("Add Condition"), false, ContextCallback, EUserActions.ADD_TRANSITION_NODE);
+                if (selectedNode.drawNode is AIStateDrawNode) {
+                    if (((AIStateNode)selectedNode).currentAIState != null) {
+                        menu.AddItem(new GUIContent("Add condition"), false, ContextCallback, EUserActions.ADD_TRANSITION_NODE);
                     }
                     else {
-                        menu.AddDisabledItem(new GUIContent("Add Condition"));
+                        menu.AddDisabledItem(new GUIContent("Add condition"));
                     }
                     menu.AddItem(new GUIContent("Delete"), false, ContextCallback, EUserActions.DELETE_NODE);
                 }
-                else if (selectedNode.drawNode is PortalNode) {
-                    menu.AddSeparator("");
-                    menu.AddItem(new GUIContent("Delete"), false, ContextCallback, EUserActions.DELETE_NODE);
-                }
-                else if (selectedNode.drawNode is TransitionNode) {
+                else if (selectedNode.drawNode is TransitionDrawNode) {
                     if (selectedNode.isDuplicate || !selectedNode.isAssigned) {
                         menu.AddDisabledItem(new GUIContent("Make transition..."));
                     }
@@ -368,21 +350,29 @@ namespace Behavior
                 EUserActions a = (EUserActions)o;
                 switch (a) {
                     case EUserActions.ADD_STATE:
-                        settings.AddNodeOnGraph(settings.stateNode, 300, 200, "AIState", mousePosition);
-                        break;
-                    case EUserActions.MAKE_PORTAL:
-                        settings.AddNodeOnGraph(settings.portalNode, 100, 80, "Portal", mousePosition);
+                        settings.AddNodeOnGraph(settings.stateNode, 300, 200, "State", mousePosition);
                         break;
                     case EUserActions.ADD_TRANSITION_NODE:
-                        AddTransitionNode(selectedNode, mousePosition);
+                        AddTransitionNode((AIStateNode)selectedNode, mousePosition);
                         break;
                     default:
                         break;
                     case EUserActions.DELETE_NODE:
-                        if (selectedNode.drawNode is TransitionNode) {
+                        if (selectedNode.drawNode is TransitionDrawNode) {
                             Node enterNode = settings.currentGraph.GetNodeWithIndex(selectedNode.enterNode);
-                            if (enterNode != null)
-                                enterNode.stateRef.currentAIState.RemoveTransition();
+                            if (enterNode != null) {
+                                if (enterNode is AIStateNode) {
+                                    ((AIStateNode)enterNode).RemoveTransition();
+                                }
+                                else {
+                                    var transitionNode = ((AIStateTransitionNode)enterNode);
+                                    for (int i = 0; i < transitionNode.exitNodes.Length; i++) {
+                                        if (transitionNode.exitNodes[i] == selectedNode.id) {
+                                            transitionNode.exitNodes[i] = null;
+                                        }
+                                    }
+                                }
+                            }
                         }
 
                         nodesToDelete++;
@@ -402,23 +392,14 @@ namespace Behavior
                         ResetScroll();
                         break;
                 }
-                forceSetDirty = true;
+                // Set dirty here
             }
 
-            public static Node AddTransitionNode(Node enterNode, Vector3 pos)
+            public static Node AddTransitionNode(AIStateNode originNode, Vector3 pos)
             {
                 Node transNode = settings.AddNodeOnGraph(settings.transitionNode, 200, 50, "Condition", pos);
-                transNode.enterNode = enterNode.id;
-                AIStateTransition t = settings.currentGraph.AddTransition(enterNode.stateRef.currentAIState);
-                transNode.transRef.transitionId = t.id;
-                return transNode;
-            }
-
-            public static Node AddTransitionNodeFromTransition(AIStateTransition transition, Node enterNode, Vector3 pos)
-            {
-                Node transNode = settings.AddNodeOnGraph(settings.transitionNode, 200, 100, "Condition", pos);
-                transNode.enterNode = enterNode.id;
-                transNode.transRef.transitionId = transition.id;
+                transNode.enterNode = originNode.id;
+                AIStateTransitionNode t = settings.currentGraph.AddTransition(originNode);
                 return transNode;
             }
             #endregion
@@ -428,8 +409,7 @@ namespace Behavior
             {
                 Vector3 startPos = GetBestArrowPosition(start, end);
                 Vector3 endPos = GetBestArrowPosition(end, start);
-                Color c = Handles.color;
-                c = curveColor;
+                Color c = curveColor;
 
                 Vector3 dir = (startPos - endPos).normalized;
                 Vector3 right = Quaternion.AngleAxis(-90, Vector3.forward) * dir;

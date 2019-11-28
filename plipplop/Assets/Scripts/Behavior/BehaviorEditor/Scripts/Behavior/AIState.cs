@@ -51,21 +51,6 @@ namespace Behavior
             }
         }
 
-        public AIStateTransition AddTransition()
-        {
-            return graph.AddTransition(this);
-        }
-
-        public void RemoveTransition()
-        {
-            graph.RemoveTransition(this);
-        }
-
-        public AIStateTransition GetTransition()
-        {
-            return graph.GetTransition(this);
-        }
-
         public NonPlayableCharacter GetGraphTarget()
         {
             return graph.GetTarget();

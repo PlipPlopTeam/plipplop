@@ -5,46 +5,43 @@ using UnityEditor;
 
 namespace Behavior.Editor
 {
-    public class TransitionNode : DrawNode
+    public class TransitionDrawNode : DrawNode
     {
 
         readonly int heightBetweenOutputs = 20;
 
-        public void Init(AIStateNode enterAIState, AIStateTransition transition)
+        public void Init(AIStateDrawNode enterAIState, AIStateTransitionNode transition)
         {
             //      this.enterAIState = enterAIState;
         }
 
         public override void DrawWindow(Node b)
         {
+            if (!(b is AIStateTransitionNode)) {
+                Debug.LogError("Attempted to draw a non-transition node with a TransitionDrawNode");
+                return;
+            }
+
             Node enterNode = BehaviorEditor.settings.currentGraph.GetNodeWithIndex(b.enterNode);
 			if (enterNode == null) {
                 EditorGUILayout.LabelField(@"/!\ This node has no entry node");
                 return;
 			}
-			
-			if (enterNode.stateRef.currentAIState == null)
-			{
-				BehaviorEditor.settings.currentGraph.DeleteNode(b.id);
-				return;
-			}
 
-            AIStateTransition transition = enterNode.stateRef.currentAIState.GetTransition();
 
-			if (transition == null)
-				return;
+            AIStateTransitionNode transitionNode = (AIStateTransitionNode)b;
 
-            for(int i = 0; i < transition.conditions.Count; i++)
+            for(int i = 0; i < transitionNode.conditions.Count; i++)
             {
                 EditorGUILayout.BeginHorizontal();
-                transition.conditions[i] = (Condition)EditorGUILayout.ObjectField(transition.conditions[i] , typeof(Condition), false);
-                if(GUILayout.Button("-")) transition.conditions.RemoveAt(i);
+                transitionNode.conditions[i] = (Condition)EditorGUILayout.ObjectField(transitionNode.conditions[i] , typeof(Condition), false);
+                if(GUILayout.Button("-")) transitionNode.conditions.RemoveAt(i);
                 EditorGUILayout.EndHorizontal();
             }
 
-            if(GUILayout.Button("Add")) transition.conditions.Add(null);
+            if(GUILayout.Button("Add")) transitionNode.conditions.Add(null);
 
-            if(transition.conditions.Count == 0)
+            if(transitionNode.conditions.Count == 0)
             {     
                 b.windowRect.height = 60;       
                 EditorGUILayout.LabelField("No Condition!");
@@ -52,7 +49,7 @@ namespace Behavior.Editor
             }
             else
             {
-                b.windowRect.height = 40 + transition.conditions.Count * 22;
+                b.windowRect.height = 40 + transitionNode.conditions.Count * 22;
                 b.isAssigned = true;
 				if (b.isDuplicate)
 				{
@@ -66,16 +63,13 @@ namespace Behavior.Editor
                         Node targetNode = BehaviorEditor.settings.currentGraph.GetNodeWithIndex(b.exitNodes[i]);
                         if (targetNode != null) {
                             if (targetNode.isDuplicate)
-                                if (i == 0) transition.outputIfTrue = null;
-                                else transition.outputIfFalse = null;
+                                transitionNode.exitNodes[i] = null;
                             else {
-                                if (i == 0) transition.outputIfTrue = targetNode.stateRef.currentAIState;
-                                else transition.outputIfFalse = targetNode.stateRef.currentAIState;
+                                transitionNode.exitNodes[i] = targetNode.id;
                             }
                         }
                         else {
-                            if (i == 0) transition.outputIfTrue = null;
-                            else transition.outputIfFalse = null;
+                            transitionNode.exitNodes[i] = null;
                         }
                     }
 				}
@@ -123,26 +117,22 @@ namespace Behavior.Editor
                 return;
 
 
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < b.exitNodes.Length; i++) {
                 Node targetNode = BehaviorEditor.settings.currentGraph.GetNodeWithIndex(b.exitNodes[i]);
                 if (targetNode != null) {
                     rect = b.windowRect;
+                    rect.y += i*heightBetweenOutputs;
                     //rect.x += rect.width;
                     Rect endRect = targetNode.windowRect;
                     //endRect.x -= endRect.width * .5f;
 
                     Color targetColor = Color.white;
 
-                    if (targetNode.drawNode is AIStateNode) {
-                        if (!targetNode.isAssigned || targetNode.isDuplicate) targetColor = Color.red;
-                    }
-                    else {
-                        if (!targetNode.isAssigned) targetColor = Color.grey;
-                        else targetColor = Color.white;
-                    }
+                    if (i == 0) targetColor = Color.red;
+                    if (i == 1) targetColor = Color.green;
 
                     //rect.position = new Vector2(rect.position.x - rect.size.x, rect.position.y);
-                    BehaviorEditor.DrawNodeCurve(rect, endRect, false, Color.white);
+                    BehaviorEditor.DrawNodeCurve(rect, endRect, false, targetColor);
                 }
             }
         }

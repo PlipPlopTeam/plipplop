@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
@@ -10,17 +11,19 @@ namespace Behavior.Editor
     {
         [SerializeField] public List<Node> nodes = new List<Node>();
         [SerializeField] public int idCount;
-        [SerializeField] public Dictionary<AIState, AIStateTransition> transitions = new Dictionary<AIState, AIStateTransition>();
+        [SerializeField] public Dictionary<AIStateNode, AIStateTransitionNode> stateTransitions = new Dictionary<AIStateNode, AIStateTransitionNode>();
+        public List<AIStateTransitionNode> transitions { get { return nodes.FindAll(o => o is AIStateTransitionNode).Select(o => { return (AIStateTransitionNode)o; }).ToList(); } }
         public AIState initialState;
         List<int> indexToDelete = new List<int>();
 
         // Runtime
-        AIState currentAIState;
+        AIStateNode currentStateNode;
         NonPlayableCharacter target;
 
-        #region Checks
-        public Node GetNodeWithIndex(int index)
+        public Node GetNodeWithIndex(int? index)
         {
+            if (index == null) return null;
+
             for (int i = 0; i < nodes.Count; i++) {
                 if (nodes[i].id == index)
                     return nodes[i];
@@ -49,50 +52,56 @@ namespace Behavior.Editor
             indexToDelete.AddUnique(index);
         }
 
-        public bool IsAIStateDuplicate(Node b)
+        public bool IsAIStateDuplicate(AIStateNode b)
         {
-            for (int i = 0; i < nodes.Count; i++) {
-                if (nodes[i].id == b.id)
-                    continue;
+            foreach(var node in nodes.FindAll(o=>o is AIStateNode)) {
 
-                if (b.stateRef.currentAIState != null && nodes[i].stateRef.currentAIState == b.stateRef.currentAIState &&
-                    !nodes[i].isDuplicate)
+                var aiNode = (AIStateNode)node;
+                if (aiNode.id == b.id) continue;
+
+                if (b.currentAIState != null && aiNode.currentAIState == b.currentAIState &&
+                    !aiNode.isDuplicate)
                     return true;
             }
+
             return false;
         }
-        #endregion
+
+        public AIState GetCurrentAIState()
+        { 
+            return currentStateNode.currentAIState;
+        }
 
         public void Start()
         {
-            currentAIState.OnEnter();
+            GetCurrentAIState().OnEnter();
         }
 
         public void Update()
         {
-            currentAIState.Tick();
+            GetCurrentAIState().Tick();
         }
 
         public void FixedUpdate()
         {
-            currentAIState.FixedTick();
+            GetCurrentAIState().FixedTick();
             CheckAndFollowTransition();
         }
 
         public void CheckAndFollowTransition()
         {
-            if (!transitions.ContainsKey(currentAIState)) return;
+            if (!stateTransitions.ContainsKey(currentStateNode)) return;
 
-            var transition = transitions[currentAIState];
+            var transition = stateTransitions[currentStateNode];
 
             // Following the path of conditions until we hit a state, or something empty
             for(; ;) {
                 if (transition.disable) return;
                 bool check = true;
                 foreach (Condition c in transition.conditions) {
-                    if (!c.Check(currentAIState)) check = false;
+                    if (!c.Check(GetCurrentAIState())) check = false;
                 }
-                INodeable nextItem;
+                Node nextItem;
                 if (check) {
                     nextItem = transition.outputIfTrue;
                 }
@@ -100,44 +109,43 @@ namespace Behavior.Editor
                     nextItem = transition.outputIfFalse;
                 }
                 if (nextItem == null) {
-                    Debug.LogError("AIState " + currentAIState.name + " transitions to a NULL state after condition check");
+                    Debug.LogError("Node " + nextItem + " transitions to a NULL state after condition check");
                 }
                 else {
-                    if (nextItem is AIState) {
-                        GoToState((AIState)nextItem);
+                    if (nextItem is AIStateNode) {
+                        GoToNode((AIStateNode)nextItem);
                         return;
                     }
                     else {
-                        transition = (AIStateTransition)nextItem;
+                        var nextTransition = (AIStateTransitionNode)nextItem;
+                       // transition = nextTransition.transRef.
                     }
                 }
             }
         }
 
-        public void GoToState(AIState state)
+        public void GoToNode(AIStateNode node)
         {
-            currentAIState.OnExit();
-            currentAIState = state;
-            currentAIState.OnEnter();
+            GetCurrentAIState().OnExit();
+            currentStateNode = node;
+            GetCurrentAIState().OnEnter();
         }
 
         public string GetCurrentAIStateName()
         {
-            return currentAIState ? currentAIState.name : "<NULL>";
+            return GetCurrentAIState() ? GetCurrentAIState().name : "<NULL>";
         }
 
         public int? GetCurrentAIStateID()
         {
-            return currentAIState ? (int?)currentAIState.id : null;
+            return GetCurrentAIState() ? (int?)GetCurrentAIState().id : null;
         }
 
         public void SetTarget(NonPlayableCharacter target)
         {
             this.target = target;
             foreach(var node in nodes) {
-                if (node.stateRef.currentAIState != null) {
-                    node.stateRef.currentAIState.SetGraph(this);
-                }
+                node.SetGraph(this);
             }
         }
 
@@ -146,30 +154,49 @@ namespace Behavior.Editor
             return target;
         }
 
-        public AIStateTransition AddTransition(AIState state)
+        public AIStateTransitionNode AddTransition(AIStateNode node)
         {
-            if (HasTransition(state)) return GetTransition(state);
+            if (HasTransition(node)) return GetTransition(node);
 
-            AIStateTransition retVal = new AIStateTransition();
-            transitions[state] = retVal;
+            AIStateTransitionNode retVal = new AIStateTransitionNode();
+            stateTransitions[node] = retVal;
             retVal.id = idCount;
             idCount++;
             return retVal;
         }
 
-        public bool HasTransition(AIState state)
+        public AIStateTransitionNode AddTransition(AIStateTransitionNode node, int index)
         {
-            return GetTransition(state) != null;
+            if (index == 0 && node.outputIfTrue is AIStateTransitionNode) return (AIStateTransitionNode)node.outputIfTrue;
+            if (index == 1 && node.outputIfFalse is AIStateTransitionNode) return (AIStateTransitionNode)node.outputIfFalse;
+
+            AIStateTransitionNode retVal = new AIStateTransitionNode();
+            retVal.id = idCount;
+            idCount++;
+
+            node.exitNodes[index] = retVal.id;
+
+            return retVal;
         }
 
-        public AIStateTransition GetTransition(AIState state)
+        public bool HasTransition(AIStateNode node)
         {
-            return transitions.ContainsKey(state) ? transitions[state] : null;
+            return GetTransition(node) != null;
         }
 
-        public void RemoveTransition(AIState state)
+        public AIStateTransitionNode GetTransition(AIStateNode node)
         {
-            transitions[state] = null;
+            return stateTransitions.ContainsKey(node) ? stateTransitions[node] : null;
+        }
+
+        public AIStateTransitionNode GetTransition(int i)
+        {
+            return transitions.Find(o => o.id == i);
+        }
+
+        public void RemoveTransition(AIStateNode node)
+        {
+            stateTransitions[node] = null;
         }
     }
 }
