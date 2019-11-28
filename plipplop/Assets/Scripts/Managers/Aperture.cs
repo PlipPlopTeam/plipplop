@@ -53,7 +53,8 @@ public class Aperture
     // Current angle on X axis
     float vAngle;
     float vAngleAmount;
-    bool isCameraBeingRepositioned;
+	float rotationMultiplier;
+	bool isCameraBeingRepositioned;
     float lastCameraInput;
 
     bool freeze = false;
@@ -115,17 +116,21 @@ public class Aperture
 
     public void Update()
     {
-        if (Time.time - lastCameraInput > settings.cameraResetAfterTime) {
-            Realign();
-        }
-    }
+        if(Time.time - lastCameraInput > settings.alignAfter) Realign();
+	}
 
     public void Realign()
     {
-        isCameraBeingRepositioned = true;
+		rotationMultiplier = settings.alignSpeedMultiplier;
+		isCameraBeingRepositioned = true;
     }
+	public void Aligned()
+	{
+		rotationMultiplier = 1f;
+		isCameraBeingRepositioned = false;
+	}
 
-    public void FixedUpdate()
+	public void FixedUpdate()
     {
         if (freeze) return;
         if (settings.constraintToTarget) {
@@ -140,11 +145,20 @@ public class Aperture
 
         // Camera trying to get in my back
         var targetMovementVelocity = Vector3.Distance(targetPosition, lastTargetPosition);
-		if(isCameraBeingRepositioned || targetMovementVelocity > 0f)
+
+
+		if (isCameraBeingRepositioned)
 		{
 			hAngle = Vector3.SignedAngle(Vector3.forward, target.forward, Vector3.up);
 			vAngleAmount = 0f;
 
+			float a = Vector3.SignedAngle(Forward(), target.forward, Vector3.up);
+			if (Mathf.Abs(a) < settings.angleMaxConsideredAlign) Aligned();
+		}
+		else if (targetMovementVelocity > 0f)
+		{
+			hAngle = Vector3.SignedAngle(Vector3.forward, target.forward, Vector3.up) * targetMovementVelocity;
+			vAngleAmount = 0f;
 			// Lerps here are kinda useless they don't have a huge impact on the real speed
 			//Mathf.Lerp(hAngle, 0f, Time.fixedDeltaTime * settings.cameraResetSpeed);
 			//Mathf.Lerp(vAngleAmount, 0f, Time.fixedDeltaTime * settings.cameraResetSpeed);
@@ -210,7 +224,7 @@ public class Aperture
 
     public void UpdateRotation()
     {
-        rotationAroundTarget.current = Vector3.Lerp(rotationAroundTarget.current, rotationAroundTarget.destination, Time.fixedDeltaTime * settings.rotationSpeed);
+        rotationAroundTarget.current = Vector3.Lerp(rotationAroundTarget.current, rotationAroundTarget.destination, Time.fixedDeltaTime * settings.rotationSpeed * rotationMultiplier);
     }
 
     public void ComputePosition(Vector3 targetPosition)

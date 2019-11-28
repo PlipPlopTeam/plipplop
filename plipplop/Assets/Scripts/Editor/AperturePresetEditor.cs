@@ -224,11 +224,12 @@ public class AperturePresetEditor : Editor
         inheritableProperties[interpolations].Add("longitudinalFollowLerp");
         inheritableProperties[interpolations].Add("verticalFollowLerp");
         inheritableProperties[interpolations].Add("rotationSpeed");
-        inheritableProperties[interpolations].Add("lookAtLerp");
-        inheritableProperties[interpolations].Add("cameraAlignSpeed");
-        inheritableProperties[interpolations].Add("cameraResetAlignSpeed");
 
-        inheritableProperties[speedFX].Add("speedEffectMultiplier");
+		inheritableProperties[interpolations].Add("angleMaxConsideredAlign");
+		inheritableProperties[interpolations].Add("alignAfter");
+		inheritableProperties[interpolations].Add("alignSpeedMultiplier");
+
+		inheritableProperties[speedFX].Add("speedEffectMultiplier");
         inheritableProperties[speedFX].Add("catchUpSpeedMultiplier");
         inheritableProperties[speedFX].Add("angleIncrementOnSpeed");
 
@@ -236,7 +237,6 @@ public class AperturePresetEditor : Editor
         inheritableProperties[advanced].Add("absoluteBoundaries");
         inheritableProperties[advanced].Add("constraintToTarget");
         inheritableProperties[advanced].Add("targetConstraintLocalOffset");
-        inheritableProperties[advanced].Add("cameraResetAfterTime");
     }
 
     void MakeStyles()
