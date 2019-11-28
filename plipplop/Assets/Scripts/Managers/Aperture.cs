@@ -126,6 +126,14 @@ public class Aperture
 		}
 	}
 
+	public void UserAlign()
+	{
+		if(settings.canBeReset)
+		{
+			Realign();
+		}
+	}
+
     public void Realign()
     {
 		rotationMultiplier = settings.alignMultiplierByUser;

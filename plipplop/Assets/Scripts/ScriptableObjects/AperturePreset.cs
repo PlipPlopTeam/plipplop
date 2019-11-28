@@ -18,7 +18,7 @@ public class AperturePreset : ScriptableObject
 
     // Switches
     [HideInInspector] public bool canBeControlled = true;
-    [HideInInspector] public bool resetable = true;
+    [HideInInspector] public bool canBeReset = true;
 
     // Basic parameters
     [HideInInspector] [Range(2f, 200f)] public float fieldOfView = 75f;

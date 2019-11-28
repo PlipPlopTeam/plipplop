@@ -73,7 +73,7 @@ public class Brain
         if (mapping.IsPressed(EAction.JUMP)) controller.OnJump();
         if (mapping.IsPressed(EAction.POSSESS)) controller.OnTryPossess();
         if (mapping.IsHeld(EAction.JUMP)) controller.OnHoldJump();
-        if (mapping.IsPressed(EAction.CAMERA_RESET)) Game.i.aperture.Realign();
+        if (mapping.IsPressed(EAction.CAMERA_RESET)) Game.i.aperture.UserAlign();
 	}
 
 	public void Possess(Controller controller)

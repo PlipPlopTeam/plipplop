@@ -212,7 +212,7 @@ public class AperturePresetEditor : Editor
         if (!inheritableProperties.ContainsKey(advanced)) inheritableProperties[advanced] = new InheritableProperties(overrides);
 
 		inheritableProperties[switches].Add("canBeControlled");
-        inheritableProperties[switches].Add("resetable");
+        inheritableProperties[switches].Add("canBeReset");
 
         inheritableProperties[basicParameters].Add("fieldOfView");
         inheritableProperties[basicParameters].Add("heightOffset");
