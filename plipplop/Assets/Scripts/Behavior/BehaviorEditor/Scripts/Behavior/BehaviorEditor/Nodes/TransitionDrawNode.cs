@@ -92,7 +92,7 @@ namespace Behavior.Editor
 
         public override void DrawCurve(Node b)
         {
-            Rect rect = b.windowRect;
+            Rect rect = b.windowRect.Shift(-BehaviorEditor.scrollPos);
             //rect.y += b.windowRect.height * .5f;
             //rect.position = new Vector2(rect.position.x - rect.size.x, rect.position.y);
             //rect.width = 1;
@@ -109,7 +109,7 @@ namespace Behavior.Editor
                 if (!b.isAssigned || b.isDuplicate)
                     targetColor = Color.grey;
 
-                Rect r = e.windowRect;
+                Rect r = e.windowRect.Shift(-BehaviorEditor.scrollPos);
                 BehaviorEditor.DrawNodeCurve(r, rect, true, Color.white);
             }
 
@@ -120,10 +120,10 @@ namespace Behavior.Editor
             for (int i = 0; i < b.exitNodes.Length; i++) {
                 Node targetNode = BehaviorEditor.settings.currentGraph.GetNodeWithIndex(b.exitNodes[i]);
                 if (targetNode != null) {
-                    rect = b.windowRect;
+                    rect = b.windowRect.Shift(-BehaviorEditor.scrollPos);
                     rect.y += i*heightBetweenOutputs;
                     //rect.x += rect.width;
-                    Rect endRect = targetNode.windowRect;
+                    Rect endRect = targetNode.windowRect.Shift(-BehaviorEditor.scrollPos);
                     //endRect.x -= endRect.width * .5f;
 
                     Color targetColor = Color.white;

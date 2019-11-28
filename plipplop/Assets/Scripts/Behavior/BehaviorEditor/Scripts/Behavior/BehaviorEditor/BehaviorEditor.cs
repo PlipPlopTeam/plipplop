@@ -29,7 +29,7 @@ namespace Behavior
 
             GUIStyle style;
             GUIStyle activeStyle;
-            Vector2 scrollPos;
+            public static Vector2 scrollPos;
             Vector2 scrollStartPos;
             static BehaviorEditor editor;
             int nodesToDelete;
