@@ -19,12 +19,7 @@ namespace Behavior.Editor
                 return;
             }
 
-            Node enterNode = BehaviorEditor.settings.currentGraph.GetNodeWithIndex(b.enterNode);
-			if (enterNode == null) {
-                EditorGUILayout.LabelField(@"/!\ This node has no entry node");
-			}
-
-
+            // Window
             AIStateTransitionNode transitionNode = (AIStateTransitionNode)b;
 
             for(int i = 0; i < transitionNode.conditions.Count; i++)
@@ -71,19 +66,6 @@ namespace Behavior.Editor
 				}
 			}
             
-            /*
-            if (b.transRef.previousCondition != transition.condition)
-            {
-                b.transRef.previousCondition = transition.condition;
-                b.isDuplicate = BehaviorEditor.settings.currentGraph.IsTransitionDuplicate(b);
-				
-				if (!b.isDuplicate)
-                {
-					BehaviorEditor.forceSetDirty = true;
-					// BehaviorEditor.settings.currentGraph.SetNode(this);   
-				}
-            }
-            */
         }
 
         public override void DrawCurve(Node b)
@@ -129,7 +111,7 @@ namespace Behavior.Editor
                     if (i == 1) targetColor = Color.red;
 
                     //rect.position = new Vector2(rect.position.x - rect.size.x, rect.position.y);
-                    BehaviorEditor.DrawNodeCurve(rect, endRect, targetColor, i+1);
+                    BehaviorEditor.DrawNodeCurve(rect, endRect, targetColor, i);
                 }
             }
         }

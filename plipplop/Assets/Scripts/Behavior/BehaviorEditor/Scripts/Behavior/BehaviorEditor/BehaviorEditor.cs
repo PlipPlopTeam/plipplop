@@ -21,11 +21,12 @@ namespace Behavior
             readonly static float minWindowSize = 50f;
             readonly static float minimapSize = 64f;
             readonly static float minimapMargin = 5f;
-            readonly static float spaceBetweenArrows = 20f;
+            readonly static float handleSize = 7f;
 
             Texture2D minimapTexture;
 
             int transitFromId;
+            int currentTransitionSlotIndex = 0;
             Rect mouseRect = new Rect(0, 0, 1, 1);
             readonly Rect all = new Rect(0, 0, 5000, 5000);
 
@@ -162,12 +163,19 @@ namespace Behavior
                 }
 
                 if (settings.MAKE_TRANSITION) {
-                    Rect from = settings.currentGraph.GetNodeWithIndex(transitFromId).windowRect.Shift(-scrollPos);
-                    DrawNodeCurve(from, new Rect(mousePosition, Vector2.zero).Shift(-scrollPos), Color.blue);
+                    var nodeFrom = settings.currentGraph.GetNodeWithIndex(transitFromId);
+                    Rect from = nodeFrom.windowRect.Shift(-scrollPos);
+                    from.y = from.y + GetCurveSlotHeight(nodeFrom, currentTransitionSlotIndex-1);
+                    DrawNodeCurve(from, new Rect(mousePosition, Vector2.zero).Shift(-scrollPos), nodeFrom is AIStateNode ? Color.white : settings.TRANSITION_TYPE ? Color.green : Color.red);
                 }
 
                 Repaint();
                 SaveChanges();
+            }
+
+            public static float GetCurveSlotHeight(Node node, int offset = 0)
+            {
+                return node.windowRect.height / 4f + offset * (node.windowRect.height / 4f);
             }
 
             void SaveChanges()
@@ -199,7 +207,7 @@ namespace Behavior
                 EditorGUILayout.LabelField("Assign Graph:", GUILayout.Width(100));
                 settings.currentGraph = (BehaviorGraph)EditorGUILayout.ObjectField(settings.currentGraph, typeof(BehaviorGraph), false, GUILayout.Width(200));
                 if (settings.currentGraph != null) {
-
+                    // Windows
                     for (int i = 0; i < settings.currentGraph.nodes.Count; i++) {
                         Node b = settings.currentGraph.nodes[i];
                         if (b.windowRect.Contains(mousePosition)) {
@@ -218,11 +226,38 @@ namespace Behavior
                             b.windowRect = GUI.Window(i, b.windowRect.Shift(-scrollPos), DrawNodeWindow, b.windowTitle + ":" + b.id, style).Shift(scrollPos);
                         }
                     }
+
+                    // Handles
+                    foreach(var node in settings.currentGraph.nodes) {
+                        if (Handles.Button(new Vector2(node.windowRect.x - handleSize * 1.5f, node.windowRect.y + node.windowRect.height/2f) - scrollPos, Quaternion.identity, handleSize, handleSize, ButtonCap)) {
+
+                        }
+
+                        int i = 0;
+                        foreach(var exit in node.exitNodes) {
+                            var exitNodeHeight = GetCurveSlotHeight(node, i);
+                            Handles.color = node is AIStateNode ? Color.white : i == 0 ? Color.green : Color.red;
+                            if (Handles.Button(new Vector2(node.windowRect.x + node.windowRect.width + handleSize * 1.5f, node.windowRect.y + exitNodeHeight) - scrollPos, Quaternion.identity, handleSize, handleSize, ButtonCap)) {
+                                settings.MAKE_TRANSITION = true;
+                                settings.TRANSITION_TYPE = (i == 0);
+                                transitFromId = node.id;
+                                currentTransitionSlotIndex = i;
+                            }
+                            i++;
+                        }
+                    }
+
+                    // Curves
                     foreach (Node n in settings.currentGraph.nodes) n.DrawCurve();
                 }
                 EditorGUILayout.LabelField(string.Format("x:{0} y:{1} zoom:{2}", scrollPos.x, scrollPos.y, zoom));
                 EndWindows();
                 GUILayout.EndArea();
+            }
+
+            void ButtonCap(int controlID, Vector3 position, Quaternion rotation, float size, EventType eventType)
+            {
+                Handles.DotHandleCap(controlID, position, Quaternion.LookRotation(Vector3.forward), handleSize, eventType);
             }
 
             void DrawMiniMap()
@@ -507,12 +542,9 @@ namespace Behavior
             public static void DrawNodeCurve(Rect start, Rect end, Color curveColor, int offset=0)
             {
 
-                Vector3 startPos = new Vector2(start.width + start.x, start.y + start.height/2f + offset*(start.height/6f));
-                Vector3 endPos = new Vector2(end.x, end.y + end.height/2f+ offset * (end.height / 6f));
-                //
-                // startPos = start.position + start.size / 2f;
-                // endPos = end.position + end.size / 2f;
-                //
+                Vector3 startPos = new Vector2(start.width + start.x + handleSize * 1.5f, start.y + start.height / 4f + offset * (start.height / 4f));
+                Vector3 endPos = new Vector2(end.x - handleSize * 1.5f, end.y + end.height/2f);
+
                 Color c = curveColor;
                 Handles.color = c;
                 Vector3 dir = (startPos - endPos).normalized;
@@ -522,32 +554,6 @@ namespace Behavior
                 DrawTriangle(center, -dir, 10, c);
             }
 
-            public static Vector3 GetBestOrigin(Rect start, Rect end, int offset=0)
-            {
-                float posx = 0;
-                float posy = 0;
-                
-                /*
-                // IS INSIDE WIDTH
-                if (start.center.x <= end.center.x + end.width / 2 && start.center.x >= end.center.x - end.width / 2) {
-                    posx = start.center.x;
-                }
-                else {
-                    if (start.center.x >= end.center.x + end.width / 2) posx = start.position.x;
-                    else if (start.center.x <= end.center.x - end.width / 2) posx = start.position.x + start.width;
-                }
-
-                // IS INSIDE HEIGHT
-                if (start.center.y <= end.center.y + end.height / 2 && start.center.y >= end.center.y - end.height / 2) {
-                    posy = start.center.y;
-                }
-                else {
-                    if (start.center.y >= end.center.y + end.height / 2) posy = start.position.y;
-                    else if (start.center.y <= end.center.y - end.height / 2) posy = start.position.y + start.height;
-                }
-                */
-                return new Vector3(posx, posy, 0f);
-            }
 
             public static void DrawTriangle(Vector3 position, Vector3 direction, float size, Color color, bool pivotOnPointyEdge = false)
             {
