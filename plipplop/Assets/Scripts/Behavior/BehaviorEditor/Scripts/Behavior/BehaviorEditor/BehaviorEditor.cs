@@ -21,6 +21,7 @@ namespace Behavior
             readonly float minWindowSize = 50f;
             readonly float minimapSize = 64f;
             readonly float minimapMargin = 5f;
+            readonly float highlightWidth = 5f;
             Texture2D minimapTexture;
 
             int transitFromId;
@@ -63,6 +64,7 @@ namespace Behavior
                 activeStyle = settings.activeSkin.GetStyle("window");
                 serializedGraph = new SerializedObject(settings.currentGraph);
                 minimapTexture = new Texture2D((int)minimapSize, (int)minimapSize);
+                scrollPos = settings.currentGraph.editorScrollPosition;
 
             }
             #endregion
@@ -117,17 +119,17 @@ namespace Behavior
                 */
 
                 if (settings.currentGraph.AreSomeNodesPendingDeletion()) {
-                if (settings.currentGraph != null) {
                     settings.currentGraph.DeleteWindowsThatNeedTo();
                     Debug.Log("Deleting " + nodesToDelete + " windows that needs to");
                     Repaint();
+                    nodesToDelete = 0;
                 }
-                nodesToDelete = 0;
-                }
+
+                settings.currentGraph.editorScrollPosition = scrollPos;
             }
 
             #region GUI Methods
-            private void OnGUI()
+            void OnGUI()
             {
                 serializedGraph.Update();
 
@@ -144,7 +146,8 @@ namespace Behavior
                 */
 
                 Event e = Event.current;
-                mousePosition = e.mousePosition;
+                mousePosition = e.mousePosition + scrollPos;
+
                 UserInput(e);
 
                 DrawWindows();
@@ -160,10 +163,8 @@ namespace Behavior
                 }
 
                 if (settings.MAKE_TRANSITION) {
-                    mouseRect.x = mousePosition.x;
-                    mouseRect.y = mousePosition.y;
-                    Rect from = settings.currentGraph.GetNodeWithIndex(transitFromId).windowRect;
-                    DrawNodeCurve(from, mouseRect, true, Color.blue);
+                    Rect from = settings.currentGraph.GetNodeWithIndex(transitFromId).windowRect.Shift(-scrollPos);
+                    DrawNodeCurve(from, new Rect(mousePosition, Vector2.zero).Shift(-scrollPos), true, Color.blue);
                     Repaint();
                 }
 
@@ -172,7 +173,7 @@ namespace Behavior
 
             void SaveChanges()
             {
-               // Debug.Log("SAVING ========");
+            //    Debug.Log("SAVING ========");
                 var newSG = new SerializedObject(settings.currentGraph);
                 var it = newSG.GetIterator();
                 for(; ;) {
@@ -185,7 +186,7 @@ namespace Behavior
                         break;
                     }
                     if (serializedGraph.FindProperty(it.propertyPath) != null) {
-                        //Debug.Log("Saving (if different) " + it.propertyPath);
+            //            Debug.Log("Saving (if different) " + it.propertyPath);
                         serializedGraph.CopyFromSerializedPropertyIfDifferent(it);
                     } 
                 }
@@ -205,14 +206,14 @@ namespace Behavior
                         if (b.drawNode is AIStateDrawNode) {
                             var bS = (AIStateNode)b;
                             if (bS.currentAIState != null && bS.currentAIState.id == settings.currentGraph.GetCurrentAIStateID()) {
-                                b.windowRect = GUI.Window(i, b.windowRect.Shift(-scrollPos), DrawNodeWindow, b.windowTitle, activeStyle).Shift(scrollPos);
+                                b.windowRect = GUI.Window(i, b.windowRect.Shift(-scrollPos), DrawNodeWindow, b.windowTitle+":"+b.id, activeStyle).Shift(scrollPos);
                             }
                             else {
-                                b.windowRect = GUI.Window(i, b.windowRect.Shift(-scrollPos), DrawNodeWindow, b.windowTitle).Shift(scrollPos);
+                                b.windowRect = GUI.Window(i, b.windowRect.Shift(-scrollPos), DrawNodeWindow, b.windowTitle + ":" + b.id).Shift(scrollPos);
                             }
                         }
                         else {
-                            b.windowRect = GUI.Window(i, b.windowRect.Shift(-scrollPos), DrawNodeWindow, b.windowTitle).Shift(scrollPos);
+                            b.windowRect = GUI.Window(i, b.windowRect.Shift(-scrollPos), DrawNodeWindow, b.windowTitle + ":" + b.id).Shift(scrollPos);
                         }
                     }
                     foreach (Node n in settings.currentGraph.nodes) n.DrawCurve();
@@ -336,7 +337,7 @@ namespace Behavior
             {
                 clickedOnWindow = false;
                 for (int i = 0; i < settings.currentGraph.nodes.Count; i++) {
-                    if (settings.currentGraph.nodes[i].windowRect.Contains(e.mousePosition)) {
+                    if (settings.currentGraph.nodes[i].windowRect.Contains(mousePosition)) {
                         clickedOnWindow = true;
                         selectedNode = settings.currentGraph.nodes[i];
                         break;
@@ -376,14 +377,14 @@ namespace Behavior
             void MakeTransitionIfFalse()
             {
                 MakeTransition((transitionNode, targetNode) => {
-                    transitionNode.exitNodes[1] = targetNode.id;
+                    transitionNode.SetExitNode(1, targetNode.id);
                 });
             }
 
             void MakeTransitionIfTrue()
             {
                 MakeTransition((transitionNode, targetNode) => {
-                    transitionNode.exitNodes[0] = targetNode.id;
+                    transitionNode.SetExitNode(0, targetNode.id);
                 });
             }
             #endregion
@@ -454,9 +455,9 @@ namespace Behavior
                                 }
                                 else {
                                     var transitionNode = ((AIStateTransitionNode)enterNode);
-                                    for (int i = 0; i < transitionNode.exitNodes.Length; i++) {
+                                    for (int i = 0; i < transitionNode.exitNodes.Count; i++) {
                                         if (transitionNode.exitNodes[i] == selectedNode.id) {
-                                            transitionNode.exitNodes[i] = null;
+                                            transitionNode.RemoveExitNode(i);
                                         }
                                     }
                                 }
@@ -495,10 +496,15 @@ namespace Behavior
             #region Helper Methods
             public static void DrawNodeCurve(Rect start, Rect end, bool left, Color curveColor)
             {
+
                 Vector3 startPos = GetBestArrowPosition(start, end);
                 Vector3 endPos = GetBestArrowPosition(end, start);
+                //
+                startPos = start.position + start.size / 2f;
+                endPos = end.position + end.size / 2f;
+                //
                 Color c = curveColor;
-
+                Handles.color = c;
                 Vector3 dir = (startPos - endPos).normalized;
                 Vector3 right = Quaternion.AngleAxis(-90, Vector3.forward) * dir;
                 Handles.DrawAAConvexPolygon(new Vector3[] { startPos - right * 2, startPos + right * 2, endPos - right * 2, endPos + right * 2 });

@@ -63,13 +63,13 @@ namespace Behavior.Editor
                         Node targetNode = BehaviorEditor.settings.currentGraph.GetNodeWithIndex(b.exitNodes[i]);
                         if (targetNode != null) {
                             if (targetNode.isDuplicate)
-                                transitionNode.exitNodes[i] = null;
+                                transitionNode.RemoveExitNode(i);
                             else {
-                                transitionNode.exitNodes[i] = targetNode.id;
+                                transitionNode.SetExitNode(i, targetNode.id);
                             }
                         }
                         else {
-                            transitionNode.exitNodes[i] = null;
+                            transitionNode.RemoveExitNode(i);
                         }
                     }
 				}
@@ -101,7 +101,7 @@ namespace Behavior.Editor
             Node e = BehaviorEditor.settings.currentGraph.GetNodeWithIndex(b.enterNode);
             if (e == null)
             {
-                BehaviorEditor.settings.currentGraph.DeleteNode(b.id);
+                // Do nothing
             }
             else
             {
@@ -117,22 +117,23 @@ namespace Behavior.Editor
                 return;
 
 
-            for (int i = 0; i < b.exitNodes.Length; i++) {
+            for (int i = 0; i < b.exitNodes.Count; i++) {
+                if (b.exitNodes[i] == null) continue;
+
                 Node targetNode = BehaviorEditor.settings.currentGraph.GetNodeWithIndex(b.exitNodes[i]);
                 if (targetNode != null) {
                     rect = b.windowRect.Shift(-BehaviorEditor.scrollPos);
-                    rect.y += i*heightBetweenOutputs;
                     //rect.x += rect.width;
                     Rect endRect = targetNode.windowRect.Shift(-BehaviorEditor.scrollPos);
                     //endRect.x -= endRect.width * .5f;
 
                     Color targetColor = Color.white;
 
-                    if (i == 0) targetColor = Color.red;
-                    if (i == 1) targetColor = Color.green;
+                    if (i == 0) targetColor = Color.green;
+                    if (i == 1) targetColor = Color.red;
 
                     //rect.position = new Vector2(rect.position.x - rect.size.x, rect.position.y);
-                    BehaviorEditor.DrawNodeCurve(rect, endRect, false, targetColor);
+                    BehaviorEditor.DrawNodeCurve(rect.Shift(Vector2.one*(i+1)*heightBetweenOutputs), endRect.Shift(Vector2.one * (i+1) * heightBetweenOutputs), false, targetColor);
                 }
             }
         }

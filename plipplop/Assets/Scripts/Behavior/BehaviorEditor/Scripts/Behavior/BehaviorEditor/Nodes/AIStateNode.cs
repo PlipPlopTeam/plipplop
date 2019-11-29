@@ -19,7 +19,7 @@ public class AIStateNode : Node
 
     public AIStateNode()
     {
-        exitNodes = new int?[1];
+        SetExitNodesNumber(1);
     }
 
     public AIStateTransitionNode AddTransition()

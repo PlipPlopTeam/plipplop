@@ -17,6 +17,8 @@ namespace Behavior.Editor
         [SerializeField] public Dictionary<AIStateNode, AIStateTransitionNode> stateTransitions = new Dictionary<AIStateNode, AIStateTransitionNode>();
         [SerializeField] public AIState initialState;
 
+        [SerializeField] public Vector2 editorScrollPosition;
+
         // These are helpers
         public List<AIStateTransitionNode> transitions { get { return nodes.Where(o => { return (o is AIStateTransitionNode); }).Select(o => { return (AIStateTransitionNode)o; }).ToList(); } }
         public ReadOnlyCollection<Node> nodes { get{ return stateNodes.Select(o => { return (Node)o; }).Concat(transitionNodes.Select(o => { return (Node)o; })).ToList().AsReadOnly(); } }
@@ -46,6 +48,7 @@ namespace Behavior.Editor
         {
             for (int i = 0; i < indexToDelete.Count; i++) {
                 Node b = GetNodeWithIndex(indexToDelete[i]);
+                Debug.Log("Deleting node " + i + " out of " + indexToDelete.Count + " (id: "+ indexToDelete[i]+ "<>" + (b != null ? b.id.ToString()+"_"+b.windowTitle : "??") + ")");   
                 if (b != null) {
                     if (b is AIStateNode) {
                         stateNodes.RemoveAll(o => o.id == b.id);
@@ -55,12 +58,13 @@ namespace Behavior.Editor
                     }
                 }
             }
-
+             
             indexToDelete.Clear();
         }
 
         public void DeleteNode(int index)
         {
+            Debug.Log("Requested to delete node with index #" + index);
             indexToDelete.AddUnique(index);
         }
 
@@ -186,7 +190,8 @@ namespace Behavior.Editor
             retVal.id = idCount;
             idCount++;
 
-            node.exitNodes[index] = retVal.id;
+
+            node.SetExitNode(index, retVal.id);
 
             return retVal;
         }
