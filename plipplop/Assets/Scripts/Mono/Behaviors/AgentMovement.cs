@@ -55,6 +55,7 @@ public class AgentMovement : Walker
 
     public void FollowPath(AIPath newPath)
     {
+		if (newPath == null) return;
         path = newPath;
         currentIndexOnPath = Random.Range(0, path.points.Count);
         followingPath = true;
