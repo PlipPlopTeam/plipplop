@@ -210,6 +210,7 @@ namespace Behavior
                     // Windows
                     for (int i = 0; i < settings.currentGraph.nodes.Count; i++) {
                         Node b = settings.currentGraph.nodes[i];
+                        b.RefreshRectSize(zoom);
                         if (b.windowRect.Contains(mousePosition)) {
                             b.windowRect = GUI.Window(i, b.windowRect.Shift(-scrollPos), DrawNodeWindow, b.windowTitle + ":" + b.id, activeStyle).Shift(scrollPos);
                         } 

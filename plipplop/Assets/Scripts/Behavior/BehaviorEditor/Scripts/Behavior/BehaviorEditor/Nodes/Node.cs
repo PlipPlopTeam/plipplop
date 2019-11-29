@@ -13,6 +13,8 @@ namespace Behavior.Editor
         public DrawNode drawNode;
         public Rect windowRect;
         public string windowTitle;
+        public float optimalWidth = 100f;
+        public float optimalHeight = 100f;
         public bool isDuplicate;
         public string comment;
         public bool isAssigned;
@@ -122,6 +124,12 @@ namespace Behavior.Editor
         public virtual void SetGraph(BehaviorGraph graph)
         {
             this.graph = graph;
+        }
+
+        public void RefreshRectSize(float zoom=1f)
+        {
+            windowRect.width = optimalWidth * zoom;
+            windowRect.height = optimalHeight * zoom;
         }
     }
 }

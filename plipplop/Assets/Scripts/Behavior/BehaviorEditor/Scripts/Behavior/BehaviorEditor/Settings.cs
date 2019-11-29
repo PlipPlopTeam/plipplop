@@ -19,12 +19,12 @@ namespace Behavior.Editor
         {
             Node baseNode = type is TransitionDrawNode ? (Node)new AIStateTransitionNode() : (Node)new AIStateNode();
             baseNode.drawNode = type;
-            baseNode.windowRect.width = width;
-            baseNode.windowRect.height = height;
+            baseNode.optimalWidth = width;
+            baseNode.optimalHeight = height;
             baseNode.windowTitle = title;
             baseNode.windowRect.x = pos.x;
             baseNode.windowRect.y = pos.y;
-
+            baseNode.RefreshRectSize();
 
             if (baseNode is AIStateNode) {
                 currentGraph.stateNodes.Add((AIStateNode)baseNode);
