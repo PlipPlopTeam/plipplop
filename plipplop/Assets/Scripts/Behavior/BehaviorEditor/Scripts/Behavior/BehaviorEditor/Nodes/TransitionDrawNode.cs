@@ -7,9 +7,6 @@ namespace Behavior.Editor
 {
     public class TransitionDrawNode : DrawNode
     {
-
-        readonly int heightBetweenOutputs = 20;
-
         public void Init(AIStateDrawNode enterAIState, AIStateTransitionNode transition)
         {
             //      this.enterAIState = enterAIState;
@@ -25,7 +22,6 @@ namespace Behavior.Editor
             Node enterNode = BehaviorEditor.settings.currentGraph.GetNodeWithIndex(b.enterNode);
 			if (enterNode == null) {
                 EditorGUILayout.LabelField(@"/!\ This node has no entry node");
-                return;
 			}
 
 
@@ -110,7 +106,7 @@ namespace Behavior.Editor
                     targetColor = Color.grey;
 
                 Rect r = e.windowRect.Shift(-BehaviorEditor.scrollPos);
-                BehaviorEditor.DrawNodeCurve(r, rect, true, Color.white);
+                BehaviorEditor.DrawNodeCurve(r, rect, Color.white);
             }
 
             if (b.isDuplicate)
@@ -133,7 +129,7 @@ namespace Behavior.Editor
                     if (i == 1) targetColor = Color.red;
 
                     //rect.position = new Vector2(rect.position.x - rect.size.x, rect.position.y);
-                    BehaviorEditor.DrawNodeCurve(rect.Shift(Vector2.one*(i+1)*heightBetweenOutputs), endRect.Shift(Vector2.one * (i+1) * heightBetweenOutputs), false, targetColor);
+                    BehaviorEditor.DrawNodeCurve(rect, endRect, targetColor, i+1);
                 }
             }
         }

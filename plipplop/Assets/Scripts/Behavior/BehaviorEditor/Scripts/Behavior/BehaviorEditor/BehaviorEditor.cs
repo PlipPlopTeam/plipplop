@@ -18,10 +18,11 @@ namespace Behavior
             public static float zoom = 1f;
             public static readonly int startNodeId = -1;
 
-            readonly float minWindowSize = 50f;
-            readonly float minimapSize = 64f;
-            readonly float minimapMargin = 5f;
-            readonly float highlightWidth = 5f;
+            readonly static float minWindowSize = 50f;
+            readonly static float minimapSize = 64f;
+            readonly static float minimapMargin = 5f;
+            readonly static float spaceBetweenArrows = 20f;
+
             Texture2D minimapTexture;
 
             int transitFromId;
@@ -60,8 +61,8 @@ namespace Behavior
             private void OnEnable()
             {
                 settings = Resources.Load("Settings") as Settings;
-                style = settings.skin.GetStyle("window");
-                activeStyle = settings.activeSkin.GetStyle("window");
+                style = settings.skin.window;
+                activeStyle = settings.activeSkin.window; 
                 serializedGraph = new SerializedObject(settings.currentGraph);
                 minimapTexture = new Texture2D((int)minimapSize, (int)minimapSize);
                 scrollPos = settings.currentGraph.editorScrollPosition;
@@ -70,7 +71,7 @@ namespace Behavior
             #endregion
 
             private void Update()
-            {
+            {               
                 // Safety check 
                 if (settings.currentGraph.GetNodeWithIndex(startNodeId) == null) {
                     settings.currentGraph.initialState.SetGraph(settings.currentGraph);
@@ -120,7 +121,6 @@ namespace Behavior
 
                 if (settings.currentGraph.AreSomeNodesPendingDeletion()) {
                     settings.currentGraph.DeleteWindowsThatNeedTo();
-                    Debug.Log("Deleting " + nodesToDelete + " windows that needs to");
                     Repaint();
                     nodesToDelete = 0;
                 }
@@ -130,7 +130,7 @@ namespace Behavior
 
             #region GUI Methods
             void OnGUI()
-            {
+            { 
                 serializedGraph.Update();
 
                 /*
@@ -159,15 +159,14 @@ namespace Behavior
 
                 if (GUI.changed) {
                     settings.currentGraph.DeleteWindowsThatNeedTo();
-                    Repaint();
                 }
 
                 if (settings.MAKE_TRANSITION) {
                     Rect from = settings.currentGraph.GetNodeWithIndex(transitFromId).windowRect.Shift(-scrollPos);
-                    DrawNodeCurve(from, new Rect(mousePosition, Vector2.zero).Shift(-scrollPos), true, Color.blue);
-                    Repaint();
+                    DrawNodeCurve(from, new Rect(mousePosition, Vector2.zero).Shift(-scrollPos), Color.blue);
                 }
 
+                Repaint();
                 SaveChanges();
             }
 
@@ -203,17 +202,20 @@ namespace Behavior
 
                     for (int i = 0; i < settings.currentGraph.nodes.Count; i++) {
                         Node b = settings.currentGraph.nodes[i];
-                        if (b.drawNode is AIStateDrawNode) {
+                        if (b.windowRect.Contains(mousePosition)) {
+                            b.windowRect = GUI.Window(i, b.windowRect.Shift(-scrollPos), DrawNodeWindow, b.windowTitle + ":" + b.id, activeStyle).Shift(scrollPos);
+                        } 
+                        else if (b.drawNode is AIStateDrawNode) {
                             var bS = (AIStateNode)b;
-                            if (bS.currentAIState != null && bS.currentAIState.id == settings.currentGraph.GetCurrentAIStateID()) {
+                            if (bS.currentAIState != null && bS.currentAIState.id == settings.currentGraph.GetCurrentAIStateID()){
                                 b.windowRect = GUI.Window(i, b.windowRect.Shift(-scrollPos), DrawNodeWindow, b.windowTitle+":"+b.id, activeStyle).Shift(scrollPos);
                             }
                             else {
-                                b.windowRect = GUI.Window(i, b.windowRect.Shift(-scrollPos), DrawNodeWindow, b.windowTitle + ":" + b.id).Shift(scrollPos);
+                                b.windowRect = GUI.Window(i, b.windowRect.Shift(-scrollPos), DrawNodeWindow, b.windowTitle + ":" + b.id, style).Shift(scrollPos);
                             }
                         }
                         else {
-                            b.windowRect = GUI.Window(i, b.windowRect.Shift(-scrollPos), DrawNodeWindow, b.windowTitle + ":" + b.id).Shift(scrollPos);
+                            b.windowRect = GUI.Window(i, b.windowRect.Shift(-scrollPos), DrawNodeWindow, b.windowTitle + ":" + b.id, style).Shift(scrollPos);
                         }
                     }
                     foreach (Node n in settings.currentGraph.nodes) n.DrawCurve();
@@ -395,13 +397,14 @@ namespace Behavior
                 GenericMenu menu = new GenericMenu();
                 menu.AddSeparator("");
                 if (settings.currentGraph != null) {
-                    menu.AddItem(new GUIContent("Add AIState"), false, ContextCallback, EUserActions.ADD_STATE);
+                    menu.AddItem(new GUIContent("Add state"), false, ContextCallback, EUserActions.ADD_STATE);
+                    menu.AddItem(new GUIContent("Add condition"), false, ContextCallback, EUserActions.ADD_TRANSITION_NODE);
                     menu.AddSeparator("");
                     menu.AddItem(new GUIContent("Reset Panning"), false, ContextCallback, EUserActions.RESET_PAN);
                 }
                 else {
                     menu.AddDisabledItem(new GUIContent("Add AIState"));
-                    menu.AddDisabledItem(new GUIContent("Add Comment"));
+                    menu.AddDisabledItem(new GUIContent("Add condition"));
                 }
                 menu.ShowAsContext();
                 e.Use();
@@ -442,7 +445,7 @@ namespace Behavior
                         settings.AddNodeOnGraph(settings.stateNode, 300, 200, "State", mousePosition);
                         break;
                     case EUserActions.ADD_TRANSITION_NODE:
-                        AddTransitionNode((AIStateNode)selectedNode, mousePosition);
+                        AddTransitionNode(selectedNode is AIStateNode ? (AIStateNode)selectedNode : null, mousePosition);
                         break;
                     default:
                         break;
@@ -484,24 +487,31 @@ namespace Behavior
 
             }
 
+            public static Node AddTransitionNode(Vector3 pos)
+            {
+                return AddTransitionNode(null, pos);
+            }
+
             public static Node AddTransitionNode(AIStateNode originNode, Vector3 pos)
             {
                 Node transNode = settings.AddNodeOnGraph(settings.transitionNode, 200, 50, "Condition", pos);
-                transNode.enterNode = originNode.id; 
-                AIStateTransitionNode t = settings.currentGraph.AddTransition(originNode);
+                if (originNode != null) {
+                    transNode.enterNode = originNode.id;
+                    AIStateTransitionNode t = settings.currentGraph.AddTransition(originNode);
+                }
                 return transNode;
             }
             #endregion
 
             #region Helper Methods
-            public static void DrawNodeCurve(Rect start, Rect end, bool left, Color curveColor)
+            public static void DrawNodeCurve(Rect start, Rect end, Color curveColor, int offset=0)
             {
 
-                Vector3 startPos = GetBestArrowPosition(start, end);
-                Vector3 endPos = GetBestArrowPosition(end, start);
+                Vector3 startPos = new Vector2(start.width + start.x, start.y + start.height/2f + offset*(start.height/6f));
+                Vector3 endPos = new Vector2(end.x, end.y + end.height/2f+ offset * (end.height / 6f));
                 //
-                startPos = start.position + start.size / 2f;
-                endPos = end.position + end.size / 2f;
+                // startPos = start.position + start.size / 2f;
+                // endPos = end.position + end.size / 2f;
                 //
                 Color c = curveColor;
                 Handles.color = c;
@@ -512,10 +522,12 @@ namespace Behavior
                 DrawTriangle(center, -dir, 10, c);
             }
 
-            public static Vector3 GetBestArrowPosition(Rect start, Rect end)
+            public static Vector3 GetBestOrigin(Rect start, Rect end, int offset=0)
             {
                 float posx = 0;
                 float posy = 0;
+                
+                /*
                 // IS INSIDE WIDTH
                 if (start.center.x <= end.center.x + end.width / 2 && start.center.x >= end.center.x - end.width / 2) {
                     posx = start.center.x;
@@ -533,6 +545,7 @@ namespace Behavior
                     if (start.center.y >= end.center.y + end.height / 2) posy = start.position.y;
                     else if (start.center.y <= end.center.y - end.height / 2) posy = start.position.y + start.height;
                 }
+                */
                 return new Vector3(posx, posy, 0f);
             }
 
