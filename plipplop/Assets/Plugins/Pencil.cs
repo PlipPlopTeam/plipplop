@@ -75,14 +75,29 @@ public static class Pencil
             tex.Line(UVs[i - 1], UVs[i], width);
         }
     }
-/*
-    public static void Lines(this Texture2D tex, Polygon UVSegments, float width = 1f)
+
+    public static void Fill(this Texture2D tex, Color color)
     {
-        foreach(var seg in UVSegments) {
-            tex.Line(seg.a, seg.b, width);
+        Fill(tex, Vector2.zero, Vector2.one, color);
+    }
+
+
+    public static void Fill(this Texture2D tex, Vector2 UV, Vector2 size, Color color)
+    {
+        for (int x = Mathf.FloorToInt(UV.x*tex.width); x < UV.x*tex.width+size.x*tex.width; x++) {
+            for (int y = Mathf.FloorToInt(UV.y * tex.height); y < UV.y * tex.height + size.y * tex.height; y++) {
+                tex.SetPixel(x, y, color);
+            }
         }
     }
-    */
+    /*
+        public static void Lines(this Texture2D tex, Polygon UVSegments, float width = 1f)
+        {
+            foreach(var seg in UVSegments) {
+                tex.Line(seg.a, seg.b, width);
+            }
+        }
+        */
     public static void Number(this Texture2D tex, Vector2 UV, float number)
     {
         var str = number.ToString();

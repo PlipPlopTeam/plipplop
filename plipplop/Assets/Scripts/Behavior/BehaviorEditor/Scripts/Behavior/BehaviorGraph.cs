@@ -81,7 +81,7 @@ namespace Behavior.Editor
 
         public AIState GetCurrentAIState()
         { 
-            return currentStateNode.currentAIState;
+            return currentStateNode != null ? currentStateNode.currentAIState : null;
         }
 
         public void Start()
