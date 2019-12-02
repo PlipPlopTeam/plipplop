@@ -75,7 +75,6 @@ namespace Behavior
             {               
                 // Safety check 
                 if (settings.currentGraph.GetNodeWithIndex(startNodeId) == null) {
-                    settings.currentGraph.initialState.SetGraph(settings.currentGraph);
                     var node = (AIStateNode)settings.AddNodeOnGraph(settings.stateNode, 300, 64, "START", Vector3.one*0.5f);
                     node.id = startNodeId;
                     node.currentAIState = settings.currentGraph.initialState;

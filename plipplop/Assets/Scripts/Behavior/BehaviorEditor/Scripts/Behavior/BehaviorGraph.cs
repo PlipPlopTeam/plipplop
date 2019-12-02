@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 
 
@@ -92,22 +93,20 @@ namespace Behavior.Editor
 			Debug.Log("START");
             currentStateNode = (AIStateNode) GetNodeWithIndex(BehaviorEditor.startNodeId);
 			currentStateNode.currentAIState = initialState;
-
-			GetCurrentAIState().SetGraph(this);
-			GetCurrentAIState().OnEnter();
+			GetCurrentAIState().OnEnter(target);
 		}
 
 		public void Update()
         {
-			GetCurrentAIState().SetGraph(this);
-            GetCurrentAIState().Tick();
+            GetCurrentAIState().Tick(target);
 		}
 
 		public void FixedUpdate()
         {
-			GetCurrentAIState().SetGraph(this);
-			GetCurrentAIState().FixedTick();
+			GetCurrentAIState().FixedTick(target);
             CheckAndFollowTransition();
+
+
         }
 
         public void CheckAndFollowTransition()
@@ -121,7 +120,7 @@ namespace Behavior.Editor
                 if (transition.disable) return;
                 bool check = true;
                 foreach (Condition c in transition.conditions) {
-                    if (!c.Check(GetCurrentAIState())) check = false;
+                    if (!c.Check(GetCurrentAIState(), target)) check = false;
                 }
                 Node nextItem;
                 if (check) {
@@ -150,10 +149,9 @@ namespace Behavior.Editor
         {
 			if (currentStateNode == node) return;
 
-			GetCurrentAIState().SetGraph(this);
-			GetCurrentAIState().OnExit();
+			GetCurrentAIState().OnExit(target);
             currentStateNode = node;
-            GetCurrentAIState().OnEnter();
+            GetCurrentAIState().OnEnter(target);
         }
 
         public string GetCurrentAIStateName()

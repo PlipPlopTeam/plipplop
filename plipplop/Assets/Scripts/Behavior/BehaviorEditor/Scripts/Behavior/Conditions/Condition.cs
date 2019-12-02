@@ -6,6 +6,6 @@ namespace Behavior
 {
     public abstract class Condition : ScriptableObject
     {
-        public abstract bool Check(AIState state);
+        public abstract bool Check(AIState state, NonPlayableCharacter target);
     }
 }

@@ -36,10 +36,4 @@ public class AIStateNode : Node
     {
         return graph.GetTransition(this);
     }
-
-    public override void SetGraph(BehaviorGraph graph)
-    {
-        base.SetGraph(graph);
-        if (currentAIState) currentAIState.SetGraph(graph);
-    }
 }

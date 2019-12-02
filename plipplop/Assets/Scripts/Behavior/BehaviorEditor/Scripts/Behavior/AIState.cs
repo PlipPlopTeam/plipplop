@@ -15,38 +15,33 @@ namespace Behavior
 
         [HideInInspector] public int id;
 		
-        public void OnEnter()
+        public void OnEnter(NonPlayableCharacter target)
         {
-            ExecuteActions(onEnter);
+            ExecuteActions(onEnter, target);
         }
 	
-		public void FixedTick()
+		public void FixedTick(NonPlayableCharacter target)
 		{
-			ExecuteActions(onFixed);
+			ExecuteActions(onFixed, target);
 		}
 
-        public void Tick()
+        public void Tick(NonPlayableCharacter target)
         {
-			ExecuteActions(onUpdate);
+			ExecuteActions(onUpdate, target);
         }
 
-        public void OnExit()
+        public void OnExit(NonPlayableCharacter target)
         {
-            ExecuteActions(onExit);
+            ExecuteActions(onExit, target);
         }
         
-        public void ExecuteActions(AIAction[] l)
+        public void ExecuteActions(AIAction[] l, NonPlayableCharacter target)
         {
 			foreach (var action in l)
 			{
 				if (action == null) continue;
-                action.Execute(graph.GetTarget());
+                action.Execute(target);
             }
-        }
-
-        public NonPlayableCharacter GetGraphTarget()
-        {
-            return graph.GetTarget();
         }
     }
 }

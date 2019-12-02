@@ -7,9 +7,9 @@ namespace Behavior.NPC
 	[CreateAssetMenu(menuName = "Behavior/Condition/NonPlayableCharacter/ActivityIsNull")]
 	public class ActivityIsNull : Condition
 	{
-		public override bool Check(AIState state)
+		public override bool Check(AIState state, NonPlayableCharacter target)
 		{
-			NonPlayableCharacter npc = state.GetGraphTarget();
+			NonPlayableCharacter npc = target;
 			return npc != null && npc.activity == null;
 		}
 	}	
