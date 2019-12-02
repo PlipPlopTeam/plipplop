@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a3262d062e5d48468ed5b87bf144ebc, type: 3}
-  m_Name: TowerAperture
+  m_Name: ChessAperture
   m_EditorClassIdentifier: 
   overrides:
   - property: canBeControlled
     isOverriden: 0
-  - property: resetable
+  - property: canBeReset
     isOverriden: 0
   - property: fieldOfView
     isOverriden: 1
@@ -30,20 +30,26 @@ MonoBehaviour:
   - property: cameraRotateAboveSensivity
     isOverriden: 0
   - property: fovLerp
-    isOverriden: 1
+    isOverriden: 0
   - property: lateralFollowLerp
-    isOverriden: 1
+    isOverriden: 0
   - property: longitudinalFollowLerp
     isOverriden: 0
   - property: verticalFollowLerp
     isOverriden: 0
   - property: rotationSpeed
     isOverriden: 0
-  - property: lookAtLerp
+  - property: alignAfter
     isOverriden: 0
-  - property: cameraAlignSpeed
+  - property: angleConsideredAlign
     isOverriden: 0
-  - property: cameraResetAlignSpeed
+  - property: minTargetVelocity
+    isOverriden: 0
+  - property: alignMultiplierByUser
+    isOverriden: 0
+  - property: alignMultiplierByStick
+    isOverriden: 0
+  - property: alignMultiplierByVelocity
     isOverriden: 0
   - property: speedEffectMultiplier
     isOverriden: 0
@@ -52,41 +58,42 @@ MonoBehaviour:
   - property: angleIncrementOnSpeed
     isOverriden: 0
   - property: maximumCatchUpSpeed
-    isOverriden: 1
+    isOverriden: 0
   - property: absoluteBoundaries
     isOverriden: 0
   - property: constraintToTarget
     isOverriden: 0
   - property: targetConstraintLocalOffset
     isOverriden: 0
-  - property: cameraResetAfterTime
-    isOverriden: 1
   fallback: {fileID: 11400000, guid: df6437ca0d9bc60498aeb18a4dd62019, type: 2}
   canBeControlled: 1
-  resetable: 1
-  fieldOfView: 40
+  canBeReset: 1
+  fieldOfView: 60
   heightOffset: 2
-  additionalAngle: 25
+  additionalAngle: 28
   distance:
-    min: 5
-    max: 9
-  cameraRotateAroundSensivity: 90
+    min: 4.5
+    max: 8
+  cameraRotateAroundSensivity: 95
   cameraRotateAboveSensivity: 20
-  fovLerp: 6
-  lateralFollowLerp: 6
+  fovLerp: 20
+  lateralFollowLerp: 20
   longitudinalFollowLerp: 6
   verticalFollowLerp: 5
-  rotationSpeed: 3
-  lookAtLerp: 7
-  cameraAlignSpeed: 3
-  cameraResetAlignSpeed: 6
-  cameraResetAfterTime: 5
-  speedEffectMultiplier: 1
-  catchUpSpeedMultiplier: 1
-  angleIncrementOnSpeed: 30
-  maximumCatchUpSpeed: 5
+  rotationSpeed: 20
+  lookAtLerp: 4
+  alignAfter: 15
+  angleConsideredAlign: 30
+  minTargetVelocity: 2
+  alignMultiplierByUser: 80
+  alignMultiplierByStick: 80
+  alignMultiplierByVelocity: 2
+  speedEffectMultiplier: 1.5
+  catchUpSpeedMultiplier: 1.8
+  angleIncrementOnSpeed: 2
+  maximumCatchUpSpeed: 15
   absoluteBoundaries:
-    min: 5
-    max: 10
+    min: 3
+    max: 8
   constraintToTarget: 0
   targetConstraintLocalOffset: {x: 0, y: 0, z: 0}
