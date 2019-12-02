@@ -7,10 +7,10 @@ namespace Behavior.NPC
     [CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/PickUp")]
     public class PickUp : AIAction
     {
-        public override void Execute(StateManager state)
+        public override void Execute(NonPlayableCharacter target)
         {
-            NonPlayableCharacter npc = (NonPlayableCharacter)state;
-			if(npc != null)
+            NonPlayableCharacter npc = target;
+            if (npc != null)
 			{
 				Controller c = npc.valuable.gameObject.GetComponent<Controller>();
                 if(c != null)

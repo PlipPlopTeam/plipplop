@@ -7,9 +7,9 @@ namespace Behavior.NPC
 	[CreateAssetMenu(menuName = "Behavior/Condition/NonPlayableCharacter/ValuableInRange")]
 	public class ValuableInRange : Condition
 	{
-		public override bool Check(StateManager state)
+		public override bool Check(AIState state)
 		{
-			NonPlayableCharacter npc = (NonPlayableCharacter)state;
+			NonPlayableCharacter npc = state.GetGraphTarget();
             return npc != null && npc.range.IsInRange(npc.valuable.gameObject);
 		}
 	}	
