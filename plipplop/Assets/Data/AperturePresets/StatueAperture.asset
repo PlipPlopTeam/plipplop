@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a3262d062e5d48468ed5b87bf144ebc, type: 3}
-  m_Name: VendingMachineAperture
+  m_Name: StatueAperture
   m_EditorClassIdentifier: 
   overrides:
   - property: canBeControlled
@@ -22,21 +22,21 @@ MonoBehaviour:
   - property: heightOffset
     isOverriden: 1
   - property: additionalAngle
-    isOverriden: 0
-  - property: distance
     isOverriden: 1
+  - property: distance
+    isOverriden: 0
   - property: cameraRotateAroundSensivity
     isOverriden: 0
   - property: cameraRotateAboveSensivity
     isOverriden: 0
   - property: fovLerp
-    isOverriden: 1
+    isOverriden: 0
   - property: lateralFollowLerp
-    isOverriden: 1
+    isOverriden: 0
   - property: longitudinalFollowLerp
     isOverriden: 0
   - property: verticalFollowLerp
-    isOverriden: 1
+    isOverriden: 0
   - property: rotationSpeed
     isOverriden: 0
   - property: alignAfter
@@ -56,7 +56,7 @@ MonoBehaviour:
   - property: catchUpSpeedMultiplier
     isOverriden: 0
   - property: angleIncrementOnSpeed
-    isOverriden: 1
+    isOverriden: 0
   - property: maximumCatchUpSpeed
     isOverriden: 0
   - property: absoluteBoundaries
@@ -65,35 +65,35 @@ MonoBehaviour:
     isOverriden: 0
   - property: targetConstraintLocalOffset
     isOverriden: 0
-  fallback: {fileID: 11400000, guid: 7242922b65396184ca72d2cacca23d05, type: 2}
+  fallback: {fileID: 11400000, guid: 846697e4cb25d1e4cbae013a3a2b2cca, type: 2}
   canBeControlled: 1
   canBeReset: 1
-  fieldOfView: 80
-  heightOffset: 4
-  additionalAngle: 7.8
+  fieldOfView: 50
+  heightOffset: 2
+  additionalAngle: 25
   distance:
     min: 2
-    max: 4
-  cameraRotateAroundSensivity: 95
-  cameraRotateAboveSensivity: 20
-  fovLerp: 10
+    max: 5
+  cameraRotateAroundSensivity: 75
+  cameraRotateAboveSensivity: 15
+  fovLerp: 20
   lateralFollowLerp: 10
-  longitudinalFollowLerp: 6
-  verticalFollowLerp: 1
-  rotationSpeed: 20
+  longitudinalFollowLerp: 10
+  verticalFollowLerp: 5
+  rotationSpeed: 60
   lookAtLerp: 4
-  alignAfter: 15
-  angleConsideredAlign: 30
+  alignAfter: 20
+  angleConsideredAlign: 15
   minTargetVelocity: 2
-  alignMultiplierByUser: 80
-  alignMultiplierByStick: 80
-  alignMultiplierByVelocity: 2
-  speedEffectMultiplier: 1.5
-  catchUpSpeedMultiplier: 1.8
-  angleIncrementOnSpeed: 0
+  alignMultiplierByUser: 100
+  alignMultiplierByStick: 60
+  alignMultiplierByVelocity: 60
+  speedEffectMultiplier: 0.1
+  catchUpSpeedMultiplier: 1
+  angleIncrementOnSpeed: 5
   maximumCatchUpSpeed: 15
   absoluteBoundaries:
     min: 2
-    max: 4
+    max: 7
   constraintToTarget: 0
   targetConstraintLocalOffset: {x: 0, y: 0, z: 0}
