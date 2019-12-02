@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a3262d062e5d48468ed5b87bf144ebc, type: 3}
-  m_Name: LampAperture
+  m_Name: HopperAperture
   m_EditorClassIdentifier: 
   overrides:
   - property: canBeControlled
@@ -28,35 +28,35 @@ MonoBehaviour:
   - property: cameraRotateAroundSensivity
     isOverriden: 1
   - property: cameraRotateAboveSensivity
-    isOverriden: 0
-  - property: fovLerp
     isOverriden: 1
+  - property: fovLerp
+    isOverriden: 0
   - property: lateralFollowLerp
-    isOverriden: 0
+    isOverriden: 1
   - property: longitudinalFollowLerp
-    isOverriden: 0
+    isOverriden: 1
   - property: verticalFollowLerp
     isOverriden: 0
   - property: rotationSpeed
-    isOverriden: 0
+    isOverriden: 1
   - property: alignAfter
-    isOverriden: 0
+    isOverriden: 1
   - property: angleConsideredAlign
-    isOverriden: 0
+    isOverriden: 1
   - property: minTargetVelocity
     isOverriden: 0
   - property: alignMultiplierByUser
-    isOverriden: 0
+    isOverriden: 1
   - property: alignMultiplierByStick
-    isOverriden: 0
+    isOverriden: 1
   - property: alignMultiplierByVelocity
-    isOverriden: 0
+    isOverriden: 1
   - property: speedEffectMultiplier
-    isOverriden: 0
+    isOverriden: 1
   - property: catchUpSpeedMultiplier
-    isOverriden: 0
+    isOverriden: 1
   - property: angleIncrementOnSpeed
-    isOverriden: 0
+    isOverriden: 1
   - property: maximumCatchUpSpeed
     isOverriden: 0
   - property: absoluteBoundaries
@@ -68,32 +68,32 @@ MonoBehaviour:
   fallback: {fileID: 11400000, guid: df6437ca0d9bc60498aeb18a4dd62019, type: 2}
   canBeControlled: 1
   canBeReset: 1
-  fieldOfView: 40
-  heightOffset: 1
+  fieldOfView: 35
+  heightOffset: 0.9
   additionalAngle: 20
   distance:
-    min: 1
-    max: 3
-  cameraRotateAroundSensivity: 60
-  cameraRotateAboveSensivity: 20
-  fovLerp: 10
-  lateralFollowLerp: 40
-  longitudinalFollowLerp: 6
+    min: 2
+    max: 5
+  cameraRotateAroundSensivity: 75
+  cameraRotateAboveSensivity: 15
+  fovLerp: 20
+  lateralFollowLerp: 10
+  longitudinalFollowLerp: 10
   verticalFollowLerp: 5
-  rotationSpeed: 3
-  lookAtLerp: 7
-  alignAfter: 2
-  angleConsideredAlign: 10
-  minTargetVelocity: 0.1
-  alignMultiplierByUser: 2
-  alignMultiplierByStick: 50
-  alignMultiplierByVelocity: 2
-  speedEffectMultiplier: 1
+  rotationSpeed: 60
+  lookAtLerp: 4
+  alignAfter: 20
+  angleConsideredAlign: 15
+  minTargetVelocity: 2
+  alignMultiplierByUser: 100
+  alignMultiplierByStick: 60
+  alignMultiplierByVelocity: 60
+  speedEffectMultiplier: 0.1
   catchUpSpeedMultiplier: 1
-  angleIncrementOnSpeed: 30
-  maximumCatchUpSpeed: 10
+  angleIncrementOnSpeed: 5
+  maximumCatchUpSpeed: 15
   absoluteBoundaries:
-    min: 3
-    max: 10
+    min: 2
+    max: 5
   constraintToTarget: 0
   targetConstraintLocalOffset: {x: 0, y: 0, z: 0}

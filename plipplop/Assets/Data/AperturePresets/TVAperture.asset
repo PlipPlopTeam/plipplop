@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a3262d062e5d48468ed5b87bf144ebc, type: 3}
-  m_Name: WashingMachineAperture
+  m_Name: TVAperture
   m_EditorClassIdentifier: 
   overrides:
   - property: canBeControlled
     isOverriden: 0
-  - property: resetable
+  - property: canBeReset
     isOverriden: 0
   - property: fieldOfView
     isOverriden: 1
   - property: heightOffset
     isOverriden: 0
   - property: additionalAngle
-    isOverriden: 1
+    isOverriden: 0
   - property: distance
     isOverriden: 0
   - property: cameraRotateAroundSensivity
@@ -30,21 +30,27 @@ MonoBehaviour:
   - property: cameraRotateAboveSensivity
     isOverriden: 0
   - property: fovLerp
-    isOverriden: 0
+    isOverriden: 1
   - property: lateralFollowLerp
-    isOverriden: 0
+    isOverriden: 1
   - property: longitudinalFollowLerp
     isOverriden: 0
   - property: verticalFollowLerp
-    isOverriden: 0
+    isOverriden: 1
   - property: rotationSpeed
     isOverriden: 0
-  - property: lookAtLerp
+  - property: alignAfter
     isOverriden: 0
-  - property: cameraAlignSpeed
+  - property: angleConsideredAlign
     isOverriden: 0
-  - property: cameraResetAlignSpeed
+  - property: minTargetVelocity
     isOverriden: 0
+  - property: alignMultiplierByUser
+    isOverriden: 0
+  - property: alignMultiplierByStick
+    isOverriden: 0
+  - property: alignMultiplierByVelocity
+    isOverriden: 1
   - property: speedEffectMultiplier
     isOverriden: 0
   - property: catchUpSpeedMultiplier
@@ -52,39 +58,40 @@ MonoBehaviour:
   - property: angleIncrementOnSpeed
     isOverriden: 0
   - property: maximumCatchUpSpeed
-    isOverriden: 0
+    isOverriden: 1
   - property: absoluteBoundaries
-    isOverriden: 0
+    isOverriden: 1
   - property: constraintToTarget
     isOverriden: 0
   - property: targetConstraintLocalOffset
     isOverriden: 0
-  - property: cameraResetAfterTime
-    isOverriden: 0
-  fallback: {fileID: 11400000, guid: bdae7ab6546bf384ea744edb3f7b33f5, type: 2}
+  fallback: {fileID: 11400000, guid: 846697e4cb25d1e4cbae013a3a2b2cca, type: 2}
   canBeControlled: 1
-  resetable: 1
-  fieldOfView: 70
-  heightOffset: 3
-  additionalAngle: 6
+  canBeReset: 1
+  fieldOfView: 30
+  heightOffset: 0.9
+  additionalAngle: 20
   distance:
-    min: 5
-    max: 9
-  cameraRotateAroundSensivity: 60
+    min: 2
+    max: 5
+  cameraRotateAroundSensivity: 75
   cameraRotateAboveSensivity: 15
-  fovLerp: 10
-  lateralFollowLerp: 20
-  longitudinalFollowLerp: 6
-  verticalFollowLerp: 5
-  rotationSpeed: 3
-  lookAtLerp: 10
-  cameraAlignSpeed: 3
-  cameraResetAlignSpeed: 6
-  cameraResetAfterTime: 2
-  speedEffectMultiplier: 1
+  fovLerp: 40
+  lateralFollowLerp: 40
+  longitudinalFollowLerp: 10
+  verticalFollowLerp: 40
+  rotationSpeed: 60
+  lookAtLerp: 4
+  alignAfter: 20
+  angleConsideredAlign: 15
+  minTargetVelocity: 2
+  alignMultiplierByUser: 100
+  alignMultiplierByStick: 60
+  alignMultiplierByVelocity: 100
+  speedEffectMultiplier: 0.1
   catchUpSpeedMultiplier: 1
-  angleIncrementOnSpeed: 0
-  maximumCatchUpSpeed: 10
+  angleIncrementOnSpeed: 5
+  maximumCatchUpSpeed: 300
   absoluteBoundaries:
     min: 5
     max: 10
