@@ -9,7 +9,7 @@ namespace Behavior.NPC
         public enum EOperator {EQUAL, SUPERIOR, INFERIOR, SUPERIOR_OR_EQUAL, INFERIOR_OR_EQUAL}
 
         [Header("Settings")]
-        public string statName;
+        public NonPlayableCharacter.EStat statName;
         public EOperator condition;
         [Range(0f, 100f)] public float value = 0;
 

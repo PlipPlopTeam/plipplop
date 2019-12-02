@@ -18,7 +18,7 @@ public class Activity : MonoBehaviour
 
     public virtual void Enter(NonPlayableCharacter user)
     {
-        user.stats["boredom"] = 0f;
+        user.stats[NonPlayableCharacter.EStat.BOREDOM] = 0f;
         user.activity = this;
         users.Add(user);
     }
@@ -62,9 +62,9 @@ public class Activity : MonoBehaviour
             timer = 1f;
             foreach(NonPlayableCharacter user in users.ToArray())
             {
-                user.AddToStat("boredom", boredomMultiplier);
-                user.AddToStat("tiredness", tirednessMultiplier);
-                user.AddToStat("hunger", hungerMultiplier);
+                user.AddToStat(NonPlayableCharacter.EStat.BOREDOM, boredomMultiplier);
+                user.AddToStat(NonPlayableCharacter.EStat.TIREDNESS, tirednessMultiplier);
+                user.AddToStat(NonPlayableCharacter.EStat.HUNGER, hungerMultiplier);
             }
         }
     }

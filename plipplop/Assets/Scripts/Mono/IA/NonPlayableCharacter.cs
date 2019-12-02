@@ -34,8 +34,9 @@ public class NonPlayableCharacter : MonoBehaviour
 	public float strength = 1f;
 	float assHeightWhenSitted = 0.51f;
 
-	[Header("Stats")]
-	public Dictionary<string, float> stats = new Dictionary<string, float>();
+	public enum EStat { BOREDOM, TIREDNESS, HUNGER };
+    [Header("Stats")]
+    public Dictionary<EStat, float> stats = new Dictionary<EStat, float>();
 
 	public ClothesData[] headStuff;
 	public ClothesData[] torsoStuff;
@@ -106,9 +107,9 @@ public class NonPlayableCharacter : MonoBehaviour
 			clothes.Add(suit, null);
 
 		// Load Character Stats
-		stats.Add("boredom", 50f);
-		stats.Add("tiredness", 50f);
-		stats.Add("hunger", 75f);
+		stats.Add(EStat.BOREDOM, 50f);
+		stats.Add(EStat.TIREDNESS, 50f);
+		stats.Add(EStat.HUNGER, 75f);
 		
 		// Debug Equip Items
 		Equip(headStuff[Random.Range(0, headStuff.Length)]);
@@ -121,17 +122,17 @@ public class NonPlayableCharacter : MonoBehaviour
 	[ContextMenu("SetHungerTwentyFive")]
 	public void SetHungerTwentyFive()
 	{
-		SetStat("hunger", 25f);
+		SetStat(EStat.HUNGER, 25f);
 	}
 	[ContextMenu("SetHungerSeventyFive")]
 	public void SetHungerSeventyFive()
 	{
-		SetStat("hunger", 75f);
+		SetStat(EStat.HUNGER, 75f);
 	}
 	[ContextMenu("SetHungerHundred")]
 	public void SetHungerHundred()
 	{
-		SetStat("hunger", 100f);
+		SetStat(EStat.HUNGER, 100f);
 	}
 
 	public void Equip(ClothesData clothData, bool change = true)
@@ -187,7 +188,7 @@ public class NonPlayableCharacter : MonoBehaviour
 		food.Consume();
 		food.onConsumeEnd += () =>
 		{
-			stats["hunger"] -= food.data.calory;
+			stats[NonPlayableCharacter.EStat.HUNGER] -= food.data.calory;
 			Drop();
 			food = null;
 		};
@@ -223,13 +224,13 @@ public class NonPlayableCharacter : MonoBehaviour
 		carried = null;
 	}
 
-	public void AddToStat(string name, float amount)
+	public void AddToStat(EStat name, float amount)
 	{
 		stats[name] += amount;
 		if(stats[name] >= 100f) stats[name] = 100f;
 		else if(stats[name] < 0f) stats[name] = 0f;
 	}
-	public void SetStat(string name, float value)
+	public void SetStat(EStat name, float value)
 	{
 		stats[name] = value;
 		if(stats[name] >= 100f) stats[name] = 100f;
@@ -284,7 +285,7 @@ public class NonPlayableCharacter : MonoBehaviour
 			float h = 0f;
 			Handles.Label(transform.position + Vector3.up * (2f + h), behaviorGraph.GetCurrentAIStateName());
 			h+= 0.1f;
-			foreach(KeyValuePair<string, float> entry in stats)
+			foreach(KeyValuePair<EStat, float> entry in stats)
 			{
 				Handles.Label(transform.position + Vector3.up * (2f + h), entry.Key.ToString() + " = " + entry.Value.ToString());
 				h+= 0.1f;

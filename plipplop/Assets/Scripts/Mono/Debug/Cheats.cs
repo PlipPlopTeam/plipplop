@@ -20,6 +20,6 @@ public class Cheats : Dictionary<string, System.Action>
     public void SetAllHunderToHundred()
     {
         foreach(NonPlayableCharacter npc in Object.FindObjectsOfType<NonPlayableCharacter>())
-            npc.SetStat("hunger", 100f);
+            npc.SetStat(NonPlayableCharacter.EStat.HUNGER, 100f);
     }
 }
