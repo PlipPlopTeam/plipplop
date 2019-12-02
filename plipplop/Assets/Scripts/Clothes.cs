@@ -10,7 +10,7 @@ public class Clothes : MonoBehaviour
     public List<Transform> attachs = new List<Transform>();
     public Skeleton.Socket socket;
 
-    public virtual void Pulverize()
+    public virtual void Destroy()
     {
         foreach(Transform a in attachs) Destroy(a.gameObject);
         Destroy(root.gameObject);
@@ -36,6 +36,11 @@ public class Clothes : MonoBehaviour
         {
             root = Instantiate(data.prefab, transform).transform;
             target.Attach(root, data.slot);
+        }
+        if (cloth.material) {
+            foreach (var renderer in root.GetComponentsInChildren<Renderer>()) {
+                renderer.material = cloth.material;
+            }
         }
     }
 }

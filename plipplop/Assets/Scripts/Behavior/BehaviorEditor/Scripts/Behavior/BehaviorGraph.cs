@@ -11,17 +11,17 @@ namespace Behavior.Editor
     public class BehaviorGraph : ScriptableObject
     {
         // This part will be saved
-        [SerializeField] public List<AIStateNode> stateNodes = new List<AIStateNode>();
-        [SerializeField] public List<AIStateTransitionNode> transitionNodes = new List<AIStateTransitionNode>();
-        [SerializeField] public int idCount;
-        [SerializeField] public Dictionary<AIStateNode, AIStateTransitionNode> stateTransitions = new Dictionary<AIStateNode, AIStateTransitionNode>();
-        [SerializeField] public AIState initialState;
+        [HideInInspector] [SerializeField] public List<AIStateNode> stateNodes = new List<AIStateNode>();
+        [HideInInspector] [SerializeField] public List<AIStateTransitionNode> transitionNodes = new List<AIStateTransitionNode>();
+        [HideInInspector] [SerializeField] public int idCount;
+        [HideInInspector] [SerializeField] public Dictionary<AIStateNode, AIStateTransitionNode> stateTransitions = new Dictionary<AIStateNode, AIStateTransitionNode>();
+        [HideInInspector] [SerializeField] public AIState initialState;
 
-        [SerializeField] public Vector2 editorScrollPosition;
+        [HideInInspector] [SerializeField] public Vector2 editorScrollPosition;
 
         // These are helpers
-        public List<AIStateTransitionNode> transitions { get { return nodes.Where(o => { return (o is AIStateTransitionNode); }).Select(o => { return (AIStateTransitionNode)o; }).ToList(); } }
-        public ReadOnlyCollection<Node> nodes { get{ return stateNodes.Select(o => { return (Node)o; }).Concat(transitionNodes.Select(o => { return (Node)o; })).ToList().AsReadOnly(); } }
+        [HideInInspector] public List<AIStateTransitionNode> transitions { get { return nodes.Where(o => { return (o is AIStateTransitionNode); }).Select(o => { return (AIStateTransitionNode)o; }).ToList(); } }
+        [HideInInspector] public ReadOnlyCollection<Node> nodes { get{ return stateNodes.Select(o => { return (Node)o; }).Concat(transitionNodes.Select(o => { return (Node)o; })).ToList().AsReadOnly(); } }
         List<int> indexToDelete = new List<int>();
 
         // Runtime
@@ -89,16 +89,19 @@ namespace Behavior.Editor
 
         public void Start()
         {
+			Debug.Log("START");
             currentStateNode = (AIStateNode) GetNodeWithIndex(BehaviorEditor.startNodeId);
-            GetCurrentAIState().OnEnter();
-        }
+			currentStateNode.currentAIState = initialState;
+			GetCurrentAIState().OnEnter();
+		}
 
-        public void Update()
+		public void Update()
         {
+			Debug.Log(GetTarget() + " " + GetCurrentAIState());
             GetCurrentAIState().Tick();
-        }
+		}
 
-        public void FixedUpdate()
+		public void FixedUpdate()
         {
             GetCurrentAIState().FixedTick();
             CheckAndFollowTransition();
@@ -142,6 +145,7 @@ namespace Behavior.Editor
 
         public void GoToNode(AIStateNode node)
         {
+			if (currentStateNode == node) return;
             GetCurrentAIState().OnExit();
             currentStateNode = node;
             GetCurrentAIState().OnEnter();
@@ -160,7 +164,9 @@ namespace Behavior.Editor
         public void SetTarget(NonPlayableCharacter target)
         {
             this.target = target;
-            foreach(var node in nodes) {
+            foreach(var node in nodes)
+			{
+
                 node.SetGraph(this);
             }
         }

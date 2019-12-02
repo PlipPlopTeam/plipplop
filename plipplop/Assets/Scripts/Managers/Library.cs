@@ -19,6 +19,12 @@ public class Library
     public GameObject baseControllerPrefab;
     public GameObject teleporterVolumePrefab;
 
+    [Header("Clothes")]
+    public List<ClothesData> headClothes;
+    public List<ClothesData> torsoClothes;
+    public List<ClothesData> legsClothes;
+
+
     [Header("Material")]
     public Material emotionBoardMaterial;
     public Material lineRendererMaterial;
@@ -26,6 +32,7 @@ public class Library
     
     [Header("Meshs")]
     public Mesh primitiveQuadMesh;
+
 
     [Header("Sounds")]
     public Sounds sounds;
