@@ -83,12 +83,13 @@ namespace Behavior.Editor
         }
 
         public AIState GetCurrentAIState()
-        { 
+        {
             return currentStateNode != null ? currentStateNode.currentAIState : null;
         }
 
         public void Start()
         {
+            currentStateNode = (AIStateNode) GetNodeWithIndex(BehaviorEditor.startNodeId);
             GetCurrentAIState().OnEnter();
         }
 

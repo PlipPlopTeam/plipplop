@@ -275,6 +275,10 @@ namespace Behavior
             {
                 var rect = new Rect(new Vector2(minimapMargin, Screen.height - minimapMargin - minimapSize - 20), new Vector2(minimapSize, minimapSize));
                 
+                if (!minimapTexture) {
+                    minimapTexture = new Texture2D((int)minimapSize, (int)minimapSize);
+                }
+
                 for (int x = 0; x < minimapTexture.width; x++) {
                     for (int y = 0; y < minimapTexture.height; y++) {
                         minimapTexture.SetPixel(x, y, new Color(1f, 1F, 1f, 0.2f));

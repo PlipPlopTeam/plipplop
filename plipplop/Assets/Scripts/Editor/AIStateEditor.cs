@@ -7,7 +7,7 @@ using UnityEditorInternal;
 
 namespace Behavior.Editor
 {
-	 // [CustomEditor(typeof(AIState))]
+	[CustomEditor(typeof(AIState))] [CanEditMultipleObjects]
 	public class AIStateEditor : UnityEditor.Editor
     {
 		SerializedObject serializedAIState;
@@ -15,11 +15,9 @@ namespace Behavior.Editor
 		ReorderableList onUpdateList;
 		ReorderableList onEnterList;
 		ReorderableList onExitList;
-		ReorderableList Transitions;
 
 		bool showDefaultGUI = false;
 		bool showActions = true;
-		bool showTransitions = true;
 
 		private void OnEnable()
         {
@@ -54,14 +52,6 @@ namespace Behavior.Editor
 				onExitList.DoLayoutList();	
 			}
 
-			showTransitions = EditorGUILayout.Toggle("Show Transitions", showTransitions);
-
-			if (showTransitions)
-			{
-				EditorGUILayout.LabelField("Conditions to exit this AIState");
-				Transitions.DoLayoutList();
-			}
-
 			serializedAIState.ApplyModifiedProperties();
 		}
 
@@ -73,13 +63,11 @@ namespace Behavior.Editor
 			onUpdateList = new ReorderableList(serializedAIState,serializedAIState.FindProperty("onUpdate"), true, true, true, true);
 			onEnterList = new ReorderableList(serializedAIState,serializedAIState.FindProperty("onEnter"), true, true, true, true);
 			onExitList = new ReorderableList(serializedAIState,serializedAIState.FindProperty("onExit"), true, true, true, true);
-			Transitions = new ReorderableList(serializedAIState, serializedAIState.FindProperty("transitions"), true, true, true, true);
 
 			HandleReordableList(onFixedList, "On Fixed");
 			HandleReordableList(onUpdateList, "On Update");
 			HandleReordableList(onEnterList, "On Enter");
 			HandleReordableList(onExitList, "On Exit");
-			HandleTransitionReordable(Transitions, "Condition --> New AIState");
 		}
 
 		void HandleReordableList(ReorderableList list, string targetName)

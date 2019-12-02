@@ -53,28 +53,6 @@ namespace Behavior.Editor
                 b.previousCollapse = b.collapse;
             }
 
-            /* ??? TODO: Understand and restore
-            if(b.previousAIState != b.currentAIState)
-            {
-                b.isDuplicate = BehaviorEditor.settings.currentGraph.IsAIStateDuplicate(b);
-				b.previousAIState = b.currentAIState;
-
-				if (!b.isDuplicate)
-				{
-					Vector3 pos = new Vector3(b.windowRect.x,b.windowRect.y,0);
-					pos.x += b.windowRect.width * 2;
-
-					SetupReordableLists(b);
-
-                    //Load transtions
-                    BehaviorEditor.AddTransitionNode(b, pos);
-
-                    BehaviorEditor.forceSetDirty = true;
-				}
-				
-			}
-            */
-
             if (b.currentAIState != null)
             {
                 b.isAssigned = true;
@@ -105,7 +83,7 @@ namespace Behavior.Editor
 						standard += 125 + (b.onEnterList.count + b.onExitList.count) * 18;
 					}
 					b.serializedAIState.ApplyModifiedProperties();
-                    b.windowRect.height = standard;
+                    b.optimalHeight = standard;
                 }   
             }
             else
