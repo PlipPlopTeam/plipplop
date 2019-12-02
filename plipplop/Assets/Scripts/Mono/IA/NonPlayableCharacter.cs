@@ -18,6 +18,7 @@ public class NonPlayableCharacter : MonoBehaviour
 	[HideInInspector] public Face face;
 	
 	[Header("Read-Only")]
+	public Controller player;
 	public Valuable valuable;
 	public Activity activity;
 	public Chair chair;
@@ -86,7 +87,9 @@ public class NonPlayableCharacter : MonoBehaviour
 
 	void Awake()
 	{
-        behaviorGraph.SetTarget(this);
+		behaviorGraph = Instantiate(behaviorGraph);
+		behaviorGraph.SetTarget(this);
+
 		skeleton = GetComponentInChildren<Skeleton>();
 		sight = GetComponent<Sight>();
 		look = GetComponent<FocusLook>();
@@ -116,7 +119,7 @@ public class NonPlayableCharacter : MonoBehaviour
 		Equip(torsoStuff[Random.Range(0, torsoStuff.Length)]);
 		Equip(legsStuff[Random.Range(0, legsStuff.Length)]);
 
-        behaviorGraph.Start();
+		behaviorGraph.Start();
 	}
 
 	[ContextMenu("SetHungerTwentyFive")]

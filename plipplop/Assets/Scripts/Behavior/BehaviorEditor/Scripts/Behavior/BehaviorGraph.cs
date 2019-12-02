@@ -97,9 +97,8 @@ namespace Behavior.Editor
 
 		public void Update()
         {
+			Debug.Log(GetTarget() + " " + GetCurrentAIState());
             GetCurrentAIState().Tick();
-			Debug.Log(GetTarget());
-
 		}
 
 		public void FixedUpdate()
@@ -165,7 +164,9 @@ namespace Behavior.Editor
         public void SetTarget(NonPlayableCharacter target)
         {
             this.target = target;
-            foreach(var node in nodes) {
+            foreach(var node in nodes)
+			{
+
                 node.SetGraph(this);
             }
         }

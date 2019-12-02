@@ -35,7 +35,8 @@ namespace Behavior
 
         public void Tick()
         {
-            ExecuteActions(onUpdate);
+			Debug.Log("TICKING " + graph.GetTarget().name);
+			ExecuteActions(onUpdate);
         }
 
         public void OnExit()
@@ -45,8 +46,9 @@ namespace Behavior
         
         public void ExecuteActions(AIAction[] l)
         {
-            foreach(var action in l) {
-                if (action == null) continue;
+			foreach (var action in l)
+			{
+				if (action == null) continue;
                 action.Execute(graph.GetTarget());
             }
         }
