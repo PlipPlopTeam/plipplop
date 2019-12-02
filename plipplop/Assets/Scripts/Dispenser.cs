@@ -38,13 +38,14 @@ public class Dispenser : Feeder
         {
             for(int i = 0; i < clients.Count; i++)
             {
-                NonPlayableCharacter c = clients[i];
+                int index = i;
+                NonPlayableCharacter c = clients[index];
                 c.Wait(
                     Random.Range(0.25f, 0.75f), 
                     delegate{
                         c.agentMovement.GoThere(
                             transform.position 
-                            + transform.forward * (i + 1) * distanceBetween
+                            + transform.forward * (index + 1) * distanceBetween
                             + new Vector3(Random.Range(-queueDispersion, queueDispersion), 0f, Random.Range(-queueDispersion, queueDispersion))
                     );}
                 );
