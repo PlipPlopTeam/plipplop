@@ -75,8 +75,7 @@ namespace Behavior.Editor
                 var aiNode = (AIStateNode)node;
                 if (aiNode.id == b.id) continue;
 
-                if (b.currentAIState != null && aiNode.currentAIState == b.currentAIState &&
-                    !aiNode.isDuplicate)
+                if (b.currentAIState != null && aiNode.currentAIState == b.currentAIState)
                     return true;
             }
 

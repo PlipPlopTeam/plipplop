@@ -230,10 +230,20 @@ namespace Behavior
 
                     // Handles
                     foreach(var node in settings.currentGraph.nodes) {
-                        if (Handles.Button(new Vector2(node.windowRect.x - handleSize * 1.5f, node.windowRect.y + node.windowRect.height/2f) - scrollPos, Quaternion.identity, handleSize, handleSize, ButtonCap)) {
-
+                        // Enter node
+                        if (settings.MAKE_TRANSITION) {
+                            if (Handles.Button(new Vector2(node.windowRect.x - handleSize * 1.5f, node.windowRect.y + node.windowRect.height/2f) - scrollPos, Quaternion.identity, handleSize, handleSize, ButtonCap)) {
+                                var origin = settings.currentGraph.GetNodeWithIndex(transitFromId);
+                                origin.RemoveExitNode(origin is AIStateNode || settings.TRANSITION_TYPE  ? 0 : 1);
+                                if (settings.TRANSITION_TYPE) MakeTransitionIfTrue(node.id);
+                                else MakeTransitionIfFalse(node.id);
+                            }
+                        }
+                        else {
+                            Handles.DotHandleCap(0, new Vector2(node.windowRect.x - handleSize * 1.5f, node.windowRect.y + node.windowRect.height / 2f) - scrollPos, Quaternion.LookRotation(Vector3.forward), handleSize, EventType.Repaint);
                         }
 
+                        // Exit nodes
                         int i = 0;
                         foreach(var exit in node.exitNodes) {
                             var exitNodeHeight = GetCurveSlotHeight(node, i);
@@ -340,6 +350,7 @@ namespace Behavior
                 {
                     if (e.type == EventType.MouseDown) {
                         if (!settings.MAKE_TRANSITION) RightClick(e);
+                        else settings.MAKE_TRANSITION = false;
                     }
                 }
                 else if (e.button == 2) // MIDDLE CLICK
@@ -386,19 +397,26 @@ namespace Behavior
                 else ModifyNode(e);
             }
 
-            void MakeTransition(System.Action<Node, Node> setTargetAndId)
+            void MakeTransition(System.Action<Node, Node> setTargetAndId, int? forceSelection=null)
             {
-                settings.MAKE_TRANSITION = false;
                 clickedOnWindow = false;
-                for (int i = 0; i < settings.currentGraph.nodes.Count; i++) {
-                    if (settings.currentGraph.nodes[i].windowRect.Contains(mousePosition)) {
-                        clickedOnWindow = true;
-                        selectedNode = settings.currentGraph.nodes[i];
-                        break;
+                if (forceSelection.HasValue) {
+                    clickedOnWindow = true;
+                    var nodes = new List<Node>(settings.currentGraph.nodes);
+                    selectedNode = nodes.Find(o => o.id == forceSelection.Value);
+                }
+                else {
+                    for (int i = 0; i < settings.currentGraph.nodes.Count; i++) {
+                        if (settings.currentGraph.nodes[i].windowRect.Contains(mousePosition)) {
+                            clickedOnWindow = true;
+                            selectedNode = settings.currentGraph.nodes[i];
+                            break;
+                        }
                     }
                 }
 
                 if (clickedOnWindow) {
+                    settings.MAKE_TRANSITION = false;
                     if (selectedNode.id != transitFromId) {
                         Node transitionOriginNode = settings.currentGraph.GetNodeWithIndex(transitFromId);
 
@@ -412,18 +430,18 @@ namespace Behavior
                 }
             }
 
-            void MakeTransitionIfFalse()
+            void MakeTransitionIfFalse(int? forceTarget=null)
             {
                 MakeTransition((transitionNode, targetNode) => {
                     transitionNode.SetExitNode(1, targetNode.id);
-                });
+                }, forceTarget);
             }
 
-            void MakeTransitionIfTrue()
+            void MakeTransitionIfTrue(int? forceTarget = null)
             {
                 MakeTransition((transitionNode, targetNode) => {
                     transitionNode.SetExitNode(0, targetNode.id);
-                });
+                }, forceTarget);
             }
             #endregion
 
@@ -450,27 +468,35 @@ namespace Behavior
             {
                 GenericMenu menu = new GenericMenu();
                 menu.AddSeparator("");
-                if (selectedNode.drawNode is AIStateDrawNode) {
-                    if (((AIStateNode)selectedNode).currentAIState != null) {
-                        menu.AddItem(new GUIContent("Add condition"), false, ContextCallback, EUserActions.ADD_TRANSITION_NODE);
+                if (selectedNode is AIStateNode) {
+                    menu.AddItem(new GUIContent("Add condition"), false, ContextCallback, EUserActions.ADD_TRANSITION_NODE);
+                }
+                else if (selectedNode is AIStateTransitionNode) {
+                    menu.AddItem(new GUIContent("Make transition when TRUE..."), false, ContextCallback, EUserActions.MAKE_TRANSITION_TRUE);
+                    menu.AddItem(new GUIContent("Make transition when FALSE..."), false, ContextCallback, EUserActions.MAKE_TRANSITION_FALSE);
+                }
+                menu.AddSeparator("");
+                for (int i = 0; i < selectedNode.exitNodes.Count; i++) {
+                    int index = i;
+                    var exit = selectedNode.exitNodes[index];
+                    if (exit.HasValue) {
+                        menu.AddItem(new GUIContent("Break output " + index), false, delegate {
+                            BreakOutput(selectedNode, index);
+                        });
                     }
                     else {
-                        menu.AddDisabledItem(new GUIContent("Add condition"));
+                        menu.AddDisabledItem(new GUIContent("Break output " + index));
                     }
-                    menu.AddItem(new GUIContent("Delete"), false, ContextCallback, EUserActions.DELETE_NODE);
                 }
-                else if (selectedNode.drawNode is TransitionDrawNode) {
-                    if (selectedNode.isDuplicate || !selectedNode.isAssigned) {
-                        menu.AddDisabledItem(new GUIContent("Make transition..."));
-                    }
-                    else {
-                        menu.AddItem(new GUIContent("Make transition when TRUE..."), false, ContextCallback, EUserActions.MAKE_TRANSITION_TRUE);
-                        menu.AddItem(new GUIContent("Make transition when FALSE..."), false, ContextCallback, EUserActions.MAKE_TRANSITION_FALSE);
-                    }
-                    menu.AddItem(new GUIContent("Delete"), false, ContextCallback, EUserActions.DELETE_NODE);
-                }
+                menu.AddSeparator("");
+                menu.AddItem(new GUIContent("Delete"), false, ContextCallback, EUserActions.DELETE_NODE);
                 menu.ShowAsContext();
                 e.Use();
+            }
+
+            void BreakOutput(Node n, int exit)
+            {
+                n.RemoveExitNode(exit);
             }
 
             void ContextCallback(object o)
@@ -486,23 +512,6 @@ namespace Behavior
                     default:
                         break;
                     case EUserActions.DELETE_NODE:
-                        if (selectedNode.drawNode is TransitionDrawNode) {
-                            Node enterNode = settings.currentGraph.GetNodeWithIndex(selectedNode.enterNode);
-                            if (enterNode != null) {
-                                if (enterNode is AIStateNode) {
-                                    ((AIStateNode)enterNode).RemoveTransition();
-                                }
-                                else {
-                                    var transitionNode = ((AIStateTransitionNode)enterNode);
-                                    for (int i = 0; i < transitionNode.exitNodes.Count; i++) {
-                                        if (transitionNode.exitNodes[i] == selectedNode.id) {
-                                            transitionNode.RemoveExitNode(i);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
                         nodesToDelete++;
                         settings.currentGraph.DeleteNode(selectedNode.id);
                         break;
@@ -532,7 +541,6 @@ namespace Behavior
             {
                 Node transNode = settings.AddNodeOnGraph(settings.transitionNode, 200, 50, "Condition", pos);
                 if (originNode != null) {
-                    transNode.enterNode = originNode.id;
                     AIStateTransitionNode t = settings.currentGraph.AddTransition(originNode);
                 }
                 return transNode;

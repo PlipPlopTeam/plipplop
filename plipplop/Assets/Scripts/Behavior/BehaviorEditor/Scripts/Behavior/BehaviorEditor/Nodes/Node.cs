@@ -15,7 +15,6 @@ namespace Behavior.Editor
         public string windowTitle;
         public float optimalWidth = 100f;
         public float optimalHeight = 100f;
-        public bool isDuplicate;
         public string comment;
         public bool isAssigned;
 		public bool showDescription;
@@ -29,19 +28,6 @@ namespace Behavior.Editor
         public bool previousCollapse;
 
         // External
-        public int? enterNode { 
-            get { if (s_hasEnterNode) return s_enterNode; else return null; } 
-            set { 
-                if (value == null) {
-                    s_hasEnterNode = false;
-                }
-                else {
-                    s_hasEnterNode = true;
-                    s_enterNode = value.Value;
-                }
-            } 
-        }
-
         public System.Collections.ObjectModel.ReadOnlyCollection<int?> exitNodes {
             get {
                 List<int?> nodes = new List<int?>();
@@ -70,8 +56,6 @@ namespace Behavior.Editor
         }
 
         // Internal - used for serialization
-        [SerializeField] int s_enterNode;
-        [SerializeField] bool s_hasEnterNode;
         [SerializeField] int[] s_exitNodes;
         [SerializeField] bool[] s_hasExitNodes;
 
@@ -87,6 +71,13 @@ namespace Behavior.Editor
             List<int?> nodes = new List<int?>(exitNodes);
             nodes[i] = null;
             SetExitNodes(nodes);
+        }
+
+        public void ClearExitNodes()
+        {
+            for(var i = 0; i < exitNodes.Count; i++) {
+                RemoveExitNode(i);
+            }
         }
 
         public void SetExitNodes(IEnumerable<int?> exitNodes)

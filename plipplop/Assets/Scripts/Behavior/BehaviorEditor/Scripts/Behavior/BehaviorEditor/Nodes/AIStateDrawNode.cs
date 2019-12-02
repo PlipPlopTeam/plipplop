@@ -75,13 +75,6 @@ namespace Behavior.Editor
 			}
             */
 
-			if (b.isDuplicate)
-            {
-                EditorGUILayout.LabelField("AIState is a duplicate!");
-                b.windowRect.height = 100;
-				return;
-            }
-
             if (b.currentAIState != null)
             {
                 b.isAssigned = true;
@@ -148,11 +141,6 @@ namespace Behavior.Editor
                  var element = list.serializedProperty.GetArrayElementAtIndex(index);
                  EditorGUI.ObjectField(new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight), element, GUIContent.none);
              };
-        }
-
-        public override void DrawCurve(Node b)
-        {
-
         }
 
         public void ClearReferences()
