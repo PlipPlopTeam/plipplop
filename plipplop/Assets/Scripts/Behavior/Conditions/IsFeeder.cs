@@ -7,9 +7,9 @@ namespace Behavior.NPC
 	{
 		public bool set;
 
-		public override bool Check(StateManager state)
+		public override bool Check(AIState state)
 		{
-			NonPlayableCharacter npc = (NonPlayableCharacter)state;
+			NonPlayableCharacter npc = state.GetGraphTarget();
 			if(npc != null)
 			{
 				if(set) return npc.feeder != null;

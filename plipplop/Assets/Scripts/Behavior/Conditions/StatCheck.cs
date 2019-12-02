@@ -13,9 +13,9 @@ namespace Behavior.NPC
         public EOperator condition;
         [Range(0f, 100f)] public float value = 0;
 
-		public override bool Check(StateManager state)
+		public override bool Check(AIState state)
 		{
-			NonPlayableCharacter npc = (NonPlayableCharacter)state;
+			NonPlayableCharacter npc = state.GetGraphTarget();
             if(npc != null)
             {
                 if(npc.stats.ContainsKey(statName))

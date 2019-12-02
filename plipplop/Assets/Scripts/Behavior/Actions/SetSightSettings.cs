@@ -7,10 +7,10 @@ namespace Behavior.NPC
     {
         public Sight.Settings settings;
 
-        public override void Execute(StateManager state)
+        public override void Execute(NonPlayableCharacter target)
         {
-            NonPlayableCharacter npc = (NonPlayableCharacter)state;
-			if(npc != null && npc.sight != null)
+            NonPlayableCharacter npc = target;
+            if (npc != null && npc.sight != null)
 			{
 				npc.sight.settings = this.settings;
             }

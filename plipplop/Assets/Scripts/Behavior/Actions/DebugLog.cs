@@ -7,7 +7,7 @@ using Behavior;
 public class DebugLogString : AIAction
 {
     public string logString = "LOG";
-    public override void Execute(StateManager state)
+    public override void Execute(NonPlayableCharacter target)
     {
         Debug.Log(Time.time + " : " + logString);
     }

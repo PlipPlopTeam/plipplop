@@ -7,10 +7,10 @@ namespace Behavior.NPC
     [CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/GoToValuableOriginPosition")]
     public class GoToValuableOriginPosition : AIAction
     {
-        public override void Execute(StateManager state)
+        public override void Execute(NonPlayableCharacter target)
         {
-            NonPlayableCharacter npc = (NonPlayableCharacter)state;
-			if(npc != null && npc.valuable != null)
+            NonPlayableCharacter npc = target;
+            if (npc != null && npc.valuable != null)
 			{
                 npc.agentMovement.GoThere(npc.valuable.origin);
 			}

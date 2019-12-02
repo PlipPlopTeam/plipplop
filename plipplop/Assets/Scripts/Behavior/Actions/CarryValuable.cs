@@ -6,10 +6,10 @@ namespace Behavior.NPC
 	[CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/CarryValuable")]
 	public class CarryValuable : AIAction
     {
-		public override void Execute(StateManager state)
-		{
-			NonPlayableCharacter npc = (NonPlayableCharacter)state;
-			if(npc != null)
+		public override void Execute(NonPlayableCharacter target)
+        {
+            NonPlayableCharacter npc = target;
+            if (npc != null)
 			{
 				Controller c = npc.valuable.gameObject.GetComponent<Controller>();
                 if(c != null)

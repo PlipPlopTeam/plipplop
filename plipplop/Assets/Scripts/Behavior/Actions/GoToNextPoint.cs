@@ -9,10 +9,10 @@ namespace Behavior.NPC
     {
 		public bool overrideMovement = false;
 		public AgentMovement.Settings overrideMovementSettings;
-		public override void Execute(StateManager state)
-		{
-			NonPlayableCharacter npc = (NonPlayableCharacter)state;
-			if(npc != null)
+		public override void Execute(NonPlayableCharacter target)
+        {
+            NonPlayableCharacter npc = target;
+            if (npc != null)
 			{
 				if(overrideMovement) npc.agentMovement.settings = overrideMovementSettings;
 				npc.agentMovement.GoToNextPoint();

@@ -7,10 +7,10 @@ namespace Behavior.NPC {
     [CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/SearchActivity")]
 	public class SearchActivity : AIAction
 	{
-		public override void Execute(StateManager state)
-		{
-			NonPlayableCharacter npc = (NonPlayableCharacter)state;
-			if(npc != null)
+		public override void Execute(NonPlayableCharacter target)
+        {
+            NonPlayableCharacter npc = target;
+            if (npc != null)
 			{
 				Activity[] activities = npc.sight.Scan<Activity>();
 				if(activities.Length > 0)
