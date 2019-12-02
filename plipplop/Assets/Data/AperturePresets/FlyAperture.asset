@@ -10,83 +10,90 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a3262d062e5d48468ed5b87bf144ebc, type: 3}
-  m_Name: UmbrellaAperture
+  m_Name: FlyAperture
   m_EditorClassIdentifier: 
   overrides:
   - property: canBeControlled
     isOverriden: 0
-  - property: resetable
+  - property: canBeReset
     isOverriden: 0
   - property: fieldOfView
-    isOverriden: 0
+    isOverriden: 1
   - property: heightOffset
-    isOverriden: 0
+    isOverriden: 1
   - property: additionalAngle
     isOverriden: 0
   - property: distance
-    isOverriden: 1
+    isOverriden: 0
   - property: cameraRotateAroundSensivity
-    isOverriden: 0
-  - property: cameraRotateAboveSensivity
-    isOverriden: 0
-  - property: fovLerp
     isOverriden: 1
+  - property: cameraRotateAboveSensivity
+    isOverriden: 1
+  - property: fovLerp
+    isOverriden: 0
   - property: lateralFollowLerp
     isOverriden: 0
   - property: longitudinalFollowLerp
-    isOverriden: 1
+    isOverriden: 0
   - property: verticalFollowLerp
     isOverriden: 1
   - property: rotationSpeed
     isOverriden: 0
-  - property: lookAtLerp
-    isOverriden: 1
-  - property: cameraAlignSpeed
+  - property: alignAfter
     isOverriden: 0
-  - property: cameraResetAlignSpeed
+  - property: angleConsideredAlign
+    isOverriden: 0
+  - property: minTargetVelocity
+    isOverriden: 0
+  - property: alignMultiplierByUser
+    isOverriden: 0
+  - property: alignMultiplierByStick
+    isOverriden: 0
+  - property: alignMultiplierByVelocity
     isOverriden: 0
   - property: speedEffectMultiplier
     isOverriden: 0
   - property: catchUpSpeedMultiplier
     isOverriden: 0
   - property: angleIncrementOnSpeed
-    isOverriden: 1
+    isOverriden: 0
   - property: maximumCatchUpSpeed
-    isOverriden: 1
+    isOverriden: 0
   - property: absoluteBoundaries
     isOverriden: 0
   - property: constraintToTarget
     isOverriden: 0
   - property: targetConstraintLocalOffset
     isOverriden: 0
-  - property: cameraResetAfterTime
-    isOverriden: 0
-  fallback: {fileID: 11400000, guid: 08166ba5a773ad646aef31a961bf98ed, type: 2}
-  canBeControlled: 0
-  resetable: 1
-  fieldOfView: 55
-  heightOffset: 2
-  additionalAngle: 25
+  fallback: {fileID: 11400000, guid: df6437ca0d9bc60498aeb18a4dd62019, type: 2}
+  canBeControlled: 1
+  canBeReset: 1
+  fieldOfView: 60
+  heightOffset: 1.5
+  additionalAngle: 7.8
   distance:
-    min: 10
-    max: 30
-  cameraRotateAroundSensivity: 90
-  cameraRotateAboveSensivity: 20
-  fovLerp: 80
-  lateralFollowLerp: 3
-  longitudinalFollowLerp: 30
-  verticalFollowLerp: 60
-  rotationSpeed: 3
-  lookAtLerp: 60
-  cameraAlignSpeed: 3
-  cameraResetAlignSpeed: 3
-  cameraResetAfterTime: 1.5
-  speedEffectMultiplier: 2
-  catchUpSpeedMultiplier: 1
-  angleIncrementOnSpeed: 20
-  maximumCatchUpSpeed: 50
+    min: 4.5
+    max: 8
+  cameraRotateAroundSensivity: 45
+  cameraRotateAboveSensivity: 45
+  fovLerp: 20
+  lateralFollowLerp: 20
+  longitudinalFollowLerp: 6
+  verticalFollowLerp: 20
+  rotationSpeed: 20
+  lookAtLerp: 4
+  alignAfter: 15
+  angleConsideredAlign: 30
+  minTargetVelocity: 2
+  alignMultiplierByUser: 80
+  alignMultiplierByStick: 80
+  alignMultiplierByVelocity: 2
+  speedEffectMultiplier: 1.5
+  catchUpSpeedMultiplier: 1.8
+  angleIncrementOnSpeed: 2
+  maximumCatchUpSpeed: 15
   absoluteBoundaries:
-    min: 5
-    max: 10
+    min: 3
+    max: 8
   constraintToTarget: 0
   targetConstraintLocalOffset: {x: 0, y: 0, z: 0}
