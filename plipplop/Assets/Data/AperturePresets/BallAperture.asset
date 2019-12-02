@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   overrides:
   - property: canBeControlled
-    isOverriden: 1
-  - property: resetable
+    isOverriden: 0
+  - property: canBeReset
     isOverriden: 0
   - property: fieldOfView
     isOverriden: 1
@@ -24,33 +24,39 @@ MonoBehaviour:
   - property: additionalAngle
     isOverriden: 1
   - property: distance
-    isOverriden: 1
+    isOverriden: 0
   - property: cameraRotateAroundSensivity
     isOverriden: 0
   - property: cameraRotateAboveSensivity
     isOverriden: 0
   - property: fovLerp
-    isOverriden: 1
-  - property: lateralFollowLerp
-    isOverriden: 1
-  - property: longitudinalFollowLerp
-    isOverriden: 1
-  - property: verticalFollowLerp
-    isOverriden: 1
-  - property: rotationSpeed
     isOverriden: 0
-  - property: angleMaxConsideredAlign
+  - property: lateralFollowLerp
+    isOverriden: 0
+  - property: longitudinalFollowLerp
+    isOverriden: 0
+  - property: verticalFollowLerp
+    isOverriden: 0
+  - property: rotationSpeed
     isOverriden: 0
   - property: alignAfter
     isOverriden: 0
-  - property: alignSpeedMultiplier
+  - property: angleConsideredAlign
+    isOverriden: 0
+  - property: minTargetVelocity
+    isOverriden: 0
+  - property: alignMultiplierByUser
+    isOverriden: 0
+  - property: alignMultiplierByStick
+    isOverriden: 0
+  - property: alignMultiplierByVelocity
     isOverriden: 0
   - property: speedEffectMultiplier
-    isOverriden: 1
+    isOverriden: 0
   - property: catchUpSpeedMultiplier
     isOverriden: 0
   - property: angleIncrementOnSpeed
-    isOverriden: 1
+    isOverriden: 0
   - property: maximumCatchUpSpeed
     isOverriden: 0
   - property: absoluteBoundaries
@@ -59,32 +65,35 @@ MonoBehaviour:
     isOverriden: 0
   - property: targetConstraintLocalOffset
     isOverriden: 0
-  fallback: {fileID: 11400000, guid: df6437ca0d9bc60498aeb18a4dd62019, type: 2}
-  canBeControlled: 0
-  resetable: 1
-  fieldOfView: 55
-  heightOffset: 2
-  additionalAngle: 25
+  fallback: {fileID: 11400000, guid: 9307df52ab5513b4bbe3b28ff5b574d3, type: 2}
+  canBeControlled: 1
+  canBeReset: 1
+  fieldOfView: 70
+  heightOffset: 1
+  additionalAngle: 30
   distance:
-    min: 10
-    max: 15
-  cameraRotateAroundSensivity: 90
-  cameraRotateAboveSensivity: 20
-  fovLerp: 30
-  lateralFollowLerp: 3
-  longitudinalFollowLerp: 10
-  verticalFollowLerp: 25
-  rotationSpeed: 3
-  lookAtLerp: 25
-  angleMaxConsideredAlign: 2
-  alignAfter: 2
-  alignSpeedMultiplier: 2
-  speedEffectMultiplier: 2
-  catchUpSpeedMultiplier: 1
-  angleIncrementOnSpeed: 15
-  maximumCatchUpSpeed: 10
+    min: 4.5
+    max: 8
+  cameraRotateAroundSensivity: 45
+  cameraRotateAboveSensivity: 45
+  fovLerp: 20
+  lateralFollowLerp: 20
+  longitudinalFollowLerp: 6
+  verticalFollowLerp: 20
+  rotationSpeed: 20
+  lookAtLerp: 4
+  alignAfter: 15
+  angleConsideredAlign: 30
+  minTargetVelocity: 2
+  alignMultiplierByUser: 80
+  alignMultiplierByStick: 80
+  alignMultiplierByVelocity: 2
+  speedEffectMultiplier: 1.5
+  catchUpSpeedMultiplier: 1.8
+  angleIncrementOnSpeed: 2
+  maximumCatchUpSpeed: 15
   absoluteBoundaries:
-    min: 5
-    max: 10
+    min: 3
+    max: 8
   constraintToTarget: 0
   targetConstraintLocalOffset: {x: 0, y: 0, z: 0}
