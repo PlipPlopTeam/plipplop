@@ -89,16 +89,20 @@ namespace Behavior.Editor
 
         public void Start()
         {
+			Debug.Log("START");
             currentStateNode = (AIStateNode) GetNodeWithIndex(BehaviorEditor.startNodeId);
-            GetCurrentAIState().OnEnter();
-        }
+			currentStateNode.currentAIState = initialState;
+			GetCurrentAIState().OnEnter();
+		}
 
-        public void Update()
+		public void Update()
         {
             GetCurrentAIState().Tick();
-        }
+			Debug.Log(GetTarget());
 
-        public void FixedUpdate()
+		}
+
+		public void FixedUpdate()
         {
             GetCurrentAIState().FixedTick();
             CheckAndFollowTransition();
@@ -142,6 +146,7 @@ namespace Behavior.Editor
 
         public void GoToNode(AIStateNode node)
         {
+			if (currentStateNode == node) return;
             GetCurrentAIState().OnExit();
             currentStateNode = node;
             GetCurrentAIState().OnEnter();

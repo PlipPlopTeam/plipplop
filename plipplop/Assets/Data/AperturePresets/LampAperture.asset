@@ -15,7 +15,7 @@ MonoBehaviour:
   overrides:
   - property: canBeControlled
     isOverriden: 0
-  - property: resetable
+  - property: canBeReset
     isOverriden: 0
   - property: fieldOfView
     isOverriden: 1
@@ -39,11 +39,17 @@ MonoBehaviour:
     isOverriden: 0
   - property: rotationSpeed
     isOverriden: 0
-  - property: lookAtLerp
+  - property: alignAfter
     isOverriden: 0
-  - property: cameraAlignSpeed
+  - property: angleConsideredAlign
     isOverriden: 0
-  - property: cameraResetAlignSpeed
+  - property: minTargetVelocity
+    isOverriden: 0
+  - property: alignMultiplierByUser
+    isOverriden: 0
+  - property: alignMultiplierByStick
+    isOverriden: 0
+  - property: alignMultiplierByVelocity
     isOverriden: 0
   - property: speedEffectMultiplier
     isOverriden: 0
@@ -59,11 +65,9 @@ MonoBehaviour:
     isOverriden: 0
   - property: targetConstraintLocalOffset
     isOverriden: 0
-  - property: cameraResetAfterTime
-    isOverriden: 1
   fallback: {fileID: 11400000, guid: df6437ca0d9bc60498aeb18a4dd62019, type: 2}
   canBeControlled: 1
-  resetable: 1
+  canBeReset: 1
   fieldOfView: 40
   heightOffset: 1
   additionalAngle: 20
@@ -78,9 +82,12 @@ MonoBehaviour:
   verticalFollowLerp: 5
   rotationSpeed: 3
   lookAtLerp: 7
-  cameraAlignSpeed: 3
-  cameraResetAlignSpeed: 6
-  cameraResetAfterTime: 4
+  alignAfter: 2
+  angleConsideredAlign: 10
+  minTargetVelocity: 0.1
+  alignMultiplierByUser: 2
+  alignMultiplierByStick: 50
+  alignMultiplierByVelocity: 2
   speedEffectMultiplier: 1
   catchUpSpeedMultiplier: 1
   angleIncrementOnSpeed: 30

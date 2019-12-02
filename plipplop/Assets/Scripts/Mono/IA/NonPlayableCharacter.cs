@@ -18,6 +18,7 @@ public class NonPlayableCharacter : MonoBehaviour
 	[HideInInspector] public Face face;
 	
 	[Header("Read-Only")]
+	public Controller player;
 	public Valuable valuable;
 	public Activity activity;
 	public Chair chair;
@@ -48,12 +49,35 @@ public class NonPlayableCharacter : MonoBehaviour
 
 	public System.Action onWaitEnded;
 
+	public void Start()
+	{
+		// Load Character Clothes Slots
+		foreach (Clothes.ESlot suit in (Clothes.ESlot[])Clothes.ESlot.GetValues(typeof(Clothes.ESlot)))
+			clothes.Add(suit, null);
+
+		// Load Character Stats
+		stats.Add("boredom", 50f);
+		stats.Add("tiredness", 50f);
+		stats.Add("hunger", 75f);
+
+		// Debug Equip Items
+		Equip(headStuff[Random.Range(0, headStuff.Length)]);
+		Equip(torsoStuff[Random.Range(0, torsoStuff.Length)]);
+		Equip(legsStuff[Random.Range(0, legsStuff.Length)]);
+
+		behaviorGraph = Instantiate(behaviorGraph);
+		behaviorGraph.Start();
+	}
 	public void Update()
 	{
         StartWaiting();
         behaviorGraph.Update();
 		if(carried != null && carried.Mass() > strength) StartCarrying(carried);
         StartCollecting();
+	}
+	public void FixedUpdate()
+	{
+		behaviorGraph.FixedUpdate();
 	}
 
 	private void StartWaiting()
@@ -99,24 +123,7 @@ public class NonPlayableCharacter : MonoBehaviour
 		face = GetComponent<Face>();
 	}
 
-	public void Start()
-	{
-		// Load Character Clothes Slots
-		foreach (Clothes.ESlot suit in (Clothes.ESlot[]) Clothes.ESlot.GetValues(typeof(Clothes.ESlot)))
-			clothes.Add(suit, null);
 
-		// Load Character Stats
-		stats.Add("boredom", 50f);
-		stats.Add("tiredness", 50f);
-		stats.Add("hunger", 75f);
-		
-		// Debug Equip Items
-		Equip(headStuff[Random.Range(0, headStuff.Length)]);
-		Equip(torsoStuff[Random.Range(0, torsoStuff.Length)]);
-		Equip(legsStuff[Random.Range(0, legsStuff.Length)]);
-
-        behaviorGraph.Start();
-	}
 
 	[ContextMenu("SetHungerTwentyFive")]
 	public void SetHungerTwentyFive()
