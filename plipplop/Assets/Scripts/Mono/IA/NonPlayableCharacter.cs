@@ -18,30 +18,28 @@ public class NonPlayableCharacter : MonoBehaviour
 	[HideInInspector] public Face face;
 	
 	[Header("Read-Only")]
-	public Controller player;
-	public Valuable valuable;
-	public Activity activity;
-	public Chair chair;
-	public Food food;
-	public Feeder feeder;
+	[ReadOnlyInGame] public Controller player;
+	[ReadOnlyInGame] public Valuable valuable;
+    [ReadOnlyInGame] public Activity activity;
+	[ReadOnlyInGame] public Chair chair;
+    [ReadOnlyInGame] public Food food;
+    [ReadOnlyInGame] public Feeder feeder;
 	
 	[HideInInspector] public Activity previousActivity;
 	[HideInInspector] public ICarryable carried;
-	private ICarryable carryableToCollect;
 	public Dictionary<Clothes.ESlot, Clothes> clothes = new Dictionary<Clothes.ESlot, Clothes>();
 
     [Header("Settings")]
     public BehaviorGraph behaviorGraph;
 	public float strength = 1f;
-	float assHeightWhenSitted = 0.51f;
 
-	public enum EStat { BOREDOM, TIREDNESS, HUNGER };
+	float assHeightWhenSitted = 0.51f;
+    ICarryable carryableToCollect;
+
+    public enum EStat { BOREDOM, TIREDNESS, HUNGER };
+
     [Header("Stats")]
     public Dictionary<EStat, float> stats = new Dictionary<EStat, float>();
-
-	public ClothesData[] headStuff;
-	public ClothesData[] torsoStuff;
-	public ClothesData[] legsStuff;
 
 	// Wait timer
 	[HideInInspector] public bool hasWaited;
@@ -87,9 +85,7 @@ public class NonPlayableCharacter : MonoBehaviour
 
 	void Awake()
 	{
-		behaviorGraph = Instantiate(behaviorGraph);
-		behaviorGraph.SetTarget(this);
-
+        behaviorGraph.SetTarget(this);
 		skeleton = GetComponentInChildren<Skeleton>();
 		sight = GetComponent<Sight>();
 		look = GetComponent<FocusLook>();
@@ -115,11 +111,11 @@ public class NonPlayableCharacter : MonoBehaviour
 		stats.Add(EStat.HUNGER, 75f);
 		
 		// Debug Equip Items
-		Equip(headStuff[Random.Range(0, headStuff.Length)]);
-		Equip(torsoStuff[Random.Range(0, torsoStuff.Length)]);
-		Equip(legsStuff[Random.Range(0, legsStuff.Length)]);
+		Equip(Game.i.library.headClothes.PickRandom());
+        Equip(Game.i.library.torsoClothes.PickRandom());
+        Equip(Game.i.library.legsClothes.PickRandom());
 
-		behaviorGraph.Start();
+        behaviorGraph.Start();
 	}
 
 	[ContextMenu("SetHungerTwentyFive")]
@@ -141,7 +137,7 @@ public class NonPlayableCharacter : MonoBehaviour
 	public void Equip(ClothesData clothData, bool change = true)
 	{
 		Clothes c = clothes[clothData.slot];
-		if(c != null && change) c.Pulverize();
+		if(c != null && change) c.Destroy();
 
 		GameObject clothObject = new GameObject();
 		clothObject.name = clothData.name;
