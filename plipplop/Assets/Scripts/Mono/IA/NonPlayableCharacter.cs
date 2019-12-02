@@ -85,7 +85,9 @@ public class NonPlayableCharacter : MonoBehaviour
 
 	void Awake()
 	{
+		behaviorGraph = Instantiate(behaviorGraph);
         behaviorGraph.SetTarget(this);
+
 		skeleton = GetComponentInChildren<Skeleton>();
 		sight = GetComponent<Sight>();
 		look = GetComponent<FocusLook>();

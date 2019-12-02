@@ -92,18 +92,21 @@ namespace Behavior.Editor
 			Debug.Log("START");
             currentStateNode = (AIStateNode) GetNodeWithIndex(BehaviorEditor.startNodeId);
 			currentStateNode.currentAIState = initialState;
+
+			GetCurrentAIState().SetGraph(this);
 			GetCurrentAIState().OnEnter();
 		}
 
 		public void Update()
         {
-			Debug.Log(GetTarget() + " " + GetCurrentAIState());
+			GetCurrentAIState().SetGraph(this);
             GetCurrentAIState().Tick();
 		}
 
 		public void FixedUpdate()
         {
-            GetCurrentAIState().FixedTick();
+			GetCurrentAIState().SetGraph(this);
+			GetCurrentAIState().FixedTick();
             CheckAndFollowTransition();
         }
 
@@ -146,7 +149,9 @@ namespace Behavior.Editor
         public void GoToNode(AIStateNode node)
         {
 			if (currentStateNode == node) return;
-            GetCurrentAIState().OnExit();
+
+			GetCurrentAIState().SetGraph(this);
+			GetCurrentAIState().OnExit();
             currentStateNode = node;
             GetCurrentAIState().OnEnter();
         }
@@ -164,10 +169,9 @@ namespace Behavior.Editor
         public void SetTarget(NonPlayableCharacter target)
         {
             this.target = target;
-            foreach(var node in nodes)
+			foreach (var node in nodes)
 			{
-
-                node.SetGraph(this);
+				node.SetGraph(this);
             }
         }
 

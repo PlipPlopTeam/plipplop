@@ -14,15 +14,7 @@ namespace Behavior
         public AIAction[] onExit;
 
         [HideInInspector] public int id;
-
-        BehaviorGraph graph;
-
-        public void SetGraph(BehaviorGraph graph)
-        {
-            this.graph = graph;
-            id = Mathf.FloorToInt(Random.value * int.MaxValue);
-        }
-
+		
         public void OnEnter()
         {
             ExecuteActions(onEnter);
@@ -35,7 +27,6 @@ namespace Behavior
 
         public void Tick()
         {
-			Debug.Log("TICKING " + graph.GetTarget().name);
 			ExecuteActions(onUpdate);
         }
 
