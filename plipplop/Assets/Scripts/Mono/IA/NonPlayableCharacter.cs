@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using Behavior;
+using Behavior.Editor;
 using UnityEditor;
 using UnityEngine.AI;
 
 
-public class NonPlayableCharacter : StateManager
+public class NonPlayableCharacter : MonoBehaviour
 {
 	[HideInInspector] public Sight sight;
 	[HideInInspector] public FocusLook look;
@@ -29,7 +29,8 @@ public class NonPlayableCharacter : StateManager
 	private ICarryable carryableToCollect;
 	public Dictionary<Clothes.ESlot, Clothes> clothes = new Dictionary<Clothes.ESlot, Clothes>();
 
-	[Header("Settings")]
+    [Header("Settings")]
+    public BehaviorGraph behaviorGraph;
 	public float strength = 1f;
 	float assHeightWhenSitted = 0.51f;
 
@@ -47,10 +48,10 @@ public class NonPlayableCharacter : StateManager
 
 	public System.Action onWaitEnded;
 
-	public override void Update()
+	public void Update()
 	{
         StartWaiting();
-		base.Update();
+        behaviorGraph.Update();
 		if(carried != null && carried.Mass() > strength) StartCarrying(carried);
         StartCollecting();
 	}
@@ -84,6 +85,7 @@ public class NonPlayableCharacter : StateManager
 
 	void Awake()
 	{
+        behaviorGraph.SetTarget(this);
 		skeleton = GetComponentInChildren<Skeleton>();
 		sight = GetComponent<Sight>();
 		look = GetComponent<FocusLook>();
@@ -97,7 +99,7 @@ public class NonPlayableCharacter : StateManager
 		face = GetComponent<Face>();
 	}
 
-	public override void Start()
+	public void Start()
 	{
 		// Load Character Clothes Slots
 		foreach (Clothes.ESlot suit in (Clothes.ESlot[]) Clothes.ESlot.GetValues(typeof(Clothes.ESlot)))
@@ -113,7 +115,7 @@ public class NonPlayableCharacter : StateManager
 		Equip(torsoStuff[Random.Range(0, torsoStuff.Length)]);
 		Equip(legsStuff[Random.Range(0, legsStuff.Length)]);
 
-		base.Start();
+        behaviorGraph.Start();
 	}
 
 	[ContextMenu("SetHungerTwentyFive")]
@@ -280,7 +282,7 @@ public class NonPlayableCharacter : StateManager
         if(EditorApplication.isPlaying)
 		{
 			float h = 0f;
-			Handles.Label(transform.position + Vector3.up * (2f + h), currentState.name);
+			Handles.Label(transform.position + Vector3.up * (2f + h), behaviorGraph.GetCurrentAIStateName());
 			h+= 0.1f;
 			foreach(KeyValuePair<string, float> entry in stats)
 			{

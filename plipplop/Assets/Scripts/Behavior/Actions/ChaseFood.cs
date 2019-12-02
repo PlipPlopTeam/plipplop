@@ -8,9 +8,9 @@ namespace Behavior.NPC
     [CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/ChaseFood")]
     public class ChaseFood : AIAction
     {
-        public override void Execute(StateManager state)
+        public override void Execute(NonPlayableCharacter target)
         {
-            NonPlayableCharacter npc = (NonPlayableCharacter)state;
+            NonPlayableCharacter npc = target;
 			if(npc != null && npc.food != null)
 			{
                 npc.Collect(npc.food);

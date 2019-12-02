@@ -9,10 +9,10 @@ namespace Behavior.NPC
 		public float minRange;
 		public float maxRange;
 
-		public override void Execute(StateManager state)
-		{
-			NonPlayableCharacter npc = (NonPlayableCharacter)state;
-			if(npc != null)
+		public override void Execute(NonPlayableCharacter target)
+        {
+            NonPlayableCharacter npc = target;
+            if (npc != null)
 			{
 				npc.agentMovement.GoThere(
 					new Vector3(

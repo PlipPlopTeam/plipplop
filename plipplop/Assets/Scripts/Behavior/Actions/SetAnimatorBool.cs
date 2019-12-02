@@ -10,10 +10,10 @@ namespace Behavior.NPC
         public string boolName;
         public bool boolValue;
 
-        public override void Execute(StateManager state)
+        public override void Execute(NonPlayableCharacter target)
         {
-            NonPlayableCharacter npc = (NonPlayableCharacter)state;
-			if(npc != null)
+            NonPlayableCharacter npc = target;
+            if (npc != null)
 			{
                 npc.animator.SetBool(boolName, boolValue);
 			}
