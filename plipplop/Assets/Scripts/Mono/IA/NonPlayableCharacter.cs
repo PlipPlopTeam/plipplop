@@ -37,8 +37,9 @@ public class NonPlayableCharacter : MonoBehaviour
     ICarryable carryableToCollect;
 
     public enum EStat { BOREDOM, TIREDNESS, HUNGER };
+	public enum EThing { PLAYER, VALUABLE, ACTIVITY, CHAIR, FOOD, FEEDER }
 
-    [Header("Stats")]
+	[Header("Stats")]
     public Dictionary<EStat, float> stats = new Dictionary<EStat, float>();
 
 	// Wait timer
