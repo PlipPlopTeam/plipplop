@@ -11,12 +11,12 @@ namespace Behavior.Editor
     [CreateAssetMenu(menuName = "Behavior/Graph")]
     public class BehaviorGraph : ScriptableObject
     {
+
         // This part will be saved
         [HideInInspector] [SerializeField] public List<AIStateNode> stateNodes = new List<AIStateNode>();
         [HideInInspector] [SerializeField] public List<AIStateTransitionNode> transitionNodes = new List<AIStateTransitionNode>();
         [HideInInspector] [SerializeField] public int idCount;
         [HideInInspector] [SerializeField] public AIState initialState;
-
         [HideInInspector] [SerializeField] public Vector2 editorScrollPosition;
 
         // These are helpers

@@ -9,6 +9,20 @@ namespace Behavior.Editor
     [System.Serializable]
     public abstract class Node
     {
+        [System.Serializable]
+        public class Reroute
+        {
+            public readonly int exitIndex;
+            public readonly int beaconIndex;
+            public Vector2 position;
+
+            public Reroute(int exitIndex, int beaconIndex)
+            {
+                this.exitIndex = exitIndex;
+                this.beaconIndex = beaconIndex;
+            }
+        }
+
         public int id;
         public DrawNode drawNode;
         public Rect windowRect;
@@ -20,7 +34,8 @@ namespace Behavior.Editor
 		public bool showDescription;
 		public bool isOnCurrent;
         public BehaviorGraph graph;
-        
+        public List<Reroute> reroutes;
+
         public bool collapse;
 		public bool showActions = true;
 		public bool showEnterExit = false;
@@ -121,6 +136,38 @@ namespace Behavior.Editor
         {
             windowRect.width = optimalWidth * zoom;
             windowRect.height = optimalHeight * zoom;
+        }
+
+        public Reroute AddReroute(int exitIndex)
+        {
+            int beaconIndex = -1;
+            foreach (var reroute in GetReroutes(exitIndex)) {
+                if (reroute.beaconIndex > beaconIndex) {
+                    beaconIndex = reroute.beaconIndex;
+                }
+            }
+            beaconIndex++;
+
+            reroutes.Add(
+                new Reroute(
+                    exitIndex: exitIndex,
+                    beaconIndex: beaconIndex
+                )
+            );
+            return reroutes[reroutes.Count - 1];
+        }
+
+        public void DeleteReroute(int exitIndex, int beaconIndex)
+        {
+            reroutes.RemoveAll(o=> exitIndex == o.exitIndex && beaconIndex == o.beaconIndex);
+        }
+
+        public List<Reroute> GetReroutes(int exitIndex)
+        {
+            var list = reroutes.FindAll(o => o.exitIndex == exitIndex);
+            list.Sort((a, b) => -a.beaconIndex.CompareTo(b.beaconIndex));
+
+            return list;
         }
     }
 }

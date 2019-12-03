@@ -21,7 +21,7 @@ namespace Behavior
             readonly static float minWindowSize = 50f;
             readonly static float minimapSize = 64f;
             readonly static float minimapMargin = 5f;
-            readonly static float handleSize = 7f;
+            readonly static float rerouteDragDistance = 30f;
 
             Texture2D minimapTexture;
 
@@ -163,20 +163,15 @@ namespace Behavior
 
                 if (settings.MAKE_TRANSITION) {
                     var nodeFrom = settings.currentGraph.GetNodeWithIndex(transitFromId);
-                    Rect from = nodeFrom.windowRect.Shift(-scrollPos);
-                    from.y = from.y + GetCurveSlotHeight(nodeFrom, currentTransitionSlotIndex-1);
-                    DrawNodeCurve(from, new Rect(mousePosition, Vector2.zero).Shift(-scrollPos), nodeFrom is AIStateNode ? Color.white : settings.TRANSITION_TYPE ? Color.green : Color.red);
+                    var from = nodeFrom.drawNode.GetExitPosition(nodeFrom, currentTransitionSlotIndex);
+
+                    DrawConnection(from - scrollPos, new Vector2(mousePosition.x, mousePosition.y) -scrollPos, nodeFrom is AIStateNode ? Color.white : settings.TRANSITION_TYPE ? Color.green : Color.red);
                 }
 
                 Repaint();
                 SaveChanges();
             }
-
-            public static float GetCurveSlotHeight(Node node, int offset = 0)
-            {
-                return node.windowRect.height / 4f + offset * (node.windowRect.height / 4f);
-            }
-
+            
             void SaveChanges()
             {
             //    Debug.Log("SAVING ========");
@@ -210,10 +205,6 @@ namespace Behavior
                     for (int i = 0; i < settings.currentGraph.nodes.Count; i++) {
                         Node b = settings.currentGraph.nodes[i];
 
-                        if (b is RerouteNode) {
-                            continue;
-                        }
-
                         // Out of screen ?
                         var shiftedPos = b.windowRect.Shift(-scrollPos);
                         var shiftedPosBottomRight = shiftedPos.Shift(b.windowRect.size);
@@ -246,11 +237,20 @@ namespace Behavior
                         }
                     }
 
+                    // Reroute
+                    foreach (var node in settings.currentGraph.nodes) {
+                        for (int i = 0; i < node.exitNodes.Count; i++) {
+                            foreach (var reroute in node.GetReroutes(i)) {
+                                Handles.CircleHandleCap(0, reroute.position-scrollPos, Quaternion.identity, rerouteDragDistance, EventType.Repaint);
+                            }
+                        }
+                    }
+
                     // Handles
-                    foreach(var node in settings.currentGraph.nodes) {
+                    foreach (var node in settings.currentGraph.nodes) {
                         // Enter node
                         if (settings.MAKE_TRANSITION) {
-                            if (Handles.Button(new Vector2(node.windowRect.x - handleSize * 1.5f, node.windowRect.y + node.windowRect.height/2f) - scrollPos, Quaternion.identity, handleSize, handleSize, ButtonCap)) {
+                            if (Handles.Button(new Vector2(node.windowRect.x - DrawNode.handleSize * 1.5f, node.windowRect.y + node.windowRect.height/2f) - scrollPos, Quaternion.identity, DrawNode.handleSize, DrawNode.handleSize, ButtonCap)) {
                                 var origin = settings.currentGraph.GetNodeWithIndex(transitFromId);
                                 origin.RemoveExitNode(origin is AIStateNode || settings.TRANSITION_TYPE  ? 0 : 1);
                                 if (settings.TRANSITION_TYPE) MakeTransitionIfTrue(node.id);
@@ -258,15 +258,15 @@ namespace Behavior
                             }
                         }
                         else {
-                            Handles.DotHandleCap(0, new Vector2(node.windowRect.x - handleSize * 1.5f, node.windowRect.y + node.windowRect.height / 2f) - scrollPos, Quaternion.LookRotation(Vector3.forward), handleSize, EventType.Repaint);
+                            Handles.DotHandleCap(0, new Vector2(node.windowRect.x - DrawNode.handleSize * 1.5f, node.windowRect.y + node.windowRect.height / 2f) - scrollPos, Quaternion.LookRotation(Vector3.forward), DrawNode.handleSize, EventType.Repaint);
                         }
 
                         // Exit nodes
                         int i = 0;
                         foreach(var exit in node.exitNodes) {
-                            var exitNodeHeight = GetCurveSlotHeight(node, i);
+                            var exitNodeHeight = node.drawNode.GetExitPosition(node, i);
                             Handles.color = node is AIStateNode ? Color.white : i == 0 ? Color.green : Color.red;
-                            if (Handles.Button(new Vector2(node.windowRect.x + node.windowRect.width + handleSize * 1.5f, node.windowRect.y + exitNodeHeight) - scrollPos, Quaternion.identity, handleSize, handleSize, ButtonCap)) {
+                            if (Handles.Button(new Vector2(node.windowRect.x + node.windowRect.width + DrawNode.handleSize * 1.5f, exitNodeHeight.y) - scrollPos, Quaternion.identity, DrawNode.handleSize, DrawNode.handleSize, ButtonCap)) {
                                 settings.MAKE_TRANSITION = true;
                                 settings.TRANSITION_TYPE = (i == 0);
                                 transitFromId = node.id;
@@ -286,7 +286,7 @@ namespace Behavior
 
             void ButtonCap(int controlID, Vector3 position, Quaternion rotation, float size, EventType eventType)
             {
-                Handles.DotHandleCap(controlID, position, Quaternion.LookRotation(Vector3.forward), handleSize, eventType);
+                Handles.DotHandleCap(controlID, position, Quaternion.LookRotation(Vector3.forward), DrawNode.handleSize, eventType);
             }
 
             void DrawMiniMap()
@@ -366,6 +366,20 @@ namespace Behavior
                         if (settings.MAKE_TRANSITION) {
                             if (settings.TRANSITION_TYPE) MakeTransitionIfTrue();
                             else MakeTransitionIfFalse();
+                        }
+                    }
+                    if (e.type == EventType.MouseDrag) {
+                        if (!settings.MAKE_TRANSITION) {
+                            var mousePosition2 = new Vector2(mousePosition.x, mousePosition.y);
+                            foreach (var node in settings.currentGraph.nodes) {
+                                for (int i = 0; i < node.exitNodes.Count; i++) {
+                                    foreach (var reroute in node.GetReroutes(i)) {
+                                        if (Vector2.Distance(reroute.position, mousePosition2) < rerouteDragDistance) {
+                                            reroute.position = mousePosition2;
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -489,6 +503,8 @@ namespace Behavior
 
             void ModifyNode(Event e)
             {
+
+                // Adding and removing links
                 GenericMenu menu = new GenericMenu();
                 menu.AddSeparator("");
                 if (selectedNode is AIStateNode) {
@@ -498,17 +514,43 @@ namespace Behavior
                     menu.AddItem(new GUIContent("Make transition when TRUE..."), false, ContextCallback, EUserActions.MAKE_TRANSITION_TRUE);
                     menu.AddItem(new GUIContent("Make transition when FALSE..."), false, ContextCallback, EUserActions.MAKE_TRANSITION_FALSE);
                 }
+
+                // REroutes
+                menu.AddSeparator("");
+                for (int i = 0; i < selectedNode.exitNodes.Count; i++) {
+                    int index = i;
+                    var exit = selectedNode.exitNodes[index];
+                    var exitNode = settings.currentGraph.GetNodeWithIndex(exit);
+                    if (exit.HasValue) {
+                        menu.AddItem(new GUIContent("Add a reroute on output " + index.Letter()), false, delegate {
+                            selectedNode.AddReroute(index).position = (exitNode.windowRect.position + selectedNode.windowRect.position) * 0.5f;
+                        }); 
+
+                        // Break reroutes
+                        foreach(var reroute in selectedNode.GetReroutes(index)) {
+                            menu.AddItem(new GUIContent("Delete reroute "+ reroute.beaconIndex.Letter() + " on output " + index.Letter()), false, delegate {
+                                selectedNode.DeleteReroute(index, reroute.beaconIndex);
+                            });
+                        }
+                    }
+                    else {
+                        menu.AddDisabledItem(new GUIContent("Add a reroute on output " + index.Letter()));
+                    }
+
+                }
+
+                // Break
                 menu.AddSeparator("");
                 for (int i = 0; i < selectedNode.exitNodes.Count; i++) {
                     int index = i;
                     var exit = selectedNode.exitNodes[index];
                     if (exit.HasValue) {
-                        menu.AddItem(new GUIContent("Break output " + index), false, delegate {
+                        menu.AddItem(new GUIContent("Break output " + index.Letter()), false, delegate {
                             BreakOutput(selectedNode, index);
                         });
                     }
                     else {
-                        menu.AddDisabledItem(new GUIContent("Break output " + index));
+                        menu.AddDisabledItem(new GUIContent("Break output " + index.Letter()));
                     }
                 }
                 menu.AddSeparator("");
@@ -571,18 +613,14 @@ namespace Behavior
             #endregion
 
             #region Helper Methods
-            public static void DrawNodeCurve(Rect start, Rect end, Color curveColor, int offset=0)
+            public static void DrawConnection(Vector3 start, Vector3 end, Color curveColor)
             {
-
-                Vector3 startPos = new Vector2(start.width + start.x + handleSize * 1.5f, start.y + start.height / 4f + offset * (start.height / 4f));
-                Vector3 endPos = new Vector2(end.x - handleSize * 1.5f, end.y + end.height/2f);
-
                 Color c = curveColor;
                 Handles.color = c;
-                Vector3 dir = (startPos - endPos).normalized;
+                Vector3 dir = (start - end).normalized;
                 Vector3 right = Quaternion.AngleAxis(-90, Vector3.forward) * dir;
-                Handles.DrawAAConvexPolygon(new Vector3[] { startPos - right * 2, startPos + right * 2, endPos - right * 2, endPos + right * 2 });
-                Vector3 center = (startPos + endPos) * 0.5f;
+                Handles.DrawAAConvexPolygon(new Vector3[] { start - right * 2, start + right * 2, end - right * 2, end + right * 2 });
+                Vector3 center = (start + end) * 0.5f;
                 DrawTriangle(center, -dir, 10, c);
             }
 
