@@ -123,7 +123,7 @@ namespace Behavior.Editor
 			if (!(node is AIStateTransitionNode)) return;
 			var transition = (AIStateTransitionNode)node;
 
-			// Following the path of conditions until we hit a state, or something empty
+			// Following the path of conditions until we hit a state, or somESubject empty
 			for (; ;)
 			{
                 if (transition.disable) return;

@@ -231,7 +231,7 @@ public abstract class Controller : MonoBehaviour
         rigidbody.AddForce(gravity, ForceMode.Acceleration);
     }
 
-    // Trying to possess something else
+    // Trying to possess somESubject else
     virtual internal void OnTryPossess()
     {
         if (!isImmerged && controllerSensor && controllerSensor.IsThereAnyController())

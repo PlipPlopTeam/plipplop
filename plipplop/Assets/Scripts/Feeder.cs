@@ -10,6 +10,11 @@ public class Feeder : MonoBehaviour
     public int stock;
     public bool destroyOnceEmpty = false;
 
+	public bool IsEmpty()
+	{
+		return stock > 0;
+	}
+
     private void Start()
     {
         Game.i.aiZone.Register(this);
