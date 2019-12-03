@@ -34,7 +34,7 @@ namespace Behavior.Editor
 		public bool showDescription;
 		public bool isOnCurrent;
         public BehaviorGraph graph;
-        public List<Reroute> reroutes;
+        public List<Reroute> reroutes = new List<Reroute>();
 
         public bool collapse;
 		public bool showActions = true;

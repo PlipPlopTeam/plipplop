@@ -40,7 +40,7 @@ namespace Behavior.Editor
                 else
                 {
                     collapseText = "Expand";
-                    b.windowRect.height = 65;
+                    b.optimalHeight = 65;
                 }
 
                 b.collapse = EditorGUILayout.Toggle(collapseText, b.collapse);

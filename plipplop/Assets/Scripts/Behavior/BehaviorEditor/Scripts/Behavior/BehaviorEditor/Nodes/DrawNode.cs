@@ -51,6 +51,7 @@ namespace Behavior.Editor
 
         public Vector2 GetEntryPosition(Node b)
         {
+			if (b == null) return Vector2.zero;
             return new Vector2(b.windowRect.x - handleSize * 1.5f, b.windowRect.y + b.windowRect.height / 2f);
         }
     }
