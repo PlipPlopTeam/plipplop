@@ -336,10 +336,11 @@ namespace Behavior
             void UserInput(Event e)
             {
                 if (settings.currentGraph == null) return;
-
+				/*
                 if (e.isScrollWheel) {
                     zoom += Mathf.Sign(e.delta.y) / 10f;
                 } 
+				*/
                 else if (e.button == 0) // LEFT CLICK
                 {
                     if (e.type == EventType.MouseDown) {
