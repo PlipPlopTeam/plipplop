@@ -35,4 +35,9 @@ public static class Tools
         return list.ElementAt(Random.Range(0, list.Count()));
     }
 
+    public static string Letter(this int value)
+    {
+        string c = char.ConvertFromUtf32(65 + value);
+        return c;
+    }
 }

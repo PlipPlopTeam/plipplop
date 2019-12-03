@@ -21,9 +21,4 @@ public class AIStateTransitionNode : Node
     {
         return graph.AddTransition(this, index);
     }
-
-    public void RemoveTransition(int index)
-    {
-        
-    }
 }

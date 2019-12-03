@@ -26,14 +26,4 @@ public class AIStateNode : Node
     {
         return graph.AddTransition(this);
     }
-
-    public void RemoveTransition()
-    {
-        graph.RemoveTransition(this);
-    }
-
-    public AIStateTransitionNode GetTransition()
-    {
-        return graph.GetTransition(this);
-    }
 }
