@@ -7,7 +7,6 @@ namespace Behavior.NPC
 	{
 		public override void Execute(NonPlayableCharacter target)
         {
-			Debug.Log("fdzadzadaz");
 			if (Game.i.aiZone.GetPaths().Length == 0) return;
 
             NonPlayableCharacter npc = target;
