@@ -209,6 +209,21 @@ namespace Behavior
                     // Windows
                     for (int i = 0; i < settings.currentGraph.nodes.Count; i++) {
                         Node b = settings.currentGraph.nodes[i];
+
+                        // Out of screen ?
+                        var shiftedPos = b.windowRect.Shift(-scrollPos);
+                        var shiftedPosBottomRight = shiftedPos.Shift(b.windowRect.size);
+                        if (
+                            (shiftedPosBottomRight.x < 0 && shiftedPos.x < 0) ||
+                            (shiftedPosBottomRight.y < 0 && shiftedPos.y < 0) ||
+
+                            (shiftedPosBottomRight.x > Screen.width && shiftedPos.x > Screen.width) ||
+                            (shiftedPosBottomRight.y > Screen.height && shiftedPos.y > Screen.height) 
+                        ) {
+                            continue;
+                        }
+
+
                         b.RefreshRectSize(zoom);
                         if (b.windowRect.Contains(mousePosition)) {
                             b.windowRect = GUI.Window(i, b.windowRect.Shift(-scrollPos), DrawNodeWindow, b.windowTitle + ":" + b.id, activeStyle).Shift(scrollPos);
@@ -260,7 +275,7 @@ namespace Behavior
                     // Curves
                     foreach (Node n in settings.currentGraph.nodes) n.DrawCurve();
                 }
-                EditorGUILayout.LabelField(string.Format("x:{0} y:{1} zoom:{2}", scrollPos.x, scrollPos.y, zoom));
+                EditorGUILayout.LabelField(string.Format("x:{0} y:{1} fps:{2}", scrollPos.x, scrollPos.y, Mathf.Round(1f/Time.deltaTime)));
                 EndWindows();
                 GUILayout.EndArea();
             }
