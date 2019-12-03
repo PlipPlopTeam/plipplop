@@ -48,12 +48,54 @@ public class NonPlayableCharacter : MonoBehaviour
 
 	public System.Action onWaitEnded;
 
+	void Awake()
+	{
+		behaviorGraph = Instantiate(behaviorGraph);
+		behaviorGraph.SetTarget(this);
+
+		skeleton = GetComponentInChildren<Skeleton>();
+		sight = GetComponent<Sight>();
+		look = GetComponent<FocusLook>();
+		agent = GetComponent<NavMeshAgent>();
+		animator = GetComponentInChildren<Animator>();
+		range = GetComponent<Range>();
+		emo = GetComponent<EmotionRenderer>();
+		emo.Load();
+		agentMovement = GetComponent<AgentMovement>();
+		agentMovement.animator = animator;
+		face = GetComponent<Face>();
+	}
+
+	public void Start()
+	{
+		// Load Character Clothes Slots
+		foreach (Clothes.ESlot suit in (Clothes.ESlot[])Clothes.ESlot.GetValues(typeof(Clothes.ESlot)))
+			clothes.Add(suit, null);
+
+		// Load Character Stats
+		stats.Add(EStat.BOREDOM, 50f);
+		stats.Add(EStat.TIREDNESS, 50f);
+		stats.Add(EStat.HUNGER, 75f);
+
+		// Debug Equip Items
+		Equip(Game.i.library.headClothes.PickRandom());
+		Equip(Game.i.library.torsoClothes.PickRandom());
+		Equip(Game.i.library.legsClothes.PickRandom());
+
+		behaviorGraph.Start();
+	}
+
 	public void Update()
 	{
         StartWaiting();
         behaviorGraph.Update();
 		if(carried != null && carried.Mass() > strength) StartCarrying(carried);
         StartCollecting();
+	}
+
+	public void FixedUpdate()
+	{
+		behaviorGraph.FixedUpdate();
 	}
 
 	private void StartWaiting()
@@ -83,42 +125,7 @@ public class NonPlayableCharacter : MonoBehaviour
 		onWaitEnded = end;
 	}
 
-	void Awake()
-	{
-		behaviorGraph = Instantiate(behaviorGraph);
-        behaviorGraph.SetTarget(this);
 
-		skeleton = GetComponentInChildren<Skeleton>();
-		sight = GetComponent<Sight>();
-		look = GetComponent<FocusLook>();
-		agent = GetComponent<NavMeshAgent>();
-		animator = GetComponentInChildren<Animator>();
-		range = GetComponent<Range>();
-		emo = GetComponent<EmotionRenderer>();
-		emo.Load();
-		agentMovement = GetComponent<AgentMovement>();
-		agentMovement.animator = animator;
-		face = GetComponent<Face>();
-	}
-
-	public void Start()
-	{
-		// Load Character Clothes Slots
-		foreach (Clothes.ESlot suit in (Clothes.ESlot[]) Clothes.ESlot.GetValues(typeof(Clothes.ESlot)))
-			clothes.Add(suit, null);
-
-		// Load Character Stats
-		stats.Add(EStat.BOREDOM, 50f);
-		stats.Add(EStat.TIREDNESS, 50f);
-		stats.Add(EStat.HUNGER, 75f);
-		
-		// Debug Equip Items
-		Equip(Game.i.library.headClothes.PickRandom());
-        Equip(Game.i.library.torsoClothes.PickRandom());
-        Equip(Game.i.library.legsClothes.PickRandom());
-
-        behaviorGraph.Start();
-	}
 
 	[ContextMenu("SetHungerTwentyFive")]
 	public void SetHungerTwentyFive()

@@ -8,10 +8,7 @@ namespace Behavior.NPC
 		public override void Execute(NonPlayableCharacter target)
         {
             NonPlayableCharacter npc = target;
-            if (npc != null && npc.activity != null)
-			{
-				npc.activity.Enter(npc);
-			}
+            if (npc != null && npc.activity != null) npc.activity.Enter(npc);
 		}
 	}
 }
