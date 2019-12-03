@@ -210,6 +210,10 @@ namespace Behavior
                     for (int i = 0; i < settings.currentGraph.nodes.Count; i++) {
                         Node b = settings.currentGraph.nodes[i];
 
+                        if (b is RerouteNode) {
+                            continue;
+                        }
+
                         // Out of screen ?
                         var shiftedPos = b.windowRect.Shift(-scrollPos);
                         var shiftedPosBottomRight = shiftedPos.Shift(b.windowRect.size);

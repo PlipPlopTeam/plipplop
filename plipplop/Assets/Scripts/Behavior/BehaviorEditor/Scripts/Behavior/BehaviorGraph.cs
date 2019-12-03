@@ -15,7 +15,6 @@ namespace Behavior.Editor
         [HideInInspector] [SerializeField] public List<AIStateNode> stateNodes = new List<AIStateNode>();
         [HideInInspector] [SerializeField] public List<AIStateTransitionNode> transitionNodes = new List<AIStateTransitionNode>();
         [HideInInspector] [SerializeField] public int idCount;
-        [HideInInspector] [SerializeField] public Dictionary<AIStateNode, AIStateTransitionNode> stateTransitions = new Dictionary<AIStateNode, AIStateTransitionNode>();
         [HideInInspector] [SerializeField] public AIState initialState;
 
         [HideInInspector] [SerializeField] public Vector2 editorScrollPosition;
@@ -199,7 +198,6 @@ namespace Behavior.Editor
             if (HasTransition(node)) return GetTransition(node);
 
             AIStateTransitionNode retVal = new AIStateTransitionNode();
-            stateTransitions[node] = retVal;
             retVal.id = idCount;
             idCount++;
             return retVal;
@@ -227,17 +225,12 @@ namespace Behavior.Editor
 
         public AIStateTransitionNode GetTransition(AIStateNode node)
         {
-            return stateTransitions.ContainsKey(node) ? stateTransitions[node] : null;
+            return transitions.Find(o => o.id == node.exitNodes[0]);
         }
 
         public AIStateTransitionNode GetTransition(int i)
         {
             return transitions.Find(o => o.id == i);
-        }
-
-        public void RemoveTransition(AIStateNode node)
-        {
-            stateTransitions[node] = null;
         }
     }
 }
