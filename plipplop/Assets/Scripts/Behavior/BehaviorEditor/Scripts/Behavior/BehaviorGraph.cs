@@ -90,7 +90,6 @@ namespace Behavior.Editor
 
         public void Start()
         {
-			Debug.Log("START");
             currentStateNode = (AIStateNode) GetNodeWithIndex(BehaviorEditor.startNodeId);
 			currentStateNode.currentAIState = initialState;
 			GetCurrentAIState().OnEnter(target);
@@ -105,41 +104,59 @@ namespace Behavior.Editor
         {
 			GetCurrentAIState().FixedTick(target);
             CheckAndFollowTransition();
-
-
         }
 
         public void CheckAndFollowTransition()
         {
-            if (!stateTransitions.ContainsKey(currentStateNode)) return;
+			// IF THE CURRENT HAS AN EXIT
+			if (currentStateNode.exitNodes.Count == 0) return;
+			var node = GetNodeWithIndex(currentStateNode.exitNodes[0]);
+		
+			// If the exit node is another state
+			if(node is AIStateNode)
+			{
+				GoToNode((AIStateNode)node);
+				return;
+			}
 
-            var transition = stateTransitions[currentStateNode];
+			// If the exit node is a transition
+			if (!(node is AIStateTransitionNode)) return;
+			var transition = (AIStateTransitionNode)node;
 
-            // Following the path of conditions until we hit a state, or something empty
-            for(; ;) {
+			// Following the path of conditions until we hit a state, or something empty
+			for (; ;)
+			{
                 if (transition.disable) return;
+
                 bool check = true;
-                foreach (Condition c in transition.conditions) {
+                foreach (Condition c in transition.conditions)
+				{
                     if (!c.Check(GetCurrentAIState(), target)) check = false;
                 }
+
                 Node nextItem;
-                if (check) {
+                if (check)
+				{
                     nextItem = transition.outputIfTrue;
                 }
-                else {
+                else
+				{
                     nextItem = transition.outputIfFalse;
                 }
-                if (nextItem == null) {
+                if (nextItem == null)
+				{
                     Debug.LogError("Node " + nextItem + " transitions to a NULL state after condition check");
                 }
-                else {
-                    if (nextItem is AIStateNode) {
+                else
+				{
+                    if (nextItem is AIStateNode)
+					{
                         GoToNode((AIStateNode)nextItem);
                         return;
                     }
-                    else {
-                        var nextTransition = (AIStateTransitionNode)nextItem;
-                       // transition = nextTransition.transRef.
+                    else
+					{
+                        transition = (AIStateTransitionNode)nextItem;
                     }
                 }
             }
@@ -148,7 +165,6 @@ namespace Behavior.Editor
         public void GoToNode(AIStateNode node)
         {
 			if (currentStateNode == node) return;
-
 			GetCurrentAIState().OnExit(target);
             currentStateNode = node;
             GetCurrentAIState().OnEnter(target);
