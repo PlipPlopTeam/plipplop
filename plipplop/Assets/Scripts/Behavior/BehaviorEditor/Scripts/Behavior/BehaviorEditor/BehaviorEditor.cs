@@ -36,6 +36,7 @@ namespace Behavior
             Vector2 scrollStartPos;
             static BehaviorEditor editor;
             int nodesToDelete;
+            Node.Reroute draggedReroute = null;
             SerializedObject serializedGraph;
 
             public enum EUserActions
@@ -108,16 +109,6 @@ namespace Behavior
                           Mathf.Clamp(node.windowRect.y, 0f, all.height)
                     );
                 }
-                /*
-                if (currentAIStateManager != null)
-                {
-                    if (previousAIState != currentAIStateManager.currentAIState)
-                    {
-                        Repaint();
-                        previousAIState = currentAIStateManager.currentAIState;
-                    }
-                }
-                */
 
                 if (settings.currentGraph.AreSomeNodesPendingDeletion()) {
                     settings.currentGraph.DeleteWindowsThatNeedTo();
@@ -234,15 +225,6 @@ namespace Behavior
                         }
                         else {
                             b.windowRect = GUI.Window(i, b.windowRect.Shift(-scrollPos), DrawNodeWindow, b.windowTitle + ":" + b.id, style).Shift(scrollPos);
-                        }
-                    }
-
-                    // Reroute
-                    foreach (var node in settings.currentGraph.nodes) {
-                        for (int i = 0; i < node.exitNodes.Count; i++) {
-                            foreach (var reroute in node.GetReroutes(i)) {
-                                Handles.CircleHandleCap(0, reroute.position-scrollPos, Quaternion.identity, rerouteDragDistance, EventType.Repaint);
-                            }
                         }
                     }
 
@@ -371,16 +353,24 @@ namespace Behavior
                     if (e.type == EventType.MouseDrag) {
                         if (!settings.MAKE_TRANSITION) {
                             var mousePosition2 = new Vector2(mousePosition.x, mousePosition.y);
-                            foreach (var node in settings.currentGraph.nodes) {
-                                for (int i = 0; i < node.exitNodes.Count; i++) {
-                                    foreach (var reroute in node.GetReroutes(i)) {
-                                        if (Vector2.Distance(reroute.position, mousePosition2) < rerouteDragDistance) {
-                                            reroute.position = mousePosition2;
+                            if (draggedReroute != null) {
+                                draggedReroute.position = mousePosition2;
+                            }
+                            else {
+                                foreach (var node in settings.currentGraph.nodes) {
+                                    for (int i = 0; i < node.exitNodes.Count; i++) {
+                                        foreach (var reroute in node.GetReroutes(i)) {
+                                            if (Vector2.Distance(reroute.position, mousePosition2) < rerouteDragDistance) {
+                                                draggedReroute = reroute;
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
+                    }
+                    else if (e.type == EventType.MouseUp) {
+                        draggedReroute = null;
                     }
                 }
                 else if (e.button == 1) // RIGHT CLICK

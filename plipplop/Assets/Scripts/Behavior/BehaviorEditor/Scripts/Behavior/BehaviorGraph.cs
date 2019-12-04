@@ -130,6 +130,7 @@ namespace Behavior.Editor
                 bool check = true;
                 foreach (Condition c in transition.conditions)
 				{
+                    if (c == null) continue; // No condition set
                     if (!c.Check(GetCurrentAIState(), target)) check = false;
                 }
 
