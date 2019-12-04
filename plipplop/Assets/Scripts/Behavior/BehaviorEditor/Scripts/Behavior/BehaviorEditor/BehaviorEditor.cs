@@ -122,25 +122,12 @@ namespace Behavior
             #region GUI Methods
             void OnGUI()
             { 
-                serializedGraph.Update();
-
-                /*
-                if (Selection.activeTransform != null)
-                {
-                    currentAIStateManager = Selection.activeTransform.GetComponentInChildren<AIStateManager>();
-                    if (prevAIStateManager != currentAIStateManager)
-                    {
-                        prevAIStateManager = currentAIStateManager;
-                        Repaint();
-                    }
-                }
-                */
-
                 Event e = Event.current;
                 mousePosition = e.mousePosition + scrollPos;
 
                 UserInput(e);
 
+                
                 DrawWindows();
                 DrawMiniMap();
 
@@ -160,29 +147,37 @@ namespace Behavior
                 }
 
                 Repaint();
-                SaveChanges();
             }
             
             void SaveChanges()
             {
-            //    Debug.Log("SAVING ========");
+                //Debug.Log("SAVING ========");
                 var newSG = new SerializedObject(settings.currentGraph);
                 var it = newSG.GetIterator();
-                for(; ;) {
+
+                for (; ;) {
                     try {
                         if (!it.NextVisible(true) && !it.NextVisible(false)) {
+                            //Debug.Log("Nothing visible, breaking");
                             break;
                         }
                     }
-                    catch (System.InvalidOperationException) {
+                    catch (System.InvalidOperationException e) {
+                        //Debug.Log("Invalid operation, stopped at "+e.ToString());
                         break;
                     }
+                    //Debug.Log("Found property " + it.propertyPath);
                     if (serializedGraph.FindProperty(it.propertyPath) != null) {
-            //            Debug.Log("Saving (if different) " + it.propertyPath);
+                        //Debug.Log("Saving (if different) " + it.propertyPath);
                         serializedGraph.CopyFromSerializedPropertyIfDifferent(it);
-                    } 
+                    }
+                    //Debug.Log("Next...");
                 }
                 serializedGraph.ApplyModifiedProperties();
+                serializedGraph.Update();
+
+                // 😭
+                EditorUtility.SetDirty(settings.currentGraph);
             }
 
             void DrawWindows()
@@ -482,6 +477,7 @@ namespace Behavior
                     menu.AddItem(new GUIContent("Add condition"), false, ContextCallback, EUserActions.ADD_TRANSITION_NODE);
                     menu.AddSeparator("");
                     menu.AddItem(new GUIContent("Reset Panning"), false, ContextCallback, EUserActions.RESET_PAN);
+                    menu.AddItem(new GUIContent("Save graph"), false, SaveChanges);
                 }
                 else {
                     menu.AddDisabledItem(new GUIContent("Add AIState"));

@@ -13,11 +13,11 @@ namespace Behavior.Editor
     {
 
         // This part will be saved
-        [HideInInspector] [SerializeField] public List<AIStateNode> stateNodes = new List<AIStateNode>();
-        [HideInInspector] [SerializeField] public List<AIStateTransitionNode> transitionNodes = new List<AIStateTransitionNode>();
-        [HideInInspector] [SerializeField] public int idCount;
-        [HideInInspector] [SerializeField] public AIState initialState;
-        [HideInInspector] [SerializeField] public Vector2 editorScrollPosition;
+        [SerializeField] public List<AIStateNode> stateNodes = new List<AIStateNode>();
+        [SerializeField] public List<AIStateTransitionNode> transitionNodes = new List<AIStateTransitionNode>();
+        [SerializeField] public int idCount;
+        [SerializeField] public AIState initialState;
+        [SerializeField] public Vector2 editorScrollPosition;
 
         // These are helpers
         [HideInInspector] public List<AIStateTransitionNode> transitions { get { return nodes.Where(o => { return (o is AIStateTransitionNode); }).Select(o => { return (AIStateTransitionNode)o; }).ToList(); } }
