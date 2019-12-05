@@ -40,4 +40,11 @@ public static class Geometry
             new Vector2(rect.width, rect.height)
         );
     }
+
+    public class PositionAndRotation
+    {
+        public Vector3 position = new Vector3();
+        public Vector3 euler { get { return rotation.eulerAngles; } }
+        public Quaternion rotation = new Quaternion();
+    }
 }

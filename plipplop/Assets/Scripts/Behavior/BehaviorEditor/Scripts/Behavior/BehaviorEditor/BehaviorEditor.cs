@@ -162,7 +162,7 @@ namespace Behavior
                             break;
                         }
                     }
-                    catch (System.InvalidOperationException e) {
+                    catch (System.InvalidOperationException) {
                         //Debug.Log("Invalid operation, stopped at "+e.ToString());
                         break;
                     }

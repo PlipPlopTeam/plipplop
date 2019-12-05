@@ -1,6 +1,8 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System;
 using UnityEditor;
 using UnityEngine;
+using static Geometry;
 
 public class Aperture
 {
@@ -38,6 +40,10 @@ public class Aperture
 
     AperturePreset settings;
     Vector3 defaultTarget;
+
+    // Static cameras
+    List<PositionAndRotation> staticObjectives = new List<PositionAndRotation>();
+    List<bool> lookAtTarget = new List<bool>();
 
     // SPEED
     Vector3 lastTargetPosition;
@@ -85,6 +91,28 @@ public class Aperture
     {
         cam = Camera.main;
         Load(s);
+    }
+
+    public int DisableLookAt()
+    {
+        lookAtTarget.Add(false);
+        return lookAtTarget.Count - 1;
+    }
+
+    public void RestoreLookAt(int index)
+    {
+        lookAtTarget.RemoveAt(index);
+    }
+
+    public int EnableLookAt()
+    {
+        lookAtTarget.Add(true);
+        return lookAtTarget.Count - 1;
+    }
+
+    public bool IsLookAtEnabled()
+    {
+        return lookAtTarget.Count == 0 || lookAtTarget[lookAtTarget.Count - 1];
     }
 
     public Vector3 Forward()
@@ -225,16 +253,20 @@ public class Aperture
 		// Rotation
 		ComputeRotation();
 		UpdateRotation();
+
 		// Position
 		ComputePosition(targetPosition);
 		UpdatePosition(catchUpSpeed);
-		EnsureMinimalCameraDistance();
+		if (GetStaticObjective() == null) 
+            EnsureMinimalCameraDistance();
+
 		// CameraFX
 		ComputeFieldOfView(targetPosition);
 		UpdateFieldOfView();
 		Apply();
 		ShakeUpdate();
 		lastTargetPosition = targetPosition;
+		rotationMultiplier = 1f;
 	}
 
 	public void ComputeHorizontalDistanceToTarget(Vector3 targetPosition)
@@ -256,7 +288,11 @@ public class Aperture
 
     public void ComputeRotation()
     {
-		rotationAroundTarget.destination = -new Vector3(Mathf.Sin(Mathf.Deg2Rad * hAngle), 0f, Mathf.Cos(Mathf.Deg2Rad * hAngle));
+        if (GetStaticObjective() != null) {
+            rotationAroundTarget.destination = GetStaticObjective().euler;
+            return;
+        }
+        rotationAroundTarget.destination = -new Vector3(Mathf.Sin(Mathf.Deg2Rad * hAngle), 0f, Mathf.Cos(Mathf.Deg2Rad * hAngle));
     }
 
     public void ComputeFieldOfView(Vector3 targetPosition)
@@ -274,6 +310,11 @@ public class Aperture
 
     public void ComputePosition(Vector3 targetPosition)
     {
+        if (GetStaticObjective() != null) {
+            position.destination = GetStaticObjective().position;
+            return;
+        }
+
         // Dark pythagorian mathematics allow us to position the camera correctly
         Vector2 a = Vector3.Scale(new Vector3(0f, 1f, 1f), position.destination);
         Vector2 b = Vector3.Scale(new Vector3(0f, 1f, 1f), targetPosition);
@@ -355,11 +396,13 @@ public class Aperture
     public void Apply()
     {
         // Look at 
-        cam.transform.forward = Vector3.Lerp(
-            cam.transform.forward, 
-            -(position.current - (target.position + settings.heightOffset * Vector3.up)).normalized, 
-            settings.lookAtLerp * Time.fixedDeltaTime
-        );
+        if (IsLookAtEnabled()) {
+            cam.transform.forward = Vector3.Lerp(
+                cam.transform.forward,
+                -(position.current - (target.position + settings.heightOffset * Vector3.up)).normalized,
+                settings.lookAtLerp * Time.fixedDeltaTime
+            );
+        }
 
         cam.transform.position = position.current;
         cam.fieldOfView = fieldOfView.current;
@@ -390,5 +433,32 @@ public class Aperture
     {
         cam.enabled = false;
         newCam.enabled = true;
+    }
+
+    public PositionAndRotation AddStaticPosition(Transform transform)
+    {
+        return AddStaticPosition(new PositionAndRotation() { position = transform.position, rotation = transform.rotation });
+    }
+
+    public PositionAndRotation AddStaticPosition(Vector3 position, Quaternion rotation)
+    {
+        return AddStaticPosition(new PositionAndRotation() { position = position, rotation = rotation });
+    }
+
+    public PositionAndRotation AddStaticPosition(PositionAndRotation positionAndRotation)
+    {
+        staticObjectives.Add(positionAndRotation);
+        return positionAndRotation;
+
+    }
+
+    public void RemoveStaticPosition(PositionAndRotation positionAndRotation)
+    {
+        staticObjectives.RemoveAll(o => o.Equals(positionAndRotation));
+    }
+
+    public PositionAndRotation GetStaticObjective()
+    {
+        return staticObjectives.Count > 0 ? staticObjectives[staticObjectives.Count - 1] : null;
     }
 }

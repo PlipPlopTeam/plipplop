@@ -219,13 +219,14 @@ public class AperturePresetEditor : Editor
         inheritableProperties[basicParameters].Add("additionalAngle");
         inheritableProperties[basicParameters].Add("distance");
         inheritableProperties[basicParameters].Add("cameraRotateAroundSensivity");
-        inheritableProperties[basicParameters].Add("cameraRotateAboveSensivity");
+		inheritableProperties[basicParameters].Add("cameraRotateAboveSensivity");
 
-        inheritableProperties[interpolations].Add("fovLerp");
+		inheritableProperties[interpolations].Add("fovLerp");
         inheritableProperties[interpolations].Add("lateralFollowLerp");
         inheritableProperties[interpolations].Add("longitudinalFollowLerp");
         inheritableProperties[interpolations].Add("verticalFollowLerp");
         inheritableProperties[interpolations].Add("rotationSpeed");
+		inheritableProperties[interpolations].Add("lookAtLerp");
 
 		inheritableProperties[alignment].Add("alignAfter");
 		inheritableProperties[alignment].Add("angleConsideredAlign");

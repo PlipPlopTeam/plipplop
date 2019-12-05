@@ -1070,6 +1070,7 @@ MonoBehaviour:
   emo: {fileID: 0}
   range: {fileID: 0}
   face: {fileID: 0}
+  player: {fileID: 0}
   valuable: {fileID: 0}
   activity: {fileID: 0}
   chair: {fileID: 0}
@@ -1078,15 +1079,6 @@ MonoBehaviour:
   previousActivity: {fileID: 0}
   behaviorGraph: {fileID: 11400000, guid: ee00b1876b0dd44458b113f86b39cd5c, type: 2}
   strength: 5
-  headStuff:
-  - {fileID: 11400000, guid: 4cd060643a2092548bd7715ff7713c27, type: 2}
-  - {fileID: 11400000, guid: 04cbd019de821fd4695fb2bd25573e63, type: 2}
-  torsoStuff:
-  - {fileID: 11400000, guid: 970cabd9e85554c40bdf195bd13faacc, type: 2}
-  - {fileID: 11400000, guid: ad7a70b4714f24643a532135ae68c747, type: 2}
-  legsStuff:
-  - {fileID: 11400000, guid: 0a3ff8548e7692449b0b0c058864818f, type: 2}
-  - {fileID: 11400000, guid: 6d4a75928957d1446bc6875ba3088477, type: 2}
   hasWaited: 0
 --- !u!114 &1684127437
 MonoBehaviour:
@@ -1102,8 +1094,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   path: {fileID: 0}
   settings:
-    speed: 5
-    maxSpeed: 6
+    speed: 3
+    maxSpeed: 4
     velocityLerpSpeed: 1
     navTreshold: 0.25
     minimumCarrySpeed: 1

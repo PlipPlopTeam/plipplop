@@ -5,12 +5,12 @@ namespace Behavior.NPC
 	[CreateAssetMenu(menuName = "Behavior/Condition/NonPlayableCharacter/ThingIsSet")]
 	public class ThingIsSet : Condition
 	{
-		public NonPlayableCharacter.ESubject thing;
+		public NonPlayableCharacter.ESubject subject;
 		public override bool Check(AIState state, NonPlayableCharacter target)
 		{
 			NonPlayableCharacter npc = target;
 			if (npc == null) return false;
-			switch(thing)
+			switch(subject)
 			{
 				case NonPlayableCharacter.ESubject.PLAYER: return npc.player != null;
 				case NonPlayableCharacter.ESubject.VALUABLE: return npc.valuable != null;
