@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 
-
 namespace Behavior.NPC
 {
 	[CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/ConsumeFood")]
