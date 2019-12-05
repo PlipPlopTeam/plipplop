@@ -177,7 +177,7 @@ namespace Behavior
                 serializedGraph.Update();
 
                 // 😭
-                EditorUtility.SetDirty(settings.currentGraph);
+                //EditorUtility.SetDirty(settings.currentGraph);
             }
 
             void DrawWindows()
