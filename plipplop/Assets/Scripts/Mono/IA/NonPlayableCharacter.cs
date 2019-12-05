@@ -160,6 +160,10 @@ public class NonPlayableCharacter : MonoBehaviour
 	{
 		return carryable == carried;
 	}
+	public bool IsCarrying()
+	{
+		return carried != null;
+	}
 
 	public void StartCarrying(ICarryable carryable)
 	{
