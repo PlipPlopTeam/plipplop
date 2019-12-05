@@ -9,6 +9,8 @@ public class Cheats : Dictionary<string, System.Action>
     {
         Add("RESET", ResetScene);
         Add("ZIK", delegate { SoundPlayer.Play("bgm_test"); });
+        Add("GLUE", delegate { Game.i.player.Paralyze(); });
+        Add("FREE", delegate { Game.i.player.Deparalyze(); });
         Add("FAMINE", SetAllHunderToHundred);
     }
 
