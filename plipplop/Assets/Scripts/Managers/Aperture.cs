@@ -235,6 +235,7 @@ public class Aperture
 		Apply();
 		ShakeUpdate();
 		lastTargetPosition = targetPosition;
+		rotationMultiplier = 1f;
 	}
 
 	public void ComputeHorizontalDistanceToTarget(Vector3 targetPosition)

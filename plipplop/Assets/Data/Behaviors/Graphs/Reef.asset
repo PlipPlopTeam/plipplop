@@ -1,0 +1,193 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 711dbd0dcc0707448ad710a82f0aa6b6, type: 3}
+  m_Name: Reef
+  m_EditorClassIdentifier: 
+  stateNodes:
+  - id: -1
+    drawNode: {fileID: 11400000, guid: 3de6cb72c5d54a842957b3d8754294e2, type: 2}
+    windowRect:
+      serializedVersion: 2
+      x: 307.5
+      y: 538.5
+      width: 300
+      height: 64
+    windowTitle: START
+    optimalWidth: 300
+    optimalHeight: 64
+    comment: 
+    isAssigned: 0
+    showDescription: 0
+    isOnCurrent: 0
+    graph: {fileID: 11400000}
+    reroutes: []
+    collapse: 0
+    showActions: 1
+    showEnterExit: 0
+    previousCollapse: 0
+    s_exitNodes: 01000000
+    s_hasExitNodes: 01
+    currentAIState: {fileID: 0}
+  - id: 1
+    drawNode: {fileID: 11400000, guid: 3de6cb72c5d54a842957b3d8754294e2, type: 2}
+    windowRect:
+      serializedVersion: 2
+      x: 715
+      y: 359
+      width: 300
+      height: 404
+    windowTitle: State
+    optimalWidth: 300
+    optimalHeight: 404
+    comment: 
+    isAssigned: 1
+    showDescription: 0
+    isOnCurrent: 0
+    graph: {fileID: 11400000}
+    reroutes: []
+    collapse: 0
+    showActions: 1
+    showEnterExit: 1
+    previousCollapse: 0
+    s_exitNodes: 02000000
+    s_hasExitNodes: 01
+    currentAIState: {fileID: 11400000, guid: 1730c82bf75fb0e40ac254b9955a5350, type: 2}
+  - id: 4
+    drawNode: {fileID: 11400000, guid: 3de6cb72c5d54a842957b3d8754294e2, type: 2}
+    windowRect:
+      serializedVersion: 2
+      x: 1488.2002
+      y: 542.6
+      width: 300
+      height: 368
+    windowTitle: State
+    optimalWidth: 300
+    optimalHeight: 368
+    comment: 
+    isAssigned: 1
+    showDescription: 0
+    isOnCurrent: 0
+    graph: {fileID: 11400000}
+    reroutes: []
+    collapse: 0
+    showActions: 1
+    showEnterExit: 1
+    previousCollapse: 0
+    s_exitNodes: 00000000
+    s_hasExitNodes: 00
+    currentAIState: {fileID: 11400000, guid: f3ae6492287d1fd4492cb034bf41277d, type: 2}
+  - id: 7
+    drawNode: {fileID: 11400000, guid: 3de6cb72c5d54a842957b3d8754294e2, type: 2}
+    windowRect:
+      serializedVersion: 2
+      x: 1863.8003
+      y: 159.20001
+      width: 300
+      height: 279
+    windowTitle: State
+    optimalWidth: 300
+    optimalHeight: 279
+    comment: 
+    isAssigned: 1
+    showDescription: 0
+    isOnCurrent: 0
+    graph: {fileID: 11400000}
+    reroutes: []
+    collapse: 0
+    showActions: 0
+    showEnterExit: 1
+    previousCollapse: 0
+    s_exitNodes: 08000000
+    s_hasExitNodes: 01
+    currentAIState: {fileID: 11400000, guid: 79912e4967ec42b40957b207243e7353, type: 2}
+  transitionNodes:
+  - id: 2
+    drawNode: {fileID: 11400000, guid: 02d1192eec6276044a75147866515bb8, type: 2}
+    windowRect:
+      serializedVersion: 2
+      x: 1080.2001
+      y: 493.59998
+      width: 200
+      height: 62
+    windowTitle: Condition
+    optimalWidth: 200
+    optimalHeight: 62
+    comment: 
+    isAssigned: 1
+    showDescription: 0
+    isOnCurrent: 0
+    graph: {fileID: 11400000}
+    reroutes: []
+    collapse: 0
+    showActions: 1
+    showEnterExit: 0
+    previousCollapse: 0
+    s_exitNodes: 0400000005000000
+    s_hasExitNodes: 0101
+    conditions:
+    - {fileID: 11400000, guid: 8ac8c3e184485954392ec8c1cba88ffb, type: 2}
+    disable: 0
+  - id: 5
+    drawNode: {fileID: 11400000, guid: 02d1192eec6276044a75147866515bb8, type: 2}
+    windowRect:
+      serializedVersion: 2
+      x: 1540.2001
+      y: 253.59998
+      width: 200
+      height: 62
+    windowTitle: Condition
+    optimalWidth: 200
+    optimalHeight: 62
+    comment: 
+    isAssigned: 1
+    showDescription: 0
+    isOnCurrent: 0
+    graph: {fileID: 11400000}
+    reroutes: []
+    collapse: 0
+    showActions: 1
+    showEnterExit: 0
+    previousCollapse: 0
+    s_exitNodes: 0700000001000000
+    s_hasExitNodes: 0101
+    conditions:
+    - {fileID: 11400000, guid: 4a87553f746e88f4fb82763d75c9b225, type: 2}
+    disable: 0
+  - id: 8
+    drawNode: {fileID: 11400000, guid: 02d1192eec6276044a75147866515bb8, type: 2}
+    windowRect:
+      serializedVersion: 2
+      x: 2261.4001
+      y: 273
+      width: 200
+      height: 62
+    windowTitle: Condition
+    optimalWidth: 200
+    optimalHeight: 62
+    comment: 
+    isAssigned: 1
+    showDescription: 0
+    isOnCurrent: 0
+    graph: {fileID: 11400000}
+    reroutes: []
+    collapse: 0
+    showActions: 1
+    showEnterExit: 0
+    previousCollapse: 0
+    s_exitNodes: 0700000001000000
+    s_hasExitNodes: 0101
+    conditions:
+    - {fileID: 11400000, guid: 404be86729fc35e42b885d4c132dbc75, type: 2}
+    disable: 0
+  idCount: 10
+  initialState: {fileID: 11400000, guid: 3cb2311cf9b6fcc488a0a7b62dc1b7c3, type: 2}
+  editorScrollPosition: {x: 663.0004, y: 62.39999}
