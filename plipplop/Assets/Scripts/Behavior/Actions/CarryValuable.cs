@@ -17,9 +17,7 @@ namespace Behavior.NPC
                     if(Game.i.player.IsPossessing(c))
                         Game.i.player.PossessBaseController();
                 }
-				npc.agentMovement.ApplyWeightToSpeed(npc.valuable.weight, npc.strength);
-                npc.valuable.transform.position = npc.skeleton.GetCenterOfHands();
-                npc.valuable.transform.forward = npc.transform.forward;
+				npc.Carry(npc.valuable);
 			}
 		}
 	}

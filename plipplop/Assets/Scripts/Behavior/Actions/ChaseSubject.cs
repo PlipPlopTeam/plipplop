@@ -14,22 +14,22 @@ namespace Behavior.NPC
 				switch (subject)
 				{
 					case NonPlayableCharacter.ESubject.PLAYER:
-						if (npc.player != null) npc.look.FocusOn(npc.player.transform);
+						if (npc.player != null) npc.agentMovement.Chase(npc.player.transform);
 						break;
 					case NonPlayableCharacter.ESubject.VALUABLE:
-						if (npc.valuable != null) npc.look.FocusOn(npc.valuable.transform);
+						if (npc.valuable != null) npc.agentMovement.Chase(npc.valuable.transform);
 						break;
 					case NonPlayableCharacter.ESubject.ACTIVITY:
-						if (npc.activity != null) npc.look.FocusOn(npc.activity.transform);
+						if (npc.activity != null) npc.agentMovement.Chase(npc.activity.transform);
 						break;
 					case NonPlayableCharacter.ESubject.CHAIR:
-						if (npc.chair != null) npc.look.FocusOn(npc.chair.transform);
+						if (npc.chair != null) npc.agentMovement.Chase(npc.chair.transform);
 						break;
 					case NonPlayableCharacter.ESubject.FOOD:
-						if (npc.food != null) npc.look.FocusOn(npc.food.transform);
+						if (npc.food != null) npc.agentMovement.Chase(npc.food.transform);
 						break;
 					case NonPlayableCharacter.ESubject.FEEDER:
-						if (npc.feeder != null) npc.look.FocusOn(npc.feeder.transform);
+						if (npc.feeder != null) npc.agentMovement.Chase(npc.feeder.transform);
 						break;
 				}
 			}

@@ -145,7 +145,7 @@ namespace Behavior.Editor
                 }
                 if (nextItem == null)
 				{
-                    Debug.LogError("Node " + nextItem + " transitions to a NULL state after condition check");
+					throw new System.Exception("Node " + transition.id + " transitions to a NULL state after condition check");
                 }
                 else
 				{

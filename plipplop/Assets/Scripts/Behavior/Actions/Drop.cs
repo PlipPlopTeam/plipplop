@@ -10,12 +10,7 @@ namespace Behavior.NPC
         public override void Execute(NonPlayableCharacter target)
         {
             NonPlayableCharacter npc = target;
-            if (npc != null && npc.valuable != null)
-			{
-				npc.valuable.transform.position = npc.skeleton.GetCenterOfHands();
-                npc.agentMovement.ResetSpeed();
-                npc.animator.SetBool("Carrying", false);
-            }
+			if (npc != null) npc.Drop();
         }
     } 
 }
