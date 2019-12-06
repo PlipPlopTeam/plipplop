@@ -34,6 +34,7 @@ namespace Behavior.Editor
             if (index == null) return null;
 
             for (int i = 0; i < nodes.Count; i++) {
+
                 if (nodes[i].id == index)
                     return nodes[i];
             }
@@ -91,7 +92,12 @@ namespace Behavior.Editor
         public void Start()
         {
             currentStateNode = (AIStateNode) GetNodeWithIndex(startNodeId);
+
+			Debug.Log("INITIAL STATE = " + initialState);
+
 			currentStateNode.currentAIState = initialState;
+
+
 			GetCurrentAIState().OnEnter(target);
 		}
 
