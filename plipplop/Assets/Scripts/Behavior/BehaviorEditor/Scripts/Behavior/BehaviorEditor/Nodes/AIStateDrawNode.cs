@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿#if UNITY_EDITOR
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -59,30 +60,36 @@ namespace Behavior.Editor
                 
                 if (!b.collapse)
                 {
+					/*
 					if (b.serializedAIState == null)
 					{
 						SetupReordableLists(b);
 
 					//	SerializedObject serializedAIState = new SerializedObject(b.currentAIState);
 					}
-
+					*/
 					float standard = 100;
-					b.serializedAIState.Update();
+					//b.serializedAIState.Update();
 					b.showActions = EditorGUILayout.Toggle("Show Actions ", b.showActions);
+
 					if (b.showActions)
 					{
+						/*
 						b.onFixedList.DoLayoutList();
 						b.onUpdateList.DoLayoutList();
 						standard += 125 + (b.onUpdateList.count + b.onFixedList.count) * 18;
+						*/
 					}
 					b.showEnterExit = EditorGUILayout.Toggle("Show Enter/Exit ", b.showEnterExit);
 					if (b.showEnterExit)
 					{
+						/*
 						b.onEnterList.DoLayoutList();
 						b.onExitList.DoLayoutList();
 						standard += 125 + (b.onEnterList.count + b.onExitList.count) * 18;
+						*/
 					}
-					b.serializedAIState.ApplyModifiedProperties();
+					//b.serializedAIState.ApplyModifiedProperties();
                     b.optimalHeight = standard;
                 }   
             }
@@ -94,8 +101,8 @@ namespace Behavior.Editor
 
 		void SetupReordableLists(AIStateNode b)
 		{
-
-			b.serializedAIState = new SerializedObject(b.currentAIState);
+			/*
+			//b.serializedAIState = new SerializedObject(b.currentAIState);
 			b.onFixedList = new ReorderableList(b.serializedAIState, b.serializedAIState.FindProperty("onFixed"), true, true, true, true);
 			b.onUpdateList = new ReorderableList(b.serializedAIState, b.serializedAIState.FindProperty("onUpdate"), true, true, true, true);
 			b.onEnterList = new ReorderableList(b.serializedAIState, b.serializedAIState.FindProperty("onEnter"), true, true, true, true);
@@ -105,9 +112,10 @@ namespace Behavior.Editor
 			HandleReordableList(b.onUpdateList, "On Update");
 			HandleReordableList(b.onEnterList, "On Enter");
 			HandleReordableList(b.onExitList, "On Exit");
+			*/
 		}
 
-        void HandleReordableList(ReorderableList list, string targetName)
+		void HandleReordableList(ReorderableList list, string targetName)
         {
             list.drawHeaderCallback = (Rect rect) =>
             {
@@ -129,3 +137,4 @@ namespace Behavior.Editor
 
     }
 }
+#endif

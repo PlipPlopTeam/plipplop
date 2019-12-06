@@ -82,7 +82,8 @@ public class WindVolume : Volume
         }
     }
 
-    new void OnDrawGizmos()
+#if UNITY_EDITOR
+	new void OnDrawGizmos()
     {
         base.OnDrawGizmos();
         Gizmos.matrix = transform.localToWorldMatrix;
@@ -128,4 +129,5 @@ public class WindVolume : Volume
             }
         }
     }
+#endif
 }

@@ -2,8 +2,6 @@
 using Behavior.Editor;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
-using UnityEditorInternal;
 using UnityEngine;
 
 [System.Serializable]
@@ -11,11 +9,11 @@ public class AIStateNode : Node
 {
     public AIState currentAIState;
 
-    public SerializedObject serializedAIState;
-    public ReorderableList onFixedList;
-    public ReorderableList onUpdateList;
-    public ReorderableList onEnterList;
-    public ReorderableList onExitList;
+    //public SerializedObject serializedAIState;
+    public List<AIAction> onFixedList;
+    public List<AIAction> onUpdateList;
+    public List<AIAction> onEnterList;
+    public List<AIAction> onExitList;
 
     public AIStateNode()
     {

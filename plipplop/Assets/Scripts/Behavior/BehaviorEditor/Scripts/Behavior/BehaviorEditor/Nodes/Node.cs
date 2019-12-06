@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEditorInternal;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Behavior.Editor
@@ -24,7 +21,6 @@ namespace Behavior.Editor
         }
 
         public int id;
-        public DrawNode drawNode;
         public Rect windowRect;
         public string windowTitle;
         public float optimalWidth = 100f;
@@ -106,25 +102,9 @@ namespace Behavior.Editor
             s_hasExitNodes = new bool[amount];
         }
 
-        public void DrawWindow()
+		public bool IsStartNode()
         {
-            if(drawNode != null)
-            {
-                drawNode.DrawWindow(this);
-            }
-        }
-
-        public void DrawCurve()
-        {
-            if (drawNode != null)
-            {
-                drawNode.DrawCurve(this);
-            }
-        }
-
-        public bool IsStartNode()
-        {
-            return id == BehaviorEditor.startNodeId;
+            return id == BehaviorGraph.startNodeId;
         }
 
         public virtual void SetGraph(BehaviorGraph graph)
@@ -168,6 +148,25 @@ namespace Behavior.Editor
             list.Sort((a, b) => -a.beaconIndex.CompareTo(b.beaconIndex));
 
             return list;
-        }
-    }
+		}
+
+#if UNITY_EDITOR
+		public DrawNode drawNode;
+		public void DrawWindow()
+		{
+			if (drawNode != null)
+			{
+				drawNode.DrawWindow(this);
+			}
+		}
+
+		public void DrawCurve()
+		{
+			if (drawNode != null)
+			{
+				drawNode.DrawCurve(this);
+			}
+		}
+#endif
+	}
 }

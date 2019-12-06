@@ -18,7 +18,8 @@ public abstract class Volume : MonoBehaviour
     bool isInside = false;
     internal Vector3 offset = new Vector3();
 
-    internal virtual void OnDrawGizmos()
+#if UNITY_EDITOR
+	internal virtual void OnDrawGizmos()
     {
         Gizmos.matrix = transform.localToWorldMatrix;
         Gizmos.color = color;
@@ -28,8 +29,9 @@ public abstract class Volume : MonoBehaviour
         Gizmos.color = color;
         Gizmos.matrix = transform.worldToLocalMatrix;
     }
+#endif
 
-    internal Vector3 GetSize()
+	internal Vector3 GetSize()
     {
         return new Vector3(width, height, length);
     }
