@@ -28,7 +28,7 @@ IF NOT EXIST %unityPath% set unityPath="C:\Program Files\Unity\Hub\Editor\2019.2
 IF NOT EXIST %unityPath% GOTO NOUNITY
 echo Building using %unityPath%...
 
-%unityPath% -batchmode -projectPath . -buildWindows64Player "../AUTOBUILD/%date%/Build.exe" -nographics  -quit
+%unityPath% -projectPath . -batchmode -buildWindows64Player "../AUTOBUILD/%date%/Build.exe" -quit
 
 IF ERRORLEVEL 1 (
 	color 0c
