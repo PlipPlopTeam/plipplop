@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System.IO;
+using System.Text;
 
 namespace Behavior
 {
@@ -16,10 +18,8 @@ namespace Behavior
             bool clickedOnWindow;
             Node selectedNode;
 
-            public static Settings settings;
             public static float zoom = 1f;
             public static readonly int startNodeId = -1;
-
             readonly static float minWindowSize = 50f;
             readonly static float minimapSize = 64f;
             readonly static float minimapMargin = 5f;
@@ -32,8 +32,6 @@ namespace Behavior
             Rect mouseRect = new Rect(0, 0, 1, 1);
             readonly Rect all = new Rect(0, 0, 5000, 5000);
 
-            GUIStyle style;
-            GUIStyle activeStyle;
             public static Vector2 scrollPos;
             Vector2 scrollStartPos;
             static BehaviorEditor editor;
@@ -41,14 +39,27 @@ namespace Behavior
             Node.Reroute draggedReroute = null;
             SerializedObject serializedGraph;
 
-            public enum EUserActions
+			public static BehaviorGraph currentGraph;
+			public AIStateDrawNode stateNode;
+			public TransitionDrawNode transitionNode;
+			public bool isMakingTransition;
+			public bool transitionType = false;
+
+            readonly string CACHE_PATH = "Assets/Editor/Cache";
+            Cache cache;
+
+			GUISkin skin;
+			GUIStyle style;
+			GUIStyle activeStyle;
+			
+			public enum EUserActions
             {
                 ADD_STATE,
                 ADD_TRANSITION_NODE,
                 DELETE_NODE,
                 COMMENT_NODE,
-                MAKE_TRANSITION_TRUE,
-                MAKE_TRANSITION_FALSE,
+                isMakingTransition_TRUE,
+                isMakingTransition_FALSE,
                 RESET_PAN
             }
             #endregion
@@ -59,43 +70,67 @@ namespace Behavior
             {
                 editor = EditorWindow.GetWindow<BehaviorEditor>();
                 editor.minSize = new Vector2(800, 600);
-
             }
-
+				
             private void OnEnable()
             {
-                settings = Resources.Load("Settings") as Settings;
-                style = settings.skin.window;
-                activeStyle = settings.activeSkin.window; 
-                serializedGraph = new SerializedObject(settings.currentGraph);
-                minimapTexture = new Texture2D((int)minimapSize, (int)minimapSize);
-                scrollPos = settings.currentGraph.editorScrollPosition;
+				// LOADING CACHE
 
+                cache = AssetDatabase.LoadAssetAtPath(Path.Combine(CACHE_PATH, "BehaviorEditor.asset"), typeof(Cache)) as Cache;
+                    
+                if (cache == null) {
+                    var pathBuilder = new StringBuilder();
+                    foreach(var dir in CACHE_PATH.Split('/')) {
+                        pathBuilder.Append(dir);
+                        var path = pathBuilder.ToString();
+                        Debug.Log(path);
+                        if (!Directory.Exists(path)) {
+                            Debug.Log("Creating directory " + path);
+                            Directory.CreateDirectory(path);
+                        }
+                        pathBuilder.Append("/");
+                    }
+
+					cache = CreateInstance<Cache>();
+					AssetDatabase.CreateAsset(cache, Path.Combine(CACHE_PATH , "BehaviorEditor.asset"));
+					AssetDatabase.SaveAssets();
+                    Debug.Log("Created cache for the behavior editor");
+                }
+				currentGraph = cache.graph;
+
+                if (currentGraph != null) {
+                    OnGraphIsLoaded();
+                }
+                minimapTexture = new Texture2D((int)minimapSize, (int)minimapSize);
             }
             #endregion
 
             private void Update()
-            {               
-                // Safety check 
-                if (settings.currentGraph.GetNodeWithIndex(startNodeId) == null) {
-                    var node = (AIStateNode)settings.AddNodeOnGraph(settings.stateNode, 300, 64, "START", Vector3.one*0.5f);
+            { 
+				if (currentGraph == null || skin == null) return;
+				
+				// Safety check 
+                if (currentGraph.GetNodeWithIndex(startNodeId) == null) {
+                    var node = (AIStateNode)AddNodeOnGraph(stateNode, 300, 64, "START", Vector3.one*0.5f);
                     node.id = startNodeId;
-                    node.currentAIState = settings.currentGraph.initialState;
-                    if (!settings.currentGraph.initialState) {
-                        Debug.LogError("No initial state set for " + settings.currentGraph + ", this should be fixed urgently.");
+                    node.currentAIState = currentGraph.initialState;
+                    if (!currentGraph.initialState) {
+                        Debug.LogError("No initial state set for " + currentGraph + ", this should be fixed urgently.");
                     }
                 }
                 else {
                     // Making sure we have only 1 start node
                     bool pastFirstNode = false;
-                    foreach(var node in settings.currentGraph.nodes) {
+                    foreach(var node in currentGraph.nodes) {
                         if (node.id == startNodeId) {
-                            if (!pastFirstNode) {
+                            if (!pastFirstNode)
+							{
                                 pastFirstNode = true;
                                 continue;
                             }
-                            else {
-                                settings.currentGraph.DeleteNode(node.id);
+                            else
+							{
+                                currentGraph.DeleteNode(node.id);
                             } 
                         }
                     }
@@ -103,8 +138,8 @@ namespace Behavior
 
                 // Updating all nodes
 
-                foreach (var node in settings.currentGraph.nodes) {
-                    node.SetGraph(settings.currentGraph);
+                foreach (var node in currentGraph.nodes) {
+                    node.SetGraph(currentGraph);
                     node.windowRect.size = new Vector2(Mathf.Max(node.windowRect.size.x, minWindowSize), Mathf.Max(node.windowRect.size.y, minWindowSize));
                     node.windowRect.position = new Vector2(
                           Mathf.Clamp(node.windowRect.x, 0f, all.width),
@@ -112,40 +147,70 @@ namespace Behavior
                     );
                 }
 
-                if (settings.currentGraph.AreSomeNodesPendingDeletion()) {
-                    settings.currentGraph.DeleteWindowsThatNeedTo();
+                if (currentGraph.AreSomeNodesPendingDeletion()) {
+                    currentGraph.DeleteWindowsThatNeedTo();
                     Repaint();
                     nodesToDelete = 0;
                 }
 
-                settings.currentGraph.editorScrollPosition = scrollPos;
+                currentGraph.editorScrollPosition = scrollPos;
             }
 
-            #region GUI Methods
-            void OnGUI()
-            { 
+			public Node AddNodeOnGraph(DrawNode type, float width, float height, string title, Vector3 pos)
+			{
+				Node baseNode = type is TransitionDrawNode ? (Node)new AIStateTransitionNode() : (Node)new AIStateNode();
+				baseNode.drawNode = type;
+				baseNode.optimalWidth = width;
+				baseNode.optimalHeight = height;
+				baseNode.windowTitle = title;
+				baseNode.windowRect.x = pos.x;
+				baseNode.windowRect.y = pos.y;
+				baseNode.RefreshRectSize();
+
+				if (baseNode is AIStateNode)
+				{
+					currentGraph.stateNodes.Add((AIStateNode)baseNode);
+				}
+				else if (baseNode is AIStateTransitionNode)
+				{
+					currentGraph.transitionNodes.Add((AIStateTransitionNode)baseNode);
+				}
+				baseNode.id = currentGraph.idCount;
+				currentGraph.idCount++;
+
+				return baseNode;
+			}
+
+			#region GUI Methods
+			void OnGUI()
+            {
+				skin = GUI.skin;
+				style = new GUIStyle(skin.window);
+				activeStyle = new GUIStyle(style);
+				activeStyle.normal = activeStyle.hover;
+
                 Event e = Event.current;
                 mousePosition = e.mousePosition + scrollPos;
 
-                UserInput(e);
+                if (currentGraph != null) UserInput(e);
 
-                
+
                 DrawWindows();
-                DrawMiniMap();
+                if (currentGraph != null) DrawMiniMap();
 
                 if (e.type == EventType.MouseDrag) {
-                    if (settings.currentGraph != null) Repaint();
+                    if (currentGraph != null) Repaint();
                 }
 
                 if (GUI.changed) {
-                    settings.currentGraph.DeleteWindowsThatNeedTo();
+                    currentGraph.DeleteWindowsThatNeedTo();
                 }
 
-                if (settings.MAKE_TRANSITION) {
-                    var nodeFrom = settings.currentGraph.GetNodeWithIndex(transitFromId);
+                if (isMakingTransition) {
+                    var nodeFrom = currentGraph.GetNodeWithIndex(transitFromId);
                     var from = nodeFrom.drawNode.GetExitPosition(nodeFrom, currentTransitionSlotIndex);
 
-                    DrawConnection(from - scrollPos, new Vector2(mousePosition.x, mousePosition.y) -scrollPos, nodeFrom is AIStateNode ? Color.white : settings.TRANSITION_TYPE ? Color.green : Color.red);
+                    DrawConnection(from - scrollPos, new Vector2(mousePosition.x, mousePosition.y) -scrollPos, nodeFrom is AIStateNode ? Color.white : transitionType ? Color.green : Color.red);
                 }
 
                 Repaint();
@@ -154,7 +219,7 @@ namespace Behavior
             void SaveChanges()
             {
                 //Debug.Log("SAVING ========");
-                var newSG = new SerializedObject(settings.currentGraph);
+                var newSG = new SerializedObject(currentGraph);
                 var it = newSG.GetIterator();
 
                 for (; ;) {
@@ -182,16 +247,28 @@ namespace Behavior
                 //EditorUtility.SetDirty(settings.currentGraph);
             }
 
+            void OnGraphIsLoaded()
+            {
+                serializedGraph = new SerializedObject(currentGraph);
+                scrollPos = currentGraph.editorScrollPosition;
+            }
+
             void DrawWindows()
             {
-                GUILayout.BeginArea(all, style);
+                GUILayout.BeginArea(all, skin.window);
                 BeginWindows();
                 EditorGUILayout.LabelField("Assign Graph:", GUILayout.Width(100));
-                settings.currentGraph = (BehaviorGraph)EditorGUILayout.ObjectField(settings.currentGraph, typeof(BehaviorGraph), false, GUILayout.Width(200));
-                if (settings.currentGraph != null) {
+                bool graphWasNull = currentGraph == null;
+                currentGraph = (BehaviorGraph)EditorGUILayout.ObjectField(currentGraph, typeof(BehaviorGraph), false, GUILayout.Width(200));
+                if (currentGraph != null) {
+                    if (graphWasNull) {
+                        OnGraphIsLoaded();
+                    }
+
+                    cache.graph = currentGraph;
                     // Windows
-                    for (int i = 0; i < settings.currentGraph.nodes.Count; i++) {
-                        Node b = settings.currentGraph.nodes[i];
+                    for (int i = 0; i < currentGraph.nodes.Count; i++) {
+                        Node b = currentGraph.nodes[i];
 
                         // Out of screen ?
                         var shiftedPos = b.windowRect.Shift(-scrollPos);
@@ -213,7 +290,7 @@ namespace Behavior
                         } 
                         else if (b.drawNode is AIStateDrawNode) {
                             var bS = (AIStateNode)b;
-                            if (bS.currentAIState != null && bS.currentAIState.id == settings.currentGraph.GetCurrentAIStateID()){
+                            if (bS.currentAIState != null && bS.currentAIState.id == currentGraph.GetCurrentAIStateID()){
                                 b.windowRect = GUI.Window(i, b.windowRect.Shift(-scrollPos), DrawNodeWindow, b.windowTitle+":"+b.id, activeStyle).Shift(scrollPos);
                             }
                             else {
@@ -226,13 +303,13 @@ namespace Behavior
                     }
 
                     // Handles
-                    foreach (var node in settings.currentGraph.nodes) {
+                    foreach (var node in currentGraph.nodes) {
                         // Enter node
-                        if (settings.MAKE_TRANSITION) {
+                        if (isMakingTransition) {
                             if (Handles.Button(new Vector2(node.windowRect.x - DrawNode.handleSize * 1.5f, node.windowRect.y + node.windowRect.height/2f) - scrollPos, Quaternion.identity, DrawNode.handleSize, DrawNode.handleSize, ButtonCap)) {
-                                var origin = settings.currentGraph.GetNodeWithIndex(transitFromId);
-                                origin.RemoveExitNode(origin is AIStateNode || settings.TRANSITION_TYPE  ? 0 : 1);
-                                if (settings.TRANSITION_TYPE) MakeTransitionIfTrue(node.id);
+                                var origin = currentGraph.GetNodeWithIndex(transitFromId);
+                                origin.RemoveExitNode(origin is AIStateNode || transitionType  ? 0 : 1);
+                                if (transitionType) MakeTransitionIfTrue(node.id);
                                 else MakeTransitionIfFalse(node.id);
                             }
                         }
@@ -246,8 +323,8 @@ namespace Behavior
                             var exitNodeHeight = node.drawNode.GetExitPosition(node, i);
                             Handles.color = node is AIStateNode ? Color.white : i == 0 ? Color.green : Color.red;
                             if (Handles.Button(new Vector2(node.windowRect.x + node.windowRect.width + DrawNode.handleSize * 1.5f, exitNodeHeight.y) - scrollPos, Quaternion.identity, DrawNode.handleSize, DrawNode.handleSize, ButtonCap)) {
-                                settings.MAKE_TRANSITION = true;
-                                settings.TRANSITION_TYPE = (i == 0);
+                                isMakingTransition = true;
+                                transitionType = (i == 0);
                                 transitFromId = node.id;
                                 currentTransitionSlotIndex = i;
                             }
@@ -256,7 +333,7 @@ namespace Behavior
                     }
 
                     // Curves
-                    foreach (Node n in settings.currentGraph.nodes) n.DrawCurve();
+                    foreach (Node n in currentGraph.nodes) n.DrawCurve();
                 }
                 EditorGUILayout.LabelField(string.Format("x:{0} y:{1} fps:{2}", scrollPos.x, scrollPos.y, Mathf.Round(1f/Time.deltaTime)));
                 EndWindows();
@@ -285,7 +362,7 @@ namespace Behavior
                 minimapTexture.SetPencilColor(Color.black);
 
 
-                foreach (var node in settings.currentGraph.nodes) {
+                foreach (var node in currentGraph.nodes) {
                     var position = new Vector2(
                         (node.windowRect.x / all.width),
                         1f - (node.windowRect.y / all.height)
@@ -327,13 +404,13 @@ namespace Behavior
 
             void DrawNodeWindow(int id)
             {
-                settings.currentGraph.nodes[id].DrawWindow();
+                currentGraph.nodes[id].DrawWindow();
                 GUI.DragWindow();
             }
 
             void UserInput(Event e)
             {
-                if (settings.currentGraph == null) return;
+                if (currentGraph == null) return;
 				/*
                 if (e.isScrollWheel) {
                     zoom += Mathf.Sign(e.delta.y) / 10f;
@@ -342,19 +419,19 @@ namespace Behavior
                 else if (e.button == 0) // LEFT CLICK
                 {
                     if (e.type == EventType.MouseDown) {
-                        if (settings.MAKE_TRANSITION) {
-                            if (settings.TRANSITION_TYPE) MakeTransitionIfTrue();
+                        if (isMakingTransition) {
+                            if (transitionType) MakeTransitionIfTrue();
                             else MakeTransitionIfFalse();
                         }
                     }
                     if (e.type == EventType.MouseDrag) {
-                        if (!settings.MAKE_TRANSITION) {
+                        if (!isMakingTransition) {
                             var mousePosition2 = new Vector2(mousePosition.x, mousePosition.y);
                             if (draggedReroute != null) {
                                 draggedReroute.position = mousePosition2;
                             }
                             else {
-                                foreach (var node in settings.currentGraph.nodes) {
+                                foreach (var node in currentGraph.nodes) {
                                     for (int i = 0; i < node.exitNodes.Count; i++) {
                                         foreach (var reroute in node.GetReroutes(i)) {
                                             if (Vector2.Distance(reroute.position, mousePosition2) < rerouteDragDistance) {
@@ -373,8 +450,8 @@ namespace Behavior
                 else if (e.button == 1) // RIGHT CLICK
                 {
                     if (e.type == EventType.MouseDown) {
-                        if (!settings.MAKE_TRANSITION) RightClick(e);
-                        else settings.MAKE_TRANSITION = false;
+                        if (!isMakingTransition) RightClick(e);
+                        else isMakingTransition = false;
                     }
                 }
                 else if (e.button == 2) // MIDDLE CLICK
@@ -396,8 +473,8 @@ namespace Behavior
                 scrollPos -= diff;
 
                 scrollPos = new Vector2(
-                    Mathf.Clamp(scrollPos.x, 0f, all.width),
-                    Mathf.Clamp(scrollPos.y, 0f, all.height)
+                    Mathf.Clamp(scrollPos.x, 0f, all.width-Screen.width-1),
+                    Mathf.Clamp(scrollPos.y, 0f, all.height - Screen.height - 1)
                 );
             }
 
@@ -409,10 +486,10 @@ namespace Behavior
             void RightClick(Event e)
             {
                 clickedOnWindow = false;
-                for (int i = 0; i < settings.currentGraph.nodes.Count; i++) {
-                    if (settings.currentGraph.nodes[i].windowRect.Contains(mousePosition)) {
+                for (int i = 0; i < currentGraph.nodes.Count; i++) {
+                    if (currentGraph.nodes[i].windowRect.Contains(mousePosition)) {
                         clickedOnWindow = true;
-                        selectedNode = settings.currentGraph.nodes[i];
+                        selectedNode = currentGraph.nodes[i];
                         break;
                     }
                 }
@@ -426,23 +503,23 @@ namespace Behavior
                 clickedOnWindow = false;
                 if (forceSelection.HasValue) {
                     clickedOnWindow = true;
-                    var nodes = new List<Node>(settings.currentGraph.nodes);
+                    var nodes = new List<Node>(currentGraph.nodes);
                     selectedNode = nodes.Find(o => o.id == forceSelection.Value);
                 }
                 else {
-                    for (int i = 0; i < settings.currentGraph.nodes.Count; i++) {
-                        if (settings.currentGraph.nodes[i].windowRect.Contains(mousePosition)) {
+                    for (int i = 0; i < currentGraph.nodes.Count; i++) {
+                        if (currentGraph.nodes[i].windowRect.Contains(mousePosition)) {
                             clickedOnWindow = true;
-                            selectedNode = settings.currentGraph.nodes[i];
+                            selectedNode = currentGraph.nodes[i];
                             break;
                         }
                     }
                 }
 
                 if (clickedOnWindow) {
-                    settings.MAKE_TRANSITION = false;
+                    isMakingTransition = false;
                     if (selectedNode.id != transitFromId) {
-                        Node transitionOriginNode = settings.currentGraph.GetNodeWithIndex(transitFromId);
+                        Node transitionOriginNode = currentGraph.GetNodeWithIndex(transitFromId);
 
                         if (selectedNode == null) {
                             Debug.LogWarning("I cannot create a transition to an empty node!");
@@ -474,7 +551,7 @@ namespace Behavior
             {
                 GenericMenu menu = new GenericMenu();
                 menu.AddSeparator("");
-                if (settings.currentGraph != null) {
+                if (currentGraph != null) {
                     menu.AddItem(new GUIContent("Add state"), false, ContextCallback, EUserActions.ADD_STATE);
                     menu.AddItem(new GUIContent("Add condition"), false, ContextCallback, EUserActions.ADD_TRANSITION_NODE);
                     menu.AddSeparator("");
@@ -499,8 +576,8 @@ namespace Behavior
                     menu.AddItem(new GUIContent("Add condition"), false, ContextCallback, EUserActions.ADD_TRANSITION_NODE);
                 }
                 else if (selectedNode is AIStateTransitionNode) {
-                    menu.AddItem(new GUIContent("Make transition when TRUE..."), false, ContextCallback, EUserActions.MAKE_TRANSITION_TRUE);
-                    menu.AddItem(new GUIContent("Make transition when FALSE..."), false, ContextCallback, EUserActions.MAKE_TRANSITION_FALSE);
+                    menu.AddItem(new GUIContent("Make transition when TRUE..."), false, ContextCallback, EUserActions.isMakingTransition_TRUE);
+                    menu.AddItem(new GUIContent("Make transition when FALSE..."), false, ContextCallback, EUserActions.isMakingTransition_FALSE);
                 }
 
                 // REroutes
@@ -508,7 +585,7 @@ namespace Behavior
                 for (int i = 0; i < selectedNode.exitNodes.Count; i++) {
                     int index = i;
                     var exit = selectedNode.exitNodes[index];
-                    var exitNode = settings.currentGraph.GetNodeWithIndex(exit);
+                    var exitNode = currentGraph.GetNodeWithIndex(exit);
                     if (exit.HasValue) {
                         menu.AddItem(new GUIContent("Add a reroute on output " + index.Letter()), false, delegate {
                             selectedNode.AddReroute(index).position = (exitNode.windowRect.position + selectedNode.windowRect.position) * 0.5f;
@@ -557,7 +634,7 @@ namespace Behavior
                 EUserActions a = (EUserActions)o;
                 switch (a) {
                     case EUserActions.ADD_STATE:
-                        settings.AddNodeOnGraph(settings.stateNode, 300, 200, "State", mousePosition);
+                        AddNodeOnGraph(stateNode, 300, 200, "State", mousePosition);
                         break;
                     case EUserActions.ADD_TRANSITION_NODE:
                         AddTransitionNode(selectedNode is AIStateNode ? (AIStateNode)selectedNode : null, mousePosition);
@@ -566,17 +643,17 @@ namespace Behavior
                         break;
                     case EUserActions.DELETE_NODE:
                         nodesToDelete++;
-                        settings.currentGraph.DeleteNode(selectedNode.id);
+                        currentGraph.DeleteNode(selectedNode.id);
                         break;
-                    case EUserActions.MAKE_TRANSITION_TRUE:
+                    case EUserActions.isMakingTransition_TRUE:
                         transitFromId = selectedNode.id;
-                        settings.MAKE_TRANSITION = true;
-                        settings.TRANSITION_TYPE = true;
+                        isMakingTransition = true;
+                        transitionType = true;
                         break;
-                    case EUserActions.MAKE_TRANSITION_FALSE:
+                    case EUserActions.isMakingTransition_FALSE:
                         transitFromId = selectedNode.id;
-                        settings.MAKE_TRANSITION = true;
-                        settings.TRANSITION_TYPE = false;
+                        isMakingTransition = true;
+                        transitionType = false;
                         break;
                     case EUserActions.RESET_PAN:
                         ResetScroll();
@@ -585,16 +662,16 @@ namespace Behavior
 
             }
 
-            public static Node AddTransitionNode(Vector3 pos)
+            public Node AddTransitionNode(Vector3 pos)
             {
                 return AddTransitionNode(null, pos);
             }
 
-            public static Node AddTransitionNode(AIStateNode originNode, Vector3 pos)
+            public Node AddTransitionNode(AIStateNode originNode, Vector3 pos)
             {
-                Node transNode = settings.AddNodeOnGraph(settings.transitionNode, 200, 50, "Condition", pos);
+                Node transNode = AddNodeOnGraph(transitionNode, 200, 50, "Condition", pos);
                 if (originNode != null) {
-                    AIStateTransitionNode t = settings.currentGraph.AddTransition(originNode);
+                    AIStateTransitionNode t = BehaviorEditor.currentGraph.AddTransition(originNode);
                 }
                 return transNode;
             }

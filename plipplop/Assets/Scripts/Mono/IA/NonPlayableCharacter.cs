@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using Behavior.Editor;
-using UnityEditor;
 using UnityEngine.AI;
 
+#if UNITY_EDITOR
+	using UnityEditor;
+#endif
 
 public class NonPlayableCharacter : MonoBehaviour
 {
