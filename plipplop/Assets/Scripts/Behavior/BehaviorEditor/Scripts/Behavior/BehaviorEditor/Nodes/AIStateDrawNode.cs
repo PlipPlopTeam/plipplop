@@ -1,10 +1,8 @@
-﻿#if UNITY_EDITOR
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditorInternal;
-
+#endif
 using System;
 using System.IO;
 
@@ -12,7 +10,8 @@ namespace Behavior.Editor
 {
     public class AIStateDrawNode : DrawNode
     {
-        public override void DrawWindow(Node node)
+		#if UNITY_EDITOR
+		public override void DrawWindow(Node node)
         {
             if (!(node is AIStateNode)) {
                 Debug.LogError("Attempted to draw a non-AIstate node with a AIStateDrawNode");
@@ -134,7 +133,6 @@ namespace Behavior.Editor
       //      BehaviorEditor.ClearWindowsFromList(dependencies);
         //    dependencies.Clear();
         }
-
-    }
+		#endif
+	}
 }
-#endif

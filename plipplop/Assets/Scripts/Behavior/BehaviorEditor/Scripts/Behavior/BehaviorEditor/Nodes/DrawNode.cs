@@ -19,7 +19,7 @@ namespace Behavior.Editor
                 if (b.exitNodes[i] == null) continue;
 
 
-                Node targetNode = BehaviorEditor.settings.currentGraph.GetNodeWithIndex(b.exitNodes[i]);
+                Node targetNode = BehaviorEditor.currentGraph.GetNodeWithIndex(b.exitNodes[i]);
 
                 List<Vector2> points = new List<Vector2>();
 
