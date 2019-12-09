@@ -6,14 +6,16 @@ namespace Behavior.NPC
 	public class GoAroundInRange : AIAction
     {
 		public float range;
-		public float minRange;
-		public float maxRange;
 
-		public override void Execute(StateManager state)
-		{
-			NonPlayableCharacter npc = (NonPlayableCharacter)state;
-			if(npc != null)
+		public bool overrideMovement;
+		public AgentMovement.Settings overrideMovementSettings;
+
+		public override void Execute(NonPlayableCharacter target)
+        {
+            NonPlayableCharacter npc = target;
+            if (npc != null)
 			{
+				if (overrideMovement) npc.agentMovement.settings = overrideMovementSettings;
 				npc.agentMovement.GoThere(
 					new Vector3(
 						npc.transform.position.x + Random.Range(-range, range),

@@ -15,7 +15,7 @@ MonoBehaviour:
   overrides:
   - property: canBeControlled
     isOverriden: 1
-  - property: resetable
+  - property: canBeReset
     isOverriden: 1
   - property: fieldOfView
     isOverriden: 1
@@ -41,9 +41,17 @@ MonoBehaviour:
     isOverriden: 1
   - property: lookAtLerp
     isOverriden: 1
-  - property: cameraAlignSpeed
+  - property: alignAfter
     isOverriden: 1
-  - property: cameraResetAlignSpeed
+  - property: angleConsideredAlign
+    isOverriden: 1
+  - property: minTargetVelocity
+    isOverriden: 1
+  - property: alignMultiplierByUser
+    isOverriden: 1
+  - property: alignMultiplierByStick
+    isOverriden: 1
+  - property: alignMultiplierByVelocity
     isOverriden: 1
   - property: speedEffectMultiplier
     isOverriden: 1
@@ -59,34 +67,35 @@ MonoBehaviour:
     isOverriden: 1
   - property: targetConstraintLocalOffset
     isOverriden: 1
-  - property: cameraResetAfterTime
-    isOverriden: 1
   fallback: {fileID: 0}
   canBeControlled: 1
-  resetable: 1
-  fieldOfView: 60
-  heightOffset: 1.5
-  additionalAngle: 5
+  canBeReset: 1
+  fieldOfView: 55
+  heightOffset: 1.3
+  additionalAngle: 7.8
   distance:
-    min: 5
-    max: 9
-  cameraRotateAroundSensivity: 90
+    min: 4.5
+    max: 8
+  cameraRotateAroundSensivity: 95
   cameraRotateAboveSensivity: 20
   fovLerp: 20
-  lateralFollowLerp: 40
+  lateralFollowLerp: 20
   longitudinalFollowLerp: 6
   verticalFollowLerp: 5
-  rotationSpeed: 3
-  lookAtLerp: 7
-  cameraAlignSpeed: 3
-  cameraResetAlignSpeed: 6
-  cameraResetAfterTime: 10
-  speedEffectMultiplier: 1
-  catchUpSpeedMultiplier: 1
-  angleIncrementOnSpeed: 30
-  maximumCatchUpSpeed: 10
+  rotationSpeed: 1000
+  lookAtLerp: 15
+  alignAfter: 15
+  angleConsideredAlign: 30
+  minTargetVelocity: 2
+  alignMultiplierByUser: 80
+  alignMultiplierByStick: 80
+  alignMultiplierByVelocity: 2
+  speedEffectMultiplier: 1.5
+  catchUpSpeedMultiplier: 1.8
+  angleIncrementOnSpeed: 2
+  maximumCatchUpSpeed: 15
   absoluteBoundaries:
-    min: 5
-    max: 10
+    min: 3
+    max: 8
   constraintToTarget: 0
   targetConstraintLocalOffset: {x: 0, y: 0, z: 0}

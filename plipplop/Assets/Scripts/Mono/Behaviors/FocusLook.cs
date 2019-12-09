@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class FocusLook : MonoBehaviour
 {
-    public Transform head;
-    public Vector3 adjustment;
-    public float angleMax = 60f;
-    public float speed = 10f;
+	public Transform head;
+	public Vector3 adjustment;
+	public float angleMax = 60f;
+	public float speed = 10f;
+	private bool targetOut = false;
+	public bool isTargetOut { get { return targetOut; } }
 
     [HideInInspector] public bool isFocused;
     Transform transformTarget;
@@ -32,12 +34,14 @@ public class FocusLook : MonoBehaviour
         else if(positionTarget != Vector3.zero) 
             targetDirection = (positionTarget - head.position).normalized;
 
-        if(Vector3.Angle(targetDirection, transform.forward) > angleMax) 
-            targetDirection = transform.forward;
-
+		if (Vector3.Angle(targetDirection, transform.forward) > angleMax)
+		{
+			targetOut = true;
+			targetDirection = transform.forward;
+		}
+		else targetOut = false;
 
         currentDirection = Vector3.Lerp(currentDirection, targetDirection, Time.deltaTime * speed);
-
         head.forward = currentDirection;
         head.Rotate(adjustment);
     }

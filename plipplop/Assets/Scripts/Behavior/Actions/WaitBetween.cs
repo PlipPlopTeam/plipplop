@@ -8,7 +8,7 @@ namespace Behavior.NPC
 	public class WaitBetween : AIAction
 	{
 		public Vector2 range;
-		public override void Execute(StateManager state)
+		public override void Execute(NonPlayableCharacter target)
 		{
 			// Prevent Vector2 settings from breaking the Rand.Range
 			if (range.x < range.y)
@@ -16,7 +16,7 @@ namespace Behavior.NPC
 			else if (range.y < range.x)
 				range.y = range.x + 0.1f;
 
-			NonPlayableCharacter npc = (NonPlayableCharacter)state;
+			NonPlayableCharacter npc = target;
 			if (npc != null) npc.Wait(Random.Range(range.x, range.y));
 		}
 	}

@@ -18,7 +18,7 @@ public class AperturePreset : ScriptableObject
 
     // Switches
     [HideInInspector] public bool canBeControlled = true;
-    [HideInInspector] public bool resetable = true;
+    [HideInInspector] public bool canBeReset = true;
 
     // Basic parameters
     [HideInInspector] [Range(2f, 200f)] public float fieldOfView = 75f;
@@ -26,21 +26,27 @@ public class AperturePreset : ScriptableObject
     [HideInInspector] [Range(0f, 40f)] public float additionalAngle = 20f;
     [HideInInspector] public Aperture.Range distance;
     [HideInInspector] public float cameraRotateAroundSensivity = 4f;
-    [HideInInspector] public float cameraRotateAboveSensivity = 2f;
+	[HideInInspector] public float cameraRotateAboveSensivity = 2f;
 
-    // Interpolations
-    [HideInInspector] public float fovLerp = 1f;
+
+	// Interpolations
+	[HideInInspector] public float fovLerp = 1f;
     [HideInInspector] public float lateralFollowLerp = 1f;
     [HideInInspector] public float longitudinalFollowLerp = 1f;
     [HideInInspector] public float verticalFollowLerp = 10f;
     [HideInInspector] public float rotationSpeed = 1f;
     [HideInInspector] public float lookAtLerp = 4f;
-    [HideInInspector] public float cameraAlignSpeed = 3f;
-    [HideInInspector] public float cameraResetAlignSpeed = 3f;
-    [HideInInspector] public float cameraResetAfterTime = 2f;
 
-    // Speed FX
-    [HideInInspector] [Range(0.1f, 10)] public float speedEffectMultiplier = 1f;
+	// Align
+	[HideInInspector] public float alignAfter = 2f;
+	[HideInInspector] public float angleConsideredAlign = 10f;
+	[HideInInspector] public float minTargetVelocity = 0.1f;
+	[HideInInspector] public float alignMultiplierByUser = 2f;
+	[HideInInspector] public float alignMultiplierByStick = 50f;
+	[HideInInspector] public float alignMultiplierByVelocity = 2f;
+
+	// Speed FX
+	[HideInInspector] [Range(0.1f, 10)] public float speedEffectMultiplier = 1f;
     [HideInInspector] [Range(1f, 20f)] public float catchUpSpeedMultiplier = 1f;
     [HideInInspector] [Range(0f, 400f)] public float angleIncrementOnSpeed = 10f;
 

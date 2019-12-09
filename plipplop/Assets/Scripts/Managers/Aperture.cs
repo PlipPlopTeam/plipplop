@@ -1,6 +1,8 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System;
 using UnityEditor;
 using UnityEngine;
+using static Geometry;
 
 public class Aperture
 {
@@ -39,6 +41,10 @@ public class Aperture
     AperturePreset settings;
     Vector3 defaultTarget;
 
+    // Static cameras
+    List<PositionAndRotation> staticObjectives = new List<PositionAndRotation>();
+    List<bool> lookAtTarget = new List<bool>();
+
     // SPEED
     Vector3 lastTargetPosition;
     float hDistanceToTarget = 0f;
@@ -50,10 +56,14 @@ public class Aperture
 
     // Current angle on Y axis
     float hAngle;
-    // Current angle on X axis
-    float vAngle;
+	float hAngleAmount;
+	// Current angle on X axis
+	float vAngle;
     float vAngleAmount;
-    bool isCameraBeingRepositioned;
+	float rotationMultiplier;
+	bool isCameraBeingRepositioned;
+	bool isCameraIdle = false;
+	bool isTargetMoving = false;
     float lastCameraInput;
 
     bool freeze = false;
@@ -83,6 +93,28 @@ public class Aperture
         Load(s);
     }
 
+    public int DisableLookAt()
+    {
+        lookAtTarget.Add(false);
+        return lookAtTarget.Count - 1;
+    }
+
+    public void RestoreLookAt(int index)
+    {
+        lookAtTarget.RemoveAt(index);
+    }
+
+    public int EnableLookAt()
+    {
+        lookAtTarget.Add(true);
+        return lookAtTarget.Count - 1;
+    }
+
+    public bool IsLookAtEnabled()
+    {
+        return lookAtTarget.Count == 0 || lookAtTarget[lookAtTarget.Count - 1];
+    }
+
     public Vector3 Forward()
     {
         return new Vector3(cam.transform.forward.x, 0f, cam.transform.forward.z).normalized;
@@ -100,13 +132,13 @@ public class Aperture
 
     public void Rotate(Vector3 rot)
     {
-        hAngle += rot.y * settings.cameraRotateAroundSensivity * Time.deltaTime;
+		hAngleAmount += rot.y * settings.cameraRotateAroundSensivity * Time.deltaTime;
         vAngleAmount = Mathf.Lerp(vAngleAmount, Mathf.Lerp(vAngleAmount, rot.x, settings.cameraRotateAboveSensivity * Time.deltaTime), Mathf.Abs(rot.x));
 
-        if (rot.magnitude > 0f) {
-            lastCameraInput = Time.time;
-            isCameraBeingRepositioned = false;
-        }
+        if (rot.magnitude > 0f)
+		{
+			ResetIdleTime();
+		}
     }
     public void Rotate(float x = 0f, float y = 0f, float z = 0f)
     {
@@ -115,68 +147,129 @@ public class Aperture
 
     public void Update()
     {
-        if (Time.time - lastCameraInput > settings.cameraResetAfterTime) {
-            Realign();
-        }
-    }
+		if (Time.time - lastCameraInput > settings.alignAfter && !isCameraIdle)
+		{
+			isCameraIdle = true;
+			Realign();
+		}
+	}
+
+	public void UserAlign()
+	{
+		if(settings.canBeReset)
+		{
+			Realign();
+		}
+	}
 
     public void Realign()
     {
-        isCameraBeingRepositioned = true;
+		rotationMultiplier = settings.alignMultiplierByUser;
+		isCameraBeingRepositioned = true;
     }
+	public void Aligned()
+	{
+		rotationMultiplier = 1f;
+		isCameraBeingRepositioned = false;
+		ResetIdleTime();
+	}
 
-    public void FixedUpdate()
-    {
-        if (freeze) return;
-        if (settings.constraintToTarget) {
-            cam.transform.parent = target;
-            cam.transform.localPosition = settings.targetConstraintLocalOffset;
-            cam.transform.forward = target.forward;
-            return;
-        }
-        else cam.transform.parent = null;
-        
-        var targetPosition = target ? target.position : defaultTarget;
+	public void ResetIdleTime()
+	{
+		isCameraBeingRepositioned = false;
+		isCameraIdle = false;
+		lastCameraInput = Time.time;
+	}
 
-        // Camera trying to get in my back
-        var targetMovementVelocity = Vector3.Distance(targetPosition, lastTargetPosition);
-		if(isCameraBeingRepositioned || targetMovementVelocity > 0f)
+	public void FixedUpdate()
+	{
+		if (freeze) return;
+		if (settings.constraintToTarget)
 		{
-			hAngle = Vector3.SignedAngle(Vector3.forward, target.forward, Vector3.up);
-			vAngleAmount = 0f;
+			cam.transform.parent = target;
+			cam.transform.localPosition = settings.targetConstraintLocalOffset;
+			cam.transform.forward = target.forward;
+			return;
+		}
+		else cam.transform.parent = null;
 
-			// Lerps here are kinda useless they don't have a huge impact on the real speed
-			//Mathf.Lerp(hAngle, 0f, Time.fixedDeltaTime * settings.cameraResetSpeed);
-			//Mathf.Lerp(vAngleAmount, 0f, Time.fixedDeltaTime * settings.cameraResetSpeed);
+		var targetPosition = target ? target.position : defaultTarget;
+
+		// Camera trying to get in my back
+		var targetMovementVelocity = Vector3.Distance(targetPosition, lastTargetPosition);
+		if (!isTargetMoving)
+		{
+			if (targetMovementVelocity > settings.minTargetVelocity)
+			{
+				isTargetMoving = true;
+				// START MOVING
+			}
+		}
+		else
+		{
+			if (targetMovementVelocity <= settings.minTargetVelocity)
+			{
+				hAngle = Vector3.SignedAngle(Vector3.forward, Forward(), Vector3.up);
+				isTargetMoving = false;
+				// STOP MOVING
+			}
 		}
 
+		// ALIGNING
+		if (isCameraBeingRepositioned)
+		{
+			hAngle = Vector3.SignedAngle(Vector3.forward, target.forward, Vector3.up);
+			float a = Vector3.SignedAngle(Forward(), target.forward, Vector3.up);
+			if (Mathf.Abs(a) < settings.angleConsideredAlign) Aligned();
+		}
+		// TARGET IS MOVING
+		else if (isTargetMoving && Mathf.Abs(hAngleAmount) <= 0f)
+		{
+			ResetIdleTime();
+			float sForwardAngle = Vector3.SignedAngle(Vector3.forward, target.forward, Vector3.up);
+			float diffForwardAngle = Mathf.Abs(Vector3.SignedAngle(Forward(), target.forward, Vector3.up));
+			float angDifMultiplier = 1f;
+			if (diffForwardAngle >= 90f || diffForwardAngle <= -90f)
+			{
+				angDifMultiplier = 1f - Mathf.Abs(1f - (diffForwardAngle / 90f));
+			}
+			rotationMultiplier = targetMovementVelocity * settings.alignMultiplierByVelocity * angDifMultiplier;
+			hAngle = sForwardAngle;
+			hAngle += hAngleAmount * settings.alignMultiplierByStick;
+		}
+		else
+		{
+			hAngle += hAngleAmount;
+		}
+		hAngleAmount = 0f;
+
 		float vAngleAmplitude = 40f - settings.additionalAngle;
-        vAngle = vAngleAmount * vAngleAmplitude;
+		vAngle = vAngleAmount * vAngleAmplitude;
 
-        // Calculating "catch up"
-        ComputeHorizontalDistanceToTarget(targetPosition);
-        float catchUpSpeed = GetCatchUpSpeed();
+		// Calculating "catch up"
+		ComputeHorizontalDistanceToTarget(targetPosition);
+		float catchUpSpeed = GetCatchUpSpeed();
 
-        // Rotation
-        ComputeRotation();
-        UpdateRotation();
+		// Rotation
+		ComputeRotation();
+		UpdateRotation();
 
-        // Position
-        ComputePosition(targetPosition);
-        UpdatePosition(catchUpSpeed);
-        EnsureMinimalCameraDistance();
+		// Position
+		ComputePosition(targetPosition);
+		UpdatePosition(catchUpSpeed);
+		if (GetStaticObjective() == null) 
+            EnsureMinimalCameraDistance();
 
-        // CameraFX
-        ComputeFieldOfView(targetPosition);
-        UpdateFieldOfView();
-        
-        Apply();
-        ShakeUpdate();
+		// CameraFX
+		ComputeFieldOfView(targetPosition);
+		UpdateFieldOfView();
+		Apply();
+		ShakeUpdate();
+		lastTargetPosition = targetPosition;
+		rotationMultiplier = 1f;
+	}
 
-        lastTargetPosition = targetPosition;
-    }
-
-    public void ComputeHorizontalDistanceToTarget(Vector3 targetPosition)
+	public void ComputeHorizontalDistanceToTarget(Vector3 targetPosition)
     {
         hDistanceToTarget = Vector3.Distance(
             Vector3.Scale(new Vector3(1f, 0f, 1f), position.current),
@@ -195,9 +288,11 @@ public class Aperture
 
     public void ComputeRotation()
     {
-		var bestHAngle = 0f; //
-        var angle = hAngle + bestHAngle;
-        rotationAroundTarget.destination = -new Vector3(Mathf.Sin(Mathf.Deg2Rad * angle), 0f, Mathf.Cos(Mathf.Deg2Rad * angle));
+        if (GetStaticObjective() != null) {
+            rotationAroundTarget.destination = GetStaticObjective().euler;
+            return;
+        }
+        rotationAroundTarget.destination = -new Vector3(Mathf.Sin(Mathf.Deg2Rad * hAngle), 0f, Mathf.Cos(Mathf.Deg2Rad * hAngle));
     }
 
     public void ComputeFieldOfView(Vector3 targetPosition)
@@ -210,11 +305,16 @@ public class Aperture
 
     public void UpdateRotation()
     {
-        rotationAroundTarget.current = Vector3.Lerp(rotationAroundTarget.current, rotationAroundTarget.destination, Time.fixedDeltaTime * settings.rotationSpeed);
+        rotationAroundTarget.current = Vector3.Lerp(rotationAroundTarget.current, rotationAroundTarget.destination, Time.fixedDeltaTime * settings.rotationSpeed * rotationMultiplier);
     }
 
     public void ComputePosition(Vector3 targetPosition)
     {
+        if (GetStaticObjective() != null) {
+            position.destination = GetStaticObjective().position;
+            return;
+        }
+
         // Dark pythagorian mathematics allow us to position the camera correctly
         Vector2 a = Vector3.Scale(new Vector3(0f, 1f, 1f), position.destination);
         Vector2 b = Vector3.Scale(new Vector3(0f, 1f, 1f), targetPosition);
@@ -296,11 +396,13 @@ public class Aperture
     public void Apply()
     {
         // Look at 
-        cam.transform.forward = Vector3.Lerp(
-            cam.transform.forward, 
-            -(position.current - (target.position + settings.heightOffset * Vector3.up)).normalized, 
-            settings.lookAtLerp * Time.fixedDeltaTime
-        );
+        if (IsLookAtEnabled()) {
+            cam.transform.forward = Vector3.Lerp(
+                cam.transform.forward,
+                -(position.current - (target.position + settings.heightOffset * Vector3.up)).normalized,
+                settings.lookAtLerp * Time.fixedDeltaTime
+            );
+        }
 
         cam.transform.position = position.current;
         cam.fieldOfView = fieldOfView.current;
@@ -331,5 +433,32 @@ public class Aperture
     {
         cam.enabled = false;
         newCam.enabled = true;
+    }
+
+    public PositionAndRotation AddStaticPosition(Transform transform)
+    {
+        return AddStaticPosition(new PositionAndRotation() { position = transform.position, rotation = transform.rotation });
+    }
+
+    public PositionAndRotation AddStaticPosition(Vector3 position, Quaternion rotation)
+    {
+        return AddStaticPosition(new PositionAndRotation() { position = position, rotation = rotation });
+    }
+
+    public PositionAndRotation AddStaticPosition(PositionAndRotation positionAndRotation)
+    {
+        staticObjectives.Add(positionAndRotation);
+        return positionAndRotation;
+
+    }
+
+    public void RemoveStaticPosition(PositionAndRotation positionAndRotation)
+    {
+        staticObjectives.RemoveAll(o => o.Equals(positionAndRotation));
+    }
+
+    public PositionAndRotation GetStaticObjective()
+    {
+        return staticObjectives.Count > 0 ? staticObjectives[staticObjectives.Count - 1] : null;
     }
 }

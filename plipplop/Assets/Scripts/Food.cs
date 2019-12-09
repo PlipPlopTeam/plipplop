@@ -8,7 +8,10 @@ public class Food : Item
     public FoodData data;
     public bool consumed = false;
     public System.Action onConsumeEnd;
-    private bool beingConsumed = false;
+
+	public bool isBeingConsumed { get { return m_BeingConsumed; } }
+	bool m_BeingConsumed = false;
+
     private float timer;
 
     public float mass;
@@ -31,7 +34,7 @@ public class Food : Item
     {
         if(!consumed)
         {
-            beingConsumed = true;
+			m_BeingConsumed = true;
             timer = data.timeToConsume;
         }   
     }
@@ -52,7 +55,7 @@ public class Food : Item
     public void Update()
     {
         mass = Mass();
-        if(beingConsumed)
+        if(m_BeingConsumed)
         {
             if(timer > 0)
             {

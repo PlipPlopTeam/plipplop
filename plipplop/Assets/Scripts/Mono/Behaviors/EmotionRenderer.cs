@@ -51,6 +51,8 @@ public class EmotionRenderer : MonoBehaviour
         {
             board.obj.transform.forward = -(Game.i.aperture.position.current - board.obj.transform.position);
             board.obj.transform.position = headTransform.position + adjustment;
+
+
             // Animation
             if(emotion != null)
             {
@@ -68,7 +70,6 @@ public class EmotionRenderer : MonoBehaviour
     {
         emotion = FindEmotion(emotionName);
         if(emotion == null) return;
-
         timer = 0f;
         frameIndex = 0;
         board.mr.material.mainTexture = emotion.frames[0];
@@ -85,7 +86,8 @@ public class EmotionRenderer : MonoBehaviour
         board.mr.material.mainTexture = emotion.frames[0];
         board.obj.SetActive(true);
 
-        if(duration > 0f) StartCoroutine(HideAfter(duration));
+		if (duration > 0f) StartCoroutine(HideAfter(duration));
+		else StopAllCoroutines();
     }
 
     IEnumerator HideAfter(float time)

@@ -8,10 +8,10 @@ namespace Behavior.NPC
     public class Wait : AIAction
     {
         public float time = 1f;
-        public override void Execute(StateManager state)
+        public override void Execute(NonPlayableCharacter target)
         {
-            NonPlayableCharacter npc = (NonPlayableCharacter)state;
-			if(npc != null) npc.Wait(time);
+            NonPlayableCharacter npc = target;
+            if (npc != null) npc.Wait(time);
         }
     } 
 }

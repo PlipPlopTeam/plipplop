@@ -9,6 +9,8 @@ public class Cheats : Dictionary<string, System.Action>
     {
         Add("RESET", ResetScene);
         Add("ZIK", delegate { SoundPlayer.Play("bgm_test"); });
+        Add("GLUE", delegate { Game.i.player.Paralyze(); });
+        Add("FREE", delegate { Game.i.player.Deparalyze(); });
         Add("FAMINE", SetAllHunderToHundred);
     }
 
@@ -20,6 +22,6 @@ public class Cheats : Dictionary<string, System.Action>
     public void SetAllHunderToHundred()
     {
         foreach(NonPlayableCharacter npc in Object.FindObjectsOfType<NonPlayableCharacter>())
-            npc.SetStat("hunger", 100f);
+            npc.SetStat(NonPlayableCharacter.EStat.HUNGER, 100f);
     }
 }

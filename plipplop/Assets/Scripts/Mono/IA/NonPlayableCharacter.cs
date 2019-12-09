@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using Behavior;
+using Behavior.Editor;
 using UnityEditor;
 using UnityEngine.AI;
 
 
-public class NonPlayableCharacter : StateManager
+public class NonPlayableCharacter : MonoBehaviour
 {
 	[HideInInspector] public Sight sight;
 	[HideInInspector] public FocusLook look;
@@ -18,27 +18,29 @@ public class NonPlayableCharacter : StateManager
 	[HideInInspector] public Face face;
 	
 	[Header("Read-Only")]
-	public Valuable valuable;
-	public Activity activity;
-	public Chair chair;
-	public Food food;
-	public Feeder feeder;
+	[ReadOnlyInGame] public Controller player;
+	[ReadOnlyInGame] public Valuable valuable;
+    [ReadOnlyInGame] public Activity activity;
+	[ReadOnlyInGame] public Chair chair;
+    [ReadOnlyInGame] public Food food;
+    [ReadOnlyInGame] public Feeder feeder;
 	
 	[HideInInspector] public Activity previousActivity;
 	[HideInInspector] public ICarryable carried;
-	private ICarryable carryableToCollect;
 	public Dictionary<Clothes.ESlot, Clothes> clothes = new Dictionary<Clothes.ESlot, Clothes>();
 
-	[Header("Settings")]
+    [Header("Settings")]
+    public BehaviorGraph behaviorGraph;
 	public float strength = 1f;
+
 	float assHeightWhenSitted = 0.51f;
+    ICarryable carryableToCollect;
+
+    public enum EStat { BOREDOM, TIREDNESS, HUNGER };
+	public enum ESubject { PLAYER, VALUABLE, ACTIVITY, CHAIR, FOOD, FEEDER };
 
 	[Header("Stats")]
-	public Dictionary<string, float> stats = new Dictionary<string, float>();
-
-	public ClothesData[] headStuff;
-	public ClothesData[] torsoStuff;
-	public ClothesData[] legsStuff;
+    public Dictionary<EStat, float> stats = new Dictionary<EStat, float>();
 
 	// Wait timer
 	[HideInInspector] public bool hasWaited;
@@ -47,12 +49,59 @@ public class NonPlayableCharacter : StateManager
 
 	public System.Action onWaitEnded;
 
-	public override void Update()
+	void Awake()
+	{
+		Debug.Log("AWAKE NPC before instantiate => " + behaviorGraph.initialState);
+		behaviorGraph = Instantiate(behaviorGraph);
+		behaviorGraph.SetTarget(this);
+		Debug.Log("AWAKE NPC after instantiate => " + behaviorGraph.initialState);
+
+		skeleton = GetComponentInChildren<Skeleton>();
+		sight = GetComponent<Sight>();
+		look = GetComponent<FocusLook>();
+		agent = GetComponent<NavMeshAgent>();
+		animator = GetComponentInChildren<Animator>();
+		range = GetComponent<Range>();
+		emo = GetComponent<EmotionRenderer>();
+		emo.Load();
+		agentMovement = GetComponent<AgentMovement>();
+		agentMovement.animator = animator;
+		face = GetComponent<Face>();
+
+	}
+
+	public void Start()
+	{
+		// Load Character Clothes Slots
+		foreach (Clothes.ESlot suit in (Clothes.ESlot[])Clothes.ESlot.GetValues(typeof(Clothes.ESlot)))
+			clothes.Add(suit, null);
+
+		// Load Character Stats
+		stats.Add(EStat.BOREDOM, 50f);
+		stats.Add(EStat.TIREDNESS, 50f);
+		stats.Add(EStat.HUNGER, 75f);
+
+		// Debug Equip Items
+		Equip(Game.i.library.headClothes.PickRandom());
+		Equip(Game.i.library.torsoClothes.PickRandom());
+		Equip(Game.i.library.legsClothes.PickRandom());
+
+		Debug.Log("START NPC before beh START => " + behaviorGraph.initialState);
+		behaviorGraph.Start();
+		Debug.Log("START NPC after beh START => " + behaviorGraph.initialState);
+	}
+
+	public void Update()
 	{
         StartWaiting();
-		base.Update();
+        behaviorGraph.Update();
 		if(carried != null && carried.Mass() > strength) StartCarrying(carried);
         StartCollecting();
+	}
+
+	public void FixedUpdate()
+	{
+		behaviorGraph.FixedUpdate();
 	}
 
 	private void StartWaiting()
@@ -82,60 +131,28 @@ public class NonPlayableCharacter : StateManager
 		onWaitEnded = end;
 	}
 
-	void Awake()
-	{
-		skeleton = GetComponentInChildren<Skeleton>();
-		sight = GetComponent<Sight>();
-		look = GetComponent<FocusLook>();
-		agent = GetComponent<NavMeshAgent>();
-		animator = GetComponentInChildren<Animator>();
-		range = GetComponent<Range>();
-		emo = GetComponent<EmotionRenderer>();
-		emo.Load();
-		agentMovement = GetComponent<AgentMovement>();
-		agentMovement.animator = animator;
-		face = GetComponent<Face>();
-	}
 
-	public override void Start()
-	{
-		// Load Character Clothes Slots
-		foreach (Clothes.ESlot suit in (Clothes.ESlot[]) Clothes.ESlot.GetValues(typeof(Clothes.ESlot)))
-			clothes.Add(suit, null);
-
-		// Load Character Stats
-		stats.Add("boredom", 50f);
-		stats.Add("tiredness", 50f);
-		stats.Add("hunger", 75f);
-		
-		// Debug Equip Items
-		Equip(headStuff[Random.Range(0, headStuff.Length)]);
-		Equip(torsoStuff[Random.Range(0, torsoStuff.Length)]);
-		Equip(legsStuff[Random.Range(0, legsStuff.Length)]);
-
-		base.Start();
-	}
 
 	[ContextMenu("SetHungerTwentyFive")]
 	public void SetHungerTwentyFive()
 	{
-		SetStat("hunger", 25f);
+		SetStat(EStat.HUNGER, 25f);
 	}
 	[ContextMenu("SetHungerSeventyFive")]
 	public void SetHungerSeventyFive()
 	{
-		SetStat("hunger", 75f);
+		SetStat(EStat.HUNGER, 75f);
 	}
 	[ContextMenu("SetHungerHundred")]
 	public void SetHungerHundred()
 	{
-		SetStat("hunger", 100f);
+		SetStat(EStat.HUNGER, 100f);
 	}
 
 	public void Equip(ClothesData clothData, bool change = true)
 	{
 		Clothes c = clothes[clothData.slot];
-		if(c != null && change) c.Pulverize();
+		if(c != null && change) c.Destroy();
 
 		GameObject clothObject = new GameObject();
 		clothObject.name = clothData.name;
@@ -147,6 +164,10 @@ public class NonPlayableCharacter : StateManager
 	public bool IsCarrying(ICarryable carryable)
 	{
 		return carryable == carried;
+	}
+	public bool IsCarrying()
+	{
+		return carried != null;
 	}
 
 	public void StartCarrying(ICarryable carryable)
@@ -185,7 +206,7 @@ public class NonPlayableCharacter : StateManager
 		food.Consume();
 		food.onConsumeEnd += () =>
 		{
-			stats["hunger"] -= food.data.calory;
+			stats[NonPlayableCharacter.EStat.HUNGER] -= food.data.calory;
 			Drop();
 			food = null;
 		};
@@ -221,13 +242,13 @@ public class NonPlayableCharacter : StateManager
 		carried = null;
 	}
 
-	public void AddToStat(string name, float amount)
+	public void AddToStat(EStat name, float amount)
 	{
 		stats[name] += amount;
 		if(stats[name] >= 100f) stats[name] = 100f;
 		else if(stats[name] < 0f) stats[name] = 0f;
 	}
-	public void SetStat(string name, float value)
+	public void SetStat(EStat name, float value)
 	{
 		stats[name] = value;
 		if(stats[name] >= 100f) stats[name] = 100f;
@@ -280,9 +301,9 @@ public class NonPlayableCharacter : StateManager
         if(EditorApplication.isPlaying)
 		{
 			float h = 0f;
-			Handles.Label(transform.position + Vector3.up * (2f + h), currentState.name);
+			Handles.Label(transform.position + Vector3.up * (2f + h), behaviorGraph.GetCurrentAIStateName());
 			h+= 0.1f;
-			foreach(KeyValuePair<string, float> entry in stats)
+			foreach(KeyValuePair<EStat, float> entry in stats)
 			{
 				Handles.Label(transform.position + Vector3.up * (2f + h), entry.Key.ToString() + " = " + entry.Value.ToString());
 				h+= 0.1f;

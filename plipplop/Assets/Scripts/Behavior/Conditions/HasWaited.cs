@@ -7,9 +7,9 @@ namespace Behavior.NPC
 	[CreateAssetMenu(menuName = "Behavior/Condition/NonPlayableCharacter/HasWaited")]
 	public class HasWaited : Condition
 	{
-		public override bool Check(StateManager state)
+		public override bool Check(AIState state, NonPlayableCharacter target)
 		{
-			NonPlayableCharacter npc = (NonPlayableCharacter)state;
+			NonPlayableCharacter npc = target;
 			return npc != null && npc.hasWaited;
 		}
 	}	

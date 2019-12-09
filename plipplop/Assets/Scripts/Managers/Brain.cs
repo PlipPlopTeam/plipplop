@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Brain
 {
+    int isParalyzed = 0;
+
     Controller controller = null;
     Controller baseController = null;
     Mapping mapping;
@@ -39,6 +41,8 @@ public class Brain
 
     public void Update()
     {
+        if (IsParalyzed()) return;
+
         UpdateController();
         Game.i.aperture.RotateWithGamepad(
             mapping.Axis(EAction.CAMERA_VERTICAL),
@@ -48,6 +52,8 @@ public class Brain
 
     public void FixedUpdate()
     {
+        if (IsParalyzed()) return;
+
         UpdateControllerPhysics();
     }
 
@@ -73,7 +79,7 @@ public class Brain
         if (mapping.IsPressed(EAction.JUMP)) controller.OnJump();
         if (mapping.IsPressed(EAction.POSSESS)) controller.OnTryPossess();
         if (mapping.IsHeld(EAction.JUMP)) controller.OnHoldJump();
-        if (mapping.IsPressed(EAction.CAMERA_RESET)) Game.i.aperture.Realign();
+        if (mapping.IsPressed(EAction.CAMERA_RESET)) Game.i.aperture.UserAlign();
 	}
 
 	public void Possess(Controller controller)
@@ -101,5 +107,20 @@ public class Brain
     public bool IsPossessingBaseController()
     {
         return controller == baseController;
+    }
+
+    public bool IsParalyzed()
+    {
+        return isParalyzed > 0;
+    }
+
+    public void Paralyze()
+    {
+        isParalyzed++;
+    }
+
+    public void Deparalyze()
+    {
+        isParalyzed--;
     }
 }

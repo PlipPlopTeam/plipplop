@@ -7,16 +7,15 @@ using UnityEngine.AI;
 using UnityEditor;
 #endif
 
-public class AgentMovement : MonoBehaviour
+public class AgentMovement : Walker
 {
     [System.Serializable]
     public class Settings
     {
         public float speed = 5f;
-        public float maxSpeed = 1f;
-        public float velocityLerpSpeed = 1f;
         public float navTreshold = 1f;
-        public float minimumCarrySpeed = 1f;  
+		public float animatorRunSpeed = 1f;
+		public float minimumCarrySpeed = 1f;  
     }
 
     public System.Action onDestinationReached;
@@ -34,7 +33,12 @@ public class AgentMovement : MonoBehaviour
     NavMeshAgent agent;
     int currentIndexOnPath;
 
-    public void ClearEvents()
+	public override void ApplyAdherence(float adherence)
+	{
+		SetSpeed(settings.speed * (1f - adherence));
+	}
+
+	public void ClearEvents()
     {
         onDestinationReached = null;
         onPathCompleted = null;
@@ -50,6 +54,7 @@ public class AgentMovement : MonoBehaviour
 
     public void FollowPath(AIPath newPath)
     {
+		if (newPath == null) return;
         path = newPath;
         currentIndexOnPath = Random.Range(0, path.points.Count);
         followingPath = true;
@@ -69,7 +74,7 @@ public class AgentMovement : MonoBehaviour
         SetSpeed(s);
     }
 
-    public void ResetSpeed()
+	public void ResetSpeed()
     {
         SetSpeed(settings.speed);
     }
@@ -153,7 +158,7 @@ public class AgentMovement : MonoBehaviour
 
         if(animator) 
         {
-            animator.SetFloat("Speed", agent.velocity.magnitude/settings.maxSpeed);
+            animator.SetFloat("Speed", agent.velocity.magnitude/settings.animatorRunSpeed);
         }
     }
 
@@ -217,5 +222,6 @@ public class AgentMovement : MonoBehaviour
             UnityEditor.Handles.DrawLine(transform.position, agent.destination);
         }
     }
+
 #endif
 }

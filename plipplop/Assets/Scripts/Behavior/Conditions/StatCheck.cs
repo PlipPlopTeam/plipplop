@@ -9,13 +9,13 @@ namespace Behavior.NPC
         public enum EOperator {EQUAL, SUPERIOR, INFERIOR, SUPERIOR_OR_EQUAL, INFERIOR_OR_EQUAL}
 
         [Header("Settings")]
-        public string statName;
+        public NonPlayableCharacter.EStat statName;
         public EOperator condition;
         [Range(0f, 100f)] public float value = 0;
 
-		public override bool Check(StateManager state)
+		public override bool Check(AIState state, NonPlayableCharacter target)
 		{
-			NonPlayableCharacter npc = (NonPlayableCharacter)state;
+			NonPlayableCharacter npc = target;
             if(npc != null)
             {
                 if(npc.stats.ContainsKey(statName))

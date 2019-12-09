@@ -15,16 +15,16 @@ MonoBehaviour:
   overrides:
   - property: canBeControlled
     isOverriden: 0
-  - property: resetable
+  - property: canBeReset
     isOverriden: 0
   - property: fieldOfView
     isOverriden: 1
   - property: heightOffset
     isOverriden: 1
   - property: additionalAngle
-    isOverriden: 1
+    isOverriden: 0
   - property: distance
-    isOverriden: 1
+    isOverriden: 0
   - property: cameraRotateAroundSensivity
     isOverriden: 0
   - property: cameraRotateAboveSensivity
@@ -32,61 +32,70 @@ MonoBehaviour:
   - property: fovLerp
     isOverriden: 0
   - property: lateralFollowLerp
-    isOverriden: 1
+    isOverriden: 0
   - property: longitudinalFollowLerp
-    isOverriden: 1
+    isOverriden: 0
   - property: verticalFollowLerp
-    isOverriden: 1
+    isOverriden: 0
   - property: rotationSpeed
     isOverriden: 0
   - property: lookAtLerp
-    isOverriden: 1
-  - property: cameraAlignSpeed
     isOverriden: 0
-  - property: cameraResetAlignSpeed
+  - property: alignAfter
+    isOverriden: 0
+  - property: angleConsideredAlign
+    isOverriden: 0
+  - property: minTargetVelocity
+    isOverriden: 0
+  - property: alignMultiplierByUser
+    isOverriden: 0
+  - property: alignMultiplierByStick
+    isOverriden: 0
+  - property: alignMultiplierByVelocity
     isOverriden: 0
   - property: speedEffectMultiplier
     isOverriden: 0
   - property: catchUpSpeedMultiplier
     isOverriden: 0
   - property: angleIncrementOnSpeed
-    isOverriden: 1
+    isOverriden: 0
   - property: maximumCatchUpSpeed
     isOverriden: 0
   - property: absoluteBoundaries
-    isOverriden: 0
+    isOverriden: 1
   - property: constraintToTarget
     isOverriden: 0
   - property: targetConstraintLocalOffset
     isOverriden: 0
-  - property: cameraResetAfterTime
-    isOverriden: 1
-  fallback: {fileID: 11400000, guid: df6437ca0d9bc60498aeb18a4dd62019, type: 2}
+  fallback: {fileID: 11400000, guid: 846697e4cb25d1e4cbae013a3a2b2cca, type: 2}
   canBeControlled: 1
-  resetable: 1
-  fieldOfView: 60
-  heightOffset: 3
-  additionalAngle: 17
+  canBeReset: 1
+  fieldOfView: 45
+  heightOffset: 1.5
+  additionalAngle: 20
   distance:
-    min: 8
-    max: 10
-  cameraRotateAroundSensivity: 90
-  cameraRotateAboveSensivity: 20
+    min: 2
+    max: 5
+  cameraRotateAroundSensivity: 75
+  cameraRotateAboveSensivity: 15
   fovLerp: 20
-  lateralFollowLerp: 20
-  longitudinalFollowLerp: 30
-  verticalFollowLerp: 2
-  rotationSpeed: 3
-  lookAtLerp: 20
-  cameraAlignSpeed: 3
-  cameraResetAlignSpeed: 6
-  cameraResetAfterTime: 3
-  speedEffectMultiplier: 1
+  lateralFollowLerp: 10
+  longitudinalFollowLerp: 10
+  verticalFollowLerp: 5
+  rotationSpeed: 60
+  lookAtLerp: 15
+  alignAfter: 20
+  angleConsideredAlign: 15
+  minTargetVelocity: 2
+  alignMultiplierByUser: 100
+  alignMultiplierByStick: 60
+  alignMultiplierByVelocity: 60
+  speedEffectMultiplier: 0.1
   catchUpSpeedMultiplier: 1
-  angleIncrementOnSpeed: 15
-  maximumCatchUpSpeed: 10
+  angleIncrementOnSpeed: 5
+  maximumCatchUpSpeed: 15
   absoluteBoundaries:
-    min: 5
-    max: 10
+    min: 2
+    max: 7
   constraintToTarget: 0
   targetConstraintLocalOffset: {x: 0, y: 0, z: 0}

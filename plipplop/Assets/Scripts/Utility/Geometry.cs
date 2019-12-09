@@ -24,4 +24,27 @@ public static class Geometry
         float angle = Random.Range(0f, 1f) * Mathf.PI * 2;
         return new Vector3(Mathf.Cos(angle) * radius, 0, Mathf.Sin(angle) * radius);
     }
+
+    public static Rect Scale(this Rect rect, float scale)
+    {
+        return new Rect(
+            new Vector2(rect.x*scale, rect.y*scale),
+            new Vector2(rect.width*scale, rect.height*scale)
+        );
+    }
+
+    public static Rect Shift(this Rect rect, Vector2 shift)
+    {
+        return new Rect(
+            new Vector2(rect.x + shift.x, rect.y + shift.y),
+            new Vector2(rect.width, rect.height)
+        );
+    }
+
+    public class PositionAndRotation
+    {
+        public Vector3 position = new Vector3();
+        public Vector3 euler { get { return rotation.eulerAngles; } }
+        public Quaternion rotation = new Quaternion();
+    }
 }

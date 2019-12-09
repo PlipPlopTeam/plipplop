@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class Locomotion : MonoBehaviour
+public class Locomotion : Walker
 {
     public LocomotionPreset preset;
     public float legsHeight = 1f;
@@ -16,6 +16,7 @@ public class Locomotion : MonoBehaviour
 
     LocomotionAnimation locomotionAnimation;
     Controller parentController;
+	float speedMultiplier = 1f;
     float timePressed = 0f;
     float lookForwardSpeed = 8f;
     Vector3 lastDirection = new Vector3();
@@ -23,7 +24,12 @@ public class Locomotion : MonoBehaviour
 
     internal Vector3 groundCheckDirection = Vector3.down;
 
-    private void Awake()
+	public override void ApplyAdherence(float adherence)
+	{
+		speedMultiplier = 1f - adherence;
+	}
+
+	private void Awake()
     {
 
         preset = preset ? preset : Game.i.library.defaultLocomotion;
@@ -48,7 +54,7 @@ public class Locomotion : MonoBehaviour
         }
     }
 
-    public bool AreLegsRetracted()
+	public bool AreLegsRetracted()
     {
         return locomotionAnimation.AreLegsRetracted();;
     }
@@ -73,7 +79,7 @@ public class Locomotion : MonoBehaviour
 
     public void Move(Vector3 direction)
     {
-        var currentVelocity = Vector3.zero;
+		var currentVelocity = Vector3.zero;
         if(rigidbody != null)
         {
             currentVelocity = rigidbody.velocity;
@@ -117,7 +123,7 @@ public class Locomotion : MonoBehaviour
                     virtualStick.z * Game.i.aperture.Forward() +
                     virtualStick.x * Game.i.aperture.Right()
                 )
-                + Vector3.up * rigidbody.velocity.y
+				+ Vector3.up * rigidbody.velocity.y
             ;
 
             // Prevents brutal air stops
@@ -126,7 +132,7 @@ public class Locomotion : MonoBehaviour
             velocity.z = Mathf.Lerp(rigidbody.velocity.z, velocity.z, anyControlAmount);
 
             // Apply changes
-            rigidbody.velocity = velocity;
+            rigidbody.velocity = velocity * speedMultiplier;
 
             // Save last direction
             lastDirection = direction;
