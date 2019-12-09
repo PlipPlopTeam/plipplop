@@ -4,94 +4,136 @@
     <e p="C:\Users\d.beaugendre\.Rider2019.2\system\extResources" t="IncludeRecursive" />
     <e p="C:\Users\d.beaugendre\.Rider2019.2\system\resharper-host\local\Transient\ReSharperHost\v192\SolutionCaches\_plipplop.-607832679.00" t="ExcludeRecursive" />
     <e p="C:\Users\d.beaugendre\Documents\PlipPlop\PlipPlop" t="IncludeRecursive">
-      <e p="Assembly-CSharp-Editor-firstpass.csproj" t="IncludeRecursive" />
       <e p="Assembly-CSharp-Editor.csproj" t="IncludeRecursive" />
       <e p="Assembly-CSharp-firstpass.csproj" t="IncludeRecursive" />
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
-        <e p="FPSClamper.cs" t="Include" />
         <e p="Plugins" t="Include">
-          <e p="BehaviorEditor" t="Include">
-            <e p="Scripts" t="Include">
-              <e p="ActionHook.cs" t="Include" />
-              <e p="Behavior" t="Include">
-                <e p="Conditions" t="Include">
-                  <e p="Condition.cs" t="Include" />
-                </e>
-                <e p="Mono Actions" t="Include">
-                  <e p="ACTION.cs" t="Include" />
-                </e>
-                <e p="State Actions" t="Include">
-                  <e p="Action.cs" t="Include" />
-                </e>
-                <e p="State.cs" t="Include" />
-              </e>
-              <e p="Editor" t="Include">
-                <e p="BehaviorEditor" t="Include">
-                  <e p="BehaviorEditor.cs" t="Include" />
-                  <e p="Nodes" t="Include">
-                    <e p="BaseNode.cs" t="Include" />
-                    <e p="DrawNode.cs" t="Include" />
-                    <e p="PortalNode.cs" t="Include" />
-                    <e p="StateNode.cs" t="Include" />
-                    <e p="TransitionNode.cs" t="Include" />
-                  </e>
-                  <e p="Settings.cs" t="Include" />
-                </e>
-                <e p="BehaviorGraph.cs" t="Include" />
-                <e p="Custom Inspectors" t="Include">
-                  <e p="StateGUI.cs" t="Include" />
-                </e>
-              </e>
-              <e p="StateManager.cs" t="Include" />
-              <e p="Transition.cs" t="Include" />
-            </e>
+          <e p="Pencil.cs" t="Include" />
+          <e p="SaveGUISkin.cs" t="Include" />
+          <e p="UnityMainThreadDispatcher" t="Include">
+            <e p="UnityMainThreadDispatcher.cs" t="Include" />
           </e>
         </e>
         <e p="Scripts" t="Include">
           <e p="Behavior" t="Include">
             <e p="Actions" t="Include">
               <e p="CarryValuable.cs" t="Include" />
+              <e p="ChaseFood.cs" t="Include" />
               <e p="ChaseValuable.cs" t="Include" />
+              <e p="ConsumeFood.cs" t="Include" />
               <e p="DebugLog.cs" t="Include" />
               <e p="Drop.cs" t="Include" />
+              <e p="EnterActivity.cs" t="Include" />
+              <e p="EnterFeeder.cs" t="Include" />
+              <e p="FollowRandomZonePath.cs" t="Include" />
+              <e p="ForgetPlayer.cs" t="Include" />
               <e p="ForgetThing.cs" t="Include" />
+              <e p="GetNearestFeeder.cs" t="Include" />
+              <e p="GoAroundInRange.cs" t="Include" />
               <e p="GoThere.cs" t="Include" />
               <e p="GoToNextPoint.cs" t="Include" />
               <e p="GoToValuableOriginPosition.cs" t="Include" />
+              <e p="HideEmotion.cs" t="Include" />
+              <e p="LeaveActivity.cs" t="Include" />
               <e p="PickUp.cs" t="Include" />
-              <e p="SearchValuable.cs" t="Include" />
+              <e p="RunAwayFromPlayer.cs" t="Include" />
+              <e p="SearchThing.cs" t="Include" />
               <e p="SetAnimatorBool.cs" t="Include" />
               <e p="SetAnimatorTrigger.cs" t="Include" />
+              <e p="SetFace.cs" t="Include" />
+              <e p="SetSightSettings.cs" t="Include" />
               <e p="ShowEmotion.cs" t="Include" />
               <e p="StopMovement.cs" t="Include" />
+              <e p="UpdateFollowRandomZonePath.cs" t="Include" />
+              <e p="Wait.cs" t="Include" />
+              <e p="WaitBetween.cs" t="Include" />
+            </e>
+            <e p="BehaviorEditor" t="Include">
+              <e p="Scripts" t="Include">
+                <e p="ActionHook.cs" t="Include" />
+                <e p="AIStateTransition.cs" t="Include" />
+                <e p="Behavior" t="Include">
+                  <e p="AIState.cs" t="Include" />
+                  <e p="BehaviorEditor" t="Include">
+                    <e p="BehaviorEditor.cs" t="Include" />
+                    <e p="INodeable.cs" t="Include" />
+                    <e p="Nodes" t="Include">
+                      <e p="AIStateDrawNode.cs" t="Include" />
+                      <e p="AIStateNode.cs" t="Include" />
+                      <e p="AIStateTransitionNode.cs" t="Include" />
+                      <e p="DrawNode.cs" t="Include" />
+                      <e p="Node.cs" t="Include" />
+                      <e p="TransitionDrawNode.cs" t="Include" />
+                    </e>
+                    <e p="Settings.cs" t="Include" />
+                  </e>
+                  <e p="BehaviorGraph.cs" t="Include" />
+                  <e p="Conditions" t="Include">
+                    <e p="Condition.cs" t="Include" />
+                  </e>
+                  <e p="Mono Actions" t="Include">
+                    <e p="AIAction.cs" t="Include" />
+                  </e>
+                </e>
+              </e>
             </e>
             <e p="Conditions" t="Include">
-              <e p="HasSeenValuable.cs" t="Include" />
+              <e p="HasWaited.cs" t="Include" />
               <e p="OnDestinationReached.cs" t="Include" />
+              <e p="StatCheck.cs" t="Include" />
+              <e p="ThingInDistance.cs" t="Include" />
+              <e p="ThingInRange.cs" t="Include" />
+              <e p="ThingIsSet.cs" t="Include" />
               <e p="ValuableHasMoved.cs" t="Include" />
-              <e p="ValuableInRange.cs" t="Include" />
             </e>
           </e>
-          <e p="Brain.cs" t="Include" />
+          <e p="Cake.cs" t="Include" />
+          <e p="Chair.cs" t="Include" />
+          <e p="Clothes.cs" t="Include" />
+          <e p="Dispenser.cs" t="Include" />
           <e p="Editor" t="Include">
+            <e p="AIPathEditor.cs" t="Include" />
+            <e p="AIStateEditor.cs" t="Include" />
+            <e p="AperturePresetEditor.cs" t="Include" />
+            <e p="BaseEditor.cs" t="Include" />
             <e p="CarEditor.cs" t="Include" />
+            <e p="ChunkStreamingZoneEditor.cs" t="Include" />
             <e p="ControllerEditor.cs" t="Include" />
+            <e p="Drawer" t="Include">
+              <e p="ApertureRangeDrawer.cs" t="Include" />
+              <e p="ColorFieldDrawer.cs" t="Include" />
+              <e p="ReadOnlyInGameDrawer.cs" t="Include" />
+              <e p="SoundDrawer.cs" t="Include" />
+              <e p="SoundsDrawer.cs" t="Include" />
+            </e>
             <e p="MapppingEditor.cs" t="Include" />
             <e p="NPCEditor.cs" t="Include" />
             <e p="RigidbodyEditor.cs" t="Include" />
           </e>
           <e p="Emotion.cs" t="Include" />
-          <e p="Extensions.cs" t="Include" />
+          <e p="Face.cs" t="Include" />
+          <e p="Feeder.cs" t="Include" />
+          <e p="FlickeringLight.cs" t="Include" />
+          <e p="Floor.cs" t="Include" />
+          <e p="Food.cs" t="Include" />
+          <e p="Hider.cs" t="Include" />
+          <e p="ICarryable.cs" t="Include" />
           <e p="Input" t="Include">
             <e p="ACTION.cs" t="Include" />
             <e p="INPUT.cs" t="Include" />
             <e p="InputWrapper.cs" t="Include" />
             <e p="MappingWrapper.cs" t="Include" />
           </e>
+          <e p="Item.cs" t="Include" />
           <e p="Managers" t="Include">
             <e p="Aperture.cs" t="Include" />
+            <e p="Brain.cs" t="Include" />
+            <e p="ChunkLoader.cs" t="Include" />
             <e p="Library.cs" t="Include" />
+            <e p="Sound.cs" t="Include" />
+            <e p="SoundPlayer.cs" t="Include" />
+            <e p="Sounds.cs" t="Include" />
           </e>
           <e p="Mono" t="Include">
             <e p="Animation" t="Include">
@@ -101,6 +143,7 @@
               </e>
               <e p="LocomotionAnimation.cs" t="Include" />
               <e p="MeshAnimator.cs" t="Include" />
+              <e p="MeshVFXPlayer.cs" t="Include" />
             </e>
             <e p="Behaviors" t="Include">
               <e p="AgentMovement.cs" t="Include" />
@@ -111,11 +154,18 @@
             </e>
             <e p="CheatCodeListener.cs" t="Include" />
             <e p="Components" t="Include">
+              <e p="Cloneable.cs" t="Include" />
               <e p="CollisionEventTransmitter.cs" t="Include" />
               <e p="ControllerSensor.cs" t="Include" />
               <e p="CustomBuyoyancy.cs" t="Include" />
+              <e p="DestroyAfter.cs" t="Include" />
+              <e p="FadedApparition.cs" t="Include" />
+              <e p="KillCameraOnAwake.cs" t="Include" />
+              <e p="KillOnAwake.cs" t="Include" />
+              <e p="Persistent.cs" t="Include" />
             </e>
             <e p="Controller.cs" t="Include" />
+            <e p="ControllerFace.cs" t="Include" />
             <e p="Controllers" t="Include">
               <e p="Ball.cs" t="Include" />
               <e p="BaseController.cs" t="Include" />
@@ -135,17 +185,28 @@
               <e p="Vanilla.cs" t="Include" />
             </e>
             <e p="Debug" t="Include">
+              <e p="AIZoneDebugger.cs" t="Include" />
+              <e p="AreaDebugText.cs" t="Include" />
               <e p="CameraApertureDebugger.cs" t="Include" />
               <e p="Cheats.cs" t="Include" />
+              <e p="ChunkLoaderStats.cs" t="Include" />
               <e p="DBG_Move.cs" t="Include" />
             </e>
-            <e p="Face.cs" t="Include" />
             <e p="Game.cs" t="Include" />
             <e p="IA" t="Include">
+              <e p="Activity" t="Include">
+                <e p="Activity.cs" t="Include" />
+                <e p="Balloon.cs" t="Include" />
+                <e p="Bike.cs" t="Include" />
+                <e p="Firepit.cs" t="Include" />
+                <e p="FishingBox.cs" t="Include" />
+                <e p="Jukebox.cs" t="Include" />
+              </e>
+              <e p="AIPath.cs" t="Include" />
+              <e p="AIZone.cs" t="Include" />
               <e p="NonPlayableCharacter.cs" t="Include" />
-              <e p="NPCOLD.cs" t="Include" />
             </e>
-            <e p="KeyboardBuffer.cs" t="Include" />
+            <e p="INoticeable.cs" t="Include" />
             <e p="Kickstarter.cs" t="Include" />
             <e p="Locomotion.cs" t="Include" />
             <e p="Marker.cs" t="Include" />
@@ -158,20 +219,34 @@
             <e p="Valuable.cs" t="Include" />
             <e p="Volume.cs" t="Include" />
             <e p="Volumes" t="Include">
+              <e p="ChunkStreamingZone.cs" t="Include" />
+              <e p="PersistenceVolume.cs" t="Include" />
               <e p="StaticCameraVolume.cs" t="Include" />
               <e p="TeleportVolume.cs" t="Include" />
               <e p="WaterVolume.cs" t="Include" />
               <e p="WindVolume.cs" t="Include" />
+              <e p="WorldBoundariesVolume.cs" t="Include" />
             </e>
           </e>
           <e p="Range.cs" t="Include" />
           <e p="ScriptableObjects" t="Include">
             <e p="AperturePreset.cs" t="Include" />
+            <e p="ClothesData.cs" t="Include" />
             <e p="EditorExtensions.cs" t="Include" />
+            <e p="FoodData.cs" t="Include" />
             <e p="LocomotionPreset.cs" t="Include" />
             <e p="Mapping.cs" t="Include" />
             <e p="MeshFlipbook.cs" t="Include" />
+            <e p="Switches.cs" t="Include" />
           </e>
+          <e p="Smoke.cs" t="Include" />
+          <e p="Utility" t="Include">
+            <e p="ColorFieldAttribute.cs" t="Include" />
+            <e p="Geometry.cs" t="Include" />
+            <e p="ReadOnlyInGameAttribute.cs" t="Include" />
+            <e p="Tools.cs" t="Include" />
+          </e>
+          <e p="Walker.cs" t="Include" />
         </e>
         <e p="Shaders" t="Include">
           <e p="S_ToonLit_CutOut.shader" t="Include" />
@@ -203,11 +278,6 @@
           </e>
           <e p="Sprites" t="Include">
             <e p="EmojiOne Attribution.txt" t="Include" />
-          </e>
-        </e>
-        <e p="XInputDotNet" t="Include">
-          <e p="Examples" t="Include">
-            <e p="XInputTestCS.cs" t="Include" />
           </e>
         </e>
       </e>
