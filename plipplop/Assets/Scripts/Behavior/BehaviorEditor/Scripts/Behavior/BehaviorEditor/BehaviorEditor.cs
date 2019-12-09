@@ -113,10 +113,6 @@ namespace Behavior
                 if (currentGraph.GetNodeWithIndex(startNodeId) == null) {
                     var node = (AIStateNode)AddNodeOnGraph(stateNode, 300, 64, "START", Vector3.one*0.5f);
                     node.id = startNodeId;
-                    node.currentAIState = currentGraph.initialState;
-                    if (!currentGraph.initialState) {
-                        Debug.LogError("No initial state set for " + currentGraph + ", this should be fixed urgently.");
-                    }
                 }
                 else {
                     // Making sure we have only 1 start node

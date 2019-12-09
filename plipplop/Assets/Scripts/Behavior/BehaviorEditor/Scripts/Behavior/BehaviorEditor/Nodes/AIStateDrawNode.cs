@@ -21,7 +21,7 @@ namespace Behavior.Editor
             if (b.IsStartNode()) {
                 EditorGUILayout.LabelField("Start node. The behavior will begin from here.");
                 try {
-                    EditorGUILayout.LabelField("Initial state: " + b.currentAIState);
+                    EditorGUILayout.LabelField("Initial state is id:" + b.graph.initialStateID);
                 }
                 catch { };
                 return;

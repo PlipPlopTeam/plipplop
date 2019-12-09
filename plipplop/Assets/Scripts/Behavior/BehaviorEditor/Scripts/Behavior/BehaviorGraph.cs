@@ -17,7 +17,7 @@ namespace Behavior.Editor
 		[SerializeField] public List<AIStateNode> stateNodes = new List<AIStateNode>();
         [SerializeField] public List<AIStateTransitionNode> transitionNodes = new List<AIStateTransitionNode>();
         [SerializeField] public int idCount;
-        [SerializeField] public AIState initialState;
+        [SerializeField] public int initialStateID;
         [SerializeField] public Vector2 editorScrollPosition;
 
         // These are helpers
@@ -93,9 +93,9 @@ namespace Behavior.Editor
         {
             currentStateNode = (AIStateNode) GetNodeWithIndex(startNodeId);
 
-			Debug.Log("INITIAL STATE = " + initialState);
+			Debug.Log("INITIAL STATE = " + GetInitialAIState());
 
-			currentStateNode.currentAIState = initialState;
+			currentStateNode.currentAIState = GetInitialAIState();
 
 
 			GetCurrentAIState().OnEnter(target);
@@ -239,6 +239,17 @@ namespace Behavior.Editor
         public AIStateTransitionNode GetTransition(int i)
         {
             return transitions.Find(o => o.id == i);
+        }
+
+        public AIState GetInitialAIState()
+        {
+            try {
+                return Game.i.library.npcLibrary.aiStates.Find(o => o.id == initialStateID).resource;
+            }
+            catch (System.NullReferenceException) {
+                Debug.LogError("!! COULD NOT GET the initial state of graph " + name + " (state id: " + initialStateID + ").\nCHECK THE LIBRARY!");
+                return null;
+            }
         }
     }
 }

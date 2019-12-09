@@ -5,6 +5,13 @@ using UnityEngine;
 [System.Serializable]
 public class Library
 {
+    [System.Serializable]
+    public class Resource<T>
+    {
+        public int id;
+        public T resource;
+    }
+
     [Header("Strings")]
     public string gameName = "Plip plop";
 
@@ -37,4 +44,6 @@ public class Library
     [Header("Sounds")]
     public Sounds sounds;
 
+    [Header("AI")]
+    public NpcLibrary npcLibrary;
 }

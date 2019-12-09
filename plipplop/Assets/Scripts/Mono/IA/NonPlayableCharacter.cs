@@ -53,10 +53,10 @@ public class NonPlayableCharacter : MonoBehaviour
 
 	void Awake()
 	{
-		Debug.Log("AWAKE NPC before instantiate => " + behaviorGraph.initialState);
+		Debug.Log("AWAKE NPC before instantiate => " + behaviorGraph.GetInitialAIState());
 		behaviorGraph = Instantiate(behaviorGraph);
 		behaviorGraph.SetTarget(this);
-		Debug.Log("AWAKE NPC after instantiate => " + behaviorGraph.initialState);
+		Debug.Log("AWAKE NPC after instantiate => " + behaviorGraph.GetInitialAIState());
 
 		skeleton = GetComponentInChildren<Skeleton>();
 		sight = GetComponent<Sight>();
@@ -88,9 +88,9 @@ public class NonPlayableCharacter : MonoBehaviour
 		Equip(Game.i.library.torsoClothes.PickRandom());
 		Equip(Game.i.library.legsClothes.PickRandom());
 
-		Debug.Log("START NPC before beh START => " + behaviorGraph.initialState);
+		Debug.Log("START NPC before beh START => " + behaviorGraph.GetInitialAIState());
 		behaviorGraph.Start();
-		Debug.Log("START NPC after beh START => " + behaviorGraph.initialState);
+		Debug.Log("START NPC after beh START => " + behaviorGraph.GetInitialAIState());
 	}
 
 	public void Update()
