@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿#if UNITY_EDITOR
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -7,11 +9,6 @@ namespace Behavior.Editor
 {
     public class TransitionDrawNode : DrawNode
     {
-        public void Init(AIStateDrawNode enterAIState, AIStateTransitionNode transition)
-        {
-            //      this.enterAIState = enterAIState;
-        }
-
         public override void DrawWindow(Node b)
         {
             if (!(b is AIStateTransitionNode)) {
@@ -60,3 +57,4 @@ namespace Behavior.Editor
 
     }
 }
+#endif

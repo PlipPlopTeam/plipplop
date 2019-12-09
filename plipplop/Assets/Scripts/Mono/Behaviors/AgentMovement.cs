@@ -13,10 +13,9 @@ public class AgentMovement : Walker
     public class Settings
     {
         public float speed = 5f;
-        public float maxSpeed = 1f;
-        public float velocityLerpSpeed = 1f;
         public float navTreshold = 1f;
-        public float minimumCarrySpeed = 1f;  
+		public float animatorRunSpeed = 1f;
+		public float minimumCarrySpeed = 1f;  
     }
 
     public System.Action onDestinationReached;
@@ -159,7 +158,7 @@ public class AgentMovement : Walker
 
         if(animator) 
         {
-            animator.SetFloat("Speed", agent.velocity.magnitude/settings.maxSpeed);
+            animator.SetFloat("Speed", agent.velocity.magnitude/settings.animatorRunSpeed);
         }
     }
 

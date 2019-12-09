@@ -10,7 +10,7 @@ public class ChunkStreamingZone : MonoBehaviour
 {
     public string identifier;
     public List<Vector3> positions;
-    public SceneAsset chunk;    
+    public UnityEngine.Object chunk;    
     public List<ChunkStreamingZone> neighborhood = new List<ChunkStreamingZone>();
 
     readonly Color selectedColor = Color.green;
@@ -96,7 +96,8 @@ public class ChunkStreamingZone : MonoBehaviour
         neighborhood.RemoveAll(o => o == csz);
     }
 
-    void OnDrawGizmos()
+#if UNITY_EDITOR
+	void OnDrawGizmos()
     {
         var content = new StringBuilder();
         content.AppendLine(identifier);
@@ -110,7 +111,6 @@ public class ChunkStreamingZone : MonoBehaviour
         if(!isSelected) Draw(new Color(baseColor.r, baseColor.g, baseColor.b, baseAlpha), new Color(baseColor.r, baseColor.g, baseColor.b, baseFillAlpha));
         isSelected = false;
     }
-
     void OnDrawGizmosSelected()
     {
         isSelected = true;
@@ -130,8 +130,9 @@ public class ChunkStreamingZone : MonoBehaviour
             }
         }
     }
+#endif
 
-    public bool IsInsideChunk(Vector3 worldPosition)
+	public bool IsInsideChunk(Vector3 worldPosition)
     {
         Vector3 position = transform.InverseTransformPoint(worldPosition);
         Vector2 position2d = new Vector2(position.x, position.z);
@@ -145,7 +146,8 @@ public class ChunkStreamingZone : MonoBehaviour
         return inside;
     }
 
-    public void Draw(Color wireColor, Color fillColor)
+#if UNITY_EDITOR
+	public void Draw(Color wireColor, Color fillColor)
     {
         Handles.matrix = transform.localToWorldMatrix;
         Handles.color = wireColor;
@@ -174,8 +176,9 @@ public class ChunkStreamingZone : MonoBehaviour
         }
         */
     }
+#endif
 
-    public bool IsLoaded()
+	public bool IsLoaded()
     {
         return scene != null;
     }

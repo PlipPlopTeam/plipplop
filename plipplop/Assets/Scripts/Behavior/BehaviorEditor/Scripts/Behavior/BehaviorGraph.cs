@@ -11,9 +11,10 @@ namespace Behavior.Editor
     [CreateAssetMenu(menuName = "Behavior/Graph")]
     public class BehaviorGraph : ScriptableObject
     {
+		public const int startNodeId = -1;
 
-        // This part will be saved
-        [SerializeField] public List<AIStateNode> stateNodes = new List<AIStateNode>();
+		// This part will be saved
+		[SerializeField] public List<AIStateNode> stateNodes = new List<AIStateNode>();
         [SerializeField] public List<AIStateTransitionNode> transitionNodes = new List<AIStateTransitionNode>();
         [SerializeField] public int idCount;
         [SerializeField] public AIState initialState;
@@ -33,6 +34,7 @@ namespace Behavior.Editor
             if (index == null) return null;
 
             for (int i = 0; i < nodes.Count; i++) {
+
                 if (nodes[i].id == index)
                     return nodes[i];
             }
@@ -89,8 +91,13 @@ namespace Behavior.Editor
 
         public void Start()
         {
-            currentStateNode = (AIStateNode) GetNodeWithIndex(BehaviorEditor.startNodeId);
+            currentStateNode = (AIStateNode) GetNodeWithIndex(startNodeId);
+
+			Debug.Log("INITIAL STATE = " + initialState);
+
 			currentStateNode.currentAIState = initialState;
+
+
 			GetCurrentAIState().OnEnter(target);
 		}
 
