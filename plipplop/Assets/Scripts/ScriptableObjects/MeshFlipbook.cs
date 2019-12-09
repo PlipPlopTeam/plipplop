@@ -9,4 +9,6 @@ public class MeshFlipbook : ScriptableObject
     public List<Mesh> meshes;
 
     public float fps;
+
+    public bool loop = true;
 }

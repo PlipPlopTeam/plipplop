@@ -29,7 +29,14 @@ public class MeshAnimator : MonoBehaviour
     {
         return currentAnimation == null ? null : currentAnimation.animationName;
     }
-
+    
+    public void PlayOnce(string animationName)
+    {
+        if (GetCurrentAnimation() != animationName) {
+            Play(animationName);
+        }
+    }
+    
     public void Play(string _animationName)
     {
         MeshFlipbook _anim = animations[_animationName];
@@ -44,14 +51,7 @@ public class MeshAnimator : MonoBehaviour
             throw new Exception("animation doesn't exist or the name is incorrect");
         }
     }
-
-    public void PlayOnce(string animationName)
-    {
-        if (GetCurrentAnimation() != animationName) {
-            Play(animationName);
-        }
-    }
-
+    
     void SetAnimation( )
     {
         if (animCoroutine != null)
@@ -74,6 +74,12 @@ public class MeshAnimator : MonoBehaviour
             yield return new WaitForSeconds(1/currentAnimation.fps);
 
             _frame++;
+            
+            if (_frame >= currentAnimation.meshes.Count && !currentAnimation.loop)
+            {
+                yield break;
+            }
+            
             _frame = _frame % currentAnimation.meshes.Count;
         }
     }
