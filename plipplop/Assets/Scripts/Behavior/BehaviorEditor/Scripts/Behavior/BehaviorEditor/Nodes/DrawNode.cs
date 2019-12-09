@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR
+﻿
 
 using System.Collections;
 using System.Collections.Generic;
@@ -10,7 +10,8 @@ namespace Behavior.Editor
     {
         public readonly static float handleSize = 7f;
 
-        public abstract void DrawWindow(Node b);
+		#if UNITY_EDITOR
+		public abstract void DrawWindow(Node b);
         public virtual void DrawCurve(Node b)
         {
             Rect rect = b.windowRect.Shift(-BehaviorEditor.scrollPos);
@@ -56,7 +57,6 @@ namespace Behavior.Editor
 			if (b == null) return Vector2.zero;
             return new Vector2(b.windowRect.x - handleSize * 1.5f, b.windowRect.y + b.windowRect.height / 2f);
         }
-    }
+		#endif
+	}
 }
-
-#endif
