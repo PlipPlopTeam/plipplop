@@ -6,8 +6,8 @@ set buildPath="S:\SIG\J002\09_PROJETS\PLIP_PLOP\BUILDS\."
 echo =====================
 echo Initializing...
 
+FOR /F "TOKENS=1 DELIMS=/" %%A IN ('date /t') DO SET dd=%%A
 FOR /F "TOKENS=1,2 eol=/ DELIMS=/ " %%A IN ('date /t') DO SET mm=%%B
-FOR /F "TOKENS=1,2 DELIMS=/ eol=/" %%A IN ('date /t') DO SET dd=%%B
 FOR /F "TOKENS=2,3 DELIMS=/ " %%A IN ('date /t') DO SET yyyy=%%B
 FOR /f "tokens=1-2 delims=/:" %%a IN ('time /t') do (set mytime=%%ah%%b)
 SET date=%yyyy%.%mm%.%dd%_%mytime%
@@ -31,6 +31,7 @@ echo Building using %unityPath%...
 %unityPath% -batchmode -projectPath . -buildWindows64Player "../AUTOBUILD/%date%/Build.exe" -nographics  -quit
 
 IF ERRORLEVEL 1 (
+	color 0c
 	echo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	echo !!                                 !!
 	echo !! ERROR WHILE BUILDING            !!
@@ -47,9 +48,11 @@ IF ERRORLEVEL 1 (
 	exit
 )
 
+color 0a
 echo =====================
 echo Sending to share...
-xcopy /E "../AUTOBUILD/%date%" %buildPath%
+mkdir "%buildPath%/%date%"
+xcopy /E /Q "../AUTOBUILD/%date%" "%buildPath%/%date%/."
 
 echo =====================
 echo Finished, cleaning up
@@ -64,6 +67,7 @@ pause
 exit
 
 :NOUNITY
+color 0c
 echo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 echo !!                                 !!
 echo !! ERROR WHILE BUILDING            !!
