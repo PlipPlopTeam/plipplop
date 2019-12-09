@@ -6,7 +6,7 @@ using Behavior.Editor;
 namespace Behavior
 {
     [CreateAssetMenu(menuName = "Behavior/AIState")]
-    public class AIState : ScriptableObject, INodeable
+	public class AIState : ScriptableObject
     {
         public AIAction[] onFixed;
         public AIAction[] onUpdate;

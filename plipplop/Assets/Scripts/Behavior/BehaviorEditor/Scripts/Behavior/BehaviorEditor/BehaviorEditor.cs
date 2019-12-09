@@ -125,7 +125,8 @@ namespace Behavior
                         if (node.id == startNodeId) {
                             if (!pastFirstNode)
 							{
-                                pastFirstNode = true;
+								((AIStateNode)node).currentAIState = currentGraph.initialState;
+								pastFirstNode = true;
                                 continue;
                             }
                             else

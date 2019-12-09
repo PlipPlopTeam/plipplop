@@ -9,7 +9,8 @@ using UnityEngine;
 namespace Behavior.Editor
 {
     [CreateAssetMenu(menuName = "Behavior/Graph")]
-    public class BehaviorGraph : ScriptableObject
+	[System.Serializable]
+	public class BehaviorGraph : ScriptableObject
     {
 		public const int startNodeId = -1;
 
@@ -70,20 +71,6 @@ namespace Behavior.Editor
             indexToDelete.AddUnique(index);
         }
 
-        public bool IsAIStateDuplicate(AIStateNode b)
-        {
-            foreach(var node in nodes.Where(o=>o is AIStateNode)) {
-
-                var aiNode = (AIStateNode)node;
-                if (aiNode.id == b.id) continue;
-
-                if (b.currentAIState != null && aiNode.currentAIState == b.currentAIState)
-                    return true;
-            }
-
-            return false;
-        }
-
         public AIState GetCurrentAIState()
         {
             return currentStateNode != null ? currentStateNode.currentAIState : null;
@@ -91,13 +78,8 @@ namespace Behavior.Editor
 
         public void Start()
         {
-            currentStateNode = (AIStateNode) GetNodeWithIndex(startNodeId);
-
-			Debug.Log("INITIAL STATE = " + initialState);
-
+            currentStateNode = (AIStateNode)GetNodeWithIndex(startNodeId);
 			currentStateNode.currentAIState = initialState;
-
-
 			GetCurrentAIState().OnEnter(target);
 		}
 
