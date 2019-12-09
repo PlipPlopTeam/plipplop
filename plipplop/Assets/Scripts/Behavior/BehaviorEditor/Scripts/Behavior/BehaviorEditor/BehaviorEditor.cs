@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System.IO;
+using System.Text;
 
 namespace Behavior
 {
@@ -43,7 +45,8 @@ namespace Behavior
 			public bool isMakingTransition;
 			public bool transitionType = false;
 
-			Cache cache;
+            readonly string CACHE_PATH = "Assets/Editor/Cache";
+            Cache cache;
 
 			GUISkin skin;
 			GUIStyle style;
@@ -72,27 +75,38 @@ namespace Behavior
             private void OnEnable()
             {
 				// LOADING CACHE
-				try
-				{
-					cache = AssetDatabase.LoadAssetAtPath("Editor/Cache/BehaviorEditor.asset", typeof(Cache)) as Cache;
-				}
-				catch 
-				{
-					Debug.Log("Created cache for behavior editor");
+
+                cache = AssetDatabase.LoadAssetAtPath(Path.Combine(CACHE_PATH, "BehaviorEditor.asset"), typeof(Cache)) as Cache;
+                    
+                if (cache == null) {
+                    var pathBuilder = new StringBuilder();
+                    foreach(var dir in CACHE_PATH.Split('/')) {
+                        pathBuilder.Append(dir);
+                        var path = pathBuilder.ToString();
+                        Debug.Log(path);
+                        if (!Directory.Exists(path)) {
+                            Debug.Log("Creating directory " + path);
+                            Directory.CreateDirectory(path);
+                        }
+                        pathBuilder.Append("/");
+                    }
+
 					cache = CreateInstance<Cache>();
-					AssetDatabase.CreateAsset(cache, "Editor/Cache/BehaviorEditor.asset");
+					AssetDatabase.CreateAsset(cache, Path.Combine(CACHE_PATH , "BehaviorEditor.asset"));
 					AssetDatabase.SaveAssets();
-				}
+                    Debug.Log("Created cache for the behavior editor");
+                }
 				currentGraph = cache.graph;
 
-				serializedGraph = new SerializedObject(currentGraph);
+                if (currentGraph != null) {
+                    OnGraphIsLoaded();
+                }
                 minimapTexture = new Texture2D((int)minimapSize, (int)minimapSize);
-                scrollPos = currentGraph.editorScrollPosition;
             }
             #endregion
 
             private void Update()
-            {
+            { 
 				if (currentGraph == null || skin == null) return;
 				
 				// Safety check 
@@ -175,15 +189,14 @@ namespace Behavior
 				activeStyle = new GUIStyle(style);
 				activeStyle.normal = activeStyle.hover;
 
-
-				Event e = Event.current;
+                Event e = Event.current;
                 mousePosition = e.mousePosition + scrollPos;
 
-                UserInput(e);
+                if (currentGraph != null) UserInput(e);
 
-                
+
                 DrawWindows();
-                DrawMiniMap();
+                if (currentGraph != null) DrawMiniMap();
 
                 if (e.type == EventType.MouseDrag) {
                     if (currentGraph != null) Repaint();
@@ -234,14 +247,25 @@ namespace Behavior
                 //EditorUtility.SetDirty(settings.currentGraph);
             }
 
+            void OnGraphIsLoaded()
+            {
+                serializedGraph = new SerializedObject(currentGraph);
+                scrollPos = currentGraph.editorScrollPosition;
+            }
+
             void DrawWindows()
             {
                 GUILayout.BeginArea(all, skin.window);
                 BeginWindows();
                 EditorGUILayout.LabelField("Assign Graph:", GUILayout.Width(100));
+                bool graphWasNull = currentGraph == null;
                 currentGraph = (BehaviorGraph)EditorGUILayout.ObjectField(currentGraph, typeof(BehaviorGraph), false, GUILayout.Width(200));
                 if (currentGraph != null) {
-					cache.graph = currentGraph;
+                    if (graphWasNull) {
+                        OnGraphIsLoaded();
+                    }
+
+                    cache.graph = currentGraph;
                     // Windows
                     for (int i = 0; i < currentGraph.nodes.Count; i++) {
                         Node b = currentGraph.nodes[i];
@@ -449,8 +473,8 @@ namespace Behavior
                 scrollPos -= diff;
 
                 scrollPos = new Vector2(
-                    Mathf.Clamp(scrollPos.x, 0f, all.width),
-                    Mathf.Clamp(scrollPos.y, 0f, all.height)
+                    Mathf.Clamp(scrollPos.x, 0f, all.width-Screen.width-1),
+                    Mathf.Clamp(scrollPos.y, 0f, all.height - Screen.height - 1)
                 );
             }
 
