@@ -20,16 +20,16 @@ namespace Behavior.Editor
             }
         }
 
-        public int id;
+		public string windowTitle;
+		public int id;
         public Rect windowRect;
-        public string windowTitle;
         public float optimalWidth = 100f;
         public float optimalHeight = 100f;
         public string comment;
         public bool isAssigned;
 		public bool showDescription;
 		public bool isOnCurrent;
-        public BehaviorGraph graph;
+        //public BehaviorGraph graph;
         public List<Reroute> reroutes = new List<Reroute>();
 
         public bool collapse;
@@ -105,11 +105,6 @@ namespace Behavior.Editor
 		public bool IsStartNode()
         {
             return id == BehaviorGraph.startNodeId;
-        }
-
-        public virtual void SetGraph(BehaviorGraph graph)
-        {
-            this.graph = graph;
         }
 
         public void RefreshRectSize(float zoom=1f)

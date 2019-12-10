@@ -13,15 +13,19 @@ namespace Behavior.Editor
 		#if UNITY_EDITOR
 		public override void DrawWindow(Node node)
         {
-            if (!(node is AIStateNode)) {
+            if (!(node is AIStateNode))
+			{
                 Debug.LogError("Attempted to draw a non-AIstate node with a AIStateDrawNode");
-            }
+			}
 
-            var b = (AIStateNode)node;
-            if (b.IsStartNode()) {
+			var b = (AIStateNode)node;
+
+			
+
+			if (b.IsStartNode()) {
                 EditorGUILayout.LabelField("Start node. The behavior will begin from here.");
                 try {
-                    EditorGUILayout.LabelField("Initial state is id:" + b.graph.initialStateID);
+                    EditorGUILayout.LabelField("Initial state is id:" + BehaviorEditor.currentGraph.initialStateID);
                 }
                 catch { };
                 return;
@@ -32,7 +36,8 @@ namespace Behavior.Editor
             }
             else
             {
-                string collapseText = "";
+				node.windowTitle = "State - " + b.state.name;
+				string collapseText = "";
                 if(!b.collapse)
                 {
                     collapseText = "Collapse";
@@ -56,9 +61,16 @@ namespace Behavior.Editor
             if (b.state != null)
             {
                 b.isAssigned = true;
-                
-                if (!b.collapse)
+				float standard = 0;
+
+				if (!b.collapse)
                 {
+					SerializedObject sState = new SerializedObject(b.state);
+					EditorGUILayout.PropertyField(sState.FindProperty("onFixed"), true);
+					EditorGUILayout.PropertyField(sState.FindProperty("onUpdate"), true);
+					EditorGUILayout.PropertyField(sState.FindProperty("onEnter"), true);
+					EditorGUILayout.PropertyField(sState.FindProperty("onExit"), true);
+					standard += (b.state.onFixed.Length + b.state.onUpdate.Length + b.state.onEnter.Length + b.state.onExit.Length) * 50;
 					/*
 					if (b.serializedAIState == null)
 					{
@@ -67,9 +79,8 @@ namespace Behavior.Editor
 					//	SerializedObject serializedAIState = new SerializedObject(b.currentAIState);
 					}
 					*/
-					float standard = 100;
 					//b.serializedAIState.Update();
-					b.showActions = EditorGUILayout.Toggle("Show Actions ", b.showActions);
+					//b.showActions = EditorGUILayout.Toggle("Show Actions ", b.showActions);
 
 					if (b.showActions)
 					{
@@ -79,7 +90,7 @@ namespace Behavior.Editor
 						standard += 125 + (b.onUpdateList.count + b.onFixedList.count) * 18;
 						*/
 					}
-					b.showEnterExit = EditorGUILayout.Toggle("Show Enter/Exit ", b.showEnterExit);
+					//b.showEnterExit = EditorGUILayout.Toggle("Show Enter/Exit ", b.showEnterExit);
 					if (b.showEnterExit)
 					{
 						/*
