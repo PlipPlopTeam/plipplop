@@ -10,7 +10,7 @@ FOR /F "TOKENS=1 DELIMS=/" %%A IN ('date /t') DO SET dd=%%A
 FOR /F "TOKENS=1,2 eol=/ DELIMS=/ " %%A IN ('date /t') DO SET mm=%%B
 FOR /F "TOKENS=2,3 DELIMS=/ " %%A IN ('date /t') DO SET yyyy=%%B
 FOR /f "tokens=1-2 delims=/:" %%a IN ('time /t') do (set mytime=%%ah%%b)
-SET date=%yyyy%.%mm%.%dd%_%mytime%
+SET date=%yyyy%.%mm%.%dd%_%mytime%_AUTO
 
 echo Creating required folders...
 mkdir ".TEMP"
