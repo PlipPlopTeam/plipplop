@@ -9,16 +9,15 @@ using UnityEngine;
 namespace Behavior.Editor
 {
     [CreateAssetMenu(menuName = "Behavior/Graph")]
-	public class BehaviorGraph : ScriptableObject
+    public class BehaviorGraph : ScriptableObject
     {
 		public const int startNodeId = -1;
 		// This part will be saved
 		[SerializeField] public List<AIStateNode> stateNodes = new List<AIStateNode>();
         [SerializeField] public List<AIStateTransitionNode> transitionNodes = new List<AIStateTransitionNode>();
         [SerializeField] public int idCount;
-        [SerializeField] public int initialState;
+        [SerializeField] public int initialStateID;
         [SerializeField] public Vector2 editorScrollPosition;
-
         // These are helpers
         [HideInInspector] public List<AIStateTransitionNode> transitions { get { return nodes.Where(o => { return (o is AIStateTransitionNode); }).Select(o => { return (AIStateTransitionNode)o; }).ToList(); } }
         [HideInInspector] public ReadOnlyCollection<Node> nodes { get{ return stateNodes.Select(o => { return (Node)o; }).Concat(transitionNodes.Select(o => { return (Node)o; })).ToList().AsReadOnly(); } }
@@ -31,10 +30,8 @@ namespace Behavior.Editor
         {
             if (index == null) return null;
 
-			Debug.Log("nodes.Count => " + nodes.Count);
-			for (int i = 0; i < nodes.Count; i++)
-			{
-				Debug.Log("Node => id = " + nodes[i].id + ", rect => " + nodes[i].windowRect);
+            for (int i = 0; i < nodes.Count; i++) {
+
                 if (nodes[i].id == index)
                     return nodes[i];
             }
@@ -60,6 +57,7 @@ namespace Behavior.Editor
                     }
                 }
             }
+             
             indexToDelete.Clear();
         }
 
@@ -69,15 +67,29 @@ namespace Behavior.Editor
             indexToDelete.AddUnique(index);
         }
 
+        public bool IsAIStateDuplicate(AIStateNode b)
+        {
+            foreach(var node in nodes.Where(o=>o is AIStateNode)) {
+
+                var aiNode = (AIStateNode)node;
+                if (aiNode.id == b.id) continue;
+
+                if (b.state != null && aiNode.state == b.state)
+                    return true;
+            }
+
+            return false;
+        }
+
         public AIState GetCurrentAIState()
         {
             return currentStateNode != null ? currentStateNode.state : null;
         }
 
-		public void Start()
-		{
-			currentStateNode = (AIStateNode)GetNodeWithIndex(startNodeId);
-			currentStateNode.state = Game.i.library.npcLibrary.aIStates[initialState];
+        public void Start()
+        {
+            currentStateNode = (AIStateNode) GetNodeWithIndex(startNodeId);
+			currentStateNode.state = GetInitialAIState();
 			GetCurrentAIState().OnEnter(target);
 		}
 
@@ -94,15 +106,12 @@ namespace Behavior.Editor
 
         public void CheckAndFollowTransition()
         {
-			Debug.Log("CheckAndFollowTransition()");
 			// IF THE CURRENT HAS AN EXIT
 			if (currentStateNode.exitNodes.Count == 0) return;
 			var node = GetNodeWithIndex(currentStateNode.exitNodes[0]);
-			Debug.Log("NODE => " + node);
-			if(node == null) Debug.Log("NODE => NULL");
-
+		
 			// If the exit node is another state
-			if (node is AIStateNode)
+			if(node is AIStateNode)
 			{
 				GoToNode((AIStateNode)node);
 				return;
@@ -120,7 +129,6 @@ namespace Behavior.Editor
                 bool check = true;
                 foreach (Condition c in transition.conditions)
 				{
-					Debug.Log("Condition " + c);
                     if (c == null) continue; // No condition set
                     if (!c.Check(GetCurrentAIState(), target)) check = false;
                 }
@@ -223,6 +231,17 @@ namespace Behavior.Editor
         public AIStateTransitionNode GetTransition(int i)
         {
             return transitions.Find(o => o.id == i);
+        }
+
+        public AIState GetInitialAIState()
+        {
+            try {
+                return Game.i.library.npcLibrary.aiStates.Find(o => o.id == initialStateID).resource;
+            }
+            catch (System.NullReferenceException) {
+                Debug.LogError("!! COULD NOT GET the initial state of graph " + name + " (state id: " + initialStateID + ").\nCHECK THE LIBRARY!");
+                return null;
+            }
         }
     }
 }

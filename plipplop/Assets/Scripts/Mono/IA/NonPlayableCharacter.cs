@@ -64,7 +64,6 @@ public class NonPlayableCharacter : MonoBehaviour
 		agentMovement = GetComponent<AgentMovement>();
 		agentMovement.animator = animator;
 		face = GetComponent<Face>();
-
 	}
 
 	public void Start()
@@ -83,7 +82,6 @@ public class NonPlayableCharacter : MonoBehaviour
 		Equip(Game.i.library.torsoClothes.PickRandom());
 		Equip(Game.i.library.legsClothes.PickRandom());
 
-		// Behavior
 		behaviorGraph = Instantiate(behaviorGraph);
 		behaviorGraph.SetTarget(this);
 		behaviorGraph.Start();

@@ -6,5 +6,8 @@ using UnityEngine;
 [System.Serializable]
 public class NpcLibrary
 {
-	public List<AIState> aIStates;
+    [System.Serializable] public class AIStateResource : Library.Resource<AIState> { }
+
+    public List<AIStateResource> aiStates;
+
 }
