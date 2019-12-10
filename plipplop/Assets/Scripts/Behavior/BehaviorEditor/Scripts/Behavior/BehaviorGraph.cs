@@ -30,9 +30,11 @@ namespace Behavior.Editor
         {
             if (index == null) return null;
 
+			Debug.Log(nodes.Count);
             for (int i = 0; i < nodes.Count; i++) {
 
-                if (nodes[i].id == index)
+				Debug.Log(nodes[i]);
+				if (nodes[i].id == index)
                     return nodes[i];
             }
             return null;
@@ -136,12 +138,12 @@ namespace Behavior.Editor
                 Node nextItem;
                 if (check)
 				{
-                    nextItem = transition.outputIfTrue;
+                    nextItem = GetNodeWithIndex(transition.exitNodes[0]);
                 }
                 else
 				{
-                    nextItem = transition.outputIfFalse;
-                }
+                    nextItem = GetNodeWithIndex(transition.exitNodes[1]);
+				}
                 if (nextItem == null)
 				{
 					throw new System.Exception("Node " + transition.id + " transitions to a NULL state after condition check");
@@ -182,10 +184,6 @@ namespace Behavior.Editor
         public void SetTarget(NonPlayableCharacter target)
         {
             this.target = target;
-			foreach (var node in nodes)
-			{
-				node.SetGraph(this);
-            }
         }
 
         public NonPlayableCharacter GetTarget()

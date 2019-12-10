@@ -140,7 +140,6 @@ namespace Behavior
                 // Updating all nodes
 
                 foreach (var node in currentGraph.nodes) {
-                    node.SetGraph(currentGraph);
                     node.windowRect.size = new Vector2(Mathf.Max(node.windowRect.size.x, minWindowSize), Mathf.Max(node.windowRect.size.y, minWindowSize));
                     node.windowRect.position = new Vector2(
                           Mathf.Clamp(node.windowRect.x, 0f, all.width),
@@ -289,14 +288,14 @@ namespace Behavior
 						if (b.drawNode is AIStateDrawNode) {
                             var bS = (AIStateNode)b;
                             if (bS.state != null && bS.state.id == currentGraph.GetCurrentAIStateID()){
-                                b.windowRect = GUI.Window(i, b.windowRect.Shift(-scrollPos), DrawNodeWindow, b.windowTitle+":"+b.id, activeStyle).Shift(scrollPos);
+                                b.windowRect = GUI.Window(i, b.windowRect.Shift(-scrollPos), DrawNodeWindow, b.windowTitle+" - "+b.id, activeStyle).Shift(scrollPos);
                             }
                             else {
-                                b.windowRect = GUI.Window(i, b.windowRect.Shift(-scrollPos), DrawNodeWindow, b.windowTitle + ":" + b.id, style).Shift(scrollPos);
+                                b.windowRect = GUI.Window(i, b.windowRect.Shift(-scrollPos), DrawNodeWindow, b.windowTitle + " - " + b.id, style).Shift(scrollPos);
                             }
                         }
                         else {
-                            b.windowRect = GUI.Window(i, b.windowRect.Shift(-scrollPos), DrawNodeWindow, b.windowTitle + ":" + b.id, style).Shift(scrollPos);
+                            b.windowRect = GUI.Window(i, b.windowRect.Shift(-scrollPos), DrawNodeWindow, b.windowTitle + " - " + b.id, style).Shift(scrollPos);
                         }
                     }
 
