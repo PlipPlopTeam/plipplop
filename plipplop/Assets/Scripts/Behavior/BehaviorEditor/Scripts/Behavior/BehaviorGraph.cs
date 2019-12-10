@@ -12,19 +12,16 @@ namespace Behavior.Editor
     public class BehaviorGraph : ScriptableObject
     {
 		public const int startNodeId = -1;
-
 		// This part will be saved
 		[SerializeField] public List<AIStateNode> stateNodes = new List<AIStateNode>();
         [SerializeField] public List<AIStateTransitionNode> transitionNodes = new List<AIStateTransitionNode>();
         [SerializeField] public int idCount;
         [SerializeField] public int initialStateID;
         [SerializeField] public Vector2 editorScrollPosition;
-
         // These are helpers
         [HideInInspector] public List<AIStateTransitionNode> transitions { get { return nodes.Where(o => { return (o is AIStateTransitionNode); }).Select(o => { return (AIStateTransitionNode)o; }).ToList(); } }
         [HideInInspector] public ReadOnlyCollection<Node> nodes { get{ return stateNodes.Select(o => { return (Node)o; }).Concat(transitionNodes.Select(o => { return (Node)o; })).ToList().AsReadOnly(); } }
         List<int> indexToDelete = new List<int>();
-
         // Runtime
         AIStateNode currentStateNode;
         NonPlayableCharacter target;
@@ -77,7 +74,7 @@ namespace Behavior.Editor
                 var aiNode = (AIStateNode)node;
                 if (aiNode.id == b.id) continue;
 
-                if (b.currentAIState != null && aiNode.currentAIState == b.currentAIState)
+                if (b.state != null && aiNode.state == b.state)
                     return true;
             }
 
@@ -86,18 +83,13 @@ namespace Behavior.Editor
 
         public AIState GetCurrentAIState()
         {
-            return currentStateNode != null ? currentStateNode.currentAIState : null;
+            return currentStateNode != null ? currentStateNode.state : null;
         }
 
         public void Start()
         {
             currentStateNode = (AIStateNode) GetNodeWithIndex(startNodeId);
-
-			Debug.Log("INITIAL STATE = " + GetInitialAIState());
-
-			currentStateNode.currentAIState = GetInitialAIState();
-
-
+			currentStateNode.state = GetInitialAIState();
 			GetCurrentAIState().OnEnter(target);
 		}
 

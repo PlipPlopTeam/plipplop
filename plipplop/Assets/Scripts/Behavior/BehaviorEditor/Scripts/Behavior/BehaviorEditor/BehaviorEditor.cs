@@ -40,8 +40,6 @@ namespace Behavior
             SerializedObject serializedGraph;
 
 			public static BehaviorGraph currentGraph;
-			public AIStateDrawNode stateNode;
-			public TransitionDrawNode transitionNode;
 			public bool isMakingTransition;
 			public bool transitionType = false;
 
@@ -77,7 +75,6 @@ namespace Behavior
 				// LOADING CACHE
 
                 cache = AssetDatabase.LoadAssetAtPath(Path.Combine(CACHE_PATH, "BehaviorEditor.asset"), typeof(Cache)) as Cache;
-                    
                 if (cache == null) {
                     var pathBuilder = new StringBuilder();
                     foreach(var dir in CACHE_PATH.Split('/')) {
@@ -110,9 +107,16 @@ namespace Behavior
 				if (currentGraph == null || skin == null) return;
 				
 				// Safety check 
-                if (currentGraph.GetNodeWithIndex(startNodeId) == null) {
-                    var node = (AIStateNode)AddNodeOnGraph(stateNode, 300, 64, "START", Vector3.one*0.5f);
+                if (currentGraph.GetNodeWithIndex(startNodeId) == null)
+				{
+                    var node = (AIStateNode)AddNodeOnGraph(cache.stateNode, 300, 64, "START", Vector3.one*0.5f);
                     node.id = startNodeId;
+                    /*
+					node.currentAIState = Game.i.library.npcLibrary.aIStates[currentGraph.initialState] ;
+                    if (!Game.i.library.npcLibrary.aIStates[currentGraph.initialState]) {
+                        Debug.LogError("No initial state set for " + currentGraph + ", this should be fixed urgently.");
+                    }
+					*/
                 }
                 else {
                     // Making sure we have only 1 start node
@@ -121,7 +125,8 @@ namespace Behavior
                         if (node.id == startNodeId) {
                             if (!pastFirstNode)
 							{
-                                pastFirstNode = true;
+								//((AIStateNode)node).currentAIState = Game.i.library.npcLibrary.aIStates[currentGraph.initialState];
+								pastFirstNode = true;
                                 continue;
                             }
                             else
@@ -281,12 +286,9 @@ namespace Behavior
 
 
                         b.RefreshRectSize(zoom);
-                        if (b.windowRect.Contains(mousePosition)) {
-                            b.windowRect = GUI.Window(i, b.windowRect.Shift(-scrollPos), DrawNodeWindow, b.windowTitle + ":" + b.id, activeStyle).Shift(scrollPos);
-                        } 
-                        else if (b.drawNode is AIStateDrawNode) {
+						if (b.drawNode is AIStateDrawNode) {
                             var bS = (AIStateNode)b;
-                            if (bS.currentAIState != null && bS.currentAIState.id == currentGraph.GetCurrentAIStateID()){
+                            if (bS.state != null && bS.state.id == currentGraph.GetCurrentAIStateID()){
                                 b.windowRect = GUI.Window(i, b.windowRect.Shift(-scrollPos), DrawNodeWindow, b.windowTitle+":"+b.id, activeStyle).Shift(scrollPos);
                             }
                             else {
@@ -630,7 +632,7 @@ namespace Behavior
                 EUserActions a = (EUserActions)o;
                 switch (a) {
                     case EUserActions.ADD_STATE:
-                        AddNodeOnGraph(stateNode, 300, 200, "State", mousePosition);
+                        AddNodeOnGraph(cache.stateNode, 300, 200, "State", mousePosition);
                         break;
                     case EUserActions.ADD_TRANSITION_NODE:
                         AddTransitionNode(selectedNode is AIStateNode ? (AIStateNode)selectedNode : null, mousePosition);
@@ -665,7 +667,7 @@ namespace Behavior
 
             public Node AddTransitionNode(AIStateNode originNode, Vector3 pos)
             {
-                Node transNode = AddNodeOnGraph(transitionNode, 200, 50, "Condition", pos);
+                Node transNode = AddNodeOnGraph(cache.transitionNode, 200, 50, "Condition", pos);
                 if (originNode != null) {
                     AIStateTransitionNode t = BehaviorEditor.currentGraph.AddTransition(originNode);
                 }
@@ -676,7 +678,7 @@ namespace Behavior
             #region Helper Methods
             public static void DrawConnection(Vector3 start, Vector3 end, Color curveColor)
             {
-                Color c = curveColor;
+                Color c = curveColor;	
                 Handles.color = c;
                 Vector3 dir = (start - end).normalized;
                 Vector3 right = Quaternion.AngleAxis(-90, Vector3.forward) * dir;
