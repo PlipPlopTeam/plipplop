@@ -40,4 +40,9 @@ public static class Tools
         string c = char.ConvertFromUtf32(65 + value);
         return c;
     }
+
+    public static string Format(this string str, params object[] elements)
+    {
+        return string.Format(str, elements);
+    }
 }
