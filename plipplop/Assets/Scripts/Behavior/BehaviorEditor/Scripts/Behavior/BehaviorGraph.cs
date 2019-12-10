@@ -9,23 +9,20 @@ using UnityEngine;
 namespace Behavior.Editor
 {
     [CreateAssetMenu(menuName = "Behavior/Graph")]
-	[System.Serializable]
 	public class BehaviorGraph : ScriptableObject
     {
 		public const int startNodeId = -1;
-
 		// This part will be saved
 		[SerializeField] public List<AIStateNode> stateNodes = new List<AIStateNode>();
         [SerializeField] public List<AIStateTransitionNode> transitionNodes = new List<AIStateTransitionNode>();
         [SerializeField] public int idCount;
-        [SerializeField] public AIState initialState;
+        [SerializeField] public int initialState;
         [SerializeField] public Vector2 editorScrollPosition;
 
         // These are helpers
         [HideInInspector] public List<AIStateTransitionNode> transitions { get { return nodes.Where(o => { return (o is AIStateTransitionNode); }).Select(o => { return (AIStateTransitionNode)o; }).ToList(); } }
         [HideInInspector] public ReadOnlyCollection<Node> nodes { get{ return stateNodes.Select(o => { return (Node)o; }).Concat(transitionNodes.Select(o => { return (Node)o; })).ToList().AsReadOnly(); } }
         List<int> indexToDelete = new List<int>();
-
         // Runtime
         AIStateNode currentStateNode;
         NonPlayableCharacter target;
@@ -34,8 +31,10 @@ namespace Behavior.Editor
         {
             if (index == null) return null;
 
-            for (int i = 0; i < nodes.Count; i++) {
-
+			Debug.Log("nodes.Count => " + nodes.Count);
+			for (int i = 0; i < nodes.Count; i++)
+			{
+				Debug.Log("Node => id = " + nodes[i].id + ", rect => " + nodes[i].windowRect);
                 if (nodes[i].id == index)
                     return nodes[i];
             }
@@ -61,7 +60,6 @@ namespace Behavior.Editor
                     }
                 }
             }
-             
             indexToDelete.Clear();
         }
 
@@ -73,13 +71,13 @@ namespace Behavior.Editor
 
         public AIState GetCurrentAIState()
         {
-            return currentStateNode != null ? currentStateNode.currentAIState : null;
+            return currentStateNode != null ? currentStateNode.state : null;
         }
 
-        public void Start()
-        {
-            currentStateNode = (AIStateNode)GetNodeWithIndex(startNodeId);
-			currentStateNode.currentAIState = initialState;
+		public void Start()
+		{
+			currentStateNode = (AIStateNode)GetNodeWithIndex(startNodeId);
+			currentStateNode.state = Game.i.library.npcLibrary.aIStates[initialState];
 			GetCurrentAIState().OnEnter(target);
 		}
 
@@ -96,12 +94,15 @@ namespace Behavior.Editor
 
         public void CheckAndFollowTransition()
         {
+			Debug.Log("CheckAndFollowTransition()");
 			// IF THE CURRENT HAS AN EXIT
 			if (currentStateNode.exitNodes.Count == 0) return;
 			var node = GetNodeWithIndex(currentStateNode.exitNodes[0]);
-		
+			Debug.Log("NODE => " + node);
+			if(node == null) Debug.Log("NODE => NULL");
+
 			// If the exit node is another state
-			if(node is AIStateNode)
+			if (node is AIStateNode)
 			{
 				GoToNode((AIStateNode)node);
 				return;
@@ -119,6 +120,7 @@ namespace Behavior.Editor
                 bool check = true;
                 foreach (Condition c in transition.conditions)
 				{
+					Debug.Log("Condition " + c);
                     if (c == null) continue; // No condition set
                     if (!c.Check(GetCurrentAIState(), target)) check = false;
                 }

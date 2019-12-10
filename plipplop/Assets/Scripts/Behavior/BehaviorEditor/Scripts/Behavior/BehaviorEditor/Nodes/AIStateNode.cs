@@ -7,8 +7,7 @@ using UnityEngine;
 [System.Serializable]
 public class AIStateNode : Node
 {
-    public AIState currentAIState;
-
+    public AIState state;
     //public SerializedObject serializedAIState;
     public List<AIAction> onFixedList;
     public List<AIAction> onUpdateList;

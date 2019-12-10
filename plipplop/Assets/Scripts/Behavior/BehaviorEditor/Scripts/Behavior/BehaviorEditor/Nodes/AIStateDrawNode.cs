@@ -21,12 +21,12 @@ namespace Behavior.Editor
             if (b.IsStartNode()) {
                 EditorGUILayout.LabelField("Start node. The behavior will begin from here.");
                 try {
-                    EditorGUILayout.LabelField("Initial state: " + b.currentAIState);
+                    EditorGUILayout.LabelField("Initial state: " + b.state);
                 }
                 catch { };
                 return;
             }
-            if(b.currentAIState == null)
+            if(b.state == null)
             {
                 EditorGUILayout.LabelField("Add state to modify:");
             }
@@ -46,14 +46,14 @@ namespace Behavior.Editor
                 b.collapse = EditorGUILayout.Toggle(collapseText, b.collapse);
             }
 
-            b.currentAIState = (AIState)EditorGUILayout.ObjectField(b.currentAIState, typeof(AIState), false);
+            b.state = (AIState)EditorGUILayout.ObjectField(b.state, typeof(AIState), false);
 
             if(b.previousCollapse != b.collapse)
             {
                 b.previousCollapse = b.collapse;
             }
 
-            if (b.currentAIState != null)
+            if (b.state != null)
             {
                 b.isAssigned = true;
                 

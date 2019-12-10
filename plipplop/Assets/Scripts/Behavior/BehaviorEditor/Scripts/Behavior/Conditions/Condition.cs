@@ -4,7 +4,8 @@ using UnityEngine;
 
 namespace Behavior
 {
-    public abstract class Condition : ScriptableObject
+	[System.Serializable]
+	public abstract class Condition : ScriptableObject
     {
         public abstract bool Check(AIState state, NonPlayableCharacter target);
     }
