@@ -234,7 +234,7 @@ namespace Behavior.Editor
         public AIState GetInitialAIState()
         {
             try {
-                return Game.i.library.npcLibrary.aiStates.Find(o => o.id == initialStateID).resource;
+                return Game.i.library.npcLibrary.states.Find(o => o.id == initialStateID).resource;
             }
             catch (System.NullReferenceException) {
                 Debug.LogError("!! COULD NOT GET the initial state of graph " + name + " (state id: " + initialStateID + ").\nCHECK THE LIBRARY!");
