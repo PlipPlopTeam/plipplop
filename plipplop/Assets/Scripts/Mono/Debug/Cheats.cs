@@ -12,6 +12,7 @@ public class Cheats : Dictionary<string, System.Action>
         Add("GLUE", delegate { Game.i.player.Paralyze(); });
         Add("FREE", delegate { Game.i.player.Deparalyze(); });
         Add("FAMINE", SetAllHunderToHundred);
+        Add("HELLO", SpawnNPC);
     }
 
     public void ResetScene()
@@ -23,5 +24,11 @@ public class Cheats : Dictionary<string, System.Action>
     {
         foreach(NonPlayableCharacter npc in Object.FindObjectsOfType<NonPlayableCharacter>())
             npc.SetStat(NonPlayableCharacter.EStat.HUNGER, 100f);
+    }
+
+    public void SpawnNPC()
+    {
+        var o = Object.Instantiate(Game.i.library.npcLibrary.NPCSamplePrefab);
+        o.transform.position = Game.i.player.GetCurrentController().transform.position + Game.i.player.GetCurrentController().transform.forward * 3f;
     }
 }
