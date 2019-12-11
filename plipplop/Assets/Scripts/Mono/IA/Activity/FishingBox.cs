@@ -43,6 +43,7 @@ public class FishingBox : Activity
         base.Exit(user);
         user.skeleton.Drop(Clothes.ESlot.RIGHT_HAND);
         user.animator.SetBool("Fishing", false);
+		StopAllCoroutines();
     }
 
 

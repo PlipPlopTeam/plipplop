@@ -13,21 +13,20 @@ MonoBehaviour:
   m_Name: NPC
   m_EditorClassIdentifier: 
   stateNodes:
-  - id: -1
+  - windowTitle: START
+    id: -1
     windowRect:
       serializedVersion: 2
       x: 46.900146
       y: 2335.5
       width: 300
       height: 64
-    windowTitle: START
     optimalWidth: 300
     optimalHeight: 64
     comment: 
     isAssigned: 0
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 1
@@ -41,21 +40,20 @@ MonoBehaviour:
     onUpdateList: []
     onEnterList: []
     onExitList: []
-  - id: 6406
+  - windowTitle: State - Venturing
+    id: 6406
     windowRect:
       serializedVersion: 2
       x: 465.19995
       y: 2122
       width: 300
-      height: 100
-    windowTitle: State
+      height: 300
     optimalWidth: 300
-    optimalHeight: 100
+    optimalHeight: 300
     comment: 
     isAssigned: 1
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 1
@@ -64,26 +62,25 @@ MonoBehaviour:
     s_exitNodes: 2a190000
     s_hasExitNodes: 01
     drawNode: {fileID: 11400000, guid: 3de6cb72c5d54a842957b3d8754294e2, type: 2}
-    state: {fileID: 0}
+    state: {fileID: 11400000, guid: 3cb2311cf9b6fcc488a0a7b62dc1b7c3, type: 2}
     onFixedList: []
     onUpdateList: []
     onEnterList: []
     onExitList: []
-  - id: 6409
+  - windowTitle: State - Busy
+    id: 6409
     windowRect:
       serializedVersion: 2
       x: 1449.0002
       y: 1605.3992
       width: 300
-      height: 100
-    windowTitle: State
+      height: 400
     optimalWidth: 300
-    optimalHeight: 100
+    optimalHeight: 400
     comment: 
     isAssigned: 1
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 1
@@ -92,26 +89,25 @@ MonoBehaviour:
     s_exitNodes: 39190000
     s_hasExitNodes: 01
     drawNode: {fileID: 11400000, guid: 3de6cb72c5d54a842957b3d8754294e2, type: 2}
-    state: {fileID: 0}
+    state: {fileID: 11400000, guid: 6ef644adabefbdc49bb099ef8304d491, type: 2}
     onFixedList: []
     onUpdateList: []
     onEnterList: []
     onExitList: []
-  - id: 6410
+  - windowTitle: State - Starving
+    id: 6410
     windowRect:
       serializedVersion: 2
       x: 1329.7998
       y: 832.1998
       width: 300
-      height: 100
-    windowTitle: State
+      height: 250
     optimalWidth: 300
-    optimalHeight: 100
+    optimalHeight: 250
     comment: 
     isAssigned: 1
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 1
@@ -120,26 +116,25 @@ MonoBehaviour:
     s_exitNodes: 27190000
     s_hasExitNodes: 01
     drawNode: {fileID: 11400000, guid: 3de6cb72c5d54a842957b3d8754294e2, type: 2}
-    state: {fileID: 0}
+    state: {fileID: 11400000, guid: 9825fc9293515ca4bb425f0677e9f4ec, type: 2}
     onFixedList: []
     onUpdateList: []
     onEnterList: []
     onExitList: []
-  - id: 6413
+  - windowTitle: State - Shopping
+    id: 6413
     windowRect:
       serializedVersion: 2
       x: 52.199463
       y: 717
       width: 300
-      height: 100
-    windowTitle: State
+      height: 350
     optimalWidth: 300
-    optimalHeight: 100
+    optimalHeight: 350
     comment: 
     isAssigned: 1
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 0
@@ -148,26 +143,25 @@ MonoBehaviour:
     s_exitNodes: 14190000
     s_hasExitNodes: 01
     drawNode: {fileID: 11400000, guid: 3de6cb72c5d54a842957b3d8754294e2, type: 2}
-    state: {fileID: 0}
+    state: {fileID: 11400000, guid: 4d49407762b973841a327e6155582ece, type: 2}
     onFixedList: []
     onUpdateList: []
     onEnterList: []
     onExitList: []
-  - id: 6414
+  - windowTitle: State - Fooled
+    id: 6414
     windowRect:
       serializedVersion: 2
       x: 606.5995
       y: 1071
       width: 300
-      height: 100
-    windowTitle: State
+      height: 300
     optimalWidth: 300
-    optimalHeight: 100
+    optimalHeight: 300
     comment: 
     isAssigned: 1
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 0
@@ -176,26 +170,25 @@ MonoBehaviour:
     s_exitNodes: 11190000
     s_hasExitNodes: 01
     drawNode: {fileID: 11400000, guid: 3de6cb72c5d54a842957b3d8754294e2, type: 2}
-    state: {fileID: 0}
+    state: {fileID: 11400000, guid: 66927571a4356984784646a2a8b644d9, type: 2}
     onFixedList: []
     onUpdateList: []
     onEnterList: []
     onExitList: []
-  - id: 6419
+  - windowTitle: State - Going Eating
+    id: 6419
     windowRect:
       serializedVersion: 2
       x: 711.2003
       y: 192.19995
       width: 300
-      height: 279
-    windowTitle: State
+      height: 150
     optimalWidth: 300
-    optimalHeight: 279
+    optimalHeight: 150
     comment: 
     isAssigned: 1
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 0
@@ -204,26 +197,25 @@ MonoBehaviour:
     s_exitNodes: 16190000
     s_hasExitNodes: 01
     drawNode: {fileID: 11400000, guid: 3de6cb72c5d54a842957b3d8754294e2, type: 2}
-    state: {fileID: 0}
+    state: {fileID: 11400000, guid: be4f52fee9126e74eb13ab731f5553e7, type: 2}
     onFixedList: []
     onUpdateList: []
     onEnterList: []
     onExitList: []
-  - id: 6421
+  - windowTitle: State - Consuming
+    id: 6421
     windowRect:
       serializedVersion: 2
       x: 1461.8003
       y: 35.80005
       width: 300
-      height: 387
-    windowTitle: State
+      height: 450
     optimalWidth: 300
-    optimalHeight: 387
+    optimalHeight: 450
     comment: 
     isAssigned: 1
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 0
@@ -232,26 +224,25 @@ MonoBehaviour:
     s_exitNodes: 1d190000
     s_hasExitNodes: 01
     drawNode: {fileID: 11400000, guid: 3de6cb72c5d54a842957b3d8754294e2, type: 2}
-    state: {fileID: 0}
+    state: {fileID: 11400000, guid: 8aa20906a79f74745a72c7a4ae2c3e69, type: 2}
     onFixedList: []
     onUpdateList: []
     onEnterList: []
     onExitList: []
-  - id: 6423
+  - windowTitle: State - Collecting Food
+    id: 6423
     windowRect:
       serializedVersion: 2
-      x: 2064.2002
-      y: 458.59998
+      x: 2155.2002
+      y: 466.59998
       width: 300
-      height: 100
-    windowTitle: State
+      height: 150
     optimalWidth: 300
-    optimalHeight: 100
+    optimalHeight: 150
     comment: 
     isAssigned: 1
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 0
@@ -260,26 +251,25 @@ MonoBehaviour:
     s_exitNodes: 1b190000
     s_hasExitNodes: 01
     drawNode: {fileID: 11400000, guid: 3de6cb72c5d54a842957b3d8754294e2, type: 2}
-    state: {fileID: 0}
+    state: {fileID: 11400000, guid: fb602b6059a99214c9d4d12496ebda0e, type: 2}
     onFixedList: []
     onUpdateList: []
     onEnterList: []
     onExitList: []
-  - id: 6437
+  - windowTitle: State - Watching
+    id: 6437
     windowRect:
       serializedVersion: 2
-      x: 1216.8003
-      y: 2329
+      x: 1174.8003
+      y: 2312
       width: 300
-      height: 100
-    windowTitle: State
+      height: 150
     optimalWidth: 300
-    optimalHeight: 100
+    optimalHeight: 150
     comment: 
     isAssigned: 1
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 0
@@ -288,26 +278,25 @@ MonoBehaviour:
     s_exitNodes: 3c190000
     s_hasExitNodes: 01
     drawNode: {fileID: 11400000, guid: 3de6cb72c5d54a842957b3d8754294e2, type: 2}
-    state: {fileID: 0}
+    state: {fileID: 11400000, guid: 04054e88a000f814b902b498c55720bf, type: 2}
     onFixedList: []
     onUpdateList: []
     onEnterList: []
     onExitList: []
-  - id: 6438
+  - windowTitle: State - Panicking
+    id: 6438
     windowRect:
       serializedVersion: 2
       x: 2130.2002
       y: 2162.6
       width: 300
-      height: 100
-    windowTitle: State
+      height: 150
     optimalWidth: 300
-    optimalHeight: 100
+    optimalHeight: 150
     comment: 
     isAssigned: 1
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 0
@@ -316,26 +305,25 @@ MonoBehaviour:
     s_exitNodes: 3a190000
     s_hasExitNodes: 01
     drawNode: {fileID: 11400000, guid: 3de6cb72c5d54a842957b3d8754294e2, type: 2}
-    state: {fileID: 0}
+    state: {fileID: 11400000, guid: 81d1d0f6cedd50448b7cee14b74aa73a, type: 2}
     onFixedList: []
     onUpdateList: []
     onEnterList: []
     onExitList: []
-  - id: 6450
+  - windowTitle: State - Loosing Intreset In Player
+    id: 6450
     windowRect:
       serializedVersion: 2
       x: 2795
       y: 2319.799
       width: 300
-      height: 100
-    windowTitle: State
+      height: 300
     optimalWidth: 300
-    optimalHeight: 100
+    optimalHeight: 300
     comment: 
     isAssigned: 1
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 0
@@ -344,27 +332,26 @@ MonoBehaviour:
     s_exitNodes: 37190000
     s_hasExitNodes: 01
     drawNode: {fileID: 11400000, guid: 3de6cb72c5d54a842957b3d8754294e2, type: 2}
-    state: {fileID: 0}
+    state: {fileID: 11400000, guid: a653985097c117e44a60544dc3357d69, type: 2}
     onFixedList: []
     onUpdateList: []
     onEnterList: []
     onExitList: []
   transitionNodes:
-  - id: 6407
+  - windowTitle: Condition
+    id: 6407
     windowRect:
       serializedVersion: 2
       x: 1172.8
       y: 2112.2007
       width: 200
       height: 62
-    windowTitle: Condition
     optimalWidth: 200
     optimalHeight: 62
     comment: 
     isAssigned: 1
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 1
@@ -376,21 +363,20 @@ MonoBehaviour:
     conditions:
     - {fileID: 11400000, guid: b2f6f3ecd54525649bf1a6fd0b3b6836, type: 2}
     disable: 0
-  - id: 6411
+  - windowTitle: Condition
+    id: 6411
     windowRect:
       serializedVersion: 2
       x: 1850.1997
       y: 1620.2
       width: 200
       height: 62
-    windowTitle: Condition
     optimalWidth: 200
     optimalHeight: 62
     comment: 
     isAssigned: 1
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 1
@@ -402,21 +388,20 @@ MonoBehaviour:
     conditions:
     - {fileID: 11400000, guid: 7b212c1ceb7bb6b41aadcb52e0ffb16b, type: 2}
     disable: 0
-  - id: 6417
+  - windowTitle: Condition
+    id: 6417
     windowRect:
       serializedVersion: 2
       x: 1021.79944
       y: 1044.7999
       width: 200
       height: 62
-    windowTitle: Condition
     optimalWidth: 200
     optimalHeight: 62
     comment: 
     isAssigned: 1
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 1
@@ -428,21 +413,20 @@ MonoBehaviour:
     conditions:
     - {fileID: 11400000, guid: 8f4c68f0d4dcd5341a57e41c73c07984, type: 2}
     disable: 0
-  - id: 6420
+  - windowTitle: Condition
+    id: 6420
     windowRect:
       serializedVersion: 2
       x: 472.20032
       y: 596.2001
       width: 200
       height: 62
-    windowTitle: Condition
     optimalWidth: 200
     optimalHeight: 62
     comment: 
     isAssigned: 1
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 1
@@ -454,21 +438,20 @@ MonoBehaviour:
     conditions:
     - {fileID: 11400000, guid: 4cda814c17eeb1346ad4cf632fae2d47, type: 2}
     disable: 0
-  - id: 6422
+  - windowTitle: Condition
+    id: 6422
     windowRect:
       serializedVersion: 2
       x: 1097.4004
       y: 70.6001
       width: 200
       height: 62
-    windowTitle: Condition
     optimalWidth: 200
     optimalHeight: 62
     comment: 
     isAssigned: 1
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 1
@@ -480,21 +463,20 @@ MonoBehaviour:
     conditions:
     - {fileID: 11400000, guid: aae45e85b089ccc47800950e5b229fd0, type: 2}
     disable: 0
-  - id: 6424
+  - windowTitle: Condition
+    id: 6424
     windowRect:
       serializedVersion: 2
       x: 1632.2002
       y: 682.2001
       width: 200
       height: 62
-    windowTitle: Condition
     optimalWidth: 200
     optimalHeight: 62
     comment: 
     isAssigned: 1
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 1
@@ -506,21 +488,20 @@ MonoBehaviour:
     conditions:
     - {fileID: 11400000, guid: 4cda814c17eeb1346ad4cf632fae2d47, type: 2}
     disable: 0
-  - id: 6427
+  - windowTitle: Condition
+    id: 6427
     windowRect:
       serializedVersion: 2
       x: 1889.2002
       y: 332.19995
       width: 200
       height: 62
-    windowTitle: Condition
     optimalWidth: 200
     optimalHeight: 62
     comment: 
     isAssigned: 1
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 1
@@ -532,21 +513,20 @@ MonoBehaviour:
     conditions:
     - {fileID: 11400000, guid: 38e80c8ed0b63ac4fa760794c09d167d, type: 2}
     disable: 0
-  - id: 6429
+  - windowTitle: Condition
+    id: 6429
     windowRect:
       serializedVersion: 2
       x: 1106.6
       y: 411.59998
       width: 200
       height: 62
-    windowTitle: Condition
     optimalWidth: 200
     optimalHeight: 62
     comment: 
     isAssigned: 1
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 1
@@ -558,21 +538,20 @@ MonoBehaviour:
     conditions:
     - {fileID: 11400000, guid: 4cda814c17eeb1346ad4cf632fae2d47, type: 2}
     disable: 0
-  - id: 6432
+  - windowTitle: Condition
+    id: 6432
     windowRect:
       serializedVersion: 2
       x: 1041.8
       y: 623.3999
       width: 200
       height: 62
-    windowTitle: Condition
     optimalWidth: 200
     optimalHeight: 62
     comment: 
     isAssigned: 1
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 1
@@ -584,21 +563,20 @@ MonoBehaviour:
     conditions:
     - {fileID: 11400000, guid: 7b212c1ceb7bb6b41aadcb52e0ffb16b, type: 2}
     disable: 0
-  - id: 6435
+  - windowTitle: Condition
+    id: 6435
     windowRect:
       serializedVersion: 2
       x: 2100.4001
       y: 1674.2002
       width: 200
       height: 62
-    windowTitle: Condition
     optimalWidth: 200
     optimalHeight: 62
     comment: 
     isAssigned: 1
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 1
@@ -610,21 +588,20 @@ MonoBehaviour:
     conditions:
     - {fileID: 11400000, guid: a93b067abcb9c104cb4582b38b31827f, type: 2}
     disable: 0
-  - id: 6439
+  - windowTitle: Condition
+    id: 6439
     windowRect:
       serializedVersion: 2
-      x: 849.6001
-      y: 796.59985
+      x: 772.6001
+      y: 797.59985
       width: 200
       height: 62
-    windowTitle: Condition
     optimalWidth: 200
     optimalHeight: 62
     comment: 
     isAssigned: 1
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 1
@@ -636,21 +613,20 @@ MonoBehaviour:
     conditions:
     - {fileID: 11400000, guid: 55bfe6e9ff8c8b94da1c2c45010ef917, type: 2}
     disable: 0
-  - id: 6442
+  - windowTitle: Condition
+    id: 6442
     windowRect:
       serializedVersion: 2
       x: 873.9999
       y: 2205.4
       width: 200
       height: 62
-    windowTitle: Condition
     optimalWidth: 200
     optimalHeight: 62
     comment: 
     isAssigned: 1
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 1
@@ -662,21 +638,20 @@ MonoBehaviour:
     conditions:
     - {fileID: 11400000, guid: 4a87553f746e88f4fb82763d75c9b225, type: 2}
     disable: 0
-  - id: 6451
+  - windowTitle: Condition
+    id: 6451
     windowRect:
       serializedVersion: 2
       x: 471
       y: 659.3993
       width: 200
       height: 62
-    windowTitle: Condition
     optimalWidth: 200
     optimalHeight: 62
     comment: 
     isAssigned: 1
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 1
@@ -688,21 +663,20 @@ MonoBehaviour:
     conditions:
     - {fileID: 11400000, guid: 55bfe6e9ff8c8b94da1c2c45010ef917, type: 2}
     disable: 0
-  - id: 6455
+  - windowTitle: Condition
+    id: 6455
     windowRect:
       serializedVersion: 2
       x: 2839.7998
       y: 3109.7996
       width: 200
       height: 62
-    windowTitle: Condition
     optimalWidth: 200
     optimalHeight: 62
     comment: 
     isAssigned: 1
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 1
@@ -714,21 +688,20 @@ MonoBehaviour:
     conditions:
     - {fileID: 11400000, guid: 8f4c68f0d4dcd5341a57e41c73c07984, type: 2}
     disable: 0
-  - id: 6457
+  - windowTitle: Condition
+    id: 6457
     windowRect:
       serializedVersion: 2
       x: 1868.4004
       y: 1874.7964
       width: 200
       height: 62
-    windowTitle: Condition
     optimalWidth: 200
     optimalHeight: 62
     comment: 
     isAssigned: 1
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 1
@@ -740,21 +713,20 @@ MonoBehaviour:
     conditions:
     - {fileID: 11400000, guid: 4a87553f746e88f4fb82763d75c9b225, type: 2}
     disable: 0
-  - id: 6458
+  - windowTitle: Condition
+    id: 6458
     windowRect:
       serializedVersion: 2
       x: 2519.0005
       y: 2258.9958
       width: 200
       height: 62
-    windowTitle: Condition
     optimalWidth: 200
     optimalHeight: 62
     comment: 
     isAssigned: 1
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 1
@@ -766,21 +738,20 @@ MonoBehaviour:
     conditions:
     - {fileID: 11400000, guid: aae45e85b089ccc47800950e5b229fd0, type: 2}
     disable: 0
-  - id: 6460
+  - windowTitle: Condition
+    id: 6460
     windowRect:
       serializedVersion: 2
       x: 1587.3997
       y: 2420.0007
       width: 200
       height: 62
-    windowTitle: Condition
     optimalWidth: 200
     optimalHeight: 62
     comment: 
     isAssigned: 1
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 1
@@ -792,21 +763,20 @@ MonoBehaviour:
     conditions:
     - {fileID: 11400000, guid: 404be86729fc35e42b885d4c132dbc75, type: 2}
     disable: 0
-  - id: 6463
+  - windowTitle: Condition
+    id: 6463
     windowRect:
       serializedVersion: 2
       x: 1843.5996
       y: 2483.6016
       width: 200
       height: 62
-    windowTitle: Condition
     optimalWidth: 200
     optimalHeight: 62
     comment: 
     isAssigned: 1
     showDescription: 0
     isOnCurrent: 0
-    graph: {fileID: 11400000}
     reroutes: []
     collapse: 0
     showActions: 1
@@ -820,4 +790,4 @@ MonoBehaviour:
     disable: 0
   idCount: 6464
   initialStateID: 2
-  editorScrollPosition: {x: 661.7998, y: 1566.0009}
+  editorScrollPosition: {x: 409.80002, y: 428.40082}

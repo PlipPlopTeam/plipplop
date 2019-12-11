@@ -32,7 +32,7 @@ public class BuildPlayerWindows64 : MonoBehaviour
         var dirs = new string[] { location, finalPath };
         foreach (var dir in dirs) {
             if (Directory.Exists(dir)) {
-                Directory.Delete(dir, true);
+                Directory.Delete(dir, true); 
             }
             Directory.CreateDirectory(dir);
         }
