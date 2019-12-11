@@ -30,10 +30,8 @@ namespace Behavior.Editor
         {
             if (index == null) return null;
 
-			Debug.Log(nodes.Count);
             for (int i = 0; i < nodes.Count; i++) {
 
-				Debug.Log(nodes[i]);
 				if (nodes[i].id == index)
                     return nodes[i];
             }

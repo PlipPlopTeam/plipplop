@@ -13,7 +13,6 @@ public abstract class Controller : MonoBehaviour
     [HideInInspector] public float gravityMultiplier = 100f;
 
     [HideInInspector] public Rigidbody customExternalRigidbody;
-
     [HideInInspector] public AperturePreset customCamera = null;
     [HideInInspector] public Locomotion locomotion;
 	[HideInInspector] public Transform visuals;
@@ -23,16 +22,16 @@ public abstract class Controller : MonoBehaviour
 
     new internal Rigidbody rigidbody;
     internal ControllerSensor controllerSensor;
+	private Controller lastFocusedController;
     internal bool isImmerged;
 
     public virtual void OnEject()
     {
         if (controllerSensor) Destroy(controllerSensor.gameObject);
         controllerSensor = null;
-
         RetractLegs();
 
-        //DEBUG
+		//DEBUG
 		/*
         foreach (var renderer in GetComponentsInChildren<Renderer>())
         {
@@ -40,9 +39,7 @@ public abstract class Controller : MonoBehaviour
         }
 		*/
 
-		if(face != null) face.SetActive(false);
-
-
+		ToggleFace(false);
 		Activity activity = gameObject.GetComponent<Activity>();
         if(activity != null) activity.Repair();
     }
@@ -52,21 +49,18 @@ public abstract class Controller : MonoBehaviour
         controllerSensor = Instantiate(Game.i.library.controllerSensor, gameObject.transform).GetComponent<ControllerSensor>();
         controllerSensor.transform.localPosition = new Vector3(0f, 0f, controllerSensor.sensorForwardPosition);
 
-        if (beginCrouched) {
-            RetractLegs();
-        }
-        else {
-            ExtendLegs();
-        }
+		if (beginCrouched) RetractLegs();
+		else ExtendLegs();
 
-        //DEBUG
+		//DEBUG
 		/*
         foreach (var renderer in GetComponentsInChildren<Renderer>()) {
             renderer.material.color = new Color(140 / 255f, 60 / 255f, 60 / 255f);
         }
 		*/
 
-		if (face != null) face.SetActive(true);
+		ToggleFace(true);
+		foreach (Transform t in visuals.GetComponentsInChildren<Transform>()) t.gameObject.layer = 0;
 
 
 		Activity activity = gameObject.GetComponent<Activity>();
@@ -76,11 +70,9 @@ public abstract class Controller : MonoBehaviour
     internal virtual void SpecificJump() {}
     internal virtual void OnJump()
     { 
-        if(AreLegsRetracted()) 
-            SpecificJump();
-        else if (WasGrounded())
-            locomotion.Jump();
-    }
+        if(AreLegsRetracted()) SpecificJump();
+		else if (WasGrounded()) locomotion.Jump();
+	}
 
     internal void RetractLegs()
     {
@@ -96,10 +88,8 @@ public abstract class Controller : MonoBehaviour
     }
 
     internal bool AreLegsRetracted() { return locomotion.AreLegsRetracted(); }
-
     internal virtual bool IsGrounded(float rangeMultiplier = 1f) { return locomotion.IsGrounded(rangeMultiplier); }
     internal virtual bool WasGrounded() { return Time.time - locomotion.preset.groundedBufferToleranceSeconds < lastTimeGrounded; }
-
     internal virtual void OnHoldJump() { }
     internal abstract void OnLegsRetracted();
     internal abstract void OnLegsExtended();
@@ -111,7 +101,6 @@ public abstract class Controller : MonoBehaviour
         if (AreLegsRetracted()) SpecificMove(direction);
         else locomotion.Move(direction);
     }
-
 
     public void Move(float fb, float rl)
     {
@@ -175,49 +164,59 @@ public abstract class Controller : MonoBehaviour
         rigidbody.useGravity = false;
     }
 
-	/*
-    void AddFace()
-    {
-        face = Instantiate(Game.i.library.facePrefab, visuals);
-        Vector3 bounds = GetComponent<Collider>().bounds.size;
-        face.transform.localPosition = new Vector3(0f, bounds.y/2, bounds.z/2);
-        face.transform.forward = visuals.forward;
-    }
-
     void ToggleFace(bool isActive)
     {
-        if(!face) AddFace();
-        face.SetActive(isActive);
-    }
-	*/
+        if(face) face.SetActive(isActive);
+	}
 
     virtual internal void Update()
     {
         rigidbody.useGravity = false;
         UpdateLastTimeGrounded();
 
-        // DEBUG
+		if(controllerSensor && !isImmerged)
+		{
+			if(controllerSensor.IsThereAnyController())
+			{
+				Controller focusedController = controllerSensor.GetFocusedController();
+				if (lastFocusedController != null && lastFocusedController != focusedController)
+				{
+					foreach (Transform t in lastFocusedController.visuals.GetComponentsInChildren<Transform>()) t.gameObject.layer = 0;
+				}
+				foreach (Transform t in focusedController.visuals.GetComponentsInChildren<Transform>()) t.gameObject.layer = 9;
+				lastFocusedController = focusedController;
+			}
+			else if (lastFocusedController != null)
+			{
+				foreach (Transform t in lastFocusedController.visuals.GetComponentsInChildren<Transform>()) t.gameObject.layer = 0;
+				lastFocusedController = null;
+			}
+		}
+
+		// DEBUG
         var lr = GetComponent<LineRenderer>();
-        if (controllerSensor) {
+        if (controllerSensor)
+		{
             if (!lr) lr = gameObject.AddComponent<LineRenderer>();
             lr.material = Game.i.library.lineRendererMaterial;//new Material(Shader.Find("Lightweight Render Pipeline/Particles/Unlit"));
             if (!isImmerged && controllerSensor.IsThereAnyController()) {
                 lr.positionCount = 2;
                 lr.SetPosition(0, gameObject.transform.position);
                 lr.SetPosition(1, controllerSensor.GetFocusedController().transform.position);
-                lr.startColor = Color.red;
-                lr.endColor = Color.blue;
-                lr.startWidth = 0.1f;
-                lr.endWidth = 0.1f;
+                lr.startColor = Color.white;
+                lr.endColor = Color.white;
+                lr.startWidth = 0.05f;
+                lr.endWidth = 0.025f;
             }
-            else {
+            else
+			{
                 Destroy(lr);
             }
         }
         else {
             if (lr) Destroy(lr);
         }
-    }
+	}
 
 
     virtual internal void FixedUpdate()
