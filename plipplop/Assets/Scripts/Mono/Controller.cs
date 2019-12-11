@@ -16,9 +16,9 @@ public abstract class Controller : MonoBehaviour
 
     [HideInInspector] public AperturePreset customCamera = null;
     [HideInInspector] public Locomotion locomotion;
-    [HideInInspector] public Transform visuals;
+	[HideInInspector] public Transform visuals;
+	[HideInInspector] public GameObject face;
 
-    GameObject face;
     float lastTimeGrounded = 0f;
 
     new internal Rigidbody rigidbody;
@@ -33,15 +33,17 @@ public abstract class Controller : MonoBehaviour
         RetractLegs();
 
         //DEBUG
+		/*
         foreach (var renderer in GetComponentsInChildren<Renderer>())
         {
             renderer.material.color = new Color(70 / 255f, 100 / 255f, 160 / 255f);
         }
+		*/
 
-        ToggleFace(false);
+		if(face != null) face.SetActive(false);
 
 
-        Activity activity = gameObject.GetComponent<Activity>();
+		Activity activity = gameObject.GetComponent<Activity>();
         if(activity != null) activity.Repair();
     }
     
@@ -58,13 +60,16 @@ public abstract class Controller : MonoBehaviour
         }
 
         //DEBUG
+		/*
         foreach (var renderer in GetComponentsInChildren<Renderer>()) {
             renderer.material.color = new Color(140 / 255f, 60 / 255f, 60 / 255f);
         }
+		*/
 
-        ToggleFace(true);
+		if (face != null) face.SetActive(true);
 
-        Activity activity = gameObject.GetComponent<Activity>();
+
+		Activity activity = gameObject.GetComponent<Activity>();
         if(activity != null) activity.Break();
     }
 
@@ -170,6 +175,7 @@ public abstract class Controller : MonoBehaviour
         rigidbody.useGravity = false;
     }
 
+	/*
     void AddFace()
     {
         face = Instantiate(Game.i.library.facePrefab, visuals);
@@ -183,6 +189,7 @@ public abstract class Controller : MonoBehaviour
         if(!face) AddFace();
         face.SetActive(isActive);
     }
+	*/
 
     virtual internal void Update()
     {
