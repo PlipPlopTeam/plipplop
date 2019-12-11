@@ -6,7 +6,7 @@ using System.IO;
 
 public class BuildPlayerWindows64 : MonoBehaviour
 {
-    static string buildLocation = @"D:\PROJETS\PLIPPLOP\plipplop\_BUILD";
+    static string buildLocation = Path.Combine(Directory.GetCurrentDirectory(), "_BUILD");
 
     [MenuItem("Tools/Build diorama")]
     public static void BuildDiorama()
@@ -22,7 +22,9 @@ public class BuildPlayerWindows64 : MonoBehaviour
 
     static void Build(string location, params string[] scenes)
     {
-        Directory.Delete(location, true);
+        if (Directory.Exists(location)) {
+            Directory.Delete(location, true);
+        }
         Directory.CreateDirectory(location);
         BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
         buildPlayerOptions.scenes = new[] { "Assets/Scenes/Debug/Diorama.unity" };
