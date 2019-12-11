@@ -36,7 +36,7 @@ public class BuildPlayerWindows64 : MonoBehaviour
         BuildSummary summary = report.summary;
 
         if (summary.result == BuildResult.Succeeded) {
-            Debug.Log("Build succeeded: " + summary.totalSize + " bytes");
+            Debug.Log("Built to ["+ location + "] (" + (summary.totalSize/1000f) + " KB)");
         }
 
         if (summary.result == BuildResult.Failed) {
