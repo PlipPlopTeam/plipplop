@@ -203,8 +203,8 @@ namespace Behavior.Editor
 
         public AIStateTransitionNode AddTransition(AIStateTransitionNode node, int index)
         {
-            if (index == 0 && node.outputIfTrue is AIStateTransitionNode) return (AIStateTransitionNode)node.outputIfTrue;
-            if (index == 1 && node.outputIfFalse is AIStateTransitionNode) return (AIStateTransitionNode)node.outputIfFalse;
+            if (index == 0 && GetOutputIfTrue(node) is AIStateTransitionNode) return (AIStateTransitionNode)GetOutputIfTrue(node);
+            if (index == 1 && GetOutputIfFalse(node) is AIStateTransitionNode) return (AIStateTransitionNode)GetOutputIfFalse(node);
 
             AIStateTransitionNode retVal = new AIStateTransitionNode();
             retVal.id = idCount;
@@ -240,6 +240,16 @@ namespace Behavior.Editor
                 Debug.LogError("!! COULD NOT GET the initial state of graph " + name + " (state id: " + initialStateID + ").\nCHECK THE LIBRARY!");
                 return null;
             }
+        }
+
+        public Node GetOutputIfTrue(AIStateTransitionNode node)
+        {
+            return GetNodeWithIndex(node.exitNodes[0]);
+        }
+
+        public Node GetOutputIfFalse(AIStateTransitionNode node)
+        {
+            return GetNodeWithIndex(node.exitNodes[1]);
         }
     }
 }
