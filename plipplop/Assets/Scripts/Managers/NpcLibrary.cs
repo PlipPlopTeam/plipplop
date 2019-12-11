@@ -9,5 +9,6 @@ public class NpcLibrary
     [System.Serializable] public class AIStateResource : Library.Resource<AIState> { }
 
     public List<AIStateResource> aiStates;
+    public GameObject NPCSamplePrefab;
 
 }
