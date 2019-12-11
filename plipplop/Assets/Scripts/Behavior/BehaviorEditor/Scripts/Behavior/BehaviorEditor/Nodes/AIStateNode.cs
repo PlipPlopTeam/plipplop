@@ -18,9 +18,4 @@ public class AIStateNode : Node
     {
         SetExitNodesNumber(1);
     }
-
-    public AIStateTransitionNode AddTransition()
-    {
-        return graph.AddTransition(this);
-    }
 }

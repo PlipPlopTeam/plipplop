@@ -167,7 +167,7 @@ public class Aperture
 		rotationMultiplier = settings.alignMultiplierByUser;
 		isCameraBeingRepositioned = true;
     }
-	public void Aligned()
+	public void DeclareAligned()
 	{
 		rotationMultiplier = 1f;
 		isCameraBeingRepositioned = false;
@@ -183,66 +183,69 @@ public class Aperture
 
 	public void FixedUpdate()
 	{
+
 		if (freeze) return;
 		if (settings.constraintToTarget)
 		{
 			cam.transform.parent = target;
 			cam.transform.localPosition = settings.targetConstraintLocalOffset;
 			cam.transform.forward = target.forward;
-			return;
+            return;
 		}
 		else cam.transform.parent = null;
 
 		var targetPosition = target ? target.position : defaultTarget;
-
-		// Camera trying to get in my back
 		var targetMovementVelocity = Vector3.Distance(targetPosition, lastTargetPosition);
-		if (!isTargetMoving)
-		{
-			if (targetMovementVelocity > settings.minTargetVelocity)
-			{
-				isTargetMoving = true;
-				// START MOVING
-			}
-		}
-		else
-		{
-			if (targetMovementVelocity <= settings.minTargetVelocity)
-			{
-				hAngle = Vector3.SignedAngle(Vector3.forward, Forward(), Vector3.up);
-				isTargetMoving = false;
-				// STOP MOVING
-			}
-		}
 
-		// ALIGNING
+        isTargetMoving = false;
+
+        if (targetMovementVelocity > settings.minTargetVelocity) {
+            isTargetMoving = true;
+        }
+
+		// If that bool is true, the camera will immediatly put itself in the back of the player
 		if (isCameraBeingRepositioned)
 		{
 			hAngle = Vector3.SignedAngle(Vector3.forward, target.forward, Vector3.up);
 			float a = Vector3.SignedAngle(Forward(), target.forward, Vector3.up);
-			if (Mathf.Abs(a) < settings.angleConsideredAlign) Aligned();
-		}
-		// TARGET IS MOVING
-		else if (isTargetMoving && Mathf.Abs(hAngleAmount) <= 0f)
-		{
-			ResetIdleTime();
-			float sForwardAngle = Vector3.SignedAngle(Vector3.forward, target.forward, Vector3.up);
-			float diffForwardAngle = Mathf.Abs(Vector3.SignedAngle(Forward(), target.forward, Vector3.up));
-			float angDifMultiplier = 1f;
-			if (diffForwardAngle >= 90f || diffForwardAngle <= -90f)
-			{
-				angDifMultiplier = 1f - Mathf.Abs(1f - (diffForwardAngle / 90f));
-			}
-			rotationMultiplier = targetMovementVelocity * settings.alignMultiplierByVelocity * angDifMultiplier;
-			hAngle = sForwardAngle;
-			hAngle += hAngleAmount * settings.alignMultiplierByStick;
-		}
-		else
-		{
-			hAngle += hAngleAmount;
-		}
-		hAngleAmount = 0f;
+			if (Mathf.Abs(a) < settings.angleConsideredAlign) 
+                DeclareAligned();
+        }
+        else {
+            hAngle += hAngleAmount;
+        }
 
+        if (isTargetMoving) {
+            ResetIdleTime();
+        }
+
+        if (Mathf.Abs(hAngleAmount) <= 0f) {
+
+        }
+
+
+        // TARGET IS MOVING
+        /*
+   else if (isTargetMoving && Mathf.Abs(hAngleAmount) <= 0f)
+   {
+       Debug.Log("Hello");
+
+       ResetIdleTime();
+       float sForwardAngle = Vector3.SignedAngle(Vector3.forward, target.forward, Vector3.up);
+       float diffForwardAngle = Mathf.Abs(Vector3.SignedAngle(Forward(), target.forward, Vector3.up));
+       float angDifMultiplier = 1f;
+       if (diffForwardAngle >= 90f || diffForwardAngle <= -90f)
+       {
+           angDifMultiplier = 1f - Mathf.Abs(1f - (diffForwardAngle / 90f));
+       }
+       rotationMultiplier = targetMovementVelocity * settings.alignMultiplierByVelocity * angDifMultiplier;
+       hAngle = sForwardAngle;
+       hAngle += hAngleAmount ;
+
+   }
+*/
+        hAngleAmount = 0f;
+                               
 		float vAngleAmplitude = 40f - settings.additionalAngle;
 		vAngle = vAngleAmount * vAngleAmplitude;
 
@@ -263,6 +266,7 @@ public class Aperture
 		// CameraFX
 		ComputeFieldOfView(targetPosition);
 		UpdateFieldOfView();
+
 		Apply();
 		ShakeUpdate();
 		lastTargetPosition = targetPosition;
@@ -397,10 +401,17 @@ public class Aperture
     {
         // Look at 
         if (IsLookAtEnabled()) {
+
+            // The further the player is from the center of the screen, the quickest i should be to look at the player
+            var screenPosition = Vector3.Scale(Vector3.up + Vector3.right, cam.WorldToViewportPoint(target.position) - Vector3.up / 2f - Vector3.right / 2f);
+            var screenPosition2 = new Vector2(screenPosition.x, screenPosition.y);
+
             cam.transform.forward = Vector3.Lerp(
                 cam.transform.forward,
                 -(position.current - (target.position + settings.heightOffset * Vector3.up)).normalized,
-                settings.lookAtLerp * Time.fixedDeltaTime
+                settings.lookAtLerp * Time.fixedDeltaTime 
+                    // Off-screen bonus to look at the target
+                    + (1f / (1f - screenPosition2.magnitude) - 1f)
             );
         }
 
@@ -460,5 +471,10 @@ public class Aperture
     public PositionAndRotation GetStaticObjective()
     {
         return staticObjectives.Count > 0 ? staticObjectives[staticObjectives.Count - 1] : null;
+    }
+
+    public float GetLastCameraInput()
+    {
+        return lastCameraInput;
     }
 }
