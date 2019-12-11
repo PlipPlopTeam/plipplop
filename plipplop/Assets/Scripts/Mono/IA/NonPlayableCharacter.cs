@@ -32,7 +32,7 @@ public class NonPlayableCharacter : MonoBehaviour
 	public Dictionary<Clothes.ESlot, Clothes> clothes = new Dictionary<Clothes.ESlot, Clothes>();
 
     [Header("Settings")]
-    public BehaviorGraph behaviorGraph;
+    public BehaviorGraphData graph;
 	public float strength = 1f;
 
 	float assHeightWhenSitted = 0.51f;
@@ -82,22 +82,21 @@ public class NonPlayableCharacter : MonoBehaviour
 		Equip(Game.i.library.torsoClothes.PickRandom());
 		Equip(Game.i.library.legsClothes.PickRandom());
 
-		behaviorGraph = Instantiate(behaviorGraph);
-		behaviorGraph.SetTarget(this);
-		behaviorGraph.Start();
+		graph = Instantiate(graph);
+		graph.Load(this);
 	}
 
 	public void Update()
 	{
         StartWaiting();
-        behaviorGraph.Update();
+		graph.Update();
 		if(carried != null && carried.Mass() > strength) StartCarrying(carried);
         StartCollecting();
 	}
 
 	public void FixedUpdate()
 	{
-		behaviorGraph.FixedUpdate();
+		graph.FixedUpdate();
 	}
 
 	private void StartWaiting()
@@ -297,7 +296,7 @@ public class NonPlayableCharacter : MonoBehaviour
         if(EditorApplication.isPlaying)
 		{
 			float h = 0f;
-			Handles.Label(transform.position + Vector3.up * (2f + h), behaviorGraph.GetCurrentAIStateName());
+			//Handles.Label(transform.position + Vector3.up * (2f + h), graph.GetCurrentAIStateName());
 			h+= 0.1f;
 			foreach(KeyValuePair<EStat, float> entry in stats)
 			{

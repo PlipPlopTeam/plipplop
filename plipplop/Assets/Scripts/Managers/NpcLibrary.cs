@@ -7,9 +7,11 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Behavior/Library")]
 public class NpcLibrary : ScriptableObject
 {
-    [System.Serializable] public class AIStateResource : Library.Resource<AIState> {}
+	[System.Serializable] public class AIStateResource : Library.Resource<AIState> { }
+	[System.Serializable] public class AIConditionResource : Library.Resource<Condition> { }
 
 	public List<AIStateResource> states;
+	public List<AIConditionResource> conditions;
     public GameObject NPCSamplePrefab;
 
 	public AIState GetAIStateObject(int id)
@@ -20,6 +22,16 @@ public class NpcLibrary : ScriptableObject
 	public int GetAIStateId(AIState state)
 	{
 		foreach (AIStateResource e in states) if (e.resource == state) return e.id;
+		return -1;
+	}
+	public Condition GetConditionObject(int id)
+	{
+		foreach (AIConditionResource e in conditions) if (e.id == id) return e.resource;
+		return null;
+	}
+	public int GetConditionId(Condition condition)
+	{
+		foreach (AIConditionResource e in conditions) if (e.resource == condition) return e.id;
 		return -1;
 	}
 }
