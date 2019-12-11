@@ -27,7 +27,7 @@ public class BuildPlayerWindows64 : MonoBehaviour
         }
         Directory.CreateDirectory(location);
         BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
-        buildPlayerOptions.scenes = new[] { "Assets/Scenes/Debug/Diorama.unity" };
+        buildPlayerOptions.scenes = scenes;
         buildPlayerOptions.locationPathName = Path.Combine(location, "Build.exe");
         buildPlayerOptions.target = BuildTarget.StandaloneWindows64;
         buildPlayerOptions.options = BuildOptions.None;
