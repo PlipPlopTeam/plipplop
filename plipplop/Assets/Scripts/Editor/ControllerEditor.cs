@@ -42,9 +42,10 @@ public class ControllerEditor : BaseEditor
         buttons.Add(GravityMultiplierSlider(colWidth));
         buttons.Add(CustomCameraField(colWidth));
         buttons.Add(CustomRigidbodyField(colWidth));
-        buttons.Add(CustomVisualsField(colWidth));
+		buttons.Add(CustomVisualsField(colWidth));
+		buttons.Add(CustomFaceField(colWidth));
 
-        if (EditorApplication.isPlaying) {
+		if (EditorApplication.isPlaying) {
             EjectButton().Invoke();
         }
         else {
@@ -285,7 +286,30 @@ public class ControllerEditor : BaseEditor
         };
     }
 
-    System.Action CustomVisualsField(float width)
+	System.Action CustomFaceField(float width)
+	{
+		var options = new List<GUILayoutOption>();
+
+		options.Add(GUILayout.Width(width));
+		options.Add(GUILayout.MinHeight(fieldsHeight));
+		options.Add(GUILayout.ExpandHeight(false));
+
+		var noBoldTitle = new GUIStyle(title);
+		noBoldTitle.fontStyle = FontStyle.Normal;
+
+		var icon = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_ChunkScene");
+
+		return delegate {
+			GUILayout.BeginVertical(options.ToArray());
+
+			GUILayout.Label(new GUIContent(buttonSpace + "Face", icon), noBoldTitle, GUILayout.Height(fieldsHeight * 0.66f), GUILayout.ExpandWidth(true));
+			serializedObject.FindProperty("face").objectReferenceValue = EditorGUILayout.ObjectField(((Controller)target).face, typeof(GameObject), allowSceneObjects: true);
+			serializedObject.ApplyModifiedProperties();
+			GUILayout.EndVertical();
+		};
+	}
+
+	System.Action CustomVisualsField(float width)
     {
         var options = new List<GUILayoutOption>();
 

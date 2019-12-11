@@ -83,7 +83,7 @@ public class Locomotion : Walker
         if(rigidbody != null)
         {
             currentVelocity = rigidbody.velocity;
-            if(rigidbody.GetHorizontalVelocity().magnitude > 1f)
+            if(rigidbody.GetHorizontalVelocity().magnitude > 1f && IsGrounded())
                 locomotionAnimation.isWalking = true;
             else
                 locomotionAnimation.isWalking = false;
@@ -138,7 +138,7 @@ public class Locomotion : Walker
             lastDirection = direction;
 
             // Animation
-            if ((isImmerged || IsGrounded()) && rigidbody.velocity.normalized.magnitude > 0) {
+            if (rigidbody.velocity.normalized.magnitude > 0) {
                 transform.forward = Vector3.Lerp(
                     Vector3.Scale(Vector3.one - Vector3.up, transform.forward),
                     Vector3.Scale(Vector3.one - Vector3.up, rigidbody.velocity.normalized),

@@ -10,6 +10,7 @@ public class NpcLibrary : ScriptableObject
     [System.Serializable] public class AIStateResource : Library.Resource<AIState> {}
 
 	public List<AIStateResource> states;
+    public GameObject NPCSamplePrefab;
 
 	public AIState GetAIStateObject(int id)
 	{

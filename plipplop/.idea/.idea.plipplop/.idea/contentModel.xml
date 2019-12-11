@@ -8,11 +8,27 @@
       <e p="Assembly-CSharp-firstpass.csproj" t="IncludeRecursive" />
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
+        <e p="Editor" t="Include">
+          <e p="BuildPlayerWindows64.cs" t="Include" />
+        </e>
+        <e p="Meshes" t="Include">
+          <e p="PhotogrammetrieTests" t="Include">
+            <e p="S_Blur01.shader" t="Include" />
+          </e>
+        </e>
         <e p="Plugins" t="Include">
           <e p="Pencil.cs" t="Include" />
-          <e p="SaveGUISkin.cs" t="Include" />
           <e p="UnityMainThreadDispatcher" t="Include">
             <e p="UnityMainThreadDispatcher.cs" t="Include" />
+          </e>
+        </e>
+        <e p="Samples" t="Include">
+          <e p="Terrain Tools" t="Include">
+            <e p="0.1.0-preview" t="Include">
+              <e p="Terrain Assets" t="Include">
+                <e p="ThirdPartyNotices.txt" t="Include" />
+              </e>
+            </e>
           </e>
         </e>
         <e p="Scripts" t="Include">
@@ -20,9 +36,10 @@
             <e p="Actions" t="Include">
               <e p="CarryValuable.cs" t="Include" />
               <e p="ChaseFood.cs" t="Include" />
-              <e p="ChaseValuable.cs" t="Include" />
+              <e p="ChaseSubject.cs" t="Include" />
+              <e p="CollectSubject.cs" t="Include" />
               <e p="ConsumeFood.cs" t="Include" />
-              <e p="DebugLog.cs" t="Include" />
+              <e p="DebugLogString.cs" t="Include" />
               <e p="Drop.cs" t="Include" />
               <e p="EnterActivity.cs" t="Include" />
               <e p="EnterFeeder.cs" t="Include" />
@@ -36,12 +53,15 @@
               <e p="GoToValuableOriginPosition.cs" t="Include" />
               <e p="HideEmotion.cs" t="Include" />
               <e p="LeaveActivity.cs" t="Include" />
+              <e p="LookAtSubject.cs" t="Include" />
+              <e p="LooseFocus.cs" t="Include" />
               <e p="PickUp.cs" t="Include" />
               <e p="RunAwayFromPlayer.cs" t="Include" />
               <e p="SearchThing.cs" t="Include" />
               <e p="SetAnimatorBool.cs" t="Include" />
               <e p="SetAnimatorTrigger.cs" t="Include" />
               <e p="SetFace.cs" t="Include" />
+              <e p="SetMovementSettings.cs" t="Include" />
               <e p="SetSightSettings.cs" t="Include" />
               <e p="ShowEmotion.cs" t="Include" />
               <e p="StopMovement.cs" t="Include" />
@@ -57,7 +77,7 @@
                   <e p="AIState.cs" t="Include" />
                   <e p="BehaviorEditor" t="Include">
                     <e p="BehaviorEditor.cs" t="Include" />
-                    <e p="INodeable.cs" t="Include" />
+                    <e p="Cache.cs" t="Include" />
                     <e p="Nodes" t="Include">
                       <e p="AIStateDrawNode.cs" t="Include" />
                       <e p="AIStateNode.cs" t="Include" />
@@ -66,7 +86,6 @@
                       <e p="Node.cs" t="Include" />
                       <e p="TransitionDrawNode.cs" t="Include" />
                     </e>
-                    <e p="Settings.cs" t="Include" />
                   </e>
                   <e p="BehaviorGraph.cs" t="Include" />
                   <e p="Conditions" t="Include">
@@ -80,8 +99,10 @@
             </e>
             <e p="Conditions" t="Include">
               <e p="HasWaited.cs" t="Include" />
+              <e p="IsCarrying.cs" t="Include" />
               <e p="OnDestinationReached.cs" t="Include" />
               <e p="StatCheck.cs" t="Include" />
+              <e p="SubjectDistanceCheck.cs" t="Include" />
               <e p="ThingInDistance.cs" t="Include" />
               <e p="ThingInRange.cs" t="Include" />
               <e p="ThingIsSet.cs" t="Include" />
@@ -103,6 +124,7 @@
             <e p="Drawer" t="Include">
               <e p="ApertureRangeDrawer.cs" t="Include" />
               <e p="ColorFieldDrawer.cs" t="Include" />
+              <e p="LibraryResourceDrawer.cs" t="Include" />
               <e p="ReadOnlyInGameDrawer.cs" t="Include" />
               <e p="SoundDrawer.cs" t="Include" />
               <e p="SoundsDrawer.cs" t="Include" />
@@ -131,6 +153,7 @@
             <e p="Brain.cs" t="Include" />
             <e p="ChunkLoader.cs" t="Include" />
             <e p="Library.cs" t="Include" />
+            <e p="NpcLibrary.cs" t="Include" />
             <e p="Sound.cs" t="Include" />
             <e p="SoundPlayer.cs" t="Include" />
             <e p="Sounds.cs" t="Include" />
@@ -188,6 +211,7 @@
               <e p="AIZoneDebugger.cs" t="Include" />
               <e p="AreaDebugText.cs" t="Include" />
               <e p="CameraApertureDebugger.cs" t="Include" />
+              <e p="CameraStats.cs" t="Include" />
               <e p="Cheats.cs" t="Include" />
               <e p="ChunkLoaderStats.cs" t="Include" />
               <e p="DBG_Move.cs" t="Include" />
@@ -252,6 +276,7 @@
           <e p="S_ToonLit_CutOut.shader" t="Include" />
           <e p="Shader10.shader" t="Include" />
         </e>
+        <e p="StateHolder.cs" t="Include" />
         <e p="TextMesh Pro" t="Include">
           <e p="Fonts" t="Include">
             <e p="LiberationSans - OFL.txt" t="Include" />
