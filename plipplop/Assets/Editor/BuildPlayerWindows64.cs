@@ -6,7 +6,7 @@ using System.IO;
 
 public class BuildPlayerWindows64 : MonoBehaviour
 {
-    static string buildLocation = Path.Combine(Directory.GetCurrentDirectory(), "_BUILD");
+    static string buildLocation = Path.Combine(Directory.GetCurrentDirectory(), "Builds");
 
     [MenuItem("Tools/Build diorama")]
     public static void BuildDiorama()
