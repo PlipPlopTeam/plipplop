@@ -217,10 +217,17 @@ public class Aperture
 
         if (isTargetMoving) {
             ResetIdleTime();
-        }
+            
+            // Target moving and user not touching the pad, I will put myself in the back of the player
+            if (Mathf.Abs(hAngleAmount) <= 0f) {
+                float currentAngle = Vector3.SignedAngle(Forward(), target.forward, Vector3.up);
+                float cameraTurnMultiplier = 1f - Mathf.Abs(currentAngle / 180f);
 
-        if (Mathf.Abs(hAngleAmount) <= 0f) {
-
+                // Camera trying to get in my back
+                if (targetMovementVelocity > 0 || isCameraBeingRepositioned) {
+                    hAngle += cameraTurnMultiplier * currentAngle * Time.fixedDeltaTime;
+                }
+            }
         }
 
 
@@ -415,7 +422,7 @@ public class Aperture
             );
         }
 
-        cam.transform.position = position.current;
+        cam.transform.position = position.current + settings.heightOffset * Vector3.up;
         cam.fieldOfView = fieldOfView.current;
     } // Apply the values to the camera 
 

@@ -10,12 +10,15 @@ public class Ball : Controller
     public float moveLerp = 1;
     public float drag = 1f;
     public float speedBeforeRoll = 12f;
+    public float timeBeforeRoll = 1f;
     public float speedBeforeStandingUp = 2f;
 
     new Renderer renderer;
     new SphereCollider collider;
     Transform childBall;
     float originalLegHeight = 2f;
+    float timeStartedRolling = 0f;
+    bool isWaitingToRoll = false;
 
     public override void OnPossess()
     {
@@ -100,12 +103,19 @@ public class Ball : Controller
             locomotion.legsHeight = originalLegHeight * (1f - rigidbody.velocity.magnitude / speedBeforeRoll);
             if(locomotion.legsHeight < 1f) locomotion.legsHeight = 1f;
 
-            if (rigidbody.velocity.magnitude > speedBeforeRoll)
-            {
-                if (!AreLegsRetracted()) RetractLegs();
+            if (rigidbody.velocity.magnitude > speedBeforeRoll) {
+
+                if (!isWaitingToRoll) {
+                    timeStartedRolling = Time.time;
+                    isWaitingToRoll = true;
+                }
+                if (isWaitingToRoll && Time.time > timeStartedRolling + timeBeforeRoll && !AreLegsRetracted()) {
+                    RetractLegs();
+                    isWaitingToRoll = false;
+                }
             }
-            else if (IsGrounded() && rigidbody.velocity.magnitude < speedBeforeStandingUp)
-            {
+            else if (IsGrounded() && rigidbody.velocity.magnitude < speedBeforeStandingUp) {
+                isWaitingToRoll = false;
                 if (AreLegsRetracted()) ExtendLegs();
             }
         }
