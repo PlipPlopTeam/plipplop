@@ -23,12 +23,12 @@ public class BehaviorGraphEditor : Editor
 		if (GUILayout.Button("EXPORT"))
 		{
 			BehaviorGraphData graphData = CreateInstance<BehaviorGraphData>();
-			AssetDatabase.CreateAsset(graphData, "Assets/BehaviorGraphData.asset");
+			AssetDatabase.CreateAsset(graphData, "Assets/Resources/BehaviorGraphData.asset");
 			AssetDatabase.SaveAssets();
 			EditorUtility.FocusProjectWindow();
 			Selection.activeObject = graphData;
 			Compile(graphData, graph);
-			AssetDatabase.RenameAsset("Assets/BehaviorGraphData.asset", target.name + "_Exported");
+			AssetDatabase.RenameAsset("Assets/Resources/BehaviorGraphData.asset", target.name + "_Data");
 		}
 	}
 

@@ -93,10 +93,11 @@ public class NonPlayableCharacter : MonoBehaviour
 
 	public void Update()
 	{
-        StartWaiting();
+		UpdateCollecting();
+		UpdateWaiting();
+		agentMovement.Tick();
+		if (carried != null && carried.Mass() > strength) StartCarrying(carried);
 		graph.Update();
-		if(carried != null && carried.Mass() > strength) StartCarrying(carried);
-        StartCollecting();
 	}
 
 	public void FixedUpdate()
@@ -104,10 +105,10 @@ public class NonPlayableCharacter : MonoBehaviour
 		graph.FixedUpdate();
 	}
 
-	private void StartWaiting()
+	private void UpdateWaiting()
 	{
-		if(hasWaited) hasWaited = false;
-		if(!endWait)
+		if (hasWaited) hasWaited = false;
+		if (!endWait)
 		{
 			if(waitTimer > 0) waitTimer -= Time.deltaTime;
 			else
@@ -176,7 +177,7 @@ public class NonPlayableCharacter : MonoBehaviour
 		carryable.Self().forward = transform.forward;
 	}
 
-	public void StartCollecting()
+	public void UpdateCollecting()
 	{
 		if(carryableToCollect != null)
 		{

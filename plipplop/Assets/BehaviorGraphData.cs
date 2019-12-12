@@ -60,12 +60,12 @@ namespace Behavior.Editor
 		public void Update()
 		{
 			GetState().Tick(target);
+			Follow();
 		}
 
 		public void FixedUpdate()
 		{
 			GetState().FixedTick(target);
-			Follow();
 		}
 
 		public void Move(int nodeId)

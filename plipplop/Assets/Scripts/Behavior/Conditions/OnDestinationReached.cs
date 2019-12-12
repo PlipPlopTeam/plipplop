@@ -12,6 +12,7 @@ namespace Behavior.NPC
 			NonPlayableCharacter npc = target;
 			if(npc != null)
 			{
+				if(npc.agentMovement.reached == true) Debug.Log("=== DESTINATION REACHED ===");
 				return npc.agentMovement.reached == true;
 			}
 			return false;

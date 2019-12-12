@@ -116,11 +116,10 @@ public class AgentMovement : Walker
         }
     }
 
-    void Update()
+	public void Tick()
     {
-        if(reached) reached = false;
-
-        if(DestinationReached())
+		if (reached) reached = false;
+		if (DestinationReached())
         {
             reached = true;
             going = false;
