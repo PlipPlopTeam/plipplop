@@ -5,23 +5,25 @@ using UnityEngine;
 
 public class MeshAnimator : MonoBehaviour
 {
+    
     public List<MeshFlipbook> _animations;
-    
-    Dictionary <string, MeshFlipbook> animations = new Dictionary<string, MeshFlipbook>();
-    
     public MeshFlipbook currentAnimation;
-
     public MeshFilter meshFilter;
-    
-    private Coroutine animCoroutine;
-    
+
+    Dictionary <string, MeshFlipbook> animations = new Dictionary<string, MeshFlipbook>();
+    Coroutine animCoroutine;
+    Transform headTransform;
+
     private void Start()
     {
+        headTransform = new GameObject().transform;
+        headTransform.SetParent(transform);
+        headTransform.localPosition = Vector3.zero;
+        
         foreach (var _anim in _animations)
         {
             animations.Add(_anim.animationName, _anim);
         }
-
         Play(_animations[0].animationName);
     }
 
@@ -40,7 +42,6 @@ public class MeshAnimator : MonoBehaviour
     public void Play(string _animationName)
     {
         MeshFlipbook _anim = animations[_animationName];
-
         if (_anim)
         {
             currentAnimation = _anim;
@@ -58,31 +59,39 @@ public class MeshAnimator : MonoBehaviour
         {
             StopCoroutine(animCoroutine);
         }
-
         animCoroutine = StartCoroutine(AnimationPlaying());
     }
-
+    
     private IEnumerator AnimationPlaying()
     {
-        int _frame = 0;
-        
+        int _frameIndex = 0;
         while (true)
         {
-
-            meshFilter.mesh = currentAnimation.meshes[_frame];
+            MeshFlipbook.MeshFrame _frame = currentAnimation.meshes[_frameIndex];
+            
+            meshFilter.mesh = _frame.mesh;
+            headTransform.localPosition = _frame.position;
+            headTransform.localEulerAngles = _frame.euler;
+            headTransform.localScale = _frame.scale;
             
             yield return new WaitForSeconds(1/currentAnimation.fps);
-
-            _frame++;
+            _frameIndex++;
             
-            if (_frame >= currentAnimation.meshes.Count && !currentAnimation.loop)
+            if (_frameIndex >= currentAnimation.meshes.Count && !currentAnimation.loop)
             {
                 yield break;
             }
-            
-            _frame = _frame % currentAnimation.meshes.Count;
+            _frameIndex = _frameIndex % currentAnimation.meshes.Count;
         }
     }
 
+    public void Attach(Transform head)
+    {
+        head.SetParent(headTransform);
+    }
 
+    public void Detach(Transform head)
+    {
+        head.parent = null;
+    }
 }
