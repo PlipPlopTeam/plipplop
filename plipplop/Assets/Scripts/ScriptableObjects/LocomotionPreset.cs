@@ -8,7 +8,8 @@ public class LocomotionPreset : ScriptableObject
     public float maxSpeed = 800f;
     public float jump = 1200f;
     public AnimationCurve accelerationCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
-    [Range(0f, 1f)] public float groundFriction = 0.6f;
+    [Range(0f, 1f)] public float groundFriction = 0.15f;
+    [Range(0f, 1f)] public float airFriction = 0f;
     public PhysicMaterialCombine frictionCombine = PhysicMaterialCombine.Minimum;
     [Range(0f, 100f)] public float airControl = 65f;
     [Range(0f, 100f)] public float waterControl = 65f;

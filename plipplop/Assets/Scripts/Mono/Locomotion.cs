@@ -79,7 +79,7 @@ public class Locomotion : Walker
 
     public void Move(Vector3 direction)
     {
-		var currentVelocity = Vector3.zero;
+        var currentVelocity = Vector3.zero;
         if(rigidbody != null)
         {
             currentVelocity = rigidbody.velocity;
@@ -88,20 +88,23 @@ public class Locomotion : Walker
             else
                 locomotionAnimation.isWalking = false;
         }
-        
+
         // Brutal half turn
-        if (direction.magnitude != 0f && Vector3.Distance(lastDirection, direction) > 0.9f)
+        if (direction.magnitude != 0f && Vector3.Distance(lastDirection, direction) > 0.9f) {
             timePressed = 0f;
+        }
 
         // Acceleration curve position
-        if (timePressed != direction.magnitude)
+        if (timePressed != direction.magnitude) {
             timePressed += Mathf.Sign(direction.magnitude - timePressed) * Time.fixedDeltaTime;
+
+        }
 
         float currentMaxSpeedAmount = preset.accelerationCurve.Evaluate(timePressed);
         float currentSpeedToDistribute = currentMaxSpeedAmount * preset.maxSpeed;
 
         // If the difference between real velocity and planned velocity is too high, it is likely the player is currently flying against a wall
-        if (currentSpeedToDistribute - currentVelocity.magnitude > 2f) {
+        if (!IsGrounded() && currentSpeedToDistribute - currentVelocity.magnitude > 2f) {
             timePressed = 0f;
         }
 
@@ -117,9 +120,10 @@ public class Locomotion : Walker
                 IsGrounded() ? 1f : direction.magnitude
             ).normalized;
 
+            float frictionMultiplier =(IsGrounded() || isImmerged) ? 1f : 1f-preset.airFriction;
 
             Vector3 velocity =
-                currentSpeedToDistribute * (
+                currentSpeedToDistribute * frictionMultiplier * (
                     virtualStick.z * Game.i.aperture.Forward() +
                     virtualStick.x * Game.i.aperture.Right()
                 )
@@ -127,7 +131,7 @@ public class Locomotion : Walker
             ;
 
             // Prevents brutal air stops
-            float anyControlAmount = (IsGrounded() || isImmerged) ? controlAmount : controlAmount * direction.magnitude;
+            float anyControlAmount = (IsGrounded() || isImmerged) ? Mathf.Lerp(controlAmount, controlAmount * direction.magnitude, 1f- preset.groundFriction) : controlAmount * direction.magnitude;
             velocity.x = Mathf.Lerp(rigidbody.velocity.x, velocity.x, anyControlAmount);
             velocity.z = Mathf.Lerp(rigidbody.velocity.z, velocity.z, anyControlAmount);
 
