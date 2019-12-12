@@ -147,6 +147,9 @@ public class AperturePresetEditor : Editor
                         if (GUILayout.Button("AUTO", normalControl, GUILayout.Width(overrideColumnWidth))) {
                             ip.inheritDefault = false;
                         }
+                        else {
+                            serializedObject.CopyFromSerializedProperty(serializedDefault.FindProperty(ip.name));
+                        }
                     }
                     else {
                         if (GUILayout.Button("OVERRIDE", pressedControl, GUILayout.Width(overrideColumnWidth))) {
