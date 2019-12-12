@@ -104,9 +104,6 @@ namespace Behavior.Editor
 				for(; ;)
 				{
 					if (transition.disable) return;
-
-					Debug.Log(transition.id);
-
 					bool check = true;
 					foreach(int c in transition.conditions)
 					{

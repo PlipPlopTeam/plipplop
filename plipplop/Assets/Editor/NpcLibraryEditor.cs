@@ -24,6 +24,11 @@ public class NpcLibraryEditor : Editor
 			{
 				c.id = counter++;
 			}
+			counter = 0;
+			foreach (NpcLibrary.AIActionResource a in lib.actions)
+			{
+				a.id = counter++;
+			}
 		}
 	}
 }
