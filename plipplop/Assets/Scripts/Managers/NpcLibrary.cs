@@ -9,9 +9,11 @@ public class NpcLibrary : ScriptableObject
 {
 	[System.Serializable] public class AIStateResource : Library.Resource<AIState> { }
 	[System.Serializable] public class AIConditionResource : Library.Resource<Condition> { }
+	[System.Serializable] public class AIActionResource : Library.Resource<AIAction> { }
 
 	public List<AIStateResource> states;
 	public List<AIConditionResource> conditions;
+	public List<AIActionResource> actions;
     public GameObject NPCSamplePrefab;
 
 	public AIState GetAIStateObject(int id)

@@ -82,6 +82,11 @@ public class NonPlayableCharacter : MonoBehaviour
 		Equip(Game.i.library.torsoClothes.PickRandom());
 		Equip(Game.i.library.legsClothes.PickRandom());
 
+		if (graph == null)
+		{
+			Destroy(gameObject);
+			return;
+		}
 		graph = Instantiate(graph);
 		graph.Load(this);
 	}

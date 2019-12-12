@@ -4,6 +4,7 @@ using Behavior;
 
 [CustomPropertyDrawer(typeof(NpcLibrary.AIStateResource))]
 [CustomPropertyDrawer(typeof(NpcLibrary.AIConditionResource))] 
+[CustomPropertyDrawer(typeof(NpcLibrary.AIActionResource))] 
 public class LibraryResourceDrawer : PropertyDrawer
 {
     // Necessary since some properties tend to collapse smaller than their content
@@ -17,7 +18,6 @@ public class LibraryResourceDrawer : PropertyDrawer
     {
 		EditorGUILayout.BeginHorizontal();
 		property.Next(true);
-		EditorGUILayout.LabelField("ID");
 		EditorGUILayout.PropertyField(property, new GUIContent(), true);
         property.Next(false);
 		EditorGUILayout.PropertyField(property, new GUIContent(), true);
