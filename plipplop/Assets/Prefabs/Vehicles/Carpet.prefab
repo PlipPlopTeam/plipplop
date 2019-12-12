@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 3743914904847482974}
   - component: {fileID: 3743914904847482975}
   - component: {fileID: 1308987203}
+  - component: {fileID: 1167848354}
   m_Layer: 0
   m_Name: Carpet
   m_TagString: Untagged
@@ -87,6 +88,7 @@ MonoBehaviour:
   customCamera: {fileID: 11400000, guid: d23f3b4779ffce74a93cdf2d40d34147, type: 2}
   locomotion: {fileID: 0}
   visuals: {fileID: 3743914904737765302}
+  face: {fileID: 0}
   spring: {fileID: 797872617}
   maxExtension: 0.8
   muscleSpeed: 5
@@ -142,6 +144,25 @@ MonoBehaviour:
   rigidbody: {fileID: 0}
   targetDirection: {x: 0, y: 0, z: 0}
   isImmerged: 0
+--- !u!114 &1167848354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3743914904847482963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebda1c927e5956243947b1e9d58ad72c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  full: 0
+  working: 1
+  boredomMultiplier: 1
+  tirednessMultiplier: 0
+  hungerMultiplier: 0
+  users: []
+  offset: -1.2
 --- !u!1 &3743914905137622424
 GameObject:
   m_ObjectHideFlags: 0
@@ -220,7 +241,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.5, y: -0.00000055707034, z: 0}
+  m_ConnectedAnchor: {x: -0.5, y: 0.0000002773947, z: 0}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -271,7 +292,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e5c78006594c0db48af8a0a2e7b86290, type: 2}
+  - {fileID: 2100000, guid: a2f7653a0f83dfb468f9f069d5a3e9f2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -310,7 +331,7 @@ SpringJoint:
   m_ConnectedBody: {fileID: 3743914906086620613}
   m_Anchor: {x: 0, y: 0.7500001, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -1.4999998, y: 0.75000036, z: 0}
+  m_ConnectedAnchor: {x: -1.4999998, y: 0.75000024, z: 0}
   serializedVersion: 2
   m_Spring: 200
   m_Damper: 0.2
@@ -398,7 +419,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.5, y: -0.000000054102486, z: -0.000000007450581}
+  m_ConnectedAnchor: {x: -0.5, y: 0.00000078036254, z: -0.000000007450581}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -449,7 +470,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e5c78006594c0db48af8a0a2e7b86290, type: 2}
+  - {fileID: 2100000, guid: e264c5dc9fce3b24ebbb5b503185ce4e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -554,7 +575,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.5, y: 0.00000011920929, z: 0}
+  m_ConnectedAnchor: {x: -0.5, y: 0.00000008940697, z: 0}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -605,7 +626,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e5c78006594c0db48af8a0a2e7b86290, type: 2}
+  - {fileID: 2100000, guid: a2f7653a0f83dfb468f9f069d5a3e9f2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -724,7 +745,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e5c78006594c0db48af8a0a2e7b86290, type: 2}
+  - {fileID: 2100000, guid: e264c5dc9fce3b24ebbb5b503185ce4e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -835,7 +856,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.5, y: 0.00000022894805, z: 0}
+  m_ConnectedAnchor: {x: -0.5, y: 0.0000001693434, z: 0}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -886,7 +907,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e5c78006594c0db48af8a0a2e7b86290, type: 2}
+  - {fileID: 2100000, guid: e264c5dc9fce3b24ebbb5b503185ce4e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
