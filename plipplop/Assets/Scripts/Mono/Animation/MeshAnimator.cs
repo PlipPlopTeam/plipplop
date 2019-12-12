@@ -22,7 +22,7 @@ public class MeshAnimator : MonoBehaviour
         
         foreach (var _anim in _animations)
         {
-            animations.Add(_anim.animationName, _anim);
+            if(!animations.ContainsKey(_anim.animationName)) animations.Add(_anim.animationName, _anim);
         }
         Play(_animations[0].animationName);
     }
