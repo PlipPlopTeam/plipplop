@@ -505,7 +505,6 @@ GameObject:
   - component: {fileID: 7149920640174899733}
   - component: {fileID: 4044045810759405129}
   - component: {fileID: 4240521751650757172}
-  - component: {fileID: 2241069790540263029}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -573,19 +572,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!135 &2241069790540263029
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1887974530838906146}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1996033026722135019
 GameObject:
   m_ObjectHideFlags: 0
@@ -662,6 +648,7 @@ GameObject:
   - component: {fileID: 2095127333375553503}
   - component: {fileID: 2095127333375553488}
   - component: {fileID: -212437679873209963}
+  - component: {fileID: 1115021647775620768}
   m_Layer: 0
   m_Name: Statue
   m_TagString: Untagged
@@ -794,6 +781,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buyoyancy: 0
   waterline: 0
+--- !u!114 &1115021647775620768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2095127333375553498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aabc07795cb8444449e1d9061cd21258, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  full: 0
+  working: 1
+  boredomMultiplier: 10
+  tirednessMultiplier: 1
+  hungerMultiplier: 1
+  users: []
+  focusOffset: {x: 0, y: 2, z: 0}
+  radius: 2
 --- !u!1 &2095127333879700217
 GameObject:
   m_ObjectHideFlags: 0

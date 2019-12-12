@@ -32,7 +32,7 @@ public class NonPlayableCharacter : MonoBehaviour
 	public Dictionary<Clothes.ESlot, Clothes> clothes = new Dictionary<Clothes.ESlot, Clothes>();
 
     [Header("Settings")]
-    public BehaviorGraph behaviorGraph;
+    public BehaviorGraphData graph;
 	public float strength = 1f;
 
 	float assHeightWhenSitted = 0.51f;
@@ -82,28 +82,33 @@ public class NonPlayableCharacter : MonoBehaviour
 		Equip(Game.i.library.torsoClothes.PickRandom());
 		Equip(Game.i.library.legsClothes.PickRandom());
 
-		behaviorGraph = Instantiate(behaviorGraph);
-		behaviorGraph.SetTarget(this);
-		behaviorGraph.Start();
+		if (graph == null)
+		{
+			Destroy(gameObject);
+			return;
+		}
+		graph = Instantiate(graph);
+		graph.Load(this);
 	}
 
 	public void Update()
 	{
-        StartWaiting();
-        behaviorGraph.Update();
-		if(carried != null && carried.Mass() > strength) StartCarrying(carried);
-        StartCollecting();
+		UpdateCollecting();
+		UpdateWaiting();
+		agentMovement.Tick();
+		if (carried != null && carried.Mass() > strength) StartCarrying(carried);
+		graph.Update();
 	}
 
 	public void FixedUpdate()
 	{
-		behaviorGraph.FixedUpdate();
+		graph.FixedUpdate();
 	}
 
-	private void StartWaiting()
+	private void UpdateWaiting()
 	{
-		if(hasWaited) hasWaited = false;
-		if(!endWait)
+		if (hasWaited) hasWaited = false;
+		if (!endWait)
 		{
 			if(waitTimer > 0) waitTimer -= Time.deltaTime;
 			else
@@ -172,7 +177,7 @@ public class NonPlayableCharacter : MonoBehaviour
 		carryable.Self().forward = transform.forward;
 	}
 
-	public void StartCollecting()
+	public void UpdateCollecting()
 	{
 		if(carryableToCollect != null)
 		{
@@ -297,7 +302,7 @@ public class NonPlayableCharacter : MonoBehaviour
         if(EditorApplication.isPlaying)
 		{
 			float h = 0f;
-			Handles.Label(transform.position + Vector3.up * (2f + h), behaviorGraph.GetCurrentAIStateName());
+			//Handles.Label(transform.position + Vector3.up * (2f + h), graph.GetCurrentAIStateName());
 			h+= 0.1f;
 			foreach(KeyValuePair<EStat, float> entry in stats)
 			{

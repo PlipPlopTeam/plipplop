@@ -35,12 +35,10 @@ namespace Behavior.Editor
             {     
                 b.windowRect.height = 60;       
                 EditorGUILayout.LabelField("No Condition!");
-                b.isAssigned = false;
             }
             else
             {
                 b.optimalHeight = 40 + transitionNode.conditions.Count * 22;
-                b.isAssigned = true;
 
                 for (int i = 0; i < b.exitNodes.Count; i++) {
                     if (!b.exitNodes[i].HasValue) continue;

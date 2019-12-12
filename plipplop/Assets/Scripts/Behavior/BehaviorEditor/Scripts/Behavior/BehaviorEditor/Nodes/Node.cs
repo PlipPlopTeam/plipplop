@@ -25,18 +25,9 @@ namespace Behavior.Editor
         public Rect windowRect;
         public float optimalWidth = 100f;
         public float optimalHeight = 100f;
-        public string comment;
-        public bool isAssigned;
-		public bool showDescription;
-		public bool isOnCurrent;
-        //public BehaviorGraph graph;
-        public List<Reroute> reroutes = new List<Reroute>();
-
+		public List<Reroute> reroutes = new List<Reroute>();
         public bool collapse;
-		public bool showActions = true;
-		public bool showEnterExit = false;
-        [HideInInspector]
-        public bool previousCollapse;
+        [HideInInspector] public bool previousCollapse;
 
         // External
         public System.Collections.ObjectModel.ReadOnlyCollection<int?> exitNodes {

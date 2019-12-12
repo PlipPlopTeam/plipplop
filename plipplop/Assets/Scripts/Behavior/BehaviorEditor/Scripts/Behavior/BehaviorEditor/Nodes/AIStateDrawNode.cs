@@ -60,7 +60,6 @@ namespace Behavior.Editor
 
             if (b.state != null)
             {
-                b.isAssigned = true;
 				float standard = 0;
 
 				if (!b.collapse)
@@ -81,31 +80,9 @@ namespace Behavior.Editor
 					*/
 					//b.serializedAIState.Update();
 					//b.showActions = EditorGUILayout.Toggle("Show Actions ", b.showActions);
-
-					if (b.showActions)
-					{
-						/*
-						b.onFixedList.DoLayoutList();
-						b.onUpdateList.DoLayoutList();
-						standard += 125 + (b.onUpdateList.count + b.onFixedList.count) * 18;
-						*/
-					}
-					//b.showEnterExit = EditorGUILayout.Toggle("Show Enter/Exit ", b.showEnterExit);
-					if (b.showEnterExit)
-					{
-						/*
-						b.onEnterList.DoLayoutList();
-						b.onExitList.DoLayoutList();
-						standard += 125 + (b.onEnterList.count + b.onExitList.count) * 18;
-						*/
-					}
 					//b.serializedAIState.ApplyModifiedProperties();
                     b.optimalHeight = standard;
                 }   
-            }
-            else
-            {
-                b.isAssigned = false;
             }
 		}
 
