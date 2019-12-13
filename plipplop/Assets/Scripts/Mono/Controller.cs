@@ -69,9 +69,17 @@ public abstract class Controller : MonoBehaviour
 
     internal virtual void SpecificJump() {}
     internal virtual void OnJump()
-    { 
-        if(AreLegsRetracted()) SpecificJump();
-		else if (WasGrounded()) locomotion.Jump();
+    {
+        if (AreLegsRetracted())
+        {
+            SpecificJump();
+            SoundPlayer.Play("sfx_jump");
+        }
+        else if (WasGrounded())
+        {
+             locomotion.Jump();
+             SoundPlayer.Play("sfx_jump");
+        }
 	}
 
     internal void RetractLegs()

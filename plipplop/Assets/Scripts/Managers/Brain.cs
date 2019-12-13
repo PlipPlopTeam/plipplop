@@ -84,6 +84,7 @@ public class Brain
 
 	public void Possess(Controller controller)
     {
+        if (controller != baseController) SoundPlayer.Play("sfx_morph");
         if (this.controller != null) {
             Eject();
         }
@@ -95,6 +96,7 @@ public class Brain
 
     public void Eject()
     {
+        SoundPlayer.Play("sfx_demorph");
         this.controller.OnEject();
         controller = null;
     }

@@ -53,17 +53,13 @@ public class Ball : Controller
         childBall.Rotate(amount, Space.World);
     }
 
-    internal override void SpecificJump()
+    internal override void SpecificJump() //niveau son c'est clunky car tu peux quand même appuyer sur A quand tu es en l'air, donc ça joue le "specific jump" global
     {
         if(WasGrounded()) 
         {
+            SoundPlayer.Play("sfx_beachball_jump");
             rigidbody.velocity = new Vector3(rigidbody.velocity.x, jumpForce, rigidbody.velocity.z);
         }
-    }
-
-    internal override void OnJump()
-    {
-        base.OnJump();
     }
 
     internal override void OnLegsRetracted()

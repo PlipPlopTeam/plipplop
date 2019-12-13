@@ -126,6 +126,7 @@ public class Umbrella : Controller
 
     IEnumerator OpenUmbrella()
     {
+        SoundPlayer.Play("sfx_umbrella_boost");
         while (renderer.GetBlendShapeWeight(0) > 1f) {
             renderer.SetBlendShapeWeight(0, Mathf.Lerp(renderer.GetBlendShapeWeight(0), 0f, Time.deltaTime * 3f));
             yield return null;
