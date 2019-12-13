@@ -14,12 +14,15 @@ public class MeshAnimator : MonoBehaviour
     Coroutine animCoroutine;
     Transform headTransform;
 
-    private void Start()
+    private void Awake()
     {
         headTransform = new GameObject().transform;
         headTransform.SetParent(transform);
         headTransform.localPosition = Vector3.zero;
-        
+    }
+
+    private void Start()
+    {        
         foreach (var _anim in _animations)
         {
             if(!animations.ContainsKey(_anim.animationName)) animations.Add(_anim.animationName, _anim);

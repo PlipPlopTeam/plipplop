@@ -24,20 +24,12 @@ public abstract class Controller : MonoBehaviour
     internal ControllerSensor controllerSensor;
 	private Controller lastFocusedController;
     internal bool isImmerged;
-
+    
     public virtual void OnEject()
     {
         if (controllerSensor) Destroy(controllerSensor.gameObject);
         controllerSensor = null;
         RetractLegs();
-
-		//DEBUG
-		/*
-        foreach (var renderer in GetComponentsInChildren<Renderer>())
-        {
-            renderer.material.color = new Color(70 / 255f, 100 / 255f, 160 / 255f);
-        }
-		*/
 
 		ToggleFace(false);
 		Activity activity = gameObject.GetComponent<Activity>();
@@ -51,14 +43,7 @@ public abstract class Controller : MonoBehaviour
 
 		if (beginCrouched) RetractLegs();
 		else ExtendLegs();
-
-		//DEBUG
-		/*
-        foreach (var renderer in GetComponentsInChildren<Renderer>()) {
-            renderer.material.color = new Color(140 / 255f, 60 / 255f, 60 / 255f);
-        }
-		*/
-
+        
 		ToggleFace(true);
 		foreach (Transform t in visuals.GetComponentsInChildren<Transform>()) t.gameObject.layer = 0;
 
@@ -146,8 +131,11 @@ public abstract class Controller : MonoBehaviour
                 Debug.Log(msg);
         }
 
+        // Loco and anims
         locomotion = GetComponent<Locomotion>();
         if (!locomotion) locomotion = gameObject.AddComponent<Locomotion>();
+        else locomotion.Initialize();
+        visuals.transform.parent = locomotion.GetHeadDummy();
 
         //DEBUG
         foreach (var renderer in GetComponentsInChildren<Renderer>()) {

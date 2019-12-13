@@ -21,6 +21,7 @@ public class Locomotion : Walker
     float lookForwardSpeed = 8f;
     Vector3 lastDirection = new Vector3();
     bool hasJumped = false;
+    bool isInitialized = false;
 
     internal Vector3 groundCheckDirection = Vector3.down;
 
@@ -31,14 +32,20 @@ public class Locomotion : Walker
 
 	private void Awake()
     {
+        if (!isInitialized) Initialize();
+    }
 
+    public void Initialize()
+    {
+        if (isInitialized) return;
         preset = preset ? preset : Game.i.library.defaultLocomotion;
         parentController = GetComponent<Controller>();
         rigidbody = parentController.rigidbody;
 
         var legsCollider = gameObject.AddComponent<BoxCollider>();
-        legsCollider.material = new PhysicMaterial() { dynamicFriction = preset.groundFriction, staticFriction = preset.groundFriction, frictionCombine = preset.frictionCombine};
+        legsCollider.material = new PhysicMaterial() { dynamicFriction = preset.groundFriction, staticFriction = preset.groundFriction, frictionCombine = preset.frictionCombine };
         locomotionAnimation = new LocomotionAnimation(rigidbody, legsCollider, parentController.visuals);
+        isInitialized = true;
     }
     
     private void Update()
@@ -56,7 +63,7 @@ public class Locomotion : Walker
 
 	public bool AreLegsRetracted()
     {
-        return locomotionAnimation.AreLegsRetracted();;
+        return locomotionAnimation.AreLegsRetracted();
     }
 
     public void RetractLegs()
@@ -207,6 +214,11 @@ public class Locomotion : Walker
         }
 
         return null;
+    }
+
+    public Transform GetHeadDummy()
+    {
+        return locomotionAnimation.GetHeadDummy();
     }
 
 #if UNITY_EDITOR

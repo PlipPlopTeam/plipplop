@@ -14,6 +14,7 @@ public class LocomotionAnimation
     BoxCollider legsCollider;
     MeshAnimator legs;
     Transform visualsTransform;
+    Transform headDummy;
 
     public LocomotionAnimation(Rigidbody rb, BoxCollider legsCollider, Transform visualsTransform)
     {
@@ -63,9 +64,9 @@ public class LocomotionAnimation
     {
         legs = Object.Instantiate(Game.i.library.legsPrefab, parentTransform)
         .GetComponent<MeshAnimator>();
-     //   legs.body = parentTransform;
+
         legs.transform.localPosition = legsOffset;
-     //   foreach (Leg l in legs.legs) l.maxFootDistance = legsHeight + 2f;
+        headDummy = legs.transform.GetChild(0); // Head position, symbolized by an empty object
     }
 
     void SetLegHeight()
@@ -73,5 +74,10 @@ public class LocomotionAnimation
         legsCollider.size = new Vector3(1f, legsHeight, 1f);
         legsCollider.center = legsOffset + new Vector3(0f, -legsHeight / 2, 0f);
         legs.transform.localScale = (Vector3.one - Vector3.up) + Vector3.up * legsHeight;
+    }
+
+    public Transform GetHeadDummy()
+    {
+        return headDummy;
     }
 }
