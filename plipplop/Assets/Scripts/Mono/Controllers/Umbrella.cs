@@ -7,8 +7,6 @@ using UnityEngine;
 public class Umbrella : Controller
 {
     [Header("Specific settings")]
-    new public SkinnedMeshRenderer renderer;
-    public Transform visual;
     public float airControlSpeed = 5f;
     public float airLerpSpeed = 3f;
     public float tiltAmplitude = 20f;
@@ -16,6 +14,8 @@ public class Umbrella : Controller
     public float maxFallSpeed = 20f;
     [Range(0f, 100f)] public float remainingGravityPercentWhenOpened = 25f;
 
+
+    new SkinnedMeshRenderer renderer;
     Vector3 tiltAccumulation = Vector3.zero;
     Coroutine currentAnimationRoutine = null;
 
@@ -38,10 +38,10 @@ public class Umbrella : Controller
         transform.forward = Vector3.Lerp(transform.forward, targetDirection, Time.deltaTime * 4f);
 
 
-        visual.localEulerAngles = Vector3.zero;
+        visuals.localEulerAngles = Vector3.zero;
         var computedTilt = tiltAccumulation * tiltAmplitude;
         if (IsDeployed()) {
-            visual.Rotate(new Vector3(computedTilt.z, 0f, -computedTilt.x), Space.Self);
+            visuals.Rotate(new Vector3(computedTilt.z, 0f, -computedTilt.x), Space.Self);
         }
     }
 
@@ -84,6 +84,7 @@ public class Umbrella : Controller
     internal override void Start()
     {
         base.Start();
+        renderer = visuals.GetComponentInChildren<SkinnedMeshRenderer>();
     }
 
     internal override void Update()

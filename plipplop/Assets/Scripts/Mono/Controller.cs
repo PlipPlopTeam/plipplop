@@ -19,10 +19,10 @@ public abstract class Controller : MonoBehaviour
 	[HideInInspector] public GameObject face;
 
     float lastTimeGrounded = 0f;
-
     new internal Rigidbody rigidbody;
+    Controller lastFocusedController;
+    Vector3 previousVisualLocalPosition;
     internal ControllerSensor controllerSensor;
-	private Controller lastFocusedController;
     internal bool isImmerged;
     
     public virtual void OnEject()
@@ -143,7 +143,8 @@ public abstract class Controller : MonoBehaviour
         locomotion = GetComponent<Locomotion>();
         if (!locomotion) locomotion = gameObject.AddComponent<Locomotion>();
         else locomotion.Initialize();
-        visuals.transform.parent = locomotion.GetHeadDummy();
+
+        previousVisualLocalPosition = visuals.transform.localPosition;
 
         //DEBUG
         foreach (var renderer in GetComponentsInChildren<Renderer>()) {
@@ -188,6 +189,18 @@ public abstract class Controller : MonoBehaviour
 				lastFocusedController = null;
 			}
 		}
+
+        if (IsPossessed()) {
+            previousVisualLocalPosition = visuals.transform.localPosition;
+            visuals.transform.parent = locomotion.GetHeadDummy();
+            visuals.transform.localPosition = Vector3.zero;
+        }
+        else {
+            visuals.transform.parent = transform;
+            visuals.transform.localPosition = previousVisualLocalPosition;
+        }
+
+
 
 		// DEBUG
         var lr = GetComponent<LineRenderer>();

@@ -27,7 +27,6 @@ public class LocomotionAnimation
 
     public void Update()
     {
-
         legs.transform.localPosition = legsOffset - Vector3.up*(legsHeight);
         SetLegHeight();
 
