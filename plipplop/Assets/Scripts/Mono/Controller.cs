@@ -36,6 +36,8 @@ public abstract class Controller : MonoBehaviour
 		ToggleFace(false);
 		Activity activity = gameObject.GetComponent<Activity>();
         if(activity != null) activity.Repair();
+
+        visuals.transform.localPosition = previousVisualLocalPosition;
     }
     
     public virtual void OnPossess()
@@ -56,6 +58,8 @@ public abstract class Controller : MonoBehaviour
 
 		Activity activity = gameObject.GetComponent<Activity>();
         if(activity != null) activity.Break();
+
+        previousVisualLocalPosition = visuals.transform.localPosition;
     }
 
     internal virtual void SpecificJump() {}
@@ -201,13 +205,9 @@ public abstract class Controller : MonoBehaviour
 		}
 
         if (IsPossessed()) {
-            previousVisualLocalPosition = visuals.transform.localPosition;
-            visuals.transform.parent = locomotion.GetHeadDummy();
-            visuals.transform.localPosition = Vector3.zero;
-        }
-        else {
-            visuals.transform.parent = transform;
-            visuals.transform.localPosition = previousVisualLocalPosition;
+            var prs = locomotion.GetHeadDummy();
+            visuals.transform.SetPositionAndRotation(prs.position, prs.rotation);
+            visuals.transform.localScale = prs.scale;
         }
 
 

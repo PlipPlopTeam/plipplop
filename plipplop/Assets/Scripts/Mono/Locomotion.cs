@@ -216,7 +216,7 @@ public class Locomotion : Walker
         return null;
     }
 
-    public Transform GetHeadDummy()
+    public Geometry.PositionAndRotationAndScale GetHeadDummy()
     {
         return locomotionAnimation.GetHeadDummy();
     }

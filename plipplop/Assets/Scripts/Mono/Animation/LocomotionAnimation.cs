@@ -75,8 +75,8 @@ public class LocomotionAnimation
         legs.transform.localScale = (Vector3.one - Vector3.up) + Vector3.up * legsHeight;
     }
 
-    public Transform GetHeadDummy()
+    public Geometry.PositionAndRotationAndScale GetHeadDummy()
     {
-        return headDummy;
+        return new Geometry.PositionAndRotationAndScale() { position = headDummy.position, rotation = headDummy.rotation, scale = headDummy.localScale };
     }
 }

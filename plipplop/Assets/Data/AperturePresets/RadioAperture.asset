@@ -20,7 +20,7 @@ MonoBehaviour:
   - property: fieldOfView
     isOverriden: 1
   - property: heightOffset
-    isOverriden: 1
+    isOverriden: 0
   - property: additionalAngle
     isOverriden: 0
   - property: distance
@@ -76,8 +76,8 @@ MonoBehaviour:
   fallback: {fileID: 11400000, guid: eb12a49b789128547a1e22a483b07d5e, type: 2}
   canBeControlled: 1
   canBeReset: 1
-  fieldOfView: 25
-  heightOffset: 0.6
+  fieldOfView: 60
+  heightOffset: 0.9
   additionalAngle: 20
   distance:
     min: 2
@@ -90,7 +90,7 @@ MonoBehaviour:
   verticalFollowLerp: 40
   rotationSpeed: 60
   lookAtLerp: 200
-  virtualTargetYCatchUp: 2
+  virtualTargetYCatchUp: 5.03
   alignAfter: 20
   angleConsideredAlign: 15
   minTargetVelocity: 0.01
@@ -100,11 +100,11 @@ MonoBehaviour:
   speedEffectMultiplier: 0.1
   catchUpSpeedMultiplier: 1
   angleIncrementOnSpeed: 5
-  maximumCatchUpSpeed: 300
+  maximumCatchUpSpeed: 15
   absoluteBoundaries:
     min: 5
     max: 10
   constraintToTarget: 0
   targetConstraintLocalOffset: {x: 0, y: 0, z: 0}
-  staticPositionLerp: 1
-  staticRotationLerp: 1
+  staticPositionLerp: 10
+  staticRotationLerp: 10
