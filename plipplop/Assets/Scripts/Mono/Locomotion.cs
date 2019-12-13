@@ -18,7 +18,6 @@ public class Locomotion : Walker
     Controller parentController;
 	float speedMultiplier = 1f;
     float timePressed = 0f;
-    float lookForwardSpeed = 8f;
     Vector3 lastDirection = new Vector3();
     bool hasJumped = false;
     bool isInitialized = false;
@@ -153,7 +152,7 @@ public class Locomotion : Walker
                 transform.forward = Vector3.Lerp(
                     Vector3.Scale(Vector3.one - Vector3.up, transform.forward),
                     Vector3.Scale(Vector3.one - Vector3.up, rigidbody.velocity.normalized),
-                    Time.fixedDeltaTime * lookForwardSpeed
+                    Time.fixedDeltaTime * preset.lookForwardSpeed
                 );
             }
         }

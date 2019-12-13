@@ -16,4 +16,5 @@ public class LocomotionPreset : ScriptableObject
     [Range(0f, 2f)] public float waterSpeedFactor = 0.6f;
     [Range(0f, 100f)] public float maxWalkableSteepness = 50f;
     [Range(0f, 1f)] public float groundedBufferToleranceSeconds = 0.2f;
+    [Range(2f, 50f)] public float lookForwardSpeed = 8f;
 }
