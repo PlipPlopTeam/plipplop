@@ -41,6 +41,8 @@ MonoBehaviour:
     isOverriden: 0
   - property: lookAtLerp
     isOverriden: 0
+  - property: virtualTargetYCatchUp
+    isOverriden: 0
   - property: alignAfter
     isOverriden: 0
   - property: angleConsideredAlign
@@ -67,6 +69,10 @@ MonoBehaviour:
     isOverriden: 0
   - property: targetConstraintLocalOffset
     isOverriden: 0
+  - property: staticPositionLerp
+    isOverriden: 0
+  - property: staticRotationLerp
+    isOverriden: 0
   fallback: {fileID: 11400000, guid: 9307df52ab5513b4bbe3b28ff5b574d3, type: 2}
   canBeControlled: 1
   canBeReset: 1
@@ -79,18 +85,19 @@ MonoBehaviour:
   cameraRotateAroundSensivity: 45
   cameraRotateAboveSensivity: 45
   fovLerp: 20
-  lateralFollowLerp: 20
+  lateralFollowLerp: 12
   longitudinalFollowLerp: 4
   verticalFollowLerp: 20
   rotationSpeed: 1000
   lookAtLerp: 200
+  virtualTargetYCatchUp: 5.03
   alignAfter: 15
   angleConsideredAlign: 30
   minTargetVelocity: 0.01
   alignMultiplierByUser: 80
   alignMultiplierByStick: 80
   alignMultiplierByVelocity: 50
-  speedEffectMultiplier: 1.5
+  speedEffectMultiplier: 0
   catchUpSpeedMultiplier: 1.8
   angleIncrementOnSpeed: 2
   maximumCatchUpSpeed: 15
@@ -99,3 +106,5 @@ MonoBehaviour:
     max: 8
   constraintToTarget: 0
   targetConstraintLocalOffset: {x: 0, y: 0, z: 0}
+  staticPositionLerp: 10
+  staticRotationLerp: 10
