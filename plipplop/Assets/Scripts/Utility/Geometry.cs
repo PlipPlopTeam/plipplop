@@ -47,4 +47,12 @@ public static class Geometry
         public Vector3 euler { get { return rotation.eulerAngles; } }
         public Quaternion rotation = new Quaternion();
     }
+
+    public class PositionAndRotationAndScale
+    {
+        public Vector3 position = new Vector3();
+        public Vector3 euler { get { return rotation.eulerAngles; } }
+        public Quaternion rotation = new Quaternion();
+        public Vector3 scale = Vector3.one;
+    }
 }
