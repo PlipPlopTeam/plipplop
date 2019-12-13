@@ -41,6 +41,8 @@ MonoBehaviour:
     isOverriden: 1
   - property: lookAtLerp
     isOverriden: 1
+  - property: virtualTargetYCatchUp
+    isOverriden: 1
   - property: alignAfter
     isOverriden: 1
   - property: angleConsideredAlign
@@ -84,13 +86,14 @@ MonoBehaviour:
   verticalFollowLerp: 10
   rotationSpeed: 1000
   lookAtLerp: 200
+  virtualTargetYCatchUp: 5.03
   alignAfter: 15
   angleConsideredAlign: 30
   minTargetVelocity: 0.01
   alignMultiplierByUser: 80
   alignMultiplierByStick: 80
   alignMultiplierByVelocity: 50
-  speedEffectMultiplier: 1.5
+  speedEffectMultiplier: 0
   catchUpSpeedMultiplier: 1.8
   angleIncrementOnSpeed: 2
   maximumCatchUpSpeed: 15

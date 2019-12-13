@@ -32,14 +32,16 @@ public class Aperture
     }
 
     public Camera cam;
-    public Transform target;
 
     public Key<float> fieldOfView = new Key<float>();
     public Key<Vector3> position = new Key<Vector3>();
     public Key<Vector3> rotationAroundTarget = new Key<Vector3>();
 
-    AperturePreset settings;
+    Transform target;
+    Key<Vector3> virtualTarget = new Key<Vector3>();
     Vector3 defaultTarget;
+
+    AperturePreset settings;
 
     // Static cameras
     List<PositionAndRotation> staticObjectives = new List<PositionAndRotation>();
@@ -194,7 +196,9 @@ public class Aperture
 		}
 		else cam.transform.parent = null;
 
-		var targetPosition = target ? target.position : defaultTarget;
+        if (target) UpdateVirtualTarget();
+
+		var targetPosition = target ? virtualTarget.current : defaultTarget;
 		var targetMovementVelocity = Vector3.Distance(targetPosition, lastTargetPosition);
 
         isTargetMoving = false;
@@ -230,27 +234,6 @@ public class Aperture
             }
         }
 
-
-        // TARGET IS MOVING
-        /*
-   else if (isTargetMoving && Mathf.Abs(hAngleAmount) <= 0f)
-   {
-       Debug.Log("Hello");
-
-       ResetIdleTime();
-       float sForwardAngle = Vector3.SignedAngle(Vector3.forward, target.forward, Vector3.up);
-       float diffForwardAngle = Mathf.Abs(Vector3.SignedAngle(Forward(), target.forward, Vector3.up));
-       float angDifMultiplier = 1f;
-       if (diffForwardAngle >= 90f || diffForwardAngle <= -90f)
-       {
-           angDifMultiplier = 1f - Mathf.Abs(1f - (diffForwardAngle / 90f));
-       }
-       rotationMultiplier = targetMovementVelocity * settings.alignMultiplierByVelocity * angDifMultiplier;
-       hAngle = sForwardAngle;
-       hAngle += hAngleAmount ;
-
-   }
-*/
         hAngleAmount = 0f;
                                
 		float vAngleAmplitude = 40f - settings.additionalAngle;
@@ -265,6 +248,7 @@ public class Aperture
 		UpdateRotation();
 
 		// Position
+
 		ComputePosition(targetPosition);
 		UpdatePosition(catchUpSpeed);
 		if (GetStaticObjective() == null) 
@@ -279,6 +263,29 @@ public class Aperture
 		lastTargetPosition = targetPosition;
 		rotationMultiplier = 1f;
 	}
+
+    public void SetTarget(Transform target)
+    {
+        this.target = target;
+        UpdateVirtualTarget();
+        virtualTarget.SetToDestination();
+    }
+
+    public Transform GetTarget()
+    {
+        return target;
+    }
+
+    public void UpdateVirtualTarget()
+    {
+        virtualTarget.destination = target.position;
+        virtualTarget.current = new Vector3(
+            target.position.x, 
+            virtualTarget.current.y < target.position.y ? target.position.y : 
+            Mathf.Lerp(virtualTarget.current.y, target.position.y, settings.virtualTargetYCatchUp * Time.fixedDeltaTime), 
+            target.position.z
+            );
+    }
 
 	public void ComputeHorizontalDistanceToTarget(Vector3 targetPosition)
     {
@@ -410,12 +417,12 @@ public class Aperture
         if (IsLookAtEnabled()) {
 
             // The further the player is from the center of the screen, the quickest i should be to look at the player
-            var screenPosition = Vector3.Scale(Vector3.up + Vector3.right, cam.WorldToViewportPoint(target.position) - Vector3.up / 2f - Vector3.right / 2f);
+            var screenPosition = Vector3.Scale(Vector3.up + Vector3.right, cam.WorldToViewportPoint(virtualTarget.current) - Vector3.up / 2f - Vector3.right / 2f);
             var screenPosition2 = new Vector2(screenPosition.x, screenPosition.y);
 
             cam.transform.forward = Vector3.Lerp(
                 cam.transform.forward,
-                -(position.current - (target.position + settings.heightOffset * Vector3.up)).normalized,
+                -(position.current - (virtualTarget.current + settings.heightOffset * Vector3.up)).normalized,
                 settings.lookAtLerp * Time.fixedDeltaTime 
                     // Off-screen bonus to look at the target
                     + (1f / (1f - screenPosition2.magnitude) - 1f)
@@ -444,6 +451,7 @@ public class Aperture
         position.SetToDestination();
         rotationAroundTarget.SetToDestination();
         fieldOfView.SetToDestination();
+        if (target) virtualTarget.SetToDestination();
         Apply();
     } // Teleport all the camera values instantly (to ignore lerp)
 
@@ -483,5 +491,10 @@ public class Aperture
     public float GetLastCameraInput()
     {
         return lastCameraInput;
+    }
+
+    public Vector3 GetVirtualTarget()
+    {
+        return Vector3.Scale(virtualTarget.current, Vector3.one);
     }
 }

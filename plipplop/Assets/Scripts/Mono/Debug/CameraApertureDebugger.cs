@@ -23,14 +23,11 @@ public class CameraApertureDebugger : MonoBehaviour
         var target = dummyTarget;
 
         if (!EditorApplication.isPlaying) {
-            aperture = new Aperture(preset ?? gamePrefab.library.defaultAperture);
-            aperture.target = target;
-
-            aperture.Apply();
+            return;
         }
         else {
             aperture = Game.i.aperture;
-            target = aperture.target;
+            target = aperture.GetTarget();
         }
 
         var settings = aperture.GetSettings();
@@ -82,10 +79,12 @@ public class CameraApertureDebugger : MonoBehaviour
 
             Gizmos.DrawWireSphere(position.destination, 1f);
             Gizmos.DrawWireSphere(position.current, 0.6f);
-
+            
             Gizmos.color = new Color32(30, 30, 255, 255);
             Gizmos.DrawWireCube(new Vector3(position.current.x, target.position.y, position.current.z), 0.5f * Vector3.one);
             Gizmos.DrawLine(position.current, new Vector3(position.current.x, target.position.y, position.current.z));
+            Gizmos.color = new Color32(30, 125, 255, 255);
+            Gizmos.DrawWireSphere(aperture.GetVirtualTarget(), 0.4f);
             /*
             Gizmos.color = new Color32(255, 130, 130, 255);
             style.normal.textColor = Gizmos.color;

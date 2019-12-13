@@ -36,17 +36,18 @@ public class AperturePreset : ScriptableObject
     [HideInInspector] public float verticalFollowLerp = 10f;
     [HideInInspector] public float rotationSpeed = 1f;
     [HideInInspector] public float lookAtLerp = 4f;
+    [HideInInspector] [Range(0.5f, 10f)] public float virtualTargetYCatchUp = 2f;
 
-	// Align
-	[HideInInspector] public float alignAfter = 2f;
+    // Align
+    [HideInInspector] public float alignAfter = 2f;
 	[HideInInspector] public float angleConsideredAlign = 10f;
 	[HideInInspector] public float minTargetVelocity = 0.1f;
 	[HideInInspector] public float alignMultiplierByUser = 2f;
 	[HideInInspector] public float alignMultiplierByStick = 50f;
 	[HideInInspector] public float alignMultiplierByVelocity = 2f;
 
-	// Speed FX
-	[HideInInspector] [Range(0.1f, 10)] public float speedEffectMultiplier = 1f;
+    // Speed FX
+    [HideInInspector] [Range(0f, 10)] public float speedEffectMultiplier = 1f;
     [HideInInspector] [Range(1f, 20f)] public float catchUpSpeedMultiplier = 1f;
     [HideInInspector] [Range(0f, 400f)] public float angleIncrementOnSpeed = 10f;
 

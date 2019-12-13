@@ -230,8 +230,9 @@ public class AperturePresetEditor : Editor
         inheritableProperties[interpolations].Add("verticalFollowLerp");
         inheritableProperties[interpolations].Add("rotationSpeed");
 		inheritableProperties[interpolations].Add("lookAtLerp");
+        inheritableProperties[interpolations].Add("virtualTargetYCatchUp");
 
-		inheritableProperties[alignment].Add("alignAfter");
+        inheritableProperties[alignment].Add("alignAfter");
 		inheritableProperties[alignment].Add("angleConsideredAlign");
 		inheritableProperties[alignment].Add("minTargetVelocity");
 		inheritableProperties[alignment].Add("alignMultiplierByUser");
