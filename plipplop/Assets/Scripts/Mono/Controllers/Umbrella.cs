@@ -92,7 +92,6 @@ public class Umbrella : Controller
         base.Update();
 
         if (IsPossessed()) {
-            rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
             if (IsGrounded()) {
                 if (AreLegsRetracted()) ExtendLegs();
                 if (currentAnimationRoutine != null) StopCoroutine(currentAnimationRoutine);
@@ -103,7 +102,6 @@ public class Umbrella : Controller
             }
         }
         else {
-            rigidbody.constraints = RigidbodyConstraints.None;
             if (!AreLegsRetracted()) {
                 RetractLegs();
             }
