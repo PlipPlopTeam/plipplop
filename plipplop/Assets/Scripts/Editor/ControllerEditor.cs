@@ -39,6 +39,7 @@ public class ControllerEditor : BaseEditor
         buttons.Add(BeginCrouchedButton(colWidth));
         buttons.Add(CanRetractLegsButton(colWidth));
         buttons.Add(UseGravityButton(colWidth));
+        buttons.Add(FreezeUntilPossessButton(colWidth));
         buttons.Add(GravityMultiplierSlider(colWidth));
         buttons.Add(CustomCameraField(colWidth));
         buttons.Add(CustomRigidbodyField(colWidth));
@@ -211,6 +212,32 @@ public class ControllerEditor : BaseEditor
             else {
                 if (GUILayout.Button(new GUIContent(buttonSpace + "No gravity", asNormalTex), normalControl))
                     serializedObject.FindProperty("useGravity").boolValue = true;
+            }
+            serializedObject.ApplyModifiedProperties();
+            GUILayout.EndVertical();
+        };
+    }
+
+    System.Action FreezeUntilPossessButton(float width)
+    {
+        // Auto possess
+        var asNormalTex = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_ControllerNoFreeze");
+        var asPressedTex = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_ControllerFreezeUntilPossess");
+
+        var options = new List<GUILayoutOption>();
+
+        options.Add(GUILayout.Height(fieldsHeight));
+        options.Add(GUILayout.Width(width));
+
+        return delegate {
+            GUILayout.BeginVertical(options.ToArray());
+            if (((Controller)target).freezeUntilPossessed) {
+                if (GUILayout.Button(new GUIContent(buttonSpace + "Frozen until possessed", asPressedTex), pressedControl))
+                    serializedObject.FindProperty("freezeUntilPossessed").boolValue = false;
+            }
+            else {
+                if (GUILayout.Button(new GUIContent(buttonSpace + "No freeze", asNormalTex), normalControl))
+                    serializedObject.FindProperty("freezeUntilPossessed").boolValue = true;
             }
             serializedObject.ApplyModifiedProperties();
             GUILayout.EndVertical();

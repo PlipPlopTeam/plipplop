@@ -9,6 +9,7 @@ public abstract class Controller : MonoBehaviour
     [HideInInspector] public bool autoPossess = false;
     [HideInInspector] public bool beginCrouched = false;
     [HideInInspector] public bool canRetractLegs = true;
+    [HideInInspector] public bool freezeUntilPossessed = false;
     [HideInInspector] public bool useGravity = true;
     [HideInInspector] public float gravityMultiplier = 100f;
 
@@ -24,6 +25,7 @@ public abstract class Controller : MonoBehaviour
     Vector3 previousVisualLocalPosition;
     internal ControllerSensor controllerSensor;
     internal bool isImmerged;
+    RigidbodyConstraints previousConstraints;
     
     public virtual void OnEject()
     {
@@ -38,6 +40,10 @@ public abstract class Controller : MonoBehaviour
     
     public virtual void OnPossess()
     {
+        if (freezeUntilPossessed && rigidbody.constraints == RigidbodyConstraints.FreezeAll) {
+            rigidbody.constraints = previousConstraints;
+        }
+
         controllerSensor = Instantiate(Game.i.library.controllerSensor, gameObject.transform).GetComponent<ControllerSensor>();
         controllerSensor.transform.localPosition = new Vector3(0f, 0f, controllerSensor.sensorForwardPosition);
 
@@ -128,8 +134,12 @@ public abstract class Controller : MonoBehaviour
     {
         rigidbody = customExternalRigidbody==null ? GetComponent<Rigidbody>() : customExternalRigidbody;
         if (!rigidbody) rigidbody = gameObject.AddComponent<Rigidbody>();
+        if (freezeUntilPossessed) {
+            previousConstraints = rigidbody.constraints;
+            rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+        }
 
-        if(visuals == null)
+        if (visuals == null)
         {
             visuals = transform.GetChild(0);
             var msg = "No visual linked for controller " + gameObject.name + ", took the first TChild (" + visuals.gameObject.name + ") instead";
