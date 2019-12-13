@@ -56,4 +56,6 @@ public class AperturePreset : ScriptableObject
     [HideInInspector] public Aperture.Range absoluteBoundaries = new Aperture.Range() { min = 2f, max = 10f };
     [HideInInspector] public bool constraintToTarget = false;
     [HideInInspector] public Vector3 targetConstraintLocalOffset;
+    [HideInInspector] public float staticPositionLerp = 1f;
+    [HideInInspector] public float staticRotationLerp = 1f;
 }

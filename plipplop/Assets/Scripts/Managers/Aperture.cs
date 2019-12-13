@@ -323,7 +323,7 @@ public class Aperture
 
     public void UpdateRotation()
     {
-        rotationAroundTarget.current = Vector3.Lerp(rotationAroundTarget.current, rotationAroundTarget.destination, Time.fixedDeltaTime * settings.rotationSpeed * rotationMultiplier);
+        rotationAroundTarget.current = Vector3.Lerp(rotationAroundTarget.current, rotationAroundTarget.destination, Time.fixedDeltaTime * (IsLookAtEnabled() ? settings.rotationSpeed * rotationMultiplier : settings.staticRotationLerp));
     }
 
     public void ComputePosition(Vector3 targetPosition)
@@ -355,10 +355,16 @@ public class Aperture
     {
         // Lerp on the up axis
         var verticalFollow = Time.fixedDeltaTime * settings.verticalFollowLerp * catchUpSpeed;
-        position.current.y = Mathf.Lerp(position.current.y, position.destination.y, verticalFollow);
-
         var lateralFollow = Time.fixedDeltaTime * settings.lateralFollowLerp * catchUpSpeed;
         var longFollow = Time.fixedDeltaTime * settings.longitudinalFollowLerp * catchUpSpeed;
+
+        if (GetStaticObjective() != null) {
+            lateralFollow = Time.fixedDeltaTime * settings.staticPositionLerp;
+            verticalFollow = lateralFollow;
+            longFollow = lateralFollow;
+        }
+
+        position.current.y = Mathf.Lerp(position.current.y, position.destination.y, verticalFollow);
 
         var rCurrent = cam.transform.InverseTransformPoint(position.current);
         var rDestination = cam.transform.InverseTransformPoint(position.destination);
@@ -427,6 +433,9 @@ public class Aperture
                     // Off-screen bonus to look at the target
                     + (1f / (1f - screenPosition2.magnitude) - 1f)
             );
+        }
+        else {
+            cam.transform.eulerAngles = rotationAroundTarget.current;
         }
 
         cam.transform.position = position.current + settings.heightOffset * Vector3.up;
