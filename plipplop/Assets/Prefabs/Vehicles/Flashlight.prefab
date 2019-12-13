@@ -79,8 +79,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   origin: {x: 0, y: 0, z: 0}
-  weight: 3
-  distanceThreshold: 3
+  weight: 1
+  distanceThreshold: 2
   hidden: 0
 --- !u!114 &6448436803926611958
 MonoBehaviour:
@@ -97,19 +97,20 @@ MonoBehaviour:
   autoPossess: 0
   beginCrouched: 0
   canRetractLegs: 1
+  freezeUntilPossessed: 0
   useGravity: 1
   gravityMultiplier: 100
   customExternalRigidbody: {fileID: 0}
   customCamera: {fileID: 0}
   locomotion: {fileID: 0}
-  visuals: {fileID: 1753268699966077858}
-  face: {fileID: 2632012742951568148}
-  fakeLightCylinder: {fileID: 8819970143309101898}
+  visuals: {fileID: 0}
+  face: {fileID: 0}
+  fakeLightCylinder: {fileID: 0}
   spotLight: {fileID: 0}
   speedToLight: 1
   maxCylinderSize: 5
-  incrementalSpeed: 5
-  decrementalSpeed: 2.5
+  incrementalSpeed: 1
+  decrementalSpeed: 1
 --- !u!114 &1578349982989775250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,9 +124,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   preset: {fileID: 0}
-  legsHeight: 0.5
+  legsHeight: 1
   groundCheckRange: 1
-  legsOffset: {x: 0, y: 0, z: 0}
+  legsOffset: {x: 0, y: 0.65, z: 0}
   rigidbody: {fileID: 0}
   targetDirection: {x: 0, y: 0, z: 0}
   isImmerged: 0
@@ -142,7 +143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buyoyancy: 10
-  waterline: -0.55
+  waterline: 0.4
 --- !u!1 &2249580470599286529
 GameObject:
   m_ObjectHideFlags: 0
@@ -470,12 +471,6 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: f5777ff73f4873b40a4d3ce8dc4743d9, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 92a01f0cfc1aa1a42ac7115d1e465d7a, type: 3}
---- !u!1 &8819970143309101898 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: 92a01f0cfc1aa1a42ac7115d1e465d7a,
-    type: 3}
-  m_PrefabInstance: {fileID: 668565789488587331}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5493703000241965401 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 92a01f0cfc1aa1a42ac7115d1e465d7a,
@@ -651,12 +646,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42edcef2484d1d446ab328bcc85a43fa, type: 3}
---- !u!1 &2632012742951568148 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2028403518381436196, guid: 42edcef2484d1d446ab328bcc85a43fa,
-    type: 3}
-  m_PrefabInstance: {fileID: 4080437071744413232}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6206724078283963169 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7962972514405291281, guid: 42edcef2484d1d446ab328bcc85a43fa,

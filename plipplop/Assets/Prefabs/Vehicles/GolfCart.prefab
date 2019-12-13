@@ -131,32 +131,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   autoPossess: 0
-  beginCrouched: 1
+  beginCrouched: 0
   canRetractLegs: 1
+  freezeUntilPossessed: 0
   useGravity: 1
-  gravityMultiplier: 80
-  customExternalRigidbody: {fileID: 1706531758072179814}
-  customCamera: {fileID: 11400000, guid: ced3c59f324d70449be952d0807c4e89, type: 2}
+  gravityMultiplier: 100
+  customExternalRigidbody: {fileID: 0}
+  customCamera: {fileID: 0}
   locomotion: {fileID: 0}
-  visuals: {fileID: 1706531759504800980}
+  visuals: {fileID: 0}
+  face: {fileID: 0}
   acceleration: 3000
-  maxSpeed: 25
+  maxSpeed: 14
   steeringSpeed: 10
-  maxSteering: 59.900547
+  maxSteering: 50
   steeringForce: 1000
   autoBrakeSpeed: 1
   antiSpinSpeed: 6
   tiltAmount: 50
   antiFlip: 1
-  antiFlipForce: 1
-  antiFlipMultiplier: 0.5
-  airStabilizationSpeed: 10
-  airStabilizationMultiplier: 1
+  antiFlipForce: 10
+  antiFlipMultiplier: 1
+  airStabilizationSpeed: 6
+  airStabilizationMultiplier: 0.1
   canTiltWhenFree: 0
-  highSpeedAdherenceBonusFactor: 3
-  wheels:
-  - {fileID: 1706531757574354176}
-  - {fileID: 1706531758141886334}
+  highSpeedAdherenceBonusFactor: 1
+  wheels: []
 --- !u!54 &1706531758072179814
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -201,8 +201,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   preset: {fileID: 0}
   legsHeight: 1
-  groundCheckRange: 0.8
-  legsOffset: {x: 0, y: -0.23, z: 0}
+  groundCheckRange: 1
+  legsOffset: {x: 0, y: 0.65, z: 0}
   rigidbody: {fileID: 0}
   targetDirection: {x: 0, y: 0, z: 0}
   isImmerged: 0
@@ -246,8 +246,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7f1354dc4d3d4a40bbb2a193721f212, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buyoyancy: 0
-  waterline: -1.64
+  buyoyancy: 10
+  waterline: 0.4
 --- !u!65 &1087231976
 BoxCollider:
   m_ObjectHideFlags: 0

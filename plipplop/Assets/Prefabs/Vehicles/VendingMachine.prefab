@@ -402,12 +402,14 @@ MonoBehaviour:
   autoPossess: 0
   beginCrouched: 0
   canRetractLegs: 1
+  freezeUntilPossessed: 0
   useGravity: 1
   gravityMultiplier: 100
   customExternalRigidbody: {fileID: 0}
   customCamera: {fileID: 11400000, guid: eefc08a948f35174db60d9790fff5b9d, type: 2}
   locomotion: {fileID: 0}
   visuals: {fileID: 5348957800398331629}
+  face: {fileID: 0}
   throwers:
   - {fileID: 6665907460514541257}
   anim: {fileID: 0}
@@ -426,7 +428,7 @@ MonoBehaviour:
   preset: {fileID: 11400000, guid: 1fd4bd979846d8d419a55b058d680ec3, type: 2}
   legsHeight: 1
   groundCheckRange: 1
-  legsOffset: {x: 0, y: 0, z: 0}
+  legsOffset: {x: 0, y: 0.65, z: 0}
   rigidbody: {fileID: 0}
   targetDirection: {x: 0, y: 0, z: 0}
   isImmerged: 0

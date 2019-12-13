@@ -9708,14 +9708,15 @@ MonoBehaviour:
   autoPossess: 0
   beginCrouched: 0
   canRetractLegs: 1
+  freezeUntilPossessed: 0
   useGravity: 1
   gravityMultiplier: 100
-  customExternalRigidbody: {fileID: 8826430337641371450}
-  customCamera: {fileID: 11400000, guid: 7242922b65396184ca72d2cacca23d05, type: 2}
+  customExternalRigidbody: {fileID: 0}
+  customCamera: {fileID: 0}
   locomotion: {fileID: 0}
-  visuals: {fileID: 8826430338838295852}
-  throwers:
-  - {fileID: 7837557356282742024}
+  visuals: {fileID: 0}
+  face: {fileID: 0}
+  throwers: []
   anim: {fileID: 0}
 --- !u!114 &8826430337641371452
 MonoBehaviour:
@@ -9729,10 +9730,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 011d63a14cf4d8347a5660a929242412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  preset: {fileID: 11400000, guid: 1fd4bd979846d8d419a55b058d680ec3, type: 2}
+  preset: {fileID: 0}
   legsHeight: 1
   groundCheckRange: 1
-  legsOffset: {x: 0, y: 0, z: 0}
+  legsOffset: {x: 0, y: 0.65, z: 0}
   rigidbody: {fileID: 0}
   targetDirection: {x: 0, y: 0, z: 0}
   isImmerged: 0
@@ -9778,7 +9779,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buyoyancy: 10
-  waterline: -1.325
+  waterline: 0.4
 --- !u!114 &7837557356282742024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9792,9 +9793,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabToThrow: {fileID: 0}
-  gunEnd: {fileID: 2591295704543605074}
-  ps: {fileID: 138854018}
-  force: 2500
+  gunEnd: {fileID: 0}
+  ps: {fileID: 0}
+  force: 0
 --- !u!111 &7391532698718983640
 Animation:
   m_ObjectHideFlags: 0

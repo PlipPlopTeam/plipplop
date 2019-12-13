@@ -50,24 +50,26 @@ MonoBehaviour:
   autoPossess: 0
   beginCrouched: 0
   canRetractLegs: 1
+  freezeUntilPossessed: 0
   useGravity: 1
-  gravityMultiplier: 2
+  gravityMultiplier: 100
   customExternalRigidbody: {fileID: 0}
-  customCamera: {fileID: 11400000, guid: 9307df52ab5513b4bbe3b28ff5b574d3, type: 2}
+  customCamera: {fileID: 0}
   locomotion: {fileID: 0}
-  visuals: {fileID: 4009345997975154357}
-  maxFlyingSpeed: 100
-  baseThrust: 600
-  pitchForce: 200
-  rollForce: 400
-  pitchControlInertia: 0.6
-  rollControlInertia: 2
-  gravityWhenFlying: 130
-  gravityPlungeFactor: 40
-  restabilizationForce: 200
-  turnForce: 2
-  drag: 1
-  pitchMaxAmplitude: 0.6
+  visuals: {fileID: 0}
+  face: {fileID: 0}
+  maxFlyingSpeed: 1000
+  baseThrust: 70
+  pitchForce: 10
+  rollForce: 10
+  pitchControlInertia: 1
+  rollControlInertia: 1
+  gravityWhenFlying: 2
+  gravityPlungeFactor: 3
+  restabilizationForce: 20
+  turnForce: 5
+  drag: 10
+  pitchMaxAmplitude: 0
 --- !u!65 &4009345996532297924
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -110,9 +112,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   preset: {fileID: 0}
-  legsHeight: 0.5
+  legsHeight: 1
   groundCheckRange: 1
-  legsOffset: {x: 0, y: -0.05, z: 0}
+  legsOffset: {x: 0, y: 0.65, z: 0}
   rigidbody: {fileID: 0}
   targetDirection: {x: 0, y: 0, z: 0}
   isImmerged: 0

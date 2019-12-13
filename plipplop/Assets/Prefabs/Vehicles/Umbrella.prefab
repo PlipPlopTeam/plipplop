@@ -97,20 +97,20 @@ MonoBehaviour:
   autoPossess: 0
   beginCrouched: 0
   canRetractLegs: 1
+  freezeUntilPossessed: 0
   useGravity: 1
-  gravityMultiplier: 80
+  gravityMultiplier: 100
   customExternalRigidbody: {fileID: 0}
-  customCamera: {fileID: 11400000, guid: 4cc18dcb07f51dc40aac023740898b62, type: 2}
-  locomotion: {fileID: 8583417825178102319}
-  visuals: {fileID: 1123944791841484717}
-  renderer: {fileID: 1123944790706117170}
-  visual: {fileID: 1123944791841484717}
-  airControlSpeed: 300
-  airLerpSpeed: 10
-  tiltAmplitude: 15
-  tiltLerpSpeed: 2
+  customCamera: {fileID: 0}
+  locomotion: {fileID: 0}
+  visuals: {fileID: 0}
+  face: {fileID: 0}
+  airControlSpeed: 5
+  airLerpSpeed: 3
+  tiltAmplitude: 20
+  tiltLerpSpeed: 1
   maxFallSpeed: 20
-  remainingGravityPercentWhenOpened: 5
+  remainingGravityPercentWhenOpened: 25
 --- !u!114 &8583417825178102319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,10 +123,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 011d63a14cf4d8347a5660a929242412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  preset: {fileID: 11400000, guid: 74ffa408cebb57e4e91421d8d63632d2, type: 2}
-  legsHeight: 0.5
+  preset: {fileID: 0}
+  legsHeight: 1
   groundCheckRange: 1
-  legsOffset: {x: 0, y: 0, z: 0}
+  legsOffset: {x: 0, y: 0.65, z: 0}
   rigidbody: {fileID: 0}
   targetDirection: {x: 0, y: 0, z: 0}
   isImmerged: 0
