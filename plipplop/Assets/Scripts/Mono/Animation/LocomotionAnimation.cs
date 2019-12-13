@@ -9,9 +9,6 @@ public class LocomotionAnimation
     public bool isJumping;
     public bool isWalking;
 
-    float tiltAmplitude = 12f;
-    float tiltLerpSpeed = 4f;
-    float tilt = 0f;
     Transform parentTransform;
     public Rigidbody rigidbody;
     BoxCollider legsCollider;
@@ -29,29 +26,13 @@ public class LocomotionAnimation
 
     public void Update()
     {
-      //  legs.isJumping = isJumping;
-      //  legs.velocity = rigidbody.velocity;       v  This will have to be removed when the legs pivot is fixed
+
         legs.transform.localPosition = legsOffset - Vector3.up*(legsHeight);
         SetLegHeight();
 
-        var tiltDirection = Mathf.Clamp(rigidbody.velocity.magnitude/2f, 0f, 1f) * ((Mathf.Floor(Time.time * 2.6f) % 2) * 2f - 1f); // Will give -1 or 1
 
         if (isWalking) legs.PlayOnce("Walk");
         else legs.PlayOnce("Idle");
-
-        tilt = Mathf.Lerp(tilt, tiltDirection, Time.deltaTime * tiltLerpSpeed);
-
-        if (isJumping) tilt = 0f;
-
-        if(visualsTransform != null)
-        {
-            visualsTransform.localEulerAngles = 
-            new Vector3(tiltAmplitude * Mathf.Clamp(- rigidbody.velocity.y/5f, -1f, 1f),
-                        visualsTransform.localEulerAngles.y,
-                        tiltAmplitude * tilt
-            );
-        }
-
     }
 
     public bool AreLegsRetracted()

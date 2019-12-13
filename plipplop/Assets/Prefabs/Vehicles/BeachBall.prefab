@@ -59,13 +59,14 @@ MonoBehaviour:
   locomotion: {fileID: 0}
   visuals: {fileID: 5773141008930165641}
   face: {fileID: 5222802577057362828}
-  maxSpeed: 1400
-  acceleration: 600
-  jumpForce: 15
+  maxSpeed: 1200
+  acceleration: 800
+  jumpForce: 10
   airRollFactor: 4
   moveLerp: 1
   drag: 1
   speedBeforeRoll: 10
+  timeBeforeRoll: 0.75
   speedBeforeStandingUp: 0.3
 --- !u!135 &2932650472225342060
 SphereCollider:
@@ -179,7 +180,7 @@ Transform:
   m_GameObject: {fileID: 6564690223429448292}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 3336212444405861189}
   - {fileID: 4242215247540849593}
@@ -193,6 +194,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5773141008930165641}
     m_Modifications:
+    - target: {fileID: 251097407703294990, guid: 7538c2519bfa60b45a71a02288ed7a98,
+        type: 3}
+      propertyPath: m_Name
+      value: Ball
+      objectReference: {fileID: 0}
     - target: {fileID: 1887552152163323666, guid: 7538c2519bfa60b45a71a02288ed7a98,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -248,26 +254,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1887552152163323666, guid: 7538c2519bfa60b45a71a02288ed7a98,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1887552152163323666, guid: 7538c2519bfa60b45a71a02288ed7a98,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1887552152163323666, guid: 7538c2519bfa60b45a71a02288ed7a98,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 251097407703294990, guid: 7538c2519bfa60b45a71a02288ed7a98,
-        type: 3}
-      propertyPath: m_Name
-      value: Ball
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7538c2519bfa60b45a71a02288ed7a98, type: 3}
 --- !u!4 &3336212444405861189 stripped
@@ -288,11 +274,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: Face_Plip
       objectReference: {fileID: 0}
-    - target: {fileID: 2028403518381436196, guid: 42edcef2484d1d446ab328bcc85a43fa,
+    - target: {fileID: 9133575028300267734, guid: 42edcef2484d1d446ab328bcc85a43fa,
         type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 8239182327490403822, guid: b1140998e35e9844eafd9e839f3a6843,
+        type: 3}
     - target: {fileID: 7962972514405291281, guid: 42edcef2484d1d446ab328bcc85a43fa,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -306,7 +293,7 @@ PrefabInstance:
     - target: {fileID: 7962972514405291281, guid: 42edcef2484d1d446ab328bcc85a43fa,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.451
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7962972514405291281, guid: 42edcef2484d1d446ab328bcc85a43fa,
         type: 3}
