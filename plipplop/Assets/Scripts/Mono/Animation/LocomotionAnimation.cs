@@ -12,7 +12,7 @@ public class LocomotionAnimation
     Transform parentTransform;
     public Rigidbody rigidbody;
     BoxCollider legsCollider;
-    MeshAnimator legs;
+    LegAnimator legs;
     Transform visualsTransform;
     Transform headDummy;
 
@@ -62,7 +62,7 @@ public class LocomotionAnimation
     void GrowLegs()
     {
         legs = Object.Instantiate(Game.i.library.legsPrefab, parentTransform)
-        .GetComponent<MeshAnimator>();
+        .GetComponent<LegAnimator>();
 
         legs.transform.localPosition = legsOffset;
         headDummy = legs.transform.GetChild(0); // Head position, symbolized by an empty object

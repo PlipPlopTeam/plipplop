@@ -19,7 +19,7 @@ public class MeshVFXPlayer : MonoBehaviour
     public bool randomScale;
     public Vector2 randomScaleSize;
 
-    public MeshAnimator animator;
+    public LegAnimator animator;
 
     public string animationName;
 
