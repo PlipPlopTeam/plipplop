@@ -97,7 +97,7 @@ MonoBehaviour:
   autoPossess: 0
   beginCrouched: 0
   canRetractLegs: 1
-  freezeUntilPossessed: 0
+  freezeUntilPossessed: 1
   useGravity: 1
   gravityMultiplier: 100
   customExternalRigidbody: {fileID: 0}
@@ -162,7 +162,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 83b8a8199297b7348a949001e4b5a9a1, type: 2}
+  - {fileID: 670224309865224971, guid: c74eda5066c33a34ba6c430f8735e428, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -203,11 +203,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1123944791841484717}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: c74eda5066c33a34ba6c430f8735e428,
-        type: 3}
-      propertyPath: m_Name
-      value: SM_Umbrella
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: c74eda5066c33a34ba6c430f8735e428,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -263,7 +258,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: -927199367670048503, guid: c74eda5066c33a34ba6c430f8735e428,
+        type: 3}
+      propertyPath: m_Name
+      value: SM_Umbrella
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: -1504981713932161579, guid: c74eda5066c33a34ba6c430f8735e428, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: c74eda5066c33a34ba6c430f8735e428, type: 3}
 --- !u!1 &8987180186206143293 stripped
 GameObject:

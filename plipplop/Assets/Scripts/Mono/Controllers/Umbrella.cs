@@ -91,6 +91,11 @@ public class Umbrella : Controller
     public override void OnPossess()
     {
         base.OnPossess();
+
+        // TODO: Remove this shit
+        transform.position += Vector3.up * locomotion.legsHeight;
+        // 
+
         rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         transform.eulerAngles = transform.rotation.eulerAngles.y * Vector3.up;
     }
@@ -116,10 +121,12 @@ public class Umbrella : Controller
             if (!AreLegsRetracted()) {
                 RetractLegs();
             }
+            /*
             if (IsDeployed() && (Mathf.Abs(transform.rotation.eulerAngles.x) + Mathf.Abs(transform.rotation.eulerAngles.z)) > 30f) {
                 if (currentAnimationRoutine != null) StopCoroutine(currentAnimationRoutine);
                 currentAnimationRoutine = StartCoroutine(CloseUmbrella());
             }
+            */
         }
     }
 

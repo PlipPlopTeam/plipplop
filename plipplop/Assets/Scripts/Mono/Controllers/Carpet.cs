@@ -64,15 +64,6 @@ public class Carpet : Controller
 
     internal override void OnJump()
     {
-        base.OnJump();
-        if (IsGrounded()) {
-            if (AreLegsRetracted()) {
-                ExtendLegs();
-            }
-            else {
-                RetractLegs();
-            }
-        }
     }
 
     internal override void Start()
