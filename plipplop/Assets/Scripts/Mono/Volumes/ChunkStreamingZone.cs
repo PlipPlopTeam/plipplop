@@ -10,7 +10,7 @@ public class ChunkStreamingZone : MonoBehaviour
 {
     public string identifier;
     public List<Vector3> positions;
-    public UnityEngine.Object chunk;    
+    public UnityEngine.Object sceneAsset;    
     public List<ChunkStreamingZone> neighborhood = new List<ChunkStreamingZone>();
 
     readonly Color selectedColor = Color.green;
@@ -33,13 +33,14 @@ public class ChunkStreamingZone : MonoBehaviour
 
     // Wrong references
     bool isDisabled = false;
+    [HideInInspector] public string chunk;
 
     // Editor
     bool isSelected = false;
 
     private void Awake()
     {
-        if (!chunk) {
+        if (chunk == string.Empty) {
             Debug.LogWarning("Chunk " + identifier + " has NO SCENE ASSET linked to it! Disabling chunk zone.");
             isDisabled = true;
             return;

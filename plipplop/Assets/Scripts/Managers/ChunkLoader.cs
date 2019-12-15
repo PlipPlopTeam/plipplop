@@ -189,7 +189,7 @@ public class ChunkLoader
     {
         if (!loadingChunks.Contains(identifier) && !chunkZones[identifier].IsLoaded()) {
             loadingChunks.Add(identifier);
-            SceneManager.LoadSceneAsync(chunkZones[identifier].chunk.name, LoadSceneMode.Additive).completed += delegate {
+            SceneManager.LoadSceneAsync(chunkZones[identifier].chunk, LoadSceneMode.Additive).completed += delegate {
                 OnChunkLoaded(identifier);
             };
         }
@@ -281,7 +281,7 @@ public class ChunkLoader
             return;
 
         foreach(var id in chunkZones.Keys) {
-            if (scene.name == chunkZones[id].chunk.name) {
+            if (scene.name == chunkZones[id].chunk) {
                 chunkZones[id].scene = scene;
 
                 if (Game.s.DEFERRED_CHUNK_PROPS_LOADING) {

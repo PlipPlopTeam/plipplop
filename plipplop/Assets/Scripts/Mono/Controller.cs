@@ -149,8 +149,8 @@ public abstract class Controller : MonoBehaviour
             var msg = "No visual linked for controller " + gameObject.name + ", took the first TChild (" + visuals.gameObject.name + ") instead";
             if (visuals.gameObject.name != "Visuals")
                 Debug.LogWarning(msg);
-            else
-                Debug.Log(msg);
+            //else
+                //Debug.Log(msg);
         }
 
         // Loco and anims
