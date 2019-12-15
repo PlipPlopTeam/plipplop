@@ -97,11 +97,11 @@ MonoBehaviour:
   autoPossess: 0
   beginCrouched: 0
   canRetractLegs: 1
-  freezeUntilPossessed: 1
+  freezeUntilPossessed: 0
   useGravity: 1
   gravityMultiplier: 100
   customExternalRigidbody: {fileID: 0}
-  customCamera: {fileID: 0}
+  customCamera: {fileID: 11400000, guid: 4cc18dcb07f51dc40aac023740898b62, type: 2}
   locomotion: {fileID: 0}
   visuals: {fileID: 0}
   face: {fileID: 0}
@@ -110,7 +110,8 @@ MonoBehaviour:
   tiltAmplitude: 20
   tiltLerpSpeed: 1
   maxFallSpeed: 20
-  remainingGravityPercentWhenOpened: 25
+  remainingGravityPercentWhenOpened: 5
+  additionalForwardPush: 4.5
 --- !u!114 &8583417825178102319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,10 +124,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 011d63a14cf4d8347a5660a929242412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  preset: {fileID: 0}
+  preset: {fileID: 11400000, guid: 74ffa408cebb57e4e91421d8d63632d2, type: 2}
   legsHeight: 1
   groundCheckRange: 1
-  legsOffset: {x: 0, y: 0.65, z: 0}
+  legsOffset: {x: 0, y: 0.31, z: 0}
   rigidbody: {fileID: 0}
   targetDirection: {x: 0, y: 0, z: 0}
   isImmerged: 0
@@ -202,11 +203,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1123944791841484717}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: c74eda5066c33a34ba6c430f8735e428,
-        type: 3}
-      propertyPath: m_Name
-      value: SM_Umbrella
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: c74eda5066c33a34ba6c430f8735e428,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -262,8 +258,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: -1504981713932161579, guid: c74eda5066c33a34ba6c430f8735e428, type: 3}
+    - target: {fileID: -927199367670048503, guid: c74eda5066c33a34ba6c430f8735e428,
+        type: 3}
+      propertyPath: m_Name
+      value: SM_Umbrella
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c74eda5066c33a34ba6c430f8735e428, type: 3}
 --- !u!1 &8987180186206143293 stripped
 GameObject:

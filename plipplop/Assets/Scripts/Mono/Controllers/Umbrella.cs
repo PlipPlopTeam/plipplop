@@ -13,6 +13,7 @@ public class Umbrella : Controller
     public float tiltLerpSpeed = 1f;
     public float maxFallSpeed = 20f;
     [Range(0f, 100f)] public float remainingGravityPercentWhenOpened = 25f;
+    public float additionalForwardPush = 10f;
 
 
     new SkinnedMeshRenderer renderer;
@@ -37,11 +38,11 @@ public class Umbrella : Controller
 
         transform.forward = Vector3.Lerp(transform.forward, targetDirection, Time.deltaTime * 4f);
 
-
         visuals.localEulerAngles = Vector3.zero;
         var computedTilt = tiltAccumulation * tiltAmplitude;
         if (IsDeployed()) {
             visuals.Rotate(new Vector3(computedTilt.z, 0f, -computedTilt.x), Space.Self);
+            rigidbody.AddForce(additionalForwardPush * targetDirection);
         }
     }
 
@@ -81,6 +82,19 @@ public class Umbrella : Controller
 
     }
 
+    public override void OnEject()
+    {
+        base.OnEject();
+        rigidbody.constraints = RigidbodyConstraints.None;
+    }
+
+    public override void OnPossess()
+    {
+        base.OnPossess();
+        rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+        transform.eulerAngles = transform.rotation.eulerAngles.y * Vector3.up;
+    }
+
     internal override void Start()
     {
         base.Start();
@@ -97,9 +111,6 @@ public class Umbrella : Controller
                 if (currentAnimationRoutine != null) StopCoroutine(currentAnimationRoutine);
                 currentAnimationRoutine = StartCoroutine(CloseUmbrella());
             }
-            else {
-                if (!AreLegsRetracted()) RetractLegs();
-            }
         }
         else {
             if (!AreLegsRetracted()) {
@@ -109,6 +120,13 @@ public class Umbrella : Controller
                 if (currentAnimationRoutine != null) StopCoroutine(currentAnimationRoutine);
                 currentAnimationRoutine = StartCoroutine(CloseUmbrella());
             }
+        }
+    }
+
+    internal override void AlignPropOnHeadDummy()
+    {
+        if (IsGrounded()) {
+            base.AlignPropOnHeadDummy();
         }
     }
 
