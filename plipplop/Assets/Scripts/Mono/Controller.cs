@@ -204,10 +204,8 @@ public abstract class Controller : MonoBehaviour
 			}
 		}
 
-        if (IsPossessed()) {
-            var prs = locomotion.GetHeadDummy();
-            visuals.transform.SetPositionAndRotation(prs.position, prs.rotation);
-            visuals.transform.localScale = prs.scale;
+        if (IsPossessed() && !AreLegsRetracted()) {
+            AlignPropOnHeadDummy();
         }
 
 
@@ -237,6 +235,12 @@ public abstract class Controller : MonoBehaviour
         }
 	}
 
+    virtual internal void AlignPropOnHeadDummy()
+    {
+        var prs = locomotion.GetHeadDummy();
+        visuals.transform.SetPositionAndRotation(prs.position, prs.rotation);
+        visuals.transform.localScale = prs.scale;
+    }
 
     virtual internal void FixedUpdate()
     {
