@@ -42,18 +42,20 @@ public class LegAnimator : MonoBehaviour
         }
     }
     
-    public void Play(string _animationName)
+    public void Play(string animationName)
     {
-        MeshFlipbook _anim = animations[_animationName];
-        if (_anim)
-        {
-            currentAnimation = _anim;
-            SetAnimation();
+        MeshFlipbook _anim;
+        try {
+            _anim = animations[animationName];
         }
-        else
-        {
-            throw new Exception("animation doesn't exist or the name is incorrect");
+        catch (KeyNotFoundException) {
+            Debug.LogWarning("!! Animation " + animationName + " doesn't exist in flipbook " + this + " or the name is incorrect");
+            Debug.LogWarning("!! List of existing animations: "+string.Join(",", animations.Keys));
+            return;
         }
+
+        currentAnimation = _anim;
+        SetAnimation();
     }
     
     void SetAnimation( )
