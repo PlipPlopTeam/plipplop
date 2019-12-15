@@ -110,7 +110,7 @@ MonoBehaviour:
   tiltAmplitude: 20
   tiltLerpSpeed: 1
   maxFallSpeed: 20
-  remainingGravityPercentWhenOpened: 5
+  remainingGravityPercentWhenOpened: 10
   additionalForwardPush: 4.5
 --- !u!114 &8583417825178102319
 MonoBehaviour:
@@ -203,6 +203,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1123944791841484717}
     m_Modifications:
+    - target: {fileID: -927199367670048503, guid: c74eda5066c33a34ba6c430f8735e428,
+        type: 3}
+      propertyPath: m_Name
+      value: SM_Umbrella
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: c74eda5066c33a34ba6c430f8735e428,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -257,11 +262,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: c74eda5066c33a34ba6c430f8735e428,
-        type: 3}
-      propertyPath: m_Name
-      value: SM_Umbrella
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -1504981713932161579, guid: c74eda5066c33a34ba6c430f8735e428, type: 3}
