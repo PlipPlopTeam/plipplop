@@ -25,6 +25,19 @@ public class Hopper : Controller
     bool pushed;
     bool jumped;
 
+    public override void OnPossess()
+    {
+        base.OnPossess();
+        rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+        transform.eulerAngles = transform.rotation.eulerAngles.y * Vector3.up;
+    }
+
+    public override void OnEject()
+    {
+        base.OnEject();
+        rigidbody.constraints = RigidbodyConstraints.None;
+    }
+
     internal override void SpecificMove(Vector3 direction)
     {
         if(!pushed && IsGrounded() && direction.magnitude > pushThreshold)
