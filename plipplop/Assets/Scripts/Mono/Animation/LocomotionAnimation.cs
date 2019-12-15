@@ -31,8 +31,15 @@ public class LocomotionAnimation
         SetLegHeight();
 
 
-        if (isWalking) legs.PlayOnce("Walk");
-        else legs.PlayOnce("Idle");
+        if (isJumping)
+        {
+            legs.PlayOnce("Jump");
+        }
+        else
+        {
+            if (isWalking) legs.PlayOnce("Walk");
+            else legs.PlayOnce("Idle");
+        }
     }
 
     public bool AreLegsRetracted()
