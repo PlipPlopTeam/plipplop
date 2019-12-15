@@ -21,6 +21,7 @@ public class ChunkLoader
     Scene cacheScene;
     readonly float deferringDelay = 1f;
     List<Task> queue = new List<Task>();
+    bool isLoading = true;
 
     class Footprint
     {
@@ -165,7 +166,11 @@ public class ChunkLoader
             }
             else {
                 // Waiting for the task to complete
+                isLoading = true;
             }
+        }
+        else {
+            isLoading = false;
         }
     }
 
@@ -561,6 +566,7 @@ public class ChunkLoader
                 });
                 Task.Delay(Mathf.RoundToInt(dt * 1000f * deferringDelay)).Wait();
             }
+
         });
     }
 
@@ -600,6 +606,11 @@ public class ChunkLoader
     void Error(string msg)
     {
         Debug.LogError(msg);
+    }
+
+    public bool IsLoading()
+    {
+        return isLoading;
     }
 }
 
