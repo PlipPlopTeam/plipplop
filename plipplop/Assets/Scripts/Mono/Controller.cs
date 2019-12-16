@@ -207,32 +207,6 @@ public abstract class Controller : MonoBehaviour
         if (IsPossessed() && !AreLegsRetracted()) {
             AlignPropOnHeadDummy();
         }
-
-
-
-		// DEBUG
-        var lr = GetComponent<LineRenderer>();
-        if (controllerSensor)
-		{
-            if (!lr) lr = gameObject.AddComponent<LineRenderer>();
-            lr.material = Game.i.library.lineRendererMaterial;//new Material(Shader.Find("Lightweight Render Pipeline/Particles/Unlit"));
-            if (!isImmerged && controllerSensor.IsThereAnyController()) {
-                lr.positionCount = 2;
-                lr.SetPosition(0, gameObject.transform.position);
-                lr.SetPosition(1, controllerSensor.GetFocusedController().transform.position);
-                lr.startColor = Color.white;
-                lr.endColor = Color.white;
-                lr.startWidth = 0.05f;
-                lr.endWidth = 0.025f;
-            }
-            else
-			{
-                Destroy(lr);
-            }
-        }
-        else {
-            if (lr) Destroy(lr);
-        }
 	}
 
     virtual internal void AlignPropOnHeadDummy()
