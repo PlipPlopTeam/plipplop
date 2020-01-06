@@ -38,12 +38,12 @@ public class NpcLibraryEditor : Editor
 			EditorGUILayout.BeginHorizontal();
 			if (GUILayout.Button("Remove")) lib.conditions.RemoveAt(i);
 			EditorGUILayout.IntField(lib.conditions[i].id);
-			EditorGUILayout.ObjectField(lib.conditions[i].resource, typeof(AIState));
+			EditorGUILayout.ObjectField(lib.conditions[i].resource, typeof(Condition));
 			EditorGUILayout.EndHorizontal();
 		}
 		if (GUILayout.Button("Add"))
 		{
-			lib.states.Add(new AIStateResource());
+			lib.conditions.Add(new AIConditionResource());
 		}
 
 		EditorGUILayout.LabelField("ACTIONS", title);
@@ -52,12 +52,12 @@ public class NpcLibraryEditor : Editor
 			EditorGUILayout.BeginHorizontal();
 			if (GUILayout.Button("Remove")) lib.actions.RemoveAt(i);
 			EditorGUILayout.IntField(lib.actions[i].id);
-			EditorGUILayout.ObjectField(lib.actions[i].resource, typeof(AIState));
+			EditorGUILayout.ObjectField(lib.actions[i].resource, typeof(AIAction));
 			EditorGUILayout.EndHorizontal();
 		}
 		if (GUILayout.Button("Add"))
 		{
-			lib.states.Add(new AIStateResource());
+			lib.actions.Add(new AIActionResource());
 		}
 
 
