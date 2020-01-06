@@ -3,13 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable] public class AIStateResource : Library.Resource<AIState> { }
+[System.Serializable] public class AIConditionResource : Library.Resource<Condition> { }
+[System.Serializable] public class AIActionResource : Library.Resource<AIAction> { }
+
 [System.Serializable]
 [CreateAssetMenu(menuName = "Behavior/Library")]
 public class NpcLibrary : ScriptableObject
 {
-	[System.Serializable] public class AIStateResource : Library.Resource<AIState> { }
-	[System.Serializable] public class AIConditionResource : Library.Resource<Condition> { }
-	[System.Serializable] public class AIActionResource : Library.Resource<AIAction> { }
+
 
 	public List<AIStateResource> states;
 	public List<AIConditionResource> conditions;

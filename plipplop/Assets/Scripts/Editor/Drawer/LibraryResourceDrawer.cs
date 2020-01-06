@@ -2,9 +2,8 @@
 using UnityEditor;
 using Behavior;
 
-[CustomPropertyDrawer(typeof(NpcLibrary.AIStateResource))]
-[CustomPropertyDrawer(typeof(NpcLibrary.AIConditionResource))] 
-[CustomPropertyDrawer(typeof(NpcLibrary.AIActionResource))] 
+[CustomPropertyDrawer(typeof(AIConditionResource))] 
+[CustomPropertyDrawer(typeof(AIActionResource))] 
 public class LibraryResourceDrawer : PropertyDrawer
 {
     // Necessary since some properties tend to collapse smaller than their content
