@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
+using System.IO;
 
 [CustomEditor(typeof(ChunkStreamingZone)), CanEditMultipleObjects]
 [ExecuteInEditMode]
@@ -119,6 +122,9 @@ public class ChunkStreamingZoneEditor : BaseEditor
         EditorGUILayout.Space();
 
         NeighborsField()();
+        EditorGUILayout.Space();
+
+        LoadUnloadField()();
         EditorGUILayout.Space();
 
     }
@@ -304,6 +310,40 @@ public class ChunkStreamingZoneEditor : BaseEditor
             GUI.color = Color.white;
         };
 
+    }
+
+    [System.Obsolete]
+    System.Action LoadUnloadField()
+    {
+        var csz = (ChunkStreamingZone)target;
+        var options = new List<GUILayoutOption>();
+
+        options.Add(GUILayout.Height(fieldsHeight));
+
+        var noBoldTitle = new GUIStyle(title);
+        noBoldTitle.fontStyle = FontStyle.Normal;
+
+        var icon = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_ChunkLoadUnload");
+        var scene = serializedObject.FindProperty("sceneAsset").objectReferenceValue;
+        var sceneName = scene ? scene.name : "";
+        var isLoaded = scene ?  SceneManager.GetSceneByName(scene.name) != null && SceneManager.GetSceneByName(scene.name).isLoaded : false;
+        
+        return delegate {
+            if (!csz.sceneAsset) GUI.color = Color.red;
+            GUILayout.BeginHorizontal(options.ToArray());
+            GUILayout.Label(new GUIContent(buttonSpace + (isLoaded ? "Unload" : "Load"), icon), noBoldTitle, GUILayout.Height(fieldsHeight), GUILayout.Width(Screen.width * 0.3f));
+            if (scene) {
+                if (GUILayout.Button(isLoaded ? "Unload" : "Load", style: normalControl)) {
+                    if (!isLoaded) EditorSceneManager.OpenScene(Path.Combine(AssetDatabase.GetAssetPath(scene)), OpenSceneMode.Additive);
+                    else EditorSceneManager.CloseScene(EditorSceneManager.GetSceneByName(sceneName), true);
+                }
+            }
+            else {
+                GUILayout.Label("No scene to load/unload");
+            }
+            GUILayout.EndHorizontal();
+            GUI.color = Color.white;
+        };
     }
 
     internal override void MakeStyles()
