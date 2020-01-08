@@ -9,6 +9,9 @@ using UnityEngine.AI;
 
 public class NonPlayableCharacter : MonoBehaviour
 {
+	public enum EStat { BOREDOM, TIREDNESS, HUNGER };
+	public enum ESubject { PLAYER, VALUABLE, ACTIVITY, CHAIR, FOOD, FEEDER };
+
 	[HideInInspector] public Sight sight;
 	[HideInInspector] public FocusLook look;
 	[HideInInspector] public NavMeshAgent agent;
@@ -18,37 +21,27 @@ public class NonPlayableCharacter : MonoBehaviour
 	[HideInInspector] public EmotionRenderer emo;
 	[HideInInspector] public Range range;
 	[HideInInspector] public Face face;
-	
-	[Header("Read-Only")]
-	[ReadOnlyInGame] public Controller player;
-	[ReadOnlyInGame] public Valuable valuable;
-    [ReadOnlyInGame] public Activity activity;
-	[ReadOnlyInGame] public Chair chair;
-    [ReadOnlyInGame] public Food food;
-    [ReadOnlyInGame] public Feeder feeder;
-	
+	[HideInInspector] public Controller player;
+	[HideInInspector] public Valuable valuable;
+    [HideInInspector] public Activity activity;
+	[HideInInspector] public Chair chair;
+    [HideInInspector] public Food food;
+    [HideInInspector] public Feeder feeder;
 	[HideInInspector] public Activity previousActivity;
 	[HideInInspector] public ICarryable carried;
 	public Dictionary<Clothes.ESlot, Clothes> clothes = new Dictionary<Clothes.ESlot, Clothes>();
+	public Dictionary<EStat, float> stats = new Dictionary<EStat, float>();
 
-    [Header("Settings")]
-    public BehaviorGraphData graph;
-	public float strength = 1f;
+	[Header("Settings")]
+	public NonPlayableCharacterSettings settings;
+	public BehaviorGraphData graph;
 
+	float strength = 1f;
 	float assHeightWhenSitted = 0.51f;
     ICarryable carryableToCollect;
-
-    public enum EStat { BOREDOM, TIREDNESS, HUNGER };
-	public enum ESubject { PLAYER, VALUABLE, ACTIVITY, CHAIR, FOOD, FEEDER };
-
-	[Header("Stats")]
-    public Dictionary<EStat, float> stats = new Dictionary<EStat, float>();
-
-	// Wait timer
-	[HideInInspector] public bool hasWaited;
 	private float waitTimer;
 	private bool endWait;
-
+	[HideInInspector] public bool hasWaited;
 	public System.Action onWaitEnded;
 
 	void Awake()
@@ -64,23 +57,29 @@ public class NonPlayableCharacter : MonoBehaviour
 		agentMovement = GetComponent<AgentMovement>();
 		agentMovement.animator = animator;
 		face = GetComponent<Face>();
+
+		// Load Character Clothes Slots
+		foreach (Clothes.ESlot suit in (Clothes.ESlot[])Clothes.ESlot.GetValues(typeof(Clothes.ESlot)))
+			clothes.Add(suit, null);
 	}
 
 	public void Start()
 	{
-		// Load Character Clothes Slots
-		foreach (Clothes.ESlot suit in (Clothes.ESlot[])Clothes.ESlot.GetValues(typeof(Clothes.ESlot)))
-			clothes.Add(suit, null);
-
-		// Load Character Stats
-		stats.Add(EStat.BOREDOM, 50f);
-		stats.Add(EStat.TIREDNESS, 50f);
-		stats.Add(EStat.HUNGER, 75f);
-
-		// Debug Equip Items
-		Equip(Game.i.library.headClothes.PickRandom());
-		Equip(Game.i.library.torsoClothes.PickRandom());
-		Equip(Game.i.library.legsClothes.PickRandom());
+		if(settings != null)
+		{
+			strength = settings.strength;
+			skeleton.gameObject.transform.localScale = Vector3.one * settings.height/2;
+			stats.Add(EStat.BOREDOM, settings.initialBoredom);
+			stats.Add(EStat.TIREDNESS, settings.initialTiredness);
+			stats.Add(EStat.HUNGER, settings.initialTiredness);
+			foreach (ClothesData c in settings.clothes) Equip(c);
+		}
+		else
+		{
+			stats.Add(EStat.BOREDOM, 50f);
+			stats.Add(EStat.TIREDNESS, 50f);
+			stats.Add(EStat.HUNGER, 50f);
+		}
 
 		if (graph == null)
 		{
