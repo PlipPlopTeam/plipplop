@@ -521,7 +521,7 @@ Transform:
   m_GameObject: {fileID: 4283993349647825426}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6821963683738862286}
   - {fileID: 779763162659531399}
@@ -1027,6 +1027,7 @@ MonoBehaviour:
     offset: {x: 0, y: 2.6, z: 0}
     fieldOfViewAngle: 145
     range: 7
+  multiplier: 1
 --- !u!114 &817710063433153459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1077,8 +1078,9 @@ MonoBehaviour:
   food: {fileID: 0}
   feeder: {fileID: 0}
   previousActivity: {fileID: 0}
+  collider: {fileID: 0}
+  settings: {fileID: 11400000, guid: 58c20c3cc224a9f418a2620c5b6998f5, type: 2}
   graph: {fileID: 11400000, guid: 0400c472f99d41c4391963b3ed3ff53c, type: 2}
-  strength: 5
   hasWaited: 0
 --- !u!114 &1684127437
 MonoBehaviour:

@@ -28,6 +28,7 @@ public class NonPlayableCharacter : MonoBehaviour
     [HideInInspector] public Food food;
     [HideInInspector] public Feeder feeder;
 	[HideInInspector] public Activity previousActivity;
+	[HideInInspector] public Collider collider;
 	[HideInInspector] public ICarryable carried;
 	public Dictionary<Clothes.ESlot, Clothes> clothes = new Dictionary<Clothes.ESlot, Clothes>();
 	public Dictionary<EStat, float> stats = new Dictionary<EStat, float>();
@@ -56,6 +57,7 @@ public class NonPlayableCharacter : MonoBehaviour
 		agentMovement = GetComponent<AgentMovement>();
 		agentMovement.animator = animator;
 		face = GetComponent<Face>();
+		collider = GetComponent<Collider>();
 
 		// Load Character Clothes Slots
 		foreach (Clothes.ESlot suit in (Clothes.ESlot[])Clothes.ESlot.GetValues(typeof(Clothes.ESlot)))
@@ -70,9 +72,13 @@ public class NonPlayableCharacter : MonoBehaviour
 		stats.Add(EStat.BOREDOM, settings.initialBoredom);
 		stats.Add(EStat.TIREDNESS, settings.initialTiredness);
 		stats.Add(EStat.HUNGER, settings.initialTiredness);
-		sight.multiplier = settings.attention;
 		foreach (ClothesData c in settings.clothes) Equip(c);
-
+		/*
+		foreach (KeyValuePair<Clothes.ESlot, Clothes> c in clothes)
+		{
+			if (c.Value != null) c.Value.Scale(settings.height / 2);
+		}
+		*/
 		// Loading Graph
 		if (graph == null)
 		{
@@ -249,6 +255,7 @@ public class NonPlayableCharacter : MonoBehaviour
 	}
 	public void Sit(Chair c, Vector3 offset)
 	{
+		collider.enabled = false;
 		chair = c;
 		agentMovement.Stop();
 		agent.enabled = false;
@@ -265,6 +272,7 @@ public class NonPlayableCharacter : MonoBehaviour
 			chair.Exit(this);
 			chair = null;
 		}
+		collider.enabled = true;
 		agent.enabled = true;
 		animator.SetBool("Sitting", false);
 		animator.SetBool("Chairing", false);

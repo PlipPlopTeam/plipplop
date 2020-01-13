@@ -18,6 +18,12 @@ public class Clothes : MonoBehaviour
         Destroy(this);
     }
 
+	public virtual void Scale(float amount)
+	{
+		//foreach (Transform t in attachs) t.localScale = Vector3.one * amount;
+		//root.localScale = Vector3.one * amount;
+	}
+
     public virtual void Create(ClothesData cloth, Skeleton target)
     {
         data = cloth;

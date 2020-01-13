@@ -65,7 +65,7 @@ public class Balloon : Activity, ICarryable
 
     public override void Exit(NonPlayableCharacter user)
     {
-        if(user == users[carrier]) user.Drop();
+        if(carrier < users.Count && user == users[carrier]) user.Drop();
 
         user.look.LooseFocus();
         

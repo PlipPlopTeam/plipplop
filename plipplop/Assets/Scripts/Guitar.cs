@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class Guitar : Activity, ICarryable
 {
@@ -21,7 +23,12 @@ public class Guitar : Activity, ICarryable
 		{
 			music.Stop();
 			user.Drop();
+			transform.parent = null;
 			user.animator.SetBool("Guitaring", false);
+		}
+		else
+		{
+			user.animator.SetBool("Dancing", false);
 		}
 		base.Exit(user);
 
@@ -30,8 +37,6 @@ public class Guitar : Activity, ICarryable
 			BecomePlayer(users[0]);
 			EverybodyLookAtPlayer();
 		}
-
-		user.animator.SetBool("Dancing", false);
 	}
 
 	void LookAtPlayer(NonPlayableCharacter npc)
@@ -60,10 +65,10 @@ public class Guitar : Activity, ICarryable
 		player.Collect(this);
 		player.agentMovement.onDestinationReached += () =>
 		{
-			music.Play();
+			player.agentMovement.Stop();
 			player.animator.SetBool("Guitaring", true);
 			player.animator.SetBool("Carrying", false);
-			player.agentMovement.Stop();
+			music.Play();
 		};
 	}
 
