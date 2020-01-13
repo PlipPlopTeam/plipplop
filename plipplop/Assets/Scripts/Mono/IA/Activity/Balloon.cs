@@ -102,15 +102,16 @@ public class Balloon : Activity, ICarryable
         playing = false;
         flying = false;
         inPlace = new bool[slots];
-        users[0].agentMovement.GoThere(originPosition + Vector3.forward * GetRandomDistance()/2);
-        users[0].agentMovement.onDestinationReached += () =>
+		users[0].agentMovement.Stop();
+		users[0].agentMovement.GoThere(originPosition + Vector3.forward * GetRandomDistance()/2);
+		users[0].agentMovement.onDestinationReached += () =>
         {
             inPlace[0] = true;
             IsAllInPlace();
         };
-
-        users[1].agentMovement.GoThere(originPosition + Vector3.forward * -GetRandomDistance()/2);
-        users[1].agentMovement.onDestinationReached += () =>
+		users[1].agentMovement.Stop();
+		users[1].agentMovement.GoThere(originPosition + Vector3.forward * -GetRandomDistance()/2);
+		users[1].agentMovement.onDestinationReached += () =>
         {
             inPlace[1] = true;
             IsAllInPlace();
@@ -142,7 +143,7 @@ public class Balloon : Activity, ICarryable
                         users[carrier].Drop();
 
                         // Throwing
-                        transform.position += users[carrier].transform.forward * 2f;
+                        transform.position += users[carrier].transform.forward * 0.5f;
                         Vector3 throwVector = users[carrier].transform.forward;
                         rb.AddForce(new Vector3(throwVector.x, 0f, throwVector.z)  * horizontalForce * Time.deltaTime);
                         rb.AddForce(new Vector3(0f, 1f, 0f)  * verticalForce * Time.deltaTime);
