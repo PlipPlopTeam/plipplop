@@ -30,6 +30,8 @@ public class Guitar : Activity, ICarryable
 			BecomePlayer(users[0]);
 			EverybodyLookAtPlayer();
 		}
+
+		user.animator.SetBool("Dancing", false);
 	}
 
 	void LookAtPlayer(NonPlayableCharacter npc)
