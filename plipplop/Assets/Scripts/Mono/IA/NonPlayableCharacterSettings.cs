@@ -10,7 +10,7 @@ public class NonPlayableCharacterSettings : ScriptableObject
 	[Header("Personality")]
 	[Range(0f, 1f)] public float courtesy = 0.5f;
 	[Range(0f, 1f)] public float courage = 0.5f;
-	[Range(0f, 1f)] public float calm = 0.5f;
+	[Range(0f, 1f)] public float tranquility = 0.5f;
 	[Range(0f, 1f)] public float attention = 0.5f;
 	[Range(0f, 1f)] public float sympathy = 0.5f;
 

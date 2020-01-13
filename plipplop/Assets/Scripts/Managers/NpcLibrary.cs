@@ -11,8 +11,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Behavior/Library")]
 public class NpcLibrary : ScriptableObject
 {
-
-
+	public NonPlayableCharacterSettings defaultSettings;
 	public List<AIStateResource> states;
 	public List<AIConditionResource> conditions;
 	public List<AIActionResource> actions;

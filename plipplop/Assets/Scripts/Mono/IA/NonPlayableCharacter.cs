@@ -36,7 +36,6 @@ public class NonPlayableCharacter : MonoBehaviour
 	public NonPlayableCharacterSettings settings;
 	public BehaviorGraphData graph;
 
-	float strength = 1f;
 	float assHeightWhenSitted = 0.51f;
     ICarryable carryableToCollect;
 	private float waitTimer;
@@ -65,22 +64,16 @@ public class NonPlayableCharacter : MonoBehaviour
 
 	public void Start()
 	{
-		if(settings != null)
-		{
-			strength = settings.strength;
-			skeleton.gameObject.transform.localScale = Vector3.one * settings.height/2;
-			stats.Add(EStat.BOREDOM, settings.initialBoredom);
-			stats.Add(EStat.TIREDNESS, settings.initialTiredness);
-			stats.Add(EStat.HUNGER, settings.initialTiredness);
-			foreach (ClothesData c in settings.clothes) Equip(c);
-		}
-		else
-		{
-			stats.Add(EStat.BOREDOM, 50f);
-			stats.Add(EStat.TIREDNESS, 50f);
-			stats.Add(EStat.HUNGER, 50f);
-		}
+		// Loading Settings
+		if (settings == null) settings = Game.i.library.npcLibrary.defaultSettings;
+		skeleton.gameObject.transform.localScale = Vector3.one * settings.height/2;
+		stats.Add(EStat.BOREDOM, settings.initialBoredom);
+		stats.Add(EStat.TIREDNESS, settings.initialTiredness);
+		stats.Add(EStat.HUNGER, settings.initialTiredness);
+		sight.multiplier = settings.attention;
+		foreach (ClothesData c in settings.clothes) Equip(c);
 
+		// Loading Graph
 		if (graph == null)
 		{
 			Destroy(gameObject);
@@ -95,7 +88,7 @@ public class NonPlayableCharacter : MonoBehaviour
 		UpdateCollecting();
 		UpdateWaiting();
 		agentMovement.Tick();
-		if (carried != null && carried.Mass() > strength) StartCarrying(carried);
+		if (carried != null && carried.Mass() > settings.strength) StartCarrying(carried);
 		graph.Update();
 	}
 
@@ -129,24 +122,6 @@ public class NonPlayableCharacter : MonoBehaviour
 		waitTimer = time;
 		endWait = false;
 		onWaitEnded = end;
-	}
-
-
-
-	[ContextMenu("SetHungerTwentyFive")]
-	public void SetHungerTwentyFive()
-	{
-		SetStat(EStat.HUNGER, 25f);
-	}
-	[ContextMenu("SetHungerSeventyFive")]
-	public void SetHungerSeventyFive()
-	{
-		SetStat(EStat.HUNGER, 75f);
-	}
-	[ContextMenu("SetHungerHundred")]
-	public void SetHungerHundred()
-	{
-		SetStat(EStat.HUNGER, 100f);
 	}
 
 	public void Equip(ClothesData clothData, bool change = true)
@@ -217,7 +192,7 @@ public class NonPlayableCharacter : MonoBehaviour
 		if(carried != null) Drop();
 		carried = carryable;
 		carried.Carry();
-		if(carried.Mass() <= strength)
+		if(carried.Mass() <= settings.strength)
 		{
 			//animator.SetBool("Holding", true);
 			skeleton.Attach(carried.Self(), Clothes.ESlot.RIGHT_HAND, true);
@@ -233,7 +208,7 @@ public class NonPlayableCharacter : MonoBehaviour
 		if(carried == null) return;
 		carried.Drop();
 
-		if(carried.Mass() <= strength)
+		if(carried.Mass() <= settings.strength)
 			skeleton.Drop(Clothes.ESlot.RIGHT_HAND);
 
 		//animator.SetBool("Holding", false);

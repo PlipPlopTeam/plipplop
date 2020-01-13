@@ -62,7 +62,7 @@ public class Activity : MonoBehaviour
             timer = 1f;
             foreach(NonPlayableCharacter user in users.ToArray())
             {
-                user.AddToStat(NonPlayableCharacter.EStat.BOREDOM, boredomMultiplier);
+                user.AddToStat(NonPlayableCharacter.EStat.BOREDOM, boredomMultiplier *  (1 - user.settings.tranquility));
                 user.AddToStat(NonPlayableCharacter.EStat.TIREDNESS, tirednessMultiplier);
                 user.AddToStat(NonPlayableCharacter.EStat.HUNGER, hungerMultiplier);
             }

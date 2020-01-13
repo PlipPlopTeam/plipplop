@@ -10,10 +10,10 @@ public class Sight : MonoBehaviour
 		public float fieldOfViewAngle = 110f;
 		public float range = 5f;
 	}
-
 	public Settings settings;
+	[Range(0f, 1f)] public float multiplier = 1f;
 
-    public GameObject[] Scan(){
+	public GameObject[] Scan(){
         return Scan<GameObject>();
     }
 
@@ -24,18 +24,18 @@ public class Sight : MonoBehaviour
 
         // Add object in range of being seen
         RaycastHit[] sphereHits;
-        sphereHits = Physics.SphereCastAll(headPosition, settings.range, transform.forward, settings.range);
+        sphereHits = Physics.SphereCastAll(headPosition, settings.range * multiplier, transform.forward, settings.range);
         for(int i = 0; i < sphereHits.Length; i++)
         {
             // Checks if the object is in front of the sight
             Vector3 direction = sphereHits[i].transform.position - headPosition;
             float angle = Vector3.Angle(direction, transform.forward);
-            if(angle < settings.fieldOfViewAngle * 0.5f)
+            if(angle < settings.fieldOfViewAngle * 0.5f * multiplier)
             {
 
                 // Check if an object is hiding the seen object from the sight
                 RaycastHit[] rayHits;
-                rayHits = Physics.RaycastAll(headPosition, direction, settings.range, 5, QueryTriggerInteraction.Ignore);
+                rayHits = Physics.RaycastAll(headPosition, direction, settings.range * multiplier, 5, QueryTriggerInteraction.Ignore);
 
                 bool seen = true;
                 foreach(RaycastHit hit in rayHits)

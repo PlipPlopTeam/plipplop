@@ -11,6 +11,8 @@ public class NpcLibraryEditor : Editor
 		NpcLibrary lib = (NpcLibrary)target;
 		//DrawDefaultInspector();
 
+		lib.defaultSettings = EditorGUILayout.ObjectField(lib.defaultSettings, typeof(NonPlayableCharacterSettings)) as NonPlayableCharacterSettings;
+
 		GUIStyle title = new GUIStyle();
 		title.fontSize = 52;
 		title.fontStyle = FontStyle.Bold;
@@ -24,7 +26,7 @@ public class NpcLibraryEditor : Editor
 			EditorGUILayout.BeginHorizontal();
 			if (GUILayout.Button("Remove")) lib.states.RemoveAt(i);
 			EditorGUILayout.IntField(lib.states[i].id);
-			EditorGUILayout.ObjectField(lib.states[i].resource, typeof(AIState));
+			lib.states[i].resource = EditorGUILayout.ObjectField(lib.states[i].resource, typeof(AIState)) as AIState;
 			EditorGUILayout.EndHorizontal();
 		}
 		if (GUILayout.Button("Add"))
@@ -38,7 +40,7 @@ public class NpcLibraryEditor : Editor
 			EditorGUILayout.BeginHorizontal();
 			if (GUILayout.Button("Remove")) lib.conditions.RemoveAt(i);
 			EditorGUILayout.IntField(lib.conditions[i].id);
-			EditorGUILayout.ObjectField(lib.conditions[i].resource, typeof(Condition));
+			lib.conditions[i].resource = EditorGUILayout.ObjectField(lib.conditions[i].resource, typeof(Condition)) as Condition;
 			EditorGUILayout.EndHorizontal();
 		}
 		if (GUILayout.Button("Add"))
@@ -52,31 +54,13 @@ public class NpcLibraryEditor : Editor
 			EditorGUILayout.BeginHorizontal();
 			if (GUILayout.Button("Remove")) lib.actions.RemoveAt(i);
 			EditorGUILayout.IntField(lib.actions[i].id);
-			EditorGUILayout.ObjectField(lib.actions[i].resource, typeof(AIAction));
+			lib.actions[i].resource = EditorGUILayout.ObjectField(lib.actions[i].resource, typeof(AIAction)) as AIAction;
 			EditorGUILayout.EndHorizontal();
 		}
 		if (GUILayout.Button("Add"))
 		{
 			lib.actions.Add(new AIActionResource());
 		}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		if (GUILayout.Button("Reset"))
 		{
 			int counter = 0;
