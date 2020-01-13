@@ -23,15 +23,6 @@ public class Bike : Activity
         user.agentMovement.SetSpeed(speed);
         user.agentMovement.FollowPath(path);
 
-/*
-        user.agentMovement.onPathCompleted += () => 
-        {
-            Exit(user);
-            user.agentMovement.ResetSpeed();
-            user.agentMovement.GoThere(Vector3.zero);
-        };
-*/
-
         transform.SetParent(user.transform);
         transform.localPosition = Vector3.zero;
         transform.forward = user.transform.forward;
