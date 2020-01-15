@@ -7,60 +7,13 @@ public class Guitar : Activity, ICarryable
 	private Rigidbody rb;
 	private Collider col;
 	private NonPlayableCharacter player;
-
 	public ParticleSystem music;
 
-	public override void Enter(NonPlayableCharacter user)
+	public override void StartUsing(NonPlayableCharacter user)
 	{
-		base.Enter(user);
-		if(player == null) BecomePlayer(user);
-		else LookAtPlayer(user);
-	}
+		base.StartUsing(user);
+		full = true;
 
-	public override void Exit(NonPlayableCharacter user)
-	{
-		if(user == player)
-		{
-			music.Stop();
-			user.Drop();
-			transform.parent = null;
-			user.animator.SetBool("Guitaring", false);
-		}
-		else
-		{
-			user.animator.SetBool("Dancing", false);
-		}
-		base.Exit(user);
-
-		if(users.Count > 0)
-		{
-			BecomePlayer(users[0]);
-			EverybodyLookAtPlayer();
-		}
-	}
-
-	void LookAtPlayer(NonPlayableCharacter npc)
-	{
-		Vector3 pos = transform.position + Geometry.GetRandomPointAround(4f);
-		npc.agentMovement.GoThere(pos);
-		npc.animator.SetBool("Dancing", false);
-		npc.agentMovement.onDestinationReached += () =>
-		{
-			npc.transform.forward = -(npc.transform.position - player.transform.position).normalized;
-			npc.agentMovement.Stop();
-			npc.look.FocusOn(player.transform);
-			npc.animator.SetBool("Dancing", true);
-		};
-	}
-
-	void EverybodyLookAtPlayer()
-	{
-		foreach (NonPlayableCharacter npc in users)
-			if (npc != player) LookAtPlayer(npc);
-	}
-
-	void BecomePlayer(NonPlayableCharacter user)
-	{
 		player = user;
 		player.Collect(this);
 		player.agentMovement.onDestinationReached += () =>
@@ -70,6 +23,43 @@ public class Guitar : Activity, ICarryable
 			player.animator.SetBool("Carrying", false);
 			music.Play();
 		};
+	}
+
+	public override void Exit(NonPlayableCharacter user)
+	{
+		base.Exit(user); 
+		if(users.Count > 0) StartUsing(users[0]);
+	}
+
+	public override void StopUsing(NonPlayableCharacter user)
+	{
+		base.StopUsing(user);
+		full = false;
+
+		music.Stop();
+		user.Drop();
+		transform.parent = null;
+		user.animator.SetBool("Guitaring", false);
+	}
+
+	public override void StopSpectate(NonPlayableCharacter npc)
+	{
+		base.StopSpectate(npc);
+		npc.animator.SetBool("Dancing", false);
+	}
+
+	public override void Look(NonPlayableCharacter npc, Vector3 position)
+	{
+		base.Look(npc, position);
+
+		//npc.look.FocusOn(player.transform);
+		npc.animator.SetBool("Dancing", true);
+	}
+
+	void EverybodyLookAtPlayer()
+	{
+		foreach (NonPlayableCharacter npc in users)
+			if (npc != player) StartSpectate(npc);
 	}
 
 	void Awake()

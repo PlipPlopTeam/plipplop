@@ -32,7 +32,7 @@ namespace Behavior.NPC {
 					Activity[] activities = npc.sight.Scan<Activity>();
 					foreach (Activity a in activities)
 					{
-						if (!a.full && a != npc.previousActivity && a.working && !a.users.Contains(npc))
+						if(a.AvailableFor(npc))
 						{
 							npc.activity = a;
 							break;

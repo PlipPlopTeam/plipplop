@@ -28,8 +28,8 @@ public class AgentMovement : Walker
     [HideInInspector] public bool reached = false;
     [HideInInspector] public Animator animator;
 
-    bool followingPath;
-    Transform chaseTarget;
+	public bool followingPath;
+    public Transform chaseTarget;
     NavMeshAgent agent;
     int currentIndexOnPath;
 
@@ -87,7 +87,9 @@ public class AgentMovement : Walker
     
     public void Chase(Transform target)
     {
-        chaseTarget = target;
+		ClearEvents();
+		StopFollowingPath();
+		chaseTarget = target;
     }
 
     public void Clear()
@@ -146,6 +148,7 @@ public class AgentMovement : Walker
             {
                 if(!GoThere(chaseTarget.transform.position))
                 {
+					Debug.Log(chaseTarget.name);
                     if(onTargetOffPath != null)
                     {
                         onTargetOffPath.Invoke();
