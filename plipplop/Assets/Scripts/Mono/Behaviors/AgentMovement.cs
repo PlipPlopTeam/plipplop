@@ -148,7 +148,6 @@ public class AgentMovement : Walker
             {
                 if(!GoThere(chaseTarget.transform.position))
                 {
-					Debug.Log(chaseTarget.name);
                     if(onTargetOffPath != null)
                     {
                         onTargetOffPath.Invoke();
