@@ -9,13 +9,10 @@
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
         <e p="Artwork.cs" t="Include" />
+        <e p="DBG_LoadingScreen.cs" t="Include" />
         <e p="Editor" t="Include">
+          <e p="AIStateResourceDrawer.cs" t="Include" />
           <e p="NpcLibraryEditor.cs" t="Include" />
-        </e>
-        <e p="Meshes" t="Include">
-          <e p="PhotogrammetrieTests" t="Include">
-            <e p="S_Blur01.shader" t="Include" />
-          </e>
         </e>
         <e p="Plugins" t="Include">
           <e p="Pencil.cs" t="Include" />
@@ -70,32 +67,22 @@
               <e p="Wait.cs" t="Include" />
               <e p="WaitBetween.cs" t="Include" />
             </e>
-            <e p="BehaviorEditor" t="Include">
-              <e p="Scripts" t="Include">
-                <e p="ActionHook.cs" t="Include" />
-                <e p="AIStateTransition.cs" t="Include" />
-                <e p="Behavior" t="Include">
-                  <e p="AIState.cs" t="Include" />
-                  <e p="BehaviorEditor" t="Include">
-                    <e p="BehaviorEditor.cs" t="Include" />
-                    <e p="Cache.cs" t="Include" />
-                    <e p="Nodes" t="Include">
-                      <e p="AIStateDrawNode.cs" t="Include" />
-                      <e p="AIStateNode.cs" t="Include" />
-                      <e p="AIStateTransitionNode.cs" t="Include" />
-                      <e p="DrawNode.cs" t="Include" />
-                      <e p="Node.cs" t="Include" />
-                      <e p="TransitionDrawNode.cs" t="Include" />
-                    </e>
-                  </e>
-                  <e p="BehaviorGraph.cs" t="Include" />
-                  <e p="Conditions" t="Include">
-                    <e p="Condition.cs" t="Include" />
-                  </e>
-                  <e p="Mono Actions" t="Include">
-                    <e p="AIAction.cs" t="Include" />
-                  </e>
-                </e>
+            <e p="BEditor" t="Include">
+              <e p="ActionHook.cs" t="Include" />
+              <e p="AIAction.cs" t="Include" />
+              <e p="AIState.cs" t="Include" />
+              <e p="AIStateTransition.cs" t="Include" />
+              <e p="BehaviorEditor.cs" t="Include" />
+              <e p="BehaviorGraph.cs" t="Include" />
+              <e p="Cache.cs" t="Include" />
+              <e p="Condition.cs" t="Include" />
+              <e p="Nodes" t="Include">
+                <e p="AIStateDrawNode.cs" t="Include" />
+                <e p="AIStateNode.cs" t="Include" />
+                <e p="AIStateTransitionNode.cs" t="Include" />
+                <e p="DrawNode.cs" t="Include" />
+                <e p="Node.cs" t="Include" />
+                <e p="TransitionDrawNode.cs" t="Include" />
               </e>
             </e>
             <e p="Conditions" t="Include">
@@ -144,6 +131,7 @@
           <e p="FlickeringLight.cs" t="Include" />
           <e p="Floor.cs" t="Include" />
           <e p="Food.cs" t="Include" />
+          <e p="GoalDetection.cs" t="Include" />
           <e p="Hider.cs" t="Include" />
           <e p="ICarryable.cs" t="Include" />
           <e p="Input" t="Include">
@@ -280,6 +268,7 @@
         </e>
         <e p="Serviette.cs" t="Include" />
         <e p="Shaders" t="Include">
+          <e p="S_Blur01.shader" t="Include" />
           <e p="S_ToonLit_CutOut.shader" t="Include" />
           <e p="Shader10.shader" t="Include" />
         </e>
