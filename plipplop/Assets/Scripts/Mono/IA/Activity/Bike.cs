@@ -18,11 +18,9 @@ public class Bike : Activity
     public override void Enter(NonPlayableCharacter user)
     {
         base.Enter(user);
-
         full = true;
         user.agentMovement.SetSpeed(speed);
         user.agentMovement.FollowPath(path);
-
         transform.SetParent(user.transform);
         transform.localPosition = Vector3.zero;
         transform.forward = user.transform.forward;
@@ -33,9 +31,7 @@ public class Bike : Activity
     public override void Exit(NonPlayableCharacter user)
     {
         base.Exit(user);
-
         // TODO : Give him back a path road for his patrol (dependent of the scene ?)
-
         user.agentMovement.ResetSpeed();
         full = false;
         transform.SetParent(null);

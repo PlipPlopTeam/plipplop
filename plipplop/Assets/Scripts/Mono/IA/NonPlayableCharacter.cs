@@ -23,11 +23,12 @@ public class NonPlayableCharacter : MonoBehaviour
 	[HideInInspector] public Face face;
 	[HideInInspector] public Controller player;
 	[HideInInspector] public Valuable valuable;
-    [HideInInspector] public Activity activity;
+    public Activity activity;
+	public Activity previousActivity;
+
 	[HideInInspector] public Chair chair;
-    [HideInInspector] public Food food;
+    public Food food;
     [HideInInspector] public Feeder feeder;
-	[HideInInspector] public Activity previousActivity;
 	[HideInInspector] public Collider collider;
 	[HideInInspector] public ICarryable carried;
 	public Dictionary<Clothes.ESlot, Clothes> clothes = new Dictionary<Clothes.ESlot, Clothes>();
@@ -184,13 +185,14 @@ public class NonPlayableCharacter : MonoBehaviour
 	public void Consume(Food f)
 	{
 		food = f;
-		food.Consume();
-		food.onConsumeEnd += () =>
-		{
-			stats[NonPlayableCharacter.EStat.HUNGER] -= food.data.calory;
-			Drop();
-			food = null;
-		};
+		food.Consume(delegate{
+			if(this.food != null)
+			{
+				this.AddToStat(NonPlayableCharacter.EStat.HUNGER, -this.food.data.calory);
+				this.Drop();
+				this.food = null;
+			}
+		});
 	}
 
 	public void Carry(ICarryable carryable)
@@ -279,12 +281,14 @@ public class NonPlayableCharacter : MonoBehaviour
 	}
 
 #if UNITY_EDITOR
-	void OnDrawGizmosSelected()
+	void OnDrawGizmos()
     {
         if(EditorApplication.isPlaying)
 		{
+			Handles.Label(transform.position + Vector3.up * 2f, graph.GetState().name);
+			
+
 			float h = 0f;
-			//Handles.Label(transform.position + Vector3.up * (2f + h), graph.GetCurrentAIStateName());
 			h+= 0.1f;
 			foreach(KeyValuePair<EStat, float> entry in stats)
 			{
