@@ -89,7 +89,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   preset: {fileID: 11400000, guid: 81c5435995369f048ab3d3d178e1aa7c, type: 2}
   legsHeight: 1
-  groundCheckRange: 1
+  groundCheckRange: 0.4
   legsOffset: {x: 0, y: 0.5, z: 0}
   rigidbody: {fileID: 0}
   targetDirection: {x: 0, y: 0, z: 0}
@@ -160,11 +160,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4182015713297960901}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 5a3e0c40ebd74e3439e1e89f8cdfdc12,
-        type: 3}
-      propertyPath: m_Name
-      value: KM_Body01
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 5a3e0c40ebd74e3439e1e89f8cdfdc12,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -225,6 +220,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 7fd17b7bac30bfa44afd5d9874b0a111, type: 2}
+    - target: {fileID: -927199367670048503, guid: 5a3e0c40ebd74e3439e1e89f8cdfdc12,
+        type: 3}
+      propertyPath: m_Name
+      value: KM_Body01
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5a3e0c40ebd74e3439e1e89f8cdfdc12, type: 3}
 --- !u!4 &5763188736245049484 stripped

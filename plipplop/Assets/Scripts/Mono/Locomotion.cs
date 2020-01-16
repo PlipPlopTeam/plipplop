@@ -163,6 +163,7 @@ public class Locomotion : Walker
     {
         if(!hasJumped) 
         {
+            Debug.Log("Jumping");
             rigidbody.AddForce(Vector3.up * preset.jump * (parentController.gravityMultiplier / 100f), ForceMode.Acceleration);
             hasJumped = true;
         }
@@ -175,8 +176,10 @@ public class Locomotion : Walker
         {
             if (!IsMe(h.transform) && !h.collider.isTrigger) {
                 if (h.normal.y >= 1 - (preset.maxWalkableSteepness / 100f)) {
-                    if (rigidbody != null && rigidbody.velocity.y < 0f) 
+                    if (hasJumped && rigidbody != null && rigidbody.velocity.y < 0f) {
                         hasJumped = false; // Put HasJumped to false only if not grounded and falling
+                        rigidbody.velocity -= rigidbody.velocity.y * Vector3.up;
+                    }
                     return true;
                 }
             }
