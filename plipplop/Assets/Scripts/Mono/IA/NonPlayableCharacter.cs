@@ -197,23 +197,13 @@ public class NonPlayableCharacter : MonoBehaviour
 
 	public virtual void Carry(ICarryable carryable)
 	{
-		if(carried != null) Drop();
+		if (carried != null) Drop();
 		carried = carryable;
 		carried.Carry();
-		if(carried.Mass() <= settings.strength)
-		{
-			//animator.SetBool("Holding", true);
+		if (carried.Mass() <= settings.strength)
 			skeleton.Attach(carried.Self(), Clothes.ESlot.RIGHT_HAND, true);
-		}
-		else 
-		{
+		else
 			animator.SetBool("Carrying", true);
-		}
-
-		if (carryable.Self().gameObject.TryGetComponent(out Controller result))
-		{
-			Kick(result);
-		}
 	}
 
 	public virtual void Kick(Controller controller)

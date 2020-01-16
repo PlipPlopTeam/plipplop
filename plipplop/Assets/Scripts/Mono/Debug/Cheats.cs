@@ -12,8 +12,17 @@ public class Cheats : Dictionary<string, System.Action>
         Add("GLUE", delegate { Game.i.player.Paralyze(); });
         Add("FREE", delegate { Game.i.player.Deparalyze(); });
         Add("FAMINE", SetAllHunderToHundred);
+        Add("BIGHEADS", BigHeads);
         Add("HELLO", SpawnNPC);
-    }
+	}
+
+	public void BigHeads()
+	{
+		foreach(NonPlayableCharacter npc in Object.FindObjectsOfType<NonPlayableCharacter>())
+		{
+			npc.skeleton.GetSocketBySlot(Clothes.ESlot.HEAD).bone.localScale = Vector3.one * Random.Range(3f, 6f);
+		}
+	}
 
     public void ResetScene()
     {
