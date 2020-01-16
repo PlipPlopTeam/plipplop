@@ -128,6 +128,14 @@ public abstract class Controller : MonoBehaviour
         }
     }
 
+	public void Kick()
+	{
+		if (IsPossessed())
+		{
+			Game.i.player.TeleportBaseControllerAndPossess();
+		}
+	}
+
     public void SetOverwater()
     {
         isImmerged = false;

@@ -1,6 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class Skeleton : MonoBehaviour
 {
@@ -19,7 +22,7 @@ public class Skeleton : MonoBehaviour
 
         public Vector3 GetPosition()
         {
-            return bone.position;
+            return bone.position + offset;
         }
 
 		public void Attach(Transform obj, Vector3 offset = new Vector3(), Vector3 rotate = new Vector3())
@@ -127,4 +130,15 @@ public class Skeleton : MonoBehaviour
     {
         // For animation sound call
     }
+
+#if UNITY_EDITOR
+	void OnDrawGizmosSelected()
+	{
+		foreach(Socket s in sockets)
+		{
+			Handles.Label(s.GetPosition(), s.bone.name);
+			Gizmos.DrawWireSphere(s.GetPosition(), 0.05f);
+		}
+	}
+#endif
 }

@@ -23,14 +23,14 @@ public class NonPlayableCharacter : MonoBehaviour
 	[HideInInspector] public Face face;
 	[HideInInspector] public Controller player;
 	[HideInInspector] public Valuable valuable;
-    public Activity activity;
-	public Activity previousActivity;
-
+	[HideInInspector] public Activity activity;
+	[HideInInspector] public Activity previousActivity;
 	[HideInInspector] public Chair chair;
-    public Food food;
+	[HideInInspector] public Food food;
     [HideInInspector] public Feeder feeder;
 	[HideInInspector] public Collider collider;
 	[HideInInspector] public ICarryable carried;
+
 	public Dictionary<Clothes.ESlot, Clothes> clothes = new Dictionary<Clothes.ESlot, Clothes>();
 	public Dictionary<EStat, float> stats = new Dictionary<EStat, float>();
 
@@ -90,7 +90,7 @@ public class NonPlayableCharacter : MonoBehaviour
 		graph.Load(this);
 	}
 
-	public void Update()
+	public virtual void Update()
 	{
 		UpdateCollecting();
 		UpdateWaiting();
@@ -195,7 +195,7 @@ public class NonPlayableCharacter : MonoBehaviour
 		});
 	}
 
-	public void Carry(ICarryable carryable)
+	public virtual void Carry(ICarryable carryable)
 	{
 		if(carried != null) Drop();
 		carried = carryable;
@@ -209,6 +209,16 @@ public class NonPlayableCharacter : MonoBehaviour
 		{
 			animator.SetBool("Carrying", true);
 		}
+
+		if (carryable.Self().gameObject.TryGetComponent(out Controller result))
+		{
+			Kick(result);
+		}
+	}
+
+	public virtual void Kick(Controller controller)
+	{
+		if (controller.IsPossessed()) Game.i.player.TeleportBaseControllerAndPossess();
 	}
 
 	public void Drop()

@@ -29,7 +29,16 @@ public class Balloon : Activity, ICarryable
         col = GetComponent<Collider>();
     }
 
-    public virtual void Carry()
+	public override void Break()
+	{
+		base.Break();
+
+		if(users.Count > 0) users[carrier].Drop();
+
+		Initialize();
+	}
+
+	public virtual void Carry()
     {
         if(col != null) col.enabled = false;
         if(rb != null) rb.isKinematic = true;
