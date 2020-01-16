@@ -1,0 +1,97 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d15dc61630091584b856659139a87c78, type: 3}
+  m_Name: Reef_Graph_New
+  m_EditorClassIdentifier: 
+  states:
+  - name: Venturing
+    id: 1
+    stateId: 9
+    exits: 02000000
+    hasExits: 01
+  - name: Reef See Valuable
+    id: 4
+    stateId: 15
+    exits: 0f000000
+    hasExits: 01
+  - name: Reef Chase Valuable
+    id: 11
+    stateId: 12
+    exits: 11000000
+    hasExits: 01
+  - name: Reef Carry Valuable
+    id: 18
+    stateId: 11
+    exits: 13000000
+    hasExits: 01
+  - name: Reef See Player
+    id: 22
+    stateId: 14
+    exits: 15000000
+    hasExits: 01
+  - name: Reef Eject Player
+    id: 30
+    stateId: 16
+    exits: 1f000000
+    hasExits: 01
+  transitions:
+  - id: 2
+    disable: 0
+    conditions: 12000000
+    exits: 0a00000005000000
+    hasExits: 0101
+  - id: 5
+    disable: 0
+    conditions: 11000000
+    exits: 1600000001000000
+    hasExits: 0101
+  - id: 8
+    disable: 0
+    conditions: 05000000
+    exits: 1600000001000000
+    hasExits: 0101
+  - id: 10
+    disable: 0
+    conditions: 14000000
+    exits: 0400000001000000
+    hasExits: 0101
+  - id: 15
+    disable: 0
+    conditions: 15000000
+    exits: 0b00000004000000
+    hasExits: 0101
+  - id: 17
+    disable: 0
+    conditions: 16000000
+    exits: 1c0000000b000000
+    hasExits: 0101
+  - id: 19
+    disable: 0
+    conditions: 13000000
+    exits: 0100000012000000
+    hasExits: 0101
+  - id: 21
+    disable: 0
+    conditions: 12000000
+    exits: 0400000008000000
+    hasExits: 0101
+  - id: 28
+    disable: 0
+    conditions: 17000000
+    exits: 1e00000012000000
+    hasExits: 0101
+  - id: 31
+    disable: 0
+    conditions: 15000000
+    exits: 120000001e000000
+    hasExits: 0101
+  initialNode: 1

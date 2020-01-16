@@ -22,7 +22,7 @@ public class Skeleton : MonoBehaviour
 
         public Vector3 GetPosition()
         {
-            return bone.position + offset;
+            return bone.position + bone.TransformVector(offset);
         }
 
 		public void Attach(Transform obj, Vector3 offset = new Vector3(), Vector3 rotate = new Vector3())
@@ -31,7 +31,7 @@ public class Skeleton : MonoBehaviour
 		    if(c != null) c.Carry();
 
 			obj.SetParent(bone);
-			obj.transform.localPosition = offset;
+			obj.transform.localPosition = this.offset + offset;
             obj.forward = bone.forward;
             //obj.localScale = Vector3.one;
             item = obj;
@@ -136,8 +136,10 @@ public class Skeleton : MonoBehaviour
 	{
 		foreach(Socket s in sockets)
 		{
-			Handles.Label(s.GetPosition(), s.bone.name);
-			Gizmos.DrawWireSphere(s.GetPosition(), 0.05f);
+			Gizmos.DrawWireSphere(s.bone.position, 0.05f);
+			Handles.Label(s.bone.position, s.bone.name);
+			Gizmos.DrawLine(s.bone.position, s.GetPosition());
+			Gizmos.DrawWireSphere(s.GetPosition(), 0.025f);
 		}
 	}
 #endif

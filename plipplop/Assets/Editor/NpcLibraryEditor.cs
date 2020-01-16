@@ -31,7 +31,9 @@ public class NpcLibraryEditor : Editor
 		}
 		if (GUILayout.Button("Add"))
 		{
-			lib.states.Add(new AIStateResource());
+			AIStateResource r = new AIStateResource();
+			r.id = lib.states.Count;
+			lib.states.Add(r);
 		}
 
 		EditorGUILayout.LabelField("CONDITIONS", title);
@@ -45,7 +47,9 @@ public class NpcLibraryEditor : Editor
 		}
 		if (GUILayout.Button("Add"))
 		{
-			lib.conditions.Add(new AIConditionResource());
+			AIConditionResource r = new AIConditionResource();
+			r.id = lib.conditions.Count;
+			lib.conditions.Add(r);
 		}
 
 		EditorGUILayout.LabelField("ACTIONS", title);
@@ -59,7 +63,9 @@ public class NpcLibraryEditor : Editor
 		}
 		if (GUILayout.Button("Add"))
 		{
-			lib.actions.Add(new AIActionResource());
+			AIActionResource r = new AIActionResource();
+			r.id = lib.actions.Count;
+			lib.actions.Add(r);
 		}
 		if (GUILayout.Button("Reset"))
 		{
