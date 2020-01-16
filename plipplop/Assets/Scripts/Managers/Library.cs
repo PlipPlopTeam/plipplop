@@ -40,9 +40,11 @@ public class Library
     [Header("Meshs")]
     public Mesh primitiveQuadMesh;
 
-
     [Header("Sounds")]
     public Sounds sounds;
+
+    [Header("VFX")]
+    public VisualEffects vfxs;
 
     [Header("AI")]
     public NpcLibrary npcLibrary;
