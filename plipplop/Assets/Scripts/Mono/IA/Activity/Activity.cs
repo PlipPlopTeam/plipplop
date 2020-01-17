@@ -20,9 +20,9 @@ public class Activity : MonoBehaviour
     public StatMultiplier use;
 	public StatMultiplier spectate;
 
-	private List<NonPlayableCharacter> users = new List<NonPlayableCharacter>();
-	private List<NonPlayableCharacter> spectators = new List<NonPlayableCharacter>();
-	private float timer = 0f;
+	internal List<NonPlayableCharacter> users = new List<NonPlayableCharacter>();
+	internal List<NonPlayableCharacter> spectators = new List<NonPlayableCharacter>();
+	internal float timer = 0f;
 	internal bool full = false;
 
     public virtual void Enter(NonPlayableCharacter user)
