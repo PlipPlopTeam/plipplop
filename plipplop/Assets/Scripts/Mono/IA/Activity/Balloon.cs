@@ -13,10 +13,9 @@ public class Balloon : Activity, ICarryable
 
     // SYSTEM
     Vector3 originPosition;
-    private int slots = 2;
     private int carrier = 0;
     private float throwTimer;
-    private bool[] inPlace;
+    private List<bool> inPlace = new List<bool>();
     private bool playing;
     private bool flying;
 
@@ -32,9 +31,7 @@ public class Balloon : Activity, ICarryable
 	public override void Break()
 	{
 		base.Break();
-
 		if(users.Count > 0) users[carrier].Drop();
-
 		Initialize();
 	}
 
@@ -43,13 +40,11 @@ public class Balloon : Activity, ICarryable
         if(col != null) col.enabled = false;
         if(rb != null) rb.isKinematic = true;
     }
-
     public virtual void Drop()
     {
         if(col != null) col.enabled = true;
         if(rb != null) rb.isKinematic = false;
     }
-
     public float Mass()
     {
         if(rb == null) return 0;
@@ -74,57 +69,60 @@ public class Balloon : Activity, ICarryable
 
     public override void Exit(NonPlayableCharacter user)
     {
-        if(carrier < users.Count && user == users[carrier]) user.Drop();
-
+		if(users[carrier].IsCarrying(this)) user.Drop();
         user.look.LooseFocus();
         
         base.Exit(user);
 
-        if(users.Count > 0) 
-        {
-            Next();
-            users[carrier].Carry(this);
-        }
-
-        Initialize();
-    }
-
-    float GetRandomDistance()
-    {
-        return Random.Range(minDistanceBetween, maxDistanceBetween);
+		if (users.Count > 0)
+		{
+			carrier = Next();
+			users[carrier].Carry(this);
+		}
+		else Initialize();
     }
 
     public override void Enter(NonPlayableCharacter user)
     {
         base.Enter(user);
         user.look.FocusOn(transform);
-        if(users.Count >= slots)
+        if(users.Count >= 2)
         {
-            full = true;
-            users[carrier].Carry(this);
+			users[carrier].Carry(this);
             GetInPlace();
         }
     }
+
+	bool GoodPositions()
+	{
+		float distance = 0f;
+		for(int i = 0; i < users.Count - 1; i++) distance += Vector3.Distance(users[i].transform.position, users[i + 1].transform.position);
+		return distance > 4f;
+	}
 
     void GetInPlace()
     {
         playing = false;
         flying = false;
-        inPlace = new bool[slots];
-		users[0].agentMovement.Stop();
-		users[0].agentMovement.GoThere(originPosition + Vector3.forward * GetRandomDistance()/2);
-		users[0].agentMovement.onDestinationReached += () =>
-        {
-            inPlace[0] = true;
-            IsAllInPlace();
-        };
-		users[1].agentMovement.Stop();
-		users[1].agentMovement.GoThere(originPosition + Vector3.forward * -GetRandomDistance()/2);
-		users[1].agentMovement.onDestinationReached += () =>
-        {
-            inPlace[1] = true;
-            IsAllInPlace();
-        };
+        inPlace.Clear();
+
+		float distance = Random.Range(minDistanceBetween, maxDistanceBetween);
+		int count = 0;
+		foreach (NonPlayableCharacter user in users)
+		{
+			int spot = inPlace.Count;
+			inPlace.Add(false);
+			float angle = ((Mathf.PI * 2f) / users.Count) * count;
+			Vector3 pos = new Vector3(Mathf.Cos(angle) * distance, 0f, Mathf.Sin(angle) * distance);
+			user.agentMovement.Stop();
+			user.agentMovement.GoThere(originPosition + pos);
+			user.agentMovement.onDestinationReached += () =>
+			{
+				inPlace[spot] = true;
+				IsAllInPlace();
+			};
+			count++;
+		}
     }
 
     void Initialize()
@@ -145,28 +143,26 @@ public class Balloon : Activity, ICarryable
             {
                 if(!flying)
                 {
-                    if(DistanceBetweenPlayers() > minDistanceBetween
-                    && DistanceBetweenPlayers() < maxDistanceBetween)
-                    {
-                        LookAtEachOthers();
-                        users[carrier].Drop();
+					if (GoodPositions())
+					{
+						LookAtEachOthers();
+						users[carrier].Drop();
+						// Throwing
+						users[carrier].transform.forward = -(users[carrier].transform.position - users[Next()].transform.position).normalized;
+						transform.position += users[carrier].transform.forward * 0.5f;
+						Vector3 throwVector = users[carrier].transform.forward;
+						rb.AddForce(new Vector3(throwVector.x, 0f, throwVector.z) * horizontalForce * Time.deltaTime);
+						rb.AddForce(new Vector3(0f, 1f, 0f) * verticalForce * Time.deltaTime);
 
-                        // Throwing
-                        transform.position += users[carrier].transform.forward * 0.5f;
-                        Vector3 throwVector = users[carrier].transform.forward;
-                        rb.AddForce(new Vector3(throwVector.x, 0f, throwVector.z)  * horizontalForce * Time.deltaTime);
-                        rb.AddForce(new Vector3(0f, 1f, 0f)  * verticalForce * Time.deltaTime);
+						Next();
+						carrier = Next();
 
-                        Next();
-                        users[carrier].Collect(this);
+						users[carrier].Collect(this);
+						flying = true;
 
-                        flying = true;
-                    }
-                    else 
-                    {
-                        GetInPlace();
-                    }
-                }
+					}
+					else GetInPlace();
+				}
                 else
                 {
                     if(users[carrier].IsCarrying(this))
@@ -181,24 +177,18 @@ public class Balloon : Activity, ICarryable
         }
     }
 
-    float DistanceBetweenPlayers()
-    {
-        return Vector3.Distance(users[0].transform.position, users[1].transform.position);
-    }
-
     void LookAtEachOthers()
     {
-        if(users.Count >= 2)
-        {
-            users[0].transform.LookAt(users[1].transform);
-            users[1].transform.LookAt(users[0].transform);
-        }
-    }
+		List<Vector3> positions = new List<Vector3>();
+		foreach (NonPlayableCharacter user in users) positions.Add(user.transform.position);
+
+		Vector3 center = Geometry.CenterOfPoints(positions.ToArray());
+		foreach (NonPlayableCharacter user in users) user.transform.forward = -(transform.position - center).normalized;
+	}
 
     void IsAllInPlace()
     {
-        if(!IsAllTrue(inPlace)) return;
-        
+		foreach(bool b in inPlace) if(!b) return;
         playing = true;
         LookAtEachOthers();
     }
@@ -209,9 +199,10 @@ public class Balloon : Activity, ICarryable
         return true;
     }
 
-    void Next()
+    int Next()
     {
-        carrier++;
-        if(carrier >= users.Count) carrier = 0;
+		int newCarrier = carrier + 1;
+        if(newCarrier >= users.Count) newCarrier = 0;
+		return newCarrier;
     }
 }

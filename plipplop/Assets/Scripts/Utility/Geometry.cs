@@ -41,7 +41,14 @@ public static class Geometry
         );
     }
 
-    public class PositionAndRotation
+	public static Vector3 CenterOfPoints(Vector3[] points)
+	{
+		Vector3 centroid = new Vector3();
+		for (int i = 0; i < points.Length; i++) centroid += points[i];
+		return centroid/points.Length;
+	}
+
+	public class PositionAndRotation
     {
         public Vector3 position = new Vector3();
         public Vector3 euler { get { return rotation.eulerAngles; } }

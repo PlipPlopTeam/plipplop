@@ -80,7 +80,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.465
+  m_Radius: 0.2325
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &2932650472225342063
 Rigidbody:
@@ -145,16 +145,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 938d530180d1dd44ba9c6c800dbe4e59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  full: 0
   working: 1
-  boredomMultiplier: 1
-  tirednessMultiplier: 0
-  hungerMultiplier: 0
-  users: []
-  minDistanceBetween: 7
-  maxDistanceBetween: 12
+  userMax: 4
+  spectatorMax: 0
+  spectatorRange: {x: 0, y: 0}
+  awarnessMultiplier: 1
+  use:
+    boredom: 1
+    tiredness: 0
+    hunger: 0
+  spectate:
+    boredom: 1
+    tiredness: 0
+    hunger: 0
+  minDistanceBetween: 3
+  maxDistanceBetween: 4
   timeBetweenThrows: 0.25
-  verticalForce: 15000
+  verticalForce: 7500
   horizontalForce: 5000
 --- !u!1 &6564690223429448292
 GameObject:
@@ -258,6 +265,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 9aed549a97ecebe439f86c6d554d109a,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 9aed549a97ecebe439f86c6d554d109a,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 9aed549a97ecebe439f86c6d554d109a,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3312780394835150675, guid: 9aed549a97ecebe439f86c6d554d109a,
         type: 3}

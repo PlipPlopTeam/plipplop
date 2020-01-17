@@ -324,12 +324,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf1a434f98f934e4a9967fc76afcf94c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  full: 0
   working: 1
-  boredomMultiplier: 1
-  tirednessMultiplier: 0
-  hungerMultiplier: 0
-  users: []
+  userMax: 6
+  spectatorMax: 0
+  spectatorRange: {x: 0, y: 0}
+  awarnessMultiplier: 0.3
+  use:
+    boredom: 0.3
+    hunger: 0.6
+    tiredness: 0
+  spectate:
+    boredom: 1
+    hunger: 0
+    tiredness: 0
   radius: {x: 1.5, y: 5}
 --- !u!135 &1594647130759019486
 SphereCollider:

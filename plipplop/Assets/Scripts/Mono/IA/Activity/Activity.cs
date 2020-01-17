@@ -7,17 +7,18 @@ public class Activity : MonoBehaviour
 	public class StatMultiplier
 	{
 		public float boredom = 1f;
-		public float tiredness = 0f;
 		public float hunger = 0f;
+		public float tiredness = 0f;
 	}
 
-    [Header("Parameters")]
+	[Header("Parameters")]
     public bool working = true;
+	public int userMax = 1;
 	public int spectatorMax = 0;
 	public Vector2 spectatorRange;
-	public float awarnessMultiplier = 1f;
 	[Header("Modifiers")]
-    public StatMultiplier use;
+	public float awarnessMultiplier = 1f;
+	public StatMultiplier use;
 	public StatMultiplier spectate;
 
 	internal List<NonPlayableCharacter> users = new List<NonPlayableCharacter>();
@@ -81,7 +82,8 @@ public class Activity : MonoBehaviour
 	{
 		bool result = working
 			&& !users.Contains(npc)
-			&& !spectators.Contains(npc);
+			&& !spectators.Contains(npc)
+			&& users.Count < userMax;
 
 		if(spectatorMax > 0) result = spectators.Count < spectatorMax;
 
@@ -140,14 +142,14 @@ public class Activity : MonoBehaviour
 	{
 		if (spectatorMax > 0)
 		{
-			Gizmos.color = new Color32(255, 215, 0, 255);
+			UnityEditor.Handles.color = new Color32(0, 0, 255, 255);
 			UnityEditor.Handles.DrawWireDisc(transform.position, Vector3.up, spectatorRange.x);
 			UnityEditor.Handles.DrawWireDisc(transform.position, Vector3.up, spectatorRange.y);
 		}
 
 		foreach (NonPlayableCharacter user in users.ToArray())
 		{
-			Gizmos.color = new Color32(255, 255, 255, 255);
+			Gizmos.color = new Color32(0, 255, 0, 255);
 			Gizmos.DrawLine(transform.position, user.transform.position);
 		}
 
