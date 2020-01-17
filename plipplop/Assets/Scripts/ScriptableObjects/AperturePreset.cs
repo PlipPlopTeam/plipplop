@@ -58,4 +58,13 @@ public class AperturePreset : ScriptableObject
     [HideInInspector] public Vector3 targetConstraintLocalOffset;
     [HideInInspector] public float staticPositionLerp = 1f;
     [HideInInspector] public float staticRotationLerp = 1f;
+    [HideInInspector] public bool immediatePresetStackUpdate = false;
+
+    public static AperturePreset CreateFromCamera(Camera cam)
+    {
+        var preset = CreateInstance<AperturePreset>();
+        
+        preset.fieldOfView = cam.fieldOfView;
+        return preset;
+    }
 }

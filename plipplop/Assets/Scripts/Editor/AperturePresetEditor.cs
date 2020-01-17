@@ -249,6 +249,7 @@ public class AperturePresetEditor : Editor
         inheritableProperties[advanced].Add("targetConstraintLocalOffset");
         inheritableProperties[advanced].Add("staticPositionLerp");
         inheritableProperties[advanced].Add("staticRotationLerp");
+        inheritableProperties[advanced].Add("immediatePresetStackUpdate");
     }
 
     void MakeStyles()

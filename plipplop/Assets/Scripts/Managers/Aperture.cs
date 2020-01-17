@@ -42,6 +42,10 @@ public class Aperture
     Vector3 defaultTarget;
 
     AperturePreset settings;
+    List<AperturePreset> presetStack;
+    float stackUpdateSpeed = 0.7f;
+    float stackTransitionState = 0f;
+    AperturePreset previousStackSettings;
 
     // Static cameras
     List<PositionAndRotation> staticObjectives = new List<PositionAndRotation>();
@@ -74,7 +78,18 @@ public class Aperture
 
     public void Load(AperturePreset s)
     {
-        settings = s;
+        if (!presetStack.Find(o => o == previousStackSettings)) UnityEngine.Object.Destroy(previousStackSettings);
+        previousStackSettings = stackTransitionState < 1f ? ComputeSettings() : presetStack[presetStack.Count - 1];
+        stackTransitionState = 0f;
+        presetStack.Add(s);
+    }
+
+    public void Unload(AperturePreset s)
+    {
+        if (!presetStack.Find(o => o == previousStackSettings)) UnityEngine.Object.Destroy(previousStackSettings);
+        previousStackSettings = stackTransitionState < 1f ? ComputeSettings() : presetStack[presetStack.Count - 1];
+        stackTransitionState = 0f;
+        presetStack.Remove(s);
     }
 
     public AperturePreset GetSettings()
@@ -82,17 +97,33 @@ public class Aperture
         return settings;
     }
 
+    public AperturePreset ComputeSettings()
+    {
+        var preset = ScriptableObject.CreateInstance<AperturePreset>();
+
+        preset.fieldOfView = Mathf.Lerp(previousStackSettings.fieldOfView, presetStack[presetStack.Count - 1].fieldOfView, stackTransitionState);
+
+        return preset;
+    }
+
     public Aperture()
     {
         cam = Camera.main ?? new GameObject().AddComponent<Camera>();
         cam.gameObject.name = "_CAMERA";
+        previousStackSettings = Game.i.library.defaultAperture;
         Load(Game.i.library.defaultAperture);
+        settings = ComputeSettings();
     }
 
     public Aperture(AperturePreset s)
     {
         cam = Camera.main;
         Load(s);
+    }
+
+    public bool IsTransitioningOnStack()
+    {
+        return stackTransitionState < 1f;
     }
 
     public int DisableLookAt()
@@ -185,9 +216,17 @@ public class Aperture
 
 	public void FixedUpdate()
 	{
-
 		if (freeze) return;
-		if (settings.constraintToTarget)
+
+        GameObject.Destroy(settings);
+        settings = ComputeSettings();
+
+        if (stackTransitionState < 1f) {
+            stackTransitionState += Time.deltaTime * stackUpdateSpeed;
+        }
+
+
+        if (settings.constraintToTarget)
 		{
 			cam.transform.parent = target;
 			cam.transform.localPosition = settings.targetConstraintLocalOffset;
@@ -461,6 +500,8 @@ public class Aperture
         rotationAroundTarget.SetToDestination();
         fieldOfView.SetToDestination();
         if (target) virtualTarget.SetToDestination();
+        stackTransitionState = 1f;
+
         Apply();
     } // Teleport all the camera values instantly (to ignore lerp)
 
