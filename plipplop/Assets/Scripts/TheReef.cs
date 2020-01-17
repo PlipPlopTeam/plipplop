@@ -46,7 +46,9 @@ public class TheReef : NonPlayableCharacter
 
 		player.rigidbody.isKinematic = false;
 		player.transform.position -= skeleton.GetSocketBySlot(Clothes.ESlot.RIGHT_HAND).bone.up * 2f;
-		player.rigidbody.AddForce(-skeleton.GetSocketBySlot(Clothes.ESlot.RIGHT_HAND).bone.up * throwForce * Time.deltaTime);
+		player.Throw(-skeleton.GetSocketBySlot(Clothes.ESlot.RIGHT_HAND).bone.up, throwForce);
+		player.transform.up = Vector3.up;
+
 		controller = null;
 		player = null;
 	}
