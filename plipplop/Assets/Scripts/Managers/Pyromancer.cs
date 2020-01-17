@@ -39,7 +39,6 @@ public class Pyromancer
             instance.gameObject.SetActive(true);
             instance.Reset();
         }
-        Debug.Log(instance);
 
         effects[name].Add(instance);
 

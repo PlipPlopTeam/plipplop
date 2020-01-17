@@ -208,7 +208,7 @@ public class Aperture
         }
 
 		// If that bool is true, the camera will immediatly put itself in the back of the player
-		if (isCameraBeingRepositioned)
+		if (target != null && isCameraBeingRepositioned)
 		{
 			hAngle = Vector3.SignedAngle(Vector3.forward, target.forward, Vector3.up);
 			float a = Vector3.SignedAngle(Forward(), target.forward, Vector3.up);
@@ -383,6 +383,8 @@ public class Aperture
 
     public void EnsureMinimalCameraDistance()
     {
+        if (target == null) return;
+
         // Absolute minimal distance so that whatever happens the camera can't be in my face
         var cameraDirection = -(Vector3.Scale(Vector3.one - Vector3.up, target.position) - Vector3.Scale(Vector3.one - Vector3.up, position.current));
         float outOfBounds = cameraDirection.magnitude < settings.absoluteBoundaries.min ? settings.absoluteBoundaries.min : cameraDirection.magnitude > settings.absoluteBoundaries.max ? settings.absoluteBoundaries.max : 0f;

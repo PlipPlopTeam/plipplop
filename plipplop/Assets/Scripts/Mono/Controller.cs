@@ -52,6 +52,11 @@ public abstract class Controller : MonoBehaviour
         visuals.transform.localPosition = previousVisualLocalPosition;
     }
     
+    public GameObject GetEjectionClone()
+    {
+        return locomotion.GetEjectionClone();
+    }
+
     public virtual void OnPossess()
     {
         if (freezeUntilPossessed && rigidbody.constraints == RigidbodyConstraints.FreezeAll) {

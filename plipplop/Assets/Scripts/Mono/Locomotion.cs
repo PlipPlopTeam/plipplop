@@ -13,6 +13,7 @@ public class Locomotion : Walker
     [HideInInspector] new public Rigidbody rigidbody;
     [HideInInspector] public Vector3 targetDirection;
     [HideInInspector] public bool isImmerged = false;
+    public event System.Action onLegAnimationEnd;
 
     LocomotionAnimation locomotionAnimation;
     Controller parentController;
@@ -45,6 +46,8 @@ public class Locomotion : Walker
         legsCollider.material = new PhysicMaterial() { dynamicFriction = preset.groundFriction, staticFriction = preset.groundFriction, frictionCombine = preset.frictionCombine };
         locomotionAnimation = new LocomotionAnimation(rigidbody, legsCollider, parentController.visuals);
         isInitialized = true;
+
+        onLegAnimationEnd += locomotionAnimation.onLegAnimationEnd;
     }
     
     private void Update()
@@ -63,6 +66,11 @@ public class Locomotion : Walker
 	public bool AreLegsRetracted()
     {
         return locomotionAnimation.AreLegsRetracted();
+    }
+
+    public GameObject GetEjectionClone()
+    {
+        return locomotionAnimation.GetEjectionClone();
     }
 
     public void RetractLegs()
@@ -163,7 +171,6 @@ public class Locomotion : Walker
     {
         if(!hasJumped) 
         {
-            Debug.Log("Jumping");
             rigidbody.AddForce(Vector3.up * preset.jump * (parentController.gravityMultiplier / 100f), ForceMode.Acceleration);
             hasJumped = true;
         }
@@ -223,6 +230,7 @@ public class Locomotion : Walker
     {
         return locomotionAnimation.GetHeadDummy();
     }
+
 
 #if UNITY_EDITOR
     // Draw a gizmo if i'm being possessed
