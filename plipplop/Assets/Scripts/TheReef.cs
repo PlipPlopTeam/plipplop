@@ -7,6 +7,8 @@ public class TheReef : NonPlayableCharacter
 	private Controller controller;
 	private Controller player;
 
+	public float throwForce = 10000f;
+
 	public override void Kick(Controller c)
 	{
 		controller = c;
@@ -32,7 +34,7 @@ public class TheReef : NonPlayableCharacter
 
 	IEnumerator WaitAndThrow()
 	{
-		yield return new WaitForSeconds(0.9f);
+		yield return new WaitForSeconds(0.85f);
 		if (controller.TryGetComponent(out ICarryable result))
 		{
 			Carry(result);
@@ -43,7 +45,10 @@ public class TheReef : NonPlayableCharacter
 		}
 
 		player.rigidbody.isKinematic = false;
-		player.rigidbody.AddForce(transform.forward * 10000f * Time.deltaTime);
+		player.transform.position -= skeleton.GetSocketBySlot(Clothes.ESlot.RIGHT_HAND).bone.up * 2f;
+		player.Throw(-skeleton.GetSocketBySlot(Clothes.ESlot.RIGHT_HAND).bone.up, throwForce);
+		player.transform.up = Vector3.up;
+
 		controller = null;
 		player = null;
 	}

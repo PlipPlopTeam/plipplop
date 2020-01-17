@@ -12,7 +12,6 @@ public abstract class Controller : MonoBehaviour
     [HideInInspector] public bool freezeUntilPossessed = false;
     [HideInInspector] public bool useGravity = true;
     [HideInInspector] public float gravityMultiplier = 100f;
-
     [HideInInspector] public Rigidbody customExternalRigidbody;
     [HideInInspector] public AperturePreset customCamera = null;
     [HideInInspector] public Locomotion locomotion;
@@ -26,8 +25,21 @@ public abstract class Controller : MonoBehaviour
     internal ControllerSensor controllerSensor;
     internal bool isImmerged;
     RigidbodyConstraints previousConstraints;
-    
-    public virtual void OnEject()
+
+	bool isBeingThrown = false;
+	bool isFrozen = false;
+
+	public virtual void Throw(Vector3 direction, float force)
+	{
+		isBeingThrown = true;
+		rigidbody.AddForce(direction * force * Time.deltaTime);
+		Freeze();
+	}
+
+	public void Freeze(){isFrozen = true;}
+	public void UnFreeze(){isFrozen = false;}
+
+	public virtual void OnEject()
     {
         if (controllerSensor) Destroy(controllerSensor.gameObject);
         controllerSensor = null;
@@ -65,7 +77,8 @@ public abstract class Controller : MonoBehaviour
     internal virtual void SpecificJump() {}
     internal virtual void OnJump()
     {
-        if (AreLegsRetracted())
+		if (!canRetractLegs) return;
+		if (AreLegsRetracted())
         {
             SpecificJump();
             SoundPlayer.Play("sfx_jump");
@@ -101,13 +114,15 @@ public abstract class Controller : MonoBehaviour
 
     virtual internal void BaseMove(Vector3 direction)
     {
-        if (AreLegsRetracted()) SpecificMove(direction);
+		if (isFrozen) return;
+		if (AreLegsRetracted()) SpecificMove(direction);
         else locomotion.Move(direction);
     }
 
     public void Move(float fb, float rl)
     {
-        BaseMove(Vector3.ClampMagnitude(new Vector3(rl, 0f, fb), 1f));
+		if (isFrozen) return;
+		BaseMove(Vector3.ClampMagnitude(new Vector3(rl, 0f, fb), 1f));
     }
 
     public void MoveCamera(float h, float v)
@@ -215,6 +230,12 @@ public abstract class Controller : MonoBehaviour
         if (IsPossessed() && !AreLegsRetracted()) {
             AlignPropOnHeadDummy();
         }
+
+		if(isBeingThrown && IsGrounded())
+		{
+			UnFreeze();
+			isBeingThrown = false;
+		}
 	}
 
     virtual internal void AlignPropOnHeadDummy()
@@ -233,7 +254,7 @@ public abstract class Controller : MonoBehaviour
 
     void UpdateLastTimeGrounded()
     {
-        if (IsGrounded()) lastTimeGrounded = Time.time;
+		if (IsGrounded()) lastTimeGrounded = Time.time;
     }
 
     internal void ApplyGravity(float factor=1f)

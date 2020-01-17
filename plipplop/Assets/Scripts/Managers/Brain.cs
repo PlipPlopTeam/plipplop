@@ -53,7 +53,6 @@ public class Brain
     public void FixedUpdate()
     {
         if (IsParalyzed()) return;
-
         UpdateControllerPhysics();
     }
 
@@ -125,4 +124,11 @@ public class Brain
     {
         isParalyzed--;
     }
+
+	IEnumerator ParalyzeFor(float time)
+	{
+		Paralyze();
+		yield return new WaitForSeconds(time);
+		Deparalyze();
+	}
 }

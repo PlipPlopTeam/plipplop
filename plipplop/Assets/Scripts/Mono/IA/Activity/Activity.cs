@@ -15,19 +15,21 @@ public class Activity : MonoBehaviour
     public bool working = true;
 	public int spectatorMax = 0;
 	public Vector2 spectatorRange;
-    [Header("Modifiers")]
+	public float awarnessMultiplier = 1f;
+	[Header("Modifiers")]
     public StatMultiplier use;
 	public StatMultiplier spectate;
 
-	public List<NonPlayableCharacter> users = new List<NonPlayableCharacter>();
-	public List<NonPlayableCharacter> spectators = new List<NonPlayableCharacter>();
-	private float timer = 0f;
+	internal List<NonPlayableCharacter> users = new List<NonPlayableCharacter>();
+	internal List<NonPlayableCharacter> spectators = new List<NonPlayableCharacter>();
+	internal float timer = 0f;
 	internal bool full = false;
 
     public virtual void Enter(NonPlayableCharacter user)
     {
         user.stats[NonPlayableCharacter.EStat.BOREDOM] = 0f;
         user.activity = this;
+		user.sight.multiplier = awarnessMultiplier;
 
 		if (!full) StartUsing(user);
 		else StartSpectate(user);
@@ -47,6 +49,7 @@ public class Activity : MonoBehaviour
     {
         user.activity = null;
         user.previousActivity = this;
+		user.sight.multiplier = 1f;
 
 		if (users.Contains(user)) StopUsing(user);
 		else if (spectators.Contains(user)) StopSpectate(user);
