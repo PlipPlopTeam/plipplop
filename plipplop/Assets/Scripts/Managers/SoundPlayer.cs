@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class SoundPlayer
 {
@@ -31,15 +33,31 @@ public class SoundPlayer
 
     static void PlaySound(Sound snd, float volume=1f, float pitch = 1f, AudioSource src=null)
     {
-        if (source == null) { source = Camera.main.gameObject.AddComponent<AudioSource>(); }
-        if (src == null) { src = source; }
+        try
+        {
+            if (source == null)
+            {
+                source = Camera.main.gameObject.AddComponent<AudioSource>();
+            }
 
-        if (snd.loop) {
-            MakeUnique(snd);
-            LoopClip(snd.clip, volume, pitch);
+            if (src == null)
+            {
+                src = source;
+            }
+
+            if (snd.loop)
+            {
+                MakeUnique(snd);
+                LoopClip(snd.clip, volume, pitch);
+            }
+            else
+            {
+                PlayClipOnce(snd.clip, src, volume, pitch);
+            }
         }
-        else {
-            PlayClipOnce(snd.clip, src, volume, pitch);
+        catch (NullReferenceException e)
+        {
+            Debug.LogWarning("Could not play the sound "+snd.name+" because either the camera or source does NOT exist yet.");
         }
     }
 
