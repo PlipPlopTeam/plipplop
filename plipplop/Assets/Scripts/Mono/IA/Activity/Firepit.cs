@@ -2,7 +2,7 @@
 
 public class Firepit : Activity
 {
-    [Header("FIREPIT")]
+    [Header("Firepit")]
 	public Vector2 radius;
 
 	public override void Enter(NonPlayableCharacter user)
@@ -50,7 +50,8 @@ public class Firepit : Activity
 #if UNITY_EDITOR
 	public override void OnDrawGizmosSelected()
 	{
-        Gizmos.color = new Color32(255, 215, 0, 255);
+		base.OnDrawGizmosSelected();
+		Gizmos.color = new Color32(255, 215, 0, 255);
         UnityEditor.Handles.DrawWireDisc(transform.position, Vector3.up, radius.x);
         UnityEditor.Handles.DrawWireDisc(transform.position, Vector3.up, radius.y);
 	}

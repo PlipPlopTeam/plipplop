@@ -75,15 +75,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 938d530180d1dd44ba9c6c800dbe4e59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  full: 0
   working: 1
-  boredomMultipler: 0.2
-  boredomFrequency: 0.25
-  users: []
-  distanceBetween: 10
-  timeBetweenThrows: 0.25
-  verticalForce: 65000
-  horizontalForce: 30000
+  userMax: 4
+  spectatorMax: 0
+  spectatorRange: {x: 0, y: 0}
+  awarnessMultiplier: 0.1
+  use:
+    boredom: 1
+    tiredness: 0.8
+    hunger: 2
+  spectate:
+    boredom: 0
+    tiredness: 0
+    hunger: 0
+  minDistanceBetween: 3
+  maxDistanceBetween: 5
+  timeBetweenThrows: 2
+  verticalForce: 50000
+  horizontalForce: 25000
 --- !u!1 &618626732637470183
 GameObject:
   m_ObjectHideFlags: 0
