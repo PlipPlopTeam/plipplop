@@ -765,7 +765,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   origin: {x: 0, y: 0, z: 0}
-  weight: 10
+  weight: 25
   distanceThreshold: 5
   hidden: 0
 --- !u!114 &-212437679873209963
@@ -794,14 +794,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aabc07795cb8444449e1d9061cd21258, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  full: 0
   working: 1
-  boredomMultiplier: 10
-  tirednessMultiplier: 1
-  hungerMultiplier: 1
-  users: []
+  userMax: 1
+  spectatorMax: 0
+  spectatorRange: {x: 0, y: 0}
+  awarnessMultiplier: 1
+  use:
+    boredom: 1
+    hunger: 0
+    tiredness: 0
+  spectate:
+    boredom: 1
+    hunger: 0
+    tiredness: 0
   focusOffset: {x: 0, y: 2, z: 0}
-  radius: 2
 --- !u!1 &2095127333879700217
 GameObject:
   m_ObjectHideFlags: 0

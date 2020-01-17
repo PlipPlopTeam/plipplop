@@ -22,6 +22,7 @@ public class Artwork : Activity
 		base.StopSpectate(npc);
 	}
 
+
 #if UNITY_EDITOR
 	public override void OnDrawGizmosSelected()
 	{

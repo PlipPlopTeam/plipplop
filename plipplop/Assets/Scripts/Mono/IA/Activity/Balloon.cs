@@ -11,22 +11,14 @@ public class Balloon : Activity, ICarryable
     public float verticalForce = 50000f;
     public float horizontalForce = 25000f;
 
-    // SYSTEM
-    Vector3 originPosition;
+	private Vector3 originPosition;
     private int carrier = 0;
     private float throwTimer;
     private List<bool> inPlace = new List<bool>();
     private bool playing;
     private bool flying;
-
-    private Rigidbody rb;
-    private Collider col;
-
-    void Awake()
-    {
-        rb = GetComponent<Rigidbody>();
-        col = GetComponent<Collider>();
-    }
+	private Rigidbody rb;
+	private Collider col;
 
 	public override void Break()
 	{
@@ -35,6 +27,11 @@ public class Balloon : Activity, ICarryable
 		Initialize();
 	}
 
+	void Awake()
+	{
+		rb = GetComponent<Rigidbody>();
+		col = GetComponent<Collider>();
+	}
 	public virtual void Carry()
     {
         if(col != null) col.enabled = false;
