@@ -14,7 +14,9 @@ public class Cheats : Dictionary<string, System.Action>
         Add("FAMINE", SetAllHunderToHundred);
         Add("BIGHEADS", BigHeads);
         Add("HELLO", SpawnNPC);
-	}
+        Add("IMONFIRE", SpawnFire);
+        Add("BOOM", SpawnPoof);
+    }
 
 	public void BigHeads()
 	{
@@ -39,5 +41,15 @@ public class Cheats : Dictionary<string, System.Action>
     {
         var o = Object.Instantiate(Game.i.library.npcLibrary.NPCSamplePrefab);
         o.transform.position = Game.i.player.GetCurrentController().transform.position + Game.i.player.GetCurrentController().transform.forward * 3f;
+    }
+
+    public void SpawnPoof()
+    {
+        Pyromancer.Play("poof", Game.i.player.GetCurrentController().transform.position);
+    }
+
+    public void SpawnFire()
+    {
+        Pyromancer.PlayAttached("fire", Game.i.player.GetCurrentController().transform);
     }
 }

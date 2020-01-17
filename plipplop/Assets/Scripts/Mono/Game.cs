@@ -6,6 +6,7 @@ public class Game : MonoBehaviour
 {
     [Range(0, -100)] public int killZ = -20;
     public Library library;
+    public Pyromancer vfx;
     public Brain player;
     public AIZone aiZone;
     public Mapping mapping;
@@ -32,6 +33,7 @@ public class Game : MonoBehaviour
         s = switches;
 
         aperture = new Aperture();
+        vfx = new Pyromancer();
         mapping = Instantiate<Mapping>(mapping);
         cheatCodeListener = new CheatCodeListener(new Cheats());
         chunkLoader = new ChunkLoader();

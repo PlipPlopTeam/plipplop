@@ -9,6 +9,7 @@ public class LegAnimator : MonoBehaviour
     public List<MeshFlipbook> _animations;
     public MeshFlipbook currentAnimation;
     public MeshFilter meshFilter;
+    public MeshRenderer meshRenderer;
 
     Dictionary <string, MeshFlipbook> animations = new Dictionary<string, MeshFlipbook>();
     Coroutine animCoroutine;
@@ -78,6 +79,7 @@ public class LegAnimator : MonoBehaviour
             headTransform.localPosition = _frame.position;
             headTransform.localEulerAngles = _frame.euler;
             headTransform.localScale = _frame.scale;
+            meshRenderer.sharedMaterial = _frame.mat;
             
             yield return new WaitForSeconds(1/currentAnimation.fps);
             _frameIndex++;
