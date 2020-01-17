@@ -8,6 +8,7 @@ public class LocomotionAnimation
     public Vector3 legsOffset;
     public bool isJumping;
     public bool isWalking;
+    public System.Action onLegAnimationEnd;
 
     Transform parentTransform;
     public Rigidbody rigidbody;
@@ -23,10 +24,14 @@ public class LocomotionAnimation
         parentTransform = legsCollider.transform;
         this.visualsTransform = visualsTransform;
         GrowLegs();
+
+        onLegAnimationEnd += legs.onAnimationEnded;
     }
 
     public void Update()
     {
+        if (Game.i.player.GetCurrentController() == null) return;
+
         legs.transform.localPosition = legsOffset - Vector3.up*(legsHeight);
         SetLegHeight();
 
@@ -64,6 +69,24 @@ public class LocomotionAnimation
     void ResetVisualRotation()
     {
         if(visualsTransform != null) visualsTransform.localEulerAngles = Vector3.zero;
+    }
+
+    public GameObject GetEjectionClone()
+    {
+        var animObject = Object.Instantiate(legs.gameObject, legs.transform.position, legs.transform.rotation).GetComponent<LegAnimator>();
+        animObject.transform.parent = null;
+        animObject.gameObject.SetActive(true);
+        animObject.enabled = true;
+
+        var visuals = Object.Instantiate(visualsTransform.gameObject, visualsTransform.position, visualsTransform.rotation);
+        visuals.transform.localScale = Vector3.one;
+        animObject.Attach(visuals.transform);
+        visuals.transform.localPosition = Vector3.zero;
+        visuals.transform.localEulerAngles = Vector3.zero;
+
+        animObject.gameObject.AddComponent<DestroyAfter>().lifespan = 2f;
+
+        return animObject.gameObject;
     }
 
     void GrowLegs()

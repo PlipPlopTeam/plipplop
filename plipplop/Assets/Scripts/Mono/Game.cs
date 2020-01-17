@@ -56,7 +56,7 @@ public class Game : MonoBehaviour
         player = new Brain(mapping);
         Controller c = Instantiate(library.baseControllerPrefab.GetComponent<Controller>(), spawn.position, Quaternion.identity);
         c.transform.forward = spawn.transform.forward;
-        player.Possess(c);
+        player.Possess(c, true);
         player.SetBaseController(c);
     }
 
