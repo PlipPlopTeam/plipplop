@@ -77,6 +77,7 @@ public abstract class Controller : MonoBehaviour
     internal virtual void SpecificJump() {}
     internal virtual void OnJump()
     {
+		if (!canRetractLegs) return;
 		if (AreLegsRetracted())
         {
             SpecificJump();
