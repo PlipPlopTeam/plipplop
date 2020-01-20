@@ -166,7 +166,6 @@ public class NonPlayableCharacter : MonoBehaviour
 	{
 		if(carryableToCollect != null)
 		{
-			Debug.Log(carryableToCollect);
 			if(range.IsInRange(carryableToCollect.Self().gameObject))
 			{
 				agentMovement.StopChase();
