@@ -80,6 +80,11 @@ public class LegAnimator : MonoBehaviour
             headTransform.localScale = _frame.scale;
             meshRenderer.sharedMaterial = _frame.mat;
 
+            if (_frame.AnimationEvent)
+            {
+                AnimationEvent(_frame.AnimationEvent);
+            }
+
             if (movementTarget) transform.position = Vector3.Lerp(movementTargetOrigin, movementTarget.position, (float)_frameIndex / (currentAnimation.meshes.Count-1));
 
             yield return new WaitForSeconds(1/currentAnimation.fps);
@@ -108,5 +113,27 @@ public class LegAnimator : MonoBehaviour
     public void Detach(Transform head)
     {
         head.parent = null;
+    }
+
+    void AnimationEvent(GameFX gameFx)
+    {
+        foreach (var sfx in gameFx.sfx)
+        {
+            PlaySFX(sfx);
+        }
+        foreach (var vfx in gameFx.vfx)
+        {
+            PlayVFX(vfx);
+        }
+    }
+
+    void PlaySFX(string sfx)
+    {
+        
+    }
+    
+    void PlayVFX(string vfx)
+    {
+        Pyromancer.Play(vfx, transform.position);
     }
 }

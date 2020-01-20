@@ -15,6 +15,8 @@ public class MeshFlipbook : ScriptableObject
         public Vector3 scale;
 
         public Material mat;
+
+        public GameFX AnimationEvent;
     }
     
     public string animationName;
