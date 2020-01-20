@@ -25,6 +25,12 @@ public static class Geometry
         return new Vector3(Mathf.Cos(angle) * radius, 0, Mathf.Sin(angle) * radius);
     }
 
+	public static Vector3 GetRandomPointInRange(float range)
+	{
+		range *= 0.5f;
+		return new Vector3(Random.Range(-range, range), 0f, Random.Range(-range, range));
+	}
+
     public static Rect Scale(this Rect rect, float scale)
     {
         return new Rect(

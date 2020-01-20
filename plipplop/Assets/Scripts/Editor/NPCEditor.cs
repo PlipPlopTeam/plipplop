@@ -14,16 +14,16 @@ public class AgentMovementEditor : Editor
         AgentMovement am = (AgentMovement)target;
         if(am.path == null) return;
         
-        Vector3[] newPath = am.path.points.ToArray();
+        AIPath.Point[] newPath = am.path.points.ToArray();
         for(int i = 0; i < newPath.Length; i++)
         {
-            newPath[i] = Handles.PositionHandle(newPath[i], Quaternion.identity);
+            newPath[i].position = Handles.PositionHandle(newPath[i].position, Quaternion.identity);
         }
 
         if(EditorGUI.EndChangeCheck())
         {
             Undo.RecordObject(am, "Move NonPlayableCharacter path point");
-            am.path.points = new List<Vector3>(newPath);
+            am.path.points = new List<AIPath.Point>(newPath);
             EditorUtility.SetDirty(am);
         }
     }

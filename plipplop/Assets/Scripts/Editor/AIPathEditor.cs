@@ -17,38 +17,83 @@ public class AIPathEditor : Editor
         Handles.ArrowHandleCap(controlID, position, Quaternion.LookRotation(Vector3.up), 1f, eventType);
         Handles.color = Color.white;
     }
-    
-    private void OnSceneGUI()
+
+
+	public override void OnInspectorGUI()
+	{
+		EditorGUI.BeginChangeCheck();
+
+		AIPath path = (AIPath)target;
+		path.loop = EditorGUILayout.Toggle("Loop", path.loop);
+
+		for (int i = 0; i < path.points.Count; i++)
+		{
+			EditorGUILayout.BeginHorizontal();
+			if (GUILayout.Button("Remove")) path.points.RemoveAt(i);
+			path.points[i].position = EditorGUILayout.Vector3Field("", path.points[i].position);
+			path.points[i].range = EditorGUILayout.FloatField("", path.points[i].range);
+			EditorGUILayout.EndHorizontal();
+		}
+
+		if (GUILayout.Button("Add"))
+		{
+			AIPath.Point p = new AIPath.Point();
+			if(path.points.Count != 0)
+			{
+				p.position = path.points[path.points.Count - 1].position;
+			}
+			p.range = 2f;
+			path.points.Add(p);
+		}
+
+		if (EditorGUI.EndChangeCheck())
+		{
+			EditorUtility.SetDirty(path);
+		}
+	}
+
+	private void OnSceneGUI()
     {
         EditorGUI.BeginChangeCheck();
 
         AIPath path = (AIPath)target;
-        var points = path.points.ToArray();
+		AIPath.Point[] points = path.points.ToArray();
 
         for (int i = 0; i < points.Length; i++)
         {
-            points[i] = 
-                Vector3.Scale(Handles.FreeMoveHandle(points[i], Quaternion.identity, 1f, Vector3.zero, GroundCap), Vector3.right + Vector3.forward) + 
-                Vector3.Scale(Handles.FreeMoveHandle(points[i], Quaternion.identity, 1f, Vector3.zero, VerticalCap), Vector3.up)
+			Handles.DrawWireDisc(points[i].position, Vector3.up, points[i].range);
+
+            points[i].position = 
+                Vector3.Scale(Handles.FreeMoveHandle(points[i].position, Quaternion.identity, 1f, Vector3.zero, GroundCap), Vector3.right + Vector3.forward) + 
+                Vector3.Scale(Handles.FreeMoveHandle(points[i].position, Quaternion.identity, 1f, Vector3.zero, VerticalCap), Vector3.up)
             ;
 
-            Handles.Label(points[i] + Camera.current.transform.right, "#"+i.ToString(), GUI.skin.label);
+			GUI.skin.label.normal.textColor = Color.white;
+            Handles.Label(points[i].position + Camera.current.transform.right * 0.5f, "#"+i.ToString(), GUI.skin.label);
 
             if(i < points.Length-1)
             {
-                Handles.DrawDottedLine(points[i], points[i+1], 10f);
-            }
+				DrawIntersect(points[i], points[i + 1]);
+			}
             else if(i == points.Length-1)
             {
-                if(path.loop) Handles.DrawDottedLine(points[i], points[0], 10f);
+                if(path.loop) DrawIntersect(points[i], points[0]);
             }
         }
 
         if(EditorGUI.EndChangeCheck())
         {
             Undo.RecordObject(path, "Move Zone Path Point");
-            path.points = new List<Vector3>(points);
+            path.points = new List<AIPath.Point>(points);
             EditorUtility.SetDirty(path);
         }
     }
+
+	void DrawIntersect(AIPath.Point from, AIPath.Point to)
+	{	
+		float distance = Vector3.Distance(from.position, to.position);
+		Vector3 direction = (from.position - to.position).normalized;
+
+		Handles.DrawDottedLine(from.position + (from.range * -direction), to.position + (to.range * direction), 10f);
+	}
 }

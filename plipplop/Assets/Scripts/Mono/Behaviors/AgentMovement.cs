@@ -184,7 +184,7 @@ public class AgentMovement : Walker
         || index < 0
         || index >= path.points.Count) return false;
 
-        if(GoThere(path.points[index]))
+        if(GoThere(path.GetPosition(index)))
         {
             currentIndexOnPath = index;
             return true;
