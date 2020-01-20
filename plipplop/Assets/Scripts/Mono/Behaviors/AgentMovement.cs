@@ -21,8 +21,11 @@ public class AgentMovement : Walker
     public System.Action onDestinationReached;
     public System.Action onPathCompleted;
     public System.Action onTargetOffPath;
+
+
     public AIPath path;
-    public AgentMovement.Settings settings;
+	[Range(0f, 1f)] public float slowMultiplier = 1f;
+	public AgentMovement.Settings settings;
 
     [HideInInspector] public bool going = false;
     [HideInInspector] public bool reached = false;
@@ -35,7 +38,7 @@ public class AgentMovement : Walker
 
 	public override void ApplyAdherence(float adherence)
 	{
-		SetSpeed(settings.speed * (1f - adherence));
+		SetSpeed(settings.speed * (1f - adherence * slowMultiplier));
 	}
 
 	public void ClearEvents()

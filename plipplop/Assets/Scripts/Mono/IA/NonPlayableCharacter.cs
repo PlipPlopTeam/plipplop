@@ -291,9 +291,12 @@ public class NonPlayableCharacter : MonoBehaviour
     {
         if(EditorApplication.isPlaying)
 		{
-			Handles.Label(transform.position + Vector3.up * 2f, graph.GetState().name);
-			
-
+			GUIStyle s = new GUIStyle();
+			s.alignment = TextAnchor.MiddleCenter;
+			s.fontStyle = FontStyle.Bold;
+			s.normal.textColor = Color.white;
+			Handles.Label(transform.position + Vector3.up * 2f, graph.GetState().name, s);
+			/*
 			float h = 0f;
 			h+= 0.1f;
 			foreach(KeyValuePair<EStat, float> entry in stats)
@@ -301,6 +304,7 @@ public class NonPlayableCharacter : MonoBehaviour
 				Handles.Label(transform.position + Vector3.up * (2f + h), entry.Key.ToString() + " = " + entry.Value.ToString());
 				h+= 0.1f;
 			}
+			*/
         }
     }
 #endif
