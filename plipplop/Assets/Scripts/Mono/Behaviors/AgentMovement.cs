@@ -18,23 +18,20 @@ public class AgentMovement : Walker
 		public float minimumCarrySpeed = 1f;  
     }
 
-    public System.Action onDestinationReached;
-    public System.Action onPathCompleted;
-    public System.Action onTargetOffPath;
-
-
     public AIPath path;
 	[Range(0f, 1f)] public float slowMultiplier = 1f;
 	public AgentMovement.Settings settings;
 
-    [HideInInspector] public bool going = false;
+	[HideInInspector] public bool going = false;
     [HideInInspector] public bool reached = false;
     [HideInInspector] public Animator animator;
-
+	public System.Action onDestinationReached;
+	public System.Action onPathCompleted;
+	public System.Action onTargetOffPath;
 	public bool followingPath;
     public Transform chaseTarget;
-    NavMeshAgent agent;
     int currentIndexOnPath;
+	NavMeshAgent agent;
 
 	public override void ApplyAdherence(float adherence)
 	{
@@ -110,7 +107,22 @@ public class AgentMovement : Walker
         if(path.status == NavMeshPathStatus.PathPartial
         || path.status == NavMeshPathStatus.PathInvalid)
         {
-            return false;
+			/*
+			RaycastHit[] hits = Physics.RaycastAll(transform.position, Vector3.down, 100f);
+			foreach (RaycastHit h in hits)
+			{
+				if (h.collider.gameObject.GetComponent<Floor>() != null)
+				{
+					Debug.Log(h.point);
+					agent.SetDestination(h.point);
+					going = true;
+					reached = false;
+					return true;
+				}
+			}
+			*/
+
+			return false;
         }
         else 
         {

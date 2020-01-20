@@ -45,4 +45,23 @@ public static class Tools
     {
         return string.Format(str, elements);
     }
+
+	public static bool IsGrounded(Transform transform, float distance)
+	{
+		RaycastHit[] hits = Physics.RaycastAll(transform.position, Vector3.down, distance);
+		foreach (RaycastHit h in hits)
+		{
+			if (!IsYourselfCheck(transform, h.transform) && !h.collider.isTrigger) return true;
+		}
+		return false;
+	}
+
+	public static bool IsYourselfCheck(Transform transform, Transform thing)
+	{
+		foreach (Transform t in transform.GetComponentsInChildren<Transform>())
+		{
+			if (thing == t.transform) return true;
+		}
+		return false;
+	}
 }

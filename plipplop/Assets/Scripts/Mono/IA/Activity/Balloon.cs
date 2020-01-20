@@ -142,21 +142,18 @@ public class Balloon : Activity, ICarryable
                 {
 					if (GoodPositions())
 					{
+						int next = Next();
 						LookAtEachOthers();
 						users[carrier].Drop();
 						// Throwing
-						users[carrier].transform.forward = -(users[carrier].transform.position - users[Next()].transform.position).normalized;
+						users[carrier].transform.forward = -(users[carrier].transform.position - users[next].transform.position).normalized;
 						transform.position += users[carrier].transform.forward * 0.5f;
 						Vector3 throwVector = users[carrier].transform.forward;
 						rb.AddForce(new Vector3(throwVector.x, 0f, throwVector.z) * horizontalForce * Time.deltaTime);
 						rb.AddForce(new Vector3(0f, 1f, 0f) * verticalForce * Time.deltaTime);
-
-						Next();
-						carrier = Next();
-
+						carrier = next;
 						users[carrier].Collect(this);
 						flying = true;
-
 					}
 					else GetInPlace();
 				}
