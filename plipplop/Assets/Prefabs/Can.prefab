@@ -98,8 +98,8 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.1
-  m_Height: 0.35
+  m_Radius: 0.07
+  m_Height: 0.25
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &4535803897487127892
@@ -136,8 +136,10 @@ MonoBehaviour:
   cc: {fileID: 4535803897487127893}
   rb: {fileID: 4535803897487127892}
   visual: {fileID: 4535803897420001826}
+  carried: 0
   data: {fileID: 11400000, guid: 61eba148cd4ebff42b0e9d6a829269b7, type: 2}
   consumed: 0
+  mass: 0
 --- !u!1001 &4535803895903949329
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -208,17 +210,17 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: ad7bed4f38dd0214f8f6aeda74b61998,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.5
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: ad7bed4f38dd0214f8f6aeda74b61998,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.5
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: ad7bed4f38dd0214f8f6aeda74b61998,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.5
+      value: 0.75
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ad7bed4f38dd0214f8f6aeda74b61998, type: 3}

@@ -53,6 +53,10 @@ namespace Behavior.Editor
 		public void Load(NonPlayableCharacter t)
 		{
 			target = t;
+
+			// In case of unfound initialnode
+			if (GetStateNode(initialNode) == null) initialNode = states[0].id;
+
 			currentNode = initialNode;
 			GetState().OnEnter(target);
 		}

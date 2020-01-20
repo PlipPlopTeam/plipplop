@@ -22,14 +22,18 @@ public class NonPlayableCharacter : MonoBehaviour
 	[HideInInspector] public Range range;
 	[HideInInspector] public Face face;
 	[HideInInspector] public Controller player;
-	[HideInInspector] public Valuable valuable;
-	[HideInInspector] public Activity activity;
-	[HideInInspector] public Activity previousActivity;
-	[HideInInspector] public Chair chair;
-	[HideInInspector] public Food food;
-    [HideInInspector] public Feeder feeder;
 	[HideInInspector] public Collider collider;
 	[HideInInspector] public ICarryable carried;
+
+	[Header("Read-Only")]
+	public Valuable valuable;
+	public Activity activity;
+	public Activity previousActivity;
+	public Chair chair;
+	public Food food;
+    public Feeder feeder;
+
+
 
 	public Dictionary<Clothes.ESlot, Clothes> clothes = new Dictionary<Clothes.ESlot, Clothes>();
 	public Dictionary<EStat, float> stats = new Dictionary<EStat, float>();
@@ -162,6 +166,7 @@ public class NonPlayableCharacter : MonoBehaviour
 	{
 		if(carryableToCollect != null)
 		{
+			Debug.Log(carryableToCollect);
 			if(range.IsInRange(carryableToCollect.Self().gameObject))
 			{
 				agentMovement.StopChase();
@@ -185,6 +190,7 @@ public class NonPlayableCharacter : MonoBehaviour
 	public void Consume(Food f)
 	{
 		food = f;
+		agentMovement.Stop();
 		food.Consume(delegate{
 			if(this.food != null)
 			{
