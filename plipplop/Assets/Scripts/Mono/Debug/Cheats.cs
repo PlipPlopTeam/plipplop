@@ -13,6 +13,8 @@ public class Cheats : Dictionary<string, System.Action>
         Add("FREE", delegate { Game.i.player.Deparalyze(); });
         Add("FAMINE", SetAllHunderToHundred);
         Add("BIGHEADS", BigHeads);
+        Add("LONGHEADS", LongHeads);
+        Add("MAUVAISESTETES", MauvaisesTetes);
         Add("HELLO", SpawnNPC);
         Add("IMONFIRE", SpawnFire);
         Add("BOOM", SpawnPoof);
@@ -25,6 +27,23 @@ public class Cheats : Dictionary<string, System.Action>
 			npc.skeleton.GetSocketBySlot(Clothes.ESlot.HEAD).bone.localScale = Vector3.one * Random.Range(3f, 6f);
 		}
 	}
+    
+    public void LongHeads()
+    {
+        foreach(NonPlayableCharacter npc in Object.FindObjectsOfType<NonPlayableCharacter>())
+        {
+            npc.skeleton.GetSocketBySlot(Clothes.ESlot.HEAD).bone.localPosition += Vector3.up * Random.Range(.2f, 1f);
+        }
+    }
+
+    public void MauvaisesTetes()
+    {
+        foreach(NonPlayableCharacter npc in Object.FindObjectsOfType<NonPlayableCharacter>())
+        {
+            npc.skeleton.GetSocketBySlot(Clothes.ESlot.HEAD).bone.localScale = Vector3.one * Random.Range(3f, 6f);
+            npc.skeleton.GetSocketBySlot(Clothes.ESlot.HEAD).bone.localPosition += Vector3.up * Random.Range(.2f, 1f);
+        }
+    }
 
     public void ResetScene()
     {
