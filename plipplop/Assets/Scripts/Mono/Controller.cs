@@ -250,6 +250,13 @@ public abstract class Controller : MonoBehaviour
         visuals.transform.localScale = prs.scale;
     }
 
+	virtual internal void ResetVisuals()
+	{
+		visuals.transform.localPosition = Vector3.zero;
+		visuals.transform.localScale = Vector3.one;
+		visuals.transform.localRotation = Quaternion.identity;
+	}
+
     virtual internal void FixedUpdate()
     {
         if (useGravity && !isImmerged) {
