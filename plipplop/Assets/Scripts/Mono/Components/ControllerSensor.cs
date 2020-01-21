@@ -43,7 +43,7 @@ public class ControllerSensor : MonoBehaviour
 
         foreach (var c in controllers) {
             try {
-                var position = Game.i.aperture.cam.WorldToScreenPoint(c.transform.position);
+                var position = Game.i.aperture.currentCamera.WorldToScreenPoint(c.transform.position);
                 var dist = Vector3.Distance(position, new Vector3(Screen.width / 2f, Screen.height / 2f, 0f));
                 if (dist < bestMatch) {
                     bestMatch = dist;

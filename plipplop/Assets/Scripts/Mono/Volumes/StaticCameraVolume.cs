@@ -17,9 +17,10 @@ public class StaticCameraVolume : Volume {
     {
         if (isImmediate) {
             Game.i.aperture.Freeze();
-            Game.i.aperture.cam.transform.position = aim.position;
-            Game.i.aperture.cam.transform.forward = aim.forward;
-            Game.i.aperture.cam.fieldOfView = FOV;
+            Game.i.aperture.AddStaticPosition(aim.position, aim.rotation);
+            Game.i.aperture.FixedUpdate();
+            Game.i.aperture.fieldOfView.destination = FOV;
+            Game.i.aperture.Teleport();
         }
         else {
             objective = Game.i.aperture.AddStaticPosition(aim);

@@ -52,7 +52,15 @@ public class Brain
 
     public void FixedUpdate()
     {
-        if (IsParalyzed()) return;
+        if (IsParalyzed()) {
+            controller.Move(
+                0f,0f
+            );
+            controller.MoveCamera(
+                0f, 0f
+            );
+            return;
+        }
 
         UpdateControllerPhysics();
     }

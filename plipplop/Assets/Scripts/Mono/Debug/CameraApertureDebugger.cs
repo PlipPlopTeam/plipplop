@@ -31,7 +31,6 @@ public class CameraApertureDebugger : MonoBehaviour
         }
 
         var settings = aperture.GetSettings();
-        var cam = aperture.cam;
         var position = aperture.position;
         var distance = aperture.GetHDistanceToTarget();
 
