@@ -7,7 +7,7 @@ public class CinematicVolume : Volume
 {
 
     [Header("Specific options")]
-    public SpielbergAssistant cinematic;
+    public string cinematic;
     public bool destroyOnCinemaStart = true;
     public bool isInvisible = true;
     [HideInInspector] public GameObject visual;
@@ -29,7 +29,8 @@ public class CinematicVolume : Volume
     public override void OnPlayerEnter(Controller player)
     {
         try {
-            cinematic.Play();
+            Spielberg.PlayCinematic("cine_test_1");
+
             if (destroyOnCinemaStart) Destroy(gameObject);
         }
         catch (NullReferenceException) {

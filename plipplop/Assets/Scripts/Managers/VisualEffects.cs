@@ -11,7 +11,7 @@ public class VisualEffects : List<VisualEffect>, ISerializationCallbackReceiver
     [Serializable]
     public struct SerializableVFXs
     {
-        public VisualEffect[] list;
+        public VisualEffect[] list; // Do not try to make me generic... Unity doesnt support it
         public int childCount;
     }
 

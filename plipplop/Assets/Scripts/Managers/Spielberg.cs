@@ -19,17 +19,29 @@ public class Spielberg
         bindings[EAction.SWITCH_CAMERA] = SwitchCamera;
         bindings[EAction.PLAY_GAMEFX] = PlaySound;
         bindings[EAction.PLAY_SOUND] = PlayGameEffect;
+    }
 
-        // TMP
-        Play("a");
+    public static void PlayCinematic(string cinematicName)
+    {
+        Game.i.cinematics.Play(cinematicName);
     }
 
     public void Play(string cinematicName)
     {
         if (currentAssistant != null) return;
+        var kino = Game.i.library.cinematics.Find(o => o.name == cinematicName);
+        if (kino == null) {
+            Debug.LogError("SPIELBERG ERROR: Cinematic not found (" + cinematicName + "). Please check the library.");
+            return;
+        }
+        currentAssistant = GameObject.Instantiate(kino.prefab).GetComponent<SpielbergAssistant>();
+        currentAssistant.Play();
+    }
 
-        // TMP
-        currentAssistant = GameObject.FindObjectOfType<SpielbergAssistant>();
+    public void OnCinematicEnded()
+    {
+        GameObject.Destroy(currentAssistant.gameObject);
+        currentAssistant = null;
     }
 
     public void Bind(EAction action, string[] args)

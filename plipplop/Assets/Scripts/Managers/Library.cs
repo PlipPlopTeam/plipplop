@@ -12,6 +12,13 @@ public class Library
         public T resource;
     }
 
+    [System.Serializable]
+    public class GenericNamedPrefabResource
+    {
+        public string name;
+        public GameObject prefab;
+    }
+
     [Header("Strings")]
     public string gameName = "Plip plop";
 
@@ -48,4 +55,7 @@ public class Library
 
     [Header("AI")]
     public NpcLibrary npcLibrary;
+
+    [Header("Cinematics")]
+    public VisualEffects cinematics; // Yes this class is called visual effects, yes its normal
 }

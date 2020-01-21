@@ -10,16 +10,15 @@ GameObject:
   m_Component:
   - component: {fileID: 181842953}
   - component: {fileID: 181842956}
-  - component: {fileID: 181842955}
   - component: {fileID: 181842954}
   - component: {fileID: 181842957}
   m_Layer: 0
-  m_Name: Camera
+  m_Name: CAMERA 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &181842953
 Transform:
   m_ObjectHideFlags: 0
@@ -41,7 +40,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 181842952}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
@@ -77,14 +76,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &181842955
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 181842952}
-  m_Enabled: 1
 --- !u!114 &181842954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,16 +204,15 @@ GameObject:
   m_Component:
   - component: {fileID: 459554682}
   - component: {fileID: 459554681}
-  - component: {fileID: 459554680}
   - component: {fileID: 459554679}
   - component: {fileID: 459554678}
   m_Layer: 0
-  m_Name: Camera (1)
+  m_Name: CAMERA 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &459554682
 Transform:
   m_ObjectHideFlags: 0
@@ -244,7 +234,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 459554677}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
@@ -280,14 +270,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &459554680
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 459554677}
-  m_Enabled: 1
 --- !u!114 &459554679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -416,16 +398,15 @@ GameObject:
   m_Component:
   - component: {fileID: 500631152}
   - component: {fileID: 500631151}
-  - component: {fileID: 500631150}
   - component: {fileID: 500631149}
   - component: {fileID: 500631148}
   m_Layer: 0
-  m_Name: Camera
+  m_Name: CAMERA 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &500631152
 Transform:
   m_ObjectHideFlags: 0
@@ -447,7 +428,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 500631147}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
@@ -483,14 +464,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &500631150
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 500631147}
-  m_Enabled: 1
 --- !u!114 &500631149
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -619,7 +592,7 @@ PrefabInstance:
     - target: {fileID: 3209900004009148955, guid: b9ae98c08d651fe48b34cadfd5524f04,
         type: 3}
       propertyPath: m_Name
-      value: Cinematic0_Example
+      value: CinematicTemplate Variant
       objectReference: {fileID: 0}
     - target: {fileID: 3209900004009148956, guid: b9ae98c08d651fe48b34cadfd5524f04,
         type: 3}
@@ -679,7 +652,7 @@ PrefabInstance:
     - target: {fileID: 3209900004009148957, guid: b9ae98c08d651fe48b34cadfd5524f04,
         type: 3}
       propertyPath: m_SceneBindings.Array.size
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 3209900004009148957, guid: b9ae98c08d651fe48b34cadfd5524f04,
         type: 3}
@@ -783,6 +756,12 @@ PrefabInstance:
       propertyPath: m_ExposedReferences.m_References.Array.data[2].second
       value: 
       objectReference: {fileID: 459554677}
+    - target: {fileID: 3209900004009148957, guid: b9ae98c08d651fe48b34cadfd5524f04,
+        type: 3}
+      propertyPath: m_SceneBindings.Array.data[8].key
+      value: 
+      objectReference: {fileID: -4323984959257375378, guid: a955ba880d0a13c4fb8c4d27a203567c,
+        type: 2}
     - target: {fileID: 3209900004009148954, guid: b9ae98c08d651fe48b34cadfd5524f04,
         type: 3}
       propertyPath: firstCamera

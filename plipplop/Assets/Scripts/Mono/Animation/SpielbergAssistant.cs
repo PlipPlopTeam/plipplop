@@ -142,6 +142,7 @@ public class SpielbergAssistant : MonoBehaviour
     {
         Game.i.aperture.currentCamera.transform.parent = null;
         Game.i.aperture.Unfreeze();
+        Game.i.cinematics.OnCinematicEnded();
     }
 
     public void SwitchCamera(string cameraName)
