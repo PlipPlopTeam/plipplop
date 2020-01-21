@@ -66,12 +66,14 @@ public class Ball : Controller
     {
         collider.enabled = true;
         rigidbody.drag = drag;
-    }
+		ResetVisuals();
+	}
 
     internal override void OnLegsExtended()
     {
         collider.enabled = false;
-    }
+		ResetVisuals();
+	}
 
     internal override void Awake()
     {
