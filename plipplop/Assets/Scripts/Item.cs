@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public enum EColliderShape { BOX, SPHERE, CAPSULE }
 
@@ -8,10 +6,8 @@ public class Item : MonoBehaviour, ICarryable
 {
     [Header("Physics")]
     public EColliderShape shape;
-    public BoxCollider bc;
-    public SphereCollider sc;
-    public CapsuleCollider cc;
     public Rigidbody rb;
+	public Collider collider;
 
     [Header("Item")]
     public GameObject visual;
@@ -19,6 +15,7 @@ public class Item : MonoBehaviour, ICarryable
 
     public virtual void Awake()
     {
+
         if(rb == null) rb = GetComponent<Rigidbody>();
         if(rb == null) rb = gameObject.AddComponent<Rigidbody>();
         if(carried) Carry();
@@ -46,37 +43,37 @@ public class Item : MonoBehaviour, ICarryable
     public virtual void Visual(GameObject go)
     {
         visual = Instantiate(go, transform);
-
-        if(bc != null) Destroy(bc);
-        if(sc != null) Destroy(sc);
-        if(cc != null) Destroy(cc);
-
         Mesh m = visual.GetComponentInChildren<MeshFilter>().mesh;
-        switch(shape)
-        {
-            case EColliderShape.BOX:
-            bc = gameObject.AddComponent<BoxCollider>();
-            bc.size = m.bounds.size;
-            break;
-            case EColliderShape.SPHERE:
-            sc = gameObject.AddComponent<SphereCollider>();
-            sc.radius = (m.bounds.size.x + m.bounds.size.y) * 0.5f;
-            
-            break;
-            case EColliderShape.CAPSULE:
-            cc = gameObject.AddComponent<CapsuleCollider>();
-            cc.height = m.bounds.size.y;
-            cc.radius = m.bounds.size.x;
-            break;  
-        }
+		collider = gameObject.GetComponent<Collider>();
+		if (collider == null)
+		{
+			switch (shape)
+			{
+				case EColliderShape.BOX:
+					BoxCollider c = gameObject.AddComponent<BoxCollider>();
+					c.size = m.bounds.size;
+					collider = c;
+					break;
+				case EColliderShape.SPHERE:
+					SphereCollider sc = gameObject.AddComponent<SphereCollider>();
+					sc.radius = (m.bounds.size.x + m.bounds.size.y) * 0.5f;
+					collider = sc;
+					break;
+				case EColliderShape.CAPSULE:
+					CapsuleCollider cc = gameObject.AddComponent<CapsuleCollider>();
+					cc.height = m.bounds.size.y;
+					cc.radius = m.bounds.size.x;
+					collider = cc;
+					break;
+			}
+		}
+
     }
 
     public virtual void Carry()
     {
-        carried = true;
-        if(bc != null) bc.enabled = false;
-        if(sc != null) sc.enabled = false;
-        if(cc != null) cc.enabled = false;
+		carried = true;
+		if (collider != null) collider.enabled = false;
         if(rb != null) rb.isKinematic = true;
         if(rb != null) rb.useGravity = false;
     }
@@ -84,9 +81,7 @@ public class Item : MonoBehaviour, ICarryable
     public virtual void Drop()
     {
         carried = false;
-        if(bc != null) bc.enabled = true;
-        if(sc != null) sc.enabled = true;
-        if(cc != null) cc.enabled = true;
+		if (collider != null) collider.enabled = true;
         if(rb != null) rb.isKinematic = false;
         if(rb != null) rb.useGravity = true;
     }
