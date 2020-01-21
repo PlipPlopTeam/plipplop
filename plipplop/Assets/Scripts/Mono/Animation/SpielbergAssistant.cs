@@ -7,19 +7,18 @@ using UnityEngine.Timeline;
 [RequireComponent(typeof(PlayableDirector))]
 public class SpielbergAssistant : MonoBehaviour
 {
-    public enum EStartType { SMOOTH_MOVEMENT, CUT }; // TODO: Add FADE...
+    public enum ETransitionType { SMOOTH_MOVEMENT, CUT }; // TODO: Add FADE...
 
     public bool paralyzeOnStart = true;
     public bool liberateOnEnd = true;
-    public EStartType startType = EStartType.SMOOTH_MOVEMENT;
-    public EStartType endType = EStartType.SMOOTH_MOVEMENT;
+    public ETransitionType startType = ETransitionType.SMOOTH_MOVEMENT;
+    public ETransitionType endType = ETransitionType.SMOOTH_MOVEMENT;
     [Range(0.3f, 10f)] public float smoothMovementSpeed = 1f;
 
     public Camera firstCamera;
 
     bool isPlaying = false;
     Camera lastCamera;
-    List<Camera> cameraHistory = new List<Camera>();
 
     PlayableDirector director;
 
@@ -54,14 +53,13 @@ public class SpielbergAssistant : MonoBehaviour
         }
 
         foreach(var cam in GetComponentsInChildren<Camera>()) {
-            cam.gameObject.SetActive(false);
+            cam.enabled = false;
         }
 
         if (paralyzeOnStart) ParalyzePlayer();
 
         isPlaying = true;
         lastCamera = Aperture.GetCurrentlyActiveCamera();
-        cameraHistory.Add(lastCamera);
 
         if (firstCamera) StartCoroutine(PrepareCinematic());
         else PlayInternal();
@@ -72,7 +70,6 @@ public class SpielbergAssistant : MonoBehaviour
         if (isPlaying && firstCamera) {
             var currCamera = Aperture.GetCurrentlyActiveCamera();
             if (!Object.ReferenceEquals(currCamera, lastCamera)) {
-                cameraHistory.Add(lastCamera);
                 lastCamera = currCamera;
             }
         }   
@@ -87,12 +84,12 @@ public class SpielbergAssistant : MonoBehaviour
         aperture.Load(AperturePreset.CreateFromCamera(firstCamera));
         aperture.FixedUpdate();
 
-        if (startType == EStartType.CUT) {
+        if (startType == ETransitionType.CUT) {
             aperture.Teleport();
             PlayInternal();
         }
 
-        else if (startType == EStartType.SMOOTH_MOVEMENT) {
+        else if (startType == ETransitionType.SMOOTH_MOVEMENT) {
             aperture.DisableLookAt();
             while (aperture.IsTransitioningOnStack() || aperture.IsMovingToDestination()) {
                 // Aperture will position itself each frame
@@ -115,12 +112,12 @@ public class SpielbergAssistant : MonoBehaviour
         Game.i.aperture.SwapLastTwoStackElements();
         aperture.FixedUpdate();
 
-        if (endType == EStartType.CUT) {
+        if (endType == ETransitionType.CUT) {
             aperture.Teleport();
             EndInternal();
         }
 
-        else if (endType == EStartType.SMOOTH_MOVEMENT) {
+        else if (endType == ETransitionType.SMOOTH_MOVEMENT) {
             while (aperture.IsTransitioningOnStack() || aperture.IsMovingToDestination()) {
                 objective.manualLerp += Time.deltaTime * smoothMovementSpeed;
                 yield return new WaitForFixedUpdate();
@@ -134,7 +131,7 @@ public class SpielbergAssistant : MonoBehaviour
     void PlayInternal()
     {
         if (firstCamera) {
-            Game.i.aperture.SwitchCamera(firstCamera);
+            SwitchCamera(firstCamera.transform);
         }
         Game.i.aperture.UnloadLast();
         Game.i.aperture.Freeze();
@@ -143,10 +140,25 @@ public class SpielbergAssistant : MonoBehaviour
 
     void EndInternal()
     {
-        if (firstCamera) {
-            Debug.Log("Ending cinematic and giving back control to : "+cameraHistory[0]);
-            Game.i.aperture.SwitchCamera(cameraHistory[0]);
-        }
+        Game.i.aperture.currentCamera.transform.parent = null;
         Game.i.aperture.Unfreeze();
+    }
+
+    public void SwitchCamera(string cameraName)
+    {
+        var t = transform.Find(cameraName);
+        if (t == null) {
+            Debug.LogError("SPIELBERG ERROR: Camera " + cameraName + " does not exist or is not a CHILD of SpielbergAssistant");
+        }
+        SwitchCamera(t);
+    }
+
+    public void SwitchCamera(Transform newCamera)
+    {
+        Game.i.aperture.currentCamera.transform.parent = newCamera.transform;
+        if (newCamera != null) {
+            Game.i.aperture.currentCamera.transform.localPosition = Vector3.zero;
+            Game.i.aperture.currentCamera.transform.localRotation = Quaternion.identity;
+        }
     }
 }

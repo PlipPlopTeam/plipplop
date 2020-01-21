@@ -587,6 +587,7 @@ public class Aperture
         Teleport();
     }
 
+    /*
     public void SwitchCamera(Camera newCam)
     {
         Debug.Log("switching from " + cam + " to " + newCam);
@@ -594,6 +595,7 @@ public class Aperture
         newCam.gameObject.SetActive(true);
         cam = newCam;
     }
+    */
 
     public PositionAndRotation AddStaticPosition(Transform transform)
     {
@@ -658,6 +660,7 @@ public class Aperture
 
     public static Camera GetCurrentlyActiveCamera()
     {
-        return Camera.allCameras.Where(o => { return o.isActiveAndEnabled; }).First();
+        var activeCams = Camera.allCameras.Where(o => { return o.isActiveAndEnabled; });
+        return activeCams.Count() > 0 ? activeCams.First() : null;
     }
 }

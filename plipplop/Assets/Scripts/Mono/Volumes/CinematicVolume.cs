@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ public class CinematicVolume : Volume
 
     [Header("Specific options")]
     public SpielbergAssistant cinematic;
+    public bool destroyOnCinemaStart = true;
     public bool isInvisible = true;
     [HideInInspector] public GameObject visual;
     public Material material;
@@ -26,8 +28,13 @@ public class CinematicVolume : Volume
 
     public override void OnPlayerEnter(Controller player)
     {
-        cinematic.Play();
-        Destroy(gameObject);
+        try {
+            cinematic.Play();
+            if (destroyOnCinemaStart) Destroy(gameObject);
+        }
+        catch (NullReferenceException) {
+            Debug.LogError("NO CINEMATIC WAS TRIGGERED because no cinematic was linked to VOLUME " + name);
+        }
     }
 
     public override void OnPlayerExit(Controller player)

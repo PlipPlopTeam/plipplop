@@ -113,7 +113,7 @@ public class ChunkLoader
     }
     public void Update()
     {        
-        var c = Game.i.player.GetCurrentController();
+        var c = Aperture.GetCurrentlyActiveCamera();
         if (c != null) {
             var playerCZ = playerChunkZone;
             foreach (var identifier in chunkZones.Keys) {
@@ -293,8 +293,7 @@ public class ChunkLoader
                     // Deferred loading
                     var props = scene.GetRootGameObjects();
                     // Nearest prop should load first
-                    if (Game.i.player.GetCurrentController() != null) 
-                        props = props.OrderBy(prop => { return Vector3.Distance(prop.transform.position, Game.i.player.GetCurrentController().transform.position); }).ToArray();
+                    props = props.OrderBy(prop => { return Vector3.Distance(prop.transform.position, Aperture.GetCurrentlyActiveCamera().transform.position); }).ToArray();
 
                     foreach (var prop in props) {
                         prop.SetActive(false);
