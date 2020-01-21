@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 7338784915185660214}
   - component: {fileID: 497905235}
   - component: {fileID: 1823408744405793946}
+  - component: {fileID: 123629222}
   m_Layer: 0
   m_Name: Jukebox
   m_TagString: Untagged
@@ -79,8 +80,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.5, z: 0.25}
-  m_Center: {x: 0, y: 0.25, z: 0}
+  m_Size: {x: 1.08, y: 0.55, z: 0.3}
+  m_Center: {x: 0, y: 0.275, z: 0}
 --- !u!54 &7338784915185660215
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -142,11 +143,11 @@ MonoBehaviour:
   freezeUntilPossessed: 0
   useGravity: 1
   gravityMultiplier: 100
-  customExternalRigidbody: {fileID: 0}
+  customExternalRigidbody: {fileID: 7338784915185660215}
   customCamera: {fileID: 11400000, guid: 5fad2a8a9d01c0f4485e0647b9b62d93, type: 2}
   locomotion: {fileID: 0}
   visuals: {fileID: 7338784913984369920}
-  face: {fileID: 0}
+  face: {fileID: 1155650761415235712}
   pushMovementForce: 500
   pushCooldown: 2
   pushThreshold: 0.5
@@ -173,6 +174,25 @@ MonoBehaviour:
   weight: 20
   distanceThreshold: 2
   hidden: 0
+--- !u!114 &123629222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7338784915185660219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 011d63a14cf4d8347a5660a929242412, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  preset: {fileID: 11400000, guid: 81c5435995369f048ab3d3d178e1aa7c, type: 2}
+  legsHeight: 1
+  groundCheckRange: 1
+  legsOffset: {x: 0, y: 0.2, z: 0}
+  rigidbody: {fileID: 0}
+  targetDirection: {x: 0, y: 0, z: 0}
+  isImmerged: 0
 --- !u!1001 &7338784914367916034
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -384,17 +404,17 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: a6745308ab6de644dabcad8c5adb767b,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.81586
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: a6745308ab6de644dabcad8c5adb767b,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.81586
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: a6745308ab6de644dabcad8c5adb767b,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.81586
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 53828880913542605, guid: a6745308ab6de644dabcad8c5adb767b,
         type: 3}
@@ -411,6 +431,12 @@ PrefabInstance:
 --- !u!4 &3601354701241493912 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: a6745308ab6de644dabcad8c5adb767b,
+    type: 3}
+  m_PrefabInstance: {fileID: 8394746863801533058}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1155650761415235712 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -1978887880731813374, guid: a6745308ab6de644dabcad8c5adb767b,
     type: 3}
   m_PrefabInstance: {fileID: 8394746863801533058}
   m_PrefabAsset: {fileID: 0}
