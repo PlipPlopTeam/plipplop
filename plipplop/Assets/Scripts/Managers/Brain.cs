@@ -91,9 +91,10 @@ public class Brain
             Eject();
         }
 
-        System.Action effectivePossess = delegate {
+		Game.i.aperture.SetTarget(controller.transform);
+
+		System.Action effectivePossess = delegate {
             this.controller = controller;
-            Game.i.aperture.SetTarget(controller.transform);
             Game.i.aperture.Load(controller.customCamera ?? Game.i.library.defaultAperture);
             controller.OnPossess();
             Pyromancer.Play("morph", this.controller.transform.position);
