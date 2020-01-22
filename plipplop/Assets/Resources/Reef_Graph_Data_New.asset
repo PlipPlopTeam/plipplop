@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d15dc61630091584b856659139a87c78, type: 3}
-  m_Name: Reef_Graph_Data
+  m_Name: Reef_Graph_Data_New
   m_EditorClassIdentifier: 
   states:
-  - name: Venturing
+  - name: Reef Venturing
     id: 1
-    stateId: 9
-    exits: 02000000
+    stateId: 18
+    exits: 21000000
     hasExits: 01
   - name: Reef See Valuable
     id: 4
@@ -42,6 +42,11 @@ MonoBehaviour:
     id: 30
     stateId: 16
     exits: 1f000000
+    hasExits: 01
+  - name: Reef Show Off
+    id: 32
+    stateId: 17
+    exits: 23000000
     hasExits: 01
   transitions:
   - id: 2
@@ -93,5 +98,15 @@ MonoBehaviour:
     disable: 0
     conditions: 15000000
     exits: 120000001e000000
+    hasExits: 0101
+  - id: 33
+    disable: 0
+    conditions: 15000000
+    exits: 2000000002000000
+    hasExits: 0101
+  - id: 35
+    disable: 0
+    conditions: 15000000
+    exits: 0100000020000000
     hasExits: 0101
   initialNode: 1
