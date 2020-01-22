@@ -77,7 +77,6 @@ public class SpielbergAssistant : MonoBehaviour
 
     IEnumerator PrepareCinematic()
     {
-        Debug.Log("Spielberg assistant is PREPARING a cinematic");
         var aperture = Game.i.aperture;
         var initialPos = new Geometry.PositionAndRotation() { position = firstCamera.transform.position, rotation = firstCamera.transform.rotation };
         var objective = aperture.AddStaticObjective(new Aperture.StaticObjective(initialPos) { manualLerp = 0f });
@@ -99,18 +98,28 @@ public class SpielbergAssistant : MonoBehaviour
             PlayInternal();
             aperture.EnableLookAt();
         }
-        aperture.RemoveStaticPosition(initialPos);
+        aperture.RemoveStaticObjective(objective);
     }
 
     IEnumerator PrepareCinematicEnding()
     {
         var currCam = Aperture.GetCurrentlyActiveCamera();
         var aperture = Game.i.aperture;
-        var endPos = new Geometry.PositionAndRotation() { position = currCam.transform.position, rotation = currCam.transform.rotation };
+
+        // Give current position to aperture
+        aperture.SetCurrentPositionAndRotation(new Geometry.PositionAndRotation() { position = currCam.transform.position, rotation = currCam.transform.rotation });
+
+        // Give final position to aperture
+        var playerTransform = Game.i.player.GetCurrentController().transform;
+        var endPos = new Geometry.PositionAndRotation() { position = playerTransform.TransformPoint(Vector3.back*aperture.GetSettings().distance.min + Vector3.up), rotation = playerTransform.rotation };
         var objective = aperture.AddStaticObjective(new Aperture.StaticObjective(endPos) { manualLerp = 0f });
+
+        // Prepare aperture
         Game.i.aperture.Load(AperturePreset.CreateFromCamera(currCam));
         Game.i.aperture.SwapLastTwoStackElements();
-        aperture.FixedUpdate();
+        aperture.currentCamera.transform.parent = null;
+        aperture.ComputeRotation();
+        aperture.ComputePosition(Game.i.player.GetCurrentController().transform.position);
 
         if (endType == ETransitionType.CUT) {
             aperture.Teleport();
@@ -118,14 +127,17 @@ public class SpielbergAssistant : MonoBehaviour
         }
 
         else if (endType == ETransitionType.SMOOTH_MOVEMENT) {
+            Game.i.aperture.Unfreeze();
+            Game.i.aperture.DisableLookAt();
             while (aperture.IsTransitioningOnStack() || aperture.IsMovingToDestination()) {
                 objective.manualLerp += Time.deltaTime * smoothMovementSpeed;
                 yield return new WaitForFixedUpdate();
             }
+            Game.i.aperture.EnableLookAt();
             EndInternal();
         }
 
-        aperture.RemoveStaticPosition(endPos);
+        aperture.RemoveStaticObjective(objective);
     }
 
     void PlayInternal()
@@ -147,7 +159,7 @@ public class SpielbergAssistant : MonoBehaviour
 
     public void SwitchCamera(string cameraName)
     {
-        var t = transform.Find(cameraName);
+        var t = GetChildInChildren(transform, cameraName);
         if (t == null) {
             Debug.LogError("SPIELBERG ERROR: Camera " + cameraName + " does not exist or is not a CHILD of SpielbergAssistant");
         }
@@ -156,10 +168,24 @@ public class SpielbergAssistant : MonoBehaviour
 
     public void SwitchCamera(Transform newCamera)
     {
-        Game.i.aperture.currentCamera.transform.parent = newCamera.transform;
+        Game.i.aperture.currentCamera.transform.parent = newCamera;
         if (newCamera != null) {
             Game.i.aperture.currentCamera.transform.localPosition = Vector3.zero;
             Game.i.aperture.currentCamera.transform.localRotation = Quaternion.identity;
         }
+    }
+
+    Transform GetChildInChildren(Transform t, string name)
+    {
+        if (t.name == name) {
+            return t;
+        }
+        else {
+            for (int i = 0; i < t.childCount; i++) {
+                var child = t.GetChild(i);
+                return GetChildInChildren(child, name);
+            }
+        }
+        return null;
     }
 }

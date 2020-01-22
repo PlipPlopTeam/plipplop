@@ -363,6 +363,11 @@ public class Aperture
         return target;
     }
 
+    public PositionAndRotation GetComputedPositionAndRotationDestination()
+    {
+        return new PositionAndRotation() { position = position.destination, rotation = rotationAroundTarget.destination };
+    }
+
     public void UpdateVirtualTarget()
     {
         virtualTarget.destination = target.position;
@@ -416,9 +421,10 @@ public class Aperture
     public void UpdateRotation()
     {
         float lerp = Time.fixedDeltaTime * (IsLookAtEnabled() ? settings.rotationSpeed * rotationMultiplier : settings.staticRotationLerp);
+        var obj = GetStaticObjective();
 
-        if (GetStaticObjective() != null && GetStaticObjective().manualLerp.HasValue) {
-            lerp = GetStaticObjective().manualLerp.Value;
+        if (obj != null && obj.manualLerp.HasValue) {
+            lerp = obj.manualLerp.Value;
         }
 
         rotationAroundTarget.current = Quaternion.Lerp(
@@ -457,6 +463,7 @@ public class Aperture
 
     public void UpdatePosition(float catchUpSpeed)
     {
+
         // Lerp on the up axis
         var verticalFollow = Time.fixedDeltaTime * settings.verticalFollowLerp * catchUpSpeed;
         var lateralFollow = Time.fixedDeltaTime * settings.lateralFollowLerp * catchUpSpeed;
@@ -494,6 +501,12 @@ public class Aperture
     public void UpdateFieldOfView()
     {
         fieldOfView.current = Mathf.Lerp(fieldOfView.current, fieldOfView.destination, Time.fixedDeltaTime * settings.fovLerp);
+    }
+
+    public void SetCurrentPositionAndRotation(PositionAndRotation pAR)
+    {
+        position.current = pAR.position;
+        rotationAroundTarget.current = pAR.rotation;
     }
 
     public void EnsureMinimalCameraDistance()
@@ -586,17 +599,7 @@ public class Aperture
         FixedUpdate();
         Teleport();
     }
-
-    /*
-    public void SwitchCamera(Camera newCam)
-    {
-        Debug.Log("switching from " + cam + " to " + newCam);
-        cam.gameObject.SetActive(false);
-        newCam.gameObject.SetActive(true);
-        cam = newCam;
-    }
-    */
-
+    
     public PositionAndRotation AddStaticPosition(Transform transform)
     {
         return AddStaticPosition(new PositionAndRotation() { position = transform.position, rotation = transform.rotation });
