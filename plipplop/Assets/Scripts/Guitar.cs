@@ -45,7 +45,7 @@ public class Guitar : Activity, ICarryable
 	public override void StopSpectate(NonPlayableCharacter npc)
 	{
 		base.StopSpectate(npc);
-		npc.animator.SetBool("Dancing", false);
+		if(npc.animator != null) npc.animator.SetBool("Dancing", false);
 	}
 
 	public override void Look(NonPlayableCharacter npc, Vector3 position)

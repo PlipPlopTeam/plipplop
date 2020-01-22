@@ -13,16 +13,15 @@ public class Activity : MonoBehaviour
 
 	[Header("Parameters")]
     public bool working = true;
-	public int userMax = 1;
+	public int userMax = 0;
 	public int spectatorMax = 0;
 	public Vector2 spectatorRange;
 	[Header("Modifiers")]
 	public float awarnessMultiplier = 1f;
 	public StatMultiplier use;
 	public StatMultiplier spectate;
-
-	internal List<NonPlayableCharacter> users = new List<NonPlayableCharacter>();
-	internal List<NonPlayableCharacter> spectators = new List<NonPlayableCharacter>();
+	public List<NonPlayableCharacter> users = new List<NonPlayableCharacter>();
+	public List<NonPlayableCharacter> spectators = new List<NonPlayableCharacter>();
 	internal float timer = 0f;
 	internal bool full = false;
 
@@ -60,6 +59,7 @@ public class Activity : MonoBehaviour
 	{
 		spectators.Add(npc);
 		Vector3 pos = transform.position + Geometry.GetRandomPointAround(Random.Range(spectatorRange.x, spectatorRange.y));
+		npc.agentMovement.Stop();
 		npc.agentMovement.GoThere(pos);
 		npc.agentMovement.onDestinationReached += () =>
 		{
@@ -82,19 +82,26 @@ public class Activity : MonoBehaviour
 	{
 		bool result = working
 			&& !users.Contains(npc)
-			&& !spectators.Contains(npc)
-			&& users.Count < userMax;
+			&& !spectators.Contains(npc);
 
+		if(userMax > 0) result = users.Count < userMax;
 		if(spectatorMax > 0) result = spectators.Count < spectatorMax;
 
 		return result;
 	}
 
-    public virtual void KickAll()
+	private void OnDestroy()
+	{
+		KickAll();
+	}
+
+	public virtual void KickAll()
     {
-        foreach(NonPlayableCharacter user in users.ToArray())
+		foreach (NonPlayableCharacter user in users.ToArray())
             Exit(user);
-    }
+		foreach (NonPlayableCharacter spectator in spectators.ToArray())
+			Exit(spectator);
+	}
 
     [ContextMenu("Break")]
     public virtual void Break()
@@ -122,13 +129,14 @@ public class Activity : MonoBehaviour
             timer = 1f;
             foreach(NonPlayableCharacter user in users.ToArray())
             {
-                user.AddToStat(NonPlayableCharacter.EStat.BOREDOM, use.boredom);
-                user.AddToStat(NonPlayableCharacter.EStat.TIREDNESS, use.tiredness);
-                user.AddToStat(NonPlayableCharacter.EStat.HUNGER, use.hunger);
+				user.AddToStat(NonPlayableCharacter.EStat.BOREDOM, use.boredom);
+				user.AddToStat(NonPlayableCharacter.EStat.TIREDNESS, use.tiredness);
+				user.AddToStat(NonPlayableCharacter.EStat.HUNGER, use.hunger);
             }
 
 			foreach (NonPlayableCharacter spectator in spectators.ToArray())
 			{
+				if (spectator == null) continue;
 				spectator.AddToStat(NonPlayableCharacter.EStat.BOREDOM, spectate.boredom);
 				spectator.AddToStat(NonPlayableCharacter.EStat.TIREDNESS, spectate.tiredness);
 				spectator.AddToStat(NonPlayableCharacter.EStat.HUNGER, spectate.hunger);
