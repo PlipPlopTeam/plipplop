@@ -219,6 +219,7 @@ public class AperturePresetEditor : Editor
 
         inheritableProperties[basicParameters].Add("fieldOfView");
         inheritableProperties[basicParameters].Add("heightOffset");
+        inheritableProperties[basicParameters].Add("maximumHeightAboveTarget"); 
         inheritableProperties[basicParameters].Add("additionalAngle");
         inheritableProperties[basicParameters].Add("distance");
         inheritableProperties[basicParameters].Add("cameraRotateAroundSensivity");
@@ -249,6 +250,7 @@ public class AperturePresetEditor : Editor
         inheritableProperties[advanced].Add("targetConstraintLocalOffset");
         inheritableProperties[advanced].Add("staticPositionLerp");
         inheritableProperties[advanced].Add("staticRotationLerp");
+        inheritableProperties[advanced].Add("immediatePresetStackUpdate");
     }
 
     void MakeStyles()

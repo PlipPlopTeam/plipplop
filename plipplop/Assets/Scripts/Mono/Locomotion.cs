@@ -130,12 +130,12 @@ public class Locomotion : Walker
         {
             // Making a virtual stick to avoid the player to stop in the air when stick reaches 0 magnitude
             Vector3 virtualStick = Vector3.Lerp(
-                Vector3.Scale(Vector3.one - Vector3.up, Game.i.aperture.cam.transform.InverseTransformDirection(rigidbody.velocity).normalized),
+                Vector3.Scale(Vector3.one - Vector3.up, Game.i.aperture.GetCameraTransform().InverseTransformDirection(rigidbody.velocity).normalized),
                 direction,
                 IsGrounded() ? 1f : direction.magnitude
             ).normalized;
 
-            float frictionMultiplier =(IsGrounded() || isImmerged) ? 1f : 1f-preset.airFriction;
+            float frictionMultiplier = (IsGrounded() || isImmerged) ? 1f : 1f-preset.airFriction;
 
             Vector3 velocity =
                 currentSpeedToDistribute * frictionMultiplier * (

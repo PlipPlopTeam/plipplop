@@ -47,7 +47,7 @@ public class VisualEffectsDrawer : PropertyDrawer
         var buttonRect = new Rect(pos);
         buttonRect.height = addButtonHeight;
         buttonRect.y = pos.y + pos.height - buttonRect.height + spacingBeforeButton / 2f;
-        if (GUI.Button(buttonRect, "Add FX")) {
+        if (GUI.Button(buttonRect, "Add resource")) {
             array.InsertArrayElementAtIndex(array.arraySize);
         }
 

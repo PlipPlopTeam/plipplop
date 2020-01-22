@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public static class Tools
+public static class ExtensionTools
 {
     public static Vector3 Mean(this Vector3[] vectors)
     {
