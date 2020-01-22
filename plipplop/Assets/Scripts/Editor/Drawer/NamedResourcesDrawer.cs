@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomPropertyDrawer(typeof(VisualEffects))]
-public class VisualEffectsDrawer : PropertyDrawer
+public class NamedResourcesDrawer : PropertyDrawer
 {
     float addButtonHeight = 15f;
     float lineHeight = 20f;
@@ -28,11 +28,11 @@ public class VisualEffectsDrawer : PropertyDrawer
 
         for (int i = 0; i < array.arraySize; i++) {
             SerializedProperty sound = array.GetArrayElementAtIndex(i);
-
             var thisPos = new Rect(pos);
             thisPos.width -= 20f;
             thisPos.height = lineHeight;
             thisPos.y = pos.y + i * lineHeight + i * interline;
+
             EditorGUI.PropertyField(thisPos, sound);
 
             //Remove this index from the List
