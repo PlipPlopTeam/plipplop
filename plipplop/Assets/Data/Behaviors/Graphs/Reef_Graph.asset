@@ -34,23 +34,23 @@ MonoBehaviour:
     onUpdateList: []
     onEnterList: []
     onExitList: []
-  - windowTitle: State - Venturing
+  - windowTitle: State - Reef Venturing
     id: 1
     windowRect:
       serializedVersion: 2
       x: 658.19995
       y: 283.59998
       width: 300
-      height: 665
+      height: 715
     optimalWidth: 300
-    optimalHeight: 665
+    optimalHeight: 715
     reroutes: []
     collapse: 0
     previousCollapse: 0
-    s_exitNodes: 02000000
+    s_exitNodes: 21000000
     s_hasExitNodes: 01
     drawNode: {fileID: 11400000, guid: 3de6cb72c5d54a842957b3d8754294e2, type: 2}
-    state: {fileID: 11400000, guid: 3cb2311cf9b6fcc488a0a7b62dc1b7c3, type: 2}
+    state: {fileID: 11400000, guid: 362ac1b800774ff4da77eeb800bbc763, type: 2}
     onFixedList: []
     onUpdateList: []
     onEnterList: []
@@ -59,8 +59,8 @@ MonoBehaviour:
     id: 4
     windowRect:
       serializedVersion: 2
-      x: 1617.8003
-      y: 704.9999
+      x: 1717.8003
+      y: 717.9999
       width: 300
       height: 515
     optimalWidth: 300
@@ -122,8 +122,8 @@ MonoBehaviour:
     id: 22
     windowRect:
       serializedVersion: 2
-      x: 1636.3997
-      y: 26
+      x: 1716.3997
+      y: 23
       width: 300
       height: 615
     optimalWidth: 300
@@ -160,13 +160,34 @@ MonoBehaviour:
     onUpdateList: []
     onEnterList: []
     onExitList: []
+  - windowTitle: State - Reef Show Off
+    id: 32
+    windowRect:
+      serializedVersion: 2
+      x: 1060.0012
+      y: 956.9999
+      width: 300
+      height: 465
+    optimalWidth: 300
+    optimalHeight: 465
+    reroutes: []
+    collapse: 0
+    previousCollapse: 0
+    s_exitNodes: 23000000
+    s_hasExitNodes: 01
+    drawNode: {fileID: 11400000, guid: 3de6cb72c5d54a842957b3d8754294e2, type: 2}
+    state: {fileID: 11400000, guid: b3b84b57607219247be0115cc62b7a19, type: 2}
+    onFixedList: []
+    onUpdateList: []
+    onEnterList: []
+    onExitList: []
   transitionNodes:
   - windowTitle: Condition
     id: 2
     windowRect:
       serializedVersion: 2
-      x: 1080.2001
-      y: 493.59998
+      x: 1291.2001
+      y: 406.59998
       width: 200
       height: 62
     optimalWidth: 200
@@ -184,8 +205,8 @@ MonoBehaviour:
     id: 5
     windowRect:
       serializedVersion: 2
-      x: 1306.2
-      y: 196.59998
+      x: 1432.2
+      y: 208.59998
       width: 200
       height: 62
     optimalWidth: 200
@@ -222,8 +243,8 @@ MonoBehaviour:
     id: 10
     windowRect:
       serializedVersion: 2
-      x: 1261.6006
-      y: 776
+      x: 1439.6006
+      y: 791
       width: 200
       height: 62
     optimalWidth: 200
@@ -351,6 +372,44 @@ MonoBehaviour:
     conditions:
     - {fileID: 11400000, guid: 8f4c68f0d4dcd5341a57e41c73c07984, type: 2}
     disable: 0
-  idCount: 32
+  - windowTitle: Condition
+    id: 33
+    windowRect:
+      serializedVersion: 2
+      x: 1071.4012
+      y: 565.7999
+      width: 200
+      height: 62
+    optimalWidth: 200
+    optimalHeight: 62
+    reroutes: []
+    collapse: 0
+    previousCollapse: 0
+    s_exitNodes: 2000000002000000
+    s_hasExitNodes: 0101
+    drawNode: {fileID: 11400000, guid: 02d1192eec6276044a75147866515bb8, type: 2}
+    conditions:
+    - {fileID: 11400000, guid: 8f4c68f0d4dcd5341a57e41c73c07984, type: 2}
+    disable: 0
+  - windowTitle: Condition
+    id: 35
+    windowRect:
+      serializedVersion: 2
+      x: 1427.2013
+      y: 969.80005
+      width: 200
+      height: 62
+    optimalWidth: 200
+    optimalHeight: 62
+    reroutes: []
+    collapse: 0
+    previousCollapse: 0
+    s_exitNodes: 0100000020000000
+    s_hasExitNodes: 0101
+    drawNode: {fileID: 11400000, guid: 02d1192eec6276044a75147866515bb8, type: 2}
+    conditions:
+    - {fileID: 11400000, guid: 8f4c68f0d4dcd5341a57e41c73c07984, type: 2}
+    disable: 0
+  idCount: 37
   initialStateID: 1
-  editorScrollPosition: {x: 2727.6016, y: 202.8}
+  editorScrollPosition: {x: 484.80127, y: 244.2}

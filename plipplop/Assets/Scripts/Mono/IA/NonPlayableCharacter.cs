@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Behavior.Editor;
 using UnityEngine.AI;
@@ -33,8 +34,6 @@ public class NonPlayableCharacter : MonoBehaviour
 	public Food food;
     public Feeder feeder;
 
-
-
 	public Dictionary<Clothes.ESlot, Clothes> clothes = new Dictionary<Clothes.ESlot, Clothes>();
 	public Dictionary<EStat, float> stats = new Dictionary<EStat, float>();
 
@@ -48,6 +47,22 @@ public class NonPlayableCharacter : MonoBehaviour
 	private bool endWait;
 	[HideInInspector] public bool hasWaited;
 	public System.Action onWaitEnded;
+
+	private Activity show;
+	public void ShowOff(float time, Vector2 range, int slot)
+	{
+		show = gameObject.AddComponent<Activity>();
+		show.spectatorMax = slot;
+		show.full = true;
+		show.working = true;
+		show.spectatorRange = range;
+		StartCoroutine(WaitAndStopExposing(time));
+	}
+	IEnumerator WaitAndStopExposing(float time)
+	{
+		yield return new WaitForSeconds(time);
+		Destroy(show);
+	}
 
 	void Awake()
 	{
