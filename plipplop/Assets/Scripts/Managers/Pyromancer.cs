@@ -25,7 +25,7 @@ public class Pyromancer
         var reference = Game.i.library.vfxs.Find(o => o.name == name);
         if (reference == null) {
             throw new Exception(
-                "The sound "+name+" DOES NOT EXIST. Check the library."
+                "The effect "+name+" DOES NOT EXIST. Check the library."
             );
         }
 

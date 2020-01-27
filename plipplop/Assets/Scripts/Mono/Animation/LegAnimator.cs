@@ -80,9 +80,9 @@ public class LegAnimator : MonoBehaviour
             headTransform.localScale = _frame.scale;
             meshRenderer.sharedMaterial = _frame.mat;
 
-            if (_frame.AnimationEvent)
+            if (_frame.gameEffect != string.Empty)
             {
-                AnimationEvent(_frame.AnimationEvent);
+                AnimationEvent(_frame.gameEffect);
             }
 
             if (movementTarget) transform.position = Vector3.Lerp(movementTargetOrigin, movementTarget.position, (float)_frameIndex / (currentAnimation.meshes.Count-1));
@@ -115,8 +115,9 @@ public class LegAnimator : MonoBehaviour
         head.parent = null;
     }
 
-    void AnimationEvent(GameFX gameFx)
+    void AnimationEvent(string gameFxName)
     {
+        var gameFx = Game.i.library.gfxs[gameFxName];
         foreach (var sfx in gameFx.sfx)
         {
             PlaySFX(sfx);

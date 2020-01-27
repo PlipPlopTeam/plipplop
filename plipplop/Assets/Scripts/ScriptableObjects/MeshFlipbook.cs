@@ -16,7 +16,7 @@ public class MeshFlipbook : ScriptableObject
 
         public Material mat;
 
-        public GameFX AnimationEvent;
+        public string gameEffect;
     }
     
     public string animationName;

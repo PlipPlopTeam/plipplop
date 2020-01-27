@@ -4,6 +4,8 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomPropertyDrawer(typeof(VisualEffects))]
+[CustomPropertyDrawer(typeof(GameEffects))]
+[CustomPropertyDrawer(typeof(NamedPrefabResources))]
 public class NamedResourcesDrawer : PropertyDrawer
 {
     float addButtonHeight = 15f;
