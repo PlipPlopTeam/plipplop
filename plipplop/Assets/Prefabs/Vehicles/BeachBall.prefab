@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 2007550832}
   - component: {fileID: -1206478011707942472}
   - component: {fileID: 7286649357687551854}
+  - component: {fileID: 2887985434650187074}
   m_Layer: 0
   m_Name: BeachBall
   m_TagString: Untagged
@@ -152,17 +153,31 @@ MonoBehaviour:
   awarnessMultiplier: 1
   use:
     boredom: 1
-    tiredness: 0
     hunger: 0
+    tiredness: 0
   spectate:
     boredom: 1
-    tiredness: 0
     hunger: 0
+    tiredness: 0
+  users: []
+  spectators: []
   minDistanceBetween: 3
   maxDistanceBetween: 4
   timeBetweenThrows: 0.25
   verticalForce: 7500
   horizontalForce: 5000
+--- !u!114 &2887985434650187074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2932650472225342062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a15cd58957a760249a3a123767c2237a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6564690223429448292
 GameObject:
   m_ObjectHideFlags: 0

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 281994533271648110}
   - component: {fileID: -6757618450328107466}
   - component: {fileID: -5195385680787726798}
+  - component: {fileID: -1075089101332401572}
   m_Layer: 0
   m_Name: BaseController
   m_TagString: Untagged
@@ -121,6 +122,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buyoyancy: 10
   waterline: -0.11
+--- !u!114 &-1075089101332401572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 281994533271648098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a15cd58957a760249a3a123767c2237a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4182015713297960900
 GameObject:
   m_ObjectHideFlags: 0
@@ -160,6 +173,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4182015713297960901}
     m_Modifications:
+    - target: {fileID: -927199367670048503, guid: 5a3e0c40ebd74e3439e1e89f8cdfdc12,
+        type: 3}
+      propertyPath: m_Name
+      value: KM_Body01
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 5a3e0c40ebd74e3439e1e89f8cdfdc12,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -220,11 +238,6 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 7fd17b7bac30bfa44afd5d9874b0a111, type: 2}
-    - target: {fileID: -927199367670048503, guid: 5a3e0c40ebd74e3439e1e89f8cdfdc12,
-        type: 3}
-      propertyPath: m_Name
-      value: KM_Body01
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5a3e0c40ebd74e3439e1e89f8cdfdc12, type: 3}
 --- !u!4 &5763188736245049484 stripped

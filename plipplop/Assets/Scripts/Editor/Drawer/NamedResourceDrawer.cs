@@ -6,6 +6,7 @@ using UnityEngine;
 [CustomPropertyDrawer(typeof(NamedPrefabResource))]
 [CustomPropertyDrawer(typeof(VisualEffect))]
 [CustomPropertyDrawer(typeof(GameEffect))]
+[CustomPropertyDrawer(typeof(GameFX.SFXParameter))]
 
 public class NamedResourceDrawer : PropertyDrawer
 {

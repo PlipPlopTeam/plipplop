@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 3743914904847482975}
   - component: {fileID: 1308987203}
   - component: {fileID: 1167848354}
+  - component: {fileID: -7245879214814929411}
   m_Layer: 0
   m_Name: Carpet
   m_TagString: Untagged
@@ -164,13 +165,27 @@ MonoBehaviour:
   awarnessMultiplier: 0.1
   use:
     boredom: 0.3
-    tiredness: 0
     hunger: 0.2
+    tiredness: 0
   spectate:
     boredom: 1
-    tiredness: 0
     hunger: 0
+    tiredness: 0
+  users: []
+  spectators: []
   offset: -1.2
+--- !u!114 &-7245879214814929411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3743914904847482963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a15cd58957a760249a3a123767c2237a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3743914905137622424
 GameObject:
   m_ObjectHideFlags: 0

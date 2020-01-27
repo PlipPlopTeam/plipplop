@@ -82,7 +82,7 @@ public class LegAnimator : MonoBehaviour
 
             if (_frame.gameEffect != string.Empty)
             {
-                AnimationEvent(_frame.gameEffect);
+                Pyromancer.PlayGameEffect(_frame.gameEffect, transform.position+_frame.gameEffectOffset);
             }
 
             if (movementTarget) transform.position = Vector3.Lerp(movementTargetOrigin, movementTarget.position, (float)_frameIndex / (currentAnimation.meshes.Count-1));
@@ -102,7 +102,7 @@ public class LegAnimator : MonoBehaviour
     {
         movementTarget = tr;
         movementTargetOrigin = transform.position;
-        transform.transform.transform.transform.forward =  (tr.position - transform.position).normalized;
+        transform.forward =  (tr.position - transform.position).normalized;
     }
 
     public void Attach(Transform head)
@@ -113,28 +113,5 @@ public class LegAnimator : MonoBehaviour
     public void Detach(Transform head)
     {
         head.parent = null;
-    }
-
-    void AnimationEvent(string gameFxName)
-    {
-        var gameFx = Game.i.library.gfxs[gameFxName];
-        foreach (var sfx in gameFx.sfx)
-        {
-            PlaySFX(sfx);
-        }
-        foreach (var vfx in gameFx.vfx)
-        {
-            PlayVFX(vfx);
-        }
-    }
-
-    void PlaySFX(string sfx)
-    {
-        
-    }
-    
-    void PlayVFX(string vfx)
-    {
-        Pyromancer.Play(vfx, transform.position);
     }
 }
