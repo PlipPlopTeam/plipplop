@@ -41,6 +41,8 @@ public class Skeleton : MonoBehaviour
     public List<Socket> sockets = new List<Socket>();
     List<Transform> bones = new List<Transform>();
 
+	public Transform hips;
+
     public void Awake()
     {
         foreach(Transform t in gameObject.GetComponentsInChildren<Transform>())
@@ -125,6 +127,12 @@ public class Skeleton : MonoBehaviour
         }
         return null;
     }
+
+	public float GetButtHeight()
+	{
+		if(hips != null) return hips.localPosition.y;
+		return 0f;
+	}
     
     void FootStep()
     {
