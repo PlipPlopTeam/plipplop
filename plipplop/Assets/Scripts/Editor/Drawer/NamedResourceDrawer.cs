@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+[CustomPropertyDrawer(typeof(NamedPrefabResource))]
 [CustomPropertyDrawer(typeof(VisualEffect))]
+[CustomPropertyDrawer(typeof(GameEffect))]
+
 public class NamedResourceDrawer : PropertyDrawer
 {
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)

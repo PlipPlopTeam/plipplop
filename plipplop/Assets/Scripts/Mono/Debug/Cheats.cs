@@ -64,11 +64,11 @@ public class Cheats : Dictionary<string, System.Action>
 
     public void SpawnPoof()
     {
-        Pyromancer.Play("poof", Game.i.player.GetCurrentController().transform.position);
+        Pyromancer.Play("vfx_poof", Game.i.player.GetCurrentController().transform.position);
     }
 
     public void SpawnFire()
     {
-        Pyromancer.PlayAttached("fire", Game.i.player.GetCurrentController().transform);
+        Pyromancer.PlayAttached("vfx_fire", Game.i.player.GetCurrentController().transform);
     }
 }
