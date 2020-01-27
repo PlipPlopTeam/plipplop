@@ -17,7 +17,7 @@ public class Cheats : Dictionary<string, System.Action>
         Add("MAUVAISESTETES", MauvaisesTetes);
         Add("HELLO", SpawnNPC);
         Add("IMONFIRE", SpawnFire);
-        Add("BOOM", SpawnPoof);
+        Add("STEP", SpawnPoof);
     }
 
 	public void BigHeads()
@@ -64,11 +64,11 @@ public class Cheats : Dictionary<string, System.Action>
 
     public void SpawnPoof()
     {
-        Pyromancer.Play("vfx_poof", Game.i.player.GetCurrentController().transform.position);
+        Pyromancer.PlayGameEffect("gfx_step", Game.i.player.GetCurrentController().transform.position);
     }
 
     public void SpawnFire()
     {
-        Pyromancer.PlayAttached("vfx_fire", Game.i.player.GetCurrentController().transform);
+        Pyromancer.PlayVFXAttached("vfx_fire", Game.i.player.GetCurrentController().transform);
     }
 }
