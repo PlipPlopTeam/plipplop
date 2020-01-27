@@ -6559,55 +6559,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 25
   m_LocalEulerAnglesHint: {x: 0, y: -315.181, z: 0}
---- !u!114 &690383647
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59b6606ef2548734bb6d11b9d160bc7e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  active: 1
-  m_AdvancedMode: 0
-  rotation:
-    m_OverrideState: 0
-    m_Value: 0
-    min: 0
-    max: 360
-  skyIntensityMode:
-    m_OverrideState: 0
-    m_Value: 0
-  exposure:
-    m_OverrideState: 0
-    m_Value: 14
-  multiplier:
-    m_OverrideState: 0
-    m_Value: 1
-    min: 0
-  upperHemisphereLuxValue:
-    m_OverrideState: 0
-    m_Value: 1.2948471
-    min: 0
-  desiredLuxValue:
-    m_OverrideState: 0
-    m_Value: 20000
-  updateMode:
-    m_OverrideState: 0
-    m_Value: 0
-  updatePeriod:
-    m_OverrideState: 0
-    m_Value: 0
-    min: 0
-  includeSunInBaking:
-    m_OverrideState: 0
-    m_Value: 0
-  hdriSky:
-    m_OverrideState: 0
-    m_Value: {fileID: 8900000, guid: 82c069ceb518aad41865d7ddea1a54c0, type: 3}
 --- !u!1 &690506710
 GameObject:
   m_ObjectHideFlags: 0
@@ -7888,6 +7839,55 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 832687722}
   m_Mesh: {fileID: -5486331822824694941, guid: b1140998e35e9844eafd9e839f3a6843, type: 3}
+--- !u!114 &846453258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59b6606ef2548734bb6d11b9d160bc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  active: 1
+  m_AdvancedMode: 0
+  rotation:
+    m_OverrideState: 0
+    m_Value: 0
+    min: 0
+    max: 360
+  skyIntensityMode:
+    m_OverrideState: 0
+    m_Value: 0
+  exposure:
+    m_OverrideState: 0
+    m_Value: 14
+  multiplier:
+    m_OverrideState: 0
+    m_Value: 1
+    min: 0
+  upperHemisphereLuxValue:
+    m_OverrideState: 0
+    m_Value: 1.2948471
+    min: 0
+  desiredLuxValue:
+    m_OverrideState: 0
+    m_Value: 20000
+  updateMode:
+    m_OverrideState: 0
+    m_Value: 0
+  updatePeriod:
+    m_OverrideState: 0
+    m_Value: 0
+    min: 0
+  includeSunInBaking:
+    m_OverrideState: 0
+    m_Value: 0
+  hdriSky:
+    m_OverrideState: 0
+    m_Value: {fileID: 8900000, guid: 82c069ceb518aad41865d7ddea1a54c0, type: 3}
 --- !u!1001 &847219840
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7943,7 +7943,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: c4ef732318d1a8244a1032fc6f543452,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: c4ef732318d1a8244a1032fc6f543452,
         type: 3}
@@ -12670,7 +12670,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Profile: {fileID: 11400000, guid: c8e3472f8e8997644bd1b3ddf70aecf4, type: 2}
   m_StaticLightingSkyUniqueID: 1
-  m_SkySettings: {fileID: 690383647}
+  m_SkySettings: {fileID: 846453258}
   m_SkySettingsFromProfile: {fileID: 1332542512067647828, guid: c8e3472f8e8997644bd1b3ddf70aecf4,
     type: 2}
 --- !u!114 &1690392957
@@ -12702,7 +12702,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1709792979
 GameObject:
@@ -13126,7 +13126,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 536b61a3bd808b7408dc0927bf0f3520,
         type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 536b61a3bd808b7408dc0927bf0f3520,
         type: 3}
@@ -15056,7 +15056,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 526ab8f34a90b464298640ddbf08d88c,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 526ab8f34a90b464298640ddbf08d88c,
         type: 3}
@@ -16751,7 +16751,7 @@ PrefabInstance:
     - target: {fileID: 5933421677173834892, guid: 50cce2bf0c97a5941920d5415fd6dcda,
         type: 3}
       propertyPath: m_RootOrder
-      value: 15
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 5933421677173834892, guid: 50cce2bf0c97a5941920d5415fd6dcda,
         type: 3}
