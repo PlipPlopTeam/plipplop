@@ -22,15 +22,7 @@ public class SpielbergTrack : TrackAsset
         foreach (var clip in GetClips()) {
             var ev = clip.asset as SpielbergClip;
 
-            clip.displayName = "{0} {1}".Format(ev.behaviour.action, string.Join(" ",
-                ev.behaviour.args
-                .Where(o => { return o.Length > 0;})
-                /*
-                .Select(o => { return (object)o; })
-                .Concat(ev.behaviour.refArgs)
-                .Where(o => { return o != null; })
-                */
-            ));
+            clip.displayName = ev.GetDisplayName();
         }
     }
 }

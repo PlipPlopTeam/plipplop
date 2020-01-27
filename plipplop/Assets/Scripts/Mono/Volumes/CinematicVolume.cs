@@ -29,7 +29,7 @@ public class CinematicVolume : Volume
     public override void OnPlayerEnter(Controller player)
     {
         try {
-            Spielberg.PlayCinematic("cine_test_1");
+            Spielberg.PlayCinematic(cinematic);
 
             if (destroyOnCinemaStart) Destroy(gameObject);
         }
