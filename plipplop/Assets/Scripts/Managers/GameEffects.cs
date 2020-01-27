@@ -30,7 +30,13 @@ public class GameEffects : List<GameEffect>, ISerializationCallbackReceiver
     }
 
     public GameFX this[string name]{
-        get { return Find(o => o.name == name).gfxScriptableObject; }
+        get {
+            var gfx = Find(o => o.name == name);
+            if (gfx == null) {
+                throw new Exception("Attempted to get gfx " + name + " that does NOT exist. Please check the library.");
+            }
+            return gfx.gfxScriptableObject;
+        }
     }
 }
 

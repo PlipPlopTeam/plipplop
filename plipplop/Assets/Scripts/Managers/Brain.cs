@@ -97,7 +97,7 @@ public class Brain
             this.controller = controller;
             Game.i.aperture.Load(controller.customCamera ?? Game.i.library.defaultAperture);
             controller.OnPossess();
-            Pyromancer.Play("vfx_morph", this.controller.transform.position);
+            Pyromancer.PlayGameEffect("gfx_morph", this.controller.transform.position);
         };
 
         if (clone!= null && !isImmediate) {

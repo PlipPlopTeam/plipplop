@@ -9,7 +9,31 @@ public class Pyromancer
     Dictionary<string, List<VisualEffectController>> effects = new Dictionary<string, List<VisualEffectController>>();
     List<VisualEffectController> allEffects { get { return effects.Values.SelectMany(o => { return o; }).ToList(); } }
 
-    public static void Play(string vfxName, Vector3 position)
+    public static void PlayGameEffect(string gfxName, Vector3 position)
+    {
+        PlayGameEffect(Game.i.library.gfxs[gfxName], position);
+    }
+
+    public static void PlayGameEffect(GameFX gfx, Vector3 position)
+    {
+        foreach (var sound in gfx.sfx) {
+            if (sound.spatializedSound) {
+                SoundPlayer.PlayAtPosition(sound.name, position, sound.volume, sound.randomPitch);
+            }
+            else if (sound.randomPitch) {
+                SoundPlayer.PlayWithRandomPitch(sound.name, sound.volume);
+            }
+            else {
+                SoundPlayer.Play(sound.name, sound.volume);
+            }
+        }
+
+        foreach (var vfx in gfx.vfx) {
+            PlayVFX(vfx, position);
+        }
+    }
+
+    public static void PlayVFX(string vfxName, Vector3 position)
     {
         var p = Game.i.vfx;
         var effect = p.AddEffect(vfxName);
@@ -45,7 +69,7 @@ public class Pyromancer
         return instance;
     }
 
-    public static void PlayAttached(string vfxName, Transform parent, Vector3 offset=new Vector3())
+    public static void PlayVFXAttached(string vfxName, Transform parent, Vector3 offset=new Vector3())
     {
         var p = Game.i.vfx;
         var effect = p.AddEffect(vfxName);
