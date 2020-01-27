@@ -39,7 +39,7 @@ public class Guitar : Activity, ICarryable
 		music.Stop();
 		user.Drop();
 		transform.parent = null;
-		user.animator.SetBool("Guitaring", false);
+		if(user.animator != null) user.animator.SetBool("Guitaring", false);
 	}
 
 	public override void StopSpectate(NonPlayableCharacter npc)

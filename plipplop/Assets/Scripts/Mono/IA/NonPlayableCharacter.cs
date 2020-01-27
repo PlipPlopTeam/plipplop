@@ -61,7 +61,11 @@ public class NonPlayableCharacter : MonoBehaviour
 	IEnumerator WaitAndStopExposing(float time)
 	{
 		yield return new WaitForSeconds(time);
-		Destroy(show);
+		if(show != null)
+		{
+			show.Dismantle();
+			show = null;
+		}
 	}
 
 	void Awake()
@@ -222,8 +226,8 @@ public class NonPlayableCharacter : MonoBehaviour
 		carried.Carry();
 		if (carried.Mass() <= settings.strength)
 		{
-			animator.SetBool("Holding", true);
-			skeleton.Attach(carried.Self(), Clothes.ESlot.RIGHT_HAND, true);
+			if(animator != null) animator.SetBool("Holding", true);
+			if(skeleton != null) skeleton.Attach(carried.Self(), Clothes.ESlot.RIGHT_HAND, true);
 		}
 		else
 		{
@@ -245,8 +249,13 @@ public class NonPlayableCharacter : MonoBehaviour
 		if(carried.Mass() <= settings.strength)
 			skeleton.Drop(Clothes.ESlot.RIGHT_HAND);
 
-		animator.SetBool("Holding", false);
-		animator.SetBool("Carrying", false);
+		if(animator != null)
+		{
+			animator.SetBool("Holding", false);
+			animator.SetBool("Carrying", false);
+		}
+
+
 
 		carried = null;
 	}
