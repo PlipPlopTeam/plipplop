@@ -61,7 +61,11 @@ public class NonPlayableCharacter : MonoBehaviour
 	IEnumerator WaitAndStopExposing(float time)
 	{
 		yield return new WaitForSeconds(time);
-		Destroy(show);
+		if(show != null)
+		{
+			show.Dismantle();
+			show = null;
+		}
 	}
 
 	void Awake()
