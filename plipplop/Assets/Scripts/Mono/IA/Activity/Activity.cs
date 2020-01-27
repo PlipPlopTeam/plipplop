@@ -100,11 +100,6 @@ public class Activity : MonoBehaviour
 		return result;
 	}
 
-	private void OnDestroy()
-	{
-		KickAll();
-	}
-
 	public virtual void KickAll()
     {
 		lock (all)

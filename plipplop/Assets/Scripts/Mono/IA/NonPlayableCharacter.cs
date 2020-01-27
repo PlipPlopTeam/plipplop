@@ -278,27 +278,30 @@ public class NonPlayableCharacter : MonoBehaviour
 		agentMovement.GoThere(where);
 		agentMovement.onDestinationReached += () => {Sit(where);};
 	}
-	public void GoSitThere(Chair c, Vector3 offset)
+	public void GoSitThere(Chair chair, Chair.Spot spot)
 	{
-
+		agentMovement.GoThere(chair.transform.position + spot.position);
+		agentMovement.onDestinationReached += () =>
+		{
+			Sit(chair);
+			chair.Sit(this, spot);
+		};
 	}
 	public void Sit(Vector3 pos)
 	{
 		agentMovement.Stop();
 		agent.enabled = false;
-
 		transform.position = pos;
 		animator.SetBool("Sitting", true);
 	}
-	public void Sit(Chair c, Vector3 offset)
+	public void Sit(Chair c)
 	{
 		collider.enabled = false;
 		chair = c;
 		agentMovement.Stop();
 		agent.enabled = false;
 		transform.SetParent(c.transform);
-		transform.localPosition = new Vector3(offset.x, offset.y - assHeightWhenSitted, offset.z);
-
+		transform.localPosition = Vector3.zero;
 		animator.SetBool("Chairing", true);
 	}
 	public void GetUp()
@@ -306,6 +309,7 @@ public class NonPlayableCharacter : MonoBehaviour
 		if(chair != null)
 		{
 			transform.SetParent(null);
+			transform.localPosition = Vector3.zero;
 			chair.Exit(this);
 			chair = null;
 		}
