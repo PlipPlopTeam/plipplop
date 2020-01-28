@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace Spielberg.Clips
 {
-    public class ParalyzePlayer : SpielbergClip
+    public class SpielbergModalClip<TBehaviour> : SpielbergClip where TBehaviour : SpielbergClipBehaviour, new()
     {
-        public SpielbergParalyzePlayerClipBehaviour behaviour = new SpielbergParalyzePlayerClipBehaviour();
+        public TBehaviour behaviour = new TBehaviour();
 
         public override SpielbergClipBehaviour GetBehaviour()
         {

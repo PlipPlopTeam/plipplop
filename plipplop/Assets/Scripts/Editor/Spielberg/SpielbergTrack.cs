@@ -7,7 +7,7 @@ using System.Linq;
 
 [TrackColor(0.4448276f, 0f, 1f)]
 [TrackClipType(typeof(SpielbergClip))]
-//[TrackBindingType(typeof(GameObject))]
+
 public class SpielbergTrack : TrackAsset
 {
     public override Playable CreateTrackMixer(PlayableGraph graph, GameObject go, int inputCount)

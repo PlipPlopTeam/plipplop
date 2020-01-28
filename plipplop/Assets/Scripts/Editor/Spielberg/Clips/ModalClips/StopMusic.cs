@@ -4,5 +4,5 @@ using UnityEngine;
 
 namespace Spielberg.Clips
 {
-   
+    public class StopMusic : SpielbergModalClip<SpielbergStopMusicClipBehaviour> { }
 }
