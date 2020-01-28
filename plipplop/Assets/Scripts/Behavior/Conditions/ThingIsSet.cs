@@ -18,6 +18,7 @@ namespace Behavior.NPC
 				case NonPlayableCharacter.ESubject.CHAIR: return npc.chair != null;
 				case NonPlayableCharacter.ESubject.FOOD: return npc.food != null;
 				case NonPlayableCharacter.ESubject.FEEDER: return npc.feeder != null;
+				case NonPlayableCharacter.ESubject.CHARACTER: return npc.character != null;
 			}
 			return false;
 		}
