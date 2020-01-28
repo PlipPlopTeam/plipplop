@@ -1102,11 +1102,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: BeachBall
       objectReference: {fileID: 0}
-    - target: {fileID: 2932650472225342062, guid: ddd968a89987eb147ae83974ec55e6fe,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2932650472225342058, guid: ddd968a89987eb147ae83974ec55e6fe,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1162,15 +1157,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7286649357687551854, guid: ddd968a89987eb147ae83974ec55e6fe,
+    - target: {fileID: 2932650472225342061, guid: ddd968a89987eb147ae83974ec55e6fe,
         type: 3}
-      propertyPath: awarnessMultiplier
-      value: 0.8
+      propertyPath: canRetractLegs
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2932650472225342061, guid: ddd968a89987eb147ae83974ec55e6fe,
         type: 3}
-      propertyPath: autoPossess
-      value: 0
+      propertyPath: beginCrouched
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ddd968a89987eb147ae83974ec55e6fe, type: 3}
@@ -1388,11 +1383,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tabouret
       objectReference: {fileID: 0}
-    - target: {fileID: 5635061604690118775, guid: 2c7e08d1f65d04f4cb477d304815a39d,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7365660621670411603, guid: 2c7e08d1f65d04f4cb477d304815a39d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1448,19 +1438,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3047219554095579076, guid: 2c7e08d1f65d04f4cb477d304815a39d,
-        type: 3}
-      propertyPath: visual
-      value: 
-      objectReference: {fileID: 1546737690}
+    - target: {fileID: 1581361766, guid: 2c7e08d1f65d04f4cb477d304815a39d, type: 3}
+      propertyPath: visualsOffset.y
+      value: -0.7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c7e08d1f65d04f4cb477d304815a39d, type: 3}
---- !u!54 &369488354 stripped
-Rigidbody:
-  m_CorrespondingSourceObject: {fileID: 744689164, guid: 2c7e08d1f65d04f4cb477d304815a39d,
-    type: 3}
-  m_PrefabInstance: {fileID: 369488353}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &494133314
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5066,12 +5049,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1546737690 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7056963107494047729, guid: 2c7e08d1f65d04f4cb477d304815a39d,
-    type: 3}
-  m_PrefabInstance: {fileID: 369488353}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1549660681
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5083,11 +5060,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Television
-      objectReference: {fileID: 0}
-    - target: {fileID: 6636483350066690592, guid: d85620bd39b5ea64187bae7bc249b707,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6636483350066690596, guid: d85620bd39b5ea64187bae7bc249b707,
         type: 3}
@@ -5366,35 +5338,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 264767652}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1581361765 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5635061604690118775, guid: 2c7e08d1f65d04f4cb477d304815a39d,
-    type: 3}
-  m_PrefabInstance: {fileID: 369488353}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1581361766
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1581361765}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a52f01500a9590a4d99cb5c7e61c9b57, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  autoPossess: 0
-  beginCrouched: 0
-  canRetractLegs: 1
-  freezeUntilPossessed: 0
-  useGravity: 1
-  gravityMultiplier: 100
-  customExternalRigidbody: {fileID: 369488354}
-  customCamera: {fileID: 0}
-  locomotion: {fileID: 0}
-  visuals: {fileID: 1546737690}
-  face: {fileID: 0}
 --- !u!1001 &1583936909
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6618,11 +6561,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Jukebox
-      objectReference: {fileID: 0}
-    - target: {fileID: 7338784915185660219, guid: 63d5d84de5bdaca42aa192455a2144f7,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7338784915185660217, guid: 63d5d84de5bdaca42aa192455a2144f7,
         type: 3}

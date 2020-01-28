@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3047219554095579076}
   - component: {fileID: 344882341352400022}
   - component: {fileID: 744689164}
+  - component: {fileID: 1581361766}
   m_Layer: 0
   m_Name: Tabouret
   m_TagString: Untagged
@@ -46,10 +47,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cec29d514bc85b419a56f570a0a6939, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minStraightAngle: 45
+  visual: {fileID: 7056963107494047729}
   spots:
   - position: {x: 0, y: 0.69, z: 0}
     orientation: {x: -45, y: 45}
     user: {fileID: 0}
+    isSitted: 0
 --- !u!65 &344882341352400022
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -79,6 +83,30 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1581361766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5635061604690118775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a52f01500a9590a4d99cb5c7e61c9b57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoPossess: 0
+  beginCrouched: 1
+  canRetractLegs: 1
+  freezeUntilPossessed: 0
+  useGravity: 1
+  gravityMultiplier: 100
+  customExternalRigidbody: {fileID: 744689164}
+  customCamera: {fileID: 0}
+  locomotion: {fileID: 0}
+  visuals: {fileID: 7056963107494047729}
+  face: {fileID: 0}
+  visualsOffset: {x: 0, y: -0.2, z: 0}
 --- !u!1 &6918016771363285954
 GameObject:
   m_ObjectHideFlags: 0

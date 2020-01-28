@@ -309,7 +309,6 @@ public class NonPlayableCharacter : MonoBehaviour
 		if(chair != null)
 		{
 			transform.SetParent(null);
-			transform.localPosition = Vector3.zero;
 			chair.Exit(this);
 			chair = null;
 		}
