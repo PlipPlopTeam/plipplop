@@ -7,12 +7,11 @@ public class SpielbergPlaySoundClipBehaviour : SpielbergClipBehaviour
 {
     public string sound;
     [Range(0f, 1f)] public float volume = 1f;
-    public float pitch;
-    public bool shouldFade = false;
+    public float pitch = 1f;
 
     public override void ExecuteBehaviour()
     {
-        Game.i.cinematics.KinoPlaySound(sound, volume, pitch, shouldFade);
+        Game.i.cinematics.KinoPlaySound(sound, volume, pitch);
     }
 
     public override string ToString()

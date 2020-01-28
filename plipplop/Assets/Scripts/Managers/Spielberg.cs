@@ -41,14 +41,14 @@ public class Spielberg
         currentAssistant.SwitchCamera(cameraName);   
     }
 
-    public void KinoPlaySound(string sound, float volume, float pitch, bool shouldFade)
+    public void KinoPlaySound(string sound, float volume, float pitch)
     {
-        SoundPlayer.Play(sound, volume, pitch, shouldFade);
+        SoundPlayer.Play(sound, volume, pitch);
     }
 
     public void KinoPlayGameEffect(string gfx, Vector3 position)
     {
-        Pyromancer.PlayGameEffect(gfx, position);
+        Pyromancer.PlayGameEffect(gfx, currentAssistant.transform.position + position);
     }
 
     public void KinoPlayMusic(string musicName, float volume, bool shouldFade)
