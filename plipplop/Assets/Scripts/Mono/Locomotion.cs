@@ -8,9 +8,9 @@ public class Locomotion : Walker
     public LocomotionPreset preset;
     public float legsHeight = 1f;
     public float groundCheckRange = 1f;
-    public Vector3 legsOffset = Vector3.up* 0.65f;
+	public Vector3 legsOffset = Vector3.up * 0.65f;
 
-    [HideInInspector] new public Rigidbody rigidbody;
+	[HideInInspector] new public Rigidbody rigidbody;
     [HideInInspector] public Vector3 targetDirection;
     [HideInInspector] public bool isImmerged = false;
     public event System.Action onLegAnimationEnd;
@@ -76,10 +76,10 @@ public class Locomotion : Walker
     public void RetractLegs()
     {
         locomotionAnimation.RetractLegs();
-    }
+	}
     public void ExtendLegs()
     {
-        locomotionAnimation.ExtendLegs();
+		locomotionAnimation.ExtendLegs();
 
         var v = GetBelowSurface();
 

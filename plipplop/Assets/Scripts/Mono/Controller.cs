@@ -18,6 +18,8 @@ public abstract class Controller : MonoBehaviour
 	[HideInInspector] public Transform visuals;
 	[HideInInspector] public GameObject face;
 
+	public Vector3 visualsOffset;
+
     float lastTimeGrounded = 0f;
     new internal Rigidbody rigidbody;
     Controller lastFocusedController;
@@ -254,7 +256,7 @@ public abstract class Controller : MonoBehaviour
     virtual internal void AlignPropOnHeadDummy()
     {
         var prs = locomotion.GetHeadDummy();
-        visuals.transform.SetPositionAndRotation(prs.position, prs.rotation);
+        visuals.transform.SetPositionAndRotation(prs.position + visualsOffset, prs.rotation);
         visuals.transform.localScale = prs.scale;
     }
 
