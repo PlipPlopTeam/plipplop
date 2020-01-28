@@ -14,6 +14,6 @@ public class SpielbergSwitchCameraClipBehaviour : SpielbergClipBehaviour
 
     public override string ToString()
     {
-        return "Switch to camera " + cameraName;
+        return "🎥 Switch to camera\n" + cameraName;
     }
 }

@@ -12,6 +12,6 @@ public class SpielbergParalyzePlayerClipBehaviour : SpielbergClipBehaviour
 
     public override string ToString()
     {
-        return "Paralyze player";
+        return "⚡ Paralyze player";
     }
 }

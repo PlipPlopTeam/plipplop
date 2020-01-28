@@ -13,6 +13,6 @@ public class SpielbergLiberatePlayerBehaviour : SpielbergClipBehaviour
 
     public override string ToString()
     {
-        return "Liberate player";
+        return "🕊 Liberate player";
     }
 }

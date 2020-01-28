@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Timeline;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
@@ -18,4 +19,5 @@ public abstract class SpielbergClip : PlayableAsset, ITimelineClipAsset
 
     public abstract SpielbergClipBehaviour GetBehaviour();
     public abstract string GetDisplayName();
+
 }

@@ -55,7 +55,7 @@ public class SoundPlayer
                 MakeUnique(snd);
                 src = LoopClip(snd.clip, shouldFadeIn ? 0f : volume, pitch);
                 if (shouldFadeIn) {
-                    src.gameObject.AddComponent<MonoBehaviour>().StartCoroutine(FadeVolumeOverTime(src, volume));
+                    UnityMainThreadDispatcher.Instance().StartCoroutine(FadeVolumeOverTime(src, volume));
                 }
                 if (src != source) managedSources.Add(src);
                 return src;
@@ -145,7 +145,7 @@ public class SoundPlayer
                 GameObject.Destroy(src.gameObject);
             };
             if (shouldFade) {
-                src.gameObject.AddComponent<MonoBehaviour>().StartCoroutine(FadeVolumeOverTime(src, 0f, cleanSteps));
+                UnityMainThreadDispatcher.Instance().StartCoroutine(FadeVolumeOverTime(src, 0f, cleanSteps));
             }
             else {
                 cleanSteps.Invoke();

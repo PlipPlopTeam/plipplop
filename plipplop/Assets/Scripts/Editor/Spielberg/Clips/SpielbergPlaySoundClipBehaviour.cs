@@ -1,13 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Timeline;
+using UnityEngine.Playables;
 
 [System.Serializable]
 public class SpielbergPlaySoundClipBehaviour : SpielbergClipBehaviour
 {
     public string sound;
-    [Range(0f, 1f)] public float volume = 1f;
-    public float pitch = 1f;
+    [NotKeyable] [Range(0f, 1f)] public float volume = 1f;
+    [NotKeyable] public float pitch = 1f;
 
     public override void ExecuteBehaviour()
     {
@@ -16,6 +18,6 @@ public class SpielbergPlaySoundClipBehaviour : SpielbergClipBehaviour
 
     public override string ToString()
     {
-        return "Play sound " + sound;
+        return "🔊 Play sound\n" + sound;
     }
 }

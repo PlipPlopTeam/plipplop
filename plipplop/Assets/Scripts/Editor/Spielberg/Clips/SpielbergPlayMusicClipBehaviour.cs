@@ -6,8 +6,8 @@ using UnityEngine;
 public class SpielbergPlayMusicClipBehaviour : SpielbergClipBehaviour
 {
     public string musicName;
-    public float volume = 1f;
-    public bool shouldFade = true;
+    [UnityEngine.Timeline.NotKeyable] public float volume = 1f;
+    [UnityEngine.Timeline.NotKeyable] public bool shouldFade = true;
 
     public override void ExecuteBehaviour()
     {
@@ -16,6 +16,6 @@ public class SpielbergPlayMusicClipBehaviour : SpielbergClipBehaviour
 
     public override string ToString()
     {
-        return "Play music " + musicName;
+        return "🎶 Play music\n" + musicName.Replace("bgm_", "");
     }
 }

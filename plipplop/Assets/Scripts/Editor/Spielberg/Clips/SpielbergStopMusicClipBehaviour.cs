@@ -6,7 +6,7 @@ using UnityEngine;
 public class SpielbergStopMusicClipBehaviour : SpielbergClipBehaviour
 {
     public string musicName;
-    public bool shouldFade = true;
+    [UnityEngine.Timeline.NotKeyable] public bool shouldFade = true;
 
     public override void ExecuteBehaviour()
     {
@@ -15,6 +15,6 @@ public class SpielbergStopMusicClipBehaviour : SpielbergClipBehaviour
 
     public override string ToString()
     {
-        return "Fade out "+musicName;
+        return "🔇 End music\n"+musicName.Replace("bgm_", "");
     }
 }
