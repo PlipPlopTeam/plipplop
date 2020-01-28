@@ -5385,7 +5385,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   autoPossess: 0
-  beginCrouched: 0
+  beginCrouched: 1
   canRetractLegs: 1
   freezeUntilPossessed: 0
   useGravity: 1
@@ -5395,6 +5395,25 @@ MonoBehaviour:
   locomotion: {fileID: 0}
   visuals: {fileID: 1546737690}
   face: {fileID: 0}
+--- !u!114 &1581361770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1581361765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 011d63a14cf4d8347a5660a929242412, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  preset: {fileID: 0}
+  legsHeight: 0.5
+  groundCheckRange: 1
+  legsOffset: {x: 0, y: 0.65, z: 0}
+  rigidbody: {fileID: 0}
+  targetDirection: {x: 0, y: 0, z: 0}
+  isImmerged: 0
 --- !u!1001 &1583936909
 PrefabInstance:
   m_ObjectHideFlags: 0
