@@ -59,11 +59,12 @@ public abstract class Controller : MonoBehaviour
 
     public virtual void OnPossess()
     {
-        if (freezeUntilPossessed && rigidbody.constraints == RigidbodyConstraints.FreezeAll) {
+		previousVisualLocalPosition = visuals.transform.localPosition;
+
+		if (freezeUntilPossessed && rigidbody.constraints == RigidbodyConstraints.FreezeAll) {
             rigidbody.constraints = previousConstraints;
         }
-
-        controllerSensor = Instantiate(Game.i.library.controllerSensor, gameObject.transform).GetComponent<ControllerSensor>();
+		controllerSensor = Instantiate(Game.i.library.controllerSensor, gameObject.transform).GetComponent<ControllerSensor>();
         controllerSensor.transform.localPosition = new Vector3(0f, 0f, controllerSensor.sensorForwardPosition);
 
 		if (beginCrouched) RetractLegs();
@@ -72,17 +73,12 @@ public abstract class Controller : MonoBehaviour
 		ToggleFace(true);
 		foreach (Transform t in visuals.GetComponentsInChildren<Transform>()) t.gameObject.layer = 0;
 
+	}
 
-		Activity activity = gameObject.GetComponent<Activity>();
-        if(activity != null) activity.Break();
-
-        previousVisualLocalPosition = visuals.transform.localPosition;
-    }
-
-    internal virtual void SpecificJump() {}
+	internal virtual void SpecificJump() {}
     internal virtual void OnJump()
     {
-		if (!canRetractLegs) return;
+		//if (!canRetractLegs) return;
 		if (AreLegsRetracted())
         {
             SpecificJump();
@@ -100,13 +96,25 @@ public abstract class Controller : MonoBehaviour
         if (!canRetractLegs) return;
         locomotion.RetractLegs();
         OnLegsRetracted();
-    }
 
-    internal void ExtendLegs()
+		// Reset visual local position when legs are retracted
+		visuals.transform.localPosition = previousVisualLocalPosition;
+	}
+
+	internal void ExtendLegs()
     {
-        locomotion.ExtendLegs();
+		Activity activity = gameObject.GetComponent<Activity>();
+		if (activity != null) activity.Break();
+
+		locomotion.ExtendLegs();
         OnLegsExtended();
     }
+
+	public void ToggleLegs()
+	{
+		if (AreLegsRetracted()) ExtendLegs();
+		else RetractLegs();
+	}
 
     internal bool AreLegsRetracted() { return locomotion.AreLegsRetracted(); }
     internal virtual bool IsGrounded(float rangeMultiplier = 1f) { return locomotion.IsGrounded(rangeMultiplier); }

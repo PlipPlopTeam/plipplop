@@ -123,6 +123,8 @@ MonoBehaviour:
     boredom: 6
     hunger: 0
     tiredness: 0
+  users: []
+  spectators: []
   radius: {x: 1, y: 1.5}
   ps: {fileID: 3517644232397957827}
 --- !u!114 &497905235
@@ -138,7 +140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   autoPossess: 0
-  beginCrouched: 0
+  beginCrouched: 1
   canRetractLegs: 1
   freezeUntilPossessed: 0
   useGravity: 1
@@ -416,16 +418,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 53828880913542605, guid: a6745308ab6de644dabcad8c5adb767b,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: e2e90891b59ea54409db2b8e28e90e67, type: 2}
     - target: {fileID: -8403459610807570633, guid: a6745308ab6de644dabcad8c5adb767b,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 209e166990199594bba4b5185535acfc, type: 2}
+    - target: {fileID: 53828880913542605, guid: a6745308ab6de644dabcad8c5adb767b,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: e2e90891b59ea54409db2b8e28e90e67, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a6745308ab6de644dabcad8c5adb767b, type: 3}
 --- !u!4 &3601354701241493912 stripped
