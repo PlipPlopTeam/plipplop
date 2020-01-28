@@ -52,7 +52,6 @@ public class SoundPlayer
 
             if (snd.loop)
             {
-                Debug.Log("Playing sound "+snd.name+" on loop");
                 MakeUnique(snd);
                 src = LoopClip(snd.clip, shouldFadeIn ? 0f : volume, pitch);
                 if (shouldFadeIn) {
