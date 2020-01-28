@@ -6,7 +6,7 @@ using UnityEngine;
 public class SpielbergPlayGameEffectClipBehaviour : SpielbergClipBehaviour
 {
     public string gfx;
-    public Vector3 position;
+    [UnityEngine.Timeline.NotKeyable] public Vector3 position;
 
     public override void ExecuteBehaviour()
     {
@@ -15,6 +15,6 @@ public class SpielbergPlayGameEffectClipBehaviour : SpielbergClipBehaviour
 
     public override string ToString()
     {
-        return "Play GameFX " + gfx;
+        return "💥 Play GameFX\n" + gfx;
     }
 }
