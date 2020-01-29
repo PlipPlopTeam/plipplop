@@ -29,7 +29,7 @@ public class Walker : MonoBehaviour
 		return null;
 	}
 
-	public virtual void ApplyAdherence(float adherence){}
+	public virtual void ApplyAdherence(float adherence) {}
 
 	// ENTER INTO A NEW FLOOR
 	private void Enter(Floor f)

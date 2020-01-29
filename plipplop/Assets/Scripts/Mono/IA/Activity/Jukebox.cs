@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class Jukebox : Activity
 {
-    Transform visuals;
-    public ParticleSystem ps;
+	[Header("Jukebox")]
+	public Vector2 radius;
 
-    private void Start()
+    public ParticleSystem ps;
+	Transform visuals;
+
+	private void Start()
     {
         visuals = transform.GetChild(0);
     }
@@ -27,14 +30,21 @@ public class Jukebox : Activity
     public override void Update() 
     {
         base.Update();
-        visuals.localScale = Vector3.one + Vector3.one * (1 + Mathf.Sin(Time.time * 10f)) * 0.25f;
+        visuals.localScale = Vector3.one + Vector3.one * (1 + Mathf.Sin(Time.time * 10f) )* 0.1f;
     }
 
     public override void Enter(NonPlayableCharacter user)
     {
         base.Enter(user);
-        user.agentMovement.Stop();
-        user.animator.SetBool("Dancing", true);
+		Vector3 pos = Geometry.GetRandomPointAround(Random.Range(radius.x, radius.y)) + transform.position;
+		user.agentMovement.Stop();
+		user.GoSitThere(pos);
+		user.agentMovement.onDestinationReached += () =>
+		{
+			user.transform.LookAt(transform.position);
+		};
+
+		user.animator.SetBool("Dancing", true);
     }
 
     public override void Exit(NonPlayableCharacter user)
@@ -42,4 +52,20 @@ public class Jukebox : Activity
         base.Exit(user);
         user.animator.SetBool("Dancing", false);
     }
+
+#if UNITY_EDITOR
+	public override void OnDrawGizmosSelected()
+	{
+		base.OnDrawGizmosSelected();
+		UnityEditor.Handles.color = new Color32(255, 215, 0, 255);
+		UnityEditor.Handles.DrawWireDisc(transform.position, Vector3.up, radius.x);
+		UnityEditor.Handles.DrawWireDisc(transform.position, Vector3.up, radius.y);
+	}
+
+	void OnValidate()
+	{
+		if (radius.x < 0) radius.x = 0;
+		if (radius.y < radius.x) radius.y = radius.x;
+	}
+#endif
 }

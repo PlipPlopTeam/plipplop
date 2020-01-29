@@ -1,6 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class Skeleton : MonoBehaviour
 {
@@ -19,7 +22,7 @@ public class Skeleton : MonoBehaviour
 
         public Vector3 GetPosition()
         {
-            return bone.position;
+            return bone.position + bone.TransformVector(offset);
         }
 
 		public void Attach(Transform obj, Vector3 offset = new Vector3(), Vector3 rotate = new Vector3())
@@ -28,7 +31,7 @@ public class Skeleton : MonoBehaviour
 		    if(c != null) c.Carry();
 
 			obj.SetParent(bone);
-			obj.transform.localPosition = offset;
+			obj.transform.localPosition = this.offset + offset;
             obj.forward = bone.forward;
             //obj.localScale = Vector3.one;
             item = obj;
@@ -37,6 +40,8 @@ public class Skeleton : MonoBehaviour
 	}
     public List<Socket> sockets = new List<Socket>();
     List<Transform> bones = new List<Transform>();
+
+	public Transform hips;
 
     public void Awake()
     {
@@ -122,9 +127,28 @@ public class Skeleton : MonoBehaviour
         }
         return null;
     }
+
+	public float GetButtHeight()
+	{
+		if(hips != null) return hips.localPosition.y;
+		return 0f;
+	}
     
     void FootStep()
     {
         // For animation sound call
     }
+
+#if UNITY_EDITOR
+	void OnDrawGizmosSelected()
+	{
+		foreach(Socket s in sockets)
+		{
+			Gizmos.DrawWireSphere(s.bone.position, 0.05f);
+			Handles.Label(s.bone.position, s.bone.name);
+			Gizmos.DrawLine(s.bone.position, s.GetPosition());
+			Gizmos.DrawWireSphere(s.GetPosition(), 0.025f);
+		}
+	}
+#endif
 }

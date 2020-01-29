@@ -38,14 +38,18 @@ public class Face : MonoBehaviour
     }
     public void Shut()
     {
-        speaking = false;
+		if (smr == null) return;
+
+		speaking = false;
         smr.SetBlendShapeWeight(1, 0f);
         smr.SetBlendShapeWeight(2, 0f);
     }
 
     public void Happiness(float value)
     {
-        happiness = Mathf.Clamp(value, 0f, 100f);
+		if (smr == null) return;
+
+		happiness = Mathf.Clamp(value, 0f, 100f);
         float h = Mathf.Clamp(-100f + happiness * 2f, 0f, 100f);
         float s = Mathf.Clamp(100f - happiness * 2f, 0f, 100f);
         smr.SetBlendShapeWeight(1, h);
@@ -54,9 +58,10 @@ public class Face : MonoBehaviour
 
     public void Update()
     {
+		if (smr == null) return;
         Happiness(happiness);
 
-        if(speaking)
+		if (speaking)
         {
             if(speakTimer > 0) speakTimer -= Time.deltaTime;
             else

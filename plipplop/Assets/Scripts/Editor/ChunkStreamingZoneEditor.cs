@@ -312,7 +312,6 @@ public class ChunkStreamingZoneEditor : BaseEditor
 
     }
 
-    [System.Obsolete]
     System.Action LoadUnloadField()
     {
         var csz = (ChunkStreamingZone)target;

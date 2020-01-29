@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 599618243422713118}
   - component: {fileID: 599618243422713113}
   - component: {fileID: 599618243422713119}
+  - component: {fileID: -6719636384063525007}
   m_Layer: 0
   m_Name: CounterStrike
   m_TagString: Untagged
@@ -51,12 +52,14 @@ MonoBehaviour:
   autoPossess: 0
   beginCrouched: 1
   canRetractLegs: 1
+  freezeUntilPossessed: 0
   useGravity: 1
   gravityMultiplier: 200
   customExternalRigidbody: {fileID: 0}
-  customCamera: {fileID: 11400000, guid: e28db491fa582f0409413fbec0456735, type: 2}
+  customCamera: {fileID: 0}
   locomotion: {fileID: 0}
   visuals: {fileID: 0}
+  face: {fileID: 0}
   speed: 10
   jumpForce: 10
   cameraSensi: 20
@@ -109,6 +112,18 @@ MonoBehaviour:
   rigidbody: {fileID: 0}
   targetDirection: {x: 0, y: 0, z: 0}
   isImmerged: 0
+--- !u!114 &-6719636384063525007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 599618243422713112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a15cd58957a760249a3a123767c2237a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &599618243490890814
 GameObject:
   m_ObjectHideFlags: 0

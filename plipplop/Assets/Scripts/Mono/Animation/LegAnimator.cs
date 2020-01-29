@@ -9,25 +9,24 @@ public class LegAnimator : MonoBehaviour
     public List<MeshFlipbook> _animations;
     public MeshFlipbook currentAnimation;
     public MeshFilter meshFilter;
+    public MeshRenderer meshRenderer;
+    public Action onAnimationEnded;
 
     Dictionary <string, MeshFlipbook> animations = new Dictionary<string, MeshFlipbook>();
     Coroutine animCoroutine;
     Transform headTransform;
+    Transform movementTarget = null;
+    Vector3 movementTargetOrigin;
 
     private void Awake()
     {
         headTransform = new GameObject().transform;
         headTransform.SetParent(transform);
         headTransform.localPosition = Vector3.zero;
-    }
 
-    private void Start()
-    {        
-        foreach (var _anim in _animations)
-        {
-            if(!animations.ContainsKey(_anim.animationName)) animations.Add(_anim.animationName, _anim);
+        foreach (var _anim in _animations) {
+            if (!animations.ContainsKey(_anim.animationName)) animations.Add(_anim.animationName, _anim);
         }
-        Play(_animations[0].animationName);
     }
 
     public string GetCurrentAnimation()
@@ -44,6 +43,7 @@ public class LegAnimator : MonoBehaviour
     
     public void Play(string animationName)
     {
+        movementTarget = null;
         MeshFlipbook _anim;
         try {
             _anim = animations[animationName];
@@ -78,16 +78,31 @@ public class LegAnimator : MonoBehaviour
             headTransform.localPosition = _frame.position;
             headTransform.localEulerAngles = _frame.euler;
             headTransform.localScale = _frame.scale;
-            
+            meshRenderer.sharedMaterial = _frame.mat;
+
+            if (_frame.gameEffect != string.Empty)
+            {
+                Pyromancer.PlayGameEffect(_frame.gameEffect, transform.position+_frame.gameEffectOffset);
+            }
+
+            if (movementTarget) transform.position = Vector3.Lerp(movementTargetOrigin, movementTarget.position, (float)_frameIndex / (currentAnimation.meshes.Count-1));
+
             yield return new WaitForSeconds(1/currentAnimation.fps);
             _frameIndex++;
             
-            if (_frameIndex >= currentAnimation.meshes.Count && !currentAnimation.loop)
-            {
+            if (_frameIndex >= currentAnimation.meshes.Count && !currentAnimation.loop) {
+                onAnimationEnded.Invoke();
                 yield break;
             }
             _frameIndex = _frameIndex % currentAnimation.meshes.Count;
         }
+    }
+
+    public void MoveTo(Transform tr)
+    {
+        movementTarget = tr;
+        movementTargetOrigin = transform.position;
+        transform.forward =  (tr.position - transform.position).normalized;
     }
 
     public void Attach(Transform head)

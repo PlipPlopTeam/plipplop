@@ -23,8 +23,9 @@ public class AperturePreset : ScriptableObject
     // Basic parameters
     [HideInInspector] [Range(2f, 200f)] public float fieldOfView = 75f;
     [HideInInspector] public float heightOffset = 1f;
+    [HideInInspector] public float maximumHeightAboveTarget = 10f;
     [HideInInspector] [Range(0f, 40f)] public float additionalAngle = 20f;
-    [HideInInspector] public Aperture.Range distance;
+    [HideInInspector] public Aperture.Range distance = new Aperture.Range() { min = 5f, max = 8f };
     [HideInInspector] public float cameraRotateAroundSensivity = 4f;
 	[HideInInspector] public float cameraRotateAboveSensivity = 2f;
 
@@ -58,4 +59,13 @@ public class AperturePreset : ScriptableObject
     [HideInInspector] public Vector3 targetConstraintLocalOffset;
     [HideInInspector] public float staticPositionLerp = 1f;
     [HideInInspector] public float staticRotationLerp = 1f;
+    [HideInInspector] public bool immediatePresetStackUpdate = false;
+
+    public static AperturePreset CreateFromCamera(Camera cam)
+    {
+        var preset = CreateInstance<AperturePreset>();
+        
+        preset.fieldOfView = cam.fieldOfView;
+        return preset;
+    }
 }

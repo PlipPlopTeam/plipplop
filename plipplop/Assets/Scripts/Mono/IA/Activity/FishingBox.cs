@@ -19,10 +19,9 @@ public class FishingBox : Activity
         user.agentMovement.GoThere(transform.position);
         user.agentMovement.onDestinationReached += () =>
         {
-            user.skeleton.Attach(Instantiate(fishingPole).transform, Clothes.ESlot.RIGHT_HAND, true, Vector3.zero, new Vector3(180f, 0f, 90f));
-
+			user.Carry(Instantiate(fishingPole).GetComponent<FishingPole>());
+            //user.skeleton.Attach(Instantiate(fishingPole).transform, Clothes.ESlot.RIGHT_HAND, true, Vector3.zero, new Vector3(180f, 0f, 90f));
             Vector3 pos = position + Geometry.GetRandomPointAround(radius);
-
             user.agentMovement.GoThere(pos);
             StartCoroutine(DelayedSetup(user));
         };
@@ -34,8 +33,12 @@ public class FishingBox : Activity
         {
             user.agentMovement.Stop();
             user.animator.SetBool("Fishing", true);
-            user.transform.LookAt(position);
-        };
+
+			FishingPole fp = user.carried.Self().GetComponent<FishingPole>();
+			fp.Use();
+			fp.Plunge(position + Geometry.GetRandomPointInRange(radius));
+			user.transform.LookAt(fp.plug);
+		};
     }
 
     public override void Exit(NonPlayableCharacter user)
@@ -50,9 +53,21 @@ public class FishingBox : Activity
 #if UNITY_EDITOR
     void OnDrawGizmosSelected()
     {
-        Gizmos.color = new Color32(255, 215, 0, 255);
-        UnityEditor.Handles.DrawLine(transform.position, position);
-        UnityEditor.Handles.DrawWireDisc(position, Vector3.up, radius);
+		GUIStyle s = new GUIStyle();
+		s.alignment = TextAnchor.MiddleCenter;
+		s.fontStyle = FontStyle.Bold;
+		s.normal.textColor = Color.white;
+		Vector3 d = (transform.position - position).normalized;
+		Vector3 p = position + (d * radius);
+
+		Handles.color = new Color32(255, 255, 255, 255);
+		UnityEditor.Handles.Label(position, "Fishing Area", s);
+		UnityEditor.Handles.DrawLine(transform.position, p);
+		UnityEditor.Handles.DrawWireDisc(position, Vector3.up, radius);
+
+		Handles.color = new Color32(0, 0, 255, 50);
+		UnityEditor.Handles.DrawSolidArc(position, Vector3.up, Vector3.right, 360f, radius);
+
     }
 #endif
 }

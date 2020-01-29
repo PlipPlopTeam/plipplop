@@ -25,6 +25,12 @@ public static class Geometry
         return new Vector3(Mathf.Cos(angle) * radius, 0, Mathf.Sin(angle) * radius);
     }
 
+	public static Vector3 GetRandomPointInRange(float range)
+	{
+		range *= 0.5f;
+		return new Vector3(Random.Range(-range, range), 0f, Random.Range(-range, range));
+	}
+
     public static Rect Scale(this Rect rect, float scale)
     {
         return new Rect(
@@ -41,7 +47,14 @@ public static class Geometry
         );
     }
 
-    public class PositionAndRotation
+	public static Vector3 CenterOfPoints(Vector3[] points)
+	{
+		Vector3 centroid = new Vector3();
+		for (int i = 0; i < points.Length; i++) centroid += points[i];
+		return centroid/points.Length;
+	}
+
+	public class PositionAndRotation
     {
         public Vector3 position = new Vector3();
         public Vector3 euler { get { return rotation.eulerAngles; } }

@@ -27,7 +27,7 @@ public class Brain
 
     public void PossessBaseController()
     {
-        Possess(baseController);
+        Possess(baseController, true);
     }
 
     public void TeleportBaseControllerAndPossess()
@@ -36,7 +36,7 @@ public class Brain
         dir = new Vector3(dir.x, 0f, dir.z);
         baseController.transform.position = controller.transform.position + dir * 2f;
         // TODO : Faire un raycast pour empecher les speedrunners de passer à travers le mur
-        Possess(baseController);
+        PossessBaseController();
     }
 
     public void Update()
@@ -53,7 +53,6 @@ public class Brain
     public void FixedUpdate()
     {
         if (IsParalyzed()) return;
-
         UpdateControllerPhysics();
     }
 
@@ -80,18 +79,37 @@ public class Brain
         if (mapping.IsPressed(EAction.POSSESS)) controller.OnTryPossess();
         if (mapping.IsHeld(EAction.JUMP)) controller.OnHoldJump();
         if (mapping.IsPressed(EAction.CAMERA_RESET)) Game.i.aperture.UserAlign();
+		if (mapping.IsPressed(EAction.ACTION)) controller.ToggleLegs();
 	}
 
-	public void Possess(Controller controller)
+	public void Possess(Controller controller, bool isImmediate=false)
     {
         if (controller != baseController) SoundPlayer.Play("sfx_morph");
+
+        GameObject clone = null;
         if (this.controller != null) {
+            if (!isImmediate) clone = this.controller.GetEjectionClone();
             Eject();
         }
-        controller.OnPossess();
-        this.controller = controller;
-        Game.i.aperture.SetTarget(controller.transform);
-        Game.i.aperture.Load(controller.customCamera ?? Game.i.library.defaultAperture);
+
+		Game.i.aperture.SetTarget(controller.transform);
+
+		System.Action effectivePossess = delegate {
+            this.controller = controller;
+            Game.i.aperture.Load(controller.customCamera ?? Game.i.library.defaultAperture);
+            controller.OnPossess();
+            Pyromancer.PlayGameEffect("gfx_morph", this.controller.transform.position);
+        };
+
+        if (clone!= null && !isImmediate) {
+            var animator = clone.GetComponent<LegAnimator>();
+            animator.onAnimationEnded += effectivePossess;
+            animator.Play("Morph");
+            animator.MoveTo(controller.transform);
+        }
+        else {
+            effectivePossess.Invoke();
+        }
     }
 
     public void Eject()
@@ -125,4 +143,11 @@ public class Brain
     {
         isParalyzed--;
     }
+
+	IEnumerator ParalyzeFor(float time)
+	{
+		Paralyze();
+		yield return new WaitForSeconds(time);
+		Deparalyze();
+	}
 }

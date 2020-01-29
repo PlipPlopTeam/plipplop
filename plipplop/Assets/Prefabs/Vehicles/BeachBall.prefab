@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 2007550832}
   - component: {fileID: -1206478011707942472}
   - component: {fileID: 7286649357687551854}
+  - component: {fileID: 2887985434650187074}
   m_Layer: 0
   m_Name: BeachBall
   m_TagString: Untagged
@@ -50,7 +51,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   autoPossess: 0
-  beginCrouched: 0
+  beginCrouched: 1
   canRetractLegs: 1
   freezeUntilPossessed: 0
   useGravity: 1
@@ -80,7 +81,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.465
+  m_Radius: 0.2325
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &2932650472225342063
 Rigidbody:
@@ -145,17 +146,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 938d530180d1dd44ba9c6c800dbe4e59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  full: 0
   working: 1
-  boredomMultiplier: 1
-  tirednessMultiplier: 0
-  hungerMultiplier: 0
+  userMax: 4
+  spectatorMax: 0
+  spectatorRange: {x: 0, y: 0}
+  awarnessMultiplier: 0.8
+  use:
+    boredom: 1
+    hunger: 0
+    tiredness: 0
+  spectate:
+    boredom: 1
+    hunger: 0
+    tiredness: 0
   users: []
-  minDistanceBetween: 7
-  maxDistanceBetween: 12
+  spectators: []
+  minDistanceBetween: 3
+  maxDistanceBetween: 4
   timeBetweenThrows: 0.25
-  verticalForce: 15000
+  verticalForce: 7500
   horizontalForce: 5000
+--- !u!114 &2887985434650187074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2932650472225342062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a15cd58957a760249a3a123767c2237a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6564690223429448292
 GameObject:
   m_ObjectHideFlags: 0
@@ -258,6 +280,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 9aed549a97ecebe439f86c6d554d109a,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 9aed549a97ecebe439f86c6d554d109a,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: 9aed549a97ecebe439f86c6d554d109a,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3312780394835150675, guid: 9aed549a97ecebe439f86c6d554d109a,
         type: 3}

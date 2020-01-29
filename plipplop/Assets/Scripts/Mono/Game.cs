@@ -6,6 +6,8 @@ public class Game : MonoBehaviour
 {
     [Range(0, -100)] public int killZ = -20;
     public Library library;
+    public Pyromancer vfx;
+    public Spielberg cinematics;
     public Brain player;
     public AIZone aiZone;
     public Mapping mapping;
@@ -32,6 +34,8 @@ public class Game : MonoBehaviour
         s = switches;
 
         aperture = new Aperture();
+        vfx = new Pyromancer();
+        cinematics = new Spielberg();
         mapping = Instantiate<Mapping>(mapping);
         cheatCodeListener = new CheatCodeListener(new Cheats());
         chunkLoader = new ChunkLoader();
@@ -54,7 +58,7 @@ public class Game : MonoBehaviour
         player = new Brain(mapping);
         Controller c = Instantiate(library.baseControllerPrefab.GetComponent<Controller>(), spawn.position, Quaternion.identity);
         c.transform.forward = spawn.transform.forward;
-        player.Possess(c);
+        player.Possess(c, true);
         player.SetBaseController(c);
     }
 

@@ -12,12 +12,13 @@ public abstract class Controller : MonoBehaviour
     [HideInInspector] public bool freezeUntilPossessed = false;
     [HideInInspector] public bool useGravity = true;
     [HideInInspector] public float gravityMultiplier = 100f;
-
     [HideInInspector] public Rigidbody customExternalRigidbody;
     [HideInInspector] public AperturePreset customCamera = null;
     [HideInInspector] public Locomotion locomotion;
 	[HideInInspector] public Transform visuals;
 	[HideInInspector] public GameObject face;
+
+	public Vector3 visualsOffset;
 
     float lastTimeGrounded = 0f;
     new internal Rigidbody rigidbody;
@@ -26,8 +27,21 @@ public abstract class Controller : MonoBehaviour
     internal ControllerSensor controllerSensor;
     internal bool isImmerged;
     RigidbodyConstraints previousConstraints;
-    
-    public virtual void OnEject()
+
+	bool isBeingThrown = false;
+	bool isFrozen = false;
+
+	public virtual void Throw(Vector3 direction, float force)
+	{
+		isBeingThrown = true;
+		rigidbody.AddForce(direction * force * Time.deltaTime);
+		Freeze();
+	}
+
+	public void Freeze(){isFrozen = true;}
+	public void UnFreeze(){isFrozen = false;}
+
+	public virtual void OnEject()
     {
         if (controllerSensor) Destroy(controllerSensor.gameObject);
         controllerSensor = null;
@@ -40,13 +54,19 @@ public abstract class Controller : MonoBehaviour
         visuals.transform.localPosition = previousVisualLocalPosition;
     }
     
+    public GameObject GetEjectionClone()
+    {
+        return locomotion.GetEjectionClone();
+    }
+
     public virtual void OnPossess()
     {
-        if (freezeUntilPossessed && rigidbody.constraints == RigidbodyConstraints.FreezeAll) {
+		previousVisualLocalPosition = visuals.transform.localPosition;
+
+		if (freezeUntilPossessed && rigidbody.constraints == RigidbodyConstraints.FreezeAll) {
             rigidbody.constraints = previousConstraints;
         }
-
-        controllerSensor = Instantiate(Game.i.library.controllerSensor, gameObject.transform).GetComponent<ControllerSensor>();
+		controllerSensor = Instantiate(Game.i.library.controllerSensor, gameObject.transform).GetComponent<ControllerSensor>();
         controllerSensor.transform.localPosition = new Vector3(0f, 0f, controllerSensor.sensorForwardPosition);
 
 		if (beginCrouched) RetractLegs();
@@ -55,17 +75,13 @@ public abstract class Controller : MonoBehaviour
 		ToggleFace(true);
 		foreach (Transform t in visuals.GetComponentsInChildren<Transform>()) t.gameObject.layer = 0;
 
+	}
 
-		Activity activity = gameObject.GetComponent<Activity>();
-        if(activity != null) activity.Break();
-
-        previousVisualLocalPosition = visuals.transform.localPosition;
-    }
-
-    internal virtual void SpecificJump() {}
+	internal virtual void SpecificJump() {}
     internal virtual void OnJump()
     {
-        if (AreLegsRetracted())
+		//if (!canRetractLegs) return;
+		if (AreLegsRetracted())
         {
             SpecificJump();
             SoundPlayer.Play("sfx_jump");
@@ -82,13 +98,25 @@ public abstract class Controller : MonoBehaviour
         if (!canRetractLegs) return;
         locomotion.RetractLegs();
         OnLegsRetracted();
-    }
 
-    internal void ExtendLegs()
+		// Reset visual local position when legs are retracted
+		visuals.transform.localPosition = previousVisualLocalPosition;
+	}
+
+	internal void ExtendLegs()
     {
-        locomotion.ExtendLegs();
+		Activity activity = gameObject.GetComponent<Activity>();
+		if (activity != null) activity.Break();
+
+		locomotion.ExtendLegs();
         OnLegsExtended();
     }
+
+	public void ToggleLegs()
+	{
+		if (AreLegsRetracted()) ExtendLegs();
+		else RetractLegs();
+	}
 
     internal bool AreLegsRetracted() { return locomotion.AreLegsRetracted(); }
     internal virtual bool IsGrounded(float rangeMultiplier = 1f) { return locomotion.IsGrounded(rangeMultiplier); }
@@ -101,13 +129,15 @@ public abstract class Controller : MonoBehaviour
 
     virtual internal void BaseMove(Vector3 direction)
     {
-        if (AreLegsRetracted()) SpecificMove(direction);
+		if (isFrozen) return;
+		if (AreLegsRetracted()) SpecificMove(direction);
         else locomotion.Move(direction);
     }
 
     public void Move(float fb, float rl)
     {
-        BaseMove(Vector3.ClampMagnitude(new Vector3(rl, 0f, fb), 1f));
+		if (isFrozen) return;
+		BaseMove(Vector3.ClampMagnitude(new Vector3(rl, 0f, fb), 1f));
     }
 
     public void MoveCamera(float h, float v)
@@ -127,6 +157,14 @@ public abstract class Controller : MonoBehaviour
             Game.i.player.TeleportBaseControllerAndPossess();
         }
     }
+
+	public void Kick()
+	{
+		if (IsPossessed())
+		{
+			Game.i.player.TeleportBaseControllerAndPossess();
+		}
+	}
 
     public void SetOverwater()
     {
@@ -207,14 +245,27 @@ public abstract class Controller : MonoBehaviour
         if (IsPossessed() && !AreLegsRetracted()) {
             AlignPropOnHeadDummy();
         }
+
+		if(isBeingThrown && IsGrounded())
+		{
+			UnFreeze();
+			isBeingThrown = false;
+		}
 	}
 
     virtual internal void AlignPropOnHeadDummy()
     {
         var prs = locomotion.GetHeadDummy();
-        visuals.transform.SetPositionAndRotation(prs.position, prs.rotation);
+        visuals.transform.SetPositionAndRotation(prs.position + visualsOffset, prs.rotation);
         visuals.transform.localScale = prs.scale;
     }
+
+	virtual internal void ResetVisuals()
+	{
+		visuals.transform.localPosition = Vector3.zero;
+		visuals.transform.localScale = Vector3.one;
+		visuals.transform.localRotation = Quaternion.identity;
+	}
 
     virtual internal void FixedUpdate()
     {
@@ -225,7 +276,7 @@ public abstract class Controller : MonoBehaviour
 
     void UpdateLastTimeGrounded()
     {
-        if (IsGrounded()) lastTimeGrounded = Time.time;
+		if (IsGrounded()) lastTimeGrounded = Time.time;
     }
 
     internal void ApplyGravity(float factor=1f)

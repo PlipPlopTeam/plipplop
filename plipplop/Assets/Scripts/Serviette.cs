@@ -17,7 +17,7 @@ public class Serviette : Activity
 
 	public override void Exit(NonPlayableCharacter user)
 	{
-		user.animator.SetBool("Tanning", false);
+		if(user.animator != null) user.animator.SetBool("Tanning", false);
 		full = false;
 		base.Exit(user);
 	}

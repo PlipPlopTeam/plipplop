@@ -4,34 +4,30 @@ public class Artwork : Activity
 {
 	[Header("ARTWORK")]
 	public Vector3 focusOffset;
-	public float radius = 2f;
 
-	public override void Enter(NonPlayableCharacter user)
+	public void Start()
 	{
-		base.Enter(user);
-
-		Vector3 pos = Geometry.GetRandomPointAround(radius) + transform.position;
-		user.agentMovement.Stop();
-		user.agentMovement.GoThere(pos);
-		user.agentMovement.ClearEvents();
-		user.agentMovement.onDestinationReached += () =>
-		{
-			user.transform.LookAt(transform.position);
-			user.look.FocusOn(transform.position + focusOffset);
-		};
+		full = true;
 	}
 
-	public override void Exit(NonPlayableCharacter user)
+	public override void Look(NonPlayableCharacter npc, Vector3 position)
 	{
-		user.look.LooseFocus();
-		base.Exit(user);
+		base.Look(npc, position);
+		npc.look.FocusOn(transform.position + focusOffset);
 	}
+
+	public override void StopSpectate(NonPlayableCharacter npc)
+	{
+		npc.look.LooseFocus();
+		base.StopSpectate(npc);
+	}
+
 
 #if UNITY_EDITOR
-	void OnDrawGizmosSelected()
+	public override void OnDrawGizmosSelected()
 	{
+		base.OnDrawGizmosSelected();
 		Gizmos.color = new Color32(255, 215, 0, 255);
-		UnityEditor.Handles.DrawWireDisc(transform.position, Vector3.up, radius);
 		UnityEditor.Handles.DrawWireCube(transform.position + focusOffset, Vector3.one * 0.25f);
 	}
 #endif

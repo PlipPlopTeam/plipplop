@@ -60,7 +60,7 @@ namespace Behavior.Editor
 
             if (b.state != null)
             {
-				float standard = 0;
+				float standard = 215;
 
 				if (!b.collapse)
                 {

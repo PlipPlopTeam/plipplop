@@ -8,7 +8,7 @@ namespace Behavior.NPC
 		public override void Execute(NonPlayableCharacter target)
         {
             NonPlayableCharacter npc = target;
-            if (npc != null && npc.valuable != null)
+            if (npc != null)
 			{
 				switch (subject)
 				{

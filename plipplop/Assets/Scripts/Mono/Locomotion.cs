@@ -8,11 +8,12 @@ public class Locomotion : Walker
     public LocomotionPreset preset;
     public float legsHeight = 1f;
     public float groundCheckRange = 1f;
-    public Vector3 legsOffset = Vector3.up* 0.65f;
+	public Vector3 legsOffset = Vector3.up * 0.65f;
 
-    [HideInInspector] new public Rigidbody rigidbody;
+	[HideInInspector] new public Rigidbody rigidbody;
     [HideInInspector] public Vector3 targetDirection;
     [HideInInspector] public bool isImmerged = false;
+    public event System.Action onLegAnimationEnd;
 
     LocomotionAnimation locomotionAnimation;
     Controller parentController;
@@ -45,6 +46,8 @@ public class Locomotion : Walker
         legsCollider.material = new PhysicMaterial() { dynamicFriction = preset.groundFriction, staticFriction = preset.groundFriction, frictionCombine = preset.frictionCombine };
         locomotionAnimation = new LocomotionAnimation(rigidbody, legsCollider, parentController.visuals);
         isInitialized = true;
+
+        onLegAnimationEnd += locomotionAnimation.onLegAnimationEnd;
     }
     
     private void Update()
@@ -65,13 +68,18 @@ public class Locomotion : Walker
         return locomotionAnimation.AreLegsRetracted();
     }
 
+    public GameObject GetEjectionClone()
+    {
+        return locomotionAnimation.GetEjectionClone();
+    }
+
     public void RetractLegs()
     {
         locomotionAnimation.RetractLegs();
-    }
+	}
     public void ExtendLegs()
     {
-        locomotionAnimation.ExtendLegs();
+		locomotionAnimation.ExtendLegs();
 
         var v = GetBelowSurface();
 
@@ -122,12 +130,12 @@ public class Locomotion : Walker
         {
             // Making a virtual stick to avoid the player to stop in the air when stick reaches 0 magnitude
             Vector3 virtualStick = Vector3.Lerp(
-                Vector3.Scale(Vector3.one - Vector3.up, Game.i.aperture.cam.transform.InverseTransformDirection(rigidbody.velocity).normalized),
+                Vector3.Scale(Vector3.one - Vector3.up, Game.i.aperture.GetCameraTransform().InverseTransformDirection(rigidbody.velocity).normalized),
                 direction,
                 IsGrounded() ? 1f : direction.magnitude
             ).normalized;
 
-            float frictionMultiplier =(IsGrounded() || isImmerged) ? 1f : 1f-preset.airFriction;
+            float frictionMultiplier = (IsGrounded() || isImmerged) ? 1f : 1f-preset.airFriction;
 
             Vector3 velocity =
                 currentSpeedToDistribute * frictionMultiplier * (
@@ -175,8 +183,10 @@ public class Locomotion : Walker
         {
             if (!IsMe(h.transform) && !h.collider.isTrigger) {
                 if (h.normal.y >= 1 - (preset.maxWalkableSteepness / 100f)) {
-                    if (rigidbody != null && rigidbody.velocity.y < 0f) 
+                    if (hasJumped && rigidbody != null && rigidbody.velocity.y < 0f) {
                         hasJumped = false; // Put HasJumped to false only if not grounded and falling
+                        rigidbody.velocity -= rigidbody.velocity.y * Vector3.up;
+                    }
                     return true;
                 }
             }
@@ -220,6 +230,7 @@ public class Locomotion : Walker
     {
         return locomotionAnimation.GetHeadDummy();
     }
+
 
 #if UNITY_EDITOR
     // Draw a gizmo if i'm being possessed

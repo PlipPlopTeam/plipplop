@@ -13,6 +13,11 @@ public class MeshFlipbook : ScriptableObject
         public Vector3 position;
         public Vector3 euler;
         public Vector3 scale;
+
+        public Material mat;
+
+        public string gameEffect;
+        public Vector3 gameEffectOffset;
     }
     
     public string animationName;

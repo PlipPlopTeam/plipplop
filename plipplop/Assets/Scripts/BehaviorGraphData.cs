@@ -34,6 +34,11 @@ namespace Behavior.Editor
 		private NonPlayableCharacter target;
 		private int currentNode = -1;
 
+		public bool IsCurrent(int id)
+		{
+			return currentNode == id;
+		}
+
 		public AIState GetState()
 		{
 			if (currentNode < 0) return null;
@@ -53,6 +58,10 @@ namespace Behavior.Editor
 		public void Load(NonPlayableCharacter t)
 		{
 			target = t;
+
+			// In case of unfound initialnode
+			if (GetStateNode(initialNode) == null) initialNode = states[0].id;
+
 			currentNode = initialNode;
 			GetState().OnEnter(target);
 		}

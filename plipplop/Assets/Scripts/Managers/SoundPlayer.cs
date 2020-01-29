@@ -1,10 +1,15 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class SoundPlayer
 {
     static AudioSource source;
+
+    static readonly float fadeSpeed = 1f;
+    static List<AudioSource> managedSources = new List<AudioSource>();
 
     public class MissingSoundException : System.Exception { public MissingSoundException(string msg) { Debug.LogError("COULD NOT FIND SOUND NAMED [" + msg + "]\nDid you type the name correctly?"); } };
     
@@ -15,7 +20,7 @@ public class SoundPlayer
         source.PlayOneShot(clip, volume);
     }
 
-    static void LoopClip(AudioClip clip, float volume = 1f, float pitch = 1f, AudioSource src=null)
+    static AudioSource LoopClip(AudioClip clip, float volume = 1f, float pitch = 1f, AudioSource src=null)
     {
         if (src == null) {
             var g = new GameObject();
@@ -27,27 +32,53 @@ public class SoundPlayer
         src.volume = volume;
         src.clip = clip;
         src.Play();
+
+        return src;
     }
 
-    static void PlaySound(Sound snd, float volume=1f, float pitch = 1f, AudioSource src=null)
+    static AudioSource PlaySound(Sound snd, float volume=1f, float pitch = 1f, AudioSource src=null, bool shouldFadeIn = false)
     {
-        if (source == null) { source = Camera.main.gameObject.AddComponent<AudioSource>(); }
-        if (src == null) { src = source; }
+        try
+        {
+            if (source == null)
+            {
+                source = Camera.main.gameObject.AddComponent<AudioSource>();
+            }
 
-        if (snd.loop) {
-            MakeUnique(snd);
-            LoopClip(snd.clip, volume, pitch);
+            if (src == null)
+            {
+                src = source;
+            }
+
+            if (snd.loop)
+            {
+                MakeUnique(snd);
+                src = LoopClip(snd.clip, shouldFadeIn ? 0f : volume, pitch);
+                if (shouldFadeIn) {
+                    UnityMainThreadDispatcher.Instance().StartCoroutine(FadeVolumeOverTime(src, volume));
+                }
+                if (src != source) managedSources.Add(src);
+                return src;
+            }
+            else
+            {
+                PlayClipOnce(snd.clip, src, volume, pitch);
+                if (src != source) managedSources.Add(src);
+                return src;
+            }
         }
-        else {
-            PlayClipOnce(snd.clip, src, volume, pitch);
+        catch (NullReferenceException)
+        {
+            Debug.LogWarning("Could not play the sound "+snd.name+" because either the camera or source does NOT exist yet.");
+            return null;
         }
     }
 
     // Public Specifics
-    public static void Play(string soundName, float volume=1f, float pitch=1f)
+    public static void Play(string soundName, float volume=1f, float pitch=1f, bool shouldFadeIn=false)
     {
         var snd = GetSoundFromName(soundName);
-        PlaySound(snd, volume, pitch);
+        PlaySound(snd, volume, pitch, null, shouldFadeIn);
     }
 
     public static void PlayWithRandomPitch(string soundName, float volume = 1f)
@@ -97,18 +128,28 @@ public class SoundPlayer
         foreach (var src in GameObject.FindObjectsOfType<AudioSource>()) {
             src.Stop();
             if (src == source) continue;
+            managedSources.Remove(src);
             GameObject.Destroy(src.gameObject);
         }
     }
 
-    public static void StopSound(string soundName)
+    public static void StopSound(string soundName, bool shouldFade=false)
     {
         var snd = GetSoundFromName(soundName);
         foreach (var src in GameObject.FindObjectsOfType<AudioSource>()) {
             if (src.clip != snd.clip) continue;
-            src.Stop();
-            if (src == source) continue;
-            GameObject.Destroy(src.gameObject);
+            Action cleanSteps = delegate {
+                src.Stop();
+                if (src == source) return;
+                managedSources.Remove(src);
+                GameObject.Destroy(src.gameObject);
+            };
+            if (shouldFade) {
+                UnityMainThreadDispatcher.Instance().StartCoroutine(FadeVolumeOverTime(src, 0f, cleanSteps));
+            }
+            else {
+                cleanSteps.Invoke();
+            }
         }
     }
 
@@ -135,5 +176,18 @@ public class SoundPlayer
             if(s.name == name) return s;
         }
         throw new MissingSoundException(name);
+    }
+
+    public static IEnumerator FadeVolumeOverTime(AudioSource src, float targetVolume, Action callback = null)
+    {
+        var originalVolume = src.volume;
+        var state = 0f;
+        while (state < 1f) {
+            state += Time.deltaTime * fadeSpeed;
+            src.volume = Mathf.Lerp(originalVolume, targetVolume, state);
+            yield return new WaitForEndOfFrame();
+        }
+        if (callback != null)
+            callback.Invoke();
     }
 }

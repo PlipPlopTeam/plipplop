@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class Chair : MonoBehaviour
 {
@@ -8,9 +10,25 @@ public class Chair : MonoBehaviour
         public Vector3 position;
         public Vector2 orientation;
         [HideInInspector] public NonPlayableCharacter user = null;
+		[HideInInspector] public bool isSitted;
     }
 
+	[Header("Settings")]
+	[Range(0f, 90f)] public float minStraightAngle = 45f;
+	public Transform visual;
     public Chair.Spot[] spots;
+
+	List<NonPlayableCharacter> users
+	{
+		get
+		{
+			List<NonPlayableCharacter> result = new List<NonPlayableCharacter>();
+			foreach (Spot s in spots) if (s.user != null) result.Add(s.user);
+			return result;
+		}
+	}
+
+	bool isStraight;
 
     private int GetFreeSpot()
     {
@@ -21,28 +39,77 @@ public class Chair : MonoBehaviour
         return -1;
     }
 
+	public void Sit(NonPlayableCharacter sitter, Spot spot)
+	{
+		Align(sitter, spot);
+		spot.isSitted = true;
+
+		if (visual != null) sitter.transform.SetParent(visual);
+	}
+
     public void Enter(NonPlayableCharacter user)
     {
         int s = GetFreeSpot();
         if(s != -1)
         {
             spots[s].user = user;
-            user.agentMovement.GoThere(transform.position + spots[s].position);
-            user.agentMovement.onDestinationReached += () =>
-            {
-                user.Sit(this, spots[s].position);
-                user.transform.forward = transform.forward;
-                user.transform.Rotate(user.transform.up * Random.Range(spots[s].orientation.x, spots[s].orientation.y));
-            };
+			user.GoSitThere(this, spots[s]);
         }
-
     }
 
-    public void Exit(NonPlayableCharacter user)
+	bool IsStraight()
+	{
+		return Vector3.Angle(transform.up, Vector3.up) <= 45f;
+	}
+
+	public void MakeStraight()
+	{
+		transform.up = Vector3.up;
+	}
+
+	public void Align(NonPlayableCharacter sitter, Spot spot)
+	{
+		sitter.transform.localPosition = Vector3.zero;
+		sitter.transform.localPosition = new Vector3(spot.position.x, spot.position.y - spot.user.skeleton.GetButtHeight() + 0.1f, spot.position.z);
+		sitter.transform.forward = transform.forward;
+		sitter.transform.Rotate(transform.up * Random.Range(spot.orientation.x, spot.orientation.y));
+	}
+
+	public void Update()
+	{
+		if(IsStraight())
+		{
+			foreach(Spot s in spots)
+			{
+				if (s.user != null && s.isSitted) 
+					s.user.transform.localPosition = new Vector3(s.position.x, s.position.y - s.user.skeleton.GetButtHeight() + 0.1f, s.position.z);
+			}
+			if (!isStraight) isStraight = true;
+		}
+		else if (isStraight)
+		{
+			Dismount();
+			isStraight = false;
+		}
+	}
+
+	public void Dismount()
+	{
+		foreach (Spot s in spots)
+		{
+			if (s.user != null) s.user.GetUp();
+		}
+	}
+
+	public void Exit(NonPlayableCharacter user)
     {
         foreach(Spot s in spots)
         {
-            if(s.user == user) s.user = null;
+			if (s.user == user)
+			{
+				s.user = null;
+				s.isSitted = false;
+			}
         }
     }
 

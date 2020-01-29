@@ -9,7 +9,7 @@ namespace Behavior.NPC
 		public override void Execute(NonPlayableCharacter target)
         {
             NonPlayableCharacter npc = target;
-            if (npc != null && npc.valuable != null)
+            if(npc != null)
 			{
 				switch (subject)
 				{
@@ -30,6 +30,9 @@ namespace Behavior.NPC
 						break;
 					case NonPlayableCharacter.ESubject.FEEDER:
 						if (npc.feeder != null) npc.agentMovement.Chase(npc.feeder.transform);
+						break;
+					case NonPlayableCharacter.ESubject.CHARACTER:
+						if (npc.character != null) npc.agentMovement.Chase(npc.character.transform);
 						break;
 				}
 			}

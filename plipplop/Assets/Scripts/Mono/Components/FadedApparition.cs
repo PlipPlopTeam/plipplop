@@ -87,7 +87,9 @@ public class FadedApparition : MonoBehaviour
     void UpdateColor()
     {
         foreach (var renderer in renderers) {
-            renderer.material.SetFloat(Shader.PropertyToID("_FadeAmount"), 1f - alpha);
+            foreach (var mat in renderer.materials) {
+                mat.SetFloat(Shader.PropertyToID("_FadeAmount"), 1f - alpha);
+            }
         }
     }
 }

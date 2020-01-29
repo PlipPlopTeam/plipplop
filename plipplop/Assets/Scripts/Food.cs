@@ -30,9 +30,10 @@ public class Food : Item
         if(visual == null) Visual(foodData.visual);
     }
 
-    public void Consume()
+    public void Consume(System.Action end)
     {
-        if(!consumed)
+		onConsumeEnd += end;
+		if (!consumed)
         {
 			m_BeingConsumed = true;
             timer = data.timeToConsume;

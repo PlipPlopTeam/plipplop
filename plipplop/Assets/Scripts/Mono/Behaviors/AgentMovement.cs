@@ -18,24 +18,24 @@ public class AgentMovement : Walker
 		public float minimumCarrySpeed = 1f;  
     }
 
-    public System.Action onDestinationReached;
-    public System.Action onPathCompleted;
-    public System.Action onTargetOffPath;
     public AIPath path;
-    public AgentMovement.Settings settings;
+	[Range(0f, 1f)] public float slowMultiplier = 1f;
+	public AgentMovement.Settings settings;
 
-    [HideInInspector] public bool going = false;
+	[HideInInspector] public bool going = false;
     [HideInInspector] public bool reached = false;
     [HideInInspector] public Animator animator;
-
-    bool followingPath;
-    Transform chaseTarget;
-    NavMeshAgent agent;
+	public System.Action onDestinationReached;
+	public System.Action onPathCompleted;
+	public System.Action onTargetOffPath;
+	public bool followingPath;
+    public Transform chaseTarget;
     int currentIndexOnPath;
+	NavMeshAgent agent;
 
 	public override void ApplyAdherence(float adherence)
 	{
-		SetSpeed(settings.speed * (1f - adherence));
+		SetSpeed(settings.speed * (1f - adherence * slowMultiplier));
 	}
 
 	public void ClearEvents()
@@ -87,7 +87,9 @@ public class AgentMovement : Walker
     
     public void Chase(Transform target)
     {
-        chaseTarget = target;
+		ClearEvents();
+		StopFollowingPath();
+		chaseTarget = target;
     }
 
     public void Clear()
@@ -105,7 +107,22 @@ public class AgentMovement : Walker
         if(path.status == NavMeshPathStatus.PathPartial
         || path.status == NavMeshPathStatus.PathInvalid)
         {
-            return false;
+			/*
+			RaycastHit[] hits = Physics.RaycastAll(transform.position, Vector3.down, 100f);
+			foreach (RaycastHit h in hits)
+			{
+				if (h.collider.gameObject.GetComponent<Floor>() != null)
+				{
+					Debug.Log(h.point);
+					agent.SetDestination(h.point);
+					going = true;
+					reached = false;
+					return true;
+				}
+			}
+			*/
+
+			return false;
         }
         else 
         {
@@ -167,7 +184,7 @@ public class AgentMovement : Walker
         || index < 0
         || index >= path.points.Count) return false;
 
-        if(GoThere(path.points[index]))
+        if(GoThere(path.GetPosition(index)))
         {
             currentIndexOnPath = index;
             return true;

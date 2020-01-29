@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Behavior.Editor;
 using UnityEngine.AI;
@@ -10,7 +11,7 @@ using UnityEngine.AI;
 public class NonPlayableCharacter : MonoBehaviour
 {
 	public enum EStat { BOREDOM, TIREDNESS, HUNGER };
-	public enum ESubject { PLAYER, VALUABLE, ACTIVITY, CHAIR, FOOD, FEEDER };
+	public enum ESubject { PLAYER, VALUABLE, ACTIVITY, CHAIR, FOOD, FEEDER, CHARACTER };
 
 	[HideInInspector] public Sight sight;
 	[HideInInspector] public FocusLook look;
@@ -22,14 +23,17 @@ public class NonPlayableCharacter : MonoBehaviour
 	[HideInInspector] public Range range;
 	[HideInInspector] public Face face;
 	[HideInInspector] public Controller player;
-	[HideInInspector] public Valuable valuable;
-    [HideInInspector] public Activity activity;
-	[HideInInspector] public Chair chair;
-    [HideInInspector] public Food food;
-    [HideInInspector] public Feeder feeder;
-	[HideInInspector] public Activity previousActivity;
 	[HideInInspector] public Collider collider;
 	[HideInInspector] public ICarryable carried;
+	[Header("Read-Only")]
+	public NonPlayableCharacter character;
+	public Valuable valuable;
+	public Activity activity;
+	public Activity previousActivity;
+	public Chair chair;
+	public Food food;
+    public Feeder feeder;
+
 	public Dictionary<Clothes.ESlot, Clothes> clothes = new Dictionary<Clothes.ESlot, Clothes>();
 	public Dictionary<EStat, float> stats = new Dictionary<EStat, float>();
 
@@ -37,12 +41,32 @@ public class NonPlayableCharacter : MonoBehaviour
 	public NonPlayableCharacterSettings settings;
 	public BehaviorGraphData graph;
 
-	float assHeightWhenSitted = 0.51f;
+	float assHeightWhenSitted = 0.38f;
     ICarryable carryableToCollect;
 	private float waitTimer;
 	private bool endWait;
 	[HideInInspector] public bool hasWaited;
 	public System.Action onWaitEnded;
+
+	private Activity show;
+	public void ShowOff(float time, Vector2 range, int slot)
+	{
+		show = gameObject.AddComponent<Activity>();
+		show.spectatorMax = slot;
+		show.full = true;
+		show.working = true;
+		show.spectatorRange = range;
+		StartCoroutine(WaitAndStopExposing(time));
+	}
+	IEnumerator WaitAndStopExposing(float time)
+	{
+		yield return new WaitForSeconds(time);
+		if(show != null)
+		{
+			show.Dismantle();
+			show = null;
+		}
+	}
 
 	void Awake()
 	{
@@ -89,7 +113,7 @@ public class NonPlayableCharacter : MonoBehaviour
 		graph.Load(this);
 	}
 
-	public void Update()
+	public virtual void Update()
 	{
 		UpdateCollecting();
 		UpdateWaiting();
@@ -184,29 +208,37 @@ public class NonPlayableCharacter : MonoBehaviour
 	public void Consume(Food f)
 	{
 		food = f;
-		food.Consume();
-		food.onConsumeEnd += () =>
-		{
-			stats[NonPlayableCharacter.EStat.HUNGER] -= food.data.calory;
-			Drop();
-			food = null;
-		};
+		agentMovement.Stop();
+		food.Consume(delegate{
+			if(this.food != null)
+			{
+				this.AddToStat(NonPlayableCharacter.EStat.HUNGER, -this.food.data.calory);
+				this.Drop();
+				this.food = null;
+			}
+		});
 	}
 
-	public void Carry(ICarryable carryable)
+	public virtual void Carry(ICarryable carryable)
 	{
-		if(carried != null) Drop();
+		if (carried != null) Drop();
 		carried = carryable;
 		carried.Carry();
-		if(carried.Mass() <= settings.strength)
+		if (carried.Mass() <= settings.strength)
 		{
-			//animator.SetBool("Holding", true);
-			skeleton.Attach(carried.Self(), Clothes.ESlot.RIGHT_HAND, true);
+			if(animator != null) animator.SetBool("Holding", true);
+			if(skeleton != null) skeleton.Attach(carried.Self(), Clothes.ESlot.RIGHT_HAND, true);
 		}
-		else 
+		else
 		{
 			animator.SetBool("Carrying", true);
 		}
+			
+	}
+
+	public virtual void Kick(Controller controller)
+	{
+		if (controller.IsPossessed()) Game.i.player.TeleportBaseControllerAndPossess();
 	}
 
 	public void Drop()
@@ -217,8 +249,13 @@ public class NonPlayableCharacter : MonoBehaviour
 		if(carried.Mass() <= settings.strength)
 			skeleton.Drop(Clothes.ESlot.RIGHT_HAND);
 
-		//animator.SetBool("Holding", false);
-		animator.SetBool("Carrying", false);
+		if(animator != null)
+		{
+			animator.SetBool("Holding", false);
+			animator.SetBool("Carrying", false);
+		}
+
+
 
 		carried = null;
 	}
@@ -241,27 +278,30 @@ public class NonPlayableCharacter : MonoBehaviour
 		agentMovement.GoThere(where);
 		agentMovement.onDestinationReached += () => {Sit(where);};
 	}
-	public void GoSitThere(Chair c, Vector3 offset)
+	public void GoSitThere(Chair chair, Chair.Spot spot)
 	{
-
+		agentMovement.GoThere(chair.transform.position + spot.position);
+		agentMovement.onDestinationReached += () =>
+		{
+			Sit(chair);
+			chair.Sit(this, spot);
+		};
 	}
 	public void Sit(Vector3 pos)
 	{
 		agentMovement.Stop();
 		agent.enabled = false;
-
 		transform.position = pos;
 		animator.SetBool("Sitting", true);
 	}
-	public void Sit(Chair c, Vector3 offset)
+	public void Sit(Chair c)
 	{
 		collider.enabled = false;
 		chair = c;
 		agentMovement.Stop();
 		agent.enabled = false;
 		transform.SetParent(c.transform);
-		transform.localPosition = new Vector3(offset.x, offset.y - assHeightWhenSitted, offset.z);
-
+		transform.localPosition = Vector3.zero;
 		animator.SetBool("Chairing", true);
 	}
 	public void GetUp()
@@ -279,18 +319,24 @@ public class NonPlayableCharacter : MonoBehaviour
 	}
 
 #if UNITY_EDITOR
-	void OnDrawGizmosSelected()
+	void OnDrawGizmos()
     {
         if(EditorApplication.isPlaying)
 		{
+			GUIStyle s = new GUIStyle();
+			s.alignment = TextAnchor.MiddleCenter;
+			s.fontStyle = FontStyle.Bold;
+			s.normal.textColor = Color.white;
+			Handles.Label(transform.position + Vector3.up * 2f, graph.GetState().name, s);
+			/*
 			float h = 0f;
-			//Handles.Label(transform.position + Vector3.up * (2f + h), graph.GetCurrentAIStateName());
 			h+= 0.1f;
 			foreach(KeyValuePair<EStat, float> entry in stats)
 			{
 				Handles.Label(transform.position + Vector3.up * (2f + h), entry.Key.ToString() + " = " + entry.Value.ToString());
 				h+= 0.1f;
 			}
+			*/
         }
     }
 #endif

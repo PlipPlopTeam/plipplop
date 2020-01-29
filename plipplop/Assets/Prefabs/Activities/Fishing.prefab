@@ -94,12 +94,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d718f2fe9f8773242b389b21d2180351, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  full: 0
   working: 1
-  boredomMultiplier: 1
-  tirednessMultiplier: 0
-  hungerMultiplier: 0
-  users: []
+  userMax: 2
+  spectatorMax: 0
+  spectatorRange: {x: 0, y: 0}
+  awarnessMultiplier: 1
+  use:
+    boredom: 0.4
+    hunger: 0.7
+    tiredness: 0.3
+  spectate:
+    boredom: 1
+    hunger: 0
+    tiredness: 0
   fishingPole: {fileID: 4091588952963639522, guid: 28130ae14e2853c47a913722f5e3c0c8,
     type: 3}
   position: {x: 10, y: 0, z: 0}
@@ -135,12 +142,14 @@ MonoBehaviour:
   autoPossess: 0
   beginCrouched: 0
   canRetractLegs: 1
+  freezeUntilPossessed: 0
   useGravity: 1
   gravityMultiplier: 100
   customExternalRigidbody: {fileID: 0}
   customCamera: {fileID: 0}
   locomotion: {fileID: 0}
   visuals: {fileID: 8531234995443601489}
+  face: {fileID: 0}
 --- !u!1001 &8531234996245258967
 PrefabInstance:
   m_ObjectHideFlags: 0
