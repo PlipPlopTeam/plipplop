@@ -15,17 +15,17 @@ MonoBehaviour:
   states:
   - name: Reef Venturing
     id: 1
-    stateId: 18
-    exits: 21000000
+    stateId: 20
+    exits: 25000000
     hasExits: 01
   - name: Reef See Valuable
     id: 4
-    stateId: 15
+    stateId: 18
     exits: 0f000000
     hasExits: 01
   - name: Reef Chase Valuable
     id: 11
-    stateId: 12
+    stateId: 13
     exits: 11000000
     hasExits: 01
   - name: Reef Carry Valuable
@@ -35,18 +35,28 @@ MonoBehaviour:
     hasExits: 01
   - name: Reef See Player
     id: 22
-    stateId: 14
+    stateId: 17
     exits: 15000000
     hasExits: 01
   - name: Reef Eject Player
     id: 30
-    stateId: 16
+    stateId: 14
     exits: 1f000000
     hasExits: 01
   - name: Reef Show Off
     id: 32
-    stateId: 17
+    stateId: 19
     exits: 23000000
+    hasExits: 01
+  - name: Reef Chase Panicking Character
+    id: 38
+    stateId: 12
+    exits: 28000000
+    hasExits: 01
+  - name: Reef Reassure Panicking Character
+    id: 39
+    stateId: 16
+    exits: 29000000
     hasExits: 01
   transitions:
   - id: 2
@@ -108,5 +118,20 @@ MonoBehaviour:
     disable: 0
     conditions: 15000000
     exits: 0100000020000000
+    hasExits: 0101
+  - id: 37
+    disable: 0
+    conditions: 18000000
+    exits: 2600000021000000
+    hasExits: 0101
+  - id: 40
+    disable: 0
+    conditions: 19000000
+    exits: 2700000026000000
+    hasExits: 0101
+  - id: 41
+    disable: 0
+    conditions: 15000000
+    exits: 0100000027000000
     hasExits: 0101
   initialNode: 1

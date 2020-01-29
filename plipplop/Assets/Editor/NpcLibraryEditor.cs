@@ -8,82 +8,119 @@ public class NpcLibraryEditor : Editor
 {
 	public override void OnInspectorGUI()
 	{
-		NpcLibrary lib = (NpcLibrary)target;
-		//DrawDefaultInspector();
-
-		lib.defaultSettings = EditorGUILayout.ObjectField(lib.defaultSettings, typeof(NonPlayableCharacterSettings)) as NonPlayableCharacterSettings;
-
 		GUIStyle title = new GUIStyle();
 		title.fontSize = 52;
 		title.fontStyle = FontStyle.Bold;
 		title.normal.textColor = Color.grey;
 		title.alignment = TextAnchor.UpperCenter;
 
+		SerializedProperty settingProperty = serializedObject.FindProperty("defaultSettings");
+		SerializedProperty statesProperty = serializedObject.FindProperty("states");
+		SerializedProperty conditionsProperty = serializedObject.FindProperty("conditions");
+		SerializedProperty actionsProperty = serializedObject.FindProperty("actions");
 
+		settingProperty.objectReferenceValue = EditorGUILayout.ObjectField("Default Settings", settingProperty.objectReferenceValue, typeof(NonPlayableCharacterSettings), true);
+		
+		// STATES
 		EditorGUILayout.LabelField("STATE", title);
-		for (int i = 0; i < lib.states.Count; i++)
+		for (int i = 0; i < statesProperty.arraySize; i++)
 		{
 			EditorGUILayout.BeginHorizontal();
-			if (GUILayout.Button("Remove")) lib.states.RemoveAt(i);
-			EditorGUILayout.IntField(lib.states[i].id);
-			lib.states[i].resource = EditorGUILayout.ObjectField(lib.states[i].resource, typeof(AIState)) as AIState;
+			var prop = statesProperty.GetArrayElementAtIndex(i);
+			prop.NextVisible(true);
+			prop.intValue = EditorGUILayout.IntField(prop.intValue);
+			prop.NextVisible(true);
+			prop.objectReferenceValue = EditorGUILayout.ObjectField(prop.objectReferenceValue, typeof(AIState), true);
+			if (GUILayout.Button("Delete")) statesProperty.DeleteArrayElementAtIndex(i);
+			EditorGUILayout.EndHorizontal();
+
+		}
+		if (GUILayout.Button("Add"))
+		{
+			AIStateResource r = new AIStateResource();
+			statesProperty.InsertArrayElementAtIndex(statesProperty.arraySize);
+			var prop = statesProperty.GetArrayElementAtIndex(statesProperty.arraySize-1);
+			prop.NextVisible(true);
+			prop.intValue = statesProperty.arraySize;
+			prop.NextVisible(true);
+			prop.objectReferenceValue = null;
+		}
+
+		// CONDITIONS
+		EditorGUILayout.LabelField("CONDITIONS", title);
+		for (int i = 0; i < conditionsProperty.arraySize; i++)
+		{
+			EditorGUILayout.BeginHorizontal();
+			var prop = conditionsProperty.GetArrayElementAtIndex(i);
+			prop.NextVisible(true);
+			prop.intValue = EditorGUILayout.IntField(prop.intValue);
+			prop.NextVisible(true);
+			prop.objectReferenceValue = EditorGUILayout.ObjectField(prop.objectReferenceValue, typeof(Condition), true);
+			if (GUILayout.Button("Delete")) conditionsProperty.DeleteArrayElementAtIndex(i);
 			EditorGUILayout.EndHorizontal();
 		}
 		if (GUILayout.Button("Add"))
 		{
 			AIStateResource r = new AIStateResource();
-			r.id = lib.states.Count;
-			lib.states.Add(r);
+			conditionsProperty.InsertArrayElementAtIndex(conditionsProperty.arraySize);
+			var prop = conditionsProperty.GetArrayElementAtIndex(conditionsProperty.arraySize - 1);
+			prop.NextVisible(true);
+			prop.intValue = conditionsProperty.arraySize;
+			prop.NextVisible(true);
+			prop.objectReferenceValue = null;
 		}
 
-		EditorGUILayout.LabelField("CONDITIONS", title);
-		for (int i = 0; i < lib.conditions.Count; i++)
-		{
-			EditorGUILayout.BeginHorizontal();
-			if (GUILayout.Button("Remove")) lib.conditions.RemoveAt(i);
-			EditorGUILayout.IntField(lib.conditions[i].id);
-			lib.conditions[i].resource = EditorGUILayout.ObjectField(lib.conditions[i].resource, typeof(Condition)) as Condition;
-			EditorGUILayout.EndHorizontal();
-		}
-		if (GUILayout.Button("Add"))
-		{
-			AIConditionResource r = new AIConditionResource();
-			r.id = lib.conditions.Count;
-			lib.conditions.Add(r);
-		}
-
+		// ACTIONS
 		EditorGUILayout.LabelField("ACTIONS", title);
-		for (int i = 0; i < lib.actions.Count; i++)
+		for (int i = 0; i < actionsProperty.arraySize; i++)
 		{
 			EditorGUILayout.BeginHorizontal();
-			if (GUILayout.Button("Remove")) lib.actions.RemoveAt(i);
-			EditorGUILayout.IntField(lib.actions[i].id);
-			lib.actions[i].resource = EditorGUILayout.ObjectField(lib.actions[i].resource, typeof(AIAction)) as AIAction;
+			var prop = actionsProperty.GetArrayElementAtIndex(i);
+			prop.NextVisible(true);
+			prop.intValue = EditorGUILayout.IntField(prop.intValue);
+			prop.NextVisible(true);
+			prop.objectReferenceValue = EditorGUILayout.ObjectField(prop.objectReferenceValue, typeof(AIAction), true);
+			if (GUILayout.Button("Delete")) actionsProperty.DeleteArrayElementAtIndex(i);
 			EditorGUILayout.EndHorizontal();
 		}
 		if (GUILayout.Button("Add"))
 		{
-			AIActionResource r = new AIActionResource();
-			r.id = lib.actions.Count;
-			lib.actions.Add(r);
+			AIStateResource r = new AIStateResource();
+			actionsProperty.InsertArrayElementAtIndex(actionsProperty.arraySize);
+			var prop = actionsProperty.GetArrayElementAtIndex(actionsProperty.arraySize - 1);
+			prop.NextVisible(true);
+			prop.intValue = actionsProperty.arraySize;
+			prop.NextVisible(true);
+			prop.objectReferenceValue = null;
 		}
+
+		// Reset Resource IDs
 		if (GUILayout.Button("Reset"))
 		{
 			int counter = 0;
-			foreach(AIStateResource s in lib.states)
+
+			for (int i = 0; i < statesProperty.arraySize; i++)
 			{
-				s.id = counter++;
+				var prop = statesProperty.GetArrayElementAtIndex(i);
+				prop.NextVisible(true);
+				prop.intValue = counter++;
 			}
 			counter = 0;
-			foreach (AIConditionResource c in lib.conditions)
+			for (int i = 0; i < conditionsProperty.arraySize; i++)
 			{
-				c.id = counter++;
+				var prop = conditionsProperty.GetArrayElementAtIndex(i);
+				prop.NextVisible(true);
+				prop.intValue = counter++;
 			}
 			counter = 0;
-			foreach (AIActionResource a in lib.actions)
+			for (int i = 0; i < actionsProperty.arraySize; i++)
 			{
-				a.id = counter++;
+				var prop = actionsProperty.GetArrayElementAtIndex(i);
+				prop.NextVisible(true);
+				prop.intValue = counter++;
 			}
 		}
+		
+		serializedObject.ApplyModifiedProperties();
 	}
 }
