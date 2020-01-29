@@ -66,15 +66,15 @@ public class Balloon : Activity, ICarryable
 
     public override void Exit(NonPlayableCharacter user)
     {
-		if(users[carrier].IsCarrying(this)) user.Drop();
+		if(user.IsCarrying(this)) user.Drop();
         if(user.look != null) user.look.LooseFocus();
         
         base.Exit(user);
 
-		if (users.Count > 0)
+		if (users.Count > 1)
 		{
 			carrier = Next();
-			users[carrier].Carry(this);
+			users[carrier].Collect(this);
 		}
 		else Initialize();
     }
@@ -83,12 +83,9 @@ public class Balloon : Activity, ICarryable
     {
         base.Enter(user);
         user.look.FocusOn(transform);
-        if(users.Count >= 2)
-        {
-			users[carrier].Carry(this);
-            GetInPlace();
-        }
-    }
+		if (users.Count >= 2) GetInPlace();
+		else users[carrier].Collect(this);
+	}
 
 	bool GoodPositions()
 	{
@@ -183,6 +180,7 @@ public class Balloon : Activity, ICarryable
     void IsAllInPlace()
     {
 		foreach(bool b in inPlace) if(!b) return;
+		if (!users[carrier].IsCarrying(this)) return;
         playing = true;
         LookAtEachOthers();
     }
