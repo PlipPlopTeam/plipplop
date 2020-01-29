@@ -92,10 +92,14 @@ public class Activity : MonoBehaviour
 	{
 		bool result = working
 			&& !users.Contains(npc)
-			&& !spectators.Contains(npc);
+			&& !spectators.Contains(npc)
+			&& npc.previousActivity != this;
 
-		if(userMax > 0) result = users.Count < userMax;
-		if(spectatorMax > 0) result = spectators.Count < spectatorMax;
+		if(result)
+		{
+			if (userMax > 0) result = users.Count < userMax;
+			if (spectatorMax > 0) result = spectators.Count < spectatorMax;
+		}
 
 		return result;
 	}

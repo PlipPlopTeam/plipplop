@@ -25,34 +25,31 @@ public class Guitar : Activity, ICarryable
 		};
 	}
 
-	public override void Exit(NonPlayableCharacter user)
-	{
-		base.Exit(user); 
-		if(users.Count > 0) StartUsing(users[0]);
-	}
-
 	public override void StopUsing(NonPlayableCharacter user)
 	{
 		base.StopUsing(user);
-		full = false;
-
-		music.Stop();
 		user.Drop();
-		transform.parent = null;
-		if(user.animator != null) user.animator.SetBool("Guitaring", false);
+		user.animator.SetBool("Guitaring", false);
+
+		full = false;
+		music.Stop();
+		if(spectators.Count > 0)
+		{
+			NonPlayableCharacter newPlayer = spectators[0];
+			StopSpectate(newPlayer);
+			StartUsing(newPlayer);
+		}
 	}
 
 	public override void StopSpectate(NonPlayableCharacter npc)
 	{
 		base.StopSpectate(npc);
-		if(npc.animator != null) npc.animator.SetBool("Dancing", false);
+		npc.animator.SetBool("Dancing", false);
 	}
 
 	public override void Look(NonPlayableCharacter npc, Vector3 position)
 	{
 		base.Look(npc, position);
-
-		//npc.look.FocusOn(player.transform);
 		npc.animator.SetBool("Dancing", true);
 	}
 
