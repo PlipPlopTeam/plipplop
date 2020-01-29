@@ -34,6 +34,11 @@ namespace Behavior.Editor
 		private NonPlayableCharacter target;
 		private int currentNode = -1;
 
+		public bool IsCurrent(int id)
+		{
+			return currentNode == id;
+		}
+
 		public AIState GetState()
 		{
 			if (currentNode < 0) return null;

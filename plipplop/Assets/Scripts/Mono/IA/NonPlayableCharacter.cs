@@ -26,7 +26,6 @@ public class NonPlayableCharacter : MonoBehaviour
 	[HideInInspector] public Collider collider;
 	[HideInInspector] public ICarryable carried;
 	[HideInInspector] public NonPlayableCharacter character;
-
 	[Header("Read-Only")]
 	public Valuable valuable;
 	public Activity activity;
