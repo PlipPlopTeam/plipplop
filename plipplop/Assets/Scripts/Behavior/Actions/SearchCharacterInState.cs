@@ -10,10 +10,10 @@ namespace Behavior.NPC
 		{
 			NonPlayableCharacter npc = target;
 			if (npc == null || stateName == "") return;
-
 			NonPlayableCharacter[] characters = npc.sight.Scan<NonPlayableCharacter>();
 			foreach (NonPlayableCharacter c in characters)
 			{
+				
 				if (c.graph.GetState().name == stateName)
 				{
 					npc.character = c;
