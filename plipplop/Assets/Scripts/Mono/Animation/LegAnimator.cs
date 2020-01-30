@@ -71,7 +71,7 @@ public class LegAnimator : MonoBehaviour
     {
         int _frameIndex = 0;
         while (true)
-        {
+        {    
             MeshFlipbook.MeshFrame _frame = currentAnimation.meshes[_frameIndex];
             
             meshFilter.mesh = _frame.mesh;
