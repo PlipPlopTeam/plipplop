@@ -134,7 +134,7 @@ public class Aperture
 
     public void DestroyPreviousStackIfTemporary()
     {
-        if (presetStack.Count > 0 && previousStackSettings != null && !presetStack.Find(o => o == previousStackSettings)) {
+        if (presetStack.Count > 0 && previousStackSettings != null && !presetStack.Find(o => o == previousStackSettings) && previousStackSettings != Game.i.library.defaultAperture) {
             UnityEngine.Object.Destroy(previousStackSettings);
         }
     }
@@ -146,9 +146,17 @@ public class Aperture
 
     public AperturePreset ComputeSettings()
     {
+        if (presetStack.Count < 1) {
+            return UnityEngine.Object.Instantiate(Game.i.library.defaultAperture);
+        }
+
         var preset = ScriptableObject.CreateInstance<AperturePreset>();
         preset.fieldOfView = Mathf.Lerp(previousStackSettings.fieldOfView, presetStack[presetStack.Count - 1].fieldOfView, stackTransitionState);
         preset.absoluteBoundaries = Range.Lerp(previousStackSettings.absoluteBoundaries, presetStack[presetStack.Count - 1].absoluteBoundaries, stackTransitionState);
+
+        foreach (var property in typeof(AperturePreset).GetFields()) {
+            property.SetValue(preset, property.GetValue(stackTransitionState > 0.5F ? presetStack[presetStack.Count - 1] : previousStackSettings));
+        }
 
         return preset;
     }
@@ -158,7 +166,7 @@ public class Aperture
         cam = Camera.main ?? new GameObject().AddComponent<Camera>();
         cam.gameObject.name = "_CAMERA";
         previousStackSettings = Game.i.library.defaultAperture;
-        Load(Game.i.library.defaultAperture);
+       // Load(Game.i.library.defaultAperture);
         stackTransitionState = 1f;
         settings = ComputeSettings();
     }
@@ -262,12 +270,18 @@ public class Aperture
 		lastCameraInput = Time.time;
 	}
 
+    public bool IsCameraBeingRepositioned()
+    {
+        return isCameraBeingRepositioned;
+    }
+
 	public void FixedUpdate()
 	{
 		if (freeze) return;
 
         GameObject.Destroy(settings);
         settings = ComputeSettings();
+
 
         if (stackTransitionState < 1f) {
             stackTransitionState += Time.deltaTime * stackUpdateSpeed;
@@ -297,10 +311,12 @@ public class Aperture
 		// If that bool is true, the camera will immediatly put itself in the back of the player
 		if (target != null && isCameraBeingRepositioned)
 		{
+
 			hAngle = Vector3.SignedAngle(Vector3.forward, target.forward, Vector3.up);
 			float a = Vector3.SignedAngle(Forward(), target.forward, Vector3.up);
 			if (Mathf.Abs(a) < settings.angleConsideredAlign) 
                 DeclareAligned();
+
         }
         else {
             hAngle += hAngleAmount;
@@ -308,7 +324,7 @@ public class Aperture
 
         if (isTargetMoving) {
             ResetIdleTime();
-            
+            /*
             // Target moving and user not touching the pad, I will put myself in the back of the player
             if (Mathf.Abs(hAngleAmount) <= 0f) {
                 float currentAngle = Vector3.SignedAngle(Forward(), target.forward, Vector3.up);
@@ -319,15 +335,16 @@ public class Aperture
                     hAngle += cameraTurnMultiplier * currentAngle * Time.fixedDeltaTime;
                 }
             }
+            */
         }
 
         hAngleAmount = 0f;
-                               
-		float vAngleAmplitude = 40f - settings.additionalAngle;
+
+        float vAngleAmplitude = 40f - settings.additionalAngle;
 		vAngle = vAngleAmount * vAngleAmplitude;
 
-		// Calculating "catch up"
-		ComputeHorizontalDistanceToTarget(targetPosition);
+        // Calculating "catch up"
+        ComputeHorizontalDistanceToTarget(targetPosition);
 		float catchUpSpeed = GetCatchUpSpeed();
 
 		// Rotation
@@ -403,11 +420,10 @@ public class Aperture
             return;
         }
 
-        // Fixme : completely crazy
-        // rotationAroundTarget.destination *= Quaternion.Euler(Mathf.Sin(Mathf.Deg2Rad * hAngle), 0f, Mathf.Cos(Mathf.Deg2Rad * hAngle));
+        rotationAroundTarget.destination = Quaternion.Euler(0f, hAngle, vAngle);
 
-        //TMP
-        rotationAroundTarget.destination = cam.transform.rotation;
+        // Fixme : completely crazy
+        //rotationAroundTarget.destination = cam.transform.rotation;
     }
 
     public void ComputeFieldOfView(Vector3 targetPosition)
@@ -451,19 +467,20 @@ public class Aperture
         float acSquare = Mathf.Pow(bc, 2f) - Mathf.Pow(ab, 2f);
 
         float cameraHeight = Mathf.Sqrt(Mathf.Abs(acSquare)); // (ac)
-        
+
+        var computedLocalPositionFromRot = new Vector3(Mathf.Sin(rotationAroundTarget.current.eulerAngles.y), 0f, Mathf.Cos(rotationAroundTarget.current.eulerAngles.y)) * settings.distance.min;
+
         position.destination =
             targetPosition
             + (cameraHeight + settings.heightOffset) * Vector3.up
-           // + rotationAroundTarget.current.eulerAngles * Mathf.Clamp(hDistanceToTarget, settings.distance.min, settings.distance.max)
+            + computedLocalPositionFromRot;
             ;
-        
+
         position.destination.y = Mathf.Min(position.destination.y, targetPosition.y + settings.maximumHeightAboveTarget);
     }
 
     public void UpdatePosition(float catchUpSpeed)
     {
-
         // Lerp on the up axis
         var verticalFollow = Time.fixedDeltaTime * settings.verticalFollowLerp * catchUpSpeed;
         var lateralFollow = Time.fixedDeltaTime * settings.lateralFollowLerp * catchUpSpeed;
@@ -658,9 +675,24 @@ public class Aperture
         return presetStack.Count;
     }
 
+    public string GetStackNames()
+    {
+        return string.Join(", ", presetStack.Select(o => { return o.name; }));
+    }
+
     public Transform GetCameraTransform()
     {
         return cam.transform;
+    }
+
+    public float GetHAngle()
+    {
+        return hAngle;
+    }
+
+    public float GetVAngle()
+    {
+        return vAngle;
     }
 
     public static Camera GetCurrentlyActiveCamera()

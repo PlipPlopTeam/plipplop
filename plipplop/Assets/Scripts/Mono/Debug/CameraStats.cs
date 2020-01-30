@@ -20,9 +20,11 @@ public class CameraStats : MonoBehaviour
     {
         txt.text = new StringBuilder()
             .AppendLine(string.Format("Time before reset: {0}", Mathf.Round(Game.i.aperture.GetSettings().alignAfter- (Time.time-Game.i.aperture.GetLastCameraInput()))))
-            .AppendLine(string.Format("Stack size: {0}", Game.i.aperture.GetStackSize()))
+            .AppendLine(string.Format("Current Aperture: {0}", Game.i.aperture.GetSettings().name))
+            .AppendLine(string.Format("Stack : {0} [{1}]", Game.i.aperture.GetStackNames(), Game.i.aperture.GetStackSize()))
             .AppendLine(string.Format("Static positions: {0}", Game.i.aperture.GetStaticPositionsCount()))
             .AppendLine(string.Format("Transitioning on stack? {0}", Game.i.aperture.IsTransitioningOnStack()))
+            .AppendLine(string.Format("hAngle {0} / vAngle {1}", Game.i.aperture.GetHAngle(), Game.i.aperture.GetVAngle()))
             .ToString();
     }
 }

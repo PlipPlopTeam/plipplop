@@ -78,12 +78,14 @@ public class CameraApertureDebugger : MonoBehaviour
 
             Gizmos.DrawWireSphere(position.destination, 1f);
             Gizmos.DrawWireSphere(position.current, 0.6f);
-            
+            Handles.Label(position.destination, "Destination", style);
+
             Gizmos.color = new Color32(30, 30, 255, 255);
             Gizmos.DrawWireCube(new Vector3(position.current.x, target.position.y, position.current.z), 0.5f * Vector3.one);
             Gizmos.DrawLine(position.current, new Vector3(position.current.x, target.position.y, position.current.z));
             Gizmos.color = new Color32(30, 125, 255, 255);
             Gizmos.DrawWireSphere(aperture.GetVirtualTarget(), 0.4f);
+            Handles.Label(aperture.GetVirtualTarget(), "VirtualTarget", style);
             /*
             Gizmos.color = new Color32(255, 130, 130, 255);
             style.normal.textColor = Gizmos.color;
