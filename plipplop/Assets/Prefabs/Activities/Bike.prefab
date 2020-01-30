@@ -309,12 +309,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 119810fa33003404cbd4d2e433d9d870, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  full: 0
   working: 1
-  boredomMultiplier: 1
-  tirednessMultiplier: 0
-  hungerMultiplier: 0
+  userMax: 1
+  spectatorMax: 0
+  spectatorRange: {x: 0, y: 0}
+  awarnessMultiplier: 1
+  use:
+    boredom: 1
+    hunger: 0
+    tiredness: 0
+  spectate:
+    boredom: 1
+    hunger: 0
+    tiredness: 0
   users: []
+  spectators: []
   speed: 7
   path: {fileID: 0}
   col: {fileID: 5436248430869024627}

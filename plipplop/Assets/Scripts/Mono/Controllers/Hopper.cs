@@ -77,12 +77,14 @@ public class Hopper : Controller
         
         if(!AreLegsRetracted())
         {
+			/*
             if(crouchTimer > 0) crouchTimer -= Time.deltaTime;
             else
             {
                 if(IsPossessed() && rigidbody.velocity.magnitude <= speedBeforeLegs)
                     RetractLegs();
             }
+			*/
         }
         else
         {

@@ -91,11 +91,7 @@ public class Balloon : Activity, ICarryable
 	{
 		base.StartUsing(user);
 		if (users.Count >= 2) GetInPlace();
-		else
-		{
-			Debug.Log(user);
-			users[carrier].Collect(this);
-		}
+		else users[carrier].Collect(this);
 	}
 
 	bool GoodPositions()
