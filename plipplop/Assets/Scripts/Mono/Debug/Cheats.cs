@@ -18,7 +18,8 @@ public class Cheats : Dictionary<string, System.Action>
         Add("HELLO", SpawnNPC);
         Add("IMONFIRE", SpawnFire);
         Add("STEP", SpawnPoof);
-    }
+		Add("BOSS", Bossfight);
+	}
 
 	public void BigHeads()
 	{
@@ -27,8 +28,20 @@ public class Cheats : Dictionary<string, System.Action>
 			npc.skeleton.GetSocketBySlot(Clothes.ESlot.HEAD).bone.localScale = Vector3.one * Random.Range(3f, 6f);
 		}
 	}
-    
-    public void LongHeads()
+
+	public void Bossfight()
+	{
+		foreach (NonPlayableCharacter npc in Object.FindObjectsOfType<NonPlayableCharacter>())
+		{
+			ICarryable torch = Game.Instantiate(Game.i.library.torchPrefab).GetComponent<ICarryable>();
+			npc.agentMovement.Chase(Game.i.player.GetCurrentController().transform);
+			npc.Carry(torch);
+			npc.sight.multiplier = 0f;
+			npc.emo.Show("Angry");
+		}
+	}
+
+	public void LongHeads()
     {
         foreach(NonPlayableCharacter npc in Object.FindObjectsOfType<NonPlayableCharacter>())
         {

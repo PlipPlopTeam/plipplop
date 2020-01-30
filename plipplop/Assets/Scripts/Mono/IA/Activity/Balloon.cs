@@ -7,6 +7,7 @@ public class Balloon : Activity, ICarryable
     [Header("BALLOON")]
     public float minDistanceBetween = 3f;
     public float maxDistanceBetween = 5f;
+	public float distanceMax = 3f;
     public float timeBetweenThrows = 2f;
     public float verticalForce = 50000f;
     public float horizontalForce = 25000f;
@@ -101,7 +102,7 @@ public class Balloon : Activity, ICarryable
 	{
 		float distance = 0f;
 		for(int i = 0; i < users.Count - 1; i++) distance += Vector3.Distance(users[i].transform.position, users[i + 1].transform.position);
-		return distance > 4f;
+		return distance > distanceMax * users.Count;
 	}
 
     void GetInPlace()
