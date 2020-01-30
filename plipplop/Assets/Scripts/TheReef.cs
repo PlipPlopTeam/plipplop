@@ -46,6 +46,8 @@ public class TheReef : NonPlayableCharacter
 	public void Reassure(NonPlayableCharacter npc)
 	{
 		target = npc;
+
+		target.graph.Pause();
 		target.agentMovement.Stop();
 		agentMovement.Stop();
 		Vector3 dir = (target.transform.position - transform.position).normalized;
@@ -56,6 +58,7 @@ public class TheReef : NonPlayableCharacter
 	IEnumerator WaitAndEndReassure()
 	{
 		yield return new WaitForSeconds(reassureTime);
+		target.graph.Play();
 		target.graph.Move(6406);
 		target = null;
 	}

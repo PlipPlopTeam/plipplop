@@ -64,12 +64,13 @@ public class Balloon : Activity, ICarryable
         originPosition = transform.position;
     }
 
-    public override void Exit(NonPlayableCharacter user)
-    {
-		if(user.IsCarrying(this)) user.Drop();
-        if(user.look != null) user.look.LooseFocus();
-        
-        base.Exit(user);
+	public override void StopUsing(NonPlayableCharacter user)
+	{
+
+		if (user.IsCarrying(this)) user.Drop();
+		if (user.look != null) user.look.LooseFocus();
+
+		base.StopUsing(user);
 
 		if (users.Count > 1)
 		{
@@ -77,14 +78,23 @@ public class Balloon : Activity, ICarryable
 			users[carrier].Collect(this);
 		}
 		else Initialize();
-    }
+	}
 
-    public override void Enter(NonPlayableCharacter user)
+	public override void Enter(NonPlayableCharacter user)
     {
         base.Enter(user);
         user.look.FocusOn(transform);
+	}
+
+	public override void StartUsing(NonPlayableCharacter user)
+	{
+		base.StartUsing(user);
 		if (users.Count >= 2) GetInPlace();
-		else users[carrier].Collect(this);
+		else
+		{
+			Debug.Log(user);
+			users[carrier].Collect(this);
+		}
 	}
 
 	bool GoodPositions()
@@ -108,7 +118,6 @@ public class Balloon : Activity, ICarryable
 			inPlace.Add(false);
 			float angle = ((Mathf.PI * 2f) / users.Count) * count;
 			Vector3 pos = new Vector3(Mathf.Cos(angle) * distance, 0f, Mathf.Sin(angle) * distance);
-			user.agentMovement.Stop();
 			user.agentMovement.GoThere(originPosition + pos);
 			user.agentMovement.onDestinationReached += () =>
 			{
@@ -174,7 +183,7 @@ public class Balloon : Activity, ICarryable
 		foreach (NonPlayableCharacter user in users) positions.Add(user.transform.position);
 
 		Vector3 center = Geometry.CenterOfPoints(positions.ToArray());
-		foreach (NonPlayableCharacter user in users) user.transform.forward = -(transform.position - center).normalized;
+		foreach (NonPlayableCharacter user in users) user.transform.forward = (transform.position - center).normalized;
 	}
 
     void IsAllInPlace()

@@ -33,6 +33,16 @@ namespace Behavior.Editor
 		// Not serialized
 		private NonPlayableCharacter target;
 		private int currentNode = -1;
+		private bool pause;
+
+		public void Pause()
+		{
+			pause = true;
+		}
+		public void Play()
+		{
+			pause = false;
+		}
 
 		public bool IsCurrent(int id)
 		{
@@ -68,12 +78,16 @@ namespace Behavior.Editor
 
 		public void Update()
 		{
+			if (pause) return;
+
 			GetState().Tick(target);
 			Follow();
 		}
 
 		public void FixedUpdate()
 		{
+			if (pause) return;
+
 			GetState().FixedTick(target);
 		}
 
