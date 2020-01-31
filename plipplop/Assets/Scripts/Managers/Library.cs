@@ -24,9 +24,10 @@ public class Library
     public GameObject facePrefab;
     public GameObject controllerSensor;
     public GameObject baseControllerPrefab;
-    public GameObject teleporterVolumePrefab;
+	public GameObject teleporterVolumePrefab;
+	public GameObject torchPrefab;
 
-    [Header("Clothes")]
+	[Header("Clothes")]
     public List<ClothesData> headClothes;
     public List<ClothesData> torsoClothes;
     public List<ClothesData> legsClothes;

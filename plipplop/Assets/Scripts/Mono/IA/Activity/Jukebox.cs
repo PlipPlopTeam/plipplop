@@ -33,25 +33,23 @@ public class Jukebox : Activity
         visuals.localScale = Vector3.one + Vector3.one * (1 + Mathf.Sin(Time.time * 10f) )* 0.1f;
     }
 
-    public override void Enter(NonPlayableCharacter user)
-    {
-        base.Enter(user);
+	public override void StartUsing(NonPlayableCharacter user)
+	{
+		base.StartUsing(user);
+
 		Vector3 pos = Geometry.GetRandomPointAround(Random.Range(radius.x, radius.y)) + transform.position;
-		user.agentMovement.Stop();
-		user.GoSitThere(pos);
+		user.agentMovement.GoThere(pos, true);
 		user.agentMovement.onDestinationReached += () =>
 		{
 			user.transform.LookAt(transform.position);
+			user.animator.SetBool("Dancing", true);
 		};
-
-		user.animator.SetBool("Dancing", true);
-    }
-
-    public override void Exit(NonPlayableCharacter user)
-    {
-        base.Exit(user);
-        user.animator.SetBool("Dancing", false);
-    }
+	}
+	public override void StopUsing(NonPlayableCharacter user)
+	{
+		base.StopUsing(user);
+		user.animator.SetBool("Dancing", false);
+	}
 
 #if UNITY_EDITOR
 	public override void OnDrawGizmosSelected()

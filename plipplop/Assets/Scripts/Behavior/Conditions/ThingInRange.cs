@@ -20,6 +20,7 @@ namespace Behavior.NPC
 				case NonPlayableCharacter.ESubject.CHAIR: return npc.chair != null && npc.range.IsInRange(npc.chair.gameObject);
 				case NonPlayableCharacter.ESubject.FOOD: return npc.food != null && npc.range.IsInRange(npc.food.gameObject);
 				case NonPlayableCharacter.ESubject.FEEDER: return npc.feeder != null && npc.range.IsInRange(npc.feeder.gameObject);
+				case NonPlayableCharacter.ESubject.CHARACTER: return npc.character != null && npc.range.IsInRange(npc.character.gameObject);
 			}
 			return false;
 		}

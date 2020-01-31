@@ -7,6 +7,7 @@ public class Balloon : Activity, ICarryable
     [Header("BALLOON")]
     public float minDistanceBetween = 3f;
     public float maxDistanceBetween = 5f;
+	public float distanceMax = 3f;
     public float timeBetweenThrows = 2f;
     public float verticalForce = 50000f;
     public float horizontalForce = 25000f;
@@ -64,37 +65,40 @@ public class Balloon : Activity, ICarryable
         originPosition = transform.position;
     }
 
-    public override void Exit(NonPlayableCharacter user)
-    {
-		if(users[carrier].IsCarrying(this)) user.Drop();
-        if(user.look != null) user.look.LooseFocus();
-        
-        base.Exit(user);
+	public override void StopUsing(NonPlayableCharacter user)
+	{
 
-		if (users.Count > 0)
+		if (user.IsCarrying(this)) user.Drop();
+		if (user.look != null) user.look.LooseFocus();
+
+		base.StopUsing(user);
+
+		if (users.Count > 1)
 		{
 			carrier = Next();
-			users[carrier].Carry(this);
+			users[carrier].Collect(this);
 		}
 		else Initialize();
-    }
+	}
 
-    public override void Enter(NonPlayableCharacter user)
+	public override void Enter(NonPlayableCharacter user)
     {
         base.Enter(user);
         user.look.FocusOn(transform);
-        if(users.Count >= 2)
-        {
-			users[carrier].Carry(this);
-            GetInPlace();
-        }
-    }
+	}
+
+	public override void StartUsing(NonPlayableCharacter user)
+	{
+		base.StartUsing(user);
+		if (users.Count >= 2) GetInPlace();
+		else users[carrier].Collect(this);
+	}
 
 	bool GoodPositions()
 	{
 		float distance = 0f;
 		for(int i = 0; i < users.Count - 1; i++) distance += Vector3.Distance(users[i].transform.position, users[i + 1].transform.position);
-		return distance > 4f;
+		return distance > distanceMax * users.Count;
 	}
 
     void GetInPlace()
@@ -111,7 +115,6 @@ public class Balloon : Activity, ICarryable
 			inPlace.Add(false);
 			float angle = ((Mathf.PI * 2f) / users.Count) * count;
 			Vector3 pos = new Vector3(Mathf.Cos(angle) * distance, 0f, Mathf.Sin(angle) * distance);
-			user.agentMovement.Stop();
 			user.agentMovement.GoThere(originPosition + pos);
 			user.agentMovement.onDestinationReached += () =>
 			{
@@ -177,12 +180,13 @@ public class Balloon : Activity, ICarryable
 		foreach (NonPlayableCharacter user in users) positions.Add(user.transform.position);
 
 		Vector3 center = Geometry.CenterOfPoints(positions.ToArray());
-		foreach (NonPlayableCharacter user in users) user.transform.forward = -(transform.position - center).normalized;
+		foreach (NonPlayableCharacter user in users) user.transform.forward = (transform.position - center).normalized;
 	}
 
     void IsAllInPlace()
     {
 		foreach(bool b in inPlace) if(!b) return;
+		if (!users[carrier].IsCarrying(this)) return;
         playing = true;
         LookAtEachOthers();
     }

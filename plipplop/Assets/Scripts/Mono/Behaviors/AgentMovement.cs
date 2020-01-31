@@ -102,6 +102,7 @@ public class AgentMovement : Walker
     public bool GoThere(Vector3 pos, bool clearEvents = false)
     {
         if(clearEvents) ClearEvents();
+
         NavMeshPath path = new NavMeshPath();
         agent.CalculatePath(pos, path);
         if(path.status == NavMeshPathStatus.PathPartial
@@ -121,12 +122,12 @@ public class AgentMovement : Walker
 				}
 			}
 			*/
-
 			return false;
         }
         else 
         {
-            agent.SetDestination(pos);
+			StopFollowingPath();
+			agent.SetDestination(pos);
             going = true;
             reached = false;
             return true;

@@ -11,7 +11,7 @@ using UnityEngine.AI;
 public class NonPlayableCharacter : MonoBehaviour
 {
 	public enum EStat { BOREDOM, TIREDNESS, HUNGER };
-	public enum ESubject { PLAYER, VALUABLE, ACTIVITY, CHAIR, FOOD, FEEDER };
+	public enum ESubject { PLAYER, VALUABLE, ACTIVITY, CHAIR, FOOD, FEEDER, CHARACTER };
 
 	[HideInInspector] public Sight sight;
 	[HideInInspector] public FocusLook look;
@@ -25,8 +25,8 @@ public class NonPlayableCharacter : MonoBehaviour
 	[HideInInspector] public Controller player;
 	[HideInInspector] public Collider collider;
 	[HideInInspector] public ICarryable carried;
-
 	[Header("Read-Only")]
+	public NonPlayableCharacter character;
 	public Valuable valuable;
 	public Activity activity;
 	public Activity previousActivity;

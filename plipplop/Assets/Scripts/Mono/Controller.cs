@@ -101,6 +101,9 @@ public abstract class Controller : MonoBehaviour
 
 		// Reset visual local position when legs are retracted
 		visuals.transform.localPosition = previousVisualLocalPosition;
+
+		Activity activity = gameObject.GetComponent<Activity>();
+		if (activity != null) activity.Repair();
 	}
 
 	internal void ExtendLegs()
