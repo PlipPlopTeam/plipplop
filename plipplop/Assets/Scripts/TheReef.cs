@@ -8,6 +8,7 @@ public class TheReef : NonPlayableCharacter
 	private Controller player;
 	private NonPlayableCharacter target;
 
+	// Throw
 	public float throwForce = 10000f;
 	public override void Kick(Controller c)
 	{
@@ -41,7 +42,7 @@ public class TheReef : NonPlayableCharacter
 		controller = null;
 		player = null;
 	}
-
+	// Reassure
 	public float reassureTime = 1f;
 	public void Reassure(NonPlayableCharacter npc)
 	{
@@ -61,5 +62,11 @@ public class TheReef : NonPlayableCharacter
 		target.graph.Play();
 		target.graph.Move(6406);
 		target = null;
+	}
+
+	public override void Carrying(ICarryable carryable)
+	{
+		base.Carrying(carryable);
+		carryable.Self().up = Vector3.up;
 	}
 }
