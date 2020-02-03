@@ -312,14 +312,12 @@ public abstract class Controller : MonoBehaviour
 	{
 		freeze++;
 		RefreshFreeze();
-		Debug.Log("Freeze " + freeze);
 	}
 
 	public void UnFreeze()
 	{
 		freeze--;
 		RefreshFreeze();
-		Debug.Log("UnFreeze " + freeze);
 	}
 
 	bool IsFrozen()
