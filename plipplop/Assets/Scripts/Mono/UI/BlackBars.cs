@@ -21,7 +21,7 @@ namespace PlipPlop.UserInterface
         void Update()
         {
             if (ShouldActivate()) {
-                if (currentPresence * Mathf.Sign(outOfScreenThreshold) > 0f) {
+                if (currentPresence * Mathf.Sign(outOfScreenThreshold) >= 0f) {
                     currentPresence -= Time.deltaTime * speed * Mathf.Sign(outOfScreenThreshold);
                 }
             }
@@ -30,7 +30,7 @@ namespace PlipPlop.UserInterface
                     currentPresence += Time.deltaTime * speed * Mathf.Sign(outOfScreenThreshold);
                 }
             }
-            SetBarPresence(currentPresence);
+            SetBarPresence(Mathf.Clamp(currentPresence, outOfScreenThreshold, 0f));
         }
 
         void SetBarPresence(float value)
