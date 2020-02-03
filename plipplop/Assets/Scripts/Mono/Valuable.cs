@@ -8,17 +8,6 @@ public class Valuable : Item, INoticeable, ICarryable
     public float weight = 1f;
     public float distanceThreshold = 2f;
     public bool hidden = false;
-	private Rigidbody rb;
-	private Collider col;
-
-	private bool carried;
-	public bool IsCarried() { return carried; }
-
-	void Awake()
-	{
-		rb = GetComponent<Rigidbody>();
-		col = GetComponent<Collider>();
-	}
 
 	void Start()
     {
