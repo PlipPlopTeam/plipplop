@@ -90,6 +90,7 @@ public class Aperture
 	bool isCameraBeingRepositioned;
 	bool isCameraIdle = false;
 	bool isTargetMoving = false;
+    bool isTryingToRealignManually = false;
     float lastCameraInput;
 
     bool freeze = false;
@@ -247,9 +248,20 @@ public class Aperture
 	{
 		if(settings.canBeReset)
 		{
-			Realign();
+            isTryingToRealignManually = true;
+            Realign();
 		}
 	}
+
+    public void DeclareUserNotAligning()
+    {
+        isTryingToRealignManually = false;
+    }
+
+    public bool IsUserAligning()
+    {
+        return isTryingToRealignManually;
+    }
 
     public void Realign()
     {
@@ -312,7 +324,7 @@ public class Aperture
 		if (target != null && isCameraBeingRepositioned)
 		{
 
-			hAngle = Vector3.SignedAngle(Vector3.forward, target.forward, Vector3.up);
+			hAngle = Vector3.SignedAngle(Vector3.back, target.forward, Vector3.up);
 			float a = Vector3.SignedAngle(Forward(), target.forward, Vector3.up);
 			if (Mathf.Abs(a) < settings.angleConsideredAlign) 
                 DeclareAligned();

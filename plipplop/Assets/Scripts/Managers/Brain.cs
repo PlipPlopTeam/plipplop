@@ -78,12 +78,18 @@ public class Brain
 
     public void UpdateController()
     {
+        if (mapping.IsHeld(EAction.CAMERA_RESET)) {
+            Game.i.aperture.UserAlign();
+        }
+        else {
+            Game.i.aperture.DeclareUserNotAligning();
+        }
+
         if (controller is null) return;
 
         if (mapping.IsPressed(EAction.JUMP)) controller.OnJump();
         if (mapping.IsPressed(EAction.POSSESS)) controller.OnTryPossess();
         if (mapping.IsHeld(EAction.JUMP)) controller.OnHoldJump();
-        if (mapping.IsPressed(EAction.CAMERA_RESET)) Game.i.aperture.UserAlign();
 		if (mapping.IsPressed(EAction.ACTION)) controller.ToggleLegs();
 	}
 
