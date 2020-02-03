@@ -71,6 +71,11 @@ public class Brain
         );
     }
 
+    public void StopController()
+    {
+        if (controller != null) controller.StopHorizontalVelocity();
+    }
+
     public void UpdateController()
     {
         if (controller is null) return;
@@ -142,6 +147,11 @@ public class Brain
     public void Deparalyze()
     {
         isParalyzed--;
+    }
+
+    public void FreezeController()
+    {
+        if (controller != null) controller.Freeze();
     }
 
 	IEnumerator ParalyzeFor(float time)
