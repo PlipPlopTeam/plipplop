@@ -38,8 +38,7 @@ public abstract class Controller : MonoBehaviour
 		Freeze();
 	}
 
-	public void Freeze(){isFrozen++;}
-	public void UnFreeze(){isFrozen--;}
+
 
 	public virtual void OnEject()
     {
@@ -309,10 +308,25 @@ public abstract class Controller : MonoBehaviour
         }
     }
 
-    bool IsFrozen()
+	public void Freeze() { isFrozen++; }
+	public void UnFreeze() { isFrozen--; }
+	bool IsFrozen()
     {
         return isFrozen > 0;
     }
+	public void RefreshFreeze()
+	{
+		if (IsFrozen()) ApplyFreeze();
+		else RemoveFreeze();
+	}
+	public void ApplyFreeze()
+	{
+		rigidbody.isKinematic = true;
+	}
+	public void RemoveFreeze()
+	{
+		rigidbody.isKinematic = false;
+	}
 
 #if UNITY_EDITOR
     // Draw a gizmo if i'm being possessed

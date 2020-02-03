@@ -6,7 +6,6 @@ public class Jukebox : Activity
 {
 	[Header("Jukebox")]
 	public Vector2 radius;
-
     public ParticleSystem ps;
 	Transform visuals;
 

@@ -11,9 +11,11 @@ public class Item : MonoBehaviour, ICarryable
 
     [Header("Item")]
     public GameObject visual;
-    [HideInInspector] public bool carried = false;
 
-    public virtual void Awake()
+    private bool carried = false;
+	public bool IsCarried() { return carried; }
+
+	public virtual void Awake()
     {
 
         if(rb == null) rb = GetComponent<Rigidbody>();

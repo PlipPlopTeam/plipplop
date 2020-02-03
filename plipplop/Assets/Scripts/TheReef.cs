@@ -23,7 +23,7 @@ public class TheReef : NonPlayableCharacter
 
 		controller.Kick();
 		player = Game.i.player.GetCurrentController();
-		player.rigidbody.isKinematic = true;
+		player.Freeze();
 		Drop();
 		skeleton.Attach(controller.transform, Clothes.ESlot.LEFT_HAND, true);
 		skeleton.Attach(player.transform, Clothes.ESlot.RIGHT_HAND, true);
@@ -35,7 +35,7 @@ public class TheReef : NonPlayableCharacter
 
 		if (controller.TryGetComponent(out ICarryable result)) Carry(result);
 		else skeleton.Attach(controller.transform, Clothes.ESlot.RIGHT_HAND, true);
-		player.rigidbody.isKinematic = false;
+		player.UnFreeze();
 		player.transform.position -= skeleton.GetSocketBySlot(Clothes.ESlot.RIGHT_HAND).bone.up * 2f;
 		player.Throw(-skeleton.GetSocketBySlot(Clothes.ESlot.RIGHT_HAND).bone.up, throwForce);
 		player.transform.up = Vector3.up;
