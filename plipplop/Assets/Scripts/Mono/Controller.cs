@@ -88,7 +88,6 @@ public abstract class Controller : MonoBehaviour
         else if (WasGrounded())
         {
              locomotion.Jump();
-             SoundPlayer.Play("sfx_jump");
         }
 	}
 

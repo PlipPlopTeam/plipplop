@@ -168,11 +168,12 @@ public class Locomotion : Walker
     }
 
     public void Jump()
-    {
-        if(!hasJumped) 
+    {//                    v   This one here is a small fix to avoid double-jump. Tweak the value as necessary
+        if(!hasJumped && rigidbody.velocity.y <= 0.3f) 
         {
             rigidbody.AddForce(Vector3.up * preset.jump * (parentController.gravityMultiplier / 100f), ForceMode.Acceleration);
             hasJumped = true;
+            SoundPlayer.Play("sfx_jump");
         }
     }
 
