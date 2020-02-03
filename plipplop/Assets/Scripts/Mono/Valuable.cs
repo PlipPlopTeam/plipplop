@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Valuable : MonoBehaviour, INoticeable, ICarryable
+public class Valuable : Item, INoticeable, ICarryable
 {
     [HideInInspector] public Vector3 origin;
     
@@ -11,22 +11,13 @@ public class Valuable : MonoBehaviour, INoticeable, ICarryable
 	private Rigidbody rb;
 	private Collider col;
 
+	private bool carried;
+	public bool IsCarried() { return carried; }
+
 	void Awake()
 	{
 		rb = GetComponent<Rigidbody>();
 		col = GetComponent<Collider>();
-	}
-
-	public virtual void Carry()
-	{
-		if (col != null) col.enabled = false;
-		if (rb != null) rb.isKinematic = true;
-	}
-
-	public virtual void Drop()
-	{
-		if (col != null) col.enabled = true;
-		if (rb != null) rb.isKinematic = false;
 	}
 
 	void Start()
@@ -34,7 +25,7 @@ public class Valuable : MonoBehaviour, INoticeable, ICarryable
         origin = transform.position;
     }
 
-    public void Notice()
+	public void Notice()
     {
         // Does things..
     }
@@ -51,14 +42,4 @@ public class Valuable : MonoBehaviour, INoticeable, ICarryable
     {
         return Vector3.Distance(origin, transform.position) > distanceThreshold;
     }
-
-	public float Mass()
-	{
-		return weight;
-	}
-
-	public Transform Self()
-	{
-		return transform;
-	}
 }

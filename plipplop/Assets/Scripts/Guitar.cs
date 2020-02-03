@@ -9,6 +9,9 @@ public class Guitar : Activity, ICarryable
 	private NonPlayableCharacter player;
 	public ParticleSystem music;
 
+	private bool carried = false;
+	public bool IsCarried() { return carried; }
+
 	public override void StartUsing(NonPlayableCharacter user)
 	{
 		base.StartUsing(user);
@@ -68,11 +71,13 @@ public class Guitar : Activity, ICarryable
 	{
 		if (col != null) col.enabled = false;
 		if (rb != null) rb.isKinematic = true;
+		carried = true;
 	}
 	public virtual void Drop()
 	{
 		if (col != null) col.enabled = true;
 		if (rb != null) rb.isKinematic = false;
+		carried = false;
 	}
 	public float Mass()
 	{

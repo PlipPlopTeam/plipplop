@@ -5,7 +5,8 @@ using UnityEngine;
 public interface ICarryable
 {
     void Carry();
-    void Drop();
-    float Mass();
+	void Drop();
+	bool IsCarried();
+	float Mass();
     Transform Self();
 }

@@ -21,6 +21,9 @@ public class Balloon : Activity, ICarryable
 	private Rigidbody rb;
 	private Collider col;
 
+	private bool carried = false;
+	public bool IsCarried() { return carried; }
+
 	public override void Break()
 	{
 		base.Break();
@@ -37,12 +40,14 @@ public class Balloon : Activity, ICarryable
     {
         if(col != null) col.enabled = false;
         if(rb != null) rb.isKinematic = true;
+		carried = true;
     }
     public virtual void Drop()
     {
         if(col != null) col.enabled = true;
         if(rb != null) rb.isKinematic = false;
-    }
+		carried = false;
+	}
     public float Mass()
     {
         if(rb == null) return 0;
