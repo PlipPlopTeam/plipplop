@@ -43,9 +43,12 @@ public class Clothes : MonoBehaviour
             root = Instantiate(data.prefab, transform).transform;
             target.Attach(root, data.slot);
         }
-        if (cloth.material) {
-            foreach (var renderer in root.GetComponentsInChildren<Renderer>()) {
-                renderer.material = cloth.material;
+        if (cloth.material)
+		{
+            foreach (var renderer in root.GetComponentsInChildren<Renderer>())
+			{
+				renderer.material = Instantiate(cloth.material);
+				renderer.material.SetColor("_Color", cloth.color);
             }
         }
     }

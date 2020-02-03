@@ -96,7 +96,12 @@ public class NonPlayableCharacter : MonoBehaviour
 		stats.Add(EStat.BOREDOM, settings.initialBoredom);
 		stats.Add(EStat.TIREDNESS, settings.initialTiredness);
 		stats.Add(EStat.HUNGER, settings.initialTiredness);
-		foreach (ClothesData c in settings.clothes) Equip(c);
+
+
+		if(settings.autoOutfit)
+			foreach (ClothesData c in Game.i.library.GetOutfit()) Equip(c);
+		else
+			foreach (ClothesData c in settings.clothes) Equip(c);
 		/*
 		foreach (KeyValuePair<Clothes.ESlot, Clothes> c in clothes)
 		{

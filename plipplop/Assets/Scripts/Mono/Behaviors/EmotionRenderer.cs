@@ -72,7 +72,7 @@ public class EmotionRenderer : MonoBehaviour
         if(emotion == null) return;
         timer = 0f;
         frameIndex = 0;
-        board.mr.material.mainTexture = emotion.frames[0];
+        board.mr.material.SetTexture("_MainTex", emotion.frames[0]);
         board.obj.SetActive(true);
 
         if(duration > 0f) StartCoroutine(HideAfter(duration));

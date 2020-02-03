@@ -56,17 +56,37 @@ MonoBehaviour:
   - name: Watching
     id: 6437
     stateId: 10
-    exits: 3c190000
-    hasExits: 01
-  - name: Panicking
-    id: 6438
-    stateId: 6
-    exits: 3a190000
+    exits: 54190000
     hasExits: 01
   - name: Loosing Intreset In Player
     id: 6450
     stateId: 5
     exits: 37190000
+    hasExits: 01
+  - name: See Valuable
+    id: 6465
+    stateId: 18
+    exits: 44190000
+    hasExits: 01
+  - name: Chase Valuable
+    id: 6466
+    stateId: 13
+    exits: 4a190000
+    hasExits: 01
+  - name: Carry Valuable
+    id: 6475
+    stateId: 11
+    exits: 4e190000
+    hasExits: 01
+  - name: Eject Player
+    id: 6476
+    stateId: 22
+    exits: 4b190000
+    hasExits: 01
+  - name: Panicking
+    id: 6481
+    stateId: 6
+    exits: 3a190000
     hasExits: 01
   transitions:
   - id: 6407
@@ -127,7 +147,7 @@ MonoBehaviour:
   - id: 6442
     disable: 0
     conditions: 11000000
-    exits: 2519000007190000
+    exits: 2519000043190000
     hasExits: 0101
   - id: 6451
     disable: 0
@@ -147,21 +167,61 @@ MonoBehaviour:
   - id: 6458
     disable: 0
     conditions: 13000000
-    exits: 3219000026190000
-    hasExits: 0101
-  - id: 6460
-    disable: 0
-    conditions: 05000000
-    exits: 3f19000032190000
-    hasExits: 0101
-  - id: 6463
-    disable: 0
-    conditions: 06000000
-    exits: 2619000025190000
+    exits: 3219000051190000
     hasExits: 0101
   - id: 6464
     disable: 0
     conditions: 0d000000
     exits: 3919000006190000
     hasExits: 0101
-  initialNode: 2
+  - id: 6467
+    disable: 0
+    conditions: 12000000
+    exits: 4719000007190000
+    hasExits: 0101
+  - id: 6468
+    disable: 0
+    conditions: 15000000
+    exits: 4219000041190000
+    hasExits: 0101
+  - id: 6471
+    disable: 0
+    conditions: 14000000
+    exits: 4919000007190000
+    hasExits: 0101
+  - id: 6473
+    disable: 0
+    conditions: 1c000000
+    exits: 4119000007190000
+    hasExits: 0101
+  - id: 6474
+    disable: 0
+    conditions: 16000000
+    exits: 4d19000042190000
+    hasExits: 0101
+  - id: 6477
+    disable: 0
+    conditions: 17000000
+    exits: 4c1900004b190000
+    hasExits: 0101
+  - id: 6478
+    disable: 0
+    conditions: 13000000
+    exits: 061900004b190000
+    hasExits: 0101
+  - id: 6484
+    disable: 0
+    conditions: 1b000000
+    exits: 5719000056190000
+    hasExits: 0101
+  - id: 6486
+    disable: 0
+    conditions: 05000000
+    exits: 5119000025190000
+    hasExits: 0101
+  - id: 6487
+    disable: 0
+    conditions: 05000000
+    exits: 2519000032190000
+    hasExits: 0101
+  initialNode: 0

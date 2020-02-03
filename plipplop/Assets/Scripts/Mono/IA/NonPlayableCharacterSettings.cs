@@ -19,5 +19,6 @@ public class NonPlayableCharacterSettings : ScriptableObject
 	[Range(0f, 100f)] public float initialHunger = 50f;
 
 	[Header("Equipments")]
+	public bool autoOutfit = false;
 	public ClothesData[] clothes;
 }
