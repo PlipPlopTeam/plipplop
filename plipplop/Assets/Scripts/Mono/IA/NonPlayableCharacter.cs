@@ -118,9 +118,16 @@ public class NonPlayableCharacter : MonoBehaviour
 		UpdateCollecting();
 		UpdateWaiting();
 		agentMovement.Tick();
-		if (carried != null && carried.Mass() > settings.strength) StartCarrying(carried);
+		if (carried != null)
+		{
+			if (carried.Mass() > settings.strength) Lift(carried);
+			else Carrying(carried);
+		}
 		graph.Update();
 	}
+
+	public virtual void Carrying(ICarryable carryable)
+	{}
 
 	public void FixedUpdate()
 	{
@@ -140,7 +147,6 @@ public class NonPlayableCharacter : MonoBehaviour
 					onWaitEnded.Invoke();
 					onWaitEnded = null;
 				}
-
 				endWait = true;
 				hasWaited = true;
 			}
@@ -175,7 +181,7 @@ public class NonPlayableCharacter : MonoBehaviour
 		return carried != null;
 	}
 
-	public void StartCarrying(ICarryable carryable)
+	public void Lift(ICarryable carryable)
 	{
 		carryable.Self().position = (skeleton.GetSocketBySlot(Clothes.ESlot.RIGHT_HAND).GetPosition() + skeleton.GetSocketBySlot(Clothes.ESlot.LEFT_HAND).GetPosition())/2f;
 		carryable.Self().forward = transform.forward;
@@ -233,7 +239,6 @@ public class NonPlayableCharacter : MonoBehaviour
 		{
 			animator.SetBool("Carrying", true);
 		}
-			
 	}
 
 	public virtual void Kick(Controller controller)
