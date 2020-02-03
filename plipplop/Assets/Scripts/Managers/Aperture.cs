@@ -324,7 +324,6 @@ public class Aperture
 
         if (isTargetMoving) {
             ResetIdleTime();
-            /*
             // Target moving and user not touching the pad, I will put myself in the back of the player
             if (Mathf.Abs(hAngleAmount) <= 0f) {
                 float currentAngle = Vector3.SignedAngle(Forward(), target.forward, Vector3.up);
@@ -335,9 +334,9 @@ public class Aperture
                     hAngle += cameraTurnMultiplier * currentAngle * Time.fixedDeltaTime;
                 }
             }
-            */
         }
 
+        hAngle = hAngle % 360f;
         hAngleAmount = 0f;
 
         float vAngleAmplitude = 40f - settings.additionalAngle;
@@ -421,9 +420,6 @@ public class Aperture
         }
 
         rotationAroundTarget.destination = Quaternion.Euler(0f, hAngle, vAngle);
-
-        // Fixme : completely crazy
-        //rotationAroundTarget.destination = cam.transform.rotation;
     }
 
     public void ComputeFieldOfView(Vector3 targetPosition)
@@ -468,7 +464,7 @@ public class Aperture
 
         float cameraHeight = Mathf.Sqrt(Mathf.Abs(acSquare)); // (ac)
 
-        var computedLocalPositionFromRot = new Vector3(Mathf.Sin(rotationAroundTarget.current.eulerAngles.y), 0f, Mathf.Cos(rotationAroundTarget.current.eulerAngles.y)) * settings.distance.min;
+        var computedLocalPositionFromRot = new Vector3(Mathf.Sin(rotationAroundTarget.current.eulerAngles.y*Mathf.Deg2Rad), 0f, Mathf.Cos(rotationAroundTarget.current.eulerAngles.y * Mathf.Deg2Rad)) * settings.distance.min;
 
         position.destination =
             targetPosition

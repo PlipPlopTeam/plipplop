@@ -154,7 +154,12 @@ public class Brain
         if (controller != null) controller.Freeze();
     }
 
-	IEnumerator ParalyzeFor(float time)
+    public void UnfreezeController()
+    {
+        if (controller != null) controller.UnFreeze();
+    }
+
+    IEnumerator ParalyzeFor(float time)
 	{
 		Paralyze();
 		yield return new WaitForSeconds(time);

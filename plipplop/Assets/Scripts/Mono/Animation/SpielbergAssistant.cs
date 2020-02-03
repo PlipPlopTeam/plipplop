@@ -8,9 +8,10 @@ using UnityEngine.Timeline;
 public class SpielbergAssistant : MonoBehaviour
 {
     public enum ETransitionType { SMOOTH_MOVEMENT, CUT }; // TODO: Add FADE...
+    public enum EParalyzisType { LIBERATE, PARALYZE, PARALYZE_AND_STOP, FREEZE, UNTOUCHED};
 
-    public bool paralyzeOnStart = true;
-    public bool liberateOnEnd = true;
+    public EParalyzisType playerStateOnStart = EParalyzisType.PARALYZE_AND_STOP;
+    public EParalyzisType playerStateOnEnd = EParalyzisType.LIBERATE;
     public ETransitionType startType = ETransitionType.SMOOTH_MOVEMENT;
     public ETransitionType endType = ETransitionType.SMOOTH_MOVEMENT;
     [Range(0.3f, 10f)] public float smoothMovementSpeed = 1f;
@@ -34,7 +35,7 @@ public class SpielbergAssistant : MonoBehaviour
 
         if (firstCamera) StartCoroutine(PrepareCinematicEnding());
         else EndInternal();
-        if (liberateOnEnd) LiberatePlayer();
+        ExecuteParalyzisState(playerStateOnEnd);
     }
 
     public void ParalyzePlayer() {
@@ -56,7 +57,7 @@ public class SpielbergAssistant : MonoBehaviour
             cam.enabled = false;
         }
 
-        if (paralyzeOnStart) ParalyzePlayer();
+        ExecuteParalyzisState(playerStateOnStart);
 
         isPlaying = true;
         lastCamera = Aperture.GetCurrentlyActiveCamera();
@@ -73,6 +74,41 @@ public class SpielbergAssistant : MonoBehaviour
                 lastCamera = currCamera;
             }
         }   
+    }
+
+    void ExecuteParalyzisState(EParalyzisType state)
+    {
+        switch (state) {
+            case EParalyzisType.FREEZE:
+                FreezePlayer();
+                break;
+            case EParalyzisType.LIBERATE:
+                LiberatePlayer();
+                UnfreezePlayer();
+                break;
+            case EParalyzisType.PARALYZE:
+                ParalyzePlayer();
+                break;
+            case EParalyzisType.PARALYZE_AND_STOP:
+                ParalyzeAndStopPlayer();
+                break;
+        }
+    }
+
+    public void FreezePlayer()
+    {
+        Game.i.player.FreezeController();
+    }
+
+    public void UnfreezePlayer()
+    {
+        Game.i.player.UnfreezeController();
+    }
+
+    public void ParalyzeAndStopPlayer()
+    {
+        ParalyzePlayer();
+        Game.i.player.StopController();
     }
 
     IEnumerator PrepareCinematic()
@@ -98,6 +134,7 @@ public class SpielbergAssistant : MonoBehaviour
             PlayInternal();
             aperture.EnableLookAt();
         }
+
         aperture.RemoveStaticObjective(objective);
     }
 
