@@ -29,7 +29,7 @@ public abstract class Controller : MonoBehaviour
     RigidbodyConstraints previousConstraints;
 
 	bool isBeingThrown = false;
-	bool isFrozen = false;
+	int isFrozen = 0;
 
 	public virtual void Throw(Vector3 direction, float force)
 	{
@@ -38,8 +38,8 @@ public abstract class Controller : MonoBehaviour
 		Freeze();
 	}
 
-	public void Freeze(){isFrozen = true;}
-	public void UnFreeze(){isFrozen = false;}
+	public void Freeze(){isFrozen++;}
+	public void UnFreeze(){isFrozen--;}
 
 	public virtual void OnEject()
     {
@@ -132,14 +132,19 @@ public abstract class Controller : MonoBehaviour
 
     virtual internal void BaseMove(Vector3 direction)
     {
-		if (isFrozen) return;
+		if (IsFrozen()) return;
 		if (AreLegsRetracted()) SpecificMove(direction);
         else locomotion.Move(direction);
     }
 
+    virtual internal void StopHorizontalVelocity()
+    {
+        rigidbody.velocity = Vector3.Scale(rigidbody.velocity, Vector3.up);
+    }
+
     public void Move(float fb, float rl)
     {
-		if (isFrozen) return;
+		if (IsFrozen()) return;
 		BaseMove(Vector3.ClampMagnitude(new Vector3(rl, 0f, fb), 1f));
     }
 
@@ -302,6 +307,11 @@ public abstract class Controller : MonoBehaviour
         {
             Game.i.player.TeleportBaseControllerAndPossess();
         }
+    }
+
+    bool IsFrozen()
+    {
+        return isFrozen > 0;
     }
 
 #if UNITY_EDITOR
