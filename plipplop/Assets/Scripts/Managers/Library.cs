@@ -26,6 +26,7 @@ public class Library
     public GameObject baseControllerPrefab;
 	public GameObject teleporterVolumePrefab;
 	public GameObject torchPrefab;
+    public GameObject canvas;
 
 	[Header("Clothes")]
     public List<ClothesData> headClothes;
