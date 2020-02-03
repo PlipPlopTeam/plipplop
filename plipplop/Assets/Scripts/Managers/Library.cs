@@ -32,8 +32,18 @@ public class Library
     public List<ClothesData> torsoClothes;
     public List<ClothesData> legsClothes;
 
+	public ClothesData[] GetOutfit()
+	{
+		List<ClothesData> outfit = new List<ClothesData>();
 
-    [Header("Material")]
+		if(Random.Range(0f, 1f) > 0.5f) outfit.Add(headClothes[Random.Range(0, headClothes.Count)]);
+		if (Random.Range(0f, 1f) > 0.25f) outfit.Add(torsoClothes[Random.Range(0, torsoClothes.Count)]);
+		outfit.Add(legsClothes[Random.Range(0, legsClothes.Count)]);
+		return outfit.ToArray();
+	}
+
+
+	[Header("Material")]
     public Material emotionBoardMaterial;
     public Material lineRendererMaterial;
     public Material killZMaterial;
