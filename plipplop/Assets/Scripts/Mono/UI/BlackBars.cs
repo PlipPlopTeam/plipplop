@@ -41,7 +41,7 @@ namespace PlipPlop.UserInterface
 
         bool ShouldActivate()
         {
-            return Game.i.player.IsParalyzed() || Game.i.aperture.IsCameraBeingRepositioned();
+            return Game.i.player.IsParalyzed() || Game.i.aperture.IsCameraBeingRepositioned() || Game.i.aperture.IsUserAligning();
         }
     }
 }
