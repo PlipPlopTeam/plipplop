@@ -20,10 +20,10 @@ public class TheReef : NonPlayableCharacter
 	IEnumerator WaitAndKick()
 	{
 		yield return new WaitForSeconds(0.5f);
-
 		controller.Kick();
 		player = Game.i.player.GetCurrentController();
 		player.Freeze();
+		player.Paralyse();
 		Drop();
 		skeleton.Attach(controller.transform, Clothes.ESlot.LEFT_HAND, true);
 		skeleton.Attach(player.transform, Clothes.ESlot.RIGHT_HAND, true);

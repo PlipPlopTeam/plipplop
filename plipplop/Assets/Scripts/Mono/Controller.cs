@@ -29,16 +29,17 @@ public abstract class Controller : MonoBehaviour
     RigidbodyConstraints previousConstraints;
 
 	bool isBeingThrown = false;
-	int isFrozen = 0;
+	int freeze = 0;
+
+	bool isParalysed = false;
+	public void Paralyse() { isParalysed = true; }
+	public void UnParalyse() { isParalysed = false; }
 
 	public virtual void Throw(Vector3 direction, float force)
 	{
 		isBeingThrown = true;
 		rigidbody.AddForce(direction * force * Time.deltaTime);
-		Freeze();
 	}
-
-
 
 	public virtual void OnEject()
     {
@@ -130,7 +131,7 @@ public abstract class Controller : MonoBehaviour
 
     virtual internal void BaseMove(Vector3 direction)
     {
-		if (IsFrozen()) return;
+		if (IsFrozen() || isParalysed) return;
 		if (AreLegsRetracted()) SpecificMove(direction);
         else locomotion.Move(direction);
     }
@@ -254,7 +255,7 @@ public abstract class Controller : MonoBehaviour
 
 		if(isBeingThrown && IsGrounded())
 		{
-			UnFreeze();
+			UnParalyse();
 			isBeingThrown = false;
 		}
 	}
@@ -307,24 +308,39 @@ public abstract class Controller : MonoBehaviour
         }
     }
 
-	public void Freeze() { isFrozen++; }
-	public void UnFreeze() { isFrozen--; }
+	public void Freeze()
+	{
+		freeze++;
+		RefreshFreeze();
+	}
+
+	public void UnFreeze()
+	{
+		freeze--;
+		RefreshFreeze();
+	}
+
 	bool IsFrozen()
     {
-        return isFrozen > 0;
+		return freeze > 0;
     }
+
 	public void RefreshFreeze()
 	{
 		if (IsFrozen()) ApplyFreeze();
 		else RemoveFreeze();
 	}
+
 	public void ApplyFreeze()
 	{
 		rigidbody.isKinematic = true;
+		rigidbody.useGravity = false;
 	}
+
 	public void RemoveFreeze()
 	{
 		rigidbody.isKinematic = false;
+		rigidbody.useGravity = true;
 	}
 
 #if UNITY_EDITOR
