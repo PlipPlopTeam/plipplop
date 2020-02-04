@@ -100,7 +100,7 @@ public class LocomotionAnimation
 
     void SetLegHeight()
     {
-        legsCollider.size = new Vector3(1f, legsHeight, 1f);
+        legsCollider.size = new Vector3(0.2f, legsHeight, 0.2f);
         legsCollider.center = legsOffset + new Vector3(0f, -legsHeight / 2, 0f);
         legs.transform.localScale = (Vector3.one - Vector3.up) + Vector3.up * legsHeight;
     }

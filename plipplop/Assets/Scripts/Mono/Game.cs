@@ -41,6 +41,7 @@ public class Game : MonoBehaviour
         chunkLoader = new ChunkLoader();
         aiZone = new AIZone();
         new GameObject().AddComponent<UnityMainThreadDispatcher>().gameObject.name="_THREAD_DISPATCHER";
+        GameObject.Instantiate(library.canvas).name = "GAME_CANVAS";
 
         var spawn = FindObjectOfType<SpawnMarker>();
         if (!spawn) {
