@@ -7,6 +7,8 @@ using System.IO;
 using System.Linq;
 using Random = UnityEngine.Random;
 
+#if UNITY_EDITOR
+
 [ExecuteInEditMode]
 public class CoconutTreeBuilder : MonoBehaviour
 {
@@ -138,3 +140,4 @@ public class CoconutTreeBuilder : MonoBehaviour
       return coconuts[Random.Range(0, coconuts.Count)];
    }
 }
+#endif
