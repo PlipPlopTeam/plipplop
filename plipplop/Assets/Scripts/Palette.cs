@@ -19,9 +19,9 @@ public class Palette : ScriptableObject
 		// If colors works in pairs or more
 		if(colors.Count > 1)
 		{
-			for(int i = 0; i < count; i++)
+			int rand = Random.Range(0, colors[0].list.Count);
+			for (int i = 0; i < count; i++)
 			{
-				int rand = Random.Range(0, colors[0].list.Count);
 				if (i < colors.Count) result.Add(colors[i].list[rand]);
 				else break;
 			}
@@ -43,7 +43,7 @@ public class Palette : ScriptableObject
 		if(result.Count < count)
 		{
 			int dif = count - result.Count;
-			for (int i = 0; i < dif; i++) result.Add(Color.white);
+			for (int i = 0; i < dif; i++) result.Add(Color.red);
 		}
 
 		return result.ToArray();

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Cloth : MonoBehaviour
 {
-    public enum ESlot {HEAD, FACE, NECK, TORSO, LEFT_WRIST, RIGHT_WRIST, RIGHT_HAND, LEFT_HAND, LEGS, RIGHT_FOOT, LEFT_FOOT, BELT};
+    public enum ESlot {TOP_HEAD, HEAD, FACE, NECK, TORSO, LEFT_WRIST, RIGHT_WRIST, RIGHT_HAND, LEFT_HAND, LEGS, RIGHT_FOOT, LEFT_FOOT, BELT};
     public ClothData data;
     public Transform root;
     public List<Transform> attachs = new List<Transform>();

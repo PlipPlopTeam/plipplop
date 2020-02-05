@@ -30,6 +30,7 @@ public class Library
 
 	[Header("Cloth")]
     public List<ClothData> headClothes;
+    public List<ClothData> hairs;
     public List<ClothData> torsoClothes;
     public List<ClothData> legsClothes;
 	/*
@@ -41,9 +42,11 @@ public class Library
 	public ClothData[] GetOutfit()
 	{
 		List<ClothData> outfit = new List<ClothData>();
+		if (Random.Range(0f, 1f) > 0.99f) return outfit.ToArray();
 
-		if(Random.Range(0f, 1f) > 0.5f) outfit.Add(headClothes[Random.Range(0, headClothes.Count)]);
+			if (Random.Range(0f, 1f) > 0.5f) outfit.Add(headClothes[Random.Range(0, headClothes.Count)]);
 		if (Random.Range(0f, 1f) > 0.25f) outfit.Add(torsoClothes[Random.Range(0, torsoClothes.Count)]);
+		if (Random.Range(0f, 1f) > 0.15f) outfit.Add(hairs[Random.Range(0, hairs.Count)]);
 		outfit.Add(legsClothes[Random.Range(0, legsClothes.Count)]);
 		return outfit.ToArray();
 	}

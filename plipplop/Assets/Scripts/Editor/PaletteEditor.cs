@@ -5,6 +5,7 @@ using UnityEditor;
 public class PaletteEditor : Editor
 {
 	Vector2 scroll;
+	bool clear = false;
 
 	public override void OnInspectorGUI()
 	{
@@ -42,10 +43,8 @@ public class PaletteEditor : Editor
 		EditorGUILayout.EndHorizontal();
 
 		// Clearing
-		if (GUILayout.Button("Clear"))
-		{
-			colors.ClearArray();
-		}
+		clear = EditorGUILayout.Toggle("Show Clear Button", clear);
+		if(clear && GUILayout.Button("Clear")) colors.ClearArray();
 
 		serializedObject.ApplyModifiedProperties();
 
