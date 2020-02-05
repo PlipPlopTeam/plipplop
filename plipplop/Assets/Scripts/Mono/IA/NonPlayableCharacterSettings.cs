@@ -20,5 +20,6 @@ public class NonPlayableCharacterSettings : ScriptableObject
 
 	[Header("Equipments")]
 	public bool autoOutfit = false;
-	public ClothesData[] clothes;
+	public bool randomColors = false;
+	public ClothData[] clothes;
 }

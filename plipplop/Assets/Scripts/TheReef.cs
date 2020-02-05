@@ -25,8 +25,8 @@ public class TheReef : NonPlayableCharacter
 		player.Freeze();
 		player.Paralyse();
 		Drop();
-		skeleton.Attach(controller.transform, Clothes.ESlot.LEFT_HAND, true);
-		skeleton.Attach(player.transform, Clothes.ESlot.RIGHT_HAND, true);
+		skeleton.Attach(controller.transform, Cloth.ESlot.LEFT_HAND, true);
+		skeleton.Attach(player.transform, Cloth.ESlot.RIGHT_HAND, true);
 		StartCoroutine(WaitAndThrow());
 	}
 	IEnumerator WaitAndThrow()
@@ -34,10 +34,10 @@ public class TheReef : NonPlayableCharacter
 		yield return new WaitForSeconds(0.85f);
 
 		if (controller.TryGetComponent(out ICarryable result)) Carry(result);
-		else skeleton.Attach(controller.transform, Clothes.ESlot.RIGHT_HAND, true);
+		else skeleton.Attach(controller.transform, Cloth.ESlot.RIGHT_HAND, true);
 		player.UnFreeze();
-		player.transform.position -= skeleton.GetSocketBySlot(Clothes.ESlot.RIGHT_HAND).bone.up * 2f;
-		player.Throw(-skeleton.GetSocketBySlot(Clothes.ESlot.RIGHT_HAND).bone.up, throwForce);
+		player.transform.position -= skeleton.GetSocketBySlot(Cloth.ESlot.RIGHT_HAND).bone.up * 2f;
+		player.Throw(-skeleton.GetSocketBySlot(Cloth.ESlot.RIGHT_HAND).bone.up, throwForce);
 		player.transform.up = Vector3.up;
 		controller = null;
 		player = null;

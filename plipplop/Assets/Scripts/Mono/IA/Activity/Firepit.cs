@@ -13,7 +13,7 @@ public class Firepit : Activity
 		foreach (NonPlayableCharacter u in users)
         {
             NonPlayableCharacter npc = users[Random.Range(0, users.Count)];
-            if(npc != u) u.look.FocusOn(npc.skeleton.GetSocketBySlot(Clothes.ESlot.HEAD).bone);
+            if(npc != u) u.look.FocusOn(npc.skeleton.GetSocketBySlot(Cloth.ESlot.HEAD).bone);
         }
 
         if(chair == null)

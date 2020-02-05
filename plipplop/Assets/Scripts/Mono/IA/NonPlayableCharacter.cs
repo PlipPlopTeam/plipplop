@@ -34,7 +34,7 @@ public class NonPlayableCharacter : MonoBehaviour
 	public Food food;
     public Feeder feeder;
 
-	public Dictionary<Clothes.ESlot, Clothes> clothes = new Dictionary<Clothes.ESlot, Clothes>();
+	public Dictionary<Cloth.ESlot, Cloth> clothes = new Dictionary<Cloth.ESlot, Cloth>();
 	public Dictionary<EStat, float> stats = new Dictionary<EStat, float>();
 
 	[Header("Settings")]
@@ -83,9 +83,38 @@ public class NonPlayableCharacter : MonoBehaviour
 		face = GetComponent<Face>();
 		collider = GetComponent<Collider>();
 
-		// Load Character Clothes Slots
-		foreach (Clothes.ESlot suit in (Clothes.ESlot[])Clothes.ESlot.GetValues(typeof(Clothes.ESlot)))
+		// Load Character Cloth Slots
+		foreach (Cloth.ESlot suit in (Cloth.ESlot[])Cloth.ESlot.GetValues(typeof(Cloth.ESlot)))
 			clothes.Add(suit, null);
+	}
+
+	public void EquipOutfit()
+	{
+		if (settings.autoOutfit)
+		{
+			foreach (ClothData c in Game.i.library.GetOutfit()) Equip(c);
+			/*
+			if (settings.randomColors)
+			{
+				Dictionary<Cloth.ESlot, Color> colors = Game.i.library.GetRandomOutfitColor();
+				foreach (KeyValuePair<Cloth.ESlot, Cloth> c in clothes)
+				{
+					if (c.Value != null && colors.ContainsKey(c.Key)) c.Value.SetColors(colors[c.Key]);
+				}
+			}
+			*/
+		}
+		else
+		{
+			foreach (ClothData c in settings.clothes) Equip(c);
+		}
+
+		/*
+		foreach (KeyValuePair<Cloth.ESlot, Cloth> c in clothes)
+		{
+			if (c.Value != null) c.Value.Scale(settings.height / 2);
+		}
+		*/
 	}
 
 	public void Start()
@@ -97,17 +126,6 @@ public class NonPlayableCharacter : MonoBehaviour
 		stats.Add(EStat.TIREDNESS, settings.initialTiredness);
 		stats.Add(EStat.HUNGER, settings.initialTiredness);
 
-
-		if(settings.autoOutfit)
-			foreach (ClothesData c in Game.i.library.GetOutfit()) Equip(c);
-		else
-			foreach (ClothesData c in settings.clothes) Equip(c);
-		/*
-		foreach (KeyValuePair<Clothes.ESlot, Clothes> c in clothes)
-		{
-			if (c.Value != null) c.Value.Scale(settings.height / 2);
-		}
-		*/
 		// Loading Graph
 		if (graph == null)
 		{
@@ -116,6 +134,8 @@ public class NonPlayableCharacter : MonoBehaviour
 		}
 		graph = Instantiate(graph);
 		graph.Load(this);
+
+		EquipOutfit();
 	}
 
 	public virtual void Update()
@@ -165,14 +185,14 @@ public class NonPlayableCharacter : MonoBehaviour
 		onWaitEnded = end;
 	}
 
-	public void Equip(ClothesData clothData, bool change = true)
+	public void Equip(ClothData clothData, bool change = true)
 	{
-		Clothes c = clothes[clothData.slot];
+		Cloth c = clothes[clothData.slot];
 		if(c != null && change) c.Destroy();
 
 		GameObject clothObject = new GameObject();
 		clothObject.name = clothData.name;
-		c = clothObject.AddComponent<Clothes>();
+		c = clothObject.AddComponent<Cloth>();
 		c.Create(clothData, skeleton);
 		clothes[clothData.slot] = c;
 	}
@@ -188,7 +208,7 @@ public class NonPlayableCharacter : MonoBehaviour
 
 	public void Lift(ICarryable carryable)
 	{
-		carryable.Self().position = (skeleton.GetSocketBySlot(Clothes.ESlot.RIGHT_HAND).GetPosition() + skeleton.GetSocketBySlot(Clothes.ESlot.LEFT_HAND).GetPosition())/2f;
+		carryable.Self().position = (skeleton.GetSocketBySlot(Cloth.ESlot.RIGHT_HAND).GetPosition() + skeleton.GetSocketBySlot(Cloth.ESlot.LEFT_HAND).GetPosition())/2f;
 		carryable.Self().forward = transform.forward;
 	}
 
@@ -238,7 +258,7 @@ public class NonPlayableCharacter : MonoBehaviour
 		if (carried.Mass() <= settings.strength)
 		{
 			if(animator != null) animator.SetBool("Holding", true);
-			if(skeleton != null) skeleton.Attach(carried.Self(), Clothes.ESlot.RIGHT_HAND, true);
+			if(skeleton != null) skeleton.Attach(carried.Self(), Cloth.ESlot.RIGHT_HAND, true);
 		}
 		else
 		{
@@ -257,7 +277,7 @@ public class NonPlayableCharacter : MonoBehaviour
 		carried.Drop();
 
 		if(carried.Mass() <= settings.strength)
-			skeleton.Drop(Clothes.ESlot.RIGHT_HAND);
+			skeleton.Drop(Cloth.ESlot.RIGHT_HAND);
 
 		if(animator != null)
 		{

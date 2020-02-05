@@ -20,7 +20,7 @@ public class FishingBox : Activity
         user.agentMovement.onDestinationReached += () =>
         {
 			user.Carry(Instantiate(fishingPole).GetComponent<FishingPole>());
-            //user.skeleton.Attach(Instantiate(fishingPole).transform, Clothes.ESlot.RIGHT_HAND, true, Vector3.zero, new Vector3(180f, 0f, 90f));
+            //user.skeleton.Attach(Instantiate(fishingPole).transform, Cloth.ESlot.RIGHT_HAND, true, Vector3.zero, new Vector3(180f, 0f, 90f));
             Vector3 pos = position + Geometry.GetRandomPointAround(radius);
             user.agentMovement.GoThere(pos);
             StartCoroutine(DelayedSetup(user));
@@ -44,7 +44,7 @@ public class FishingBox : Activity
     public override void Exit(NonPlayableCharacter user)
     {
         base.Exit(user);
-        user.skeleton.Drop(Clothes.ESlot.RIGHT_HAND);
+        user.skeleton.Drop(Cloth.ESlot.RIGHT_HAND);
         user.animator.SetBool("Fishing", false);
 		StopAllCoroutines();
     }

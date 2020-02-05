@@ -28,21 +28,35 @@ public class Library
 	public GameObject torchPrefab;
     public GameObject canvas;
 
-	[Header("Clothes")]
-    public List<ClothesData> headClothes;
-    public List<ClothesData> torsoClothes;
-    public List<ClothesData> legsClothes;
+	[Header("Cloth")]
+    public List<ClothData> headClothes;
+    public List<ClothData> torsoClothes;
+    public List<ClothData> legsClothes;
+	/*
+	public Color[] headColors;
+	public Color[] torsoColors;
+	public Color[] legsColors;
+	*/
 
-	public ClothesData[] GetOutfit()
+	public ClothData[] GetOutfit()
 	{
-		List<ClothesData> outfit = new List<ClothesData>();
+		List<ClothData> outfit = new List<ClothData>();
 
 		if(Random.Range(0f, 1f) > 0.5f) outfit.Add(headClothes[Random.Range(0, headClothes.Count)]);
 		if (Random.Range(0f, 1f) > 0.25f) outfit.Add(torsoClothes[Random.Range(0, torsoClothes.Count)]);
 		outfit.Add(legsClothes[Random.Range(0, legsClothes.Count)]);
 		return outfit.ToArray();
 	}
-
+	/*
+	public Dictionary<Cloth.ESlot, Color> GetRandomOutfitColor()
+	{
+		Dictionary<Cloth.ESlot, Color> dic = new Dictionary<Cloth.ESlot, Color>();
+		dic.Add(Cloth.ESlot.HEAD, headColors.Length > 0 ? headColors[Random.Range(0, headColors.Length)] : Color.white);
+		dic.Add(Cloth.ESlot.TORSO, torsoColors.Length > 0 ? torsoColors[Random.Range(0, torsoColors.Length)] : Color.white);
+		dic.Add(Cloth.ESlot.LEGS, legsColors.Length > 0 ? legsColors[Random.Range(0, legsColors.Length)] : Color.white);
+		return dic;
+	}
+	*/
 
 	[Header("Material")]
     public Material emotionBoardMaterial;

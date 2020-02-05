@@ -25,7 +25,7 @@ public class Cheats : Dictionary<string, System.Action>
 	{
 		foreach(NonPlayableCharacter npc in Object.FindObjectsOfType<NonPlayableCharacter>())
 		{
-			npc.skeleton.GetSocketBySlot(Clothes.ESlot.HEAD).bone.localScale = Vector3.one * Random.Range(3f, 6f);
+			npc.skeleton.GetSocketBySlot(Cloth.ESlot.HEAD).bone.localScale = Vector3.one * Random.Range(3f, 6f);
 		}
 	}
 
@@ -46,7 +46,7 @@ public class Cheats : Dictionary<string, System.Action>
     {
         foreach(NonPlayableCharacter npc in Object.FindObjectsOfType<NonPlayableCharacter>())
         {
-            npc.skeleton.GetSocketBySlot(Clothes.ESlot.HEAD).bone.localPosition += Vector3.up * Random.Range(.2f, 1f);
+            npc.skeleton.GetSocketBySlot(Cloth.ESlot.HEAD).bone.localPosition += Vector3.up * Random.Range(.2f, 1f);
         }
     }
 
@@ -54,8 +54,8 @@ public class Cheats : Dictionary<string, System.Action>
     {
         foreach(NonPlayableCharacter npc in Object.FindObjectsOfType<NonPlayableCharacter>())
         {
-            npc.skeleton.GetSocketBySlot(Clothes.ESlot.HEAD).bone.localScale = Vector3.one * Random.Range(3f, 6f);
-            npc.skeleton.GetSocketBySlot(Clothes.ESlot.HEAD).bone.localPosition += Vector3.up * Random.Range(.2f, 1f);
+            npc.skeleton.GetSocketBySlot(Cloth.ESlot.HEAD).bone.localScale = Vector3.one * Random.Range(3f, 6f);
+            npc.skeleton.GetSocketBySlot(Cloth.ESlot.HEAD).bone.localPosition += Vector3.up * Random.Range(.2f, 1f);
         }
     }
 
