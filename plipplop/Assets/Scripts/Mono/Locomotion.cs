@@ -6,23 +6,23 @@ using UnityEngine;
 public class Locomotion : Walker
 {
     public LocomotionPreset preset;
-    public float legsHeight = 1f;
     public float groundCheckRange = 1f;
-	public Vector3 legsOffset = Vector3.up * 0.65f;
+    public Vector3 legsOffset = Vector3.up * 0.65f;
+    public float legsHeight { get { return 1f; } }
 
-	[HideInInspector] new public Rigidbody rigidbody;
+    [HideInInspector] new public Rigidbody rigidbody;
     [HideInInspector] public Vector3 targetDirection;
     [HideInInspector] public bool isImmerged = false;
     public event System.Action onLegAnimationEnd;
 
     LocomotionAnimation locomotionAnimation;
     Controller parentController;
-	float speedMultiplier = 1f;
+    float speedMultiplier = 1f;
     float timePressed = 0f;
     Vector3 lastDirection = new Vector3();
     bool hasJumped = false;
     bool isInitialized = false;
-    
+
 
     internal Vector3 groundCheckDirection = Vector3.down;
 
@@ -158,7 +158,7 @@ public class Locomotion : Walker
             lastDirection = direction;
 
             // Animation
-            if (rigidbody.velocity.normalized.magnitude > 0) {
+            if (rigidbody.velocity.normalized.magnitude > 0 && direction.magnitude > 0f) {
                 transform.forward = Vector3.Lerp(
                     Vector3.Scale(Vector3.one - Vector3.up, transform.forward),
                     Vector3.Scale(Vector3.one - Vector3.up, rigidbody.velocity.normalized),

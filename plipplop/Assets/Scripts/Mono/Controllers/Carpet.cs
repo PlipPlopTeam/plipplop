@@ -12,29 +12,49 @@ public class Carpet : Controller
     public float accelerationSpeed = 4f;
     public float cruiseForce = 40f;
     public float turnForce = 10000f;
+    public float decelerationSpeed = 50f;
+
+    public Rigidbody[] rigidbodies;
+
+    public PhysicMaterial playMaterial;
+    public PhysicMaterial immobileMaterial;
 
     float currentZAccumulator = 0f;
     float timeStarted = 0f;
 
+
     public override void OnEject()
     {
         base.OnEject();
+        foreach(var collider in GetComponentsInChildren<Collider>()) {
+            collider.material = immobileMaterial;
+        }
         // Code here
     }
 
     public override void OnPossess()
     {
         base.OnPossess();
+        foreach (var collider in GetComponentsInChildren<Collider>()) {
+            collider.material = playMaterial;
+        }
         // Code here
+    }
+
+    internal override void BaseMove(Vector3 direction)
+    {
+        base.BaseMove(direction);
     }
 
     internal override void SpecificMove(Vector3 direction)
     {
         // acc goes from 0 to 1 over time when grounded, and decreases until 0f otherwise
-        currentZAccumulator = Mathf.Clamp01(currentZAccumulator + ((direction.z != 0f && IsGrounded() ? (Mathf.Sign(direction.z) * 2f) : 0f) - 1f) * accelerationSpeed * Time.fixedDeltaTime);
+        currentZAccumulator = Mathf.Clamp(currentZAccumulator + ((direction.z != 0f && IsGrounded() ? (Mathf.Sign(direction.z) * 2f - 1f) : 0f)) * accelerationSpeed * Time.fixedDeltaTime, -1f, 1f);
+        if (direction.z == 0F) {
+            currentZAccumulator *= Mathf.Min(1f/Time.deltaTime, 1f/decelerationSpeed) * Time.deltaTime;
+        }
 
         if (IsGrounded()) {
-            
             if (currentZAccumulator != 0f) {
                 
                 // Animation
@@ -58,27 +78,22 @@ public class Carpet : Controller
             rigidbody.AddTorque(transform.up * direction.x * (turnForce * (0.3f + currentZAccumulator)) * Time.fixedDeltaTime, ForceMode.Acceleration);
         }
         else {
-            spring.minDistance = 0f;
+            //spring.minDistance = 0f;
         }
-    }
-
-    internal override void OnJump()
-    {
     }
 
     internal override void Start()
     {
         base.Start();
+        foreach (var collider in GetComponentsInChildren<Collider>()) {
+            collider.material = immobileMaterial;
+        }
         // Code here
     }
 
     internal override void Update()
     {
         base.Update();
-        // Code here
-        if (!IsGrounded() && !AreLegsRetracted()) {
-          //RetractLegs();
-        } 
     }
 
     internal override void OnLegsRetracted()
@@ -89,7 +104,13 @@ public class Carpet : Controller
     internal override void OnLegsExtended()
     {
         // Code here
+        transform.position += Vector3.up * 0.3f;
+        foreach (var rb in rigidbodies) {
+            rb.isKinematic = false;
+        }
+
     }
+
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {

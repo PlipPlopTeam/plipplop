@@ -11,6 +11,7 @@ public abstract class Controller : MonoBehaviour
     [HideInInspector] public bool canRetractLegs = true;
     [HideInInspector] public bool freezeUntilPossessed = false;
     [HideInInspector] public bool useGravity = true;
+    [HideInInspector] public bool animateHead = true;
     [HideInInspector] public float gravityMultiplier = 100f;
     [HideInInspector] public Rigidbody customExternalRigidbody;
     [HideInInspector] public AperturePreset customCamera = null;
@@ -249,7 +250,7 @@ public abstract class Controller : MonoBehaviour
 			}
 		}
 
-        if (IsPossessed() && !AreLegsRetracted()) {
+        if (IsPossessed() && !AreLegsRetracted() && animateHead) {
             AlignPropOnHeadDummy();
         }
 

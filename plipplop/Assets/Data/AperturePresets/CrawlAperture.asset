@@ -18,13 +18,15 @@ MonoBehaviour:
   - property: canBeReset
     isOverriden: 0
   - property: fieldOfView
-    isOverriden: 0
+    isOverriden: 1
   - property: heightOffset
     isOverriden: 1
+  - property: maximumHeightAboveTarget
+    isOverriden: 0
   - property: additionalAngle
     isOverriden: 1
   - property: distance
-    isOverriden: 0
+    isOverriden: 1
   - property: cameraRotateAroundSensivity
     isOverriden: 0
   - property: cameraRotateAboveSensivity
@@ -44,7 +46,7 @@ MonoBehaviour:
   - property: virtualTargetYCatchUp
     isOverriden: 0
   - property: alignAfter
-    isOverriden: 1
+    isOverriden: 0
   - property: angleConsideredAlign
     isOverriden: 0
   - property: minTargetVelocity
@@ -73,25 +75,28 @@ MonoBehaviour:
     isOverriden: 0
   - property: staticRotationLerp
     isOverriden: 0
+  - property: immediatePresetStackUpdate
+    isOverriden: 0
   fallback: {fileID: 11400000, guid: df6437ca0d9bc60498aeb18a4dd62019, type: 2}
   canBeControlled: 1
   canBeReset: 1
-  fieldOfView: 65
-  heightOffset: 0.4
+  fieldOfView: 75
+  heightOffset: 0.6
+  maximumHeightAboveTarget: 10
   additionalAngle: 0
   distance:
-    min: 4
-    max: 4
-  cameraRotateAroundSensivity: 200
+    min: 6
+    max: 6
+  cameraRotateAroundSensivity: 70
   cameraRotateAboveSensivity: 20
   fovLerp: 20
   lateralFollowLerp: 12
   longitudinalFollowLerp: 4
   verticalFollowLerp: 10
-  rotationSpeed: 1000
+  rotationSpeed: 10
   lookAtLerp: 200
   virtualTargetYCatchUp: 5.03
-  alignAfter: 6
+  alignAfter: 15
   angleConsideredAlign: 30
   minTargetVelocity: 0.01
   alignMultiplierByUser: 80
@@ -102,9 +107,10 @@ MonoBehaviour:
   angleIncrementOnSpeed: 2
   maximumCatchUpSpeed: 15
   absoluteBoundaries:
-    min: 1
+    min: 2
     max: 5
   constraintToTarget: 0
   targetConstraintLocalOffset: {x: 0, y: 0, z: 0}
   staticPositionLerp: 10
   staticRotationLerp: 10
+  immediatePresetStackUpdate: 0
