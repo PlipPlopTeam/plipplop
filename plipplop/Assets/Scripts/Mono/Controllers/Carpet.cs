@@ -13,9 +13,10 @@ public class Carpet : Controller
     public float cruiseForce = 40f;
     public float turnForce = 10000f;
     public float decelerationSpeed = 50f;
+    public float centralBoneForce = 10000f;
 
     public Rigidbody[] rigidbodies;
-
+    public Rigidbody centralBone;
     public PhysicMaterial playMaterial;
     public PhysicMaterial immobileMaterial;
 
@@ -36,6 +37,7 @@ public class Carpet : Controller
     {
         base.OnPossess();
         foreach (var collider in GetComponentsInChildren<Collider>()) {
+            if (collider.gameObject == gameObject) continue;
             collider.material = playMaterial;
         }
         // Code here
@@ -65,8 +67,10 @@ public class Carpet : Controller
                 var muscle = Mathf.Abs(Mathf.Sin((timeStarted-Time.time)*muscleSpeed));
                 spring.minDistance = muscle * maxExtension;
 
+                centralBone.AddForce(Vector3.up * centralBoneForce * muscle);
+
                 // Actual movement
-                var force = transform.forward * cruiseForce * (1f - muscle) * currentZAccumulator * Time.fixedDeltaTime;
+                var force = Forward() * cruiseForce * (1f - muscle) * currentZAccumulator * Time.fixedDeltaTime;
                 rigidbody.AddForce(force,ForceMode.Acceleration);
             }
             else {
@@ -86,6 +90,7 @@ public class Carpet : Controller
     {
         base.Start();
         foreach (var collider in GetComponentsInChildren<Collider>()) {
+            if (collider.gameObject == gameObject) continue;
             collider.material = immobileMaterial;
         }
         // Code here
@@ -109,6 +114,11 @@ public class Carpet : Controller
             rb.isKinematic = false;
         }
 
+    }
+
+    Vector3 Forward()
+    {
+        return Vector3.Scale(transform.forward, (Vector3.one - Vector3.up)).normalized;
     }
 
 #if UNITY_EDITOR
