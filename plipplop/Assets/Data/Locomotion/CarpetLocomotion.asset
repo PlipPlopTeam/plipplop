@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d332c5cba85ae44489c8fc18b91eaae4, type: 3}
   m_Name: CarpetLocomotion
   m_EditorClassIdentifier: 
-  maxSpeed: 10
-  jump: 0
+  maxSpeed: 4
+  jump: 300
   accelerationCurve:
     serializedVersion: 2
     m_Curve:
@@ -38,7 +38,12 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  baseDrag: 5
-  maxFallSpeed: 13
-  airControl: 35
+  groundFriction: 0.15
+  airFriction: 0
+  frictionCombine: 0
+  airControl: 20
+  waterControl: 65
   waterSpeedFactor: 0.6
+  maxWalkableSteepness: 25
+  groundedBufferToleranceSeconds: 0.2
+  lookForwardSpeed: 5
