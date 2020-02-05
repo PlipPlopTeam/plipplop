@@ -14,6 +14,8 @@ public class Carpet : Controller
     public float turnForce = 10000f;
     public float decelerationSpeed = 50f;
 
+    public Rigidbody[] rigidbodies;
+
     public PhysicMaterial playMaterial;
     public PhysicMaterial immobileMaterial;
 
@@ -39,6 +41,11 @@ public class Carpet : Controller
         // Code here
     }
 
+    internal override void BaseMove(Vector3 direction)
+    {
+        base.BaseMove(direction);
+    }
+
     internal override void SpecificMove(Vector3 direction)
     {
         // acc goes from 0 to 1 over time when grounded, and decreases until 0f otherwise
@@ -48,7 +55,6 @@ public class Carpet : Controller
         }
 
         if (IsGrounded()) {
-            
             if (currentZAccumulator != 0f) {
                 
                 // Animation
@@ -72,12 +78,8 @@ public class Carpet : Controller
             rigidbody.AddTorque(transform.up * direction.x * (turnForce * (0.3f + currentZAccumulator)) * Time.fixedDeltaTime, ForceMode.Acceleration);
         }
         else {
-            spring.minDistance = 0f;
+            //spring.minDistance = 0f;
         }
-    }
-
-    internal override void OnJump()
-    {
     }
 
     internal override void Start()
@@ -102,6 +104,11 @@ public class Carpet : Controller
     internal override void OnLegsExtended()
     {
         // Code here
+        transform.position += Vector3.up * 0.3f;
+        foreach (var rb in rigidbodies) {
+            rb.isKinematic = false;
+        }
+
     }
 
 #if UNITY_EDITOR

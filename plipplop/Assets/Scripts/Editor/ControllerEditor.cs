@@ -40,6 +40,7 @@ public class ControllerEditor : BaseEditor
         buttons.Add(CanRetractLegsButton(colWidth));
         buttons.Add(UseGravityButton(colWidth));
         buttons.Add(FreezeUntilPossessButton(colWidth));
+        buttons.Add(AnimateHeadButton(colWidth));
         buttons.Add(GravityMultiplierSlider(colWidth));
         buttons.Add(CustomCameraField(colWidth));
         buttons.Add(CustomRigidbodyField(colWidth));
@@ -103,6 +104,32 @@ public class ControllerEditor : BaseEditor
                 if (GUILayout.Button(new GUIContent("EJECT", ejectText), centeredNormalControl, options.ToArray()))
                     Game.i.player.TeleportBaseControllerAndPossess();
             }
+        };
+    }
+
+    System.Action AnimateHeadButton(float width)
+    {
+        // Auto possess
+        var asNormalTex = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_DoNotAnimateHead");
+        var asPressedTex = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_AnimateHead");
+
+        var options = new List<GUILayoutOption>();
+
+        options.Add(GUILayout.MinHeight(fieldsHeight));
+        options.Add(GUILayout.Width(width));
+
+        return delegate {
+            GUILayout.BeginVertical(options.ToArray());
+            if (((Controller)target).animateHead) {
+                if (GUILayout.Button(new GUIContent(buttonSpace + "Head is animated", asPressedTex), pressedControl))
+                    serializedObject.FindProperty("animateHead").boolValue = false;
+            }
+            else {
+                if (GUILayout.Button(new GUIContent(buttonSpace + "Head is static", asNormalTex), normalControl))
+                    serializedObject.FindProperty("animateHead").boolValue = true;
+            }
+            serializedObject.ApplyModifiedProperties();
+            GUILayout.EndVertical();
         };
     }
 

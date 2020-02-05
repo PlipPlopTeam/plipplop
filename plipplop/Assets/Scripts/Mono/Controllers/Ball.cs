@@ -16,7 +16,6 @@ public class Ball : Controller
     new Renderer renderer;
     new SphereCollider collider;
     Transform childBall;
-    float originalLegHeight = 2f;
     float timeStartedRolling = 0f;
     bool isWaitingToRoll = false;
 
@@ -89,7 +88,6 @@ public class Ball : Controller
     internal override void Start()
     {
         base.Start();
-        originalLegHeight = locomotion.legsHeight;
     }
     
     internal override void Update()
@@ -98,9 +96,6 @@ public class Ball : Controller
 
         if (IsPossessed())
         {
-            locomotion.legsHeight = originalLegHeight * (1f - rigidbody.velocity.magnitude / speedBeforeRoll);
-            if(locomotion.legsHeight < 1f) locomotion.legsHeight = 1f;
-
             if (rigidbody.velocity.magnitude > speedBeforeRoll) {
 
                 if (!isWaitingToRoll) {
