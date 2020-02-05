@@ -136,7 +136,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3327656391176162976
 Transform:
   m_ObjectHideFlags: 0
@@ -254,7 +254,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 7789326555039661116, guid: 3adcdb68959317a46992e39d2a528799, type: 3}
+  - {fileID: 2100000, guid: 59b91b8311eb657419f6036f064f4a5c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -749,7 +749,7 @@ GameObject:
   - component: {fileID: 9019254820768127473}
   - component: {fileID: 9019254820768127474}
   m_Layer: 0
-  m_Name: Carpet 1
+  m_Name: Carpet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -784,7 +784,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dc422f69d6eb374599b3d69dc022b00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoPossess: 0
+  autoPossess: 1
   beginCrouched: 1
   canRetractLegs: 1
   freezeUntilPossessed: 0
@@ -795,21 +795,23 @@ MonoBehaviour:
   customCamera: {fileID: 11400000, guid: d23f3b4779ffce74a93cdf2d40d34147, type: 2}
   locomotion: {fileID: 9019254820768127471}
   visuals: {fileID: 9019254820882697963}
-  face: {fileID: 0}
+  face: {fileID: 6535185812442962811}
   visualsOffset: {x: 0, y: 0, z: 0}
   spring: {fileID: 9019254821776289794}
   maxExtension: 0.8
   muscleSpeed: 5
   accelerationSpeed: 4
-  cruiseForce: 1200
+  cruiseForce: 1500
   turnForce: 3000
   decelerationSpeed: 50
+  centralBoneForce: 70
   rigidbodies:
   - {fileID: 9019254821111175583}
   - {fileID: 9019254821654221322}
   - {fileID: 9019254821200123531}
   - {fileID: 9019254821776289795}
   - {fileID: 9019254820086187720}
+  centralBone: {fileID: 9019254821200123531}
   playMaterial: {fileID: 13400000, guid: 929274ef7e00a0b49898865188cf8830, type: 2}
   immobileMaterial: {fileID: 13400000, guid: bafd84a0db61af24c8f8364da84c3027, type: 2}
 --- !u!54 &9019254820768127469
@@ -826,7 +828,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!136 &9019254820768127470
 CapsuleCollider:
@@ -835,13 +837,13 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9019254820768127475}
-  m_Material: {fileID: 13400000, guid: 1ba9d71612f555b479275556f3dee594, type: 2}
+  m_Material: {fileID: 13400000, guid: 31dcc833381586b46a3ad09097e9b8d6, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.1
+  m_Radius: 0.2
   m_Height: 1.5
   m_Direction: 0
-  m_Center: {x: 0, y: 0.05, z: 0}
+  m_Center: {x: 0, y: 0.1, z: 0}
 --- !u!114 &9019254820768127471
 MonoBehaviour:
   m_ObjectHideFlags: 0
