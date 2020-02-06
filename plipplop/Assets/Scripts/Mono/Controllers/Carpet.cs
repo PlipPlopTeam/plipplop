@@ -70,7 +70,14 @@ public class Carpet : Controller
                 centralBone.AddForce(Vector3.up * centralBoneForce * muscle);
 
                 // Actual movement
-                var force = Forward() * cruiseForce * (1f - muscle) * currentZAccumulator * Time.fixedDeltaTime;
+                var y = transform.eulerAngles.y;
+                var norm = locomotion.GetGroundNormal();
+                if (norm.HasValue) {
+                    transform.up = norm.Value;
+                    transform.Rotate(Vector3.up * y);
+                }
+
+                var force = transform.forward * cruiseForce * (1f - muscle) * currentZAccumulator * Time.fixedDeltaTime;
                 rigidbody.AddForce(force,ForceMode.Acceleration);
             }
             else {
@@ -114,11 +121,6 @@ public class Carpet : Controller
             rb.isKinematic = false;
         }
 
-    }
-
-    Vector3 Forward()
-    {
-        return Vector3.Scale(transform.forward, (Vector3.one - Vector3.up)).normalized;
     }
 
 #if UNITY_EDITOR

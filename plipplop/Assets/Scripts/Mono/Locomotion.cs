@@ -180,7 +180,7 @@ public class Locomotion : Walker
 
     public bool IsGrounded(float rangeMultiplier = 1f) // But better 😎
     {
-        RaycastHit[] hits = RaycatAllToGround(rangeMultiplier);
+        RaycastHit[] hits = RaycastAllToGround(rangeMultiplier);
         foreach(RaycastHit h in hits)
         {
             if (!IsMe(h.transform) && !h.collider.isTrigger) {
@@ -205,7 +205,7 @@ public class Locomotion : Walker
         return false;
     }
 
-    RaycastHit[] RaycatAllToGround(float rangeMultiplier = 1f)
+    public RaycastHit[] RaycastAllToGround(float rangeMultiplier = 1f)
     {
         Vector3 os = Vector3.zero;
 
@@ -217,9 +217,22 @@ public class Locomotion : Walker
         return Physics.RaycastAll(transform.position + transform.TransformDirection(os), groundCheckDirection, groundCheckRange * rangeMultiplier);
     }
 
+    public Vector3? GetGroundNormal()
+    {
+        if (!IsGrounded()) throw new System.Exception("Tried to get ground normal BUT controller is not grounded. Please add a check.");
+
+        RaycastHit[] hits = RaycastAllToGround();
+        foreach (RaycastHit h in hits) {
+            if (!IsMe(h.transform) && !h.collider.isTrigger) {
+                return h.normal;
+            }
+        }
+        return null;
+    }
+
     Vector3? GetBelowSurface()
     {
-        RaycastHit[] hits = RaycatAllToGround();
+        RaycastHit[] hits = RaycastAllToGround();
 
         foreach (RaycastHit h in hits) {
             if (!IsMe(h.transform) && !h.collider.isTrigger) return h.point;

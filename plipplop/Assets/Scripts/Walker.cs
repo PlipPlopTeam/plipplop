@@ -12,7 +12,7 @@ public class Walker : MonoBehaviour
 	}
 
 	// GET ALL RAYCAST HITS BELOW FEETS
-	private RaycastHit[] RaycatAllToGround()
+	private RaycastHit[] RaycastAllToGround()
 	{
 		return Physics.RaycastAll(transform.position, -Vector3.up, 1f);
 	}
@@ -20,7 +20,7 @@ public class Walker : MonoBehaviour
 	// FIND THE FIRST FLOOR BELOW FEETS
 	private Floor FindFloor()
 	{
-		RaycastHit[] hits = RaycatAllToGround();
+		RaycastHit[] hits = RaycastAllToGround();
 		foreach(RaycastHit h in hits)
 		{
 			Floor f = h.collider.gameObject.GetComponent<Floor>();
