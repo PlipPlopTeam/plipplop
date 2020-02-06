@@ -6,10 +6,11 @@ using UnityEngine;
 [CustomPropertyDrawer(typeof(NamedPrefabResource))]
 [CustomPropertyDrawer(typeof(VisualEffect))]
 [CustomPropertyDrawer(typeof(GameEffect))]
-[CustomPropertyDrawer(typeof(GameFX.SFXParameter))]
 
 public class NamedResourceDrawer : PropertyDrawer
 {
+    internal bool displayLabels = false;
+
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         var skippedProperties = new List<string>(){ "childCount"};
@@ -36,7 +37,7 @@ public class NamedResourceDrawer : PropertyDrawer
         // Calculate rects
         var spaceBetween = 5f;
         var w = position.width - spaceBetween * 4f;
-        var fractionalWidth = 1f/(count);
+        var fractionalWidth = 1f/(count * (displayLabels ? 2f : 1f) + (displayLabels ? 1f : 0f));
 
         var elementRect = new Rect(position.x, position.y, fractionalWidth * w, position.height);
         var prop = property.Copy();
@@ -47,7 +48,11 @@ public class NamedResourceDrawer : PropertyDrawer
             if (prop.depth != property.depth + 1) break;
 
             // Draw fields - passs GUIContent.none to each so they are drawn without labels
-            EditorGUI.PropertyField(elementRect, prop, GUIContent.none, true) ;
+            if (displayLabels) {
+                EditorGUI.LabelField(elementRect, prop.displayName);
+                elementRect = new Rect(elementRect.x + elementRect.width + spaceBetween, position.y, fractionalWidth * w, position.height);
+            }
+            EditorGUI.PropertyField(elementRect, prop, GUIContent.none, true);
             elementRect = new Rect(elementRect.x + elementRect.width + spaceBetween, position.y, fractionalWidth * w, position.height);
         }
 
