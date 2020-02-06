@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 2932650472225342060}
   - component: {fileID: 2932650472225342063}
   - component: {fileID: 2007550832}
-  - component: {fileID: -1206478011707942472}
   - component: {fileID: 7286649357687551854}
   - component: {fileID: 2887985434650187074}
+  - component: {fileID: 2984802757717126301}
   m_Layer: 0
   m_Name: BeachBall
   m_TagString: Untagged
@@ -61,17 +61,15 @@ MonoBehaviour:
   customCamera: {fileID: 11400000, guid: e5ed624ee327ee14898b812c5fcbdb21, type: 2}
   locomotion: {fileID: 0}
   visuals: {fileID: 5773141008930165641}
-  face: {fileID: 0}
+  face: {fileID: 8047810985327452236}
   visualsOffset: {x: 0, y: 0, z: 0}
-  maxSpeed: 1200
-  acceleration: 800
-  jumpForce: 10
-  airRollFactor: 4
-  moveLerp: 1
-  drag: 1
-  speedBeforeRoll: 10
-  timeBeforeRoll: 0.75
-  speedBeforeStandingUp: 0.3
+  jumpComboWindow: 0.5
+  jumpComboHForceBonus: 750
+  jumpComboVForceBonus: 2000
+  maxCombo: 5
+  rotationSpeed: 0.5
+  horizontalForce: 3000
+  verticalForce: 2000
 --- !u!135 &2932650472225342060
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -121,24 +119,6 @@ MonoBehaviour:
   weight: 5
   distanceThreshold: 2
   hidden: 0
---- !u!114 &-1206478011707942472
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2932650472225342062}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 011d63a14cf4d8347a5660a929242412, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  preset: {fileID: 11400000, guid: 6351e4fb2ae84444bad1ffb5c3c0824f, type: 2}
-  groundCheckRange: 1
-  legsOffset: {x: 0, y: 0, z: 0}
-  rigidbody: {fileID: 0}
-  targetDirection: {x: 0, y: 0, z: 0}
-  isImmerged: 0
 --- !u!114 &7286649357687551854
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,6 +164,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a15cd58957a760249a3a123767c2237a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2984802757717126301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2932650472225342062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 204a04f771aa6ec47859d83538a2553d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoPossess: 1
+  beginCrouched: 1
+  canRetractLegs: 1
+  freezeUntilPossessed: 0
+  useGravity: 1
+  animateHead: 1
+  gravityMultiplier: 100
+  customExternalRigidbody: {fileID: 2932650472225342063}
+  customCamera: {fileID: 11400000, guid: e5ed624ee327ee14898b812c5fcbdb21, type: 2}
+  locomotion: {fileID: 0}
+  visuals: {fileID: 5773141008930165641}
+  face: {fileID: 8047810985327452236}
+  visualsOffset: {x: 0, y: 0, z: 0}
+  jumpComboWindow: 0.5
+  jumpComboHForceBonus: 750
+  jumpComboVForceBonus: 2000
+  maxCombo: 5
+  rotationSpeed: 0.5
+  horizontalForce: 2000
+  verticalForce: 1000
 --- !u!1 &6564690223429448292
 GameObject:
   m_ObjectHideFlags: 0
@@ -282,6 +294,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3312780394835150675, guid: 9aed549a97ecebe439f86c6d554d109a,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 3312780394835150675, guid: 9aed549a97ecebe439f86c6d554d109a,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3312780394835150675, guid: 9aed549a97ecebe439f86c6d554d109a,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 3312780394835150675, guid: 9aed549a97ecebe439f86c6d554d109a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
     - target: {fileID: 4848594794600692302, guid: 9aed549a97ecebe439f86c6d554d109a,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -297,6 +329,12 @@ PrefabInstance:
 --- !u!4 &2482614798847232048 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 9aed549a97ecebe439f86c6d554d109a,
+    type: 3}
+  m_PrefabInstance: {fileID: 7426068338447704874}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8047810985327452236 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 621814218485564262, guid: 9aed549a97ecebe439f86c6d554d109a,
     type: 3}
   m_PrefabInstance: {fileID: 7426068338447704874}
   m_PrefabAsset: {fileID: 0}

@@ -85,7 +85,6 @@ public abstract class Controller : MonoBehaviour
 		if (AreLegsRetracted())
         {
             SpecificJump();
-            SoundPlayer.Play("sfx_jump");
         }
         else if (WasGrounded())
         {

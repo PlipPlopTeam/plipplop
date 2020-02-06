@@ -84,7 +84,7 @@ public class LocomotionAnimation
         visuals.transform.localPosition = Vector3.zero;
         visuals.transform.localEulerAngles = Vector3.zero;
 
-        animObject.gameObject.AddComponent<DestroyAfter>().lifespan = 2f;
+		Object.Destroy(animObject.gameObject, 2f);
 
         return animObject.gameObject;
     }

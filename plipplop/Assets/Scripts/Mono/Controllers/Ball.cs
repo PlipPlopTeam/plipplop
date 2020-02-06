@@ -2,115 +2,89 @@
 
 public class Ball : Controller
 {
-    [Header("Specific properties")]
-    public float maxSpeed = 200f;
-    public float acceleration = 1000f;
-    public float jumpForce = 7f;
-    public float airRollFactor = 4f;
-    public float moveLerp = 1;
-    public float drag = 1f;
-    public float speedBeforeRoll = 12f;
-    public float timeBeforeRoll = 1f;
-    public float speedBeforeStandingUp = 2f;
+	[Header("Specific properties")]
+	public float jumpComboWindow = 0.5f;
 
-    new Renderer renderer;
-    new SphereCollider collider;
-    Transform childBall;
-    float timeStartedRolling = 0f;
-    bool isWaitingToRoll = false;
+	public float jumpComboHForceBonus = 1000f;
+	public float jumpComboVForceBonus = 1000f;
 
-    public override void OnPossess()
+	public int maxCombo = 5;
+	public float rotationSpeed = 0.5f;
+
+	public float velocityDamplerOnImpact = 0.75f;
+
+	public float horizontalForce;
+	public float verticalForce;
+
+	int combo = 1;
+	float comboTimer = 0f;
+	bool hopped = false;
+	Vector3 lastOrientation;
+
+	public void OnCollisionEnter(Collision collision)
+	{
+		if(hopped)
+		{
+			rigidbody.velocity *= velocityDamplerOnImpact;
+			Pyromancer.PlayGameEffect("gfx_bounce", collision.GetContact(0).point);
+			hopped = false;
+
+			if (comboTimer > 0 && combo < maxCombo) combo++;
+			else combo = 1;
+		}
+	}
+
+	internal override void Update()
+	{
+		base.Update();
+		if (comboTimer > 0f) comboTimer -= Time.deltaTime;
+	}
+
+	internal override void SpecificMove(Vector3 direction)
     {
-        base.OnPossess();
-        ExtendLegs();
-    }
+		if(direction.magnitude > 0.1f)
+		{
+			Rotate(direction);
+			if (!hopped)
+			{
+				Bump(direction);
+				hopped = true;
+			}
+		}
 
-    public override void OnEject()
+		if(direction.magnitude > 0.25f)
+		{
+			lastOrientation = (Game.i.aperture.Right() * direction.x + Game.i.aperture.Forward() * direction.z);
+		}
+	}
+
+	void Rotate(Vector3 direction)
+	{
+		Vector3 dir = (Game.i.aperture.Forward() * -direction.x + Game.i.aperture.Right() * direction.z);
+		rigidbody.angularVelocity += dir * rotationSpeed;
+	}
+
+	void Bump(Vector3 direction)
+	{
+		Vector3 dir = (Game.i.aperture.Right() * direction.x + Game.i.aperture.Forward() * direction.z);
+		rigidbody.AddForce(dir * (horizontalForce + ((combo - 1) * jumpComboHForceBonus)) * Time.deltaTime);
+		rigidbody.AddForce(Vector3.up * (verticalForce + ((combo - 1) * jumpComboVForceBonus)) * Time.deltaTime);
+	}
+
+    internal override void SpecificJump()
     {
-        base.OnEject();
-    }
-
-    internal override void SpecificMove(Vector3 direction)
-    {
-        var perimeter = 2 * Mathf.PI * (1f); //radius
-        Vector3 _velocity = (Game.i.aperture.Right() * direction.x + Game.i.aperture.Forward() * direction.z) * Time.deltaTime;
-        _velocity *= maxSpeed;
-        _velocity = Vector3.ClampMagnitude(_velocity, maxSpeed);
-        _velocity.y = rigidbody.velocity.y;
-        rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, _velocity, Time.deltaTime * moveLerp);
-
-        if(rigidbody.velocity.magnitude > 0.2f) transform.forward = rigidbody.velocity.normalized;
-
-
-        var factor = 1;
-        var amount = new Vector3(
-            (rigidbody.velocity.z / perimeter) * 10f,
-            0f,
-            -(rigidbody.velocity.x / perimeter) * 10f
-        ) * factor;
-
-        childBall.Rotate(amount, Space.World);
-    }
-
-    internal override void SpecificJump() //niveau son c'est clunky car tu peux quand même appuyer sur A quand tu es en l'air, donc ça joue le "specific jump" global
-    {
-        if(WasGrounded()) 
-        {
-            SoundPlayer.Play("sfx_beachball_jump");
-            rigidbody.velocity = new Vector3(rigidbody.velocity.x, jumpForce, rigidbody.velocity.z);
-        }
-    }
+		if(comboTimer <= 0) comboTimer += jumpComboWindow;
+	}
 
     internal override void OnLegsRetracted()
     {
-        collider.enabled = true;
-        rigidbody.drag = drag;
-		ResetVisuals();
+		rigidbody.constraints = RigidbodyConstraints.None;
 	}
 
     internal override void OnLegsExtended()
     {
-        collider.enabled = false;
-		ResetVisuals();
+		AlignPropOnHeadDummy();
+		transform.forward = lastOrientation;
+		rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 	}
-
-    internal override void Awake()
-    {
-        base.Awake();
-
-        rigidbody = GetComponent<Rigidbody>();
-        renderer = GetComponentInChildren<MeshRenderer>();
-        collider = GetComponent<SphereCollider>();
-        renderer.material = Instantiate<Material>(renderer.material);
-        childBall = transform.GetChild(0);
-    }
-
-    internal override void Start()
-    {
-        base.Start();
-    }
-    
-    internal override void Update()
-    {
-        base.Update();
-
-        if (IsPossessed())
-        {
-            if (rigidbody.velocity.magnitude > speedBeforeRoll) {
-
-                if (!isWaitingToRoll) {
-                    timeStartedRolling = Time.time;
-                    isWaitingToRoll = true;
-                }
-                if (isWaitingToRoll && Time.time > timeStartedRolling + timeBeforeRoll && !AreLegsRetracted()) {
-                    RetractLegs();
-                    isWaitingToRoll = false;
-                }
-            }
-            else if (IsGrounded() && rigidbody.velocity.magnitude < speedBeforeStandingUp) {
-                isWaitingToRoll = false;
-                if (AreLegsRetracted()) ExtendLegs();
-            }
-        }
-    }
 }

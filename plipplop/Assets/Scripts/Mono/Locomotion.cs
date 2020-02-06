@@ -7,8 +7,8 @@ public class Locomotion : Walker
 {
     public LocomotionPreset preset;
     public float groundCheckRange = 1f;
-    public Vector3 legsOffset = Vector3.up * 0.65f;
     public float legsHeight { get { return 1f; } }
+	public Vector3 legsOffset = Vector3.up * 0.65f;
 
     [HideInInspector] new public Rigidbody rigidbody;
     [HideInInspector] public Vector3 targetDirection;
@@ -17,9 +17,9 @@ public class Locomotion : Walker
 
     LocomotionAnimation locomotionAnimation;
     Controller parentController;
-    float speedMultiplier = 1f;
+	Vector3 lastDirection = new Vector3();
+	float speedMultiplier = 1f;
     float timePressed = 0f;
-    Vector3 lastDirection = new Vector3();
     bool hasJumped = false;
     bool isInitialized = false;
 
@@ -86,9 +86,10 @@ public class Locomotion : Walker
 
         if (v != null) 
         {
-            transform.position = new Vector3(transform.position.x, v.Value.y + legsHeight + 0.1f, transform.position.z);
+            transform.position = new Vector3(transform.position.x, v.Value.y + legsHeight/2 - 0.1f, transform.position.z);
         }
-        else {
+        else
+		{
             Debug.LogWarning("Could not detect the ground surface when expanding legs from " + gameObject.name);
         }
     }

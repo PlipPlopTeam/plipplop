@@ -16,7 +16,7 @@ public class Jukebox : Activity
 
     private void OnEnable()
     {
-        SoundPlayer.PlaySoundAttached("bgm_test", transform);
+        SoundPlayer.PlaySoundAttached("bgm_test_3", transform);
         ps.Play();
     }
 
