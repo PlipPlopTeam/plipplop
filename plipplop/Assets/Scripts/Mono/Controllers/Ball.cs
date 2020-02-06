@@ -4,21 +4,17 @@ public class Ball : Controller
 {
 	[Header("Specific properties")]
 	public float jumpComboWindow = 0.5f;
-
 	public float jumpComboHForceBonus = 1000f;
 	public float jumpComboVForceBonus = 1000f;
-
 	public int maxCombo = 5;
 	public float rotationSpeed = 0.5f;
-
 	public float velocityDamplerOnImpact = 0.75f;
-
 	public float horizontalForce;
 	public float verticalForce;
 
 	int combo = 1;
 	float comboTimer = 0f;
-	bool hopped = false;
+	public bool hopped = false;
 	Vector3 lastOrientation;
 
 	public void OnCollisionEnter(Collision collision)
