@@ -10,34 +10,32 @@ public class Bike : Activity
 {
     [Header("BIKE")]
     public float speed = 10f;
-    public AIPath path;
-
+	public AIPath path;
     public Collider col;
     public Rigidbody rb;
 
-    public override void Enter(NonPlayableCharacter user)
-    {
-        base.Enter(user);
-        full = true;
-        user.agentMovement.SetSpeed(speed);
-        user.agentMovement.FollowPath(path);
-        transform.SetParent(user.transform);
-        transform.localPosition = Vector3.zero;
-        transform.forward = user.transform.forward;
-        col.enabled = false;
-        rb.isKinematic = true;
-    }
+	public override void StartUsing(NonPlayableCharacter user)
+	{
+		base.StartUsing(user);
+		full = true;
+		user.agentMovement.SetSpeed(speed);
+		user.agentMovement.FollowPath(path);
+		transform.SetParent(user.transform);
+		transform.localPosition = Vector3.zero;
+		transform.forward = user.transform.forward;
+		col.enabled = false;
+		rb.isKinematic = true;
+	}
+	public override void StopUsing(NonPlayableCharacter user)
+	{
+		base.StopSpectate(user);
+		user.agentMovement.ResetSpeed();
+		full = false;
+		transform.SetParent(null);
+		col.enabled = true;
+		rb.isKinematic = false;
+	}
 
-    public override void Exit(NonPlayableCharacter user)
-    {
-        base.Exit(user);
-        // TODO : Give him back a path road for his patrol (dependent of the scene ?)
-        user.agentMovement.ResetSpeed();
-        full = false;
-        transform.SetParent(null);
-        col.enabled = true;
-        rb.isKinematic = false;
-    }
 }
 
 #if UNITY_EDITOR
