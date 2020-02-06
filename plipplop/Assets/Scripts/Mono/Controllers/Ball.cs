@@ -17,6 +17,26 @@ public class Ball : Controller
 	public bool hopped = false;
 	Vector3 lastOrientation;
 
+	public override void OnEject()
+	{
+		base.OnEject();
+		Initialized();
+	}
+
+	public override void OnPossess()
+	{
+		base.OnPossess();
+		Initialized();
+	}
+
+	public void Initialized()
+	{
+		comboTimer = 0f;
+		combo = 1;
+		hopped = false;
+		lastOrientation = Vector3.zero;
+	}
+
 	public void OnCollisionEnter(Collision collision)
 	{
 		if(hopped)

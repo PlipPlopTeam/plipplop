@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 2007550832}
   - component: {fileID: 7286649357687551854}
   - component: {fileID: 2887985434650187074}
-  - component: {fileID: 2984802757717126301}
   m_Layer: 0
   m_Name: BeachBall
   m_TagString: Untagged
@@ -50,7 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 204a04f771aa6ec47859d83538a2553d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoPossess: 1
+  autoPossess: 0
   beginCrouched: 1
   canRetractLegs: 1
   freezeUntilPossessed: 0
@@ -68,8 +67,10 @@ MonoBehaviour:
   jumpComboVForceBonus: 2000
   maxCombo: 5
   rotationSpeed: 0.5
+  velocityDamplerOnImpact: 0.75
   horizontalForce: 3000
   verticalForce: 2000
+  hopped: 0
 --- !u!135 &2932650472225342060
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -164,38 +165,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a15cd58957a760249a3a123767c2237a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2984802757717126301
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2932650472225342062}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 204a04f771aa6ec47859d83538a2553d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  autoPossess: 1
-  beginCrouched: 1
-  canRetractLegs: 1
-  freezeUntilPossessed: 0
-  useGravity: 1
-  animateHead: 1
-  gravityMultiplier: 100
-  customExternalRigidbody: {fileID: 2932650472225342063}
-  customCamera: {fileID: 11400000, guid: e5ed624ee327ee14898b812c5fcbdb21, type: 2}
-  locomotion: {fileID: 0}
-  visuals: {fileID: 5773141008930165641}
-  face: {fileID: 8047810985327452236}
-  visualsOffset: {x: 0, y: 0, z: 0}
-  jumpComboWindow: 0.5
-  jumpComboHForceBonus: 750
-  jumpComboVForceBonus: 2000
-  maxCombo: 5
-  rotationSpeed: 0.5
-  horizontalForce: 2000
-  verticalForce: 1000
 --- !u!1 &6564690223429448292
 GameObject:
   m_ObjectHideFlags: 0
@@ -238,6 +207,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: KM_Ball01
+      objectReference: {fileID: 0}
+    - target: {fileID: 621814218485564262, guid: 9aed549a97ecebe439f86c6d554d109a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 9aed549a97ecebe439f86c6d554d109a,
         type: 3}
