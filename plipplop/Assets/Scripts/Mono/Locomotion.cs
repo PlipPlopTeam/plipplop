@@ -93,6 +93,8 @@ public class Locomotion : Walker
             Debug.LogWarning("Could not detect the ground surface when expanding legs from " + gameObject.name);
             transform.position = new Vector3(transform.position.x, transform.position.y + (IsGrounded() ? legsHeight + legsOffset.y : additionalLegYOffset), transform.position.z);
         }
+
+        SoundPlayer.PlayAtPosition("sfx_pop_legs", transform.position);
     }
 
     public void Move(Vector3 direction)

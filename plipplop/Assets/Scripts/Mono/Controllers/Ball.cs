@@ -45,8 +45,12 @@ public class Ball : Controller
 			Pyromancer.PlayGameEffect("gfx_bounce", collision.GetContact(0).point);
 			hopped = false;
 
+            SoundPlayer.PlayAtPosition("sfx_beachball_jump_" + combo, collision.GetContact(0).point, 1f, true);
+
 			if (comboTimer > 0 && combo < maxCombo) combo++;
 			else combo = 1;
+
+
 		}
 	}
 
