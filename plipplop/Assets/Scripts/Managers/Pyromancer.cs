@@ -33,6 +33,20 @@ public class Pyromancer
         }
     }
 
+    public static void PlayGameEffect(GameFX gfx, Transform attach)
+    {
+        foreach (var sound in gfx.sfx) {
+            SoundPlayer.PlaySoundAttached(sound.name, attach, sound.volume, sound.randomPitch);
+            if (!sound.spatializedSound) {
+                Debug.LogWarning("The sound " + sound.name + " was played ATTACHED even though it is normally NOT spatialized.\nPlease check the calling code.");
+            }
+        }
+
+        foreach (var vfx in gfx.vfx) {
+            PlayVFXAttached(vfx, attach);
+        }
+    }
+
     public static void PlayVFX(string vfxName, Vector3 position)
     {
         var p = Game.i.vfx;
