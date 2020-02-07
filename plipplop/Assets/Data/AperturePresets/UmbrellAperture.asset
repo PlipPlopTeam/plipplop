@@ -21,6 +21,8 @@ MonoBehaviour:
     isOverriden: 1
   - property: heightOffset
     isOverriden: 1
+  - property: maximumHeightAboveTarget
+    isOverriden: 0
   - property: additionalAngle
     isOverriden: 1
   - property: distance
@@ -73,11 +75,15 @@ MonoBehaviour:
     isOverriden: 0
   - property: staticRotationLerp
     isOverriden: 0
+  - property: immediatePresetStackUpdate
+    isOverriden: 0
   fallback: {fileID: 11400000, guid: 9307df52ab5513b4bbe3b28ff5b574d3, type: 2}
   canBeControlled: 1
   canBeReset: 1
+  detectsSurroundings: 1
   fieldOfView: 60
   heightOffset: 1
+  maximumHeightAboveTarget: 10
   additionalAngle: 37.5
   distance:
     min: 4
@@ -88,7 +94,7 @@ MonoBehaviour:
   lateralFollowLerp: 12
   longitudinalFollowLerp: 4
   verticalFollowLerp: 20
-  rotationSpeed: 1000
+  rotationSpeed: 10
   lookAtLerp: 200
   virtualTargetYCatchUp: 5.03
   alignAfter: 15
@@ -102,9 +108,10 @@ MonoBehaviour:
   angleIncrementOnSpeed: 2
   maximumCatchUpSpeed: 15
   absoluteBoundaries:
-    min: 3
+    min: 2
     max: 8
   constraintToTarget: 0
   targetConstraintLocalOffset: {x: 0, y: 0, z: 0}
   staticPositionLerp: 10
   staticRotationLerp: 10
+  immediatePresetStackUpdate: 0

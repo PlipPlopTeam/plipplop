@@ -21,6 +21,8 @@ MonoBehaviour:
     isOverriden: 1
   - property: heightOffset
     isOverriden: 1
+  - property: maximumHeightAboveTarget
+    isOverriden: 0
   - property: additionalAngle
     isOverriden: 1
   - property: distance
@@ -78,8 +80,10 @@ MonoBehaviour:
   fallback: {fileID: 11400000, guid: 846697e4cb25d1e4cbae013a3a2b2cca, type: 2}
   canBeControlled: 1
   canBeReset: 1
+  detectsSurroundings: 1
   fieldOfView: 50
   heightOffset: 2
+  maximumHeightAboveTarget: 10
   additionalAngle: 25
   distance:
     min: 2
