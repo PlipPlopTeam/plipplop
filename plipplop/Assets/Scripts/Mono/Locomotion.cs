@@ -86,11 +86,12 @@ public class Locomotion : Walker
 
         if (v != null) 
         {
-            transform.position = new Vector3(transform.position.x, v.Value.y + legsHeight/2 - 0.1f, transform.position.z);
+            transform.position = new Vector3(transform.position.x, v.Value.y + (IsGrounded() ? legsHeight + legsOffset.y : 0f), transform.position.z);
         }
         else
 		{
             Debug.LogWarning("Could not detect the ground surface when expanding legs from " + gameObject.name);
+            transform.position = new Vector3(transform.position.x, transform.position.y + (IsGrounded() ? legsHeight + legsOffset.y : 0f), transform.position.z);
         }
     }
 

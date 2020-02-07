@@ -249,11 +249,30 @@ public abstract class Controller : MonoBehaviour
 			}
 		}
 
-        if (IsPossessed() && !AreLegsRetracted() && animateHead) {
-            AlignPropOnHeadDummy();
+        if (IsPossessed() && !AreLegsRetracted()) {
+            if (animateHead) {
+                AlignPropOnHeadDummy();
+            }
+
+            // ""Align"" to ground normal
+            Vector3? norm;
+            try {
+                norm = locomotion.GetGroundNormal();
+            }
+            catch {
+                norm = null;
+            }
+            var y = transform.eulerAngles.y;
+            if (norm.HasValue) {
+                transform.up = norm.Value;
+            }
+            else {
+                transform.up = Vector3.up;
+            }
+            transform.Rotate(Vector3.up * y);
         }
 
-		if(isBeingThrown && IsGrounded())
+        if (isBeingThrown && IsGrounded())
 		{
 			UnParalyse();
 			isBeingThrown = false;
