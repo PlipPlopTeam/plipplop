@@ -35,5 +35,6 @@
     KB_E,
 
     MS_X,
-    MS_Y
+    MS_Y,
+    MS_LMB
 }

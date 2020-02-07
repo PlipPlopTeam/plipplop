@@ -129,6 +129,11 @@ public abstract class Controller : MonoBehaviour
     internal virtual void SpecificMove(Vector3 direction) { }
     internal virtual void MoveCamera(Vector2 d) { }
 
+    virtual internal void Shout()
+    {
+        Pyromancer.PlayGameEffect("gfx_shout", transform.position);
+    }
+
     virtual internal void BaseMove(Vector3 direction)
     {
 		if (IsFrozen() || isParalysed) return;

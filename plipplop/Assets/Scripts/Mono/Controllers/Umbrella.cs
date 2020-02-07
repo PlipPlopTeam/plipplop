@@ -14,9 +14,9 @@ public class Umbrella : Controller
     public float maxFallSpeed = 20f;
     [Range(0f, 100f)] public float remainingGravityPercentWhenOpened = 25f;
     public float additionalForwardPush = 10f;
+    new public SkinnedMeshRenderer renderer;
 
-
-    new SkinnedMeshRenderer renderer;
+    SkinnedMeshRenderer umbrellaFace;
     Vector3 tiltAccumulation = Vector3.zero;
     Coroutine currentAnimationRoutine = null;
 
@@ -103,7 +103,7 @@ public class Umbrella : Controller
     internal override void Start()
     {
         base.Start();
-        renderer = visuals.GetComponentInChildren<SkinnedMeshRenderer>();
+        umbrellaFace = face.GetComponent<SkinnedMeshRenderer>();
     }
 
     internal override void Update()
@@ -144,7 +144,8 @@ public class Umbrella : Controller
     {
         while (renderer.GetBlendShapeWeight(0) < 99f) {
             renderer.SetBlendShapeWeight(0, Mathf.Lerp(renderer.GetBlendShapeWeight(0), 100f, Time.deltaTime*3f));
-            yield return null;
+            umbrellaFace.SetBlendShapeWeight(0, Mathf.Lerp(renderer.GetBlendShapeWeight(0), 100f, Time.deltaTime * 3f)); 
+             yield return null;
         }
     }
 
@@ -152,6 +153,7 @@ public class Umbrella : Controller
     {
         SoundPlayer.Play("sfx_umbrella_boost");
         while (renderer.GetBlendShapeWeight(0) > 1f) {
+            umbrellaFace.SetBlendShapeWeight(0, Mathf.Lerp(renderer.GetBlendShapeWeight(0), 0f, Time.deltaTime * 3f));
             renderer.SetBlendShapeWeight(0, Mathf.Lerp(renderer.GetBlendShapeWeight(0), 0f, Time.deltaTime * 3f));
             yield return null;
         }
