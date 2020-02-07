@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4581310841653097105}
   - component: {fileID: 5867374511833901001}
+  - component: {fileID: 142939863400108864}
   m_Layer: 0
   m_Name: Crab
   m_TagString: Untagged
@@ -28,7 +29,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4396803656852245048}
+  - {fileID: 5363962702264628836}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -51,12 +52,60 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &142939863400108864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1200613829552647963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8178895bda633c84a949fc7c6874e157, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderer: {fileID: 1193547072658412301}
+  blendShapeAmount: 1
+  maxTime: 1
+  randomY: 1
+  maxAngleChange: 30
+--- !u!1 &9186472112978646103
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5363962702264628836}
+  m_Layer: 0
+  m_Name: Visuals
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5363962702264628836
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9186472112978646103}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4396803656852245048}
+  m_Father: {fileID: 4581310841653097105}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &8682413896273273122
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 4581310841653097105}
+    m_TransformParent: {fileID: 5363962702264628836}
     m_Modifications:
     - target: {fileID: -927199367670048503, guid: 975754487f9d4cc4ebbd70b9ce19778b,
         type: 3}
@@ -174,6 +223,12 @@ PrefabInstance:
 --- !u!4 &4396803656852245048 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 975754487f9d4cc4ebbd70b9ce19778b,
+    type: 3}
+  m_PrefabInstance: {fileID: 8682413896273273122}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &1193547072658412301 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7561110372842451503, guid: 975754487f9d4cc4ebbd70b9ce19778b,
     type: 3}
   m_PrefabInstance: {fileID: 8682413896273273122}
   m_PrefabAsset: {fileID: 0}
