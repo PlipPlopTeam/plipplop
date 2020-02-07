@@ -541,15 +541,16 @@ public class Aperture
         // Absolute minimal distance so that whatever happens the camera can't be in my face
         var cameraDirection = -(Vector3.Scale(Vector3.one - Vector3.up, target.position) - Vector3.Scale(Vector3.one - Vector3.up, position.current));
         var dist = cameraDirection.magnitude;
+        var detect = settings.detectsSurroundings && false; // Fix me/ enable me later
 
-        if (settings.detectsSurroundings) {
+        if (detect) {
             RaycastHit hit;
             if (Physics.Raycast(target.position, cameraDirection, out hit)) {
                 dist = Vector3.Distance(hit.point, target.position) - 0.1f;
             }
         }
 
-        float outOfBounds = dist < settings.absoluteBoundaries.min && !settings.detectsSurroundings ? settings.absoluteBoundaries.min : 
+        float outOfBounds = dist < settings.absoluteBoundaries.min && !detect ? settings.absoluteBoundaries.min : 
             dist > settings.absoluteBoundaries.max ? settings.absoluteBoundaries.max : 0f;
 
         if (outOfBounds != 0f) {
