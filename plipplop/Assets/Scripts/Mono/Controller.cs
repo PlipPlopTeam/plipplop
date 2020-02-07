@@ -131,7 +131,7 @@ public abstract class Controller : MonoBehaviour
 
     virtual internal void Shout()
     {
-        Pyromancer.PlayGameEffect("gfx_shout", transform.position);
+        Pyromancer.PlayGameEffect(Game.i.library.gfxs["gfx_speak"], transform, Vector3.up*0.5f);
     }
 
     virtual internal void BaseMove(Vector3 direction)
