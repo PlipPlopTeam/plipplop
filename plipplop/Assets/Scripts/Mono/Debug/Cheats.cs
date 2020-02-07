@@ -19,6 +19,7 @@ public class Cheats : Dictionary<string, System.Action>
         Add("IMONFIRE", SpawnFire);
         Add("STEP", SpawnPoof);
 		Add("BOSS", Bossfight);
+		Add("MOUETTE", Mouette);
 	}
 
 	public void BigHeads()
@@ -84,5 +85,12 @@ public class Cheats : Dictionary<string, System.Action>
     public void SpawnFire()
     {
         Pyromancer.PlayVFXAttached("vfx_fire", Game.i.player.GetCurrentController().transform);
+    }
+
+    public void Mouette()
+    {
+	    GameObject _mouette =Object.Instantiate(Object.FindObjectOfType<BlendShapeAnimator>().gameObject, Game.i.player.GetCurrentController().visuals.transform);
+	    _mouette.transform.localPosition = new Vector3(0,.2f,0);
+	    _mouette.transform.localEulerAngles = new Vector3(0,180,0);
     }
 }
