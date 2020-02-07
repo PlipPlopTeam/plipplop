@@ -55,6 +55,7 @@ MonoBehaviour:
   canRetractLegs: 1
   freezeUntilPossessed: 0
   useGravity: 1
+  animateHead: 1
   gravityMultiplier: 100
   customExternalRigidbody: {fileID: 6234941143426916896}
   customCamera: {fileID: 11400000, guid: 261ad80f9edfaeb46a8c534af5127621, type: 2}
@@ -99,8 +100,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.821496, y: 1.5472529, z: 0.8187534}
-  m_Center: {x: -0.004640579, y: 0.7290145, z: -0.0023202002}
+  m_Size: {x: 0.821496, y: 1.2, z: 0.8187534}
+  m_Center: {x: -0.004640579, y: 0.65, z: -0.0023202002}
 --- !u!114 &6234941143426916911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,7 +115,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   preset: {fileID: 0}
-  legsHeight: 0.5
   groundCheckRange: 1
   legsOffset: {x: 0, y: 0, z: 0}
   rigidbody: {fileID: 0}
@@ -132,6 +132,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27bebb278a4489e489e5558d1c6671af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shape: 0
+  rb: {fileID: 0}
+  collider: {fileID: 0}
+  visual: {fileID: 0}
   origin: {x: 0, y: 0, z: 0}
   weight: 1
   distanceThreshold: 3
