@@ -80,6 +80,7 @@ MonoBehaviour:
   fallback: {fileID: 11400000, guid: df6437ca0d9bc60498aeb18a4dd62019, type: 2}
   canBeControlled: 1
   canBeReset: 1
+  detectsSurroundings: 1
   fieldOfView: 65
   heightOffset: 1.5
   maximumHeightAboveTarget: 10
@@ -93,7 +94,7 @@ MonoBehaviour:
   lateralFollowLerp: 12
   longitudinalFollowLerp: 4
   verticalFollowLerp: 20
-  rotationSpeed: 1000
+  rotationSpeed: 10
   lookAtLerp: 200
   virtualTargetYCatchUp: 5.03
   alignAfter: 15
@@ -107,7 +108,7 @@ MonoBehaviour:
   angleIncrementOnSpeed: 2
   maximumCatchUpSpeed: 15
   absoluteBoundaries:
-    min: 4
+    min: 2
     max: 8
   constraintToTarget: 0
   targetConstraintLocalOffset: {x: 0, y: 0, z: 0}
