@@ -86,7 +86,7 @@ public class Locomotion : Walker
 
         if (v != null) 
         {
-            transform.position = new Vector3(transform.position.x, v.Value.y + legsHeight/2 - 0.1f, transform.position.z);
+            transform.position = new Vector3(transform.position.x, v.Value.y + legsHeight/2, transform.position.z);
         }
         else
 		{
