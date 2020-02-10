@@ -689,12 +689,14 @@ MonoBehaviour:
   canRetractLegs: 1
   freezeUntilPossessed: 0
   useGravity: 1
+  animateHead: 0
   gravityMultiplier: 100
   customExternalRigidbody: {fileID: 2095127333375553500}
   customCamera: {fileID: 11400000, guid: 7996e3911da91fa458f8eceaab8b2c2f, type: 2}
   locomotion: {fileID: 0}
   visuals: {fileID: 2095127333941081580}
   face: {fileID: 2012210394792238451}
+  visualsOffset: {x: 0, y: 0, z: 0}
   pushMovementForce: 500
   pushCooldown: 2
   pushThreshold: 0.5
@@ -747,7 +749,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   preset: {fileID: 0}
-  legsHeight: 0.5
   groundCheckRange: 1
   legsOffset: {x: 0, y: 0.65, z: 0}
   rigidbody: {fileID: 0}
@@ -765,6 +766,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27bebb278a4489e489e5558d1c6671af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shape: 0
+  rb: {fileID: 0}
+  collider: {fileID: 0}
+  visual: {fileID: 0}
   origin: {x: 0, y: 0, z: 0}
   weight: 25
   distanceThreshold: 5
