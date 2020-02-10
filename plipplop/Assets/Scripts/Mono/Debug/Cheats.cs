@@ -20,6 +20,7 @@ public class Cheats : Dictionary<string, System.Action>
         Add("STEP", SpawnPoof);
 		Add("BOSS", Bossfight);
 		Add("MOUETTE", Mouette);
+		Add("CRAB", Crab);
 	}
 
 	public void BigHeads()
@@ -89,8 +90,23 @@ public class Cheats : Dictionary<string, System.Action>
 
     public void Mouette()
     {
-	    GameObject _mouette =Object.Instantiate(Object.FindObjectOfType<BlendShapeAnimator>().gameObject, Game.i.player.GetCurrentController().visuals.transform);
-	    _mouette.transform.localPosition = new Vector3(0,.2f,0);
-	    _mouette.transform.localEulerAngles = new Vector3(0,180,0);
+	    GameObject _m = GameObject.Find("Seagull");
+	    if (_m)
+	    {
+		    GameObject _mouette = Object.Instantiate(_m, Game.i.player.GetCurrentController().visuals.transform);
+		    _mouette.transform.localPosition = new Vector3(0, .2f, 0);
+		    _mouette.transform.localEulerAngles = new Vector3(0, 180, 0);
+	    }
+    }
+    
+    public void Crab()
+    {
+	    GameObject _c = GameObject.Find("Crab (1)");
+	    if (_c)
+	    {
+		    GameObject _crab = Object.Instantiate(_c, Game.i.player.GetCurrentController().visuals.transform);
+		    _crab.transform.localPosition = new Vector3(0, .2f, 0);
+		    _crab.transform.localEulerAngles = new Vector3(0, 180, 0);
+	    }
     }
 }
