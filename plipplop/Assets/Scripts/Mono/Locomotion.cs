@@ -22,7 +22,7 @@ public class Locomotion : Walker
     float timePressed = 0f;
     bool hasJumped = false;
     bool isInitialized = false;
-    readonly float additionalLegYOffset = 1f;
+    readonly float additionalLegYOffset = 0f;
 
     internal Vector3 groundCheckDirection = Vector3.down;
 
@@ -86,12 +86,12 @@ public class Locomotion : Walker
 
         if (v != null) 
         {
-            transform.position = new Vector3(transform.position.x, v.Value.y + (IsGrounded() ? legsHeight + legsOffset.y : 0f), transform.position.z);
+            transform.position = new Vector3(transform.position.x, v.Value.y + (IsGrounded() ? legsHeight : 0f), transform.position.z);
         }
         else
 		{
             Debug.LogWarning("Could not detect the ground surface when expanding legs from " + gameObject.name);
-            transform.position = new Vector3(transform.position.x, transform.position.y + (IsGrounded() ? legsHeight + legsOffset.y : additionalLegYOffset), transform.position.z);
+            transform.position = new Vector3(transform.position.x, transform.position.y/* + legsHeight + legsOffset.y*/, transform.position.z);
         }
 
         SoundPlayer.PlayAtPosition("sfx_pop_legs", transform.position);
@@ -234,7 +234,7 @@ public class Locomotion : Walker
         return null;
     }
 
-    Vector3? GetBelowSurface()
+    public Vector3? GetBelowSurface()
     {
         RaycastHit[] hits = RaycastAllToGround();
 

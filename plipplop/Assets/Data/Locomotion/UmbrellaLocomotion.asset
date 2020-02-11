@@ -12,36 +12,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d332c5cba85ae44489c8fc18b91eaae4, type: 3}
   m_Name: UmbrellaLocomotion
   m_EditorClassIdentifier: 
-  maxSpeed: 10
-  jump: 520
+  maxSpeed: 5
+  jump: 500
   accelerationCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 2
-      outSlope: 2
+      inSlope: 23.390127
+      outSlope: 23.390127
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.0125
     - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
+      time: 0.058835797
+      value: 0.8088696
+      inSlope: 1.8893037
+      outSlope: 1.8893037
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.33333334
+      outWeight: 0.11357156
+    - serializedVersion: 3
+      time: 0.4208374
+      value: 0.9976425
+      inSlope: -0
+      outSlope: -0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.3375
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  groundFriction: 0.6
-  frictionCombine: 2
-  airControl: 66.9
+  groundFriction: 0.206
+  airFriction: 0
+  frictionCombine: 0
+  airControl: 20
   waterControl: 65
   waterSpeedFactor: 0.6
-  maxWalkableSteepness: 50
+  maxWalkableSteepness: 25
   groundedBufferToleranceSeconds: 0.2
+  lookForwardSpeed: 20

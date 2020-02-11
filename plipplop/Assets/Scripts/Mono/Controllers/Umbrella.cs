@@ -15,10 +15,13 @@ public class Umbrella : Controller
     [Range(0f, 100f)] public float remainingGravityPercentWhenOpened = 25f;
     public float additionalForwardPush = 10f;
     new public SkinnedMeshRenderer renderer;
+    public float flapForce = 200f;
 
     SkinnedMeshRenderer umbrellaFace;
     Vector3 tiltAccumulation = Vector3.zero;
     Coroutine currentAnimationRoutine = null;
+    bool isFlapping = false;
+    bool isStuck = false;
 
     void AirMove(Vector3 direction)
     {
@@ -40,46 +43,67 @@ public class Umbrella : Controller
 
         visuals.localEulerAngles = Vector3.zero;
         var computedTilt = tiltAccumulation * tiltAmplitude;
-        if (IsDeployed()) {
-            visuals.Rotate(new Vector3(computedTilt.z, 0f, -computedTilt.x), Space.Self);
-            rigidbody.AddForce(additionalForwardPush * targetDirection);
-        }
+        visuals.Rotate(new Vector3(computedTilt.z, 0f, -computedTilt.x), Space.Self);
+        rigidbody.AddForce(additionalForwardPush * targetDirection);
     }
 
     internal override void OnJump()
     {
-        if (!IsGrounded()) {
-            if (!IsDeployed()) {
+        if (IsGrounded()) {
+            if (AreLegsRetracted()) {
+                // It's stuck in the ground
                 if (currentAnimationRoutine != null) StopCoroutine(currentAnimationRoutine);
-                currentAnimationRoutine = StartCoroutine(OpenUmbrella());
+                currentAnimationRoutine = StartCoroutine(IsDeployed() ? CloseUmbrella() : OpenUmbrella());
             }
             else {
-                if (currentAnimationRoutine != null) StopCoroutine(currentAnimationRoutine);
-                currentAnimationRoutine = StartCoroutine(CloseUmbrella());
+                locomotion.Jump();
             }
         }
         else {
-            locomotion.Jump();
+            Flap();
         }
+    }
+
+    void Flap()
+    {
+        if (isFlapping) return;
+        if (currentAnimationRoutine != null) StopCoroutine(currentAnimationRoutine);
+        currentAnimationRoutine = StartCoroutine(FlapRoutine());
     }
 
     internal override void FixedUpdate()
     {
-        ApplyGravity(remainingGravityPercentWhenOpened / 100f + GetCurrentClosure() * (1f - remainingGravityPercentWhenOpened / 100f));
-        if (-rigidbody.velocity.y > maxFallSpeed * Mathf.Max(remainingGravityPercentWhenOpened/100f, GetCurrentClosure())) {
-            rigidbody.velocity = Vector3.Scale(Vector3.one - Vector3.up, rigidbody.velocity) + Vector3.down * (maxFallSpeed * Mathf.Max(remainingGravityPercentWhenOpened / 100f, GetCurrentClosure()));
+        // Gravity
+        var p = remainingGravityPercentWhenOpened;
+        if (rigidbody.velocity.y > 0) {
+            p = p + (100 - p) * Mathf.Clamp01(rigidbody.velocity.y);
+        }
+        ApplyGravity(p / 100f + GetCurrentClosure() * (1f - p / 100f));
+        if (-rigidbody.velocity.y > maxFallSpeed * Mathf.Max(p / 100f, GetCurrentClosure())) {
+            rigidbody.velocity = Vector3.Scale(Vector3.one - Vector3.up, rigidbody.velocity) + Vector3.down * (maxFallSpeed * Mathf.Max(p / 100f, GetCurrentClosure()));
+        }
+    }
+
+    internal override void Update()
+    {
+        if (IsGrounded() && !isStuck && AreLegsRetracted()) {
+            var surf = locomotion.GetBelowSurface();
+            var pos = transform.position;
+            if (surf.HasValue) {
+                pos = surf.Value;
+            }
+            Stuck(pos);
         }
     }
 
     internal override void BaseMove(Vector3 direction)
     {
-        if (IsGrounded()) {
+        if (IsGrounded() && !AreLegsRetracted()) {
             locomotion.Move(direction);
         }
-        else {
+        else if (!IsGrounded()){
             AirMove(direction);
         }
-
     }
 
     public override void OnEject()
@@ -91,11 +115,7 @@ public class Umbrella : Controller
     public override void OnPossess()
     {
         base.OnPossess();
-
-        // TODO: Remove this shit
-        transform.position += Vector3.up * locomotion.legsHeight;
-        // 
-
+        
         rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         transform.eulerAngles = transform.rotation.eulerAngles.y * Vector3.up;
     }
@@ -106,30 +126,6 @@ public class Umbrella : Controller
         umbrellaFace = face.GetComponent<SkinnedMeshRenderer>();
     }
 
-    internal override void Update()
-    {
-        base.Update();
-
-        if (IsPossessed()) {
-            if (IsGrounded()) {
-                if (AreLegsRetracted()) ExtendLegs();
-                if (currentAnimationRoutine != null) StopCoroutine(currentAnimationRoutine);
-                currentAnimationRoutine = StartCoroutine(CloseUmbrella());
-            }
-        }
-        else {
-            if (!AreLegsRetracted()) {
-                RetractLegs();
-            }
-            /*
-            if (IsDeployed() && (Mathf.Abs(transform.rotation.eulerAngles.x) + Mathf.Abs(transform.rotation.eulerAngles.z)) > 30f) {
-                if (currentAnimationRoutine != null) StopCoroutine(currentAnimationRoutine);
-                currentAnimationRoutine = StartCoroutine(CloseUmbrella());
-            }
-            */
-        }
-    }
-
     internal override void AlignPropOnHeadDummy()
     {
         if (IsGrounded()) {
@@ -137,14 +133,51 @@ public class Umbrella : Controller
         }
     }
 
-    internal override void OnLegsExtended() { }
-    internal override void OnLegsRetracted() { }
+    internal override void OnLegsExtended() {
+        if (isStuck) {
+            UnStuck();
+        }
+        if (!IsDeployed()) {
+            if (currentAnimationRoutine != null) StopCoroutine(currentAnimationRoutine);
+            currentAnimationRoutine = StartCoroutine(OpenUmbrella());
+        }
+        visuals.localEulerAngles = Vector3.zero;
+    }
+    internal override void OnLegsRetracted() {
+        var surf = locomotion.GetBelowSurface();
+        if (surf.HasValue) {
+            Stuck(surf.Value);
+        }
+    }
 
-    IEnumerator CloseUmbrella()
+    void UnStuck()
+    {
+        transform.Translate(Vector3.up * locomotion.legsHeight);
+        isStuck = false;
+    }
+
+    void Stuck(Vector3 position)
+    {
+        transform.position = position;
+        visuals.Rotate(new Vector3(Random.value * tiltAmplitude, 0f, -Random.value * tiltAmplitude), Space.Self);
+        isStuck = true;
+    }
+
+    IEnumerator FlapRoutine()
+    {
+        isFlapping = true;
+        rigidbody.AddForce(Vector3.up * flapForce, ForceMode.Impulse);
+        Pyromancer.PlayGameEffect("gfx_umbrella_boost", transform.position + transform.up);
+        yield return CloseUmbrella(10f);
+        yield return OpenUmbrella();
+        isFlapping = false;
+    }
+
+    IEnumerator CloseUmbrella(float additionalSpeed=1f)
     {
         while (renderer.GetBlendShapeWeight(0) < 99f) {
-            renderer.SetBlendShapeWeight(0, Mathf.Lerp(renderer.GetBlendShapeWeight(0), 100f, Time.deltaTime*3f));
-            umbrellaFace.SetBlendShapeWeight(0, Mathf.Lerp(renderer.GetBlendShapeWeight(0), 100f, Time.deltaTime * 3f)); 
+            renderer.SetBlendShapeWeight(0, Mathf.Lerp(renderer.GetBlendShapeWeight(0), 100f, Time.deltaTime*3f* additionalSpeed));
+            umbrellaFace.SetBlendShapeWeight(0, Mathf.Lerp(renderer.GetBlendShapeWeight(0), 100f, Time.deltaTime * 3f* additionalSpeed)); 
              yield return null;
         }
     }
@@ -152,7 +185,7 @@ public class Umbrella : Controller
     IEnumerator OpenUmbrella()
     {
         SoundPlayer.Play("sfx_umbrella_boost");
-        while (renderer.GetBlendShapeWeight(0) > 1f) {
+        while (renderer.GetBlendShapeWeight(0) > 4f) {
             umbrellaFace.SetBlendShapeWeight(0, Mathf.Lerp(renderer.GetBlendShapeWeight(0), 0f, Time.deltaTime * 3f));
             renderer.SetBlendShapeWeight(0, Mathf.Lerp(renderer.GetBlendShapeWeight(0), 0f, Time.deltaTime * 3f));
             yield return null;
