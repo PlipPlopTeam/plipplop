@@ -33,7 +33,7 @@ public class Skeleton : MonoBehaviour
 			obj.SetParent(bone);
 			obj.transform.localPosition = this.offset + offset;
             obj.forward = bone.forward;
-            //obj.localScale = Vector3.one;
+			obj.localScale = Vector3.one;
             item = obj;
             obj.Rotate(rotate);
 		}

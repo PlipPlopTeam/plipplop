@@ -103,27 +103,11 @@ public class AgentMovement : Walker
     {
         if(clearEvents) ClearEvents();
 
-        NavMeshPath path = new NavMeshPath();
+		agent.enabled = true;
+		NavMeshPath path = new NavMeshPath();
         agent.CalculatePath(pos, path);
         if(path.status == NavMeshPathStatus.PathPartial
-        || path.status == NavMeshPathStatus.PathInvalid)
-        {
-			/*
-			RaycastHit[] hits = Physics.RaycastAll(transform.position, Vector3.down, 100f);
-			foreach (RaycastHit h in hits)
-			{
-				if (h.collider.gameObject.GetComponent<Floor>() != null)
-				{
-					Debug.Log(h.point);
-					agent.SetDestination(h.point);
-					going = true;
-					reached = false;
-					return true;
-				}
-			}
-			*/
-			return false;
-        }
+        || path.status == NavMeshPathStatus.PathInvalid) return false;
         else 
         {
 			StopFollowingPath();
@@ -204,7 +188,7 @@ public class AgentMovement : Walker
         reached = false;
         chaseTarget = null;
         StopFollowingPath();
-        agent.SetDestination(transform.position);
+		agent.enabled = false;
     }
 
     public bool GoToNextPoint()
