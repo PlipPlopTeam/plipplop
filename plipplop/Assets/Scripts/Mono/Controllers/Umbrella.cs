@@ -22,6 +22,7 @@ public class Umbrella : Controller
     Coroutine currentAnimationRoutine = null;
     bool isFlapping = false;
     bool isStuck = false;
+    bool isAnimating = false;
 
     void AirMove(Vector3 direction)
     {
@@ -52,7 +53,7 @@ public class Umbrella : Controller
         if (IsGrounded()) {
             if (AreLegsRetracted()) {
                 // It's stuck in the ground
-                if (currentAnimationRoutine != null) StopCoroutine(currentAnimationRoutine);
+                if (isAnimating) StopCoroutine(currentAnimationRoutine);
                 currentAnimationRoutine = StartCoroutine(IsDeployed() ? CloseUmbrella() : OpenUmbrella());
             }
             else {
@@ -67,7 +68,7 @@ public class Umbrella : Controller
     void Flap()
     {
         if (isFlapping) return;
-        if (currentAnimationRoutine != null) StopCoroutine(currentAnimationRoutine);
+        if (isAnimating) StopCoroutine(currentAnimationRoutine);
         currentAnimationRoutine = StartCoroutine(FlapRoutine());
     }
 
@@ -86,13 +87,28 @@ public class Umbrella : Controller
 
     internal override void Update()
     {
-        if (IsGrounded() && !isStuck && AreLegsRetracted()) {
-            var surf = locomotion.GetBelowSurface();
-            var pos = transform.position;
-            if (surf.HasValue) {
-                pos = surf.Value;
+        base.Update();
+
+        if (IsGrounded() && !isStuck) {
+            if (AreLegsRetracted()) {
+                var surf = locomotion.GetBelowSurface();
+                var pos = transform.position;
+                if (surf.HasValue) {
+                    pos = surf.Value;
+                }
+                Stuck(pos);
             }
-            Stuck(pos);
+            else {
+                if (IsDeployed()) {
+                    if (isAnimating) StopCoroutine(currentAnimationRoutine);
+                    currentAnimationRoutine = StartCoroutine(CloseUmbrella());
+                }
+            }
+        }
+        else if (!IsGrounded()) {
+            if (!isFlapping && !IsDeployed() && !isAnimating) {
+                currentAnimationRoutine = StartCoroutine(OpenUmbrella());
+            }
         }
     }
 
@@ -136,12 +152,8 @@ public class Umbrella : Controller
     internal override void OnLegsExtended() {
         if (isStuck) {
             UnStuck();
+            visuals.localEulerAngles = Vector3.zero;
         }
-        if (!IsDeployed()) {
-            if (currentAnimationRoutine != null) StopCoroutine(currentAnimationRoutine);
-            currentAnimationRoutine = StartCoroutine(OpenUmbrella());
-        }
-        visuals.localEulerAngles = Vector3.zero;
     }
     internal override void OnLegsRetracted() {
         var surf = locomotion.GetBelowSurface();
@@ -175,21 +187,25 @@ public class Umbrella : Controller
 
     IEnumerator CloseUmbrella(float additionalSpeed=1f)
     {
+        isAnimating = true;
         while (renderer.GetBlendShapeWeight(0) < 99f) {
             renderer.SetBlendShapeWeight(0, Mathf.Lerp(renderer.GetBlendShapeWeight(0), 100f, Time.deltaTime*3f* additionalSpeed));
             umbrellaFace.SetBlendShapeWeight(0, Mathf.Lerp(renderer.GetBlendShapeWeight(0), 100f, Time.deltaTime * 3f* additionalSpeed)); 
              yield return null;
         }
+        isAnimating = false;
     }
 
     IEnumerator OpenUmbrella()
     {
+        isAnimating = true;
         SoundPlayer.Play("sfx_umbrella_boost");
         while (renderer.GetBlendShapeWeight(0) > 4f) {
             umbrellaFace.SetBlendShapeWeight(0, Mathf.Lerp(renderer.GetBlendShapeWeight(0), 0f, Time.deltaTime * 3f));
             renderer.SetBlendShapeWeight(0, Mathf.Lerp(renderer.GetBlendShapeWeight(0), 0f, Time.deltaTime * 3f));
             yield return null;
         }
+        isAnimating = false;
     }
 
     float GetCurrentClosure()
