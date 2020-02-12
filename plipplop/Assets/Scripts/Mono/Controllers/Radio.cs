@@ -20,7 +20,8 @@ public class Radio : Hopper
     Jukebox jukebox;
     float timeSinceLastBeat = 0f;
     float noiseBase = 0.2f;
-    float noiseReduxFactor = 8f;
+    float noiseReduxFactor = 15f;
+    float pitch = 1f;
     AudioSource noiseSrc;
 
     internal override void Awake()
@@ -50,7 +51,7 @@ public class Radio : Hopper
         if (isOn) {
             timeSinceLastBeat += Time.deltaTime;
             var delta = jukebox.GetAnimDelta();
-            if (timeSinceLastBeat > 1f/(musics[currentMusic].bpm / 60f)) {
+            if (timeSinceLastBeat > 1f/((musics[currentMusic].bpm* pitch) / 60f)) {
                 timeSinceLastBeat = 0f;
                 jukebox.SetAnimDelta(1f);
             }
@@ -60,6 +61,8 @@ public class Radio : Hopper
 
             noiseSrc.volume = Mathf.Clamp01(rigidbody.velocity.magnitude * (1f - noiseBase) * (1f/ noiseReduxFactor)) + noiseBase;
             jukebox.GetAttachedSource().volume = 1f - noiseSrc.volume;
+            pitch = 0.95f + noiseSrc.volume * 0.1f;
+            jukebox.GetAttachedSource().pitch = pitch;
         }
         else {
             jukebox.SetAnimDelta(0f);

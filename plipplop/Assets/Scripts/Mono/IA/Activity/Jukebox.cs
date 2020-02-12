@@ -12,6 +12,7 @@ public class Jukebox : Activity
     public bool animateWithSound = true;
 
     float animDelta = 0f;
+    float radioBeatScale = 0.4f;
     Transform visuals;
     AudioSource attachedSource;
 
@@ -69,7 +70,7 @@ public class Jukebox : Activity
         if (animateWithSound) {
             animDelta = (1 + Mathf.Sin(Time.time * 10f)) * 0.1f;
         }
-        visuals.localScale = Vector3.one + Vector3.one * animDelta;
+        visuals.localScale = Vector3.one + Vector3.one * animDelta * radioBeatScale;
     }
 
 	public override void StartUsing(NonPlayableCharacter user)
