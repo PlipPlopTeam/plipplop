@@ -4,22 +4,23 @@ public class Serviette : Activity
 	[Header("SERVIETTE")]
 	public float offset;
 
-	public override void Enter(NonPlayableCharacter user)
+	public override void StartUsing(NonPlayableCharacter user)
 	{
-		base.Enter(user);
-		user.transform.position = transform.position + transform.forward * offset;
-		user.transform.forward = -transform.forward;
-		user.agentMovement.Stop();
-		user.agentMovement.ClearEvents();
-		user.animator.SetBool("Tanning", true);
-		full = true;
-	}
+		base.StartUsing(user);
 
-	public override void Exit(NonPlayableCharacter user)
+		user.agentMovement.GoThere(transform.position, true);
+		user.agentMovement.onDestinationReached += () =>
+		{
+			user.transform.position = transform.position + transform.forward * offset;
+			user.transform.forward = -transform.forward;
+			user.animator.SetBool("Tanning", true);
+			user.agentMovement.Stop();
+		};
+	}
+	public override void StopUsing(NonPlayableCharacter user)
 	{
-		if(user.animator != null) user.animator.SetBool("Tanning", false);
-		full = false;
-		base.Exit(user);
+		base.StopUsing(user);
+		if (user.animator != null) user.animator.SetBool("Tanning", false);
 	}
 
 #if UNITY_EDITOR

@@ -33,15 +33,15 @@ public class Skeleton : MonoBehaviour
 			obj.SetParent(bone);
 			obj.transform.localPosition = this.offset + offset;
             obj.forward = bone.forward;
-            //obj.localScale = Vector3.one;
+			obj.localScale = Vector3.one;
             item = obj;
             obj.Rotate(rotate);
 		}
 	}
     public List<Socket> sockets = new List<Socket>();
     List<Transform> bones = new List<Transform>();
-
 	public Transform hips;
+	public Vector3 hairOffset;
 
     public void Awake()
     {
@@ -66,26 +66,47 @@ public class Skeleton : MonoBehaviour
 
     public void Attach(Transform t, Cloth.ESlot where, bool unequipCurrent = false, Vector3 offset = new Vector3(), Vector3 rotate = new Vector3())
     {
-        Socket s = GetSocketBySlot(where);
+		Vector3 os = offset;
+
+		Socket s = GetSocketBySlot(where);
         if(s != null)
         {
-            if(!s.IsFree())
-            {
-                if(unequipCurrent)
-                {
-                    s.item.SetParent(null);
-                    s.Attach(t, offset, rotate);
-                }
-            }
-            else s.Attach(t, offset, rotate);
+			// Hair Offset
+			if (where == Cloth.ESlot.TOP_HEAD && !GetSocketBySlot(Cloth.ESlot.HEAD).IsFree())
+			{
+				os += hairOffset;
+			}
+			else if (where == Cloth.ESlot.HEAD && !GetSocketBySlot(Cloth.ESlot.TOP_HEAD).IsFree())
+			{
+				GetSocketBySlot(Cloth.ESlot.TOP_HEAD).item.localPosition += hairOffset;
+			}
+
+			if (!s.IsFree())
+			{
+				if (unequipCurrent)
+				{
+					s.item.SetParent(null);
+					s.Attach(t, os, rotate);
+				}
+			}
+			else s.Attach(t, os, rotate);
         }
         else Debug.LogWarning("Socket : '" + where + "' doesn't exist");
     }
 
     public void Drop(Cloth.ESlot from)
     {
-        Socket s = GetSocketBySlot(from);
-        if(s != null)
+		Socket s = GetSocketBySlot(from);
+
+		if (s.slot == Cloth.ESlot.HEAD)
+		{
+			if (!GetSocketBySlot(Cloth.ESlot.TOP_HEAD).IsFree())
+			{
+				GetSocketBySlot(Cloth.ESlot.TOP_HEAD).item.localPosition -= hairOffset;
+			}
+		}
+
+		if (s != null)
         {
             if(s.item != null)
             {
