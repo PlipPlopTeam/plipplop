@@ -86,7 +86,7 @@ public class SoundPlayer
         PlaySound(GetSoundFromName(soundName), volume, RandomPitch()); 
     }
 
-    public static void PlaySoundAttached(string soundName, Transform parent, float volume = 1f, bool randomPitch = false)
+    public static AudioSource PlaySoundAttached(string soundName, Transform parent, float volume = 1f, bool randomPitch = false)
     {
         var snd = GetSoundFromName(soundName);
         var clip = snd.clip;
@@ -103,7 +103,7 @@ public class SoundPlayer
         g.transform.parent = parent;
         g.transform.localPosition = new Vector3();
 
-        PlaySound(snd, volume, randomPitch ? RandomPitch() : 1f, source);
+        return PlaySound(snd, volume, randomPitch ? RandomPitch() : 1f, source);
     }
 
     public static void PlayAtPosition(string soundName, Vector3 position, float volume = 1f, bool randomPitch = false)
@@ -125,7 +125,8 @@ public class SoundPlayer
 
     public static void StopEverySound()
     {
-        foreach (var src in GameObject.FindObjectsOfType<AudioSource>()) {
+        CleanSources();
+        foreach (var src in managedSources) {
             src.Stop();
             if (src == source) continue;
             managedSources.Remove(src);
@@ -133,23 +134,29 @@ public class SoundPlayer
         }
     }
 
-    public static void StopSound(string soundName, bool shouldFade=false)
+    public static void StopSound(string soundName, bool shouldFade = false) { StopSounds(soundName, shouldFade); }
+    public static void StopSounds(string soundName, bool shouldFade = false)
     {
         var snd = GetSoundFromName(soundName);
-        foreach (var src in GameObject.FindObjectsOfType<AudioSource>()) {
+        foreach (var src in managedSources) {
             if (src.clip != snd.clip) continue;
-            Action cleanSteps = delegate {
-                src.Stop();
-                if (src == source) return;
-                managedSources.Remove(src);
-                GameObject.Destroy(src.gameObject);
-            };
-            if (shouldFade) {
-                UnityMainThreadDispatcher.Instance().StartCoroutine(FadeVolumeOverTime(src, 0f, cleanSteps));
-            }
-            else {
-                cleanSteps.Invoke();
-            }
+            StopSound(src, shouldFade);
+        }
+    }
+
+    public static void StopSound(AudioSource src, bool shouldFade = false)
+    {
+        Action cleanSteps = delegate {
+            src.Stop();
+            if (src == source) return;
+            managedSources.Remove(src);
+            GameObject.Destroy(src.gameObject);
+        };
+        if (shouldFade) {
+            UnityMainThreadDispatcher.Instance().StartCoroutine(FadeVolumeOverTime(src, 0f, cleanSteps));
+        }
+        else {
+            cleanSteps.Invoke();
         }
     }
 
@@ -160,13 +167,19 @@ public class SoundPlayer
 
     static void MakeUnique(Sound sound)
     {
-        foreach(var src in GameObject.FindObjectsOfType<AudioSource>()) {
+        CleanSources();
+        foreach (var src in managedSources) {
             if (src.clip == sound.clip) {
                 src.Stop();
                 if (src == source) continue;
                 GameObject.Destroy(src.gameObject);
             }
         }
+    }
+
+    static void CleanSources()
+    {
+        managedSources.RemoveAll(o=>o == null);
     }
 
     static Sound GetSoundFromName(string name)
