@@ -183,12 +183,16 @@ public class Activity : MonoBehaviour
 		foreach (NonPlayableCharacter user in users.ToArray())
 		{
 			Gizmos.color = new Color32(0, 255, 0, 255);
+			UnityEditor.Handles.color = new Color32(0, 255, 0, 255);
 			Gizmos.DrawLine(transform.position, user.transform.position);
+			UnityEditor.Handles.DrawWireDisc(user.transform.position, Vector3.up, 0.1f);
 		}
 
 		foreach (NonPlayableCharacter spectator in spectators.ToArray())
 		{
 			Gizmos.color = new Color32(0, 0, 255, 255);
+			UnityEditor.Handles.color = new Color32(0, 0, 255, 255);
+			UnityEditor.Handles.DrawWireDisc(spectator.transform.position, Vector3.up, 0.25f);
 			Gizmos.DrawLine(transform.position, spectator.transform.position);
 		}
 	}
