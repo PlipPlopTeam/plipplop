@@ -41,11 +41,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7338784915185660217}
+  - component: {fileID: 1676616953}
   - component: {fileID: 2535470559777295997}
   - component: {fileID: 8909978216379082688}
   - component: {fileID: 8020316882926807654}
   - component: {fileID: 3821377048270948624}
-  - component: {fileID: 1380468852954246194}
   - component: {fileID: 2370884390476261711}
   m_Layer: 0
   m_Name: Radio
@@ -69,6 +69,50 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1676616953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7338784915185660219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9d354988b6bcd140ada8f439f5367d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoPossess: 0
+  beginCrouched: 0
+  canRetractLegs: 1
+  freezeUntilPossessed: 0
+  useGravity: 1
+  animateHead: 1
+  gravityMultiplier: 100
+  customExternalRigidbody: {fileID: 0}
+  customCamera: {fileID: 0}
+  locomotion: {fileID: 0}
+  visuals: {fileID: 0}
+  face: {fileID: 0}
+  visualsOffset: {x: 0, y: -0.2, z: 0}
+  pushMovementForce: 500
+  pushCooldown: 2
+  pushThreshold: 0.5
+  pushJumpForce: 250
+  jumpForce: 10
+  speedBeforeLegs: 1
+  rotationVelocityThreshold: 0.25
+  rotationLerpSpeed: 2
+  crouchCooldown: 2
+  drag: 1
+  musics:
+  - name: bgm_test
+    bpm: 96
+  - name: bgm_test_2
+    bpm: 98
+  - name: bgm_test_3
+    bpm: 80
+  - name: bgm_test_4
+    bpm: 101
 --- !u!54 &2535470559777295997
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -112,7 +156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   preset: {fileID: 11400000, guid: 81c5435995369f048ab3d3d178e1aa7c, type: 2}
   groundCheckRange: 1
-  legsOffset: {x: 0, y: 0.2, z: 0}
+  legsOffset: {x: 0, y: 0.4, z: 0}
   rigidbody: {fileID: 0}
   targetDirection: {x: 0, y: 0, z: 0}
   isImmerged: 0
@@ -136,41 +180,6 @@ MonoBehaviour:
   weight: 20
   distanceThreshold: 2
   hidden: 0
---- !u!114 &1380468852954246194
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7338784915185660219}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4194289d42295894e9edeb06fa29964c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  autoPossess: 0
-  beginCrouched: 1
-  canRetractLegs: 1
-  freezeUntilPossessed: 0
-  useGravity: 1
-  animateHead: 1
-  gravityMultiplier: 100
-  customExternalRigidbody: {fileID: 2535470559777295997}
-  customCamera: {fileID: 11400000, guid: 5fad2a8a9d01c0f4485e0647b9b62d93, type: 2}
-  locomotion: {fileID: 0}
-  visuals: {fileID: 8132795082402124948}
-  face: {fileID: 1155650761415235712}
-  visualsOffset: {x: 0, y: -0.2, z: 0}
-  pushMovementForce: 500
-  pushCooldown: 2
-  pushThreshold: 0.5
-  pushJumpForce: 250
-  jumpForce: 10
-  speedBeforeLegs: 1
-  rotationVelocityThreshold: 0.25
-  rotationLerpSpeed: 2
-  crouchCooldown: 2
-  drag: 1
 --- !u!114 &2370884390476261711
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,6 +209,9 @@ MonoBehaviour:
   spectators: []
   radius: {x: 1, y: 1.5}
   ps: {fileID: 3517644232397957827}
+  doesPlayMusicForReal: 0
+  music: 
+  animateWithSound: 0
 --- !u!1001 &7338784914367916034
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -453,12 +465,6 @@ PrefabInstance:
 --- !u!4 &3601354701241493912 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: a6745308ab6de644dabcad8c5adb767b,
-    type: 3}
-  m_PrefabInstance: {fileID: 8394746863801533058}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1155650761415235712 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -1978887880731813374, guid: a6745308ab6de644dabcad8c5adb767b,
     type: 3}
   m_PrefabInstance: {fileID: 8394746863801533058}
   m_PrefabAsset: {fileID: 0}

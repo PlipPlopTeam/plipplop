@@ -7,29 +7,70 @@ public class Jukebox : Activity
 	[Header("Jukebox")]
 	public Vector2 radius;
     public ParticleSystem ps;
-	Transform visuals;
+    public bool doesPlayMusicForReal = true;
+    public string music = "bgm_test";
+    public bool animateWithSound = true;
 
-	private void Start()
+    float animDelta = 0f;
+    float radioBeatScale = 0.4f;
+    Transform visuals;
+    AudioSource attachedSource;
+
+    public void SetAnimDelta(float v)
+    {
+        animDelta = v;
+    }
+
+    public float GetAnimDelta()
+    {
+        return animDelta;
+    }
+
+    private void Start()
     {
         visuals = transform.GetChild(0);
     }
 
+    public void PlayMusic()
+    {
+        attachedSource = SoundPlayer.PlaySoundAttached(music, transform);
+        ps.Play();
+    }
+
+    public AudioSource GetAttachedSource()
+    {
+        return attachedSource;
+    }
+
+    public void StopMusic()
+    {
+        if (attachedSource != null) {
+            SoundPlayer.StopSound(attachedSource);
+        }
+        ps.Stop();
+    }
+
     private void OnEnable()
     {
-        SoundPlayer.PlaySoundAttached("bgm_test", transform);
-        ps.Play();
+        if (doesPlayMusicForReal) {
+            PlayMusic();
+        }
     }
 
     private void OnDisable()
     {
-        SoundPlayer.StopSound("bgm_test");
-        ps.Stop();
+        if (doesPlayMusicForReal) {
+            StopMusic();
+        }
     }
 
     public override void Update() 
     {
         base.Update();
-        visuals.localScale = Vector3.one + Vector3.one * (1 + Mathf.Sin(Time.time * 10f) )* 0.1f;
+        if (animateWithSound) {
+            animDelta = (1 + Mathf.Sin(Time.time * 10f)) * 0.1f;
+        }
+        visuals.localScale = Vector3.one + Vector3.one * animDelta * radioBeatScale;
     }
 
 	public override void StartUsing(NonPlayableCharacter user)
