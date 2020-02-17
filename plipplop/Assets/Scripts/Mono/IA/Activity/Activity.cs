@@ -21,8 +21,8 @@ public class Activity : MonoBehaviour
 	public float awarnessMultiplier = 1f;
 	public StatMultiplier use = new StatMultiplier();
 	public StatMultiplier spectate = new StatMultiplier();
-	public List<NonPlayableCharacter> users = new List<NonPlayableCharacter>();
-	public List<NonPlayableCharacter> spectators = new List<NonPlayableCharacter>();
+	internal List<NonPlayableCharacter> users = new List<NonPlayableCharacter>();
+	internal List<NonPlayableCharacter> spectators = new List<NonPlayableCharacter>();
 	internal float timer = 0f;
 	internal bool full = false;
 
@@ -67,7 +67,7 @@ public class Activity : MonoBehaviour
 	public virtual void StartSpectate(NonPlayableCharacter npc)
 	{
 		spectators.Add(npc);
-		Vector3 pos = transform.position + Geometry.GetRandomPointAround(Random.Range(spectatorRange.x, spectatorRange.y));
+		Vector3 pos = transform.position + Geometry.GetRandomPointOnCircle(Random.Range(spectatorRange.x, spectatorRange.y));
 		npc.agentMovement.Stop();
 		npc.agentMovement.GoThere(pos);
 		npc.agentMovement.onDestinationReached += () =>
