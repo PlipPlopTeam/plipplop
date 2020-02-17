@@ -95,7 +95,7 @@ public class Cheats : Dictionary<string, System.Action>
 	    {
 		    GameObject _mouette = Object.Instantiate(_m, Game.i.player.GetCurrentController().visuals.transform);
 		    _mouette.transform.localPosition = new Vector3(0, .2f, 0);
-		    _mouette.transform.localEulerAngles = new Vector3(0, 180, 0);
+		    _mouette.transform.localEulerAngles = new Vector3(90, 180, 0);
 	    }
     }
     

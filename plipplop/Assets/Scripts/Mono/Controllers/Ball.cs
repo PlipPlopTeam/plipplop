@@ -14,22 +14,24 @@ public class Ball : Controller
 
 	int combo = 1;
 	float comboTimer = 0f;
-	public bool hopped = false;
-	Vector3 lastOrientation;
+	bool hopped = false;
+    bool canJumpAgain = true;
+    Vector3 lastOrientation;
+    bool movingStick = false;
 
 	public override void OnEject()
 	{
 		base.OnEject();
-		Initialized();
+		Initialize();
 	}
 
 	public override void OnPossess()
 	{
 		base.OnPossess();
-		Initialized();
+		Initialize();
 	}
 
-	public void Initialized()
+	public void Initialize()
 	{
 		comboTimer = 0f;
 		combo = 1;
@@ -39,19 +41,13 @@ public class Ball : Controller
 
 	public void OnCollisionEnter(Collision collision)
 	{
-		if(hopped)
+        canJumpAgain = true;
+
+        if (hopped)
 		{
-			rigidbody.velocity *= velocityDamplerOnImpact;
-			Pyromancer.PlayGameEffect("gfx_bounce", collision.GetContact(0).point);
-			hopped = false;
-
-            SoundPlayer.PlayAtPosition("sfx_beachball_jump_" + combo, collision.GetContact(0).point, 1f, true);
-
-			if (comboTimer > 0 && combo < maxCombo) combo++;
-			else combo = 1;
-
-
-		}
+            Jump(collision.GetContact(0).point);
+            hopped = false;
+        }
 	}
 
 	internal override void Update()
@@ -70,7 +66,12 @@ public class Ball : Controller
 				Bump(direction);
 				hopped = true;
 			}
-		}
+            movingStick = true;
+
+        }
+        else {
+            movingStick = false;
+        }
 
 		if(direction.magnitude > 0.25f)
 		{
@@ -91,9 +92,37 @@ public class Ball : Controller
 		rigidbody.AddForce(Vector3.up * (verticalForce + ((combo - 1) * jumpComboVForceBonus)) * Time.deltaTime);
 	}
 
+    void Jump(Vector3 pointOfContact)
+    {
+        rigidbody.velocity *= velocityDamplerOnImpact;
+        JumpFX(pointOfContact);
+
+
+        if (comboTimer > 0) {
+            if (combo < maxCombo)
+                combo++;
+        }
+        else {
+            combo = 1;
+        }
+    }
+
+    void JumpFX(Vector3 pointOfContact)
+    {
+
+        Pyromancer.PlayGameEffect("gfx_bounce", pointOfContact);
+        SoundPlayer.PlayAtPosition("sfx_beachball_jump_" + combo, pointOfContact, 1f, true);
+    }
+
     internal override void SpecificJump()
     {
 		if(comboTimer <= 0) comboTimer += jumpComboWindow;
+        if (!movingStick && !hopped && IsGrounded() && canJumpAgain) {
+            Bump(Vector3.up);
+            canJumpAgain = false;
+            combo = 1;
+            JumpFX(transform.position - 0.5f * Vector3.up);
+        }
 	}
 
     internal override void OnLegsRetracted()
