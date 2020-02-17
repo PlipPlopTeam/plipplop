@@ -19,7 +19,7 @@ public static class Geometry
         return s > 0 && t > 0 && (s + t) < 2 * A * sign;
     }
 
-    public static Vector3 GetRandomPointAround(float radius)
+    public static Vector3 GetRandomPointOnCircle(float radius)
     {
         float angle = Random.Range(0f, 1f) * Mathf.PI * 2;
         return new Vector3(Mathf.Cos(angle) * radius, 0, Mathf.Sin(angle) * radius);
