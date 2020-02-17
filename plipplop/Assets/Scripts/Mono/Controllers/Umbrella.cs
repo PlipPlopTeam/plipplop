@@ -89,6 +89,7 @@ public class Umbrella : Controller
     {
         base.Update();
 
+        if (IsGrounded()) isFlapping = false;
         if (IsGrounded() && !isStuck) {
             if (AreLegsRetracted()) {
                 var surf = locomotion.GetBelowSurface();
