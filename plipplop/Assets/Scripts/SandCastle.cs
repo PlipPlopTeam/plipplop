@@ -31,6 +31,7 @@ public class SandCastle : Activity
 	public override void StartUsing(NonPlayableCharacter user)
 	{
 		base.StartUsing(user);
+		user.look.FocusOn(transform);
 		user.GoSitThere(transform.position + Geometry.GetRandomPointOnCircle(radius + 1f));
 		user.agentMovement.onDestinationReached += () =>
 		{
@@ -42,6 +43,7 @@ public class SandCastle : Activity
 	public override void StopUsing(NonPlayableCharacter user)
 	{
 		base.StopUsing(user);
+		user.look.LooseFocus();
 		user.GetUp();
 	}
 
@@ -62,14 +64,18 @@ public class SandCastle : Activity
 	{
 		Clear();
 		Generate();
-		foreach (SkinnedMeshRenderer smr in towers) smr.SetBlendShapeWeight(0, 100f);
+		foreach (SkinnedMeshRenderer smr in towers)
+			smr.SetBlendShapeWeight(0, 100f);
+
 		selected = 0;
 		built = false;
 	}
 
 	private void Clear()
 	{
-		foreach (SkinnedMeshRenderer smr in towers) Destroy(smr.gameObject);
+		foreach (SkinnedMeshRenderer smr in towers)
+			Destroy(smr.gameObject);
+
 		towers.Clear();
 	}
 
@@ -84,11 +90,13 @@ public class SandCastle : Activity
 				float blend = towers[selected].GetBlendShapeWeight(0);
 				if (blend >= 0f)
 				{
+					Pyromancer.PlayGameEffect("gfx_sand_poof", towers[selected].transform.position);
 					float value = (towers.Count / timeToComplete) * 100f * refreshTime;
 					towers[selected].SetBlendShapeWeight(0, blend - value);
 				}
 				else
 				{
+
 					towers[selected].SetBlendShapeWeight(0, 0f);
 					selected++;
 					if(selected >= towers.Count) Complete();
@@ -100,11 +108,16 @@ public class SandCastle : Activity
 
 	public void Stomp()
 	{
+		foreach (NonPlayableCharacter npc in users)
+		{
+			npc.emo.Show("Angry", 2f);
+		}
+
 		foreach (SkinnedMeshRenderer smr in towers)
 		{
 			smr.SetBlendShapeWeight(0, 0f);
-			smr.SetBlendShapeWeight(0, 100f);
-			Pyromancer.PlayVFX("vfx_poof", smr.transform.position);
+			smr.SetBlendShapeWeight(1, 100f);
+			Pyromancer.PlayGameEffect("gfx_sand_poof", smr.transform.position);
 		}
 		built = false;
 	}
@@ -112,6 +125,11 @@ public class SandCastle : Activity
 	private void OnTriggerEnter(Collider other)
 	{
 		if(built) Stomp();
+		else if(constructionInProgress)
+		{
+			Stomp();
+			Initialize();
+		}
 	}
 
 	public override bool AvailableFor(NonPlayableCharacter npc)
