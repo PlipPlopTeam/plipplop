@@ -47,6 +47,7 @@ public class NonPlayableCharacter : MonoBehaviour
 	private bool endWait;
 	[HideInInspector] public bool hasWaited;
 	public System.Action onWaitEnded;
+	public System.Action onCollect;
 
 	private Activity show;
 	public void ShowOff(float time, Vector2 range, int slot)
@@ -221,6 +222,11 @@ public class NonPlayableCharacter : MonoBehaviour
 				agentMovement.StopChase();
 				Carry(carryableToCollect);
 				carryableToCollect = null;
+				if(onCollect != null)
+				{
+					onCollect.Invoke();
+					onCollect = null;
+				}
 			}
 		}
 	}
@@ -230,10 +236,12 @@ public class NonPlayableCharacter : MonoBehaviour
 		return carryable == carryableToCollect;
 	}
 
-	public void Collect(ICarryable carryable)
+	public void Collect(ICarryable carryable, System.Action then = null)
 	{
 		carryableToCollect = carryable;
-		agentMovement.Chase(carryableToCollect.Self());		
+		agentMovement.Chase(carryableToCollect.Self());
+
+		if (then != null) onCollect += then;
 	}
 
 	public void Consume(Food f)
@@ -308,6 +316,7 @@ public class NonPlayableCharacter : MonoBehaviour
 		agentMovement.GoThere(where);
 		agentMovement.onDestinationReached += () => {Sit(where);};
 	}
+
 	public void GoSitThere(Chair chair, Chair.Spot spot)
 	{
 		agentMovement.GoThere(chair.transform.position + spot.position);
@@ -317,6 +326,14 @@ public class NonPlayableCharacter : MonoBehaviour
 			chair.Sit(this, spot);
 		};
 	}
+
+	public void Sit()
+	{
+		agentMovement.Stop();
+		agent.enabled = false;
+		animator.SetBool("Sitting", true);
+	}
+
 	public void Sit(Vector3 pos)
 	{
 		agentMovement.Stop();

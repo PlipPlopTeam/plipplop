@@ -103,7 +103,7 @@ public class AgentMovement : Walker
     {
         if(clearEvents) ClearEvents();
 
-		agent.enabled = true;
+		ActivateAgent();
 		NavMeshPath path = new NavMeshPath();
         agent.CalculatePath(pos, path);
         if(path.status == NavMeshPathStatus.PathPartial
@@ -118,8 +118,34 @@ public class AgentMovement : Walker
         }
     }
 
+	Vector3 orientation;
+	public void Orient(Vector3 _orientation)
+	{
+		orientation = new Vector3(_orientation.x, 0f, _orientation.z);
+	}
+
+	public void OrientToward(Vector3 _position)
+	{
+		Vector3 dir = -(transform.position - _position).normalized;
+		Orient(dir);
+	}
+
+	public void ActivateAgent()
+	{
+		agent.enabled = true;
+		orientation = transform.forward;
+	}
+	public void DesactivateAgent()
+	{
+		agent.enabled = false;
+	}
 	public void Tick()
     {
+		if(!agent.enabled)
+		{
+			transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(orientation), Time.deltaTime * 5f);
+		}
+
 		if (reached) reached = false;
 		if (DestinationReached())
         {
@@ -188,7 +214,7 @@ public class AgentMovement : Walker
         reached = false;
         chaseTarget = null;
         StopFollowingPath();
-		agent.enabled = false;
+		DesactivateAgent();
     }
 
     public bool GoToNextPoint()

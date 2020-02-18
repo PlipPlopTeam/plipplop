@@ -31,6 +31,14 @@ public class Cheats : Dictionary<string, System.Action>
 		}
 	}
 
+	public void Rayban()
+	{
+		foreach (NonPlayableCharacter npc in Object.FindObjectsOfType<NonPlayableCharacter>())
+		{
+		
+		}
+	}
+
 	public void Bossfight()
 	{
 		foreach (NonPlayableCharacter npc in Object.FindObjectsOfType<NonPlayableCharacter>())
