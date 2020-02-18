@@ -18,14 +18,14 @@ namespace Behavior.NPC {
 					Controller[] controllers = npc.sight.Scan<Controller>();
 					foreach (Controller c in controllers)
 					{
-						if (c.IsPossessed()) npc.player = c; break;
+						if (c.IsVisibleByNPC()) npc.player = c; break;
 					}
 					break;
 				case NonPlayableCharacter.ESubject.VALUABLE:
 					Valuable[] valuables = npc.sight.Scan<Valuable>();
 					foreach (Valuable v in valuables)
 					{
-						if (!v.hidden) npc.valuable = v; break;
+						if (!v.IsCarried() && !v.hidden) npc.valuable = v; break;
 					}
 					break;
 				case NonPlayableCharacter.ESubject.ACTIVITY:

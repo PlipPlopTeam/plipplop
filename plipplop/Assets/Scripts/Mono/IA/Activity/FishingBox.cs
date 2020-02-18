@@ -20,7 +20,6 @@ public class FishingBox : Activity
         user.agentMovement.onDestinationReached += () =>
         {
 			user.Carry(Instantiate(fishingPole).GetComponent<FishingPole>());
-            //user.skeleton.Attach(Instantiate(fishingPole).transform, Cloth.ESlot.RIGHT_HAND, true, Vector3.zero, new Vector3(180f, 0f, 90f));
             Vector3 pos = position + Geometry.GetRandomPointOnCircle(radius);
             user.agentMovement.GoThere(pos);
             StartCoroutine(DelayedSetup(user));

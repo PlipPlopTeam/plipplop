@@ -45,15 +45,20 @@ public class FishingPole : Item
 	{
 		if(isBeingUsed)
 		{
-			line.SetPositions(new Vector3[] { poleBentEnd.position, plug.position });
-
-
 			plug.up = Vector3.up;
 			plugOffset = (Mathf.Sin(Time.time) / 1000f) * 0.5f;
 			plug.position = new Vector3(plug.position.x, plug.position.y + plugOffset, plug.position.z);
 
 			Vector3 dir = (transform.position - plug.position).normalized;
 			transform.right = dir;
+		}
+	}
+
+	public void LateUpdate()
+	{
+		if (isBeingUsed)
+		{
+			line.SetPositions(new Vector3[] { poleBentEnd.position, plug.position });
 		}
 	}
 }

@@ -148,6 +148,7 @@ public class Balloon : Activity, ICarryable
 		Vector3 throwVector = users[carrier].transform.forward;
 		rb.AddForce(new Vector3(throwVector.x, 0f, throwVector.z) * horizontalForce * Time.deltaTime);
 		rb.AddForce(new Vector3(0f, 1f, 0f) * verticalForce * Time.deltaTime);
+		rb.angularVelocity = transform.forward * 100f;
 	}
 
     public override void Update()

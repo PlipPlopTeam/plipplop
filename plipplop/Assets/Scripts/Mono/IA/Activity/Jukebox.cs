@@ -78,6 +78,7 @@ public class Jukebox : Activity
 		base.StartUsing(user);
 
 		Vector3 pos = Geometry.GetRandomPointOnCircle(Random.Range(radius.x, radius.y)) + transform.position;
+		user.agentMovement.StopFollowingPath();
 		user.agentMovement.GoThere(pos, true);
 		user.agentMovement.onDestinationReached += () =>
 		{

@@ -33,6 +33,10 @@ public class AgentMovement : Walker
     int currentIndexOnPath;
 	NavMeshAgent agent;
 
+	Vector3 orientation;
+	Vector3 rotationLast;
+	Vector3 rotationDelta;
+
 	public override void ApplyAdherence(float adherence)
 	{
 		SetSpeed(settings.speed * (1f - adherence * slowMultiplier));
@@ -110,7 +114,7 @@ public class AgentMovement : Walker
         || path.status == NavMeshPathStatus.PathInvalid) return false;
         else 
         {
-			StopFollowingPath();
+			//StopFollowingPath();
 			agent.SetDestination(pos);
             going = true;
             reached = false;
@@ -118,7 +122,6 @@ public class AgentMovement : Walker
         }
     }
 
-	Vector3 orientation;
 	public void Orient(Vector3 _orientation)
 	{
 		orientation = new Vector3(_orientation.x, 0f, _orientation.z);
@@ -141,7 +144,10 @@ public class AgentMovement : Walker
 	}
 	public void Tick()
     {
-		if(!agent.enabled)
+		rotationDelta = transform.rotation.eulerAngles - rotationLast;
+		rotationLast = transform.rotation.eulerAngles;
+
+		if (!agent.enabled)
 		{
 			transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(orientation), Time.deltaTime * 5f);
 		}
@@ -186,6 +192,7 @@ public class AgentMovement : Walker
         if(animator) 
         {
             animator.SetFloat("Speed", agent.velocity.magnitude/settings.animatorRunSpeed);
+			animator.SetFloat("RotationSpeed", rotationDelta.magnitude/10f);
         }
     }
 

@@ -161,6 +161,11 @@ public abstract class Controller : MonoBehaviour
         return Game.i.player.IsPossessing(this);
     }
 
+	public virtual bool IsVisibleByNPC()
+	{
+		return IsPossessed() && !AreLegsRetracted();
+	}
+
     public void SetUnderwater()
     {
         isImmerged = true;
