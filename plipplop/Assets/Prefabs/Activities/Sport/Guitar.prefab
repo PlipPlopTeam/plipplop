@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2108323508247141260}
   - component: {fileID: 2108323508247141257}
   - component: {fileID: 1282282712914580995}
+  - component: {fileID: 934051586}
   m_Layer: 0
   m_Name: Guitar
   m_TagString: Untagged
@@ -89,8 +90,6 @@ MonoBehaviour:
     boredom: 1
     hunger: 0
     tiredness: 0
-  users: []
-  spectators: []
   music: {fileID: 5209523728472252059}
 --- !u!114 &1282282712914580995
 MonoBehaviour:
@@ -109,6 +108,7 @@ MonoBehaviour:
   canRetractLegs: 1
   freezeUntilPossessed: 0
   useGravity: 1
+  animateHead: 1
   gravityMultiplier: 100
   customExternalRigidbody: {fileID: 2108323508247141260}
   customCamera: {fileID: 0}
@@ -116,6 +116,20 @@ MonoBehaviour:
   visuals: {fileID: 606325553785487067}
   face: {fileID: 0}
   visualsOffset: {x: 0, y: 0, z: 0}
+--- !u!114 &934051586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2108323508247141261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7f1354dc4d3d4a40bbb2a193721f212, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buyoyancy: 25
+  waterline: -0
 --- !u!1 &8921650999581642498
 GameObject:
   m_ObjectHideFlags: 0

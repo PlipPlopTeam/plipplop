@@ -8,13 +8,14 @@ namespace Behavior.NPC
 		public override void Execute(NonPlayableCharacter target)
         {
 			if (Game.i.aiZone.GetPaths().Length == 0) return;
-
             NonPlayableCharacter npc = target;
             var randomPath = Game.i.aiZone.GetRandomPath();
-            if (npc != null && npc.agentMovement.path == null && randomPath)
+            if (npc != null)
 			{
-				npc.agentMovement.ClearEvents();
-                npc.agentMovement.FollowPath(randomPath);
+				if (randomPath != null)
+				{
+					npc.agentMovement.FollowPath(randomPath);
+				}
 			}
 		}
 	}

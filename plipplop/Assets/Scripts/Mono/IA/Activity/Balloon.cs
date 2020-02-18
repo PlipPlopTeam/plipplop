@@ -87,15 +87,11 @@ public class Balloon : Activity, ICarryable
 		else Initialize();
 	}
 
-	public override void Enter(NonPlayableCharacter user)
-    {
-        base.Enter(user);
-        user.look.FocusOn(transform);
-	}
-
 	public override void StartUsing(NonPlayableCharacter user)
 	{
 		base.StartUsing(user);
+		if (user.look != null) user.look.FocusOn(transform);
+
 		if (users.Count >= 2) GetInPlace();
 		else
 		{
@@ -115,7 +111,6 @@ public class Balloon : Activity, ICarryable
 		playing = false;
         flying = false;
         inPlace.Clear();
-
 		float distance = Random.Range(minDistanceBetween, maxDistanceBetween);
 		int count = 0;
 		foreach (NonPlayableCharacter user in users)
@@ -157,7 +152,7 @@ public class Balloon : Activity, ICarryable
         
         if(playing)
         {
-            if(throwTimer > 0f) throwTimer -= Time.deltaTime;
+			if (throwTimer > 0f) throwTimer -= Time.deltaTime;
             else
             {
                 if(!flying)
@@ -181,7 +176,7 @@ public class Balloon : Activity, ICarryable
 				}
                 else
                 {
-                    if(users[carrier].IsCarrying(this))
+					if (users[carrier].IsCarrying(this))
                     {
                         LookAtEachOthers();
                         users[carrier].agentMovement.Stop();

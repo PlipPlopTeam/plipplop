@@ -9,6 +9,7 @@ public class Feeder : MonoBehaviour
     public FoodData food;
     public int stock;
     public bool destroyOnceEmpty = false;
+	public float range = 3f;
 
 	public bool IsEmpty()
 	{
@@ -25,6 +26,11 @@ public class Feeder : MonoBehaviour
         if(stock <= 0) 
             npc.feeder = null;
     }
+
+	public virtual bool InRange(NonPlayableCharacter npc)
+	{
+		return Vector3.Distance(npc.transform.position, transform.position) <= range;
+	}
 
     public virtual void Serve(NonPlayableCharacter npc)
     {

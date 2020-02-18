@@ -9,11 +9,13 @@ namespace Behavior.NPC
         {
 			if (Game.i.aiZone.GetPaths().Length == 0) return;
             NonPlayableCharacter npc = target;
-
+			var randomPath = Game.i.aiZone.GetRandomPath();
 			if (npc != null && npc.agentMovement.path == null)
 			{
-				npc.agentMovement.ClearEvents();
-                npc.agentMovement.FollowPath(Game.i.aiZone.GetRandomPath());
+				if(randomPath != null)
+				{
+					npc.agentMovement.FollowPath(randomPath);
+				}
 			}
 		}
 	}

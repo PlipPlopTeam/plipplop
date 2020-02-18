@@ -42,17 +42,17 @@ public class FishingBox : Activity
 		};
     }
 
-    public override void Exit(NonPlayableCharacter user)
-    {
-        base.Exit(user);
-        user.skeleton.Drop(Cloth.ESlot.RIGHT_HAND);
-        user.animator.SetBool("Fishing", false);
+	public override void StopUsing(NonPlayableCharacter user)
+	{
+		base.StopUsing(user);
+		user.skeleton.Drop(Cloth.ESlot.RIGHT_HAND);
+		user.animator.SetBool("Fishing", false);
 		StopAllCoroutines();
-    }
+	}
 
 
 #if UNITY_EDITOR
-    void OnDrawGizmosSelected()
+	void OnDrawGizmosSelected()
     {
 		GUIStyle s = new GUIStyle();
 		s.alignment = TextAnchor.MiddleCenter;

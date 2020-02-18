@@ -29,7 +29,8 @@ public class Dispenser : Feeder
 
         clients.Remove(client);
         serving = false;
-        Next();
+		serveTimer = timeToServe;
+		Next();
     }
 
     public void Next()
@@ -68,8 +69,11 @@ public class Dispenser : Feeder
     {
         if(serving)
         {
-            if(serveTimer > 0f) serveTimer -= Time.deltaTime;
-            else if(next != null) Serve(next);
+			if(next != null && InRange(next))
+			{
+				if (serveTimer > 0f) serveTimer -= Time.deltaTime;
+				else Serve(next);
+			}
         }
     }
 }

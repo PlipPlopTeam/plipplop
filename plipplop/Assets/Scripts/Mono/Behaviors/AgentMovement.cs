@@ -59,18 +59,21 @@ public class AgentMovement : Walker
     public void FollowPath(AIPath newPath)
     {
 		if (newPath == null) return;
-        path = newPath;
-        currentIndexOnPath = Random.Range(0, path.points.Count);
+
+		path = newPath;
         followingPath = true;
         ClearEvents();
-        onPathCompleted += () => {if(!path.loop) followingPath = false;};
-        StopChase();
-        GoAtPoint(currentIndexOnPath);
+		StopChase();
+
+		onPathCompleted += () => { if (!path.loop) followingPath = false;};
+
+		currentIndexOnPath = Random.Range(0, path.points.Count);
+		GoAtPoint(currentIndexOnPath);
     }
     public void StopFollowingPath()
     {
         followingPath = false;
-    }
+	}
 
     public void ApplyWeightToSpeed(float weight, float strength)
     {
@@ -198,16 +201,19 @@ public class AgentMovement : Walker
 
     public bool GoAtPoint(int index)
     {
-        if(path.points.Count == 0
+		if (path.points.Count == 0
         || index < 0
         || index >= path.points.Count) return false;
 
-        if(GoThere(path.GetPosition(index)))
-        {
-            currentIndexOnPath = index;
-            return true;
-        }
-        else return false;
+		if (GoThere(path.GetPosition(index)))
+		{
+			currentIndexOnPath = index;
+			return true;
+		}
+		else
+		{
+			return false;
+		}
     }
 
     public void StopChase()

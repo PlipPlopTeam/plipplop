@@ -30,6 +30,7 @@ public class Activity : MonoBehaviour
 
 	public virtual void Enter(NonPlayableCharacter user)
     {
+		user.agentMovement.StopFollowingPath();
         user.stats[NonPlayableCharacter.EStat.BOREDOM] = 0f;
         user.activity = this;
 		user.sight.multiplier = awarnessMultiplier;
@@ -84,8 +85,8 @@ public class Activity : MonoBehaviour
 
 	public virtual void Look(NonPlayableCharacter npc, Vector3 position)
 	{
-		npc.transform.forward = -(npc.transform.position - position).normalized;
 		npc.agentMovement.Stop();
+		npc.agentMovement.OrientToward(transform.position);
 	}
 
 	public virtual bool AvailableFor(NonPlayableCharacter npc)

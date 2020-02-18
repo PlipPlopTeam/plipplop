@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 2007550832}
   - component: {fileID: 7286649357687551854}
   - component: {fileID: 2887985434650187074}
+  - component: {fileID: 1032220758}
   m_Layer: 0
   m_Name: BeachBall
   m_TagString: Untagged
@@ -70,7 +71,6 @@ MonoBehaviour:
   velocityDamplerOnImpact: 0.25
   horizontalForce: 3500
   verticalForce: 2500
-  hopped: 0
 --- !u!135 &2932650472225342060
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -145,11 +145,9 @@ MonoBehaviour:
     boredom: 1
     hunger: 0
     tiredness: 0
-  users: []
-  spectators: []
-  minDistanceBetween: 5
-  maxDistanceBetween: 6
-  distanceMax: 3
+  minDistanceBetween: 2
+  maxDistanceBetween: 3
+  distanceMax: 1
   timeBetweenThrows: 1
   verticalForce: 9000
   horizontalForce: 8000
@@ -165,6 +163,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a15cd58957a760249a3a123767c2237a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1032220758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2932650472225342062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7f1354dc4d3d4a40bbb2a193721f212, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buyoyancy: 10
+  waterline: 0
 --- !u!1 &6564690223429448292
 GameObject:
   m_ObjectHideFlags: 0
