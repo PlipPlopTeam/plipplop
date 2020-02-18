@@ -12,7 +12,7 @@ public class Serviette : Activity
 		user.agentMovement.onDestinationReached += () =>
 		{
 			user.transform.position = transform.position + transform.forward * offset;
-			user.transform.forward = -transform.forward;
+			user.agentMovement.Orient(-transform.forward);
 			user.animator.SetBool("Tanning", true);
 			user.agentMovement.Stop();
 		};

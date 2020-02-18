@@ -37,7 +37,9 @@ public class FishingBox : Activity
 			FishingPole fp = user.carried.Self().GetComponent<FishingPole>();
 			fp.Use();
 			fp.Plunge(position + Geometry.GetRandomPointInRange(radius));
-			user.transform.LookAt(fp.plug);
+
+			user.look.FocusOn(fp.plug);
+			user.agentMovement.OrientToward(fp.plug.position);
 		};
     }
 

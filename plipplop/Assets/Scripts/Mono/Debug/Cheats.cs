@@ -21,6 +21,7 @@ public class Cheats : Dictionary<string, System.Action>
 		Add("BOSS", Bossfight);
 		Add("MOUETTE", Mouette);
 		Add("CRAB", Crab);
+		Add("RAYBAN", Rayban);
 	}
 
 	public void BigHeads()
@@ -35,7 +36,7 @@ public class Cheats : Dictionary<string, System.Action>
 	{
 		foreach (NonPlayableCharacter npc in Object.FindObjectsOfType<NonPlayableCharacter>())
 		{
-		
+			npc.Equip(Game.i.library.headClothes[3], true);
 		}
 	}
 

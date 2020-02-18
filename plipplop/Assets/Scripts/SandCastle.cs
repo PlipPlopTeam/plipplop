@@ -35,7 +35,7 @@ public class SandCastle : Activity
 		user.GoSitThere(transform.position + Geometry.GetRandomPointOnCircle(radius + 1f));
 		user.agentMovement.onDestinationReached += () =>
 		{
-			user.transform.forward = -(user.transform.position - transform.position).normalized;
+			user.agentMovement.OrientToward(transform.position);
 			constructionInProgress = true;
 		};
 	}
