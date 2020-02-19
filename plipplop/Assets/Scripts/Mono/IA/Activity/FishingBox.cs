@@ -45,7 +45,7 @@ public class FishingBox : Activity
 	public override void StopUsing(NonPlayableCharacter user)
 	{
 		base.StopUsing(user);
-		user.skeleton.Drop(Cloth.ESlot.RIGHT_HAND);
+		user.Drop();
 		user.animator.SetBool("Fishing", false);
 		StopAllCoroutines();
 	}

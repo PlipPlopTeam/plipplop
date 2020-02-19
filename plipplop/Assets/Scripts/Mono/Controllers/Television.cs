@@ -10,7 +10,7 @@ public class Television : Hopper
     [Header("References")]
     public Valuable valuable;
     public Renderer screenRenderer;
-    public GameObject fakeLight;
+    //public GameObject fakeLight;
     public Animation anim;
     public ParticleSystem ps;
     [Space(5)]
@@ -23,7 +23,7 @@ public class Television : Hopper
     {
         base.OnEject();
         screenRenderer.material.mainTexture = idleScreenTexture;
-        fakeLight.SetActive(true);
+        //fakeLight.SetActive(true);
     }
 
     internal override void Push(Vector3 direction)
@@ -59,7 +59,7 @@ public class Television : Hopper
         base.OnLegsRetracted();
         
         valuable.hidden = true;
-        fakeLight.SetActive(true);
+        //fakeLight.SetActive(true);
         screenRenderer.material.mainTexture = crouchScreenTexture;
     }
 
@@ -69,6 +69,6 @@ public class Television : Hopper
 
         valuable.hidden = false;
         screenRenderer.material.mainTexture = standScreenTexture;
-        fakeLight.SetActive(false);
+        //fakeLight.SetActive(false);
     }
 }

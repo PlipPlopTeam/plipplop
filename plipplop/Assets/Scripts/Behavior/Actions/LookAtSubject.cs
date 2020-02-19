@@ -30,7 +30,6 @@ namespace Behavior.NPC
 					if (npc.feeder != null) npc.look.FocusOn(npc.feeder.transform);
 					break;
 			}
-
 		}
 	}
 }

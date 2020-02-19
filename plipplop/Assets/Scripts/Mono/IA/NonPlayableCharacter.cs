@@ -22,10 +22,11 @@ public class NonPlayableCharacter : MonoBehaviour
 	[HideInInspector] public EmotionRenderer emo;
 	[HideInInspector] public Range range;
 	[HideInInspector] public Face face;
-	[HideInInspector] public Controller player;
 	[HideInInspector] public Collider collider;
 	[HideInInspector] public ICarryable carried;
 	[Header("Read-Only")]
+	public Controller player;
+	public Controller rPlayer;
 	public NonPlayableCharacter character;
 	public Valuable valuable;
 	public Activity activity;
@@ -49,26 +50,6 @@ public class NonPlayableCharacter : MonoBehaviour
 	public System.Action onWaitEnded;
 	public System.Action onCollect;
 
-	private Activity show;
-	public void ShowOff(float time, Vector2 range, int slot)
-	{
-		show = gameObject.AddComponent<Activity>();
-		show.spectatorMax = slot;
-		show.full = true;
-		show.working = true;
-		show.spectatorRange = range;
-		StartCoroutine(WaitAndStopExposing(time));
-	}
-	IEnumerator WaitAndStopExposing(float time)
-	{
-		yield return new WaitForSeconds(time);
-		if(show != null)
-		{
-			show.Dismantle();
-			show = null;
-		}
-	}
-
 	void Awake()
 	{
 		skeleton = GetComponentInChildren<Skeleton>();
@@ -89,40 +70,11 @@ public class NonPlayableCharacter : MonoBehaviour
 			clothes.Add(suit, null);
 	}
 
-	public void EquipOutfit()
-	{
-		if (settings.autoOutfit)
-		{
-			foreach (ClothData c in Game.i.library.GetOutfit()) Equip(c);
-			/*
-			if (settings.randomColors)
-			{
-				Dictionary<Cloth.ESlot, Color> colors = Game.i.library.GetRandomOutfitColor();
-				foreach (KeyValuePair<Cloth.ESlot, Cloth> c in clothes)
-				{
-					if (c.Value != null && colors.ContainsKey(c.Key)) c.Value.SetColors(colors[c.Key]);
-				}
-			}
-			*/
-		}
-		else
-		{
-			foreach (ClothData c in settings.clothes) Equip(c);
-		}
-
-		/*
-		foreach (KeyValuePair<Cloth.ESlot, Cloth> c in clothes)
-		{
-			if (c.Value != null) c.Value.Scale(settings.height / 2);
-		}
-		*/
-	}
-
 	public void Start()
 	{
 		// Loading Settings
 		if (settings == null) settings = Game.i.library.npcLibrary.defaultSettings;
-		skeleton.gameObject.transform.localScale = Vector3.one * settings.height/2;
+		skeleton.gameObject.transform.localScale = Vector3.one * settings.height / 2;
 		stats.Add(EStat.BOREDOM, settings.initialBoredom);
 		stats.Add(EStat.TIREDNESS, settings.initialTiredness);
 		stats.Add(EStat.HUNGER, settings.initialTiredness);
@@ -137,6 +89,50 @@ public class NonPlayableCharacter : MonoBehaviour
 		graph.Load(this);
 
 		EquipOutfit();
+	}
+
+	public void RememberPlayerFor(float time)
+	{		
+		rPlayer = player;
+		StartCoroutine(WaitAndStopExposing(time));
+	}
+	IEnumerator WaitAndForgetRememberedPlayer(float time)
+	{
+		yield return new WaitForSeconds(time);
+		rPlayer = null;
+	}
+
+	// SHOW OFF
+	private Activity show;
+	public void ShowOff(float time, Vector2 range, int slot)
+	{
+		show = gameObject.AddComponent<Activity>();
+		show.spectatorMax = slot;
+		show.full = true;
+		show.working = true;
+		show.spectatorRange = range;
+		StartCoroutine(WaitAndStopExposing(time));
+	}
+	IEnumerator WaitAndStopExposing(float time)
+	{
+		yield return new WaitForSeconds(time);
+		if(show != null)
+		{
+			show.Dismantle();
+			show = null;
+		}
+	}
+
+	public void EquipOutfit()
+	{
+		if (settings.autoOutfit)
+		{
+			foreach (ClothData c in Game.i.library.GetOutfit()) Equip(c);
+		}
+		else
+		{
+			foreach (ClothData c in settings.clothes) Equip(c);
+		}
 	}
 
 	public virtual void Update()

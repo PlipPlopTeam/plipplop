@@ -18,7 +18,7 @@ namespace Behavior.NPC {
 					Controller[] controllers = npc.sight.Scan<Controller>();
 					foreach (Controller c in controllers)
 					{
-						if (c.IsVisibleByNPC()) npc.player = c; break;
+						if (c.IsVisibleByNPC() && c != npc.rPlayer) npc.player = c; break;
 					}
 					break;
 				case NonPlayableCharacter.ESubject.VALUABLE:

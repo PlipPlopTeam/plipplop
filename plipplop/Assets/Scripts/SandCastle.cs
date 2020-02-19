@@ -45,6 +45,8 @@ public class SandCastle : Activity
 		base.StopUsing(user);
 		user.look.LooseFocus();
 		user.GetUp();
+
+		if (users.Count == 0) constructionInProgress = false;
 	}
 
 	private void Generate()
