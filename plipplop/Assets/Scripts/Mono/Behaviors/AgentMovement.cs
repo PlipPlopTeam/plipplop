@@ -195,7 +195,7 @@ public class AgentMovement : Walker
         if(animator) 
         {
             animator.SetFloat("Speed", agent.velocity.magnitude/settings.animatorRunSpeed);
-			animator.SetFloat("RotationSpeed", rotationDelta.magnitude/10f);
+			animator.SetFloat("RotationSpeed", rotationDelta.magnitude);
         }
     }
 
