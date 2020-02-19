@@ -76,9 +76,11 @@ public class Aperture
     float rotationReachedThreshold = 5f;
 
     // SHAKE
-    float timer = 0f;
-    float intensity = 0.7f;
-    float duration = 0f;
+    Vector3 shakeDisplacement = Vector3.zero;
+    float shakeTimeRemaining = 0f;
+    float shakeForce = 0f;
+    int updateEvery = 2;
+    int lastUpdate = 0;
 
     // Current angle on Y axis
     float hAngle;
@@ -167,7 +169,7 @@ public class Aperture
         cam = Camera.main ?? new GameObject().AddComponent<Camera>();
         cam.gameObject.name = "_CAMERA";
         previousStackSettings = Game.i.library.defaultAperture;
-       // Load(Game.i.library.defaultAperture);
+
         stackTransitionState = 1f;
         settings = ComputeSettings();
     }
@@ -564,24 +566,26 @@ public class Aperture
         return hDistanceToTarget;
     }
 
-    [ContextMenu("Shake")]
-    public void DEBUG_Shake() {Shake(5f, 2f);}
-    public void Shake(float i = 0.5f, float d = 1f)
-    {   
-        intensity = i;
-        duration = d;
-        timer = duration;
-    }
-    public void ShakeUpdate()
+    public void Shake(float intensity, float time)
     {
-        if(timer > 0)
-        {
-            timer -= Time.deltaTime;
-            // TODO: Update
-            rotationAroundTarget.current.eulerAngles += UnityEngine.Random.insideUnitSphere * intensity;
-            intensity *= timer/duration;
-            if(timer <= 0) Teleport();
+        shakeForce = intensity;
+        shakeTimeRemaining = time;
+    }
+    
+    void ShakeUpdate()
+    {
+        if (shakeTimeRemaining <= 0f) {
+            shakeDisplacement = Vector3.zero;
+            return;
         }
+
+        lastUpdate = (lastUpdate + 1) % updateEvery;
+        if (lastUpdate != 1) {
+            return;
+        }
+
+        shakeTimeRemaining -= Time.deltaTime;
+        shakeDisplacement = ((UnityEngine.Random.insideUnitSphere * 2f) - Vector3.one) * shakeForce;
     }
 
     public void Apply()
@@ -604,7 +608,7 @@ public class Aperture
             cam.transform.rotation = rotationAroundTarget.current;
         }
         
-        cam.transform.position = position.current + (GetStaticObjective() == null ? settings.heightOffset * Vector3.up : Vector3.zero);
+        cam.transform.position = position.current + (GetStaticObjective() == null ? settings.heightOffset * Vector3.up : Vector3.zero) + shakeDisplacement;
         cam.fieldOfView = fieldOfView.current;
 
     } // Apply the values to the camera 

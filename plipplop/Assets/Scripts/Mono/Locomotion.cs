@@ -22,7 +22,6 @@ public class Locomotion : Walker
     float timePressed = 0f;
     bool hasJumped = false;
     bool isInitialized = false;
-    readonly float additionalLegYOffset = 0f;
 
     internal Vector3 groundCheckDirection = Vector3.down;
 

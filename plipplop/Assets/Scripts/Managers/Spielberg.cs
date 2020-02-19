@@ -85,4 +85,9 @@ public class Spielberg
     {
 
     }
+
+    public void KinoScreenShake(float time, float force)
+    {
+        Game.i.aperture.Shake(force, time);
+    }
 }

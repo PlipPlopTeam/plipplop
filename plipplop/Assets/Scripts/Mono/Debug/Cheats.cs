@@ -22,7 +22,13 @@ public class Cheats : Dictionary<string, System.Action>
 		Add("MOUETTE", Mouette);
 		Add("CRAB", Crab);
 		Add("RAYBAN", Rayban);
-	}
+        Add("SHAKEY", DebugShake);
+    }
+
+    public void DebugShake()
+    {
+        Game.i.aperture.Shake(0.2f, 1f);
+    }
 
 	public void BigHeads()
 	{
