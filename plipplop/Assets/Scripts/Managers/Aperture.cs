@@ -570,6 +570,7 @@ public class Aperture
     {
         shakeForce = intensity;
         shakeTimeRemaining = time;
+        Game.i.player.Rumble(intensity, time);
     }
     
     void ShakeUpdate()
@@ -580,11 +581,11 @@ public class Aperture
         }
 
         lastUpdate = (lastUpdate + 1) % updateEvery;
+        shakeTimeRemaining -= Time.fixedDeltaTime;
+
         if (lastUpdate != 1) {
             return;
         }
-
-        shakeTimeRemaining -= Time.deltaTime;
         shakeDisplacement = ((UnityEngine.Random.insideUnitSphere * 2f) - Vector3.one) * shakeForce;
     }
 

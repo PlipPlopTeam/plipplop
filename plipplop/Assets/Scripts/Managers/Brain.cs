@@ -10,6 +10,8 @@ public class Brain
     Controller baseController = null;
     Mapping mapping;
 
+    Coroutine rumbleCoroutine;
+
     public Brain(Mapping mapping)
     {
         this.mapping = mapping;
@@ -172,4 +174,18 @@ public class Brain
 		yield return new WaitForSeconds(time);
 		Deparalyze();
 	}
+
+    public void Rumble(float force, float time)
+    {
+        if (rumbleCoroutine != null) Game.i.StopCoroutine(rumbleCoroutine);
+        rumbleCoroutine = Game.i.StartCoroutine(RumbleFor(force, time));
+    }
+
+    IEnumerator RumbleFor(float force, float time)
+    {
+        mapping.StopRumble();
+        mapping.StartRumble(force);
+        yield return new WaitForSecondsRealtime(time);
+        mapping.StopRumble();
+    }
 }

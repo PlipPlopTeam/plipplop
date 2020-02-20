@@ -109,7 +109,6 @@ public abstract class Controller : MonoBehaviour
     {
 		Activity activity = gameObject.GetComponent<Activity>();
 		if (activity != null) activity.Break();
-
 		locomotion.ExtendLegs();
         OnLegsExtended();
     }
@@ -298,6 +297,7 @@ public abstract class Controller : MonoBehaviour
 
 	virtual internal void ResetVisuals()
 	{
+        Debug.Log("Resetting visuals");
 		visuals.transform.localPosition = Vector3.zero;
 		visuals.transform.localScale = Vector3.one;
 		visuals.transform.localRotation = Quaternion.identity;
