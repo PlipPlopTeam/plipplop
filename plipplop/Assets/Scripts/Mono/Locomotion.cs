@@ -172,7 +172,8 @@ public class Locomotion : Walker
     }
 
     public void Jump()
-    {//                    v   This one here is a small fix to avoid double-jump. Tweak the value as necessary
+    {
+        //                                   v   This one here is a small fix to avoid double-jump. Tweak the value as necessary
         if((isImmerged || !hasJumped) && rigidbody.velocity.y <= 4) 
         {
             rigidbody.AddForce(Vector3.up * preset.jump * (parentController.gravityMultiplier / 100f), ForceMode.Acceleration);

@@ -39,10 +39,9 @@ public class WaterVolume : Volume
     {
         var rb = obj.GetComponent<Rigidbody>();
         if (rb) {
-            objectsInWater.Add(rb, obj);
-
+            bool isNew = objectsInWater.Add(rb, obj);
             var con = obj.GetComponent<Controller>();
-            if (con && !con.isImmerged) {
+            if (con && isNew) {
                 con.SetUnderwater();
             }
         }
@@ -124,4 +123,15 @@ public class WaterVolume : Volume
             );
         }
     }
+
+#if UNITY_EDITOR
+    internal override void OnDrawGizmos()
+    {
+        base.OnDrawGizmos();
+        UnityEditor.Handles.Label(
+            transform.position + Vector3.up,
+            objectsInWater.Count.ToString()
+        );
+    }
+#endif
 }

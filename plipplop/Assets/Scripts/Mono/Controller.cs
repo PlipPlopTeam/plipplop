@@ -26,11 +26,12 @@ public abstract class Controller : MonoBehaviour
     Controller lastFocusedController;
     Vector3 previousVisualLocalPosition;
     internal ControllerSensor controllerSensor;
-    internal bool isImmerged;
+    internal bool isImmerged { get { return immersion > 0; } }
     RigidbodyConstraints previousConstraints;
 
 	bool isBeingThrown = false;
 	int freeze = 0;
+    int immersion = 0;
 
 	bool isParalysed = false;
 	public void Paralyse() { isParalysed = true; }
@@ -167,7 +168,7 @@ public abstract class Controller : MonoBehaviour
 
     public void SetUnderwater()
     {
-        isImmerged = true;
+        immersion++;
         locomotion.isImmerged = isImmerged;
         Kick();
     }
@@ -182,7 +183,7 @@ public abstract class Controller : MonoBehaviour
 
     public void SetOverwater()
     {
-        isImmerged = false;
+        immersion--;
         locomotion.isImmerged = isImmerged;
     }
 

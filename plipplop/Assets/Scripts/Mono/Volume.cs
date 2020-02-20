@@ -108,15 +108,17 @@ public abstract class Volume : MonoBehaviour
             return Find(o => o.colliders.Contains(body)) != null;
         }
 
-        public void Add(Rigidbody b, Collider c)
+        public bool Add(Rigidbody b, Collider c)
         {
             if (Contains(b)) {
                 var cols = Find(o => o.rigidbody == b).colliders;
                 cols.RemoveAll(o => o == c);
                 cols.Add(c);
+                return false;
             }
             else {
                 Add(new Body(b, c));
+                return true;
             }
         }
 
