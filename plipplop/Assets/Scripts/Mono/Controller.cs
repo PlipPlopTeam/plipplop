@@ -86,7 +86,7 @@ public abstract class Controller : MonoBehaviour
         {
             SpecificJump();
         }
-        else if (WasGrounded())
+        else if (WasGrounded() || isImmerged)
         {
              locomotion.Jump();
         }
@@ -169,14 +169,12 @@ public abstract class Controller : MonoBehaviour
     {
         isImmerged = true;
         locomotion.isImmerged = isImmerged;
-        if (IsPossessed()) {
-            Game.i.player.TeleportBaseControllerAndPossess();
-        }
+        Kick();
     }
 
 	public void Kick()
 	{
-		if (IsPossessed())
+		if (IsPossessed() && !Game.i.player.IsPossessingBaseController())
 		{
 			Game.i.player.TeleportBaseControllerAndPossess();
 		}
