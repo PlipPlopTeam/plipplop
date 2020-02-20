@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4581310841653097105}
   - component: {fileID: 5867374511833901001}
   - component: {fileID: 142939863400108864}
+  - component: {fileID: 7534239468689323976}
   m_Layer: 0
   m_Name: Crab
   m_TagString: Untagged
@@ -69,6 +70,51 @@ MonoBehaviour:
   maxTime: 1
   randomY: 1
   maxAngleChange: 30
+--- !u!114 &7534239468689323976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1200613829552647963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab31871cc102a8e458f12c2c3448569d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  knife: {fileID: 1862652821686387535, guid: 89cf5d05eab19c34f9f6c53815e72910, type: 3}
+  knifeTransform: {fileID: 7801395640465927954}
+  knifeChance: 0.5
+--- !u!1 &5571397018339262975
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7801395640465927954}
+  m_Layer: 0
+  m_Name: KnifeTransform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7801395640465927954
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5571397018339262975}
+  m_LocalRotation: {x: 0.8886382, y: 0.2611464, z: -0.33437854, w: 0.17411445}
+  m_LocalPosition: {x: -0.057, y: 0.2118, z: -0.1288}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5363962702264628836}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 151.047, y: 35.115997, z: -23.412994}
 --- !u!1 &9186472112978646103
 GameObject:
   m_ObjectHideFlags: 0
@@ -97,6 +143,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4396803656852245048}
+  - {fileID: 7801395640465927954}
   m_Father: {fileID: 4581310841653097105}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
