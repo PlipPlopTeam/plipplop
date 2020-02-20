@@ -94,10 +94,20 @@ public class Balloon : Activity, ICarryable
 		base.StartUsing(user);
 		if (user.look != null) user.look.FocusOn(transform);
 
-		if (users.Count >= 2) GetInPlace();
+		if (users.Count > 1) GetInPlace();
 		else
 		{
-			users[carrier].Collect(this, () => { users[carrier].Sit(); });
+			users[carrier].Collect(this, () => 
+			{
+				if (users.Count <= 1)
+				{
+					users[carrier].Sit();
+				}
+				else
+				{
+					GetInPlace();
+				}
+			});
 		}
 	}
 

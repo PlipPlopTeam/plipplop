@@ -22,7 +22,7 @@ public class AgentMovement : Walker
 	[Range(0f, 1f)] public float slowMultiplier = 1f;
 	public AgentMovement.Settings settings;
 
-	[HideInInspector] public bool going = false;
+	public bool going = false;
     [HideInInspector] public bool reached = false;
     [HideInInspector] public Animator animator;
 	public System.Action onDestinationReached;

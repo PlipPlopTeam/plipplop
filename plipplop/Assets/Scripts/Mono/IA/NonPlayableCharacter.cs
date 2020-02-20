@@ -314,7 +314,7 @@ public class NonPlayableCharacter : MonoBehaviour
 	public void GoSitThere(Vector3 where)
 	{
 		agentMovement.GoThere(where);
-		agentMovement.onDestinationReached += () => {Sit(where);};
+		agentMovement.onDestinationReached += () => {Sit();};
 	}
 
 	public void GoSitThere(Chair chair, Chair.Spot spot)

@@ -748,6 +748,7 @@ GameObject:
   - component: {fileID: 9019254820768127472}
   - component: {fileID: 9019254820768127473}
   - component: {fileID: 9019254820768127474}
+  - component: {fileID: 7665704946609006148}
   m_Layer: 0
   m_Name: Carpet
   m_TagString: Untagged
@@ -887,8 +888,6 @@ MonoBehaviour:
     boredom: 1
     hunger: 0
     tiredness: 0
-  users: []
-  spectators: []
   offset: -1.2
 --- !u!114 &9019254820768127473
 MonoBehaviour:
@@ -915,6 +914,26 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.2, y: 1, z: 0.2}
   m_Center: {x: 0, y: -0.110000014, z: -0.16}
+--- !u!114 &7665704946609006148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9019254820768127475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27bebb278a4489e489e5558d1c6671af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 0
+  rb: {fileID: 9019254820768127469}
+  collider: {fileID: 0}
+  visual: {fileID: 9019254820882697964}
+  origin: {x: 0, y: 0, z: 0}
+  weight: 1
+  distanceThreshold: 2
+  hidden: 0
 --- !u!1 &9019254820882697964
 GameObject:
   m_ObjectHideFlags: 0
