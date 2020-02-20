@@ -117,4 +117,14 @@ public class Mapping : ScriptableObject
         }
         catch (KeyNotFoundException) { throw new System.Exception("UNKNOWN AXIS " + a); }
     }
+
+    public void StartRumble(float force)
+    {
+        GamePad.SetVibration(PlayerIndex.One, force, force);
+    }
+
+    public void StopRumble()
+    {
+        GamePad.SetVibration(PlayerIndex.One, 0f, 0f);
+    }
 }

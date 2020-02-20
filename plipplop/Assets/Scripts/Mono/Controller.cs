@@ -26,11 +26,12 @@ public abstract class Controller : MonoBehaviour
     Controller lastFocusedController;
     Vector3 previousVisualLocalPosition;
     internal ControllerSensor controllerSensor;
-    internal bool isImmerged;
+    internal bool isImmerged { get { return immersion > 0; } }
     RigidbodyConstraints previousConstraints;
 
 	bool isBeingThrown = false;
 	int freeze = 0;
+    int immersion = 0;
 
 	bool isParalysed = false;
 	public void Paralyse() { isParalysed = true; }
@@ -86,7 +87,7 @@ public abstract class Controller : MonoBehaviour
         {
             SpecificJump();
         }
-        else if (WasGrounded())
+        else if (WasGrounded() || isImmerged)
         {
              locomotion.Jump();
         }
@@ -109,7 +110,6 @@ public abstract class Controller : MonoBehaviour
     {
 		Activity activity = gameObject.GetComponent<Activity>();
 		if (activity != null) activity.Break();
-
 		locomotion.ExtendLegs();
         OnLegsExtended();
     }
@@ -168,16 +168,14 @@ public abstract class Controller : MonoBehaviour
 
     public void SetUnderwater()
     {
-        isImmerged = true;
+        immersion++;
         locomotion.isImmerged = isImmerged;
-        if (IsPossessed()) {
-            Game.i.player.TeleportBaseControllerAndPossess();
-        }
+        Kick();
     }
 
 	public void Kick()
 	{
-		if (IsPossessed())
+		if (IsPossessed() && !Game.i.player.IsPossessingBaseController())
 		{
 			Game.i.player.TeleportBaseControllerAndPossess();
 		}
@@ -185,7 +183,7 @@ public abstract class Controller : MonoBehaviour
 
     public void SetOverwater()
     {
-        isImmerged = false;
+        immersion--;
         locomotion.isImmerged = isImmerged;
     }
 
@@ -298,6 +296,7 @@ public abstract class Controller : MonoBehaviour
 
 	virtual internal void ResetVisuals()
 	{
+        Debug.Log("Resetting visuals");
 		visuals.transform.localPosition = Vector3.zero;
 		visuals.transform.localScale = Vector3.one;
 		visuals.transform.localRotation = Quaternion.identity;

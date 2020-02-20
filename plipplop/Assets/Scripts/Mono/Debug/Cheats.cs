@@ -23,6 +23,12 @@ public class Cheats : Dictionary<string, System.Action>
 		Add("CRAB", Crab);
 		Add("RAYBAN", Rayban);
         Add("SHAKEY", DebugShake);
+        Add("BRRRRR", Rumble);
+    }
+
+    public void Rumble()
+    {
+        Game.i.player.Rumble(0.1f, 1f);
     }
 
     public void DebugShake()

@@ -64,7 +64,9 @@ public class LegAnimator : MonoBehaviour
         {
             StopCoroutine(animCoroutine);
         }
-        animCoroutine = StartCoroutine(AnimationPlaying());
+        if (isActiveAndEnabled) {
+            animCoroutine = StartCoroutine(AnimationPlaying());
+        }
     }
     
     private IEnumerator AnimationPlaying()

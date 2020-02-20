@@ -43,7 +43,9 @@ public class LocomotionAnimation
         else
         {
             if (isWalking) legs.PlayOnce("Walk");
-            else legs.PlayOnce("Idle");
+            else {
+                legs.PlayOnce("Idle");
+            }
         }
     }
 
@@ -64,6 +66,7 @@ public class LocomotionAnimation
         legs.gameObject.SetActive(true);
         legsCollider.enabled = true;
         ResetVisualRotation(); // TODO : Remove
+        legs.Play("Idle");
     }
 
     void ResetVisualRotation()
