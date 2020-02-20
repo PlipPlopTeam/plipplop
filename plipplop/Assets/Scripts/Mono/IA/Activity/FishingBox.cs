@@ -19,7 +19,6 @@ public class FishingBox : Activity
         user.agentMovement.GoThere(transform.position, true);
         user.agentMovement.onDestinationReached += () =>
         {
-			Debug.Log("Got Pole");
 			user.Carry(Instantiate(fishingPole).GetComponent<FishingPole>());
             Vector3 pos = position + Geometry.GetRandomPointOnCircle(radius);
 			user.agentMovement.Stop();
@@ -32,7 +31,6 @@ public class FishingBox : Activity
         yield return new WaitForEndOfFrame();
         user.agentMovement.onDestinationReached += () =>
         {
-			Debug.Log("In Fishing position");
 			user.agentMovement.Stop();
             user.animator.SetBool("Fishing", true);
 
