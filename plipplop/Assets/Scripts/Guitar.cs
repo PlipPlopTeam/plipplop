@@ -32,6 +32,7 @@ public class Guitar : Activity, ICarryable
 	{
 		base.StopUsing(user);
 		user.Drop();
+		user.StopCollecting();
 		user.animator.SetBool("Guitaring", false);
 
 		full = false;

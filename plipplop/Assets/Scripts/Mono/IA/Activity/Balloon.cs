@@ -76,6 +76,8 @@ public class Balloon : Activity, ICarryable
 		if (user.IsCarrying(this)) user.Drop();
 		if (user.look != null) user.look.LooseFocus();
 
+		user.StopCollecting();
+
 		base.StopUsing(user);
 		user.GetUp();
 

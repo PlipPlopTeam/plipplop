@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class Valuable : Item, INoticeable, ICarryable
 {
@@ -13,7 +14,6 @@ public class Valuable : Item, INoticeable, ICarryable
     {
         origin = transform.position;
     }
-
 	public void Notice()
     {
         // Does things..
@@ -26,7 +26,6 @@ public class Valuable : Item, INoticeable, ICarryable
     {
         hidden = value;
     }
-
     public bool HasMoved()
     {
         return Vector3.Distance(origin, transform.position) > distanceThreshold;

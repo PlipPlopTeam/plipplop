@@ -231,7 +231,11 @@ public class NonPlayableCharacter : MonoBehaviour
 	{
 		return carryable == carryableToCollect;
 	}
-
+	public void StopCollecting()
+	{
+		carryableToCollect = null;
+		agentMovement.StopChase();
+	}
 	public void Collect(ICarryable carryable, System.Action then = null)
 	{
 		carryableToCollect = carryable;
