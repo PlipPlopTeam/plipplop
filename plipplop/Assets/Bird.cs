@@ -136,7 +136,7 @@ public class Bird : MonoBehaviour
 		rotationLast = transform.eulerAngles;
 
 		UpdateState();
-
+		Debug.Log(positionDelta.normalized);
 		rotation = positionDelta.normalized * 90f;
 
 		if (refreshTimer > 0) refreshTimer -= Time.deltaTime;
