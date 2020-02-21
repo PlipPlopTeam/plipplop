@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5867374511833901001}
   - component: {fileID: 142939863400108864}
   - component: {fileID: 7534239468689323976}
+  - component: {fileID: 2239638613221925946}
   m_Layer: 0
   m_Name: Crab
   m_TagString: Untagged
@@ -70,6 +71,8 @@ MonoBehaviour:
   maxTime: 1
   randomY: 1
   maxAngleChange: 30
+  move: 1
+  maxMoveRange: 0.3
 --- !u!114 &7534239468689323976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85,6 +88,23 @@ MonoBehaviour:
   knife: {fileID: 1862652821686387535, guid: 89cf5d05eab19c34f9f6c53815e72910, type: 3}
   knifeTransform: {fileID: 7801395640465927954}
   knifeChance: 0.5
+  hidden: 0
+  col: {fileID: 2239638613221925946}
+  hiddenMaxTime: 3
+  respawnRange: 2
+--- !u!135 &2239638613221925946
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1200613829552647963}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.08
+  m_Center: {x: 0, y: 0.09, z: 0}
 --- !u!1 &5571397018339262975
 GameObject:
   m_ObjectHideFlags: 0
@@ -109,7 +129,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5571397018339262975}
   m_LocalRotation: {x: 0.8886382, y: 0.2611464, z: -0.33437854, w: 0.17411445}
-  m_LocalPosition: {x: -0.057, y: 0.2118, z: -0.1288}
+  m_LocalPosition: {x: -0.057, y: 0.17949998, z: -0.1288}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5363962702264628836}
@@ -167,7 +187,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 975754487f9d4cc4ebbd70b9ce19778b,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.0353
+      value: 0.003
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 975754487f9d4cc4ebbd70b9ce19778b,
         type: 3}

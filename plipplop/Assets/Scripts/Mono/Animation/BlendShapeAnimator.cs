@@ -10,6 +10,9 @@ public class BlendShapeAnimator : MonoBehaviour
     public float maxTime;
     public bool randomY;
     public float maxAngleChange;
+
+    public bool move = false;
+    public float maxMoveRange = .3f;
     
     void Start()
     {
@@ -29,6 +32,17 @@ public class BlendShapeAnimator : MonoBehaviour
             transform.localEulerAngles += new Vector3(0, Random.Range(-maxAngleChange, maxAngleChange), 0);
         }
 
+        if (move)
+        {
+            transform.position += transform.forward * Random.Range(-maxMoveRange / 2, maxMoveRange / 2);
+
+            RaycastHit hit;
+            if(Physics.Raycast(transform.position+new Vector3(0,.1f,0), Vector3.down,  out hit,.2f))
+            {
+                transform.position = hit.point;
+            }
+        }
+        if(blendShapeAmount!=0)
         renderer.SetBlendShapeWeight(_selectedBlendShapeIndex,Random.Range(0,100));
 
         yield return new WaitForSecondsRealtime(_time);
