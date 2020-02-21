@@ -42,7 +42,7 @@ public class BlendShapeAnimator : MonoBehaviour
                 transform.position = hit.point;
             }
         }
-        
+        if(blendShapeAmount!=0)
         renderer.SetBlendShapeWeight(_selectedBlendShapeIndex,Random.Range(0,100));
 
         yield return new WaitForSecondsRealtime(_time);
