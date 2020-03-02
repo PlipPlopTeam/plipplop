@@ -24,9 +24,18 @@ public class Cheats : Dictionary<string, System.Action>
 		Add("RAYBAN", Rayban);
         Add("SHAKEY", DebugShake);
         Add("BRRRRR", Rumble);
-    }
+        Add("BIRDS", Hitchcock);
+	}
 
-    public void Rumble()
+	public void Hitchcock()
+	{
+		foreach (Bird b in Object.FindObjectsOfType<Bird>())
+		{
+			b.GoToSpot();
+		}
+	}
+
+	public void Rumble()
     {
         Game.i.player.Rumble(0.1f, 1f);
     }
