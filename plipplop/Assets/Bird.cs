@@ -19,7 +19,7 @@ public class Bird : MonoBehaviour
 	public float speed = 2f;
 	public float treshold = 0.5f;
 	public float angleMax = 45f;
-	public State state;
+	public Vector2 sizeRange;
 
 	public System.Action onDestinationReached;
 	private Vector3 target;
@@ -35,9 +35,11 @@ public class Bird : MonoBehaviour
 	private Vector3 rotationLast;
 	private Vector3 rotationDelta;
 	private float timeOffset;
+	private State state;
 
 	void Start()
     {
+		visuals.transform.localScale = Vector3.one * Random.Range(sizeRange.x, sizeRange.y);
 		timeOffset = Random.Range(-1f, 1f);
 
 		position = transform.position;
