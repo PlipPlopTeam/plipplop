@@ -88,4 +88,9 @@ public class Radio : Hopper
         isOn = false;
         jukebox.StopMusic();
     }
+
+    public bool IsRadioOn()
+    {
+        return isOn;
+    }
 }

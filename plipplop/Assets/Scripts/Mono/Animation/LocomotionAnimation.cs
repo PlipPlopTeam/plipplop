@@ -8,6 +8,7 @@ public class LocomotionAnimation
     public Vector3 legsOffset;
     public bool isJumping;
     public bool isWalking;
+    public bool isFlattened;
     public System.Action onLegAnimationEnd;
 
     Transform parentTransform;
@@ -16,6 +17,7 @@ public class LocomotionAnimation
     LegAnimator legs;
     Transform visualsTransform;
     Transform headDummy;
+    bool areLegsRetracted = false;
 
     public LocomotionAnimation(Rigidbody rb, BoxCollider legsCollider, Transform visualsTransform)
     {
@@ -36,7 +38,11 @@ public class LocomotionAnimation
         SetLegHeight();
 
 
-        if (isJumping)
+        if (isFlattened) {
+            legs.gameObject.SetActive(true);
+            legs.PlayOnce("Flat");
+        }
+        else if (isJumping)
         {
             legs.PlayOnce("Jump");
         }
@@ -51,12 +57,14 @@ public class LocomotionAnimation
 
     public bool AreLegsRetracted()
     {
-        return legs == null || !legs.gameObject.activeSelf;
+        return areLegsRetracted;
     }
 
     public void RetractLegs()
     {
+        Debug.Log("RETRACTING");
         legs.gameObject.SetActive(false);
+        areLegsRetracted = true;
         legsCollider.enabled = false;
         ResetVisualRotation(); // TODO : Remove
     }
@@ -64,6 +72,7 @@ public class LocomotionAnimation
     public void ExtendLegs()
     {
         legs.gameObject.SetActive(true);
+        areLegsRetracted = false;
         legsCollider.enabled = true;
         ResetVisualRotation(); // TODO : Remove
         legs.Play("Idle");

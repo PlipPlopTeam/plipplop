@@ -296,7 +296,6 @@ public abstract class Controller : MonoBehaviour
 
 	virtual internal void ResetVisuals()
 	{
-        Debug.Log("Resetting visuals");
 		visuals.transform.localPosition = Vector3.zero;
 		visuals.transform.localScale = Vector3.one;
 		visuals.transform.localRotation = Quaternion.identity;
