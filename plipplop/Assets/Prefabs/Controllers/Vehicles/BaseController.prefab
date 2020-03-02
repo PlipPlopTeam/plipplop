@@ -67,15 +67,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   autoPossess: 0
   beginCrouched: 0
-  canRetractLegs: 0
+  canRetractLegs: 1
   freezeUntilPossessed: 0
   useGravity: 1
+  animateHead: 1
   gravityMultiplier: 150.25
   customExternalRigidbody: {fileID: 281994533271648099}
   customCamera: {fileID: 11400000, guid: df6437ca0d9bc60498aeb18a4dd62019, type: 2}
   locomotion: {fileID: 0}
   visuals: {fileID: 4182015713297960901}
   face: {fileID: 7723396102312926875}
+  visualsOffset: {x: 0, y: 0, z: 0}
+  radiusWhenFlat: 0.1
 --- !u!114 &281994533271648110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89,9 +92,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   preset: {fileID: 11400000, guid: 81c5435995369f048ab3d3d178e1aa7c, type: 2}
-  legsHeight: 1
   groundCheckRange: 0.4
   legsOffset: {x: 0, y: 0.5, z: 0}
+  isFlattened: 0
   rigidbody: {fileID: 0}
   targetDirection: {x: 0, y: 0, z: 0}
   isImmerged: 0
@@ -173,6 +176,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4182015713297960901}
     m_Modifications:
+    - target: {fileID: -927199367670048503, guid: 5a3e0c40ebd74e3439e1e89f8cdfdc12,
+        type: 3}
+      propertyPath: m_Name
+      value: KM_Body01
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 5a3e0c40ebd74e3439e1e89f8cdfdc12,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -227,11 +235,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 5a3e0c40ebd74e3439e1e89f8cdfdc12,
-        type: 3}
-      propertyPath: m_Name
-      value: KM_Body01
       objectReference: {fileID: 0}
     - target: {fileID: -1504981713932161579, guid: 5a3e0c40ebd74e3439e1e89f8cdfdc12,
         type: 3}

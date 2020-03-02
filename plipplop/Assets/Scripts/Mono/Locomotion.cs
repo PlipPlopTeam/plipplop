@@ -9,6 +9,7 @@ public class Locomotion : Walker
     public float groundCheckRange = 1f;
     public float legsHeight { get { return 1f; } }
 	public Vector3 legsOffset = Vector3.up * 0.65f;
+    public bool isFlattened = false;
 
     [HideInInspector] new public Rigidbody rigidbody;
     [HideInInspector] public Vector3 targetDirection;
@@ -61,6 +62,9 @@ public class Locomotion : Walker
             locomotionAnimation.legsHeight = legsHeight;
             locomotionAnimation.Update();
         }
+
+        locomotionAnimation.isFlattened = isFlattened;
+        if (locomotionAnimation.isFlattened) locomotionAnimation.Update();
     }
 
 	public bool AreLegsRetracted()
