@@ -5,38 +5,62 @@
 
 public class Bird : MonoBehaviour
 {
-	enum State { MOVING, FLYING, LANDED };
+	public enum State { MOVING, FLYING, LANDED };
 
 	[Header("References")]
 	public SkinnedMeshRenderer smr;
+	public SkinnedMeshRenderer idleSMR;
 	public GameObject idleGameObject;
 	public GameObject flyingGameObject;
+	public Transform visuals;
 
 	[Header("Settings")]
 	public float refreshTime = 0.25f;
-	public float range = 1f;
+	public float speed = 2f;
+	public float treshold = 0.5f;
+	public float angleMax = 45f;
+	public State state;
 
-	private State state;
+	public System.Action onDestinationReached;
+	private Vector3 target;
+	private bool going;
 	private bool wingUp = false;
+	private bool lookingRight = false;
 	private float flappingTimer = 0f;
 	private float refreshTimer = 0f;
-
-	public Vector3 position;
+	private Vector3 position;
 	private Vector3 positionLast;
-	public Vector3 positionDelta;
-
-	public Vector3 rotation;
+	private Vector3 positionDelta;
+	private Vector3 rotation;
 	private Vector3 rotationLast;
-	public Vector3 rotationDelta;
+	private Vector3 rotationDelta;
+	private float timeOffset;
 
 	void Start()
     {
+		timeOffset = Random.Range(-1f, 1f);
+
 		position = transform.position;
 		rotation = transform.rotation.eulerAngles;
 
 		EnterState(Bird.State.FLYING);
 	}
 
+	[ContextMenu("GoSit")]
+	public void GoToSpot()
+	{
+		BirdArea ba = FindObjectOfType<BirdArea>();
+		if(ba != null)
+		{
+			Vector3 pos = ba.GetLandPosition();
+			MoveTo(pos, () =>
+			{
+				position = pos;
+				rotation.y = Random.Range(0f, 360f);
+				EnterState(State.LANDED);
+			});
+		}
+	}
 
 	void ExitState(State nState)
 	{
@@ -53,6 +77,14 @@ public class Bird : MonoBehaviour
 				break;
 			default: break;
 		}
+	}
+
+	public void MoveTo(Vector3 pos, System.Action onReached = null)
+	{
+		EnterState(State.MOVING);
+		going = true;
+		target = pos;
+		onDestinationReached += onReached;
 	}
 
 	void EnterState(State nState)
@@ -85,6 +117,7 @@ public class Bird : MonoBehaviour
 				//Flap();
 				break;
 			case Bird.State.LANDED:
+				if (Random.Range(0f, 1f) >= 0.9f) LookOtherWay();
 				break;
 			default: break;
 		}
@@ -95,10 +128,10 @@ public class Bird : MonoBehaviour
 		switch(state)
 		{
 			case Bird.State.MOVING:
-				position += Vector3.up * 0.1f * Time.deltaTime;
 				break;
 			case Bird.State.FLYING:
-				position += (transform.right * Mathf.Sin(Time.time) + transform.up * Mathf.Cos(Time.time)) * 0.01f; 
+				position += (transform.right * Mathf.Sin(Time.time + timeOffset) + transform.up * Mathf.Cos(Time.time + timeOffset)) * 0.01f;
+				position += transform.right * Mathf.Sin(Time.time + timeOffset) * 0.005f;
 				break;
 			case Bird.State.LANDED:
 				break;
@@ -109,7 +142,14 @@ public class Bird : MonoBehaviour
 	void Frame()
 	{
 		transform.position = position;
-		transform.rotation = Quaternion.Euler(rotation);
+		transform.eulerAngles = rotation;
+
+		positionDelta = transform.position - positionLast;
+		positionLast = transform.position;
+		rotationDelta = transform.eulerAngles - rotationLast;
+		rotationLast = transform.eulerAngles;
+
+		visuals.localEulerAngles = positionDelta.normalized * angleMax;
 	}
 
 	void Flap()
@@ -128,16 +168,26 @@ public class Bird : MonoBehaviour
 		}
 	}
 
+	void LookOtherWay()
+	{
+		if (lookingRight)
+		{
+			lookingRight = false;
+			idleSMR.SetBlendShapeWeight(0, 0f);
+
+			if (Random.Range(0f, 1f) >= 0.5f) idleSMR.SetBlendShapeWeight(1, 100f);
+		}
+		else
+		{
+			lookingRight = true;
+			idleSMR.SetBlendShapeWeight(1, 0f);
+			if (Random.Range(0f, 1f) >= 0.5f) idleSMR.SetBlendShapeWeight(0, 100f);
+		}
+	}
+
     void Update()
     {
-		positionDelta = transform.position - positionLast;
-		positionLast = transform.position;
-		rotationDelta = transform.eulerAngles - rotationLast;
-		rotationLast = transform.eulerAngles;
-
 		UpdateState();
-		Debug.Log(positionDelta.normalized);
-		rotation = positionDelta.normalized * 90f;
 
 		if (refreshTimer > 0) refreshTimer -= Time.deltaTime;
 		else
@@ -145,6 +195,20 @@ public class Bird : MonoBehaviour
 			Frame();
 			UpdateFrameState();
 			refreshTimer = refreshTime;
+		}
+
+		if(going)
+		{
+			position += (target - position).normalized * speed * Time.deltaTime;
+			if (Vector3.Distance(position, target) < treshold)
+			{
+				going = false;
+				if (onDestinationReached != null)
+				{
+					onDestinationReached.Invoke();
+					onDestinationReached = null;
+				}
+			}
 		}
 	}
 
