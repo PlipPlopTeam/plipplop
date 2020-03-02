@@ -9,6 +9,8 @@ public class CrabDance : MonoBehaviour
 
     public bool dancing;
 
+    private Radio radio;
+
     public void StartDancing()
     {
         if (!dancing)
@@ -32,13 +34,38 @@ public class CrabDance : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Radio _radio = other.gameObject.GetComponent<Radio>();
-
-        if (_radio)
+        if (!radio)
         {
-            if (_radio.IsRadioOn())
+            radio = other.gameObject.GetComponent<Radio>();
+        }
+
+        if (radio)
+        {
+            if (radio.IsRadioOn())
             {
                 StartDancing();
+            }
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (radio)
+        {
+            if (radio.IsRadioOn())
+            {
+                StartDancing();
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (radio)
+        {
+            if (radio.gameObject == other.gameObject)
+            {
+                radio = null;
             }
         }
     }

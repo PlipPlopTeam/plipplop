@@ -7,6 +7,7 @@ public class BlendShapeAnimator : MonoBehaviour
 
     public SkinnedMeshRenderer renderer;
     public int blendShapeAmount;
+    public bool fixedTime = false;
     public float maxTime;
     public bool randomY;
     public float maxAngleChange;
@@ -19,11 +20,9 @@ public class BlendShapeAnimator : MonoBehaviour
         StartCoroutine(ChangePose());
     }
     
-    
-
     IEnumerator ChangePose()
     {
-        float _time = Random.Range(0f, maxTime);
+        float _time = Random.Range(fixedTime?maxTime:0f, maxTime);
 
         int _selectedBlendShapeIndex = Random.Range(0, blendShapeAmount);
 
