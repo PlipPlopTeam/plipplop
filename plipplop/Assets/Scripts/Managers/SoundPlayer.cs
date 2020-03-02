@@ -86,7 +86,7 @@ public class SoundPlayer
         PlaySound(GetSoundFromName(soundName), volume, RandomPitch()); 
     }
 
-    public static AudioSource PlaySoundAttached(string soundName, Transform parent, float volume = 1f, bool randomPitch = false)
+    public static AudioSource PlaySoundAttached(string soundName, Transform parent, float volume = 1f, bool randomPitch = false, bool shouldFadeIn = false)
     {
         var snd = GetSoundFromName(soundName);
         var clip = snd.clip;
@@ -103,10 +103,10 @@ public class SoundPlayer
         g.transform.parent = parent;
         g.transform.localPosition = new Vector3();
 
-        return PlaySound(snd, volume, randomPitch ? RandomPitch() : 1f, source);
+        return PlaySound(snd, volume, randomPitch ? RandomPitch() : 1f, source, shouldFadeIn);
     }
 
-    public static void PlayAtPosition(string soundName, Vector3 position, float volume = 1f, bool randomPitch = false)
+    public static void PlayAtPosition(string soundName, Vector3 position, float volume = 1f, bool randomPitch = false, bool shouldFadeIn = false)
     {
         var g = new GameObject();
         g.name = "_SPATIALIZED_PLAYER";
@@ -118,7 +118,7 @@ public class SoundPlayer
             g.AddComponent<DestroyAfter>().lifespan = clip.length + 1f;
         }
 
-        PlaySoundAttached(soundName, g.transform, volume, randomPitch);
+        PlaySoundAttached(soundName, g.transform, volume, randomPitch, shouldFadeIn);
     }
 
     // utilities
