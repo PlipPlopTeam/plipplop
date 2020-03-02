@@ -4,8 +4,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+public enum CrabType
+{
+    Alone,
+    First,
+    Line,
+    Final
+}
+
 public class Crab : MonoBehaviour
 {
+    public CrabType type = CrabType.Alone;
+    public Crab nextCrab;
+
+    public CrabDance crabDance;
+    
     public GameObject knife;
     public Transform knifeTransform;
 
@@ -22,6 +35,11 @@ public class Crab : MonoBehaviour
     
     void Start()
     {
+        if (type != CrabType.Alone  && type!=CrabType.First)
+        {
+            Hide(true);
+        }
+        
         if (Random.Range(0f, 1f) < knifeChance)
         {
             holdedKnife = Instantiate(knife, knifeTransform);
@@ -33,11 +51,37 @@ public class Crab : MonoBehaviour
     {
         if (!hidden)
         {
-            Hide();
+            if (type == CrabType.Line || type ==CrabType.First)
+            {
+                if (nextCrab)
+                {
+                    nextCrab.Show();
+                }
+                else
+                {
+                    print("la variable nextCrab n'est pas renseignée");
+                }
+                
+                Hide(true);
+            }
+            else if (type == CrabType.Final)
+            {
+                crabDance.StartDancing();
+                Hide(true);
+            }
+            else
+            {
+                if (crabDance)
+                {
+                    crabDance.StartDancing();
+                }
+
+                Hide();
+            }
         }
     }
 
-    void Hide()
+    void Hide(bool _stayHidden = false)
     {
         hidden = true;
         col.enabled = false;
@@ -45,15 +89,24 @@ public class Crab : MonoBehaviour
         Pyromancer.PlayGameEffect("gfx_sand_poof", transform.position);
 
         transform.position -= Vector3.up;
-        
-        
-        Invoke("Show", Random.Range(hiddenMaxTime/2f,hiddenMaxTime));
+
+        if (!_stayHidden)
+        {
+            print("repop soon");
+            Invoke("Show", Random.Range(hiddenMaxTime / 2f, hiddenMaxTime));
+
+        }
 
         if (hasKnife)
         {
             hasKnife = false;
             holdedKnife.SetActive(false);
         }
+    }
+
+    public void Pop()
+    {
+        Pyromancer.PlayGameEffect("gfx_sand_poof", transform.position);
     }
 
     void Show()
@@ -82,8 +135,6 @@ public class Crab : MonoBehaviour
             hasKnife = true;
         }
     }
-
-
         hidden = false;
         col.enabled = true;
         transform.position += Vector3.up;
@@ -91,4 +142,5 @@ public class Crab : MonoBehaviour
         
         Pyromancer.PlayGameEffect("gfx_sand_poof", transform.position);
     }
+    
 }
