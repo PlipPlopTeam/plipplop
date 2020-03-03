@@ -26,7 +26,6 @@ public class Bird : MonoBehaviour
 	private bool going;
 	private bool wingUp = false;
 	private bool lookingRight = false;
-	private float flappingTimer = 0f;
 	private float refreshTimer = 0f;
 	private Vector3 position;
 	private Vector3 positionLast;
@@ -46,6 +45,9 @@ public class Bird : MonoBehaviour
 		rotation = transform.rotation.eulerAngles;
 
 		EnterState(Bird.State.FLYING);
+
+		BirdPath bp = FindObjectOfType<BirdPath>();
+		if(bp != null) Follow(bp);
 	}
 
 	[ContextMenu("GoSit")]
@@ -78,6 +80,38 @@ public class Bird : MonoBehaviour
 				idleGameObject.SetActive(false);
 				break;
 			default: break;
+		}
+	}
+
+	private BirdPath path = null;
+	private int pointIndex = 0;
+	private int initialPointIndex = 0;
+	public void Follow(BirdPath _path)
+	{
+		path = _path;
+		pointIndex = Random.Range(0, path.points.Count);
+		initialPointIndex = pointIndex;
+		GoToNextPoint();
+	}
+
+	public void GoToNextPoint()
+	{
+		if (path == null) return;
+
+		pointIndex++;
+		if (pointIndex >= path.points.Count) pointIndex = 0;
+
+		if(pointIndex != initialPointIndex)
+		{
+			MoveTo(path.GetPosition(pointIndex), () =>
+			{
+				this.GoToNextPoint();
+				Debug.Log("this.GoToNextPoint()");
+			});
+		}
+		else
+		{
+			GoToSpot();
 		}
 	}
 
