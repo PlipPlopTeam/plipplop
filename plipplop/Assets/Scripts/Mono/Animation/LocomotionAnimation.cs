@@ -18,6 +18,7 @@ public class LocomotionAnimation
     Transform visualsTransform;
     Transform headDummy;
     bool areLegsRetracted = false;
+    float legsGrowSpeed = 10f;
 
     public LocomotionAnimation(Rigidbody rb, BoxCollider legsCollider, Transform visualsTransform)
     {
@@ -62,7 +63,6 @@ public class LocomotionAnimation
 
     public void RetractLegs()
     {
-        Debug.Log("RETRACTING");
         legs.gameObject.SetActive(false);
         areLegsRetracted = true;
         legsCollider.enabled = false;
@@ -112,9 +112,14 @@ public class LocomotionAnimation
 
     void SetLegHeight()
     {
-        legsCollider.size = new Vector3(0.2f, legsHeight, 0.2f);
-        legsCollider.center = legsOffset + new Vector3(0f, -legsHeight / 2, 0f);
-        legs.transform.localScale = (Vector3.one - Vector3.up) + Vector3.up * legsHeight;
+        if (areLegsRetracted) {
+            legsCollider.size = new Vector3(0.2f, 0.2f, 0.2f);
+            legsCollider.center = Vector3.zero;
+        }
+        else {
+            legsCollider.size = new Vector3(0.2f, Mathf.Lerp(legsCollider.size.y, legsHeight/2f, legsGrowSpeed * Time.deltaTime), 0.2f);
+            legsCollider.center = Vector3.Lerp(legsCollider.center, (-legsOffset / 2f), legsGrowSpeed * Time.deltaTime);
+        }
     }
 
     public Geometry.PositionAndRotationAndScale GetHeadDummy()
