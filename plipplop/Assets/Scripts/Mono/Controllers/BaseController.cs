@@ -40,7 +40,6 @@ public class BaseController : Controller
     {
         base.Update();
         // Code here
-        AlignPropOnHeadDummy();
         if (AreLegsRetracted()) {
             mainCollider.material = new PhysicMaterial() {
                 dynamicFriction = 100f,
@@ -50,6 +49,7 @@ public class BaseController : Controller
             };
             mainCollider.radius = radiusWhenFlat;
             locomotion.isFlattened = true;
+            AlignPropOnHeadDummy();
         }
         else {
             mainCollider.material = baseMaterial;
