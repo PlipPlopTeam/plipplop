@@ -1,15 +1,51 @@
 ﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 #if UNITY_EDITOR
-	using UnityEditor;
+using UnityEditor;
 #endif
 
 public class Bird : MonoBehaviour
 {
 	public enum State { MOVING, FLYING, LANDED };
+	public enum WingPosition { UP, MIDDLE, DOWN };
+
+	public class NearObject
+	{
+		public Transform transform;
+		public Vector3 position;
+		public Vector3 velocity;
+		public float magnitude;
+
+		public NearObject(Transform t)
+		{
+			this.transform = t;
+			this.position = t.position;
+		}
+
+		public void Update()
+		{
+			velocity = transform.position - position;
+			magnitude = velocity.magnitude;
+			position = transform.position;
+		}
+	}
+	void RemoveNearObject(Transform t)
+	{
+		foreach(NearObject no in nearObjects)
+		{
+			if(no.transform == t.transform)
+			{
+				nearObjects.Remove(no);
+				return;
+			}
+		}
+	}
 
 	[Header("References")]
 	public SkinnedMeshRenderer smr;
 	public SkinnedMeshRenderer idleSMR;
+	public CollisionEventTransmitter range;
 	public GameObject idleGameObject;
 	public GameObject flyingGameObject;
 	public Transform visuals;
@@ -19,12 +55,15 @@ public class Bird : MonoBehaviour
 	public float speed = 2f;
 	public float treshold = 0.5f;
 	public float angleMax = 45f;
+	public float fearObjectMagnitude = 0.1f;
 	public Vector2 sizeRange;
 
-	public System.Action onDestinationReached;
+	public System.Action onReached;
+	public System.Action storedOnReached;
 	private Vector3 target;
 	private bool going;
-	private bool wingUp = false;
+	private WingPosition currentWingState = WingPosition.MIDDLE;
+	private WingPosition previousWingState = WingPosition.DOWN;
 	private bool lookingRight = false;
 	private float refreshTimer = 0f;
 	private Vector3 position;
@@ -35,19 +74,41 @@ public class Bird : MonoBehaviour
 	private Vector3 rotationDelta;
 	private float timeOffset;
 	private State state;
+	private bool faceDirection = false;
+
+	private List<NearObject> nearObjects = new List<NearObject>();
 
 	void Start()
     {
 		visuals.transform.localScale = Vector3.one * Random.Range(sizeRange.x, sizeRange.y);
 		timeOffset = Random.Range(-1f, 1f);
-
 		position = transform.position;
 		rotation = transform.rotation.eulerAngles;
 
-		EnterState(Bird.State.FLYING);
+		range.onTriggerEnter += (other) =>
+		{
+			nearObjects.Add(new NearObject(other.transform));
+		};
+		range.onTriggerExit += (other) =>
+		{
+			RemoveNearObject(other.transform);
+		};
 
+		FlyOff();
+	}
+
+	public void ScaredFrom(Vector3 pos)
+	{
+		Vector3 hPos = new Vector3(pos.x, transform.position.y, pos.z);
+		Vector3 dir = (transform.position - hPos).normalized;
+		dir.y = 0.5f;
+		MoveTo(transform.position + dir * 3f, () => { FlyOff(); });
+	}
+
+	public void FlyOff()
+	{
 		BirdPath bp = FindObjectOfType<BirdPath>();
-		if(bp != null) Follow(bp);
+		if (bp != null) Follow(bp);
 	}
 
 	[ContextMenu("GoSit")]
@@ -56,6 +117,7 @@ public class Bird : MonoBehaviour
 		BirdArea ba = FindObjectOfType<BirdArea>();
 		if(ba != null)
 		{
+			onReached = null;
 			Vector3 pos = ba.GetLandPosition();
 			MoveTo(pos, () =>
 			{
@@ -63,23 +125,6 @@ public class Bird : MonoBehaviour
 				rotation.y = Random.Range(0f, 360f);
 				EnterState(State.LANDED);
 			});
-		}
-	}
-
-	void ExitState(State nState)
-	{
-		switch (nState)
-		{
-			case Bird.State.MOVING:
-				flyingGameObject.SetActive(false);
-				break;
-			case Bird.State.FLYING:
-				flyingGameObject.SetActive(false);
-				break;
-			case Bird.State.LANDED:
-				idleGameObject.SetActive(false);
-				break;
-			default: break;
 		}
 	}
 
@@ -105,8 +150,8 @@ public class Bird : MonoBehaviour
 		{
 			MoveTo(path.GetPosition(pointIndex), () =>
 			{
+				onReached = null;
 				this.GoToNextPoint();
-				Debug.Log("this.GoToNextPoint()");
 			});
 		}
 		else
@@ -120,7 +165,7 @@ public class Bird : MonoBehaviour
 		EnterState(State.MOVING);
 		going = true;
 		target = pos;
-		onDestinationReached += onReached;
+		this.onReached += onReached;
 	}
 
 	void EnterState(State nState)
@@ -131,6 +176,7 @@ public class Bird : MonoBehaviour
 		{
 			case Bird.State.MOVING:
 				flyingGameObject.SetActive(true);
+				faceDirection = true;
 				break;
 			case Bird.State.FLYING:
 				flyingGameObject.SetActive(true);
@@ -138,7 +184,23 @@ public class Bird : MonoBehaviour
 			case Bird.State.LANDED:
 				idleGameObject.SetActive(true);
 				break;
-			default: break;
+		}
+	}
+
+	void ExitState(State nState)
+	{
+		switch (nState)
+		{
+			case Bird.State.MOVING:
+				flyingGameObject.SetActive(false);
+				faceDirection = false;
+				break;
+			case Bird.State.FLYING:
+				flyingGameObject.SetActive(false);
+				break;
+			case Bird.State.LANDED:
+				idleGameObject.SetActive(false);
+				break;
 		}
 	}
 
@@ -155,7 +217,6 @@ public class Bird : MonoBehaviour
 			case Bird.State.LANDED:
 				if (Random.Range(0f, 1f) >= 0.9f) LookOtherWay();
 				break;
-			default: break;
 		}
 	}
 
@@ -170,8 +231,15 @@ public class Bird : MonoBehaviour
 				position += transform.right * Mathf.Sin(Time.time + timeOffset) * 0.005f;
 				break;
 			case Bird.State.LANDED:
+				foreach(NearObject no in nearObjects)
+				{
+					no.Update();
+					if (no.magnitude > fearObjectMagnitude)
+					{
+						ScaredFrom(no.transform.position);
+					}
+				}
 				break;
-			default: break;
 		}
 	}
 
@@ -185,23 +253,43 @@ public class Bird : MonoBehaviour
 		rotationDelta = transform.eulerAngles - rotationLast;
 		rotationLast = transform.eulerAngles;
 
-		visuals.localEulerAngles = positionDelta.normalized * angleMax;
+		if(faceDirection)
+		{
+			visuals.transform.forward = -positionDelta.normalized;
+		}
+		else
+		{
+			visuals.localEulerAngles = positionDelta.normalized * angleMax;
+		}
 	}
 
 	void Flap()
 	{
-		if (wingUp)
+		WingPosition _previous = currentWingState;
+
+		if(currentWingState == WingPosition.MIDDLE)
 		{
-			wingUp = false;
-			smr.SetBlendShapeWeight(0, 100f);
-			smr.SetBlendShapeWeight(1, 0f);
+			if(previousWingState == WingPosition.DOWN)
+			{
+				currentWingState = WingPosition.UP;
+				smr.SetBlendShapeWeight(0, 0f);
+				smr.SetBlendShapeWeight(1, 100f);
+			}
+			else
+			{
+				currentWingState = WingPosition.DOWN;
+				smr.SetBlendShapeWeight(0, 100f);
+				smr.SetBlendShapeWeight(1, 0f);
+			}
 		}
 		else
 		{
-			wingUp = true;
+			currentWingState = WingPosition.MIDDLE;
 			smr.SetBlendShapeWeight(0, 0f);
-			smr.SetBlendShapeWeight(1, 100f);
+			smr.SetBlendShapeWeight(1, 0f);
 		}
+
+		previousWingState = _previous;
 	}
 
 	void LookOtherWay()
@@ -239,10 +327,12 @@ public class Bird : MonoBehaviour
 			if (Vector3.Distance(position, target) < treshold)
 			{
 				going = false;
-				if (onDestinationReached != null)
+				if (onReached != null)
 				{
-					onDestinationReached.Invoke();
-					onDestinationReached = null;
+					storedOnReached += onReached;
+					onReached = null;
+					storedOnReached.Invoke();
+					storedOnReached = null;
 				}
 			}
 		}

@@ -25,6 +25,7 @@ public class Cheats : Dictionary<string, System.Action>
         Add("SHAKEY", DebugShake);
         Add("BRRRRR", Rumble);
         Add("BIRDS", Hitchcock);
+        Add("GRIFFIN", Griffin);
 	}
 
 	public void Hitchcock()
@@ -32,6 +33,14 @@ public class Cheats : Dictionary<string, System.Action>
 		foreach (Bird b in Object.FindObjectsOfType<Bird>())
 		{
 			b.GoToSpot();
+		}
+	}
+
+	public void Griffin()
+	{
+		foreach (Bird b in Object.FindObjectsOfType<Bird>())
+		{
+			b.visuals.localScale = Vector3.one * Random.Range(5f, 10f);
 		}
 	}
 
