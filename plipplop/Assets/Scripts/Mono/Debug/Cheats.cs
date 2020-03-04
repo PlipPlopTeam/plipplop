@@ -32,7 +32,7 @@ public class Cheats : Dictionary<string, System.Action>
 	{
 		foreach (Bird b in Object.FindObjectsOfType<Bird>())
 		{
-			b.GoToSpot();
+			b.GoSitOnSpot();
 		}
 	}
 

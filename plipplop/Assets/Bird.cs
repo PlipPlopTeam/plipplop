@@ -75,6 +75,8 @@ public class Bird : MonoBehaviour
 	private float timeOffset;
 	private State state;
 	private bool faceDirection = false;
+	private NearObject objectOn = null;
+	private bool unfearable;
 
 	private List<NearObject> nearObjects = new List<NearObject>();
 
@@ -102,30 +104,89 @@ public class Bird : MonoBehaviour
 		Vector3 hPos = new Vector3(pos.x, transform.position.y, pos.z);
 		Vector3 dir = (transform.position - hPos).normalized;
 		dir.y = 0.5f;
+
+		StopAllCoroutines();
 		MoveTo(transform.position + dir * 3f, () => { FlyOff(); });
 	}
 
 	public void FlyOff()
 	{
-		BirdPath bp = FindObjectOfType<BirdPath>();
-		if (bp != null) Follow(bp);
+		StopAllCoroutines();
+		List<BirdPath> bps = Game.i.aiZone.birdPaths;
+		if (bps.Count > 0)
+		{
+			BirdPath bp = bps.PickRandom();
+			if(bp != null)
+			{
+				Follow(bp);
+				StartCoroutine(WaitBeforeIdle(Random.Range(10f, 20f)));
+			}
+			else
+			{
+				Debug.LogWarning("No Bird Path found in this scene");
+				Destroy(gameObject);
+			}
+		}
+		else
+		{
+			Debug.LogWarning("No Bird Path found in this scene");
+			Destroy(gameObject);
+		}
 	}
 
 	[ContextMenu("GoSit")]
-	public void GoToSpot()
+	public void GoSitOnSpot()
 	{
-		BirdArea ba = FindObjectOfType<BirdArea>();
-		if(ba != null)
+		StopAllCoroutines();
+		List<BirdArea> areas = Game.i.aiZone.birdAreas;
+		if (areas.Count > 0)
 		{
-			onReached = null;
-			Vector3 pos = ba.GetLandPosition();
-			MoveTo(pos, () =>
+			BirdArea area = areas.PickRandom();
+			if(area != null)
 			{
-				position = pos;
-				rotation.y = Random.Range(0f, 360f);
-				EnterState(State.LANDED);
-			});
+				onReached = null;
+				BirdArea.Spot s = area.GetSpot();
+				SitOn(s.position, s.surface);
+			}
+			else
+			{
+				Debug.LogWarning("No Bird Area found in this scene");
+				Destroy(gameObject);
+			}
 		}
+		else
+		{
+			Debug.LogWarning("No Bird Area found in this scene");
+			Destroy(gameObject);
+		}
+	}
+
+	IEnumerator WaitBeforeSit(float time)
+	{
+		yield return new WaitForSeconds(time);
+		GoSitOnSpot();
+	}
+	IEnumerator WaitBeforeFlyingOff(float time)
+	{
+		yield return new WaitForSeconds(time);
+		FlyOff();
+	}
+	IEnumerator WaitBeforeIdle(float time)
+	{
+		yield return new WaitForSeconds(time);
+		Idle();
+	}
+
+	public void SitOn(Vector3 pos, Transform tran)
+	{
+		objectOn = new NearObject(tran);
+
+		MoveTo(pos, () =>
+		{
+			position = pos;
+			rotation.y = Random.Range(0f, 360f);
+			EnterState(State.LANDED);
+		});
 	}
 
 	private BirdPath path = null;
@@ -146,7 +207,13 @@ public class Bird : MonoBehaviour
 		pointIndex++;
 		if (pointIndex >= path.points.Count) pointIndex = 0;
 
-		if(pointIndex != initialPointIndex)
+		MoveTo(path.GetPosition(pointIndex), () =>
+		{
+			onReached = null;
+			this.GoToNextPoint();
+		});
+		/*
+		if (pointIndex != initialPointIndex)
 		{
 			MoveTo(path.GetPosition(pointIndex), () =>
 			{
@@ -156,8 +223,20 @@ public class Bird : MonoBehaviour
 		}
 		else
 		{
-			GoToSpot();
+			GoSitOnSpot();
 		}
+		*/
+	}
+
+	public void Stop()
+	{
+		onReached = null;
+		position = transform.position;
+	}
+
+	public void Idle()
+	{
+		EnterState(Bird.State.FLYING);
 	}
 
 	public void MoveTo(Vector3 pos, System.Action onReached = null)
@@ -179,10 +258,18 @@ public class Bird : MonoBehaviour
 				faceDirection = true;
 				break;
 			case Bird.State.FLYING:
+				Stop();
+				transform.forward = Vector3.forward;
+				visuals.localEulerAngles = Vector3.one;
+
+				smr.SetBlendShapeWeight(0, 0f);
+				smr.SetBlendShapeWeight(1, 0f);
 				flyingGameObject.SetActive(true);
+				StartCoroutine(WaitBeforeSit(Random.Range(10f, 20f)));
 				break;
 			case Bird.State.LANDED:
 				idleGameObject.SetActive(true);
+				StartCoroutine(WaitBeforeFlyingOff(Random.Range(10f, 20f)));
 				break;
 		}
 	}
@@ -231,12 +318,20 @@ public class Bird : MonoBehaviour
 				position += transform.right * Mathf.Sin(Time.time + timeOffset) * 0.005f;
 				break;
 			case Bird.State.LANDED:
-				foreach(NearObject no in nearObjects)
+				if(!unfearable)
 				{
-					no.Update();
-					if (no.magnitude > fearObjectMagnitude)
+					foreach (NearObject no in nearObjects)
 					{
-						ScaredFrom(no.transform.position);
+						no.Update();
+						if (no.magnitude > fearObjectMagnitude)
+						{
+							ScaredFrom(no.transform.position);
+						}
+					}
+					if (objectOn != null)
+					{
+						objectOn.Update();
+						if (objectOn.magnitude > 0) FlyOff();
 					}
 				}
 				break;

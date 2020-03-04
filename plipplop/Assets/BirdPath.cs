@@ -19,12 +19,10 @@ public class BirdPath : MonoBehaviour
 	public bool loop = true;
     public List<Point> points = new List<Point>();
 
-    /*
-    private void Start()
-    {
-        Game.i.aiZone.Register(this);
-    }
-    */
+	private void Awake()
+	{
+		Game.i.aiZone.Register(this);
+	}
 
 	public Vector3 GetPosition(int id)
 	{

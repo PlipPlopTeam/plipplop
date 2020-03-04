@@ -6,9 +6,12 @@ public class AIZone
 {
     List<Activity> activities = new List<Activity>();
     List<Feeder> feeders = new List<Feeder>();
-    List<AIPath> paths = new List<AIPath>();
+	List<AIPath> paths = new List<AIPath>();
 
-    public AIZone(Activity[] activities, Feeder[] feeders)
+    public List<BirdArea> birdAreas = new List<BirdArea>();
+	public List<BirdPath> birdPaths = new List<BirdPath>();
+
+	public AIZone(Activity[] activities, Feeder[] feeders)
     {
         this.activities = new List<Activity>(activities);
         this.feeders = new List<Feeder>(feeders);
@@ -34,7 +37,17 @@ public class AIZone
         paths.Add(path);
     }
 
-    public AIPath GetRandomPath()
+	public void Register(BirdPath path)
+	{
+		birdPaths.Add(path);
+	}
+
+	public void Register(BirdArea area)
+	{
+		birdAreas.Add(area);
+	}
+
+	public AIPath GetRandomPath()
     {
         return paths.PickRandom();
     }
