@@ -13,6 +13,7 @@ public class NonPlayableCharacter : MonoBehaviour
 	public enum EStat { BOREDOM, TIREDNESS, HUNGER };
 	public enum ESubject { PLAYER, VALUABLE, ACTIVITY, CHAIR, FOOD, FEEDER, CHARACTER };
 
+	[Header("References")]
 	[HideInInspector] public Sight sight;
 	[HideInInspector] public FocusLook look;
 	[HideInInspector] public NavMeshAgent agent;
@@ -23,6 +24,7 @@ public class NonPlayableCharacter : MonoBehaviour
 	[HideInInspector] public Range range;
 	[HideInInspector] public Face face;
 	[HideInInspector] public Collider collider;
+	public SkinnedMeshRenderer skin;
 	[HideInInspector] public ICarryable carried;
 	[Header("Read-Only")]
 	public Controller player;
@@ -74,7 +76,10 @@ public class NonPlayableCharacter : MonoBehaviour
 	{
 		// Loading Settings
 		if (settings == null) settings = Game.i.library.npcLibrary.defaultSettings;
+		settings = Instantiate(settings);
+		settings.Load();
 		skeleton.gameObject.transform.localScale = Vector3.one * settings.height / 2;
+		skin.SetBlendShapeWeight(7, settings.GetWeightRatio() * 100f);
 		stats.Add(EStat.BOREDOM, settings.initialBoredom);
 		stats.Add(EStat.TIREDNESS, settings.initialTiredness);
 		stats.Add(EStat.HUNGER, settings.initialTiredness);
@@ -184,6 +189,18 @@ public class NonPlayableCharacter : MonoBehaviour
 
 	public void Equip(ClothData clothData, bool change = true)
 	{
+		// CHECK IF THIS CLOTH IS BANNED
+		foreach (KeyValuePair<Cloth.ESlot, Cloth> key in clothes)
+		{
+			if(key.Value != null)
+			{
+				foreach (Cloth.ESlot s in key.Value.data.bannedSlot)
+				{
+					if (s == clothData.slot) return;
+				}
+			}
+		}
+
 		Cloth c = clothes[clothData.slot];
 		if(c != null && change) c.Destroy();
 
@@ -191,6 +208,15 @@ public class NonPlayableCharacter : MonoBehaviour
 		clothObject.name = clothData.name;
 		c = clothObject.AddComponent<Cloth>();
 		c.Create(clothData, skeleton);
+		c.SetWeight(settings.GetWeightRatio() * 100f);
+
+		// UNEQUIP BANNED CLOTHES
+		foreach (Cloth.ESlot s in c.data.bannedSlot)
+		{
+			if(clothes[clothData.slot] != null)
+				clothes[clothData.slot].Destroy();
+		}
+
 		clothes[clothData.slot] = c;
 	}
 
@@ -292,9 +318,6 @@ public class NonPlayableCharacter : MonoBehaviour
 			animator.SetBool("Holding", false);
 			animator.SetBool("Carrying", false);
 		}
-
-
-
 		carried = null;
 	}
 

@@ -36,6 +36,7 @@ public class ClothDataEditor : Editor
 		SerializedProperty slot = serializedObject.FindProperty("slot");
 		SerializedProperty prefab = serializedObject.FindProperty("prefab");
 		SerializedProperty color = serializedObject.FindProperty("color");
+		SerializedProperty bannedSlot = serializedObject.FindProperty("bannedSlot");
 
 		if (GUILayout.Button("Preview", button))
 		{
@@ -50,6 +51,25 @@ public class ClothDataEditor : Editor
 		EditorGUILayout.PropertyField(name);
 		EditorGUILayout.PropertyField(prefab);
 		EditorGUILayout.PropertyField(slot);
+
+		EditorGUILayout.LabelField("Banned Slot", title);
+		EditorGUILayout.HelpBox("Slots to unequip or banned if this cloth is equiped", MessageType.Info);
+		for (int i = 0; i < bannedSlot.arraySize; i++)
+		{
+			EditorGUILayout.BeginHorizontal();
+			if (GUILayout.Button("Remove", button))
+			{
+				int key = i;
+				if (key == bannedSlot.arraySize) key = bannedSlot.arraySize - 1;
+				bannedSlot.DeleteArrayElementAtIndex(key);
+			}
+			if (i >= bannedSlot.arraySize) continue;
+			EditorGUILayout.PropertyField(bannedSlot.GetArrayElementAtIndex(i), new GUIContent(""));
+			EditorGUILayout.EndHorizontal();
+		}
+		if (GUILayout.Button("Add", button)) bannedSlot.InsertArrayElementAtIndex(bannedSlot.arraySize);
+
+
 
 		EditorGUILayout.LabelField("Color Modifier", title);
 		color.NextVisible(true);
@@ -82,8 +102,6 @@ public class ClothDataEditor : Editor
 				EditorGUILayout.HelpBox("You need to specify some properties names, or the palette wont have any effect.", MessageType.Warning);
 			}
 		}
-
-
 		serializedObject.ApplyModifiedProperties();
 	}
 

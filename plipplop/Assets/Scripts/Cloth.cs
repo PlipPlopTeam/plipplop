@@ -19,6 +19,12 @@ public class Cloth : MonoBehaviour
         Destroy(this);
     }
 
+	public void SetWeight(float ratio)
+	{
+		SkinnedMeshRenderer smr = root.gameObject.GetComponentInChildren<SkinnedMeshRenderer>();
+		if (smr != null) smr.SetBlendShapeWeight(0, ratio);
+	}
+
 	public virtual void SetColors(Dictionary<string, Color> colors) // TODO : Should become an array at some point
 	{
 		Material[] mats = renderer.sharedMaterials;

@@ -20,8 +20,9 @@ public class ClothData : ScriptableObject
 	}
 	
 	public string title = "Untitled";
-    public Cloth.ESlot slot;
     public GameObject prefab;
+	public Cloth.ESlot slot;
+	public List<Cloth.ESlot> bannedSlot;
 	public ColorModification color = new ColorModification();
 
 	public Dictionary<string, Color> GetColors()
