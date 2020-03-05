@@ -122,7 +122,7 @@ public abstract class Controller : MonoBehaviour
 	}
 
     internal bool AreLegsRetracted() { return locomotion.AreLegsRetracted(); }
-    internal virtual bool IsGrounded(float rangeMultiplier = 1f) { return locomotion.IsGrounded(rangeMultiplier); }
+    internal virtual bool IsGrounded(float rangeMultiplier = 1f) { return locomotion.IsGrounded(); }
     internal virtual bool WasGrounded() { return Time.time - locomotion.preset.groundedBufferToleranceSeconds < lastTimeGrounded; }
     internal virtual void OnHoldJump() { }
     internal abstract void OnLegsRetracted();

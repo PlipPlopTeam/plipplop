@@ -6,6 +6,7 @@ using UnityEngine;
 public class Locomotion : Walker
 {
     public LocomotionPreset preset;
+	public float groundCheckOffset = 0.5f;
     private float groundCheckRange = 0.1f;
 	[HideInInspector] public float legsHeight { get { return 1f; } }
 	private Vector3 legsOffset = Vector3.up * 0.5f;
@@ -202,16 +203,18 @@ public class Locomotion : Walker
         return false;
     }
 
+	public Vector3 GetCheckOffset()
+	{
+		Vector3 os = Vector3.zero;
+		if (AreLegsRetracted()) os = legsOffset + new Vector3(0f, groundCheckOffset, 0f);
+		else os = legsOffset - new Vector3(0f, legsHeight - groundCheckOffset, 0f);
+		return os;
+	}
+
     public RaycastHit[] RaycastAllToGround(float rangeMultiplier = 1f)
     {
-        Vector3 os = Vector3.zero;
-
-        if (AreLegsRetracted())
-            os = legsOffset + new Vector3(0f, 1f, 0f);
-        else
-            os = legsOffset - new Vector3(0f, legsHeight - 1f, 0f);
-
-        return Physics.RaycastAll(transform.position + transform.TransformDirection(os), groundCheckDirection, 1f + groundCheckRange * rangeMultiplier);
+		Vector3 os = GetCheckOffset();
+		return Physics.RaycastAll(transform.position + transform.TransformDirection(os), groundCheckDirection, 1f + groundCheckRange * rangeMultiplier);
 	}
 
     public Vector3? GetGroundNormal()
@@ -244,17 +247,18 @@ public class Locomotion : Walker
     }
 
 #if UNITY_EDITOR
-    // Draw a gizmo if i'm being possessed
     void OnDrawGizmos()
     {
         if (EditorApplication.isPlaying) {
-            // Legs
             Gizmos.color = Color.red;
-            if (AreLegsRetracted())
-                Gizmos.DrawLine(transform.position + transform.TransformDirection(legsOffset - new Vector3(0f, 0.1f, 0f)), transform.position + transform.TransformDirection(legsOffset - new Vector3(0f, 0.1f, 0f)) + groundCheckDirection * groundCheckRange);
-            //else
-                //Gizmos.DrawLine(transform.position + legsOffset - new Vector3(0f, legsHeight, 0f), transform.position + legsOffset - new Vector3(0f, legsHeight, 0f) + (-transform.up * groundCheckRange));
-
+			Vector3 os = GetCheckOffset();
+			if (AreLegsRetracted())
+			{
+				Gizmos.DrawLine(
+					transform.position + transform.TransformDirection(os),
+					transform.position - transform.TransformDirection(os + groundCheckDirection * groundCheckRange)
+				);
+			}
         }
     }
 #endif
