@@ -51,12 +51,12 @@ public static class ExtensionTools
 		RaycastHit[] hits = Physics.RaycastAll(transform.position, Vector3.down, distance);
 		foreach (RaycastHit h in hits)
 		{
-			if (!IsYourselfCheck(transform, h.transform) && !h.collider.isTrigger) return true;
+			if (!transform.IsYourselfCheck(h.transform) && !h.collider.isTrigger) return true;
 		}
 		return false;
 	}
 
-	public static bool IsYourselfCheck(Transform transform, Transform thing)
+	public static bool IsYourselfCheck(this Transform transform, Transform thing)
 	{
 		foreach (Transform t in transform.GetComponentsInChildren<Transform>())
 		{

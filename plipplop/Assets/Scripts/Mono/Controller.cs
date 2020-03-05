@@ -20,6 +20,7 @@ public abstract class Controller : MonoBehaviour
 	[HideInInspector] public GameObject face;
 
 	public Vector3 visualsOffset;
+	public float unpossessSpawnDistance = 1f;
 
     float lastTimeGrounded = 0f;
     new internal Rigidbody rigidbody;
@@ -280,7 +281,7 @@ public abstract class Controller : MonoBehaviour
             transform.Rotate(Vector3.up * y);
         }
 
-        if (isBeingThrown && IsGrounded())
+        if (isBeingThrown && (IsGrounded()|| isImmerged))
 		{
 			UnParalyse();
 			isBeingThrown = false;
@@ -322,16 +323,14 @@ public abstract class Controller : MonoBehaviour
     // Trying to possess somESubject else
     virtual internal void OnTryPossess()
     {
-        if (!isImmerged && controllerSensor && controllerSensor.IsThereAnyController())
-        {
+        if (!isImmerged && controllerSensor && controllerSensor.IsThereAnyController()) {
             var focused = controllerSensor.GetFocusedController();
             if (!focused.isImmerged) {
                 Game.i.player.Possess(focused);
             }
         }
-        else if (!Game.i.player.IsPossessingBaseController())
-        {
-            Game.i.player.TeleportBaseControllerAndPossess();
+        else if (!Game.i.player.IsPossessingBaseController()) {
+            Game.i.player.TeleportBaseControllerAndPossess(unpossessSpawnDistance);
         }
     }
 

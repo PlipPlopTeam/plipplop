@@ -62,7 +62,8 @@ MonoBehaviour:
   locomotion: {fileID: 0}
   visuals: {fileID: 6234941144914050891}
   face: {fileID: 4998087601379508225}
-  visualsOffset: {x: 0, y: 0, z: 0}
+  visualsOffset: {x: 0, y: -0.2, z: 0}
+  unpossessSpawnDistance: 0.85
   pushMovementForce: 300
   pushCooldown: 2
   pushThreshold: 0.5
@@ -100,8 +101,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.821496, y: 1.2, z: 0.8187534}
-  m_Center: {x: -0.004640579, y: 0.65, z: -0.0023202002}
+  m_Size: {x: 0.821496, y: 0.59259987, z: 0.8187534}
+  m_Center: {x: -0.004640579, y: 0.25323033, z: -0.0023202002}
 --- !u!114 &6234941143426916911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,8 +116,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   preset: {fileID: 0}
-  groundCheckRange: 1
-  legsOffset: {x: 0, y: 0, z: 0}
+  isFlattened: 0
   rigidbody: {fileID: 0}
   targetDirection: {x: 0, y: 0, z: 0}
   isImmerged: 0
@@ -408,12 +408,12 @@ PrefabInstance:
     - target: {fileID: 7962972514405291281, guid: 42edcef2484d1d446ab328bcc85a43fa,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.442
+      value: 0.225
       objectReference: {fileID: 0}
     - target: {fileID: 7962972514405291281, guid: 42edcef2484d1d446ab328bcc85a43fa,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.506
+      value: 0.365
       objectReference: {fileID: 0}
     - target: {fileID: 7962972514405291281, guid: 42edcef2484d1d446ab328bcc85a43fa,
         type: 3}
@@ -458,17 +458,17 @@ PrefabInstance:
     - target: {fileID: 7962972514405291281, guid: 42edcef2484d1d446ab328bcc85a43fa,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7962972514405291281, guid: 42edcef2484d1d446ab328bcc85a43fa,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7962972514405291281, guid: 42edcef2484d1d446ab328bcc85a43fa,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42edcef2484d1d446ab328bcc85a43fa, type: 3}

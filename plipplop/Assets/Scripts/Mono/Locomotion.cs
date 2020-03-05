@@ -6,10 +6,10 @@ using UnityEngine;
 public class Locomotion : Walker
 {
     public LocomotionPreset preset;
-    public float groundCheckRange = 1f;
-    public float legsHeight { get { return 1f; } }
-	public Vector3 legsOffset = Vector3.up * 0.65f;
-    public bool isFlattened = false;
+    private float groundCheckRange = 1f;
+	[HideInInspector] public float legsHeight { get { return 1f; } }
+	private Vector3 legsOffset = Vector3.up * 0.5f;
+	[HideInInspector] public bool isFlattened = false;
 
     [HideInInspector] new public Rigidbody rigidbody;
     [HideInInspector] public Vector3 targetDirection;
@@ -84,17 +84,16 @@ public class Locomotion : Walker
     public void ExtendLegs()
     {
 		locomotionAnimation.ExtendLegs();
-
         var v = GetBelowSurface();
 
         if (v != null) 
         {
-            transform.position = new Vector3(transform.position.x, v.Value.y + (IsGrounded() ? legsHeight : 0f), transform.position.z);
+            transform.position = new Vector3(transform.position.x, v.Value.y + (IsGrounded() ? legsHeight/2f : 0f), transform.position.z);
         }
         else
 		{
             Debug.LogWarning("Could not detect the ground surface when expanding legs from " + gameObject.name);
-            transform.position = new Vector3(transform.position.x, transform.position.y/* + legsHeight + legsOffset.y*/, transform.position.z);
+            transform.position = new Vector3(transform.position.x, transform.position.y + legsHeight/2f + legsOffset.y, transform.position.z);
         }
 
         SoundPlayer.PlayAtPosition("sfx_pop_legs", transform.position);
@@ -120,7 +119,6 @@ public class Locomotion : Walker
         // Acceleration curve position
         if (timePressed != direction.magnitude) {
             timePressed += Mathf.Sign(direction.magnitude - timePressed) * Time.fixedDeltaTime;
-
         }
 
         float currentMaxSpeedAmount = preset.accelerationCurve.Evaluate(timePressed);
@@ -191,7 +189,7 @@ public class Locomotion : Walker
         RaycastHit[] hits = RaycastAllToGround(rangeMultiplier);
         foreach(RaycastHit h in hits)
         {
-            if (!IsMe(h.transform) && !h.collider.isTrigger) {
+            if (!transform.IsYourselfCheck(h.transform) && !h.collider.isTrigger) {
                 if (h.normal.y >= 1 - (preset.maxWalkableSteepness / 100f)) {
                     if (hasJumped && rigidbody != null && rigidbody.velocity.y < 0f) {
                         hasJumped = false; // Put HasJumped to false only if not grounded and falling
@@ -204,26 +202,17 @@ public class Locomotion : Walker
         return false;
     }
 
-    bool IsMe(Transform thing)
-    {
-        foreach(Transform t in transform.GetComponentsInChildren<Transform>())
-        {
-            if(thing == t.transform) return true;
-        }
-        return false;
-    }
-
     public RaycastHit[] RaycastAllToGround(float rangeMultiplier = 1f)
     {
         Vector3 os = Vector3.zero;
 
         if (AreLegsRetracted())
-            os = legsOffset + new Vector3(0f, 0.2f, 0f);
+            os = legsOffset + new Vector3(0f, 1f, 0f);
         else
-            os = legsOffset - new Vector3(0f, legsHeight - 0.2f, 0f);
+            os = legsOffset - new Vector3(0f, legsHeight - 1f, 0f);
 
-        return Physics.RaycastAll(transform.position + transform.TransformDirection(os), groundCheckDirection, groundCheckRange * rangeMultiplier);
-    }
+        return Physics.RaycastAll(transform.position + transform.TransformDirection(os), groundCheckDirection, 1f + groundCheckRange * rangeMultiplier);
+	}
 
     public Vector3? GetGroundNormal()
     {
@@ -231,7 +220,7 @@ public class Locomotion : Walker
 
         RaycastHit[] hits = RaycastAllToGround();
         foreach (RaycastHit h in hits) {
-            if (!IsMe(h.transform) && !h.collider.isTrigger) {
+            if (!transform.IsYourselfCheck(h.transform) && !h.collider.isTrigger) {
                 return h.normal;
             }
         }
@@ -243,7 +232,7 @@ public class Locomotion : Walker
         RaycastHit[] hits = RaycastAllToGround();
 
         foreach (RaycastHit h in hits) {
-            if (!IsMe(h.transform) && !h.collider.isTrigger) return h.point;
+            if (!transform.IsYourselfCheck(h.transform) && !h.collider.isTrigger) return h.point;
         }
 
         return null;
@@ -253,7 +242,6 @@ public class Locomotion : Walker
     {
         return locomotionAnimation.GetHeadDummy();
     }
-
 
 #if UNITY_EDITOR
     // Draw a gizmo if i'm being possessed
