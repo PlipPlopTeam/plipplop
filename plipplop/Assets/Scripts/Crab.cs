@@ -32,6 +32,7 @@ public class Crab : MonoBehaviour
     public float hiddenMaxTime = 2f;
 
     public float respawnRange = 1f;
+
     
     void Start()
     {
@@ -45,6 +46,7 @@ public class Crab : MonoBehaviour
             holdedKnife = Instantiate(knife, knifeTransform);
             hasKnife = true;
         }
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -92,7 +94,7 @@ public class Crab : MonoBehaviour
 
         if (!_stayHidden)
         {
-            print("repop soon");
+//            print("repop soon");
             Invoke("Show", Random.Range(hiddenMaxTime / 2f, hiddenMaxTime));
 
         }
@@ -108,6 +110,7 @@ public class Crab : MonoBehaviour
     {
         Pyromancer.PlayGameEffect("gfx_sand_poof", transform.position);
     }
+
 
     void Show()
     {
