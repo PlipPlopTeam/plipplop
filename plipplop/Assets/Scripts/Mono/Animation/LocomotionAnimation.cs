@@ -67,7 +67,6 @@ public class LocomotionAnimation
 
 	public void PlayAnimation(float hVelocity)
 	{
-		Debug.Log(hVelocity);
 		string animName = "Walk";
 		foreach (KeyValuePair<float, string> entry in movementAnimationMagnitude)
 		{

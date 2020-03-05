@@ -70,7 +70,7 @@ public class Chair : MonoBehaviour
 	public void Align(NonPlayableCharacter sitter, Spot spot)
 	{
 		sitter.transform.localPosition = Vector3.zero;
-		sitter.transform.localPosition = new Vector3(spot.position.x, spot.position.y - spot.user.skeleton.GetButtHeight() + 0.1f, spot.position.z);
+		sitter.transform.localPosition = new Vector3(spot.position.x, spot.position.y - spot.user.skeleton.GetButtHeight(), spot.position.z);
 		sitter.transform.forward = transform.forward;
 		sitter.transform.Rotate(transform.up * Random.Range(spot.orientation.x, spot.orientation.y));
 	}
@@ -82,7 +82,7 @@ public class Chair : MonoBehaviour
 			foreach(Spot s in spots)
 			{
 				if (s.user != null && s.isSitted) 
-					s.user.transform.localPosition = new Vector3(s.position.x, s.position.y - s.user.skeleton.GetButtHeight() + 0.1f, s.position.z);
+					s.user.transform.localPosition = new Vector3(s.position.x, s.position.y - s.user.skeleton.GetButtHeight(), s.position.z);
 			}
 			if (!isStraight) isStraight = true;
 		}

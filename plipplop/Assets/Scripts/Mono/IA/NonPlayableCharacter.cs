@@ -43,8 +43,6 @@ public class NonPlayableCharacter : MonoBehaviour
 	[Header("Settings")]
 	public NonPlayableCharacterSettings settings;
 	public BehaviorGraphData graph;
-
-	float assHeightWhenSitted = 0.38f;
     ICarryable carryableToCollect;
 	private float waitTimer;
 	private bool endWait;
