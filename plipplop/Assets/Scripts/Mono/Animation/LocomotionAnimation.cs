@@ -11,14 +11,16 @@ public class LocomotionAnimation
     public bool isFlattened;
     public System.Action onLegAnimationEnd;
 
-    Transform parentTransform;
-    public Rigidbody rigidbody;
+	public Rigidbody rigidbody;
+	Transform parentTransform;
     BoxCollider legsCollider;
     LegAnimator legs;
     Transform visualsTransform;
     Transform headDummy;
     bool areLegsRetracted = false;
     float legsGrowSpeed = 10f;
+
+	Dictionary<float, string> movementAnimationMagnitude = new Dictionary<float, string>();
 
     public LocomotionAnimation(Rigidbody rb, BoxCollider legsCollider, Transform visualsTransform)
     {
@@ -29,9 +31,12 @@ public class LocomotionAnimation
         GrowLegs();
 
         onLegAnimationEnd += legs.onAnimationEnded;
-    }
 
-    public void Update()
+		movementAnimationMagnitude.Add(0f, "Walk");
+		movementAnimationMagnitude.Add(3f, "Run");
+	}
+
+	public void Update()
     {
         if (Game.i.player.GetCurrentController() == null) return;
 
@@ -49,12 +54,27 @@ public class LocomotionAnimation
         }
         else
         {
-            if (isWalking) legs.PlayOnce("Walk");
-            else {
-                legs.PlayOnce("Idle");
-            }
+			if (isWalking)
+			{
+				PlayAnimation(new Vector2(rigidbody.velocity.x, rigidbody.velocity.z).magnitude);
+			}
+			else
+			{
+				legs.PlayOnce("Idle");
+			}
         }
     }
+
+	public void PlayAnimation(float hVelocity)
+	{
+		Debug.Log(hVelocity);
+		string animName = "Walk";
+		foreach (KeyValuePair<float, string> entry in movementAnimationMagnitude)
+		{
+			if(hVelocity > entry.Key) animName = entry.Value;
+		}
+		legs.PlayOnce(animName);
+	}
 
     public bool AreLegsRetracted()
     {
