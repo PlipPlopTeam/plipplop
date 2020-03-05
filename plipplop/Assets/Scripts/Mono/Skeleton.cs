@@ -151,7 +151,7 @@ public class Skeleton : MonoBehaviour
 
 	public float GetButtHeight()
 	{
-		if(hips != null) return hips.localPosition.y;
+		if(hips != null && hips.parent != null) return Mathf.Abs(hips.parent.transform.position.y - hips.transform.position.y);
 		return 0f;
 	}
     
