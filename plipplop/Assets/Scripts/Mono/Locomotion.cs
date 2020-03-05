@@ -6,7 +6,7 @@ using UnityEngine;
 public class Locomotion : Walker
 {
     public LocomotionPreset preset;
-    private float groundCheckRange = 1f;
+    private float groundCheckRange = 0.1f;
 	[HideInInspector] public float legsHeight { get { return 1f; } }
 	private Vector3 legsOffset = Vector3.up * 0.5f;
 	[HideInInspector] public bool isFlattened = false;

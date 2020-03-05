@@ -112,6 +112,7 @@ public class LocomotionAnimation
 
     void SetLegHeight()
     {
+		/*
         if (areLegsRetracted) {
             legsCollider.size = new Vector3(0.2f, 0.2f, 0.2f);
             legsCollider.center = Vector3.zero;
@@ -120,7 +121,11 @@ public class LocomotionAnimation
             legsCollider.size = new Vector3(0.2f, Mathf.Lerp(legsCollider.size.y, legsHeight/2f, legsGrowSpeed * Time.deltaTime), 0.2f);
             legsCollider.center = Vector3.Lerp(legsCollider.center, (-legsOffset / 2f), legsGrowSpeed * Time.deltaTime);
         }
-    }
+		*/
+
+		legsCollider.size = new Vector3(0.2f, legsHeight/2f, 0.2f);
+		legsCollider.center = -legsOffset/2f;
+	}
 
     public Geometry.PositionAndRotationAndScale GetHeadDummy()
     {
