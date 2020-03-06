@@ -109,12 +109,13 @@ MonoBehaviour:
   visuals: {fileID: 1123944791841484717}
   face: {fileID: 4372214418793336870}
   visualsOffset: {x: 0, y: 0, z: 0}
+  unpossessSpawnDistance: 1
   airControlSpeed: 5
   airLerpSpeed: 3
   tiltAmplitude: 20
   tiltLerpSpeed: 1
   maxFallSpeed: 20
-  remainingGravityPercentWhenOpened: 45
+  remainingGravityPercentWhenOpened: 50
   additionalForwardPush: 4.5
   renderer: {fileID: 8280727820858426847}
   flapForce: 5
@@ -131,8 +132,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   preset: {fileID: 11400000, guid: 74ffa408cebb57e4e91421d8d63632d2, type: 2}
-  groundCheckRange: 1
-  legsOffset: {x: 0, y: 0.31, z: 0}
+  groundCheckOffset: 0.5
+  isFlattened: 0
   rigidbody: {fileID: 0}
   targetDirection: {x: 0, y: 0, z: 0}
   isImmerged: 0
