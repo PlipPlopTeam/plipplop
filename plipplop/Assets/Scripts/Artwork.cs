@@ -22,6 +22,17 @@ public class Artwork : Activity
 		base.StopSpectate(npc);
 	}
 
+	public override void Update()
+	{
+		base.Update();
+		
+
+		foreach (var _s  in spectators)
+		{
+			_s.agentMovement.OrientToward(transform.position);
+		}
+	}
+
 
 #if UNITY_EDITOR
 	public override void OnDrawGizmosSelected()
