@@ -173,7 +173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   head: {fileID: 8958451676656578186}
   adjustment: {x: 0, y: 90, z: 0}
-  angleMax: 80
+  angleMax: 170
   speed: 10
   isFocused: 0
 --- !u!114 &2459333794845294712
@@ -190,8 +190,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settings:
     offset: {x: 0, y: 2.2, z: 0}
-    fieldOfViewAngle: 145
-    range: 7
+    fieldOfViewAngle: 170
+    range: 10
   multiplier: 1
 --- !u!114 &817710063433153459
 MonoBehaviour:
@@ -239,6 +239,8 @@ MonoBehaviour:
   animator: {fileID: 0}
   followingPath: 0
   chaseTarget: {fileID: 0}
+  chaseTargetPosition: {x: 0, y: 0, z: 0}
+  orientation: {x: 0, y: 0, z: 0}
 --- !u!114 &1215592124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -309,9 +311,9 @@ MonoBehaviour:
   food: {fileID: 0}
   feeder: {fileID: 0}
   settings: {fileID: 11400000, guid: 58c20c3cc224a9f418a2620c5b6998f5, type: 2}
-  graph: {fileID: 11400000, guid: 3b02aadeed8e1054bbeecee174fb7b6b, type: 2}
+  graph: {fileID: 11400000, guid: e19fc021a67bc4e499e985c4e7c9b319, type: 2}
   hasWaited: 0
-  throwForce: 20000
+  throwForce: 10000
   reassureTime: 3
 --- !u!1001 &7774208547089620269
 PrefabInstance:
@@ -325,11 +327,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SK_TheReef
       objectReference: {fileID: 0}
-    - target: {fileID: -6057140222963153312, guid: 3c2023dcf43ce38489ee148459827f61,
+    - target: {fileID: 758943704907644298, guid: 3c2023dcf43ce38489ee148459827f61,
         type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 11f31ad7ded5bfc40ac42b9448c4c484, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -5585639385825273947, guid: 3c2023dcf43ce38489ee148459827f61,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -405,22 +407,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -149068344433273450, guid: 3c2023dcf43ce38489ee148459827f61,
+    - target: {fileID: -6057140222963153312, guid: 3c2023dcf43ce38489ee148459827f61,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 2100000, guid: 2e428d4b7a297334fa6de7e168c40962, type: 2}
-    - target: {fileID: 758943704907644298, guid: 3c2023dcf43ce38489ee148459827f61,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2632603552432847624, guid: 3c2023dcf43ce38489ee148459827f61,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -2590881456220195038, guid: 3c2023dcf43ce38489ee148459827f61,
+      objectReference: {fileID: 9100000, guid: 11f31ad7ded5bfc40ac42b9448c4c484, type: 2}
+    - target: {fileID: -149068344433273450, guid: 3c2023dcf43ce38489ee148459827f61,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 

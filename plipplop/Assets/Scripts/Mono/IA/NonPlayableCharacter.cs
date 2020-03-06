@@ -90,14 +90,13 @@ public class NonPlayableCharacter : MonoBehaviour
 		}
 		graph = Instantiate(graph);
 		graph.Load(this);
-
 		EquipOutfit();
 	}
 
 	public void RememberPlayerFor(float time)
 	{		
 		rPlayer = player;
-		StartCoroutine(WaitAndStopExposing(time));
+		StartCoroutine(WaitAndForgetRememberedPlayer(time));
 	}
 	IEnumerator WaitAndForgetRememberedPlayer(float time)
 	{
@@ -114,16 +113,22 @@ public class NonPlayableCharacter : MonoBehaviour
 		show.full = true;
 		show.working = true;
 		show.spectatorRange = range;
-		StartCoroutine(WaitAndStopExposing(time));
+		WaitAndDo(time, () => {
+			if (show != null)
+			{
+				show.Dismantle();
+				show = null;
+			}
+		});
 	}
-	IEnumerator WaitAndStopExposing(float time)
+	public void WaitAndDo(float time, System.Action action)
+	{
+		StartCoroutine(WaitAndDoThing(time, action));
+	}
+	IEnumerator WaitAndDoThing(float time, System.Action action)
 	{
 		yield return new WaitForSeconds(time);
-		if(show != null)
-		{
-			show.Dismantle();
-			show = null;
-		}
+		action.Invoke();
 	}
 
 	public void EquipOutfit()

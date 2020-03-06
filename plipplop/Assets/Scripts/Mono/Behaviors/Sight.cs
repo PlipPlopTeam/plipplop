@@ -13,7 +13,8 @@ public class Sight : MonoBehaviour
 	public Settings settings;
 	[Range(0f, 1f)] public float multiplier = 1f;
 
-	public GameObject[] Scan(){
+	public GameObject[] Scan()
+	{
         return Scan<GameObject>();
     }
 
@@ -27,35 +28,39 @@ public class Sight : MonoBehaviour
         sphereHits = Physics.SphereCastAll(headPosition, settings.range * multiplier, transform.forward, settings.range);
         for(int i = 0; i < sphereHits.Length; i++)
         {
-            // Checks if the object is in front of the sight
-            Vector3 direction = sphereHits[i].transform.position - headPosition;
-            float angle = Vector3.Angle(direction, transform.forward);
-            if(angle < settings.fieldOfViewAngle * 0.5f * multiplier)
-            {
-
-                // Check if an object is hiding the seen object from the sight
-                RaycastHit[] rayHits;
-                rayHits = Physics.RaycastAll(headPosition, direction, settings.range * multiplier, 5, QueryTriggerInteraction.Ignore);
-
-                bool seen = true;
-                foreach(RaycastHit hit in rayHits)
-                {
-                    if(hit.transform != transform && hit.transform != sphereHits[i].transform) 
-                    {
-                        if(Vector3.Distance(headPosition, sphereHits[i].transform.position) > Vector3.Distance(headPosition, hit.point)) seen = false;
-                    }
-                }
-                if(seen) 
-                {
-                    if(sphereHits[i].transform.gameObject.GetComponent<T>() != null)
-                    {
-                        objects.Add(sphereHits[i].transform.gameObject.GetComponent<T>());
-                    }
-                }
-            }
+			if(See(sphereHits[i].transform.gameObject) && sphereHits[i].transform.gameObject.GetComponent<T>() != null)
+			{
+				objects.Add(sphereHits[i].transform.gameObject.GetComponent<T>());
+			}
         }
         return objects.ToArray();
     }
+
+	public bool See(GameObject o)
+	{
+		Vector3 headPosition = transform.position + settings.offset;
+		Vector3 direction = o.transform.position - headPosition;
+		float angle = Vector3.Angle(direction, transform.forward);
+		if (angle < settings.fieldOfViewAngle * 0.5f * multiplier)
+		{
+
+			// Check if an object is hiding the seen object from the sight
+			RaycastHit[] rayHits;
+			rayHits = Physics.RaycastAll(headPosition, direction, settings.range * multiplier, 5, QueryTriggerInteraction.Ignore);
+
+			bool seen = true;
+			foreach (RaycastHit hit in rayHits)
+			{
+				if (hit.transform != transform && !o.transform.IsYourselfCheck(hit.transform))
+				{
+					if (Vector3.Distance(headPosition, o.transform.position) > Vector3.Distance(headPosition, hit.point)) seen = false;
+				}
+			}
+
+			return seen;
+		}
+		else return false;
+	}
 
 #if UNITY_EDITOR
     void OnDrawGizmosSelected()

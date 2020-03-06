@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d15dc61630091584b856659139a87c78, type: 3}
-  m_Name: Reef_Graph_Data
+  m_Name: Reef_Graph_Data_OLD
   m_EditorClassIdentifier: 
   states:
   - name: Reef Venturing
@@ -18,17 +18,17 @@ MonoBehaviour:
     stateId: 20
     exits: 25000000
     hasExits: 01
-  - name: See Valuable
+  - name: Reef See Valuable
     id: 4
     stateId: 18
     exits: 0f000000
     hasExits: 01
-  - name: Chase Valuable
+  - name: Reef Chase Valuable
     id: 11
     stateId: 13
     exits: 11000000
     hasExits: 01
-  - name: Carry Valuable
+  - name: Reef Carry Valuable
     id: 18
     stateId: 11
     exits: 13000000
@@ -58,16 +58,6 @@ MonoBehaviour:
     stateId: 16
     exits: 29000000
     hasExits: 01
-  - name: Loosing Sight On Valuable
-    id: 43
-    stateId: 23
-    exits: 2c000000
-    hasExits: 01
-  - name: Looking Around
-    id: 47
-    stateId: 24
-    exits: 31000000
-    hasExits: 01
   transitions:
   - id: 2
     disable: 0
@@ -77,6 +67,11 @@ MonoBehaviour:
   - id: 5
     disable: 0
     conditions: 11000000
+    exits: 1600000001000000
+    hasExits: 0101
+  - id: 8
+    disable: 0
+    conditions: 05000000
     exits: 1600000001000000
     hasExits: 0101
   - id: 10
@@ -92,7 +87,7 @@ MonoBehaviour:
   - id: 17
     disable: 0
     conditions: 16000000
-    exits: 1c0000002a000000
+    exits: 1c0000000b000000
     hasExits: 0101
   - id: 19
     disable: 0
@@ -102,7 +97,7 @@ MonoBehaviour:
   - id: 21
     disable: 0
     conditions: 12000000
-    exits: 0400000033000000
+    exits: 0400000008000000
     hasExits: 0101
   - id: 28
     disable: 0
@@ -138,30 +133,5 @@ MonoBehaviour:
     disable: 0
     conditions: 15000000
     exits: 0100000027000000
-    hasExits: 0101
-  - id: 42
-    disable: 0
-    conditions: 23000000
-    exits: 0b0000002b000000
-    hasExits: 0101
-  - id: 44
-    disable: 0
-    conditions: 13000000
-    exits: 2f0000002e000000
-    hasExits: 0101
-  - id: 46
-    disable: 0
-    conditions: 23000000
-    exits: 040000002b000000
-    hasExits: 0101
-  - id: 49
-    disable: 0
-    conditions: 15000000
-    exits: 010000002f000000
-    hasExits: 0101
-  - id: 51
-    disable: 0
-    conditions: 22000000
-    exits: 1600000001000000
     hasExits: 0101
   initialNode: 1

@@ -30,10 +30,11 @@ public class AgentMovement : Walker
 	public System.Action onTargetOffPath;
 	public bool followingPath;
     public Transform chaseTarget;
+	public Vector3 chaseTargetPosition;
     int currentIndexOnPath;
 	NavMeshAgent agent;
 
-	Vector3 orientation;
+	[HideInInspector] public Vector3 orientation;
 	Vector3 rotationLast;
 	Vector3 rotationDelta;
 
@@ -92,12 +93,13 @@ public class AgentMovement : Walker
         agent.speed = value;
     }
     
-    public void Chase(Transform target)
+    public void Chase(Transform target, System.Action onUnreachable = null)
     {
 		ClearEvents();
 		StopFollowingPath();
 		chaseTarget = target;
-    }
+		onTargetOffPath += onUnreachable;
+	}
 
     public void Clear()
     {
@@ -181,7 +183,9 @@ public class AgentMovement : Walker
         {
             if(chaseTarget != null)
             {
-                if(!GoThere(chaseTarget.transform.position))
+				chaseTargetPosition = chaseTarget.transform.position;
+
+				if (!GoThere(chaseTargetPosition))
                 {
                     if(onTargetOffPath != null)
                     {

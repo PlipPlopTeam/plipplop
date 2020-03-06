@@ -25,7 +25,7 @@ namespace Behavior.NPC {
 					Valuable[] valuables = npc.sight.Scan<Valuable>();
 					foreach (Valuable v in valuables)
 					{
-						if (!v.IsCarried() && !v.hidden) npc.valuable = v; break;
+						if (!v.IsCarried() && v.IsVisible()) npc.valuable = v; break;
 					}
 					break;
 				case NonPlayableCharacter.ESubject.ACTIVITY:
