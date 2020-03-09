@@ -25,11 +25,10 @@ public class Artwork : Activity
 	public override void Update()
 	{
 		base.Update();
-		
-
-		foreach (var _s  in spectators)
+		foreach (var s  in spectators)
 		{
-			_s.agentMovement.OrientToward(transform.position);
+			s.agentMovement.OrientToward(transform.position);
+			s.look.FocusOn(transform.position + focusOffset);
 		}
 	}
 
