@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d15dc61630091584b856659139a87c78, type: 3}
-  m_Name: NPC_Graph_Data
+  m_Name: Basic_NPC_Graph_Data
   m_EditorClassIdentifier: 
   states:
   - name: Venturing
@@ -71,7 +71,7 @@ MonoBehaviour:
   - name: Chase Valuable
     id: 6466
     stateId: 13
-    exits: 4a190000
+    exits: 60190000
     hasExits: 01
   - name: Carry Valuable
     id: 6475
@@ -87,6 +87,16 @@ MonoBehaviour:
     id: 6481
     stateId: 6
     exits: 3a190000
+    hasExits: 01
+  - name: Loosing Sight On Valuable
+    id: 6497
+    stateId: 23
+    exits: 63190000
+    hasExits: 01
+  - name: Looking Around
+    id: 6498
+    stateId: 24
+    exits: 64190000
     hasExits: 01
   transitions:
   - id: 6407
@@ -192,7 +202,7 @@ MonoBehaviour:
   - id: 6474
     disable: 0
     conditions: 16000000
-    exits: 4d19000060190000
+    exits: 4d19000006190000
     hasExits: 0101
   - id: 6477
     disable: 0
@@ -242,6 +252,21 @@ MonoBehaviour:
   - id: 6496
     disable: 0
     conditions: 1c000000
-    exits: 0619000042190000
+    exits: 4a19000065190000
+    hasExits: 0101
+  - id: 6499
+    disable: 0
+    conditions: 13000000
+    exits: 6219000061190000
+    hasExits: 0101
+  - id: 6500
+    disable: 0
+    conditions: 15000000
+    exits: 0619000062190000
+    hasExits: 0101
+  - id: 6501
+    disable: 0
+    conditions: 23000000
+    exits: 4219000061190000
     hasExits: 0101
   initialNode: 6406
