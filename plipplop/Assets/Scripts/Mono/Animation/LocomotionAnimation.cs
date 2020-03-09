@@ -33,7 +33,7 @@ public class LocomotionAnimation
         onLegAnimationEnd += legs.onAnimationEnded;
 
 		movementAnimationMagnitude.Add(0f, "Walk");
-		movementAnimationMagnitude.Add(3f, "Run");
+		movementAnimationMagnitude.Add(4f, "Run");
 	}
 
 	public void Update()
