@@ -80,7 +80,11 @@ public class NonPlayableCharacter : MonoBehaviour
 		settings = Instantiate(settings);
 		settings.Load();
 		skeleton.gameObject.transform.localScale = Vector3.one * settings.height / 2;
-		skin.SetBlendShapeWeight(7, settings.GetWeightRatio() * 100f);
+
+		if (skin.sharedMesh.blendShapeCount > 6)
+		{
+			skin.SetBlendShapeWeight(7, settings.GetWeightRatio() * 100f);
+		}
 		stats.Add(EStat.BOREDOM, settings.initialBoredom);
 		stats.Add(EStat.TIREDNESS, settings.initialTiredness);
 		stats.Add(EStat.HUNGER, settings.initialTiredness);
