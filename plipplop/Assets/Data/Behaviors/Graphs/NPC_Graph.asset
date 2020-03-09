@@ -251,13 +251,13 @@ MonoBehaviour:
       x: 2100
       y: 2802.2
       width: 300
-      height: 465
+      height: 515
     optimalWidth: 300
-    optimalHeight: 465
+    optimalHeight: 515
     reroutes: []
     collapse: 0
     previousCollapse: 0
-    s_exitNodes: 4a190000
+    s_exitNodes: 60190000
     s_hasExitNodes: 01
     drawNode: {fileID: 11400000, guid: 3de6cb72c5d54a842957b3d8754294e2, type: 2}
     state: {fileID: 11400000, guid: 79912e4967ec42b40957b207243e7353, type: 2}
@@ -345,6 +345,48 @@ MonoBehaviour:
     s_hasExitNodes: 00
     drawNode: {fileID: 11400000, guid: 3de6cb72c5d54a842957b3d8754294e2, type: 2}
     state: {fileID: 0}
+    onFixedList: []
+    onUpdateList: []
+    onEnterList: []
+    onExitList: []
+  - windowTitle: State - Loosing Sight On Valuable
+    id: 6497
+    windowRect:
+      serializedVersion: 2
+      x: 3347.6
+      y: 2336.3997
+      width: 300
+      height: 365
+    optimalWidth: 300
+    optimalHeight: 365
+    reroutes: []
+    collapse: 0
+    previousCollapse: 0
+    s_exitNodes: 63190000
+    s_hasExitNodes: 01
+    drawNode: {fileID: 11400000, guid: 3de6cb72c5d54a842957b3d8754294e2, type: 2}
+    state: {fileID: 11400000, guid: b683d8dabfba8e3489d2a4852b9e3fbd, type: 2}
+    onFixedList: []
+    onUpdateList: []
+    onEnterList: []
+    onExitList: []
+  - windowTitle: State - Looking Around
+    id: 6498
+    windowRect:
+      serializedVersion: 2
+      x: 4009.6
+      y: 2484.3997
+      width: 300
+      height: 415
+    optimalWidth: 300
+    optimalHeight: 415
+    reroutes: []
+    collapse: 0
+    previousCollapse: 0
+    s_exitNodes: 64190000
+    s_hasExitNodes: 01
+    drawNode: {fileID: 11400000, guid: 3de6cb72c5d54a842957b3d8754294e2, type: 2}
+    state: {fileID: 11400000, guid: fe1692eb0ac64b64289e1e1a75b3194b, type: 2}
     onFixedList: []
     onUpdateList: []
     onEnterList: []
@@ -736,7 +778,7 @@ MonoBehaviour:
     windowRect:
       serializedVersion: 2
       x: 2489.8003
-      y: 2897.4019
+      y: 2799.4019
       width: 200
       height: 62
     optimalWidth: 200
@@ -744,7 +786,7 @@ MonoBehaviour:
     reroutes: []
     collapse: 0
     previousCollapse: 0
-    s_exitNodes: 4d19000060190000
+    s_exitNodes: 4d19000006190000
     s_hasExitNodes: 0101
     drawNode: {fileID: 11400000, guid: 02d1192eec6276044a75147866515bb8, type: 2}
     conditions:
@@ -926,8 +968,8 @@ MonoBehaviour:
     id: 6496
     windowRect:
       serializedVersion: 2
-      x: 2455.4
-      y: 3009.7996
+      x: 2465.4
+      y: 2952.7996
       width: 200
       height: 62
     optimalWidth: 200
@@ -935,12 +977,69 @@ MonoBehaviour:
     reroutes: []
     collapse: 0
     previousCollapse: 0
-    s_exitNodes: 0619000042190000
+    s_exitNodes: 4a19000065190000
     s_hasExitNodes: 0101
     drawNode: {fileID: 11400000, guid: 02d1192eec6276044a75147866515bb8, type: 2}
     conditions:
     - {fileID: 11400000, guid: 116e29e1d22aa8747ad39ed6d44324e6, type: 2}
     disable: 0
-  idCount: 6497
+  - windowTitle: Condition
+    id: 6499
+    windowRect:
+      serializedVersion: 2
+      x: 3751.6
+      y: 2486.3997
+      width: 200
+      height: 62
+    optimalWidth: 200
+    optimalHeight: 62
+    reroutes: []
+    collapse: 0
+    previousCollapse: 0
+    s_exitNodes: 6219000061190000
+    s_hasExitNodes: 0101
+    drawNode: {fileID: 11400000, guid: 02d1192eec6276044a75147866515bb8, type: 2}
+    conditions:
+    - {fileID: 11400000, guid: aae45e85b089ccc47800950e5b229fd0, type: 2}
+    disable: 0
+  - windowTitle: Condition
+    id: 6500
+    windowRect:
+      serializedVersion: 2
+      x: 4357.2
+      y: 2523.7996
+      width: 200
+      height: 62
+    optimalWidth: 200
+    optimalHeight: 62
+    reroutes: []
+    collapse: 0
+    previousCollapse: 0
+    s_exitNodes: 0619000062190000
+    s_hasExitNodes: 0101
+    drawNode: {fileID: 11400000, guid: 02d1192eec6276044a75147866515bb8, type: 2}
+    conditions:
+    - {fileID: 11400000, guid: 8f4c68f0d4dcd5341a57e41c73c07984, type: 2}
+    disable: 0
+  - windowTitle: Condition
+    id: 6501
+    windowRect:
+      serializedVersion: 2
+      x: 2873.2
+      y: 2706.7996
+      width: 200
+      height: 62
+    optimalWidth: 200
+    optimalHeight: 62
+    reroutes: []
+    collapse: 0
+    previousCollapse: 0
+    s_exitNodes: 4219000061190000
+    s_hasExitNodes: 0101
+    drawNode: {fileID: 11400000, guid: 02d1192eec6276044a75147866515bb8, type: 2}
+    conditions:
+    - {fileID: 11400000, guid: 912f9d1a0786f20498f6536eaf3e6768, type: 2}
+    disable: 0
+  idCount: 6502
   initialStateID: 6406
-  editorScrollPosition: {x: 2052.5999, y: 2570.5994}
+  editorScrollPosition: {x: 1978.0002, y: 2225.3987}
