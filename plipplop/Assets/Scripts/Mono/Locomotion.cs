@@ -7,7 +7,7 @@ public class Locomotion : Walker
 {
     public LocomotionPreset preset;
 	public float groundCheckOffset = 0.5f;
-    private float groundCheckRange = 0.1f;
+    private float groundCheckRange = 0.05f;
 	[HideInInspector] public float legsHeight { get { return 1f; } }
 	private Vector3 legsOffset = Vector3.up * 0.5f;
 	[HideInInspector] public bool isFlattened = false;
