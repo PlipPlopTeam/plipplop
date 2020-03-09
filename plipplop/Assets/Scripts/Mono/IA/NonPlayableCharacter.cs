@@ -46,6 +46,7 @@ public class NonPlayableCharacter : MonoBehaviour
     ICarryable carryableToCollect;
 	private float waitTimer;
 	private bool endWait;
+	[HideInInspector] public Vector3 spawnPosition;
 	[HideInInspector] public bool hasWaited;
 	public System.Action onWaitEnded;
 	public System.Action onCollect;
@@ -68,6 +69,8 @@ public class NonPlayableCharacter : MonoBehaviour
 		// Load Character Cloth Slots
 		foreach (Cloth.ESlot suit in (Cloth.ESlot[])Cloth.ESlot.GetValues(typeof(Cloth.ESlot)))
 			clothes.Add(suit, null);
+
+		spawnPosition = transform.position;
 	}
 
 	public void Start()
