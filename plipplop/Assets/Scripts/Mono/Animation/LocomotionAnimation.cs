@@ -17,6 +17,7 @@ public class LocomotionAnimation
     LegAnimator legs;
     Transform visualsTransform;
     Transform headDummy;
+	CollisionEventTransmitter groundedTrigger;
     bool areLegsRetracted = false;
     float legsGrowSpeed = 10f;
 
@@ -128,7 +129,30 @@ public class LocomotionAnimation
 
         legs.transform.localPosition = legsOffset;
         headDummy = legs.transform.GetChild(0); // Head position, symbolized by an empty object
-    }
+
+		/*
+		GameObject trigger = new GameObject();
+		trigger.transform.SetParent(legs.transform);
+		trigger.transform.localPosition = Vector3.zero;
+		trigger.name = "GroundedTrigger";
+		SphereCollider sc = trigger.AddComponent<SphereCollider>();
+		sc.isTrigger = true;
+		sc.radius = 0.05f;
+		sc.center = new Vector3(0f, -sc.radius, 0f);
+		groundedTrigger = trigger.AddComponent<CollisionEventTransmitter>();
+
+
+		groundedTrigger.onTriggerEnter += (other) =>
+		{
+			isJumping = true;
+		};
+
+		groundedTrigger.onTriggerExit += (other) =>
+		{
+			isJumping = false;
+		};
+		*/
+	}
 
     void SetLegHeight()
     {

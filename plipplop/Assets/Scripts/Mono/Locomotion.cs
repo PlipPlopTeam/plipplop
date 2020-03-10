@@ -6,8 +6,8 @@ using UnityEngine;
 public class Locomotion : Walker
 {
     public LocomotionPreset preset;
-	public float groundCheckOffset = 0.5f;
-    private float groundCheckRange = 0.05f;
+	private float groundCheckOffset = 0.5f;
+	private float groundCheckRange = 0.25f;
 	[HideInInspector] public float legsHeight { get { return 1f; } }
 	private Vector3 legsOffset = Vector3.up * 0.5f;
 	[HideInInspector] public bool isFlattened = false;
@@ -57,8 +57,9 @@ public class Locomotion : Walker
         rigidbody = parentController.rigidbody;
         locomotionAnimation.rigidbody = rigidbody;
 
-        if (!AreLegsRetracted()) {
-            locomotionAnimation.isJumping = !IsGrounded();
+        if (!AreLegsRetracted())
+		{
+            locomotionAnimation.isJumping = !IsGrounded(0.5f);
             locomotionAnimation.legsOffset = legsOffset;
             locomotionAnimation.legsHeight = legsHeight;
             locomotionAnimation.Update();
@@ -190,7 +191,8 @@ public class Locomotion : Walker
         RaycastHit[] hits = RaycastAllToGround(rangeMultiplier);
         foreach(RaycastHit h in hits)
         {
-            if (!transform.IsYourselfCheck(h.transform) && !h.collider.isTrigger) {
+            if (!transform.IsYourselfCheck(h.transform) && !h.collider.isTrigger)
+			{
                 if (h.normal.y >= 1 - (preset.maxWalkableSteepness / 100f)) {
                     if (hasJumped && rigidbody != null && rigidbody.velocity.y < 0f) {
                         hasJumped = false; // Put HasJumped to false only if not grounded and falling
@@ -214,7 +216,7 @@ public class Locomotion : Walker
     public RaycastHit[] RaycastAllToGround(float rangeMultiplier = 1f)
     {
 		Vector3 os = GetCheckOffset();
-		return Physics.RaycastAll(transform.position + transform.TransformDirection(os), groundCheckDirection, 1f + groundCheckRange * rangeMultiplier);
+		return Physics.RaycastAll(transform.position - transform.TransformDirection(os), groundCheckDirection, groundCheckOffset + groundCheckRange * rangeMultiplier);
 	}
 
     public Vector3? GetGroundNormal()
