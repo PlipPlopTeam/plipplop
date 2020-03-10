@@ -44,7 +44,8 @@ public class LocomotionAnimation
         SetLegHeight();
 
 
-        if (isFlattened) {
+        if (isFlattened)
+		{
             legs.gameObject.SetActive(true);
             legs.PlayOnce("Flat");
         }

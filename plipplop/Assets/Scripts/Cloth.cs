@@ -43,15 +43,25 @@ public class Cloth : MonoBehaviour
 		}
 		renderer.sharedMaterials = mats;
 	}
-	public virtual void SetAlbedos(Dictionary<string, Texture> textures) // TODO : Should become an array at some point
+	public virtual void SetPatern(ClothPaternPalette.Info info) // TODO : Should become an array at some point
 	{
 		Material[] mats = renderer.sharedMaterials;
 		for (int i = 0; i < mats.Length; i++)
 		{
-			foreach (KeyValuePair<string, Texture> c in textures)
+			Vector4 vec = new Vector4();
+			float tilling = 1f;
+			if(info.patern.tillingRange.x == info.patern.tillingRange.y)
 			{
-				mats[i].SetTexture(c.Key, c.Value);
+				tilling = info.patern.tillingRange.x;
 			}
+			else
+			{
+				tilling = Random.Range(info.patern.tillingRange.x, info.patern.tillingRange.y);
+			}
+			vec.x = vec.y = tilling;
+
+			mats[i].SetTexture(info.textureProperty, info.patern.texture);
+			mats[i].SetVector(info.tillingProperty, vec);
 		}
 		renderer.sharedMaterials = mats;
 	}
@@ -92,8 +102,9 @@ public class Cloth : MonoBehaviour
 		Material[] mats = renderer.sharedMaterials;
 		for (int i = 0; i < mats.Length; i++) mats[i] = Instantiate(mats[i]);
 		renderer.sharedMaterials = mats;
+
 		SetColors(data.GetColors());
-		//SetAlbedos(data.GetTextures());
+		SetPatern(data.GetPaternInfo());
 	}
 
 	public virtual void Attach(Skeleton target)

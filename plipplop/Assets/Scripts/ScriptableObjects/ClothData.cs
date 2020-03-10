@@ -4,14 +4,6 @@ using System.Collections.Generic;
 [CreateAssetMenu(menuName="ScriptableObjects/Cloth")]
 public class ClothData : ScriptableObject
 {
-	/*
-	[System.Serializable]
-	public class TextureModification
-	{
-		public string propertyName;
-		public List<Texture> textures;
-	}
-	*/
 	[System.Serializable]
 	public class ColorModification
 	{
@@ -24,6 +16,7 @@ public class ClothData : ScriptableObject
 	public Cloth.ESlot slot;
 	public List<Cloth.ESlot> bannedSlot;
 	public ColorModification color = new ColorModification();
+	public ClothPaternPalette paternPalette;
 
 	public Dictionary<string, Color> GetColors()
 	{
@@ -34,6 +27,18 @@ public class ClothData : ScriptableObject
 		Dictionary<string, Color> result = new Dictionary<string, Color>();
 		for (int i = 0; i < colors.Length; i++) result.Add(color.properties[i], colors[i]);
 		return result;
+	}
+
+	public ClothPaternPalette.Info GetPaternInfo()
+	{
+		ClothPaternPalette.Info info = new ClothPaternPalette.Info();
+		if(paternPalette != null)
+		{
+			info.patern = paternPalette.Get();
+			info.textureProperty = paternPalette.texturePropertyName;
+			info.tillingProperty = paternPalette.tillingPropertyName;
+		}
+		return info;
 	}
 
 	//public TextureModification[] textures;

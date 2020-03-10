@@ -157,11 +157,11 @@ public class Locomotion : Walker
             velocity.x = Mathf.Lerp(rigidbody.velocity.x, velocity.x, anyControlAmount);
             velocity.z = Mathf.Lerp(rigidbody.velocity.z, velocity.z, anyControlAmount);
 
-            // Apply changes
-            rigidbody.velocity = velocity * speedMultiplier;
+			// Apply changes
+			rigidbody.velocity = new Vector3(velocity.x * speedMultiplier, velocity.y, velocity.z * speedMultiplier);
 
-            // Save last direction
-            lastDirection = direction;
+			// Save last direction
+			lastDirection = direction;
 
             // Animation
             if (rigidbody.velocity.normalized.magnitude > 0 && direction.magnitude > 0f) {

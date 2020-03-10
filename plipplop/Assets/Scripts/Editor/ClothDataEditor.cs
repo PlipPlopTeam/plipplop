@@ -37,6 +37,7 @@ public class ClothDataEditor : Editor
 		SerializedProperty prefab = serializedObject.FindProperty("prefab");
 		SerializedProperty color = serializedObject.FindProperty("color");
 		SerializedProperty bannedSlot = serializedObject.FindProperty("bannedSlot");
+		SerializedProperty paternPalette = serializedObject.FindProperty("paternPalette");
 
 		if (GUILayout.Button("Preview", button))
 		{
@@ -51,6 +52,7 @@ public class ClothDataEditor : Editor
 		EditorGUILayout.PropertyField(name);
 		EditorGUILayout.PropertyField(prefab);
 		EditorGUILayout.PropertyField(slot);
+
 
 		EditorGUILayout.LabelField("Banned Slot", title);
 		EditorGUILayout.HelpBox("Slots to unequip or banned if this cloth is equiped", MessageType.Info);
@@ -102,6 +104,14 @@ public class ClothDataEditor : Editor
 				EditorGUILayout.HelpBox("You need to specify some properties names, or the palette wont have any effect.", MessageType.Warning);
 			}
 		}
+
+		EditorGUILayout.LabelField("Paterns", title);
+		if (paternPalette != null)
+		{
+			EditorGUILayout.HelpBox("Color Modifier also controls the symbol color of the patern!", MessageType.Info);
+		}
+		EditorGUILayout.PropertyField(paternPalette);
+
 		serializedObject.ApplyModifiedProperties();
 	}
 
