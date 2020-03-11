@@ -94,7 +94,6 @@ public class LegAnimator : MonoBehaviour
 
 			if (frameIndex >= currentAnimation.meshes.Count)
 			{
-				Debug.Log(currentAnimation.name + " has reached end.");
 				if (onAnimationEnded != null) onAnimationEnded.Invoke();
 				if (onNextAnimationEnded != null)
 				{
