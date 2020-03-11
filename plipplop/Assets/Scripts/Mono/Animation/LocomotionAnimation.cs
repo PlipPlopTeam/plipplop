@@ -6,18 +6,18 @@ public class LocomotionAnimation
 {
     public float legsHeight;
     public Vector3 legsOffset;
-    public bool isJumping;
-    public bool isWalking;
+	public bool grounded;
+	public bool landed = true;
+	public bool jumped;
+	public bool isWalking;
     public bool isFlattened;
-    public System.Action onLegAnimationEnd;
-
+	public System.Action onLegAnimationEnd;
 	public Rigidbody rigidbody;
 	Transform parentTransform;
     BoxCollider legsCollider;
     LegAnimator legs;
     Transform visualsTransform;
     Transform headDummy;
-	CollisionEventTransmitter groundedTrigger;
     bool areLegsRetracted = false;
     float legsGrowSpeed = 10f;
 
@@ -30,50 +30,65 @@ public class LocomotionAnimation
         parentTransform = legsCollider.transform;
         this.visualsTransform = visualsTransform;
         GrowLegs();
-
         onLegAnimationEnd += legs.onAnimationEnded;
-
-		movementAnimationMagnitude.Add(0f, "Walk");
+		movementAnimationMagnitude.Add(0f, "Idle");
+		movementAnimationMagnitude.Add(0.25f, "Walk");
 		movementAnimationMagnitude.Add(4f, "Run");
 	}
 
 	public void Update()
     {
         if (Game.i.player.GetCurrentController() == null) return;
-
         legs.transform.localPosition = legsOffset - Vector3.up*(legsHeight);
         SetLegHeight();
-
 
         if (isFlattened)
 		{
             legs.gameObject.SetActive(true);
-            legs.PlayOnce("Flat");
+			legs.PlayOnce("Flat");
         }
-        else if (isJumping)
+        else if (!grounded)
         {
-            legs.PlayOnce("Jump");
-        }
+			if(!jumped)
+			{
+				jumped = true;
+				landed = false;
+
+				this.legs.speed = 10f;
+				legs.PlayOnce("Jump", () => {
+					this.legs.speed = 1f;
+					this.legs.PlayOnce("Air");
+				});
+			}
+		}
         else
         {
-			if (isWalking)
+			if(jumped)
+			{
+				jumped = false;
+
+				legs.speed = 1f;
+				legs.PlayOnce("Land", () => {
+					this.landed = true;
+				});
+			}
+			else if (landed)
 			{
 				PlayAnimation(new Vector2(rigidbody.velocity.x, rigidbody.velocity.z).magnitude);
-			}
-			else
-			{
-				legs.PlayOnce("Idle");
 			}
         }
     }
 
 	public void PlayAnimation(float hVelocity)
 	{
-		string animName = "Walk";
+		string animName = "Idle";
 		foreach (KeyValuePair<float, string> entry in movementAnimationMagnitude)
 		{
 			if(hVelocity > entry.Key) animName = entry.Value;
 		}
+		if (animName != "Idle") legs.speed = Mathf.Clamp(hVelocity/2, 0.5f, 2f);
+		else legs.speed = 1f;
+
 		legs.PlayOnce(animName);
 	}
 
@@ -144,12 +159,12 @@ public class LocomotionAnimation
 
 		groundedTrigger.onTriggerEnter += (other) =>
 		{
-			isJumping = true;
+			jumped = true;
 		};
 
 		groundedTrigger.onTriggerExit += (other) =>
 		{
-			isJumping = false;
+			jumped = false;
 		};
 		*/
 	}

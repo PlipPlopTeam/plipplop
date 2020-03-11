@@ -5,18 +5,21 @@ using UnityEngine;
 
 public class LegAnimator : MonoBehaviour
 {
-    
+    [Header("Assets")]
     public List<MeshFlipbook> _animations;
-    public MeshFlipbook currentAnimation;
+	[Header("Settings")]
+	public MeshFlipbook currentAnimation;
     public MeshFilter meshFilter;
     public MeshRenderer meshRenderer;
     public Action onAnimationEnded;
+	public Action onNextAnimationEnded;
 
-    Dictionary <string, MeshFlipbook> animations = new Dictionary<string, MeshFlipbook>();
+	Dictionary<string, MeshFlipbook> animations = new Dictionary<string, MeshFlipbook>();
     Coroutine animCoroutine;
     Transform headTransform;
     Transform movementTarget = null;
     Vector3 movementTargetOrigin;
+	public float speed = 1f;
 
     private void Awake()
     {
@@ -24,81 +27,108 @@ public class LegAnimator : MonoBehaviour
         headTransform.SetParent(transform);
         headTransform.localPosition = Vector3.zero;
 
-        foreach (var _anim in _animations) {
+        foreach (var _anim in _animations)
+		{
             if (!animations.ContainsKey(_anim.animationName)) animations.Add(_anim.animationName, _anim);
         }
     }
 
-    public string GetCurrentAnimation()
+	public void Reset()
+	{
+		//speed = 1f;
+		timer = 0f;
+		frameIndex = 0;
+		playing = false;
+	}
+
+	public string GetCurrentAnimation()
     {
         return currentAnimation == null ? null : currentAnimation.animationName;
     }
     
-    public void PlayOnce(string animationName)
+    public void PlayOnce(string animationName, Action ended = null)
     {
-        if (GetCurrentAnimation() != animationName) {
-            Play(animationName);
-        }
-    }
-    
-    public void Play(string animationName)
-    {
+        if (GetCurrentAnimation() != animationName) Play(animationName, ended);
+
+	}
+
+	public void Play(string animationName, Action ended = null)
+	{
         movementTarget = null;
         MeshFlipbook _anim;
-        try {
+        try
+		{
             _anim = animations[animationName];
         }
-        catch (KeyNotFoundException) {
+        catch (KeyNotFoundException)
+		{
             Debug.LogWarning("!! Animation " + animationName + " doesn't exist in flipbook " + this + " or the name is incorrect");
             Debug.LogWarning("!! List of existing animations: "+string.Join(",", animations.Keys));
             return;
         }
+		onNextAnimationEnded = null;
+		onNextAnimationEnded += ended;
+		currentAnimation = _anim;
+		Reset();
+		playing = true;
+	}
 
-        currentAnimation = _anim;
-        SetAnimation();
-    }
-    
-    void SetAnimation( )
-    {
-        if (animCoroutine != null)
-        {
-            StopCoroutine(animCoroutine);
-        }
-        if (isActiveAndEnabled) {
-            animCoroutine = StartCoroutine(AnimationPlaying());
-        }
-    }
-    
-    private IEnumerator AnimationPlaying()
-    {
-        int _frameIndex = 0;
-        while (true)
-        {    
-            MeshFlipbook.MeshFrame _frame = currentAnimation.meshes[_frameIndex];
-            
-            meshFilter.mesh = _frame.mesh;
-            headTransform.localPosition = _frame.position;
-            headTransform.localEulerAngles = _frame.euler;
-            headTransform.localScale = _frame.scale;
-            meshRenderer.sharedMaterial = _frame.mat;
+	float timer = 0f;
+	int frameIndex = 0;
+	bool playing = false;
+	void Update()
+	{
+		if (!playing) return;
 
-            if (_frame.gameEffect != string.Empty)
-            {
-                Pyromancer.PlayGameEffect(_frame.gameEffect, transform.position+_frame.gameEffectOffset);
-            }
+		if (timer > 0) timer -= Time.deltaTime;
+		else
+		{
+			Frame(frameIndex);
 
-            if (movementTarget) transform.position = Vector3.Lerp(movementTargetOrigin, movementTarget.position, (float)_frameIndex / (currentAnimation.meshes.Count-1));
+			if(movementTarget)
+			{
+				transform.position = Vector3.Lerp(movementTargetOrigin, movementTarget.position, (float)frameIndex / (currentAnimation.meshes.Count - 1));
+			}
 
-            yield return new WaitForSeconds(1/currentAnimation.fps);
-            _frameIndex++;
-            
-            if (_frameIndex >= currentAnimation.meshes.Count && !currentAnimation.loop) {
-                onAnimationEnded.Invoke();
-                yield break;
-            }
-            _frameIndex = _frameIndex % currentAnimation.meshes.Count;
-        }
-    }
+			frameIndex++;
+
+			if (frameIndex >= currentAnimation.meshes.Count)
+			{
+				Debug.Log(currentAnimation.name + " has reached end.");
+				if (onAnimationEnded != null) onAnimationEnded.Invoke();
+				if (onNextAnimationEnded != null)
+				{
+					onNextAnimationEnded.Invoke();
+					onNextAnimationEnded = null;
+				}
+
+				if (currentAnimation.loop) frameIndex = 0;
+				else playing = false;
+			}
+
+			//frameIndex = frameIndex % currentAnimation.meshes.Count;
+			timer = (1/currentAnimation.fps) * 1/speed;
+		}
+	}
+
+	public void Frame(int index)
+	{
+		if(currentAnimation == null 
+		|| index < 0 
+		|| index > currentAnimation.meshes.Count) return;
+
+		MeshFlipbook.MeshFrame f = currentAnimation.meshes[index];
+		meshFilter.mesh = f.mesh;
+		headTransform.localPosition = f.position;
+		headTransform.localEulerAngles = f.euler;
+		headTransform.localScale = f.scale;
+		meshRenderer.sharedMaterial = f.mat;
+
+		if (f.gameEffect != string.Empty)
+		{
+			Pyromancer.PlayGameEffect(f.gameEffect, transform.position + f.gameEffectOffset);
+		}
+	}
 
     public void MoveTo(Transform tr)
     {
