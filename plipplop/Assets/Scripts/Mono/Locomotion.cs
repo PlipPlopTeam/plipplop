@@ -59,8 +59,8 @@ public class Locomotion : Walker
 
         if (!AreLegsRetracted())
 		{
-            locomotionAnimation.isJumping = !IsGrounded(0.5f);
-            locomotionAnimation.legsOffset = legsOffset;
+			locomotionAnimation.grounded = IsGrounded(0.75f);
+			locomotionAnimation.legsOffset = legsOffset;
             locomotionAnimation.legsHeight = legsHeight;
             locomotionAnimation.Update();
         }
@@ -86,7 +86,7 @@ public class Locomotion : Walker
     public void ExtendLegs()
     {
 		locomotionAnimation.ExtendLegs();
-        var v = GetBelowSurface();
+        var v = GetBelowSurface(2f);
 
         if (v != null) 
         {
@@ -95,7 +95,7 @@ public class Locomotion : Walker
         else
 		{
             Debug.LogWarning("Could not detect the ground surface when expanding legs from " + gameObject.name);
-            transform.position = new Vector3(transform.position.x, transform.position.y + legsHeight/2f + legsOffset.y, transform.position.z);
+            transform.position = new Vector3(transform.position.x, transform.position.y/* + legsHeight/2f + legsOffset.y*/, transform.position.z);
         }
 
         SoundPlayer.PlayAtPosition("sfx_pop_legs", transform.position);
@@ -103,11 +103,13 @@ public class Locomotion : Walker
 
     public void Move(Vector3 direction)
     {
-        var currentVelocity = Vector3.zero;
+		bool grounded = IsGrounded();
+		Vector3 currentVelocity = Vector3.zero;
+
         if(rigidbody != null)
         {
             currentVelocity = rigidbody.velocity;
-            if(rigidbody.GetHorizontalVelocity().magnitude > 1f && IsGrounded())
+            if(rigidbody.GetHorizontalVelocity().magnitude > 1f && grounded)
                 locomotionAnimation.isWalking = true;
             else
                 locomotionAnimation.isWalking = false;
@@ -127,23 +129,29 @@ public class Locomotion : Walker
         float currentSpeedToDistribute = currentMaxSpeedAmount * preset.maxSpeed;
 
         // If the difference between real velocity and planned velocity is too high, it is likely the player is currently flying against a wall
-        if (!IsGrounded() && currentSpeedToDistribute - currentVelocity.magnitude > 2f) {
+        if (!grounded && currentSpeedToDistribute - currentVelocity.magnitude > 2f) {
             timePressed = 0f;
         }
 
-        float controlAmount = IsGrounded() ? 1f : isImmerged ? preset.waterControl : preset.airControl / 100f;
+        float controlAmount = grounded ? 1f : isImmerged ? preset.waterControl : preset.airControl / 100f;
 
 
         if(rigidbody != null)
         {
+			if(hasJumped && rigidbody.velocity.y < 0f)
+			{
+				hasJumped = false; // Put HasJumped to false only if not grounded and falling
+				rigidbody.velocity -= rigidbody.velocity.y * Vector3.up;
+			}
+
             // Making a virtual stick to avoid the player to stop in the air when stick reaches 0 magnitude
             Vector3 virtualStick = Vector3.Lerp(
                 Vector3.Scale(Vector3.one - Vector3.up, Game.i.aperture.GetCameraTransform().InverseTransformDirection(rigidbody.velocity).normalized),
                 direction,
-                IsGrounded() ? 1f : direction.magnitude
+				grounded ? 1f : direction.magnitude
             ).normalized;
 
-            float frictionMultiplier = (IsGrounded() || isImmerged) ? 1f : 1f-preset.airFriction;
+            float frictionMultiplier = (grounded || isImmerged) ? 1f : 1f-preset.airFriction;
 
             Vector3 velocity =
                 currentSpeedToDistribute * frictionMultiplier * (
@@ -154,7 +162,7 @@ public class Locomotion : Walker
             ;
 
             // Prevents brutal air stops
-            float anyControlAmount = (IsGrounded() || isImmerged) ? Mathf.Lerp(controlAmount, controlAmount * direction.magnitude, 1f- preset.groundFriction) : controlAmount * direction.magnitude;
+            float anyControlAmount = (grounded || isImmerged) ? Mathf.Lerp(controlAmount, controlAmount * direction.magnitude, 1f- preset.groundFriction) : controlAmount * direction.magnitude;
             velocity.x = Mathf.Lerp(rigidbody.velocity.x, velocity.x, anyControlAmount);
             velocity.z = Mathf.Lerp(rigidbody.velocity.z, velocity.z, anyControlAmount);
 
@@ -177,7 +185,7 @@ public class Locomotion : Walker
 
     public void Jump()
     {
-        //                                   v   This one here is a small fix to avoid double-jump. Tweak the value as necessary
+        // This one here is a small fix to avoid double-jump. Tweak the value as necessary
         if((isImmerged || !hasJumped) && rigidbody.velocity.y <= 4) 
         {
             rigidbody.AddForce(Vector3.up * preset.jump * (parentController.gravityMultiplier / 100f), ForceMode.Acceleration);
@@ -191,13 +199,10 @@ public class Locomotion : Walker
         RaycastHit[] hits = RaycastAllToGround(rangeMultiplier);
         foreach(RaycastHit h in hits)
         {
-            if (!transform.IsYourselfCheck(h.transform) && !h.collider.isTrigger)
+            if(!transform.IsYourselfCheck(h.transform) && !h.collider.isTrigger)
 			{
-                if (h.normal.y >= 1 - (preset.maxWalkableSteepness / 100f)) {
-                    if (hasJumped && rigidbody != null && rigidbody.velocity.y < 0f) {
-                        hasJumped = false; // Put HasJumped to false only if not grounded and falling
-                        rigidbody.velocity -= rigidbody.velocity.y * Vector3.up;
-                    }
+                if(h.normal.y >= 1 - (preset.maxWalkableSteepness / 100f))
+				{
                     return true;
                 }
             }
@@ -232,9 +237,9 @@ public class Locomotion : Walker
         return null;
     }
 
-    public Vector3? GetBelowSurface()
+    public Vector3? GetBelowSurface(float multiplier = 1f)
     {
-        RaycastHit[] hits = RaycastAllToGround();
+        RaycastHit[] hits = RaycastAllToGround(multiplier);
 
         foreach (RaycastHit h in hits) {
             if (!transform.IsYourselfCheck(h.transform) && !h.collider.isTrigger) return h.point;

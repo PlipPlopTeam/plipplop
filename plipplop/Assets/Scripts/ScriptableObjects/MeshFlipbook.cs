@@ -18,9 +18,9 @@ public class MeshFlipbook : ScriptableObject
 
         public string gameEffect;
         public Vector3 gameEffectOffset;
-    }
-    
-    public string animationName;
+	}
+
+	public string animationName;
     public List<MeshFrame> meshes;
     public float fps;
     public bool loop = true;

@@ -28,6 +28,10 @@ public class NonPlayableCharacterSettings : ScriptableObject
 	public bool randomColors = false;
 	public ClothData[] clothes;
 
+	[Header("Behavior")]
+	public bool followPath;
+	public string[] favoriteActivities;
+
 	public float GetWeightRatio()
 	{
 		return (10f + weight) / (150f + 10f);
