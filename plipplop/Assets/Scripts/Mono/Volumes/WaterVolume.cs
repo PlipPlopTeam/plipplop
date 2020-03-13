@@ -44,6 +44,11 @@ public class WaterVolume : Volume
             if (con && isNew) {
                 con.SetUnderwater();
             }
+            if (isNew)
+            {
+                // rentre
+                SoundPlayer.Play("sfx_splash");
+            }
         }
     }
 
@@ -55,6 +60,8 @@ public class WaterVolume : Volume
 
             if (outOfWater) {
                 objectsInWater.Remove(rb);
+
+                // sort
 
                 rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y * aboveWaterSpeedReduction, rb.velocity.z);
 
@@ -68,12 +75,12 @@ public class WaterVolume : Volume
 
     public override void OnPlayerEnter(Controller player)
     {
-        //throw new System.NotImplementedException();
+
     }
 
     public override void OnPlayerExit(Controller player)
     {
-        //throw new System.NotImplementedException();
+
     }
 
     private void FixedUpdate()
