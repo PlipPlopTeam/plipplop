@@ -11,9 +11,9 @@ public class KiteActivity : Activity
     {
         base.StartSpectate(npc);
         
-        npc.look.FocusOn(kite.visual.transform);
+        npc.look.FocusOn(kite.visuals.transform);
         
-        npc.agentMovement.OrientToward(kite.visual.transform.position);
+        npc.agentMovement.OrientToward(kite.visuals.transform.position);
 
     }
 
@@ -30,9 +30,9 @@ public class KiteActivity : Activity
         
         user.agentMovement.Stop();
         
-        user.look.FocusOn(kite.visual.transform);
+        user.look.FocusOn(kite.visuals.transform);
 
-        user.agentMovement.OrientToward(kite.visual.transform.position);
+        user.agentMovement.OrientToward(kite.visuals.transform.position);
         
         user.skeleton.Attach(transform, Cloth.ESlot.RIGHT_HAND);
         
@@ -47,11 +47,11 @@ public class KiteActivity : Activity
     {
         base.Update();
         
-        users[0].agentMovement.OrientToward(kite.visual.transform.position);
+        users[0].agentMovement.OrientToward(kite.visuals.transform.position);
 
         foreach (var _s  in spectators)
         {
-            _s.agentMovement.OrientToward(kite.visual.transform.position);
+            _s.agentMovement.OrientToward(kite.visuals.transform.position);
         }
     }
 

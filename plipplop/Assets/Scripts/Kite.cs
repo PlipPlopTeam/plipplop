@@ -42,7 +42,7 @@ public class Kite : Item
     IEnumerator Fly()
     {
         flying = true;
-        visual.transform.parent = null;
+        visuals.transform.parent = null;
         StartCoroutine(UpdateLine());
         
         while (flying)
@@ -65,16 +65,16 @@ public class Kite : Item
 
         while (_y < 1)
         {
-            visual.transform.position = Vector3.Lerp(visual.transform.position, transform.position, _y);
+            visuals.transform.position = Vector3.Lerp(visuals.transform.position, transform.position, _y);
             DrawLine();
             _y += .2f;
             yield return new WaitForSecondsRealtime(.2f);
         }
         
-        visual.transform.SetParent(transform);
+        visuals.transform.SetParent(transform);
 
-        visual.transform.localPosition = Vector3.zero;
-        visual.transform.localEulerAngles = Vector3.zero;
+        visuals.transform.localPosition = Vector3.zero;
+        visuals.transform.localEulerAngles = Vector3.zero;
 
         line.enabled = false;
         
@@ -94,13 +94,13 @@ public class Kite : Item
 
     void SetPosition()
     {
-        visual.transform.position = Vector3.Lerp(visual.transform.position,transform.position + Vector3.up * maxHeight + WindDirection * maxWindDistance +
+        visuals.transform.position = Vector3.Lerp(visuals.transform.position,transform.position + Vector3.up * maxHeight + WindDirection * maxWindDistance +
                                                                            Random.insideUnitSphere * maxRange,.5f);
     }
 
     void SetRotation()
     {
-        visual.transform.up = (visual.transform.position - transform.position).normalized;
+        visuals.transform.up = (visuals.transform.position - transform.position).normalized;
             
         //need rotation toward transform.position
     }
@@ -109,9 +109,9 @@ public class Kite : Item
     {
         for (int i = 0; i < linePointAmount; i++)
         {
-            line.SetPosition(i, new Vector3(Mathf.Lerp(transform.position.x, visual.transform.position.x, (float)i/(linePointAmount-1)),
-                                            Mathf.Lerp(transform.position.y, visual.transform.position.y, lineCurve.Evaluate((float)i/(linePointAmount-1))),
-                                            Mathf.Lerp(transform.position.z, visual.transform.position.z, (float)i/(linePointAmount-1))) );
+            line.SetPosition(i, new Vector3(Mathf.Lerp(transform.position.x, visuals.transform.position.x, (float)i/(linePointAmount-1)),
+                                            Mathf.Lerp(transform.position.y, visuals.transform.position.y, lineCurve.Evaluate((float)i/(linePointAmount-1))),
+                                            Mathf.Lerp(transform.position.z, visuals.transform.position.z, (float)i/(linePointAmount-1))) );
         }
     }
 }
