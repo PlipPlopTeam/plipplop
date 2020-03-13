@@ -30,7 +30,6 @@ public class EmotionRenderer : MonoBehaviour
     Board CreateBoard()
     {
         Board newBoard = new Board();
-
         newBoard.obj = new GameObject();
         newBoard.obj.name = "EmotionBoard";
         // Mesh Renderer

@@ -51,7 +51,7 @@ public class NonPlayableCharacter : MonoBehaviour
 	public System.Action onWaitEnded;
 	public System.Action onCollect;
 
-	void Awake()
+	public void Awake()
 	{
 		skeleton = GetComponentInChildren<Skeleton>();
 		sight = GetComponent<Sight>();
@@ -73,11 +73,9 @@ public class NonPlayableCharacter : MonoBehaviour
 		spawnPosition = transform.position;
 	}
 
-	public void Start()
+	public void Set(NonPlayableCharacterSettings s)
 	{
-		// Loading Settings
-		if (settings == null) settings = Game.i.library.npcLibrary.defaultSettings;
-		settings = Instantiate(settings);
+		settings = Instantiate(s);
 		settings.Load();
 		skeleton.gameObject.transform.localScale = Vector3.one * settings.height / 2;
 
@@ -85,9 +83,18 @@ public class NonPlayableCharacter : MonoBehaviour
 		{
 			skin.SetBlendShapeWeight(7, settings.GetWeightRatio() * 100f);
 		}
-		stats.Add(EStat.BOREDOM, settings.initialBoredom);
-		stats.Add(EStat.TIREDNESS, settings.initialTiredness);
-		stats.Add(EStat.HUNGER, settings.initialTiredness);
+
+		stats.Add(EStat.BOREDOM, 0f);
+		stats.Add(EStat.TIREDNESS, 0f);
+		stats.Add(EStat.HUNGER, 0f);
+	}
+
+	public void Start()
+	{
+		if (settings == null) settings = Game.i.library.npcLibrary.defaultSettings;
+		Set(settings);
+		EquipOutfit();
+
 
 		// Loading Graph
 		if (graph == null)
@@ -97,7 +104,6 @@ public class NonPlayableCharacter : MonoBehaviour
 		}
 		graph = Instantiate(graph);
 		graph.Load(this);
-		EquipOutfit();
 	}
 
 	public void RememberPlayerFor(float time)

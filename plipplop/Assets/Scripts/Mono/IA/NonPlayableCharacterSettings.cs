@@ -17,11 +17,12 @@ public class NonPlayableCharacterSettings : ScriptableObject
 	public Vector2 rangeAge;
 	[Range(0f, 100f)] public float strength = 1f;
 
-
+	/*
 	[Header("Starters")]
 	[Range(0f, 100f)] public float initialBoredom = 50f;
 	[Range(0f, 100f)] public float initialTiredness = 50f;
 	[Range(0f, 100f)] public float initialHunger = 50f;
+	*/
 
 	[Header("Equipments")]
 	public bool autoOutfit = false;
@@ -31,7 +32,11 @@ public class NonPlayableCharacterSettings : ScriptableObject
 	[Header("Behavior")]
 	public bool followPath;
 	public string[] favoriteActivities;
-
+	/*
+#if UNITY_EDITOR
+	public GameObject prefab;
+#endif
+*/
 	public float GetWeightRatio()
 	{
 		return (10f + weight) / (150f + 10f);
