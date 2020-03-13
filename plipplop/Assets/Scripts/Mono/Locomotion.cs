@@ -27,9 +27,9 @@ public class Locomotion : Walker
 
     internal Vector3 groundCheckDirection = Vector3.down;
 
-	public override void ApplyAdherence(float adherence)
+	public override void ApplyModifier(float value)
 	{
-		speedMultiplier = 1f - adherence;
+		speedMultiplier *= value;
 	}
 
 	private void Awake()

@@ -93,7 +93,9 @@ public class NonPlayableCharacter : MonoBehaviour
 	{
 		if (settings == null) settings = Game.i.library.npcLibrary.defaultSettings;
 		Set(settings);
-		Outfit(settings.clothes);
+
+		if(settings.autoOutfit) RandomOutfit();
+		else Outfit(settings.clothes);
 
 		// Loading Graph
 		if (graph == null)
@@ -143,9 +145,13 @@ public class NonPlayableCharacter : MonoBehaviour
 		action.Invoke();
 	}
 
+	public void RandomOutfit()
+	{
+		List<ClothData> outfit = Game.i.library.GetOutfit();
+		foreach (ClothData c in outfit) Equip(c);
+	}
 	public void Outfit(List<ClothData> outfit)
 	{
-		if (outfit.Count == 0) outfit = Game.i.library.GetOutfit();
 		foreach (ClothData c in outfit) Equip(c);
 	}
 

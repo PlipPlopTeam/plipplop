@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Food : Item
 {
@@ -19,6 +17,7 @@ public class Food : Item
     public override void Awake()
     {
         base.Awake();
+		type = EType.FOOD;
         if(data != null) Create(data);
         if(consumed) Consumed();
     }
