@@ -17,7 +17,6 @@ public class Item : MonoBehaviour, ICarryable
 
 	public virtual void Awake()
     {
-
         if(rb == null) rb = GetComponent<Rigidbody>();
         if(rb == null) rb = gameObject.AddComponent<Rigidbody>();
         if(carried) Carry();
@@ -69,7 +68,6 @@ public class Item : MonoBehaviour, ICarryable
 					break;
 			}
 		}
-
     }
 
     public virtual void Carry()
