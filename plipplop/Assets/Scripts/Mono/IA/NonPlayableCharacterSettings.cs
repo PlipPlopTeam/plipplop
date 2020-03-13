@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 [CreateAssetMenu(menuName = "ScriptableObjects/NonPlayableCharacterSettings")]
 public class NonPlayableCharacterSettings : ScriptableObject
@@ -8,30 +10,25 @@ public class NonPlayableCharacterSettings : ScriptableObject
 	public string lastname = "Flantier";
 
 	[Header("Stats")]
-	public bool randomStats = false;
 	[Range(1f, 2.5f)] public float height = 1.75f;
-	public Vector2 rangeHeight;
 	[Range(10f, 150f)] public float weight = 65f;
-	public Vector2 rangeWeight;
 	[Range(0f, 100f)] public float age = 25f;
-	public Vector2 rangeAge;
 	[Range(0f, 100f)] public float strength = 1f;
 
-	/*
-	[Header("Starters")]
-	[Range(0f, 100f)] public float initialBoredom = 50f;
-	[Range(0f, 100f)] public float initialTiredness = 50f;
-	[Range(0f, 100f)] public float initialHunger = 50f;
-	*/
+	public bool randomStats = false;
+	public Vector2 rangeHeight;
+	public Vector2 rangeWeight;
+	public Vector2 rangeAge;
 
 	[Header("Equipments")]
 	public bool autoOutfit = false;
 	public bool randomColors = false;
-	public ClothData[] clothes;
+	public List<ClothData> clothes = new List<ClothData>();
 
 	[Header("Behavior")]
 	public bool followPath;
-	public string[] favoriteActivities;
+	public bool doAllActivities;
+	public List<string>  favoriteActivities = new List<string>();
 	/*
 #if UNITY_EDITOR
 	public GameObject prefab;

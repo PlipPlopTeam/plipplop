@@ -93,8 +93,7 @@ public class NonPlayableCharacter : MonoBehaviour
 	{
 		if (settings == null) settings = Game.i.library.npcLibrary.defaultSettings;
 		Set(settings);
-		EquipOutfit();
-
+		Outfit(settings.clothes);
 
 		// Loading Graph
 		if (graph == null)
@@ -144,8 +143,13 @@ public class NonPlayableCharacter : MonoBehaviour
 		action.Invoke();
 	}
 
-	public void EquipOutfit()
+	public void Outfit(List<ClothData> outfit)
 	{
+		if (outfit.Count == 0) outfit = Game.i.library.GetOutfit();
+
+		foreach (ClothData c in outfit) Equip(c);
+
+
 		if (settings.autoOutfit)
 		{
 			foreach (ClothData c in Game.i.library.GetOutfit()) Equip(c);
@@ -403,7 +407,7 @@ public class NonPlayableCharacter : MonoBehaviour
 		animator.SetBool("Sitting", false);
 		animator.SetBool("Chairing", false);
 	}
-
+	
 #if UNITY_EDITOR
 	void OnDrawGizmos()
     {

@@ -34,8 +34,19 @@ namespace Behavior.NPC {
 					{
 						if(a.AvailableFor(npc))
 						{
-							npc.activity = a;
-							break;
+							if(npc.settings.doAllActivities)
+							{
+								npc.activity = a;
+								break;
+							}
+							else
+							{
+								if(npc.settings.favoriteActivities.Contains(a.GetType().ToString()))
+								{
+									npc.activity = a;
+									break;
+								}
+							}
 						}
 					}
 					break;

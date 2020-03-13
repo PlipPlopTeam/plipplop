@@ -25,7 +25,7 @@ public class Activity : MonoBehaviour
 	internal List<NonPlayableCharacter> spectators = new List<NonPlayableCharacter>();
 	internal float timer = 0f;
 	internal bool full = false;
-
+	
 	public List<NonPlayableCharacter> all { get { return users.Union(spectators).ToList(); } }
 
 	public virtual void Enter(NonPlayableCharacter user)

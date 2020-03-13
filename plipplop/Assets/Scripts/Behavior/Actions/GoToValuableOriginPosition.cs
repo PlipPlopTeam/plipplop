@@ -12,9 +12,10 @@ namespace Behavior.NPC
             NonPlayableCharacter npc = target;
             if (npc != null && npc.valuable != null)
 			{
-                if(!npc.agentMovement.GoThere(npc.valuable.origin))
+				if (!npc.agentMovement.GoThere(npc.valuable.origin))
 				{
-					npc.agentMovement.GoThere(npc.transform.position);
+					npc.Drop();
+					npc.agentMovement.reached = true;
 				}
 			}
         }

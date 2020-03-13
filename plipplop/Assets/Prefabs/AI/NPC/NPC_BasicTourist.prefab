@@ -214,7 +214,7 @@ MonoBehaviour:
   food: {fileID: 0}
   feeder: {fileID: 0}
   settings: {fileID: 11400000, guid: 7739a2840a1b2a44d8adf298bc5c78bf, type: 2}
-  graph: {fileID: 11400000, guid: 80b3893c3a33b334abb66b292606ec3e, type: 2}
+  graph: {fileID: 11400000, guid: 33c0620d8c63dd04fa1bc81bdbff2ac2, type: 2}
   spawnPosition: {x: 0, y: 0, z: 0}
   hasWaited: 0
 --- !u!114 &1684127437
@@ -369,16 +369,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SK_Tourist
       objectReference: {fileID: 0}
-    - target: {fileID: 3049276234239041946, guid: 85438989d6e08724ebf3e5ba8bdeb568,
+    - target: {fileID: -6057140222963153312, guid: 85438989d6e08724ebf3e5ba8bdeb568,
         type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5629209890089637745, guid: 85438989d6e08724ebf3e5ba8bdeb568,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 4055c018088f5e345801c283400af1db, type: 2}
     - target: {fileID: -4216859302048453862, guid: 85438989d6e08724ebf3e5ba8bdeb568,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -434,11 +429,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -6057140222963153312, guid: 85438989d6e08724ebf3e5ba8bdeb568,
+    - target: {fileID: 3049276234239041946, guid: 85438989d6e08724ebf3e5ba8bdeb568,
         type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 4055c018088f5e345801c283400af1db, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5629209890089637745, guid: 85438989d6e08724ebf3e5ba8bdeb568,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 85438989d6e08724ebf3e5ba8bdeb568, type: 3}
 --- !u!1 &7311536964611924945 stripped
