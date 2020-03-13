@@ -10,7 +10,7 @@ public class Item : MonoBehaviour, ICarryable
 	public Collider collider;
 
     [Header("Item")]
-    public GameObject visual;
+    public GameObject visuals;
 
     private bool carried = false;
 	public bool IsCarried() { return carried; }
@@ -44,8 +44,8 @@ public class Item : MonoBehaviour, ICarryable
 
     public virtual void Visual(GameObject go)
     {
-        visual = Instantiate(go, transform);
-        Mesh m = visual.GetComponentInChildren<MeshFilter>().mesh;
+		visuals = Instantiate(go, transform);
+        Mesh m = visuals.GetComponentInChildren<MeshFilter>().mesh;
 		collider = gameObject.GetComponent<Collider>();
 		if (collider == null)
 		{

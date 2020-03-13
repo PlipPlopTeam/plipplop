@@ -27,7 +27,7 @@ public class Food : Item
     {
         gameObject.name = foodData.name;
         data = foodData;
-        if(visual == null) Visual(foodData.visual);
+        if(visuals == null) Visual(foodData.visual);
     }
 
     public void Consume(System.Action end)
@@ -48,7 +48,7 @@ public class Food : Item
             onConsumeEnd = null;
         }
         consumed = true;
-        visual.transform.localScale = Vector3.one;
+        visuals.transform.localScale = Vector3.one;
         if(data.destroyAfterConsumed) Destroy();
         else Drop();
     }
@@ -63,7 +63,7 @@ public class Food : Item
                 timer -= Time.deltaTime;
                 
                 if(data.scaleDownAsEaten)
-                    visual.transform.localScale = Vector3.one * (timer/data.timeToConsume);
+                    visuals.transform.localScale = Vector3.one * (timer/data.timeToConsume);
             }
             else Consumed();
         }
