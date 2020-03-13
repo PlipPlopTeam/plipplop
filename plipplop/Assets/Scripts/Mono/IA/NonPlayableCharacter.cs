@@ -146,18 +146,7 @@ public class NonPlayableCharacter : MonoBehaviour
 	public void Outfit(List<ClothData> outfit)
 	{
 		if (outfit.Count == 0) outfit = Game.i.library.GetOutfit();
-
 		foreach (ClothData c in outfit) Equip(c);
-
-
-		if (settings.autoOutfit)
-		{
-			foreach (ClothData c in Game.i.library.GetOutfit()) Equip(c);
-		}
-		else
-		{
-			foreach (ClothData c in settings.clothes) Equip(c);
-		}
 	}
 
 	public virtual void Update()
