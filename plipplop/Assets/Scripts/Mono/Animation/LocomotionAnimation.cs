@@ -45,6 +45,7 @@ public class LocomotionAnimation
         if (isFlattened)
 		{
             legs.gameObject.SetActive(true);
+            legs.speed = 1f;
 			legs.PlayOnce("Flat");
         }
         else if (!grounded)
