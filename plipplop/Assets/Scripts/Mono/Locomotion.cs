@@ -7,9 +7,9 @@ public class Locomotion : Walker
 {
     public LocomotionPreset preset;
 	private float groundCheckOffset = 0.5f;
-	private float groundCheckRange = 0.25f;
+	private float groundCheckRange = 1f;
 	[HideInInspector] public float legsHeight { get { return 1f; } }
-	private Vector3 legsOffset = Vector3.up * 0.5f;
+    private Vector3 legsOffset = Vector3.up * 0.5f;
 	[HideInInspector] public bool isFlattened = false;
 
     [HideInInspector] new public Rigidbody rigidbody;
@@ -24,12 +24,14 @@ public class Locomotion : Walker
     float timePressed = 0f;
     bool hasJumped = false;
     bool isInitialized = false;
+    float jumpTimer = 0f;
+    bool canJump = true;
 
     internal Vector3 groundCheckDirection = Vector3.down;
 
-	public override void ApplyAdherence(float adherence)
+	public override void ApplyModifier(float value)
 	{
-		speedMultiplier = 1f - adherence;
+		speedMultiplier *= value;
 	}
 
 	private void Awake()
@@ -67,6 +69,16 @@ public class Locomotion : Walker
 
         locomotionAnimation.isFlattened = isFlattened;
         if (locomotionAnimation.isFlattened) locomotionAnimation.Update();
+
+        if(!canJump)
+        {
+            if (jumpTimer > 0) jumpTimer -= Time.deltaTime;
+            else
+            {
+                canJump = true;
+            }
+        }
+
     }
 
 	public bool AreLegsRetracted()
@@ -86,16 +98,17 @@ public class Locomotion : Walker
     public void ExtendLegs()
     {
 		locomotionAnimation.ExtendLegs();
-        var v = GetBelowSurface(2f);
+        var v = GetBelowSurface();
 
         if (v != null) 
         {
-            transform.position = new Vector3(transform.position.x, v.Value.y + (IsGrounded() ? legsHeight/2f : 0f), transform.position.z);
+            float o = v.Value.y + (IsGrounded() ? legsHeight/2f + legsOffset.y/2f : 0f);
+            transform.position = new Vector3(transform.position.x, o, transform.position.z);
         }
         else
 		{
             Debug.LogWarning("Could not detect the ground surface when expanding legs from " + gameObject.name);
-            transform.position = new Vector3(transform.position.x, transform.position.y/* + legsHeight/2f + legsOffset.y*/, transform.position.z);
+            //transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         }
 
         SoundPlayer.PlayAtPosition("sfx_pop_legs", transform.position);
@@ -116,7 +129,8 @@ public class Locomotion : Walker
         }
 
         // Brutal half turn
-        if (direction.magnitude != 0f && Vector3.Distance(lastDirection, direction) > 0.9f) {
+        if (direction.magnitude != 0f && Vector3.Distance(lastDirection, direction) > 0.9f)
+        {
             timePressed = 0f;
         }
 
@@ -186,11 +200,13 @@ public class Locomotion : Walker
     public void Jump()
     {
         // This one here is a small fix to avoid double-jump. Tweak the value as necessary
-        if((isImmerged || !hasJumped) && rigidbody.velocity.y <= 4) 
+        if(canJump && (isImmerged || !hasJumped) && rigidbody.velocity.y <= 4) 
         {
             rigidbody.AddForce(Vector3.up * preset.jump * (parentController.gravityMultiplier / 100f), ForceMode.Acceleration);
             hasJumped = true;
             SoundPlayer.Play("sfx_jump");
+            canJump = false;
+            jumpTimer = 0.5f;
         }
     }
 
@@ -210,18 +226,17 @@ public class Locomotion : Walker
         return false;
     }
 
-	public Vector3 GetCheckOffset()
+	public float GetCheckOffset()
 	{
-		Vector3 os = Vector3.zero;
-		if (AreLegsRetracted()) os = legsOffset + new Vector3(0f, groundCheckOffset, 0f);
-		else os = legsOffset - new Vector3(0f, legsHeight - groundCheckOffset, 0f);
-		return os;
+		if (AreLegsRetracted()) return legsOffset.y + groundCheckOffset;
+		else return legsOffset.y + legsHeight + groundCheckOffset;
 	}
 
     public RaycastHit[] RaycastAllToGround(float rangeMultiplier = 1f)
     {
-		Vector3 os = GetCheckOffset();
-		return Physics.RaycastAll(transform.position - transform.TransformDirection(os), groundCheckDirection, groundCheckOffset + groundCheckRange * rangeMultiplier);
+		float offset = GetCheckOffset();
+        Debug.DrawRay(transform.position + transform.up * offset, groundCheckDirection, Color.red);
+		return Physics.RaycastAll(transform.position + transform.up * offset, groundCheckDirection, offset + groundCheckRange * rangeMultiplier);
 	}
 
     public Vector3? GetGroundNormal()
@@ -240,11 +255,10 @@ public class Locomotion : Walker
     public Vector3? GetBelowSurface(float multiplier = 1f)
     {
         RaycastHit[] hits = RaycastAllToGround(multiplier);
-
-        foreach (RaycastHit h in hits) {
+        foreach (RaycastHit h in hits)
+        {
             if (!transform.IsYourselfCheck(h.transform) && !h.collider.isTrigger) return h.point;
         }
-
         return null;
     }
 
@@ -253,6 +267,7 @@ public class Locomotion : Walker
         return locomotionAnimation.GetHeadDummy();
     }
 
+/*
 #if UNITY_EDITOR
     void OnDrawGizmos()
     {
@@ -265,8 +280,9 @@ public class Locomotion : Walker
 					transform.position + transform.TransformDirection(os),
 					transform.position - transform.TransformDirection(os + groundCheckDirection * groundCheckRange)
 				);
-			}
+			}   
         }
     }
 #endif
+*/
 }
