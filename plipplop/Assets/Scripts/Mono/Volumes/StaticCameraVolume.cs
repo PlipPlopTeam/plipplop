@@ -18,7 +18,7 @@ public class StaticCameraVolume : Volume {
     public override void OnPlayerEnter(Controller player)
     {
         if (isImmediate) {
-            Game.i.aperture.Freeze();
+            //Game.i.aperture.Freeze();
             Game.i.aperture.AddStaticPosition(aim.position, aim.rotation);
             Game.i.aperture.FixedUpdate();
             Game.i.aperture.fieldOfView.destination = FOV;
@@ -28,10 +28,12 @@ public class StaticCameraVolume : Volume {
             objective = Game.i.aperture.AddStaticPosition(aim);
         }
 
-        if (!lookAtTarget) {
-            Game.i.aperture.DisableLookAt();
+        if (!lookAtTarget) 
+        {
+            lookAtIndex = Game.i.aperture.DisableLookAt();
         }
-        else {
+        else 
+        {
             Game.i.aperture.EnableLookAt();
         }
 
@@ -48,7 +50,8 @@ public class StaticCameraVolume : Volume {
             Game.i.aperture.RemoveStaticPosition(objective);
         }
 
-        if (!lookAtTarget) {
+        if (!lookAtTarget)
+        {
             Game.i.aperture.RestoreLookAt(lookAtIndex);
         }
 

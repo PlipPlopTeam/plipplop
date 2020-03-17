@@ -470,7 +470,8 @@ public class Aperture
 
     public void ComputePosition(Vector3 targetPosition)
     {
-        if (GetStaticObjective() != null) {
+        if (GetStaticObjective() != null) 
+        {
             position.destination = GetStaticObjective().positionAndRotation.position;
             return;
         }
@@ -504,15 +505,12 @@ public class Aperture
         var lateralFollow = Time.fixedDeltaTime * settings.lateralFollowLerp * catchUpSpeed;
         var longFollow = Time.fixedDeltaTime * settings.longitudinalFollowLerp * catchUpSpeed;
 
-        if (GetStaticObjective() != null) {
+        if (GetStaticObjective() != null) 
+        {
             var statObj = GetStaticObjective();
-
             var lerp = statObj.manualLerp.HasValue ? statObj.manualLerp.Value : Time.fixedDeltaTime * settings.staticPositionLerp;
-
-            if (statObj.manualLerp.HasValue) {
-                position.current = Vector3.Lerp(position.current, position.destination, lerp);
-                return;
-            }
+            position.current = Vector3.Lerp(position.current, position.destination, lerp);
+            return;
         }
 
         position.current.y = Mathf.Lerp(position.current.y, position.destination.y, verticalFollow);
