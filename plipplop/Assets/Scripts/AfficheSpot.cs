@@ -130,7 +130,7 @@ else if (shape == AfficheSpot.Shape.RECTANGLE)
 #endif
 }
 
-
+#if UNITY_EDITOR
 [CustomEditor(typeof(AfficheSpot)), CanEditMultipleObjects]
 [ExecuteInEditMode]
 public class AfficheSpotEditor : Editor
@@ -157,3 +157,4 @@ public class AfficheSpotEditor : Editor
         }
     }
 }
+#endif
