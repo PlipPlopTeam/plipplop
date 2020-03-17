@@ -38,9 +38,9 @@ public class AgentMovement : Walker
 	Vector3 rotationLast;
 	Vector3 rotationDelta;
 
-	public override void ApplyAdherence(float adherence)
+	public override void ApplyModifier(float value)
 	{
-		SetSpeed(settings.speed * (1f - adherence * slowMultiplier));
+		SetSpeed(settings.speed * value);
 	}
 
 	public void ClearEvents()
