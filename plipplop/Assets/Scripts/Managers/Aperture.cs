@@ -209,7 +209,15 @@ public class Aperture
 
     public Vector3 Forward()
     {
-        return new Vector3(cam.transform.forward.x, 0f, cam.transform.forward.z).normalized;
+        // Prevent issue when camera is facing the ground perpendiculary
+        if(Mathf.Abs(cam.transform.forward.x) < 0.01f && Mathf.Abs(cam.transform.forward.z) < 0.01f)
+        {
+            return new Vector3(cam.transform.up.x, 0f, cam.transform.up.z).normalized;
+        }
+        else
+        {
+            return new Vector3(cam.transform.forward.x, 0f, cam.transform.forward.z).normalized;
+        }
     }
 
     public Vector3 Right()
