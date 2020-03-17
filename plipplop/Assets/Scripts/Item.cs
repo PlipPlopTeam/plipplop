@@ -1,23 +1,25 @@
 ﻿using UnityEngine;
 
-public enum EColliderShape { BOX, SPHERE, CAPSULE }
 
 public class Item : MonoBehaviour, ICarryable
 {
-    [Header("Physics")]
-    public EColliderShape shape;
+	public enum EColliderShape { BOX, SPHERE, CAPSULE }
+	public enum EType { TRASH, FOOD, ABSTRACT, OTHER }
+
+	[Header("Physics")]
+	public EColliderShape shape;
     public Rigidbody rb;
 	public Collider collider;
 
     [Header("Item")]
-    public GameObject visuals;
+	public EType type = EType.OTHER;
+	public GameObject visuals;
 
     private bool carried = false;
 	public bool IsCarried() { return carried; }
 
 	public virtual void Awake()
     {
-
         if(rb == null) rb = GetComponent<Rigidbody>();
         if(rb == null) rb = gameObject.AddComponent<Rigidbody>();
         if(carried) Carry();
@@ -69,7 +71,6 @@ public class Item : MonoBehaviour, ICarryable
 					break;
 			}
 		}
-
     }
 
     public virtual void Carry()

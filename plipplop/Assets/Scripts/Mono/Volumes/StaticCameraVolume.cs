@@ -10,6 +10,8 @@ public class StaticCameraVolume : Volume {
     public bool isImmediate = false;
     public bool lookAtTarget = false;
 
+    public List<GameObject> objectsToHide = new List<GameObject>();
+
     int lookAtIndex = 0;
     Geometry.PositionAndRotation objective;
 
@@ -32,6 +34,9 @@ public class StaticCameraVolume : Volume {
         else {
             Game.i.aperture.EnableLookAt();
         }
+
+        // TODO : Replace by a fadeout
+        foreach (GameObject o in objectsToHide) o.SetActive(false);
     }
 
     public override void OnPlayerExit(Controller player)
@@ -46,5 +51,7 @@ public class StaticCameraVolume : Volume {
         if (!lookAtTarget) {
             Game.i.aperture.RestoreLookAt(lookAtIndex);
         }
+
+        foreach (GameObject o in objectsToHide) o.SetActive(true);
     }
 }

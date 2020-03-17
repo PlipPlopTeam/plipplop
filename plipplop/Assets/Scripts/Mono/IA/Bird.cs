@@ -25,6 +25,8 @@ public class Bird : MonoBehaviour
 
 		public void Update()
 		{
+			if (transform == null) return;
+
 			velocity = transform.position - position;
 			magnitude = velocity.magnitude;
 			position = transform.position;
