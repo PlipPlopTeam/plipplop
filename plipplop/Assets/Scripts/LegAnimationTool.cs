@@ -17,7 +17,8 @@ public class LegAnimationTool : MonoBehaviour
         legs.Play(legs.currentAnimation.animationName);
         
         legs.Attach(visuals);
-
+        visuals.transform.localPosition = Vector3.zero;
+        visuals.transform.localEulerAngles = Vector3.zero;
         
         Game.i.player.Eject();
         Destroy(FindObjectOfType<BaseController>().gameObject);
