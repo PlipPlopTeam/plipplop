@@ -154,7 +154,10 @@ public class AgentMovement : Walker
 
 		if (!agent.enabled)
 		{
-			transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(orientation), Time.deltaTime * 5f);
+            Quaternion q = new Quaternion();
+            if (orientation != Vector3.zero) q = Quaternion.LookRotation(orientation);
+
+            transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * 5f);
 		}
 
 		if (reached) reached = false;

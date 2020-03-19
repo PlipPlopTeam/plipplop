@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public class Walker : MonoBehaviour
 {
+	[System.Serializable]
 	public class SpeedModifiers
 	{
 		public int id = 0;
@@ -32,6 +33,7 @@ public class Walker : MonoBehaviour
 		if(pos != -1)
 		{
 			ApplyModifier(1f/modifiers[pos].multiplier);
+			modifiers.RemoveAt(pos);
 		}
 	}
 

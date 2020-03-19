@@ -34,8 +34,7 @@ public class WaterVolume : Volume
         Destroy(customVisual.gameObject.GetComponent<Collider>());
     }
 
-
-    public override void OnObjectEnter(Collider obj)
+     public override void OnObjectEnter(Collider obj)
     {
         var rb = obj.GetComponent<Rigidbody>();
         if (rb) {
@@ -47,7 +46,9 @@ public class WaterVolume : Volume
             if (isNew)
             {
                 // rentre
-                SoundPlayer.Play("sfx_splash");
+                SoundPlayer.PlayAtPosition("sfx_splash", rb.transform.position);
+                // TODO : Integrate GameEffect
+                //Pyromancer.PlayGameEffect("")
             }
         }
     }

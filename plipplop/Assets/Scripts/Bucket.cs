@@ -8,7 +8,6 @@ public class Bucket : Controller
 	private Container container;
 	public FoodData debugFoodItem;
 
-	[ContextMenu("DebugSpawnFood")]
 	public void DebugSpawnFood()
 	{
 		Food fo = new GameObject().AddComponent<Food>();
@@ -29,23 +28,28 @@ public class Bucket : Controller
 
 		container.onItemStored += () =>
 		{
-			if (this.currentSlow != -1) this.locomotion.RemoveModifier(this.currentSlow);
 			this.Slow(container.GetItemCount());
 		};
 
-		slowdown.Add(0, 0f);
-		slowdown.Add(1, 15f);
-		slowdown.Add(2, 30f);
-		slowdown.Add(3, 45f);
-		slowdown.Add(4, 60f);
-		slowdown.Add(5, 75f);
+		container.onItemStored += () =>
+		{
+			this.Slow(container.GetItemCount());
+		};
+
+		slowdown.Add(0, 0.9f);        
+		slowdown.Add(1, 0.85f);
+		slowdown.Add(2, 0.70f);
+		slowdown.Add(3, 0.55f);
+		slowdown.Add(4, 0.40f);
+		slowdown.Add(5, 0.25f);
 	}
 
 	public void Slow(int itemStored)
 	{
-		float slow = 0f;
-		if (slowdown.TryGetValue(itemStored, out slow))
+
+		if(slowdown.TryGetValue(itemStored, out float slow))
 		{
+			if (this.currentSlow != -1) this.locomotion.RemoveModifier(this.currentSlow);
 			currentSlow = locomotion.AddModifier(slow);
 		}
 	}

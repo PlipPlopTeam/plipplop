@@ -14,6 +14,12 @@ public class Container : Item
 	public float reverseAngle = 45f;
 	private List<Item> items = new List<Item>();
 	public System.Action onItemStored;
+	public System.Action onItemRemoved;
+
+	public void Awake()
+	{
+		Game.i.aiZone.Register(this);
+	}
 
 	public int GetItemCount()
 	{
@@ -23,7 +29,7 @@ public class Container : Item
 	public virtual void Store(Item item)
 	{
 		item.Carry();
-		item.transform.SetParent(transform);
+		item.transform.SetParent(visuals.transform);
 		item.transform.localPosition = Vector3.zero;
 		items.Add(item);
 		if(showStoredItem)
@@ -35,6 +41,8 @@ public class Container : Item
 		{
 			item.visuals.SetActive(false);
 		}
+
+		if (onItemStored != null) onItemStored.Invoke();
 	}
 
 	public bool IsMadeFor(Item item)
@@ -56,6 +64,8 @@ public class Container : Item
 	{
 		Free(item);
 		items.Remove(item);
+
+		if (onItemRemoved != null) onItemRemoved.Invoke();
 	}
 	public virtual void Remove(int index)
 	{

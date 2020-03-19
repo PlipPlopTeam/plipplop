@@ -35,7 +35,8 @@ public class NonPlayableCharacter : MonoBehaviour
 	public Activity previousActivity;
 	public Chair chair;
 	public Food food;
-    public Feeder feeder;
+	public Feeder feeder;
+	public Container container;
 
 	public Dictionary<Cloth.ESlot, Cloth> clothes = new Dictionary<Cloth.ESlot, Cloth>();
 	public Dictionary<EStat, float> stats = new Dictionary<EStat, float>();
@@ -159,6 +160,7 @@ public class NonPlayableCharacter : MonoBehaviour
 	{
 		UpdateCollecting();
 		UpdateWaiting();
+		UpdateStoring();
 		agentMovement.Tick();
 		if (carried != null)
 		{
@@ -231,7 +233,6 @@ public class NonPlayableCharacter : MonoBehaviour
 			if(clothes[clothData.slot] != null)
 				clothes[clothData.slot].Destroy();
 		}
-
 		clothes[clothData.slot] = c;
 	}
 
@@ -242,6 +243,53 @@ public class NonPlayableCharacter : MonoBehaviour
 	public bool IsCarrying()
 	{
 		return carried != null;
+	}
+
+	Container tContainer = null;
+	Item itemToStore = null;
+	System.Action onStoredItem;
+	public void StopStoring()
+	{
+		tContainer = null;
+		itemToStore = null;
+	}
+	public void Store(Container c, Item item)
+	{
+		tContainer = c;
+		itemToStore = item;
+		agentMovement.Chase(c.transform);
+	}
+	public void UpdateStoring()
+	{
+		if (tContainer != null && range.IsInRange(tContainer.gameObject))
+		{
+			Item item = null;
+			if (carried.Self().gameObject.TryGetComponent<Item>(out item))
+			{
+				if (item == itemToStore) Drop();
+			}
+
+			agentMovement.StopChase();
+			tContainer.Store(itemToStore);
+			StopStoring();
+
+			if(onStoredItem != null)
+			{
+				onStoredItem.Invoke();
+				onStoredItem = null;
+			}
+		}
+	}
+	public void StoreCarriedItem(Container c)
+	{
+		if(carried != null && carried.Self().gameObject.GetComponent<Item>())
+		{
+			Item item = null;
+			if(carried.Self().gameObject.TryGetComponent<Item>(out item))
+			{
+				Store(c, item);
+			}
+		}
 	}
 
 	public void Lift(ICarryable carryable)
@@ -290,11 +338,21 @@ public class NonPlayableCharacter : MonoBehaviour
 		food = f;
 		agentMovement.Stop();
 		food.Consume(delegate{
+			animator.SetBool("Consuming", false);
 			if(this.food != null)
 			{
 				this.AddToStat(NonPlayableCharacter.EStat.HUNGER, -this.food.data.calory);
-				this.Drop();
-				this.food = null;
+				Container c = Game.i.aiZone.GetContainerMadeFor(this.food.type);
+				if (c != null)
+				{
+					this.onStoredItem += () => { this.food = null; };
+					this.StoreCarriedItem(c);
+				}
+				else
+				{
+					this.food.Drop();
+					this.food = null;
+				}
 			}
 		});
 	}

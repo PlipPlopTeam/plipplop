@@ -114,20 +114,11 @@ public class Bird : MonoBehaviour
 	public void FlyOff()
 	{
 		StopAllCoroutines();
-		List<BirdPath> bps = Game.i.aiZone.birdPaths;
-		if (bps.Count > 0)
+		BirdPath bp = Game.i.aiZone.GetRandomBirdPath();
+		if (bp != null)
 		{
-			BirdPath bp = bps.PickRandom();
-			if(bp != null)
-			{
-				Follow(bp);
-				StartCoroutine(WaitBeforeIdle(Random.Range(10f, 20f)));
-			}
-			else
-			{
-				Debug.LogWarning("No Bird Path found in this scene");
-				Destroy(gameObject);
-			}
+			Follow(bp);
+			StartCoroutine(WaitBeforeIdle(Random.Range(10f, 20f)));
 		}
 		else
 		{
@@ -140,21 +131,12 @@ public class Bird : MonoBehaviour
 	public void GoSitOnSpot()
 	{
 		StopAllCoroutines();
-		List<BirdArea> areas = Game.i.aiZone.birdAreas;
-		if (areas.Count > 0)
+		BirdArea area = Game.i.aiZone.GetRandomBirdArea();
+		if (area != null)
 		{
-			BirdArea area = areas.PickRandom();
-			if(area != null)
-			{
-				onReached = null;
-				BirdArea.Spot s = area.GetSpot();
-				SitOn(s.position, s.surface);
-			}
-			else
-			{
-				Debug.LogWarning("No Bird Area found in this scene");
-				Destroy(gameObject);
-			}
+			onReached = null;
+			BirdArea.Spot s = area.GetSpot();
+			SitOn(s.position, s.surface);
 		}
 		else
 		{

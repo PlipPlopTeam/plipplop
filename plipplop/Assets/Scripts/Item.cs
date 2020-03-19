@@ -46,6 +46,8 @@ public class Item : MonoBehaviour, ICarryable
 
     public virtual void Visual(GameObject go)
     {
+        if (visuals != null) Destroy(visuals);
+
 		visuals = Instantiate(go, transform);
         Mesh m = visuals.GetComponentInChildren<MeshFilter>().mesh;
 		collider = gameObject.GetComponent<Collider>();

@@ -124,7 +124,7 @@ public class Carpet : Controller
     }
 
 #if UNITY_EDITOR
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         var style = new GUIStyle(GUI.skin.box);
         Handles.Label(transform.position + Vector3.up*2f, spring.minDistance.ToString(), style);

@@ -14,12 +14,17 @@ public class WorldBoundariesVolume : Volume
     
     private void Start()
     {
-        offset = Vector3.up * (height / 2f);
-        var g = Instantiate(visualBoundariesPrefab, this.transform);
-        g.transform.localScale = GetSize();
-        if (isInvisible) {
-            foreach(var mr in g.GetComponentsInChildren<MeshRenderer>()) {
-                mr.enabled = false;
+        if (visualBoundariesPrefab != null)
+        {
+            offset = Vector3.up * (height / 2f);
+            var g = Instantiate(visualBoundariesPrefab, this.transform);
+            g.transform.localScale = GetSize();
+            if (isInvisible)
+            {
+                foreach (var mr in g.GetComponentsInChildren<MeshRenderer>())
+                {
+                    mr.enabled = false;
+                }
             }
         }
     }

@@ -26,7 +26,17 @@ public class Food : Item
     {
         gameObject.name = foodData.name;
         data = foodData;
-        if(visuals == null) Visual(foodData.visual);
+        if(data.pristine != null) Assemble(data.pristine);
+    }
+
+    public void Assemble(GameObject obj)
+    {
+        Visual(data.pristine);
+        if (visuals != null)
+        {
+            visuals.transform.localEulerAngles = data.rotationOffset;
+            visuals.transform.localPosition = data.positionOffset;
+        }
     }
 
     public void Consume(System.Action end)
@@ -41,15 +51,22 @@ public class Food : Item
 
     public void Consumed()
     {
-        if(onConsumeEnd != null)
+        End();
+        consumed = true;
+
+        if (onConsumeEnd != null)
         {
             onConsumeEnd.Invoke();
             onConsumeEnd = null;
         }
-        consumed = true;
-        visuals.transform.localScale = Vector3.one;
-        if(data.destroyAfterConsumed) Destroy();
-        else Drop();
+    }
+
+    public void End()
+    {
+        if (data.consumed != null) Assemble(data.consumed);
+
+        if (data.destroyAfterConsumed) Destroy();
+        else type = Item.EType.TRASH;
     }
 
     public void Update()
