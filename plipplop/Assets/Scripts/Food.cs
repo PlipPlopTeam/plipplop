@@ -4,15 +4,13 @@ public class Food : Item
 {
     [Header("Food")]
     public FoodData data;
-    public bool consumed = false;
-    public System.Action onConsumeEnd;
+    [HideInInspector] public bool consumed = false;
+    [HideInInspector] public float mass;
 
+    public System.Action onConsumeEnd;
 	public bool isBeingConsumed { get { return m_BeingConsumed; } }
 	bool m_BeingConsumed = false;
-
     private float timer;
-
-    public float mass;
 
     public override void Awake()
     {

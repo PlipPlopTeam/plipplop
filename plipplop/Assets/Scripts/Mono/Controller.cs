@@ -323,13 +323,16 @@ public abstract class Controller : MonoBehaviour
     // Trying to possess somESubject else
     virtual internal void OnTryPossess()
     {
-        if (!isImmerged && controllerSensor && controllerSensor.IsThereAnyController()) {
+        if (!isImmerged && controllerSensor && controllerSensor.IsThereAnyController())
+        {
             var focused = controllerSensor.GetFocusedController();
-            if (!focused.isImmerged) {
+            if (!focused.isImmerged) 
+            {
                 Game.i.player.Possess(focused);
             }
         }
-        else if (!Game.i.player.IsPossessingBaseController()) {
+        else if (!Game.i.player.IsPossessingBaseController()) 
+        {
             Game.i.player.TeleportBaseControllerAndPossess(unpossessSpawnDistance);
         }
     }
