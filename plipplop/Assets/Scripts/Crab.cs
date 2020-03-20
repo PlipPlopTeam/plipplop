@@ -68,7 +68,7 @@ public class Crab : MonoBehaviour
             }
             else if (type == CrabType.Final)
             {
-                crabDance.StartDancing();
+               // crabDance.StartDancing(false);
                 Hide(true);
             }
             else
