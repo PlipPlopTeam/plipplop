@@ -13,7 +13,8 @@ public class Activity : MonoBehaviour
 	}
 
 	[Header("Parameters")]
-	public bool working = true;
+	public bool activated = true;
+	[HideInInspector] public bool working = true;
 	public int userMax = 0;
 	public int spectatorMax = 0;
 	public Vector2 spectatorRange;
@@ -92,6 +93,7 @@ public class Activity : MonoBehaviour
 	public virtual bool AvailableFor(NonPlayableCharacter npc)
 	{
 		bool result = working
+			&& activated
 			&& !users.Contains(npc)
 			&& !spectators.Contains(npc)
 			&& npc.previousActivity != this;
