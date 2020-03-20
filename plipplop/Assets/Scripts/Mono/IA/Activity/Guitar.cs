@@ -9,6 +9,8 @@ public class Guitar : Activity, ICarryable
 	private NonPlayableCharacter player;
 	public ParticleSystem music;
 
+	public Transform visual;
+
 	private bool carried = false;
 	public bool IsCarried() { return carried; }
 
@@ -25,16 +27,24 @@ public class Guitar : Activity, ICarryable
 			player.animator.SetBool("Guitaring", true);
 			player.animator.SetBool("Carrying", false);
 			music.Play();
+
+			visual = transform.GetChild(0);
+			visual.localPosition = new Vector3(0.114f,-0.08f,-0.155f);
+			visual.localEulerAngles = new Vector3(3.809f,5.44f,55.098f);
 		};
 	}
 
 	public override void StopUsing(NonPlayableCharacter user)
 	{
 		base.StopUsing(user);
+		
 		user.Drop();
 		user.StopCollecting();
 		user.animator.SetBool("Guitaring", false);
 
+		visual.localPosition = Vector3.zero;
+		visual.localEulerAngles = Vector3.zero;
+		
 		full = false;
 		music.Stop();
 		if(spectators.Count > 0)
@@ -44,7 +54,7 @@ public class Guitar : Activity, ICarryable
 			StartUsing(newPlayer);
 		}
 	}
-
+	
 	public override void StopSpectate(NonPlayableCharacter npc)
 	{
 		base.StopSpectate(npc);
@@ -96,4 +106,6 @@ public class Guitar : Activity, ICarryable
 	{
 		return transform;
 	}
+
+	
 }
