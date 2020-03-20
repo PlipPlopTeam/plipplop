@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zola>
+	<meta version="1"></meta>	
+	<!-- Line possible tags
+		// Rich text
+		- <big>
+		- <huge>
+		- <small>
+		- <tiny>
+		- <color value="#AABBCC">
+		- <outline color="#AABBCC">
+		- <nonbreakable>
+		- <sprite name="">
+		
+		// Requires external vertex FX
+		- <rumble>
+		- <wave>
+		
+		// Flow control
+		- <pause/>
+		- <whole> <instantaneous>
+		- <slow>
+		- <fast>
+		- <shock/>
+        
+        // Content control 
+		- <break/> <br/>
+		- <random>
+			<word>hello</word>
+			<word>yoo</word>
+		  </random>
+	-->
+	
+	<!-- Dialog possible tags
+		<line>
+		<pause miliseconds="500"/>
+	-->
+	
+	<!-- dialog flags 
+		id="123"
+		automatic="true"
+		speed="ultrafast"/"fast"/"slow"/"ultraslow"
+	-->
+	<dialog id="test">
+		<line>
+			Some words go out <pause/><fast>very fast</fast>, other are <slow>sluggish</slow>.<break/>
+			<whole>Then. </whole><whole>There's. </whole><whole>Me. </whole>
+		</line>
+		<line>Hello!</line>
+        <pause miliseconds="500"/>
+		<line>This is <big>big</big> and <small>small</small>. Prepare for that <huge>HUGE</huge> <tiny>text</tiny>.</line>
+		<line>Now look at my <break/>LINE<break/>BREAKS!</line>
+		<line>GET READY TO <rumble>RUMMMBBLLLEE!!!!!</rumble></line>
+		<line><wave>Hello darling~~~</wave></line>
+		<line>This is <outline color="#0000FF">OUTLINE</outline> and this is <color value="#FF0000">RED COLOR!</color></line>
+		
+	</dialog>
+</zola>

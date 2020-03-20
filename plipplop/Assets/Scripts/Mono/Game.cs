@@ -40,6 +40,10 @@ public class Game : MonoBehaviour
         cheatCodeListener = new CheatCodeListener(new Cheats());
         chunkLoader = new ChunkLoader();
         aiZone = new AIZone();
+
+        library.dialogs = new DialogLibrary();
+        library.dialogs.Rebuild();  // 🔥
+
         new GameObject().AddComponent<UnityMainThreadDispatcher>().gameObject.name="_THREAD_DISPATCHER";
         GameObject.Instantiate(library.canvas).name = "GAME_CANVAS";
 

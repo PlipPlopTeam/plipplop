@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class Brain
 {
+    public readonly Mapping mapping;
+
     int isParalyzed = 0;
 
     Controller controller = null;
     Controller baseController = null;
-    Mapping mapping;
 
     Coroutine rumbleCoroutine;
 
