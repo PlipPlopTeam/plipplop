@@ -258,13 +258,15 @@ public abstract class Controller : MonoBehaviour
 			}
 		}
 
-        if (IsPossessed() && !AreLegsRetracted()) {
+        if (IsPossessed() && !AreLegsRetracted())
+        {
             if (animateHead) {
                 AlignPropOnHeadDummy();
             }
 
             // ""Align"" to ground normal
             Vector3? norm;
+            Vector3 up = Vector3.up;
             try {
                 norm = locomotion.GetGroundNormal();
             }
@@ -272,12 +274,11 @@ public abstract class Controller : MonoBehaviour
                 norm = null;
             }
             var y = transform.eulerAngles.y;
-            if (norm.HasValue) {
-                transform.up = norm.Value;
+            if (norm.HasValue) 
+            {
+                up = norm.Value;
             }
-            else {
-                transform.up = Vector3.up;
-            }
+            transform.up = up;// Vector3.Lerp(transform.up, up, Time.deltaTime * 10f);
             transform.Rotate(Vector3.up * y);
         }
 
