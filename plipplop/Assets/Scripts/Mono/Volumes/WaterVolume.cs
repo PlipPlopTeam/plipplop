@@ -15,11 +15,12 @@ public class WaterVolume : Volume
 
     // PARAMETERS
     float tractionToSurface = 4f;   // The lower this value is, the more objects will slowdown when approaching the surface
-    float waterForce = 100f;        // The force that pushes objects upward
+    float waterForce = 50f;        // The force that pushes objects upward
     float maxUpSpeed = 6f;          // The maximum upward speed of immerged objects
     float waterline = 1F;         // Objects will stop a bit below water instead of perfectly at the surface. This is the distance from surface (downwards)
     float artificialDrag = 2f;      // Objects will lerp to zero speed using this value to simulate a drag      
     float aboveWaterSpeedReduction = 0.4f;   // Upon exiting water the vertical velocity of the object is altered to avoid bouncing
+    float velocitySplash = 1f;   // Upon exiting water the vertical velocity of the object is altered to avoid bouncing
 
     private void Start()
     {
@@ -46,9 +47,12 @@ public class WaterVolume : Volume
             if (isNew)
             {
                 // rentre
-                SoundPlayer.PlayAtPosition("sfx_splash", rb.transform.position);
+                //SoundPlayer.PlayAtPosition("sfx_splash", rb.transform.position);
                 // TODO : Integrate GameEffect
-                //Pyromancer.PlayGameEffect("")
+                if(rb.velocity.magnitude >= velocitySplash)
+                {
+                    Pyromancer.PlayGameEffect("gfx_splash", obj.transform.position);
+                }
             }
         }
     }
@@ -86,7 +90,10 @@ public class WaterVolume : Volume
 
     private void FixedUpdate()
     {
-        foreach(var b in objectsInWater) {
+        foreach(var b in objectsInWater) 
+        {
+            if (b.rigidbody == null) continue;
+
             var rb = b.rigidbody;
             var force = 10f / Mathf.Max(1f, b.rigidbody.mass);
             var customWaterline = waterline;
