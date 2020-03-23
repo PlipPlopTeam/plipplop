@@ -6,13 +6,25 @@ public class BirdPoint : BirdZone
 	{
 		if (transform.childCount == 0)
 		{
-			return new Bird.Spot(transform, Vector3.zero);
+			return new Bird.Spot(transform, transform.position);
 		}
 		else return null;
 	}
 
+	public override void Enter()
+	{
+		base.Enter();
+		full = true;
+	}
+
+	public override void Exit()
+	{
+		base.Exit();
+		full = false;
+	}
+
 	public override bool Available()
 	{
-		return transform.childCount == 0;
+		return base.Available() && transform.childCount == 0;
 	}
 }
