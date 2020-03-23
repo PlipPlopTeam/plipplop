@@ -46,8 +46,11 @@ public class KiteActivity : Activity
     public override void Update()
     {
         base.Update();
-        
-        users[0].agentMovement.OrientToward(kite.visuals.transform.position);
+
+        if (users.Count > 0)
+        {
+            users[0].agentMovement.OrientToward(kite.visuals.transform.position);
+        }
 
         foreach (var _s  in spectators)
         {
