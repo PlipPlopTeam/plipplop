@@ -15,7 +15,7 @@ public class WaterVolume : Volume
 
     // PARAMETERS
     float tractionToSurface = 4f;   // The lower this value is, the more objects will slowdown when approaching the surface
-    float waterForce = 50f;        // The force that pushes objects upward
+    float waterForce = 100f;        // The force that pushes objects upward
     float maxUpSpeed = 6f;          // The maximum upward speed of immerged objects
     float waterline = 1F;         // Objects will stop a bit below water instead of perfectly at the surface. This is the distance from surface (downwards)
     float artificialDrag = 2f;      // Objects will lerp to zero speed using this value to simulate a drag      
