@@ -15,6 +15,7 @@ public class AgentMovement : Walker
         public float speed = 5f;
         public float navTreshold = 1f;
 		public float animatorRunSpeed = 1f;
+        public float animatorRotationSpeed = 5f;
 		public float minimumCarrySpeed = 1f;  
     }
 
@@ -201,8 +202,8 @@ public class AgentMovement : Walker
 
         if(animator) 
         {
-            animator.SetFloat("Speed", agent.velocity.magnitude/settings.animatorRunSpeed);
-			animator.SetFloat("RotationSpeed", rotationDelta.magnitude);
+            animator.SetFloat("Speed", agent.velocity.magnitude / settings.animatorRunSpeed);
+			animator.SetFloat("RotationSpeed", rotationDelta.magnitude / settings.animatorRotationSpeed);
         }
     }
 
