@@ -90,6 +90,7 @@ GameObject:
   - component: {fileID: 3293007541466354032}
   - component: {fileID: 2249843687965861543}
   - component: {fileID: 3744840916138228909}
+  - component: {fileID: 925866113327000500}
   m_Layer: 0
   m_Name: Deckchair
   m_TagString: Untagged
@@ -154,6 +155,32 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.3, y: 0.5, z: 1}
   m_Center: {x: 0.35, y: 0.5, z: 0}
+--- !u!114 &925866113327000500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4175127814306585225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a52f01500a9590a4d99cb5c7e61c9b57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoPossess: 0
+  beginCrouched: 0
+  canRetractLegs: 1
+  freezeUntilPossessed: 0
+  useGravity: 1
+  animateHead: 1
+  gravityMultiplier: 100
+  customExternalRigidbody: {fileID: 0}
+  customCamera: {fileID: 0}
+  locomotion: {fileID: 0}
+  visuals: {fileID: 0}
+  face: {fileID: 0}
+  visualsOffset: {x: 0, y: -0.2, z: 0}
+  unpossessSpawnDistance: 1
 --- !u!1 &7075289220273256438
 GameObject:
   m_ObjectHideFlags: 0
