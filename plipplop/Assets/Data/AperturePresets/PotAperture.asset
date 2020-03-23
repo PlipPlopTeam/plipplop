@@ -20,13 +20,13 @@ MonoBehaviour:
   - property: fieldOfView
     isOverriden: 0
   - property: heightOffset
-    isOverriden: 1
+    isOverriden: 0
   - property: maximumHeightAboveTarget
     isOverriden: 0
   - property: additionalAngle
     isOverriden: 0
   - property: distance
-    isOverriden: 0
+    isOverriden: 1
   - property: cameraRotateAroundSensivity
     isOverriden: 0
   - property: cameraRotateAboveSensivity
@@ -82,12 +82,12 @@ MonoBehaviour:
   canBeReset: 1
   detectsSurroundings: 1
   fieldOfView: 60
-  heightOffset: 0.45
+  heightOffset: 0.9
   maximumHeightAboveTarget: 10
   additionalAngle: 20
   distance:
-    min: 2
-    max: 5
+    min: 6
+    max: 7
   cameraRotateAroundSensivity: 75
   cameraRotateAboveSensivity: 15
   fovLerp: 20
@@ -108,8 +108,8 @@ MonoBehaviour:
   angleIncrementOnSpeed: 5
   maximumCatchUpSpeed: 15
   absoluteBoundaries:
-    min: 2
-    max: 7
+    min: 4
+    max: 8
   constraintToTarget: 0
   targetConstraintLocalOffset: {x: 0, y: 0, z: 0}
   staticPositionLerp: 10
