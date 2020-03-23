@@ -6,15 +6,10 @@ using UnityEditor;
 public class BirdArea : BirdZone
 {
 	public enum Shape { CIRCLE, RECTANGLE }
-	[Header("Settings")]
+	[Header("Area")]
 	public Shape shape;
 	public float range;
 	public Vector2 size;
-
-	private void Awake()
-    {
-        Game.i.aiZone.Register(this);
-    }
 
 	public override bool Available()
 	{

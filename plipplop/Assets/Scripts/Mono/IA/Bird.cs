@@ -91,6 +91,7 @@ public class Bird : MonoBehaviour
 	private bool faceDirection = false;
 	private NearObject objectOn = null;
 	private bool unfearable;
+	private BirdZone zone;
 
 	private List<NearObject> nearObjects = new List<NearObject>();
 
@@ -129,6 +130,12 @@ public class Bird : MonoBehaviour
 		BirdPath bp = Game.i.aiZone.GetRandomBirdPath();
 		if (bp != null)
 		{
+			if(zone != null)
+			{
+				zone.Exit();
+				zone = null;
+			}
+
 			Follow(bp);
 			StartCoroutine(WaitBeforeIdle(Random.Range(10f, 20f)));
 		}
@@ -148,6 +155,8 @@ public class Bird : MonoBehaviour
 			Spot s = zone.GetSpot();
 			if(s != null)
 			{
+				this.zone = zone;
+				this.zone.Enter();
 				onReached = null;
 				SitOn(s.position, s.surface);
 			}
@@ -156,7 +165,6 @@ public class Bird : MonoBehaviour
 		else
 		{
 			Debug.LogWarning("No Bird Area found in this scene");
-			Destroy(gameObject);
 		}
 	}
 
