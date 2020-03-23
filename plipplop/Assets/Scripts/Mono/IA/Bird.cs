@@ -127,16 +127,19 @@ public class Bird : MonoBehaviour
 		}
 	}
 
-	[ContextMenu("GoSit")]
 	public void GoSitOnSpot()
 	{
 		StopAllCoroutines();
 		BirdArea area = Game.i.aiZone.GetRandomBirdArea();
 		if (area != null)
 		{
-			onReached = null;
 			BirdArea.Spot s = area.GetSpot();
-			SitOn(s.position, s.surface);
+			if(s != null)
+			{
+				onReached = null;
+				SitOn(s.position, s.surface);
+			}
+			else StartCoroutine(WaitBeforeSit(Random.Range(10f, 20f)));
 		}
 		else
 		{
