@@ -10,6 +10,18 @@ public class Bird : MonoBehaviour
 	public enum State { MOVING, FLYING, LANDED };
 	public enum WingPosition { UP, MIDDLE, DOWN };
 
+	public class Spot
+	{
+		public Transform surface;
+		public Vector3 position;
+
+		public Spot(Transform t, Vector3 pos)
+		{
+			surface = t;
+			position = pos;
+		}
+	}
+
 	public class NearObject
 	{
 		public Transform transform;
@@ -130,10 +142,10 @@ public class Bird : MonoBehaviour
 	public void GoSitOnSpot()
 	{
 		StopAllCoroutines();
-		BirdArea area = Game.i.aiZone.GetRandomBirdArea();
-		if (area != null)
+		BirdZone zone = Game.i.aiZone.GetRandomBirdArea();
+		if (zone != null)
 		{
-			BirdArea.Spot s = area.GetSpot();
+			Spot s = zone.GetSpot();
 			if(s != null)
 			{
 				onReached = null;

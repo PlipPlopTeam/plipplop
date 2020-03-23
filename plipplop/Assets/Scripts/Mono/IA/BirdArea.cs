@@ -3,7 +3,7 @@
 using UnityEditor;
 #endif
 
-public class BirdArea : MonoBehaviour
+public class BirdArea : BirdZone
 {
 	public enum Shape { CIRCLE, RECTANGLE }
 	[Header("Settings")]
@@ -11,24 +11,17 @@ public class BirdArea : MonoBehaviour
 	public float range;
 	public Vector2 size;
 
-	public class Spot
-	{
-		public Transform surface;
-		public Vector3 position;
-
-		public Spot(Transform t, Vector3 pos)
-		{
-			surface = t;
-			position = pos;
-		}
-	}
-
 	private void Awake()
     {
         Game.i.aiZone.Register(this);
     }
 
-	public Spot GetSpot()
+	public override bool Available()
+	{
+		return true;
+	}
+
+	public override Bird.Spot GetSpot()
 	{
 		Vector3 position = Vector3.zero;
 
@@ -46,7 +39,7 @@ public class BirdArea : MonoBehaviour
 		for (int i = hits.Length - 1; i > 0; i--)
 		{
 			if (!hits[i].collider.isTrigger)
-				return new Spot(hits[i].collider.transform, hits[i].point);
+				return new Bird.Spot(hits[i].collider.transform, hits[i].point);
 		}
 		return null;
 	}
