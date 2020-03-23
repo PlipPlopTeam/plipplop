@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class AIZone
 {
@@ -8,7 +9,7 @@ public class AIZone
     List<Feeder> feeders = new List<Feeder>();
     List<AIPath> paths = new List<AIPath>();
     List<Container> containers = new List<Container>();
-    List<BirdArea> birdAreas = new List<BirdArea>();
+    List<BirdZone> birdAreas = new List<BirdZone>();
 	List<BirdPath> birdPaths = new List<BirdPath>();
 
 	public AIZone(Activity[] activities, Feeder[] feeders)
@@ -75,7 +76,7 @@ public class AIZone
 		birdPaths.Add(path);
 	}
 
-	public void Register(BirdArea area)
+	public void Register(BirdZone area)
 	{
 		birdAreas.Add(area);
 	}
@@ -91,10 +92,16 @@ public class AIZone
         else return null;
     }
 
-    public BirdArea GetRandomBirdArea()
+    public BirdZone GetRandomBirdArea()
     {
-        if (birdAreas.Count > 0) return birdAreas.PickRandom();
-        else return null;
+        List<BirdZone> bzs = new List<BirdZone>(birdAreas);
+        bzs.OrderBy(bz => bz.priority);
+
+        foreach(BirdZone bz in bzs)
+        {
+            if (bz.Available()) return bz;
+        }
+        return null;
     }
 
     public Feeder[] GetFeeders()

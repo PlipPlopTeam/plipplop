@@ -10,6 +10,18 @@ public class Bird : MonoBehaviour
 	public enum State { MOVING, FLYING, LANDED };
 	public enum WingPosition { UP, MIDDLE, DOWN };
 
+	public class Spot
+	{
+		public Transform surface;
+		public Vector3 position;
+
+		public Spot(Transform t, Vector3 pos)
+		{
+			surface = t;
+			position = pos;
+		}
+	}
+
 	public class NearObject
 	{
 		public Transform transform;
@@ -79,6 +91,7 @@ public class Bird : MonoBehaviour
 	private bool faceDirection = false;
 	private NearObject objectOn = null;
 	private bool unfearable;
+	private BirdZone zone;
 
 	private List<NearObject> nearObjects = new List<NearObject>();
 
@@ -117,6 +130,12 @@ public class Bird : MonoBehaviour
 		BirdPath bp = Game.i.aiZone.GetRandomBirdPath();
 		if (bp != null)
 		{
+			if(zone != null)
+			{
+				zone.Exit();
+				zone = null;
+			}
+
 			Follow(bp);
 			StartCoroutine(WaitBeforeIdle(Random.Range(10f, 20f)));
 		}
@@ -127,21 +146,25 @@ public class Bird : MonoBehaviour
 		}
 	}
 
-	[ContextMenu("GoSit")]
 	public void GoSitOnSpot()
 	{
 		StopAllCoroutines();
-		BirdArea area = Game.i.aiZone.GetRandomBirdArea();
-		if (area != null)
+		BirdZone zone = Game.i.aiZone.GetRandomBirdArea();
+		if (zone != null)
 		{
-			onReached = null;
-			BirdArea.Spot s = area.GetSpot();
-			SitOn(s.position, s.surface);
+			Spot s = zone.GetSpot();
+			if(s != null)
+			{
+				this.zone = zone;
+				this.zone.Enter();
+				onReached = null;
+				SitOn(s.position, s.surface);
+			}
+			else StartCoroutine(WaitBeforeSit(Random.Range(10f, 20f)));
 		}
 		else
 		{
 			Debug.LogWarning("No Bird Area found in this scene");
-			Destroy(gameObject);
 		}
 	}
 

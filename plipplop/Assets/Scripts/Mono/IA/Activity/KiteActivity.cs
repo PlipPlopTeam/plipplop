@@ -37,7 +37,6 @@ public class KiteActivity : Activity
         user.skeleton.Attach(transform, Cloth.ESlot.RIGHT_HAND);
         
         user.animator.SetBool("Holding", true);
-        print(user.gameObject);
         kite.StartFly();
 
         full = true;
