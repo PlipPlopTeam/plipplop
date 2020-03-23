@@ -37,8 +37,23 @@ public class StaticCameraVolume : Volume {
             Game.i.aperture.EnableLookAt();
         }
 
+        // Stop control for 1 frame
+        StartCoroutine(FreezeForSomeTime());
+
+
         // TODO : Replace by a fadeout
-        foreach (GameObject o in objectsToHide) o.SetActive(false);
+        foreach (GameObject o in objectsToHide)
+        {
+            var fade = o.GetComponent<FadedApparition>();
+            if (fade != null)
+            {
+                fade.FadeOutThen(null);
+            }
+            else
+            {
+                o.SetActive(false);
+            }
+        }
     }
 
     public override void OnPlayerExit(Controller player)
@@ -55,6 +70,27 @@ public class StaticCameraVolume : Volume {
             Game.i.aperture.RestoreLookAt(lookAtIndex);
         }
 
-        foreach (GameObject o in objectsToHide) o.SetActive(true);
+        StartCoroutine(FreezeForSomeTime());
+
+        foreach (GameObject o in objectsToHide)
+        {
+            var fade = o.GetComponent<FadedApparition>();
+            if (fade != null)
+            {
+                fade.StartFadeIn();
+            }
+            else
+            {
+                o.SetActive(true);
+            }
+        }
+    }
+
+    IEnumerator FreezeForSomeTime()
+    {
+
+        Game.i.player.Paralyze();
+        yield return new WaitForSeconds(0.75f);
+        Game.i.player.Deparalyze();
     }
 }
