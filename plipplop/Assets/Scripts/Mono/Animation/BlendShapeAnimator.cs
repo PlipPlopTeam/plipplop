@@ -15,6 +15,8 @@ public class BlendShapeAnimator : MonoBehaviour
     public bool move = false;
     public float maxMoveRange = .3f;
     
+    public LayerMask mask;
+
     void Start()
     {
         StartCoroutine(ChangePose());
@@ -36,7 +38,7 @@ public class BlendShapeAnimator : MonoBehaviour
             transform.position += transform.forward * Random.Range(-maxMoveRange / 2, maxMoveRange / 2);
 
             RaycastHit hit;
-            if(Physics.Raycast(transform.position+new Vector3(0,.1f,0), Vector3.down,  out hit,.2f))
+            if(Physics.Raycast(transform.position+new Vector3(0,.1f,0), Vector3.down,  out hit,.2f, mask))
             {
                 transform.position = hit.point;
             }
