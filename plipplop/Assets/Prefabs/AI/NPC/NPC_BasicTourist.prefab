@@ -215,7 +215,7 @@ MonoBehaviour:
   feeder: {fileID: 0}
   container: {fileID: 0}
   settings: {fileID: 11400000, guid: 7739a2840a1b2a44d8adf298bc5c78bf, type: 2}
-  graph: {fileID: 11400000, guid: 19c1410dc5dcceb4bbe0bf791c30a900, type: 2}
+  graph: {fileID: 11400000, guid: 4c045c5db27177a468f90ad3cc3ea544, type: 2}
   spawnPosition: {x: 0, y: 0, z: 0}
   hasWaited: 0
 --- !u!114 &1684127437
@@ -230,12 +230,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d32d2f021836fd4ab299067088d9cac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modifiers: []
   path: {fileID: 0}
   slowMultiplier: 1
   settings:
     speed: 2
     navTreshold: 1
     animatorRunSpeed: 5
+    animatorRotationSpeed: 7
     minimumCarrySpeed: 1
   going: 0
   reached: 0
@@ -379,6 +381,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2185281420412016359, guid: 85438989d6e08724ebf3e5ba8bdeb568,
+        type: 3}
+      propertyPath: m_BlendShapeWeights.Array.size
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 85438989d6e08724ebf3e5ba8bdeb568,
         type: 3}
