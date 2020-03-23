@@ -95,8 +95,8 @@ public class SoundPlayer
         g.name = "_ATTACHED_PLAYER";
         var source = g.AddComponent<AudioSource>();
         source.spatialBlend = 1f;
-        source.minDistance = 2000f;
-        source.maxDistance = 2000.1f;
+        source.minDistance = 5f;
+        source.maxDistance = 35f;
         if (snd.loop == false) {
             g.AddComponent<DestroyAfter>().lifespan = clip.length + 1f;
         }
