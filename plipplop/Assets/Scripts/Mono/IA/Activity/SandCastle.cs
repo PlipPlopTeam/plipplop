@@ -32,11 +32,12 @@ public class SandCastle : Activity
 	{
 		base.StartUsing(user);
 		user.look.FocusOn(transform);
-		user.GoSitThere(transform.position + Geometry.GetRandomPointOnCircle(radius + 1f));
+		user.GoSitThere(transform.position + Geometry.GetRandomPointOnCircle(radius + 0.25f));
 		user.agentMovement.onDestinationReached += () =>
 		{
 			user.agentMovement.OrientToward(transform.position);
 			constructionInProgress = true;
+			user.animator.SetBool("Crafting", true);
 		};
 	}
 
@@ -45,7 +46,7 @@ public class SandCastle : Activity
 		base.StopUsing(user);
 		user.look.LooseFocus();
 		user.GetUp();
-
+		user.animator.SetBool("Crafting", false);
 		if (users.Count == 0) constructionInProgress = false;
 	}
 
@@ -146,6 +147,8 @@ public class SandCastle : Activity
 		refreshTimer = 0f;
 		constructionInProgress = false;
 		built = true;
+
+		if (users.Count > 0) users[0].animator.SetBool("Crafting", false);
 	}
 
 	private GameObject CreateTower()
