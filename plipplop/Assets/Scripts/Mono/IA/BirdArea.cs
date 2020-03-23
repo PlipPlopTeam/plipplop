@@ -43,9 +43,10 @@ public class BirdArea : MonoBehaviour
 		}
 
 		RaycastHit[] hits = Physics.RaycastAll(position, Vector3.down);
-		foreach (RaycastHit h in hits)
+		for (int i = hits.Length - 1; i > 0; i--)
 		{
-			if (!h.collider.isTrigger) return new Spot(h.collider.transform, h.point);
+			if (!hits[i].collider.isTrigger)
+				return new Spot(hits[i].collider.transform, hits[i].point);
 		}
 		return null;
 	}
@@ -55,7 +56,7 @@ public class BirdArea : MonoBehaviour
 	{
 		var style = new GUIStyle();
 		style.imagePosition = ImagePosition.ImageAbove;
-		style.alignment = TextAnchor.MiddleCenter;
+		style.alignment = TextAnchor.UpperCenter;
 		var tex = Resources.Load<Texture2D>("Editor/Sprites/SPR_flap");
 		var content = new GUIContent();
 		content.image = tex;
