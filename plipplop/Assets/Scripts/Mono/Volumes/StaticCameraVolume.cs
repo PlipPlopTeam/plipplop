@@ -90,7 +90,7 @@ public class StaticCameraVolume : Volume {
     {
 
         Game.i.player.Paralyze();
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.75f);
         Game.i.player.Deparalyze();
     }
 }
