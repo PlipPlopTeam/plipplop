@@ -129,7 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e362031a56a4ed4ba1adeffdf97d2b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoPossess: 0
+  autoPossess: 1
   beginCrouched: 1
   canRetractLegs: 1
   freezeUntilPossessed: 0
@@ -141,7 +141,7 @@ MonoBehaviour:
   locomotion: {fileID: 0}
   visuals: {fileID: 7348150398772626055}
   face: {fileID: 7615949197226608932}
-  visualsOffset: {x: 0, y: 0, z: 0}
+  visualsOffset: {x: 0, y: -0.2, z: 0}
   unpossessSpawnDistance: 1
   pushMovementForce: 250
   pushCooldown: 1
@@ -172,6 +172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 011d63a14cf4d8347a5660a929242412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modifiers: []
   preset: {fileID: 11400000, guid: 81c5435995369f048ab3d3d178e1aa7c, type: 2}
   isFlattened: 0
   rigidbody: {fileID: 0}
@@ -237,7 +238,8 @@ MonoBehaviour:
   shape: 0
   rb: {fileID: 6636483350066690593}
   collider: {fileID: 6636483350066690607}
-  visual: {fileID: 7348150398772626054}
+  type: 3
+  visuals: {fileID: 0}
   origin: {x: 0, y: 0, z: 0}
   weight: 5
   distanceThreshold: 3
@@ -255,7 +257,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buyoyancy: 1
-  waterline: -0.4
+  waterline: -0.25
 --- !u!114 &-7803465493484530299
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -465,21 +467,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -90
       objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: 6f58e9dfaa9555f42a57ed5561c73cd5,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: 6f58e9dfaa9555f42a57ed5561c73cd5,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: 6f58e9dfaa9555f42a57ed5561c73cd5,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: -1504981713932161579, guid: 6f58e9dfaa9555f42a57ed5561c73cd5,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -564,21 +551,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7962972514405291281, guid: 42edcef2484d1d446ab328bcc85a43fa,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7962972514405291281, guid: 42edcef2484d1d446ab328bcc85a43fa,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7962972514405291281, guid: 42edcef2484d1d446ab328bcc85a43fa,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42edcef2484d1d446ab328bcc85a43fa, type: 3}
