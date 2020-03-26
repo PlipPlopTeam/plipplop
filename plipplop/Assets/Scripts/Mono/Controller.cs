@@ -260,26 +260,30 @@ public abstract class Controller : MonoBehaviour
 
         if (IsPossessed() && !AreLegsRetracted())
         {
-            if (animateHead) {
+            if (animateHead) 
+            {
                 AlignPropOnHeadDummy();
             }
-
-            // ""Align"" to ground normal
-            Vector3? norm;
-            Vector3 up = Vector3.up;
-            try {
-                norm = locomotion.GetGroundNormal();
-            }
-            catch {
-                norm = null;
-            }
-            var y = transform.eulerAngles.y;
-            if (norm.HasValue) 
+            if(!IsFrozen())
             {
-                up = norm.Value;
+                Vector3? norm;
+                Vector3 up = Vector3.up;
+                try
+                {
+                    norm = locomotion.GetGroundNormal();
+                }
+                catch
+                {
+                    norm = null;
+                }
+                var y = transform.eulerAngles.y;
+                if (norm.HasValue)
+                {
+                    up = norm.Value;
+                }
+                transform.up = up;// Vector3.Lerp(transform.up, up, Time.deltaTime * 10f);
+                transform.Rotate(Vector3.up * y);
             }
-            transform.up = up;// Vector3.Lerp(transform.up, up, Time.deltaTime * 10f);
-            transform.Rotate(Vector3.up * y);
         }
 
         if (isBeingThrown && (IsGrounded()|| isImmerged))
