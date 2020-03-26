@@ -210,6 +210,15 @@ public class Locomotion : Walker
         }
     }
 
+    public void StartFly()
+    {
+        locomotionAnimation.isFlying = true;
+    }
+    public void EndFly()
+    {
+        locomotionAnimation.isFlying = false;
+    }
+
     public bool IsGrounded(float rangeMultiplier = 1f) // But better 😎
     {
         RaycastHit[] hits = RaycastAllToGround(rangeMultiplier);

@@ -11,6 +11,7 @@ public class LocomotionAnimation
 	public bool jumped;
 	public bool isWalking;
     public bool isFlattened;
+    public bool isFlying;
 	public System.Action onLegAnimationEnd;
 	public Rigidbody rigidbody;
 	Transform parentTransform;
@@ -47,6 +48,12 @@ public class LocomotionAnimation
             legs.gameObject.SetActive(true);
             legs.speed = 1f;
 			legs.PlayOnce("Flat");
+        }
+        else if(isFlying)
+        {
+            legs.gameObject.SetActive(true);
+            legs.speed = 1f;
+            legs.PlayOnce("Fly");
         }
         else if (!grounded)
         {
