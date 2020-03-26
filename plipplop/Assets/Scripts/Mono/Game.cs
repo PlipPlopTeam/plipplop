@@ -16,6 +16,8 @@ public class Game : MonoBehaviour
     public ChunkLoader chunkLoader;
     [HideInInspector] public Aperture aperture;
 
+    public Dialog dialogToBeGrabbed;
+
     static public Game i;
     static public Switches s;
 
@@ -96,5 +98,9 @@ public class Game : MonoBehaviour
         volume.isInvisible = true;
     }
 
+    public void PlayDialogue(Dialog dial)
+    {
+        dialogToBeGrabbed = dial;
+    }
 
 }

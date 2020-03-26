@@ -11,24 +11,19 @@ public class DialogPlayer : MonoBehaviour
     public float pauseInterval = 0.4f;
     public float fastSpeedMultiplier = 2f;
     public float slowSpeedMultiplier = 0.2f;
+    public float scaleSpeed = 2f;
 
-    public Dictionary<string, Tuple<int, int>> vertexFXs = new Dictionary<string, Tuple<int, int>>();
+    public Dictionary<string, List<Tuple<int, int>>> vertexFXs = new Dictionary<string, List<Tuple<int, int>>>();
+    public RectTransform parent;
 
     bool isPlaying = false;
     bool isWaitingDelay = false;
     bool isWaitingForInput = false;
     int currentLineIndex = 0;
-    int rawCharIndex = 0;
+    int currentCharIndex = 0;
     Dialog currentDialogue = null;
     TextMeshProUGUI textMesh;
     Coroutine teletypeRoutine;
-
-    readonly List<string> vertexFX = new List<string> { "rumble", "wave" };
-    readonly List<string> TMProSupportedTags = new List<string>()
-    {
-        "size", "color", "nobr", "font", 
-        "/size", "/color", "/nobr", "/font"
-    };
 
     int slowingDown = 0;
     int goingFaster = 0;
@@ -57,15 +52,21 @@ public class DialogPlayer : MonoBehaviour
             library = new DialogLibrary();
             library.Rebuild();
         }
+        
         PlaySampleDialogue();
     }
 
     public void LoadDialogue(string id)
     {
+        LoadDialogue(library[id]);
+    }
+
+    public void LoadDialogue(Dialog dialog)
+    {
         currentLineIndex = 0;
-        rawCharIndex = 0;
-        currentDialogue = library[id];
+        currentCharIndex = 0;
         textMesh.text = "";
+        currentDialogue = dialog;
     }
 
     public void Play()
@@ -80,7 +81,8 @@ public class DialogPlayer : MonoBehaviour
         Debug.Log("NEXT!");
         if (teletypeRoutine != null) StopCoroutine(teletypeRoutine);
         vertexFXs.Clear();
-        rawCharIndex = 0;
+        currentCharIndex = 0;
+        textMesh.maxVisibleCharacters = 0;
         currentLineIndex++;
         if (currentLineIndex >= currentDialogue.elements.Count)
         {
@@ -108,9 +110,21 @@ public class DialogPlayer : MonoBehaviour
 
     private void Update()
     {
+        if (!isPlaying)
+        {
+            parent.localScale = Vector3.Slerp(parent.localScale, Vector3.zero, scaleSpeed * Time.deltaTime);
+            if (Game.i && Game.i.dialogToBeGrabbed != null) {
+                LoadDialogue(Game.i.dialogToBeGrabbed);
+                Game.i.dialogToBeGrabbed = null;
+                Play();
+            }
+            return;
+        }
+        parent.localScale = Vector3.Slerp(parent.localScale, Vector3.one, scaleSpeed * Time.deltaTime);
+
         if (isWaitingDelay) return;
 
-        if (Input.GetKeyDown(KeyCode.Space) || (Game.i && Game.i.player.mapping.IsPressed(EAction.ACTION)))
+        if (Input.GetKeyDown(KeyCode.Space) || (Game.i && Game.i.player.mapping.IsPressed(EAction.TOGGLE_LEGS)))
         {
             if (isWaitingForInput || currentElement is Dialog.Pause)
             {
@@ -119,7 +133,7 @@ public class DialogPlayer : MonoBehaviour
             }
             else
             {
-                rawCharIndex = currentLine.convertedXML.Length;
+                currentCharIndex = currentLine.pureText.Length;
                 isWaitingForInput = true;
             }
         }
@@ -130,125 +144,90 @@ public class DialogPlayer : MonoBehaviour
     IEnumerator Teletype()
     {
         var line = currentLine;
-        Debug.Log("Starting teletype");
 
         // Content control
         // TODO: Random, Autodialog, Dialog speeds, OUTLINE
 
-        while (rawCharIndex < line.convertedXML.Length)
+        // Let's first look for events of type vertexFX
+        vertexFXs.Clear();
+        foreach (var evnt in line.events.FindAll(o => Dialog.vertexFXTags.Contains(o.name)))
+        {
+            if (!vertexFXs.ContainsKey(evnt.name)) {
+                vertexFXs.Add(evnt.name, new List<Tuple<int, int>>());
+            }
+
+            vertexFXs[evnt.name].Add(new Tuple<int, int>(evnt.startChar, evnt.endChar));
+        }
+
+        while (currentCharIndex < line.pureText.Length)
         {
             // Detect XML tag start
-            if (line.convertedXML[rawCharIndex] == '<')
+
+            var startingEvents = line.events.FindAll(o => o.startChar == currentCharIndex);
+            foreach (var startingEvent in startingEvents)
             {
-                rawCharIndex++;
-                StringBuilder buffer = new StringBuilder();
-                while (line.convertedXML[rawCharIndex] != '>')
+                switch (startingEvent.name)
                 {
-                    buffer.Append(line.convertedXML[rawCharIndex]);
-                    rawCharIndex++;
-                }
+                    case "pause":
+                        yield return new WaitForSeconds(pauseInterval);
+                        break;
 
-                var tag = buffer.ToString();
+                    case "shock":
+                        yield return new WaitForSeconds(pauseInterval);
+                        // <Insert shock FX>
+                        break;
 
-                // Detect vertex FX tags
-                if (vertexFX.Contains(tag))
-                {
-                    int start = rawCharIndex;
-                    int rawIndex = rawCharIndex;
-                    StringBuilder effectBuffer = new StringBuilder();
-                    bool isInTag = false;
-                    while (!effectBuffer.ToString().EndsWith("</" + tag + ">"))
-                    {
-                        rawIndex++;
+                    case "slow":
+                        slowingDown++;
+                        break;
 
-                        if (line.convertedXML[rawIndex] == '<')
-                            isInTag = true;
+                    case "fast":
+                        goingFaster++;
+                        break;
 
-                        if (!isInTag)
+                    case "whole":
+                    case "instantaneous":
+                        // Skipping until I meet an ending
+                        while (true)
                         {
-                            rawIndex++;
-                        }
-
-                        if (line.convertedXML[rawIndex] == '>')
-                            isInTag = false;
-
-                        if (rawIndex >= line.convertedXML.Length)
-                        {
-                            throw new Exception("Tag " + tag + " seems to never end. Line " + currentLineIndex + ".");
-                        }
-                        effectBuffer.Append(line.convertedXML[rawIndex]);
-                    }
-                    int end = rawIndex;
-
-                    vertexFXs.Add(tag, new Tuple<int, int>(start, end));
-                }
-
-                // Flow control
-                else if (new List<string>() { "pause /", "whole", "instantaneous", "slow", "fast", "shock /" }.Contains(tag))
-                {
-                    switch (tag)
-                    {
-                        case "pause /":
-                            yield return new WaitForSeconds(pauseInterval);
-                            break;
-
-                        case "shock /":
-                            // <Insert shock FX>
-                            break;
-
-                        case "slow":
-                            slowingDown++;
-                            break;
-
-                        case "fast":
-                            goingFaster++;
-                            break;
-
-                        case "whole":
-                        case "instantaneous":
-                            // Skipping until I meet an ending
-                            StringBuilder charBuffer = new StringBuilder();
-                            bool isInTag = false;
-                            while (!charBuffer.ToString().EndsWith("</" + tag + ">"))
+                            currentCharIndex++;
+                            var ends = line.events.FindAll(o => o.name == startingEvent.name && o.endChar == currentCharIndex);
+                            if (ends.Count > 0)
                             {
-                                rawCharIndex++;
-
-                                if (line.convertedXML[rawCharIndex] == '<')
-                                    isInTag = true;
-
-                                if (!isInTag)
-                                {
-                                    rawCharIndex++;
-                                }
-
-                                if (line.convertedXML[rawCharIndex] == '>')
-                                    isInTag = false;
-
-                                if (rawCharIndex >= line.convertedXML.Length)
-                                {
-                                    throw new Exception("Tag " + tag + " seems to never end. Line " + currentLineIndex + ".");
-                                }
-
-                                charBuffer.Append(line.convertedXML[rawCharIndex]);
+                                break;
                             }
-                            break;
-                    }
-                }
-                else if (tag == "/slow")
-                {
-                    slowingDown--;
-                }
-                else if (tag == "/fast")
-                {
-                    goingFaster--;
+
+                            if (currentCharIndex >= line.pureText.Length)
+                            {
+                                throw new Exception("Tag " + startingEvent.name + " seems to never end. Line " + currentLineIndex + ".");
+                            }
+                        }
+                        break;
                 }
             }
-            yield return new WaitForSeconds(currentDialogue.intervalMultiplier * (isGoingFaster ? fastInterval : (isSlowingDown ? slowInterval : baseInterval)));
 
-            rawCharIndex++;
+            var endingEvents = line.events.FindAll(o => o.endChar == currentCharIndex);
+            foreach (var end in endingEvents)
+            {
+                switch (end.name)
+                {
+                    case "slow":
+                        slowingDown--;
+                        break;
+
+                    case "fast":
+                        goingFaster--;
+                        break;
+                }
+            }
+
+            currentCharIndex++;
+            yield return new WaitForSeconds(currentDialogue.intervalMultiplier * (isGoingFaster ? fastInterval : (isSlowingDown ? slowInterval : baseInterval)));
         }
-        Debug.Log("Ending teletype because " + rawCharIndex + " > " + line.convertedXML.Length);
+
+        Debug.Log("Ending teletype because " + currentCharIndex + " > " + line.pureText.Length);
         isWaitingForInput = true;
+
     }
 
     IEnumerator WaitFor(float miliseconds)
@@ -265,47 +244,7 @@ public class DialogPlayer : MonoBehaviour
             return;
         }
 
-        StringBuilder builder = new StringBuilder();
-        var line = currentLine;
-
-        bool isInTag = false;
-        var currentTag = "";
-        int i = 0;
-        while (i < rawCharIndex || isInTag) { 
-            if (line.convertedXML[i] == '<')
-            {
-                isInTag = true;
-                i++;
-                continue;
-            }
-            if (line.convertedXML[i] == '>')
-            {
-                isInTag = false;
-                var tagHead = currentTag.Split('=')[0];
-
-                if (TMProSupportedTags.Contains(tagHead))
-                {
-                    builder.Append("<" + currentTag + ">");
-                }
-
-                currentTag = "";
-                i++;
-                continue;
-            }
-
-            if (isInTag)
-            {
-                currentTag += line.convertedXML[i];
-            }
-            else
-            {
-                builder.Append(line.convertedXML[i]);
-            }
-
-            i++;
-        }
-
-
-        textMesh.text = builder.ToString();
+        textMesh.text = currentLine.tmpReadyXml;
+        textMesh.maxVisibleCharacters = currentCharIndex;
     }
 }
