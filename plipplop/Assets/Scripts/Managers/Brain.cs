@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class Brain
 {
+    public TalkableCharacter currentChatOpportunity = null;
+    public readonly Mapping mapping;
+
     int isParalyzed = 0;
 
     Controller controller = null;
     Controller baseController = null;
-    Mapping mapping;
 
     Coroutine rumbleCoroutine;
 
@@ -50,6 +52,11 @@ public class Brain
             mapping.Axis(EAction.CAMERA_VERTICAL),
             mapping.Axis(EAction.CAMERA_HORIZONTAL)
         );
+
+        if (currentChatOpportunity != null && mapping.IsPressed(EAction.TALK))
+        {
+            currentChatOpportunity.StartDialogue();
+        }
     }
 
     public void FixedUpdate()
@@ -92,7 +99,7 @@ public class Brain
         if (mapping.IsPressed(EAction.JUMP)) controller.OnJump();
         if (mapping.IsPressed(EAction.POSSESS)) controller.OnTryPossess();
         if (mapping.IsHeld(EAction.JUMP)) controller.OnHoldJump();
-		if (mapping.IsPressed(EAction.ACTION)) controller.ToggleLegs();
+		if (mapping.IsPressed(EAction.TOGGLE_LEGS)) controller.ToggleLegs();
         if (mapping.IsPressed(EAction.SHOUT)) controller.Shout();
     }
 

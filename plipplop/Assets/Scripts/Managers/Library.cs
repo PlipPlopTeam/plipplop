@@ -82,4 +82,8 @@ public class Library
 
     [Header("Cinematics")]
     public NamedPrefabResources cinematics;
+
+
+    // Hidden
+    public DialogLibrary dialogs;
 }

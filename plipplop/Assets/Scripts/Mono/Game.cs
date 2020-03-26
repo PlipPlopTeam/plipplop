@@ -16,6 +16,8 @@ public class Game : MonoBehaviour
     public ChunkLoader chunkLoader;
     [HideInInspector] public Aperture aperture;
 
+    public Dialog dialogToBeGrabbed;
+
     static public Game i;
     static public Switches s;
 
@@ -40,6 +42,10 @@ public class Game : MonoBehaviour
         cheatCodeListener = new CheatCodeListener(new Cheats());
         chunkLoader = new ChunkLoader();
         aiZone = new AIZone();
+
+        library.dialogs = new DialogLibrary();
+        library.dialogs.Rebuild();  // 🔥
+
         new GameObject().AddComponent<UnityMainThreadDispatcher>().gameObject.name="_THREAD_DISPATCHER";
         GameObject.Instantiate(library.canvas).name = "GAME_CANVAS";
 
@@ -92,5 +98,9 @@ public class Game : MonoBehaviour
         volume.isInvisible = true;
     }
 
+    public void PlayDialogue(Dialog dial)
+    {
+        dialogToBeGrabbed = dial;
+    }
 
 }
