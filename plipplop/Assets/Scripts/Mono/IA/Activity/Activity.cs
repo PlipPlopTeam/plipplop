@@ -40,6 +40,11 @@ public class Activity : MonoBehaviour
 		else StartSpectate(user);
     }
 
+	public bool Used()
+	{
+		return users.Count > 0 || spectators.Count > 0;
+	}
+
 	public virtual void StartUsing(NonPlayableCharacter user)
 	{
 		users.Add(user);
