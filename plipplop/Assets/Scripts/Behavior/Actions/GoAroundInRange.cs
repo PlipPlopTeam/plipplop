@@ -25,7 +25,6 @@ namespace Behavior.NPC
 					)
 				))
 				{
-					Debug.Log("Yes");
 					npc.agentMovement.GoThere(npc.transform.position);
 				}
 
