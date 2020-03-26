@@ -124,11 +124,11 @@ public abstract class Controller : MonoBehaviour
     internal bool AreLegsRetracted() { return locomotion.AreLegsRetracted(); }
     internal virtual bool IsGrounded(float rangeMultiplier = 1f) { return locomotion.IsGrounded(); }
     internal virtual bool WasGrounded() { return Time.time - locomotion.preset.groundedBufferToleranceSeconds < lastTimeGrounded; }
-    internal virtual void OnHoldJump() { }
-    internal abstract void OnLegsRetracted();
-    internal abstract void OnLegsExtended();
-    internal virtual void SpecificMove(Vector3 direction) { }
-    internal virtual void MoveCamera(Vector2 d) { }
+    internal virtual void OnHoldJump() {}
+	internal virtual void OnLegsRetracted() {}
+	internal virtual void OnLegsExtended() {}
+    internal virtual void SpecificMove(Vector3 direction) {}
+    internal virtual void MoveCamera(Vector2 d) {}
 
     virtual internal void Shout()
     {
@@ -258,13 +258,15 @@ public abstract class Controller : MonoBehaviour
 			}
 		}
 
-        if (IsPossessed() && !AreLegsRetracted()) {
+        if (IsPossessed() && !AreLegsRetracted())
+        {
             if (animateHead) {
                 AlignPropOnHeadDummy();
             }
 
             // ""Align"" to ground normal
             Vector3? norm;
+            Vector3 up = Vector3.up;
             try {
                 norm = locomotion.GetGroundNormal();
             }
@@ -272,12 +274,11 @@ public abstract class Controller : MonoBehaviour
                 norm = null;
             }
             var y = transform.eulerAngles.y;
-            if (norm.HasValue) {
-                transform.up = norm.Value;
+            if (norm.HasValue) 
+            {
+                up = norm.Value;
             }
-            else {
-                transform.up = Vector3.up;
-            }
+            transform.up = up;// Vector3.Lerp(transform.up, up, Time.deltaTime * 10f);
             transform.Rotate(Vector3.up * y);
         }
 
@@ -323,13 +324,16 @@ public abstract class Controller : MonoBehaviour
     // Trying to possess somESubject else
     virtual internal void OnTryPossess()
     {
-        if (!isImmerged && controllerSensor && controllerSensor.IsThereAnyController()) {
+        if (!isImmerged && controllerSensor && controllerSensor.IsThereAnyController())
+        {
             var focused = controllerSensor.GetFocusedController();
-            if (!focused.isImmerged) {
+            if (!focused.isImmerged) 
+            {
                 Game.i.player.Possess(focused);
             }
         }
-        else if (!Game.i.player.IsPossessingBaseController()) {
+        else if (!Game.i.player.IsPossessingBaseController()) 
+        {
             Game.i.player.TeleportBaseControllerAndPossess(unpossessSpawnDistance);
         }
     }

@@ -1,24 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Food : Item
 {
     [Header("Food")]
     public FoodData data;
-    public bool consumed = false;
-    public System.Action onConsumeEnd;
+    [HideInInspector] public bool consumed = false;
+    [HideInInspector] public float mass;
 
+    public System.Action onConsumeEnd;
 	public bool isBeingConsumed { get { return m_BeingConsumed; } }
 	bool m_BeingConsumed = false;
-
     private float timer;
-
-    public float mass;
 
     public override void Awake()
     {
         base.Awake();
+		type = EType.FOOD;
         if(data != null) Create(data);
         if(consumed) Consumed();
     }
@@ -27,7 +24,17 @@ public class Food : Item
     {
         gameObject.name = foodData.name;
         data = foodData;
-        if(visuals == null) Visual(foodData.visual);
+        if(data.pristine != null) Assemble(data.pristine);
+    }
+
+    public void Assemble(GameObject obj)
+    {
+        Visual(data.pristine);
+        if (visuals != null)
+        {
+            visuals.transform.localEulerAngles = data.rotationOffset;
+            visuals.transform.localPosition = data.positionOffset;
+        }
     }
 
     public void Consume(System.Action end)
@@ -42,15 +49,22 @@ public class Food : Item
 
     public void Consumed()
     {
-        if(onConsumeEnd != null)
+        End();
+        consumed = true;
+
+        if (onConsumeEnd != null)
         {
             onConsumeEnd.Invoke();
             onConsumeEnd = null;
         }
-        consumed = true;
-        visuals.transform.localScale = Vector3.one;
-        if(data.destroyAfterConsumed) Destroy();
-        else Drop();
+    }
+
+    public void End()
+    {
+        if (data.consumed != null) Assemble(data.consumed);
+
+        if (data.destroyAfterConsumed) Destroy();
+        else type = Item.EType.TRASH;
     }
 
     public void Update()

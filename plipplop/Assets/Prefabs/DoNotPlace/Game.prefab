@@ -51,8 +51,6 @@ MonoBehaviour:
       type: 2}
     legsPrefab: {fileID: 6001065113688149855, guid: 823b30a0857109544bb3e84e8b857163,
       type: 3}
-    facePrefab: {fileID: 5131392639726500382, guid: 78ac6d4b29d0b5443a82478784face18,
-      type: 3}
     controllerSensor: {fileID: 3199166143164121905, guid: 51b77e329595014498537b8fdd9a2dbf,
       type: 3}
     baseControllerPrefab: {fileID: 281994533271648098, guid: 0f20616f80e31ec4a9faa96c1a5542ec,
@@ -237,7 +235,10 @@ MonoBehaviour:
         - name: vfx_sand_poof
           prefab: {fileID: 1161564232449718670, guid: d6a5a6f077dea6f48ac57c284a721e39,
             type: 3}
-        childCount: 6
+        - name: vfx_splash
+          prefab: {fileID: 3549938389114782582, guid: 5bff4749ca0f75d4db0ee873e184842a,
+            type: 3}
+        childCount: 7
     gfxs:
       serializableEffects:
         list:
@@ -265,7 +266,10 @@ MonoBehaviour:
         - name: gfx_step
           gfxScriptableObject: {fileID: 11400000, guid: 71d540799c2a658428d9f739dbb75e8c,
             type: 2}
-        childCount: 8
+        - name: gfx_splash
+          gfxScriptableObject: {fileID: 11400000, guid: d5ca0d676036ed74e94fe713f24d4bfe,
+            type: 2}
+        childCount: 9
     npcLibrary: {fileID: 11400000, guid: d52e8e370a131fe4fa27843e9bddccee, type: 2}
     cinematics:
       serializableEffects:

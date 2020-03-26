@@ -11,13 +11,14 @@ public class CrabDance : MonoBehaviour
 
     private Radio radio;
 
-    public void StartDancing()
+    public void StartDancing(bool _isRadio = true)
     {
         if (!dancing)
         {
             dancing = true;
             StartCoroutine(DanceDelay());
-            SoundPlayer.Play("bgm_crab_rave", 1, 1, true);
+            
+            SoundPlayer.PlayAtPosition("bgm_crab_rave", transform.position, .4f, false, true);
         }
     }
 

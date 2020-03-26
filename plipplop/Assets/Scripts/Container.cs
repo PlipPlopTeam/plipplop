@@ -1,46 +1,103 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class Container : MonoBehaviour
+public class Container : Item
 {
 	[Header("Settings")]
-	public bool showStockedItem;
-	public Vector3 stockOffset;
-	public float stockRange;
-	public List<Item> items = new List<Item>();
+	public bool showStoredItem = true;
+	public bool randomizeStoreItemRotation = true;
+	public Vector3 storedOffset;
+	public float storedRange;
+	public List<Item.EType> madeFor = new List<Item.EType>();
 
-	public void Stock(Item item)
+	public bool emptyIfReversed = true;
+	public float reverseAngle = 45f;
+	private List<Item> items = new List<Item>();
+	public System.Action onItemStored;
+	public System.Action onItemRemoved;
+
+	public void Awake()
+	{
+		Game.i.aiZone.Register(this);
+	}
+
+	public int GetItemCount()
+	{
+		return items.Count;
+	}
+
+	public virtual void Store(Item item)
 	{
 		item.Carry();
-		item.transform.SetParent(transform);
+		item.transform.SetParent(visuals.transform);
 		item.transform.localPosition = Vector3.zero;
 		items.Add(item);
-		if(showStockedItem)
+		if(showStoredItem)
 		{
-			item.transform.localPosition = transform.position + stockOffset + Geometry.GetRandomPointInSphere(stockRange);
+			if (randomizeStoreItemRotation) item.transform.localEulerAngles = new Vector3(Random.Range(0f, 360f), Random.Range(0f, 360f), Random.Range(0f, 360f));
+			item.transform.localPosition = storedOffset + Geometry.GetRandomPointInSphere(storedRange);
 		}
 		else
 		{
 			item.visuals.SetActive(false);
 		}
+
+		if (onItemStored != null) onItemStored.Invoke();
 	}
 
-	public void Empty()
+	public bool IsMadeFor(Item item)
 	{
-		foreach(Item i in items)
+		return item != null && madeFor.Contains(item.type);
+	}
+
+	public virtual void Update()
+	{
+		if(emptyIfReversed 
+		&& Vector3.Angle(transform.up, Vector3.up) >= reverseAngle
+		&& items.Count > 0f)
 		{
-			i.visuals.SetActive(true);
-			i.Drop();
-			i.transform.SetParent(null);
+			Empty();
 		}
+	}
+
+	public virtual void Remove(Item item)
+	{
+		Free(item);
+		items.Remove(item);
+
+		if (onItemRemoved != null) onItemRemoved.Invoke();
+	}
+	public virtual void Remove(int index)
+	{
+		if (index < 0 || index >= items.Count) return;
+		Free(items[index]);
+		items.RemoveAt(index);
+	}
+
+	public virtual void Free(Item item)
+	{
+		item.visuals.SetActive(true);
+		item.Drop();
+		item.transform.SetParent(null);
+	}
+
+	public virtual void Empty()
+	{
+		foreach(Item i in items) Free(i);
 		items.Clear();
 	}
 
 #if UNITY_EDITOR
 	private void OnDrawGizmosSelected()
 	{
-		Gizmos.DrawWireSphere(transform.position + stockOffset, stockRange);
+		if(showStoredItem) Gizmos.DrawWireSphere(transform.position + storedOffset, storedRange);
+
+		if(emptyIfReversed)
+		{
+			float a = 90f - reverseAngle;
+			Vector3 dir = new Vector3(0f, Mathf.Sin(Mathf.Deg2Rad * a), Mathf.Cos(Mathf.Deg2Rad * a));
+			Gizmos.DrawLine(transform.position, transform.position + dir);
+		}
 	}
 #endif
 }

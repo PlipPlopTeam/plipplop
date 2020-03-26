@@ -78,12 +78,10 @@ public class Kite : Item
 
         line.enabled = false;
         
-        print("stop vol");
     }
 
     IEnumerator UpdateLine()
     {
-        print("vole");
         line.enabled = true;
         while (flying)
         {

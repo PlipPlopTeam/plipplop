@@ -20,6 +20,7 @@ public class WaterVolume : Volume
     float waterline = 1F;         // Objects will stop a bit below water instead of perfectly at the surface. This is the distance from surface (downwards)
     float artificialDrag = 2f;      // Objects will lerp to zero speed using this value to simulate a drag      
     float aboveWaterSpeedReduction = 0.4f;   // Upon exiting water the vertical velocity of the object is altered to avoid bouncing
+    float velocitySplash = 1f;   // Upon exiting water the vertical velocity of the object is altered to avoid bouncing
 
     private void Start()
     {
@@ -34,8 +35,7 @@ public class WaterVolume : Volume
         Destroy(customVisual.gameObject.GetComponent<Collider>());
     }
 
-
-    public override void OnObjectEnter(Collider obj)
+     public override void OnObjectEnter(Collider obj)
     {
         var rb = obj.GetComponent<Rigidbody>();
         if (rb) {
@@ -47,7 +47,12 @@ public class WaterVolume : Volume
             if (isNew)
             {
                 // rentre
-                SoundPlayer.Play("sfx_splash");
+                //SoundPlayer.PlayAtPosition("sfx_splash", rb.transform.position);
+                // TODO : Integrate GameEffect
+                if(rb.velocity.magnitude >= velocitySplash)
+                {
+                    Pyromancer.PlayGameEffect("gfx_splash", obj.transform.position);
+                }
             }
         }
     }
@@ -85,7 +90,10 @@ public class WaterVolume : Volume
 
     private void FixedUpdate()
     {
-        foreach(var b in objectsInWater) {
+        foreach(var b in objectsInWater) 
+        {
+            if (b.rigidbody == null) continue;
+
             var rb = b.rigidbody;
             var force = 10f / Mathf.Max(1f, b.rigidbody.mass);
             var customWaterline = waterline;

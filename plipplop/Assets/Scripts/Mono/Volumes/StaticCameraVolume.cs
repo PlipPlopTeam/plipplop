@@ -10,13 +10,15 @@ public class StaticCameraVolume : Volume {
     public bool isImmediate = false;
     public bool lookAtTarget = false;
 
+    public List<GameObject> objectsToHide = new List<GameObject>();
+
     int lookAtIndex = 0;
     Geometry.PositionAndRotation objective;
 
     public override void OnPlayerEnter(Controller player)
     {
         if (isImmediate) {
-            Game.i.aperture.Freeze();
+            //Game.i.aperture.Freeze();
             Game.i.aperture.AddStaticPosition(aim.position, aim.rotation);
             Game.i.aperture.FixedUpdate();
             Game.i.aperture.fieldOfView.destination = FOV;
@@ -26,11 +28,31 @@ public class StaticCameraVolume : Volume {
             objective = Game.i.aperture.AddStaticPosition(aim);
         }
 
-        if (!lookAtTarget) {
-            Game.i.aperture.DisableLookAt();
+        if (!lookAtTarget) 
+        {
+            lookAtIndex = Game.i.aperture.DisableLookAt();
         }
-        else {
+        else 
+        {
             Game.i.aperture.EnableLookAt();
+        }
+
+        // Stop control for 1 frame
+        StartCoroutine(FreezeForSomeTime());
+
+
+        // TODO : Replace by a fadeout
+        foreach (GameObject o in objectsToHide)
+        {
+            var fade = o.GetComponent<FadedApparition>();
+            if (fade != null)
+            {
+                fade.FadeOutThen(null);
+            }
+            else
+            {
+                o.SetActive(false);
+            }
         }
     }
 
@@ -43,8 +65,32 @@ public class StaticCameraVolume : Volume {
             Game.i.aperture.RemoveStaticPosition(objective);
         }
 
-        if (!lookAtTarget) {
+        if (!lookAtTarget)
+        {
             Game.i.aperture.RestoreLookAt(lookAtIndex);
         }
+
+        StartCoroutine(FreezeForSomeTime());
+
+        foreach (GameObject o in objectsToHide)
+        {
+            var fade = o.GetComponent<FadedApparition>();
+            if (fade != null)
+            {
+                fade.StartFadeIn();
+            }
+            else
+            {
+                o.SetActive(true);
+            }
+        }
+    }
+
+    IEnumerator FreezeForSomeTime()
+    {
+
+        Game.i.player.Paralyze();
+        yield return new WaitForSeconds(0.75f);
+        Game.i.player.Deparalyze();
     }
 }

@@ -16,13 +16,19 @@ namespace Behavior.NPC
             if (npc != null)
 			{
 				if (overrideMovement) npc.agentMovement.settings = overrideMovementSettings;
-				npc.agentMovement.GoThere(
+
+				if(!npc.agentMovement.GoThere(
 					new Vector3(
 						npc.transform.position.x + Random.Range(-range, range),
-						npc.transform.position.y, 
+						npc.transform.position.y,
 						npc.transform.position.z + Random.Range(-range, range)
-            		)
-				);
+					)
+				))
+				{
+					Debug.Log("Yes");
+					npc.agentMovement.GoThere(npc.transform.position);
+				}
+
 			}
 
 		}

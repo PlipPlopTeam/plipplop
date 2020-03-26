@@ -21,7 +21,6 @@ public class Library
 
     [Header("Prefabs")]
     public GameObject legsPrefab;
-    public GameObject facePrefab;
     public GameObject controllerSensor;
     public GameObject baseControllerPrefab;
 	public GameObject teleporterVolumePrefab;

@@ -15,6 +15,7 @@ public class AgentMovement : Walker
         public float speed = 5f;
         public float navTreshold = 1f;
 		public float animatorRunSpeed = 1f;
+        public float animatorRotationSpeed = 5f;
 		public float minimumCarrySpeed = 1f;  
     }
 
@@ -38,9 +39,9 @@ public class AgentMovement : Walker
 	Vector3 rotationLast;
 	Vector3 rotationDelta;
 
-	public override void ApplyAdherence(float adherence)
+	public override void ApplyModifier(float value)
 	{
-		SetSpeed(settings.speed * (1f - adherence * slowMultiplier));
+		SetSpeed(settings.speed * value);
 	}
 
 	public void ClearEvents()
@@ -154,7 +155,10 @@ public class AgentMovement : Walker
 
 		if (!agent.enabled)
 		{
-			transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(orientation), Time.deltaTime * 5f);
+            Quaternion q = new Quaternion();
+            if (orientation != Vector3.zero) q = Quaternion.LookRotation(orientation);
+
+            transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * 5f);
 		}
 
 		if (reached) reached = false;
@@ -198,8 +202,8 @@ public class AgentMovement : Walker
 
         if(animator) 
         {
-            animator.SetFloat("Speed", agent.velocity.magnitude/settings.animatorRunSpeed);
-			animator.SetFloat("RotationSpeed", rotationDelta.magnitude);
+            animator.SetFloat("Speed", agent.velocity.magnitude / settings.animatorRunSpeed);
+			animator.SetFloat("RotationSpeed", rotationDelta.magnitude / settings.animatorRotationSpeed);
         }
     }
 

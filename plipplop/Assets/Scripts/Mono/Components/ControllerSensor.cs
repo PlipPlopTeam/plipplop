@@ -22,13 +22,30 @@ public class ControllerSensor : MonoBehaviour
     private void OnControllerEnter(Collider obj)
     {
         var ctrl = obj.GetComponent<Controller>();
-        if (ctrl) controllers.Add(ctrl);
+        if (ctrl/* && NothingBetween(obj.gameObject)*/) controllers.Add(ctrl);
     }
 
     private void OnControllerExit(Collider obj)
     {
         var ctrl = obj.GetComponent<Controller>();
-        if (ctrl) controllers.RemoveAll(o => o == ctrl);
+        if(ctrl) controllers.RemoveAll(o => o == ctrl);
+    }
+
+    public bool NothingBetween(GameObject obj)
+    {
+        float dis = Vector3.Distance(transform.position, obj.transform.position);
+        Vector3 dir = (obj.transform.position - transform.position).normalized;
+        RaycastHit[] hits = Physics.RaycastAll(transform.position, dir, dis);
+
+        foreach(RaycastHit h in hits)
+        {
+            if(h.collider.gameObject != gameObject
+            && h.collider.gameObject != obj)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public bool IsThereAnyController()

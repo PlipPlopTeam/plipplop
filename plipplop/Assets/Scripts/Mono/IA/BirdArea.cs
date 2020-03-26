@@ -3,32 +3,20 @@
 using UnityEditor;
 #endif
 
-public class BirdArea : MonoBehaviour
+public class BirdArea : BirdZone
 {
 	public enum Shape { CIRCLE, RECTANGLE }
-	[Header("Settings")]
+	[Header("Area")]
 	public Shape shape;
 	public float range;
 	public Vector2 size;
 
-	public class Spot
+	public override bool Available()
 	{
-		public Transform surface;
-		public Vector3 position;
-
-		public Spot(Transform t, Vector3 pos)
-		{
-			surface = t;
-			position = pos;
-		}
+		return true;
 	}
 
-	private void Awake()
-    {
-        Game.i.aiZone.Register(this);
-    }
-
-	public Spot GetSpot()
+	public override Bird.Spot GetSpot()
 	{
 		Vector3 position = Vector3.zero;
 
@@ -43,9 +31,10 @@ public class BirdArea : MonoBehaviour
 		}
 
 		RaycastHit[] hits = Physics.RaycastAll(position, Vector3.down);
-		foreach (RaycastHit h in hits)
+		for (int i = hits.Length - 1; i > 0; i--)
 		{
-			if (!h.collider.isTrigger) return new Spot(h.collider.transform, h.point);
+			if (!hits[i].collider.isTrigger)
+				return new Bird.Spot(hits[i].collider.transform, hits[i].point);
 		}
 		return null;
 	}
@@ -55,7 +44,7 @@ public class BirdArea : MonoBehaviour
 	{
 		var style = new GUIStyle();
 		style.imagePosition = ImagePosition.ImageAbove;
-		style.alignment = TextAnchor.MiddleCenter;
+		style.alignment = TextAnchor.UpperCenter;
 		var tex = Resources.Load<Texture2D>("Editor/Sprites/SPR_flap");
 		var content = new GUIContent();
 		content.image = tex;

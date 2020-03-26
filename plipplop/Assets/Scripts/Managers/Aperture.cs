@@ -209,7 +209,15 @@ public class Aperture
 
     public Vector3 Forward()
     {
-        return new Vector3(cam.transform.forward.x, 0f, cam.transform.forward.z).normalized;
+        // Prevent issue when camera is facing the ground perpendiculary
+        if(Mathf.Abs(cam.transform.forward.x) < 0.01f && Mathf.Abs(cam.transform.forward.z) < 0.01f)
+        {
+            return new Vector3(cam.transform.up.x, 0f, cam.transform.up.z).normalized;
+        }
+        else
+        {
+            return new Vector3(cam.transform.forward.x, 0f, cam.transform.forward.z).normalized;
+        }
     }
 
     public Vector3 Right()
@@ -462,7 +470,8 @@ public class Aperture
 
     public void ComputePosition(Vector3 targetPosition)
     {
-        if (GetStaticObjective() != null) {
+        if (GetStaticObjective() != null) 
+        {
             position.destination = GetStaticObjective().positionAndRotation.position;
             return;
         }
@@ -496,15 +505,12 @@ public class Aperture
         var lateralFollow = Time.fixedDeltaTime * settings.lateralFollowLerp * catchUpSpeed;
         var longFollow = Time.fixedDeltaTime * settings.longitudinalFollowLerp * catchUpSpeed;
 
-        if (GetStaticObjective() != null) {
+        if (GetStaticObjective() != null) 
+        {
             var statObj = GetStaticObjective();
-
             var lerp = statObj.manualLerp.HasValue ? statObj.manualLerp.Value : Time.fixedDeltaTime * settings.staticPositionLerp;
-
-            if (statObj.manualLerp.HasValue) {
-                position.current = Vector3.Lerp(position.current, position.destination, lerp);
-                return;
-            }
+            position.current = Vector3.Lerp(position.current, position.destination, lerp);
+            return;
         }
 
         position.current.y = Mathf.Lerp(position.current.y, position.destination.y, verticalFollow);

@@ -7,10 +7,18 @@ using UnityEditor;
 
 public class FishingBox : Activity
 {
+    [System.Serializable]
+    public class Area
+    {
+        public Vector3 position;
+        public float radius;
+    }
+
     [Header("FISHING-BOX")]
     public GameObject fishingPole;
-    public Vector3 position;
-    public float radius;
+    public Area plunge;
+    public Area stand;
+
 
     public override void Enter(NonPlayableCharacter user)
     {
@@ -20,7 +28,7 @@ public class FishingBox : Activity
         user.agentMovement.onDestinationReached += () =>
         {
 			user.Carry(Instantiate(fishingPole).GetComponent<FishingPole>());
-            Vector3 pos = position + Geometry.GetRandomPointOnCircle(radius);
+            Vector3 pos = stand.position + Geometry.GetRandomPointInRange(stand.radius);
 			user.agentMovement.Stop();
 			user.agentMovement.GoThere(pos, true);
 			StartCoroutine(DelayedSetup(user));
@@ -36,7 +44,7 @@ public class FishingBox : Activity
 
 			FishingPole fp = user.carried.Self().GetComponent<FishingPole>();
 			fp.Use();
-			fp.Plunge(position + Geometry.GetRandomPointInRange(radius));
+			fp.Plunge(plunge.position + Geometry.GetRandomPointInRange(plunge.radius));
 
 			user.look.FocusOn(fp.plug);
 			user.agentMovement.OrientToward(fp.plug.position);
@@ -55,21 +63,27 @@ public class FishingBox : Activity
 #if UNITY_EDITOR
 	void OnDrawGizmosSelected()
     {
-		GUIStyle s = new GUIStyle();
-		s.alignment = TextAnchor.MiddleCenter;
-		s.fontStyle = FontStyle.Bold;
-		s.normal.textColor = Color.white;
-		Vector3 d = (transform.position - position).normalized;
-		Vector3 p = position + (d * radius);
+        DrawArea(plunge.position, plunge.radius, Color.blue);
+        DrawArea(stand.position, stand.radius, Color.green);
+    }
 
-		Handles.color = new Color32(255, 255, 255, 255);
-		UnityEditor.Handles.Label(position, "Fishing Area", s);
+    public void DrawArea(Vector3 position, float radius, Color color)
+    {
+    	GUIStyle s = new GUIStyle();
+        s.alignment = TextAnchor.MiddleCenter;
+		s.fontStyle = FontStyle.Bold;
+		s.normal.textColor = color;
+
+		Vector3 d = (transform.position - position).normalized;
+        Vector3 p = position + (d * radius);
+
+        Handles.color = new Color32(255, 255, 255, 255);
+        //UnityEditor.Handles.Label(position, "Fishing Area", s);
 		UnityEditor.Handles.DrawLine(transform.position, p);
 		UnityEditor.Handles.DrawWireDisc(position, Vector3.up, radius);
-
-		Handles.color = new Color32(0, 0, 255, 50);
-		UnityEditor.Handles.DrawSolidArc(position, Vector3.up, Vector3.right, 360f, radius);
-
+        color.a = 0.25f;
+		Handles.color = color;
+        UnityEditor.Handles.DrawSolidArc(position, Vector3.up, Vector3.right, 360f, radius);
     }
 #endif
 }
@@ -84,9 +98,11 @@ public class FishingBoxEditor : Editor
     {
         EditorGUI.BeginChangeCheck();
         FishingBox fb = (FishingBox)target;
-        fb.position = Handles.PositionHandle(fb.position, Quaternion.identity);
 
-        if(EditorGUI.EndChangeCheck())
+        fb.plunge.position = Handles.PositionHandle(fb.plunge.position, Quaternion.identity);
+        fb.stand.position = Handles.PositionHandle(fb.stand.position, Quaternion.identity);
+
+        if (EditorGUI.EndChangeCheck())
         {
             EditorUtility.SetDirty(fb);
         }

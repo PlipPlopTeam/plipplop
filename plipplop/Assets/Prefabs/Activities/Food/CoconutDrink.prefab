@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &943555919568528033
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2174439897186972894}
+  m_Layer: 0
+  m_Name: Visuals
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2174439897186972894
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 943555919568528033}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 5646835192892442525}
+  m_Father: {fileID: 6495408926882390294}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7966879976779853737
 GameObject:
   m_ObjectHideFlags: 0
@@ -11,6 +42,7 @@ GameObject:
   - component: {fileID: 6495408926882390294}
   - component: {fileID: 8396046497942763431}
   - component: {fileID: 518240971177680045}
+  - component: {fileID: 9218428315375650967}
   m_Layer: 0
   m_Name: CoconutDrink
   m_TagString: Untagged
@@ -29,7 +61,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 5646835192892442525}
+  - {fileID: 2174439897186972894}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -60,14 +92,34 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.25, y: 0.25, z: 0.25}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.2965536, y: 0.24678707, z: 0.29176712}
+  m_Center: {x: -0.0023274422, y: -0.014457941, z: 0.02088356}
+--- !u!114 &9218428315375650967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7966879976779853737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96ecb658364a33e4081fba062150063b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  rb: {fileID: 8396046497942763431}
+  collider: {fileID: 518240971177680045}
+  type: 1
+  visuals: {fileID: 8648828182110254478}
+  data: {fileID: 11400000, guid: 007778a7fa908af458786a8d95d9580d, type: 2}
+  consumed: 0
+  mass: 0
 --- !u!1001 &803648983340608647
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 6495408926882390294}
+    m_TransformParent: {fileID: 2174439897186972894}
     m_Modifications:
     - target: {fileID: -927199367670048503, guid: d9ada4a986899ad42a51f35386c08b4a,
         type: 3}
@@ -139,33 +191,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: d9ada4a986899ad42a51f35386c08b4a,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: d9ada4a986899ad42a51f35386c08b4a,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: d9ada4a986899ad42a51f35386c08b4a,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4292982534384019613, guid: d9ada4a986899ad42a51f35386c08b4a,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: dd319b4b37e5c3043bcafac6111d09af, type: 2}
-    - target: {fileID: 8882120018426808015, guid: d9ada4a986899ad42a51f35386c08b4a,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 324fa28eda71ae147affa888c245279a, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d9ada4a986899ad42a51f35386c08b4a, type: 3}
+--- !u!1 &8648828182110254478 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: d9ada4a986899ad42a51f35386c08b4a,
+    type: 3}
+  m_PrefabInstance: {fileID: 803648983340608647}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5646835192892442525 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: d9ada4a986899ad42a51f35386c08b4a,
