@@ -15,23 +15,28 @@ public class DialogPlayer : MonoBehaviour
     public float slowSpeedMultiplier = 0.2f;
     public float scaleSpeed = 2f;
     public string pausingChars = ",.:";
+    public bool playTestDialogue = false;
 
     public Dictionary<string, List<Tuple<int, int>>> vertexFXs = new Dictionary<string, List<Tuple<int, int>>>();
     public Image prompt;
     public RectTransform parent;
+    public Action triggerVFX;
+    public int lineIndex { get { return currentLineIndex; } }
+    public int charIndex { get { return currentCharIndex; } }
 
-    bool isPlaying = false;
+    public bool isPlaying { private set; get; } = false;
     bool isWaitingDelay = false;
     bool isWaitingForInput = false;
     int currentLineIndex = 0;
     int currentCharIndex = 0;
     Dialog currentDialogue = null;
-    TextMeshProUGUI textMesh;
     Coroutine teletypeRoutine;
+    public TextMeshProUGUI textMesh { private set; get; }
 
     int slowingDown = 0;
     int goingFaster = 0;
     DialogLibrary library;
+    DialogEffect dfx;
 
     bool isSlowingDown { get { return slowingDown > 0; } }
     bool isGoingFaster { get { return goingFaster > 0; } }
@@ -43,6 +48,7 @@ public class DialogPlayer : MonoBehaviour
     private void Awake()
     {
         textMesh = GetComponent<TextMeshProUGUI>();
+        dfx = GetComponent<DialogEffect>();
     }
 
     private void Start()
@@ -56,7 +62,10 @@ public class DialogPlayer : MonoBehaviour
             library = new DialogLibrary();
             library.Rebuild();
         }
-        
+        if (playTestDialogue)
+        {
+            PlaySampleDialogue();
+        }
     }
 
     public void LoadDialogue(string id)
@@ -74,7 +83,7 @@ public class DialogPlayer : MonoBehaviour
 
     public void Play()
     {
-        Game.i.player.Paralyze();
+        if (Game.i) Game.i.player.Paralyze();
         isPlaying = true;
         currentLineIndex = -1;
         Next();
@@ -92,7 +101,7 @@ public class DialogPlayer : MonoBehaviour
         if (currentLineIndex >= currentDialogue.elements.Count)
         {
             isPlaying = false;
-            Game.i.player.Deparalyze();
+            if (Game.i) Game.i.player.Deparalyze();
             return;
         }
         if (currentElement is Dialog.Pause)
@@ -236,9 +245,7 @@ public class DialogPlayer : MonoBehaviour
 
             if (line.pureText.Length > currentCharIndex && pausingChars.Contains(line.pureText[currentCharIndex].ToString()))
             {
-                currentCharIndex++;
                 yield return new WaitForSeconds(periodInterval); // Pause on period
-                currentCharIndex--;
             }
             currentCharIndex++;
             yield return new WaitForSeconds(currentDialogue.intervalMultiplier * (isGoingFaster ? fastInterval : (isSlowingDown ? slowInterval : baseInterval)));
@@ -266,6 +273,9 @@ public class DialogPlayer : MonoBehaviour
         }
 
         textMesh.text = currentLine.tmpReadyXml;
-        textMesh.maxVisibleCharacters = currentCharIndex;
+        if (dfx == null)
+        {
+            textMesh.maxVisibleCharacters = currentCharIndex;
+        }
     }
 }
