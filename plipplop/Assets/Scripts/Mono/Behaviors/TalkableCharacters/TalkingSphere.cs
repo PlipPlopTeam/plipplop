@@ -8,4 +8,5 @@ public class TalkingSphere : TalkableCharacter
     {
         return Game.i.library.dialogs["test"];
     }
+
 }

@@ -37,7 +37,6 @@ public class DialogLibrary
             foreach (var node in root.ChildNodes.Cast<XmlNode>())
             {
                 if (node.Name != "dialog") continue;
-                Debug.Log("Adding dialogue with ID " + node.Attributes["id"].Value);
                 dialogs[node.Attributes["id"].Value] = new Dialog(node);
             }
         }
