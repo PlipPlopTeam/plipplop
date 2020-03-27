@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using System.Text;
 using System;
@@ -16,6 +17,7 @@ public class DialogPlayer : MonoBehaviour
     public string pausingChars = ",.:";
 
     public Dictionary<string, List<Tuple<int, int>>> vertexFXs = new Dictionary<string, List<Tuple<int, int>>>();
+    public Image prompt;
     public RectTransform parent;
 
     bool isPlaying = false;
@@ -55,7 +57,6 @@ public class DialogPlayer : MonoBehaviour
             library.Rebuild();
         }
         
-        PlaySampleDialogue();
     }
 
     public void LoadDialogue(string id)
@@ -73,6 +74,7 @@ public class DialogPlayer : MonoBehaviour
 
     public void Play()
     {
+        Game.i.player.Paralyze();
         isPlaying = true;
         currentLineIndex = -1;
         Next();
@@ -84,10 +86,13 @@ public class DialogPlayer : MonoBehaviour
         vertexFXs.Clear();
         currentCharIndex = 0;
         textMesh.maxVisibleCharacters = 0;
+        slowingDown = 0;
+        goingFaster = 0;
         currentLineIndex++;
         if (currentLineIndex >= currentDialogue.elements.Count)
         {
             isPlaying = false;
+            Game.i.player.Deparalyze();
             return;
         }
         if (currentElement is Dialog.Pause)
@@ -123,6 +128,15 @@ public class DialogPlayer : MonoBehaviour
 
         if (isWaitingDelay) return;
 
+        if (isWaitingForInput)
+        {
+            prompt.color = Color.Lerp(prompt.color, Color.white, Time.deltaTime);
+        }
+        else
+        {
+            prompt.color = new Color(1f, 1f, 1f, 0f);
+        }
+
         if (Input.GetKeyDown(KeyCode.Space) || (Game.i && Game.i.player.mapping.IsPressed(EAction.TOGGLE_LEGS)))
         {
             if (isWaitingForInput || currentElement is Dialog.Pause)
@@ -145,7 +159,7 @@ public class DialogPlayer : MonoBehaviour
         var line = currentLine;
 
         // Content control
-        // TODO: Random, Autodialog, Dialog speeds, OUTLINE
+        // TODO: Random, Autodialog, Dialog speeds
 
         // Let's first look for events of type vertexFX
         vertexFXs.Clear();
@@ -222,7 +236,9 @@ public class DialogPlayer : MonoBehaviour
 
             if (line.pureText.Length > currentCharIndex && pausingChars.Contains(line.pureText[currentCharIndex].ToString()))
             {
+                currentCharIndex++;
                 yield return new WaitForSeconds(periodInterval); // Pause on period
+                currentCharIndex--;
             }
             currentCharIndex++;
             yield return new WaitForSeconds(currentDialogue.intervalMultiplier * (isGoingFaster ? fastInterval : (isSlowingDown ? slowInterval : baseInterval)));
@@ -243,6 +259,7 @@ public class DialogPlayer : MonoBehaviour
 
     void UpdateVisibleLetters()
     {
+        if (currentLineIndex >= currentDialogue.elements.Count) return;
         if (currentElement is Dialog.Pause)
         {
             return;
