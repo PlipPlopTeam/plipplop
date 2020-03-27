@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using System.Text;
 using System;
@@ -9,11 +10,14 @@ public class DialogPlayer : MonoBehaviour
 {
     public float baseInterval = 0.1f;
     public float pauseInterval = 0.4f;
+    public float periodInterval = 0.5f;
     public float fastSpeedMultiplier = 2f;
     public float slowSpeedMultiplier = 0.2f;
     public float scaleSpeed = 2f;
+    public string pausingChars = ",.:";
 
     public Dictionary<string, List<Tuple<int, int>>> vertexFXs = new Dictionary<string, List<Tuple<int, int>>>();
+    public Image prompt;
     public RectTransform parent;
 
     bool isPlaying = false;
@@ -53,7 +57,6 @@ public class DialogPlayer : MonoBehaviour
             library.Rebuild();
         }
         
-        PlaySampleDialogue();
     }
 
     public void LoadDialogue(string id)
@@ -71,6 +74,7 @@ public class DialogPlayer : MonoBehaviour
 
     public void Play()
     {
+        Game.i.player.Paralyze();
         isPlaying = true;
         currentLineIndex = -1;
         Next();
@@ -78,25 +82,25 @@ public class DialogPlayer : MonoBehaviour
 
     public void Next()
     {
-        Debug.Log("NEXT!");
         if (teletypeRoutine != null) StopCoroutine(teletypeRoutine);
         vertexFXs.Clear();
         currentCharIndex = 0;
         textMesh.maxVisibleCharacters = 0;
+        slowingDown = 0;
+        goingFaster = 0;
         currentLineIndex++;
         if (currentLineIndex >= currentDialogue.elements.Count)
         {
             isPlaying = false;
+            Game.i.player.Deparalyze();
             return;
         }
         if (currentElement is Dialog.Pause)
         {
-            Debug.Log("wait!");
             WaitFor(((Dialog.Pause)currentElement).miliseconds);
         }
         else if (currentElement is Dialog.Line)
         {
-            Debug.Log("teletyping...");
             textMesh.text = "";
             teletypeRoutine = StartCoroutine(Teletype());
         }
@@ -124,6 +128,15 @@ public class DialogPlayer : MonoBehaviour
 
         if (isWaitingDelay) return;
 
+        if (isWaitingForInput)
+        {
+            prompt.color = Color.Lerp(prompt.color, Color.white, Time.deltaTime);
+        }
+        else
+        {
+            prompt.color = new Color(1f, 1f, 1f, 0f);
+        }
+
         if (Input.GetKeyDown(KeyCode.Space) || (Game.i && Game.i.player.mapping.IsPressed(EAction.TOGGLE_LEGS)))
         {
             if (isWaitingForInput || currentElement is Dialog.Pause)
@@ -133,7 +146,7 @@ public class DialogPlayer : MonoBehaviour
             }
             else
             {
-                currentCharIndex = currentLine.pureText.Length;
+                currentCharIndex = currentLine.pureText.Length+2;
                 isWaitingForInput = true;
             }
         }
@@ -146,7 +159,7 @@ public class DialogPlayer : MonoBehaviour
         var line = currentLine;
 
         // Content control
-        // TODO: Random, Autodialog, Dialog speeds, OUTLINE
+        // TODO: Random, Autodialog, Dialog speeds
 
         // Let's first look for events of type vertexFX
         vertexFXs.Clear();
@@ -159,7 +172,7 @@ public class DialogPlayer : MonoBehaviour
             vertexFXs[evnt.name].Add(new Tuple<int, int>(evnt.startChar, evnt.endChar));
         }
 
-        while (currentCharIndex < line.pureText.Length)
+        while (currentCharIndex <= line.length)
         {
             // Detect XML tag start
 
@@ -197,7 +210,7 @@ public class DialogPlayer : MonoBehaviour
                                 break;
                             }
 
-                            if (currentCharIndex >= line.pureText.Length)
+                            if (currentCharIndex >= line.length)
                             {
                                 throw new Exception("Tag " + startingEvent.name + " seems to never end. Line " + currentLineIndex + ".");
                             }
@@ -221,11 +234,17 @@ public class DialogPlayer : MonoBehaviour
                 }
             }
 
+            if (line.pureText.Length > currentCharIndex && pausingChars.Contains(line.pureText[currentCharIndex].ToString()))
+            {
+                currentCharIndex++;
+                yield return new WaitForSeconds(periodInterval); // Pause on period
+                currentCharIndex--;
+            }
             currentCharIndex++;
             yield return new WaitForSeconds(currentDialogue.intervalMultiplier * (isGoingFaster ? fastInterval : (isSlowingDown ? slowInterval : baseInterval)));
         }
 
-        Debug.Log("Ending teletype because " + currentCharIndex + " > " + line.pureText.Length);
+        Debug.Log("Ending teletype because " + currentCharIndex + " > " + line.length);
         isWaitingForInput = true;
 
     }
@@ -235,10 +254,12 @@ public class DialogPlayer : MonoBehaviour
         isWaitingDelay = true;
         yield return new WaitForSeconds(miliseconds);
         isWaitingDelay = false;
+        Next();
     }
 
     void UpdateVisibleLetters()
     {
+        if (currentLineIndex >= currentDialogue.elements.Count) return;
         if (currentElement is Dialog.Pause)
         {
             return;

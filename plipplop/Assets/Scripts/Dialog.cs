@@ -8,6 +8,7 @@ using System;
 using System.Text;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 public class Dialog {
     public bool isAutomatic = false;
@@ -16,7 +17,7 @@ public class Dialog {
 
     static readonly List<string> TMProSupportedTags = new List<string>()
     {
-        "size", "color", "nobr", "font"
+        "size", "color", "nobr", "font", "mark"
     };
 
     static readonly List<string> flowControlTags = new List<string>()
@@ -40,11 +41,17 @@ public class Dialog {
         new Tuple<string, string>("</tiny>", "</size>"),
 
         new Tuple<string, string>("<color value=", "<color="),
-        new Tuple<string, string>("<highlight value=", "<mark="),
+        new Tuple<string, string>("<highlight color=", "<mark="),
+        new Tuple<string, string>("</highlight>", "</mark>"),
         new Tuple<string, string>("<nonbreakable>", "<nobr>"),	
         new Tuple<string, string>("<br />", Environment.NewLine),
-        new Tuple<string, string>("<break />", Environment.NewLine),
-        new Tuple<string, string>("	", "")
+        new Tuple<string, string>("<break />", Environment.NewLine)
+    };
+
+    static readonly List<Tuple<string, string>> spaceInterpolations = new List<Tuple<string, string>>()
+    {
+        new Tuple<string, string>("\t", ""),
+        new Tuple<string, string>(Encoding.ASCII.GetString(new byte[]{ 9 }), "")
     };
 
     public struct Event
@@ -54,15 +61,13 @@ public class Dialog {
         public int endChar;
     }
 
-    public interface IElement
-    {
-
-    }
+    public interface IElement {}
 
     public class Line : IElement
     {
         public readonly string tmpReadyXml;
         public readonly string pureText;
+        public readonly int length = 0;
 
         public List<Event> events = new List<Event>();
 
@@ -77,6 +82,26 @@ public class Dialog {
             {
                 tmpReadyXml = tmpReadyXml.Replace(interpolation.Item1, interpolation.Item2);
             }
+            foreach (var interpolation in spaceInterpolations)
+            {
+                tmpReadyXml = tmpReadyXml.Replace(interpolation.Item1, interpolation.Item2);
+                pureText = pureText.Replace(interpolation.Item1, interpolation.Item2);
+            }
+
+           // Color interpolation
+           var match = Regex.Match(tmpReadyXml, "(\")(?:#[AF0-9]{6})(\")");
+            while (match != null && match.Success && match.Length > 0)
+            {
+                if (match.Value.Length == 9)
+                {
+                    tmpReadyXml = tmpReadyXml.Replace(match.Value, match.Value.Substring(1, 7));
+                }
+                match = match.NextMatch();
+            }
+
+            var breaks = Regex.Matches(tmpReadyXml, Environment.NewLine).Count;
+
+            length = pureText.Length + breaks +1;
 
             // Event detection
             int charIndex = 0;
@@ -116,7 +141,7 @@ public class Dialog {
 
                     if (TMProSupportedTags.Contains(tag))
                     {
-                        totalText.Append("<" + (isClosingTag ? "/" : "") + rawTag + ">");
+                        totalText.Append("<" + rawTag);
                     }
                     else if (flowControlTags.Contains(tag) || vertexFXTags.Contains(tag))
                     {
@@ -126,7 +151,7 @@ public class Dialog {
                             continue;
                         }
 
-                        var evnt = new Event() { name = tag, startChar = totalText.Length-1, endChar = -1 };
+                        var evnt = new Event() { name = tag, startChar = totalText.Length, endChar = -1 };
                         if (!isSelfClosing)
                         {
                             int cursor = charIndex;
@@ -150,8 +175,7 @@ public class Dialog {
                                         }
                                         if (bld.ToString() == evnt.name)
                                         {
-                                            evnt.endChar = pureCursor-3; // small offset, necessary for visual coherence
-                                            Debug.Log("Event " + tag + " starts at " + evnt.startChar + " and ends at " + evnt.endChar);
+                                            evnt.endChar = pureCursor-2; // small offset, necessary for visual coherence
                                             foundExit = true;
                                         }
                                     }
