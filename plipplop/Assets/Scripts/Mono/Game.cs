@@ -16,6 +16,8 @@ public class Game : MonoBehaviour
     public ChunkLoader chunkLoader;
     [HideInInspector] public Aperture aperture;
 
+    public System.Action<float> onTransitionCalled;
+
     public Dialog dialogToBeGrabbed;
 
     static public Game i;
