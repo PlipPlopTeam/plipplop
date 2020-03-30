@@ -9,9 +9,15 @@ public class VisualEffect
     public string name;
     public GameObject prefab;
     
-    public VisualEffectController Instantiate()
+    public IVisualEffectController Instantiate()
     {
         var instance = UnityEngine.Object.Instantiate(prefab);
-        return instance.AddComponent<VisualEffectController>();
+        if (instance.GetComponent<ParticleSystem>())
+        {
+            return instance.AddComponent<ShurikenEffectController>();
+
+        }
+        return instance.AddComponent<DecalEffectController>();
+
     }
 }
