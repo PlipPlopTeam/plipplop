@@ -14,7 +14,7 @@ public class MeshFlipbook : ScriptableObject
         public Vector3 euler;
         public Vector3 scale;
 
-        public Material mat;
+        public List<Material> mat;
 
         public string gameEffect;
         public Vector3 gameEffectOffset;
