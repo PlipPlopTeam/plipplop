@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
-public class VisualEffectController : MonoBehaviour
+public class ShurikenEffectController : MonoBehaviour,IVisualEffectController
 {
     ParticleSystem shuriken;
 
@@ -11,9 +12,19 @@ public class VisualEffectController : MonoBehaviour
         shuriken = GetComponent<ParticleSystem>();
     }
 
+    public void Activate()
+    {
+        gameObject.SetActive(true);
+    }
+
     public void SetPosition(Vector3 v)
     {
         gameObject.transform.position = v;
+    }
+
+    public void SetLocalPosition(Vector3 v)
+    {
+        transform.localPosition = v;
     }
 
     public void Attach(Transform p)
