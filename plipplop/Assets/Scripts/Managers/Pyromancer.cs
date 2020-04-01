@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class Pyromancer
 {
-    Dictionary<string, List<VisualEffectController>> effects = new Dictionary<string, List<VisualEffectController>>();
-    List<VisualEffectController> allEffects { get { return effects.Values.SelectMany(o => { return o; }).ToList(); } }
+    Dictionary<string, List<IVisualEffectController>> effects = new Dictionary<string, List<IVisualEffectController>>();
+    List<IVisualEffectController> allEffects { get { return effects.Values.SelectMany(o => { return o; }).ToList(); } }
 
     public static void PlayGameEffect(string gfxName, Vector3 position)
     {
@@ -55,10 +55,10 @@ public class Pyromancer
         effect.SetPosition(position);
     }
 
-    VisualEffectController AddEffect(string name)
+    IVisualEffectController AddEffect(string name)
     {
         if (!effects.ContainsKey(name)) {
-            effects[name] = new List<VisualEffectController>();
+            effects[name] = new List<IVisualEffectController>();
         }
 
         var reference = Game.i.library.vfxs.Find(o => o.name == name);
@@ -68,14 +68,14 @@ public class Pyromancer
             );
         }
 
-        var instance = effects[name].Find(o => !o.IsAlive() || !o.gameObject.activeSelf);
+        var instance = effects[name].Find(o => !o.IsAlive());
         if (instance == null) {
             // Let's create it
             instance = reference.Instantiate();
         }
         else {
             // Let's reuse it
-            instance.gameObject.SetActive(true);
+            instance.Activate();
             instance.Reset();
         }
 
@@ -89,6 +89,6 @@ public class Pyromancer
         var p = Game.i.vfx;
         var effect = p.AddEffect(vfxName);
         effect.Attach(parent);
-        effect.transform.localPosition = offset;
+        effect.SetLocalPosition(offset);
     }
 }

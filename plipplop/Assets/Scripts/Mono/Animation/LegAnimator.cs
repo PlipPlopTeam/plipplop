@@ -121,7 +121,8 @@ public class LegAnimator : MonoBehaviour
 		headTransform.localPosition = f.position;
 		headTransform.localEulerAngles = f.euler;
 		headTransform.localScale = f.scale;
-		meshRenderer.sharedMaterial = f.mat;
+
+		meshRenderer.sharedMaterials = f.mat.ToArray();
 
 		if (f.gameEffect != string.Empty)
 		{
