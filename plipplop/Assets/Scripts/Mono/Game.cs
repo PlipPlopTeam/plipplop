@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Game : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class Game : MonoBehaviour
     public ChunkLoader chunkLoader;
     [HideInInspector] public Aperture aperture;
 
-    public System.Action<float> onTransitionCalled;
+    public Action<float, float> onTransitionCalled;
 
     public Dialog dialogToBeGrabbed;
 
@@ -78,6 +79,23 @@ public class Game : MonoBehaviour
         aperture.Update();
         chunkLoader.Update();
         cheatCodeListener.ListenCheat();
+    }
+
+    public void Transition(float closeTime, float waitTime, Action onClosed = null, Action onOpenned = null)
+    {
+        if (onTransitionCalled != null) onTransitionCalled.Invoke(closeTime, waitTime);
+        StartCoroutine(WaitAndDo(closeTime, () => {
+            if (onClosed != null) onClosed.Invoke();
+            StartCoroutine(WaitAndDo(waitTime, () => {
+                if (onOpenned != null) onOpenned.Invoke();
+            }));
+        }));
+    }
+
+    IEnumerator WaitAndDo(float time, Action then)
+    {
+        yield return new WaitForSeconds(time);
+        if (then != null) then.Invoke();
     }
 
     private void FixedUpdate()

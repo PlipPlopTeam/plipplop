@@ -26,13 +26,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1959736695}
-  m_LocalRotation: {x: 0.3084019, y: 0.5291233, z: -0.20262644, w: 0.76410687}
-  m_LocalPosition: {x: -11.34, y: 19.52, z: -27.33}
+  m_LocalRotation: {x: 0.097428344, y: 0.915604, z: -0.28461152, w: 0.26678336}
+  m_LocalPosition: {x: -6.77, y: 14.92, z: 3.44}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1805985088041541702}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 43.293003, y: 69.925, z: 1.315}
+  m_LocalEulerAnglesHint: {x: 34.971, y: 148.095, z: 1.8570001}
 --- !u!20 &1959736699
 Camera:
   m_ObjectHideFlags: 0
@@ -212,7 +212,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1805985086499115371}
-  m_LocalRotation: {x: -0.017469803, y: 0.93998575, z: 0.33726987, w: 0.048689097}
+  m_LocalRotation: {x: -0.017544696, y: 0.9394657, z: 0.3387158, w: 0.048662156}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -290,7 +290,7 @@ MonoBehaviour:
     roll: 0
   - position: {x: 5.043166, y: 12.728913, z: -22.093525}
     roll: 0
-  - position: {x: 20.83817, y: 1.2716274, z: -41.86645}
+  - position: {x: 20.83817, y: 0.79946566, z: -41.86645}
     roll: 0
 --- !u!1 &1805985088041541701
 GameObject:
@@ -375,8 +375,16 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   speedMultiplier: 0.2
-  aim: {fileID: 0}
-  FOV: 60
+  throwGameEffect: gfx_step
+  releaseGameEffect: gfx_step
+  alignWithVelocity: 1
+  rotationSpeed: 10
+  delay: 2
+  arrivedProgression: 0.75
+  transitionCloseDuration: 1
+  transitionWaitDuration: 1
+  aim: {fileID: 1959736696}
+  FOV: 70
   isImmediate: 0
   lookAtTarget: 0
 --- !u!135 &1805985088041541704

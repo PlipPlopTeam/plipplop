@@ -20,15 +20,9 @@ public class Transitioner : MonoBehaviour
 	{
 		if (img == null || material == null) Destroy(gameObject);
 
-		Game.i.onTransitionCalled += (time) => Play(time);
+		Game.i.onTransitionCalled += (closeTime, waitTime) => Play(closeTime, waitTime);
 		img.material = Instantiate(material);
 		img.material.SetFloat("_Value", 0f);
-	}
-
-	[ContextMenu("DEBUG_Transition")]
-	public void DEBUG_Transition()
-	{
-		Play(5f);
 	}
 
 	public void FixedUpdate()
@@ -72,18 +66,14 @@ public class Transitioner : MonoBehaviour
 		}
 	}
 
-	public void Play(float d, string transition = "Default")
+	public void Play(float closeTime, float waitTime, string transition = "Default")
 	{
 		profile = GetTransition(transition);
 		if(profile != null)
 		{
-			float timePool = d;
-
-			closeDuration = Mathf.Clamp(timePool / 2, 0, profile.maxCloseDuration);
-			timePool -= closeDuration;
-			openDuration = Mathf.Clamp(timePool / 2, 0, profile.maxOpenDuration);
-			timePool -= openDuration;
-			idleDuration = timePool;
+			closeDuration = closeTime;
+			idleDuration = waitTime;
+			openDuration = 1f;
 
 			active = true;
 			phase = 0;
