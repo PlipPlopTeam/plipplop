@@ -8,6 +8,7 @@ public class Locomotion : Walker
     public LocomotionPreset preset;
 	private float groundCheckOffset = 0.5f;
 	private float groundCheckRange = 1f;
+    private float groundCheckDistanceRange = 0.1f;
 	[HideInInspector] public float legsHeight { get { return 1f; } }
     private Vector3 legsOffset = Vector3.up * 0.5f;
 	[HideInInspector] public bool isFlattened = false;
@@ -46,7 +47,7 @@ public class Locomotion : Walker
         parentController = GetComponent<Controller>();
         rigidbody = parentController.rigidbody;
 
-        var legsCollider = gameObject.AddComponent<BoxCollider>();
+        var legsCollider = gameObject.AddComponent<CapsuleCollider>();
         legsCollider.material = new PhysicMaterial() { dynamicFriction = preset.groundFriction, staticFriction = preset.groundFriction, frictionCombine = preset.frictionCombine };
         locomotionAnimation = new LocomotionAnimation(rigidbody, legsCollider, parentController.visuals);
         isInitialized = true;
@@ -66,8 +67,9 @@ public class Locomotion : Walker
             locomotionAnimation.legsHeight = legsHeight;
             locomotionAnimation.Update();
         }
-
         locomotionAnimation.isFlattened = isFlattened;
+        locomotionAnimation.isImmerged = isImmerged;
+
         if (locomotionAnimation.isFlattened) locomotionAnimation.Update();
 
         if(!canJump)
@@ -119,6 +121,8 @@ public class Locomotion : Walker
 		bool grounded = IsGrounded();
 		Vector3 currentVelocity = Vector3.zero;
 
+        locomotionAnimation.moveInput = new Vector2(direction.x, direction.z);
+
         if(rigidbody != null)
         {
             currentVelocity = rigidbody.velocity;
@@ -148,7 +152,6 @@ public class Locomotion : Walker
         }
 
         float controlAmount = grounded ? 1f : isImmerged ? preset.waterControl : preset.airControl / 100f;
-
 
         if(rigidbody != null)
         {
@@ -219,10 +222,17 @@ public class Locomotion : Walker
         locomotionAnimation.isFlying = false;
     }
 
-    public bool IsGrounded(float rangeMultiplier = 1f) // But better 😎
+    public bool IsGrounded(float range = 1f) // But better 😎
     {
-        RaycastHit[] hits = RaycastAllToGround(rangeMultiplier);
-        foreach(RaycastHit h in hits)
+        List<RaycastHit> hits = new List<RaycastHit>();
+
+        hits.AddRange(RaycastAllToGround(1f)); // MIDDLE
+        //hits.AddRange(RaycastAllToGround(1.2f, new Vector2(groundCheckDistanceRange, 0f)));
+        //hits.AddRange(RaycastAllToGround(1.2f, new Vector2(-groundCheckDistanceRange, 0f)));
+        //hits.AddRange(RaycastAllToGround(1.2f, new Vector2(0f, groundCheckDistanceRange))); // RIGHT
+        //hits.AddRange(RaycastAllToGround(1.2f, new Vector2(0f, -groundCheckDistanceRange))); // LEFT
+
+        foreach (RaycastHit h in hits)
         {
             if(!transform.IsYourselfCheck(h.transform) && !h.collider.isTrigger)
 			{
@@ -241,18 +251,28 @@ public class Locomotion : Walker
 		else return legsOffset.y + legsHeight + groundCheckOffset;
 	}
 
-    public RaycastHit[] RaycastAllToGround(float rangeMultiplier = 1f)
+    public List<RaycastHit> RaycastAllToGround(float range = 1f, Vector2 offset = new Vector2())
     {
-		float offset = GetCheckOffset();
-        Debug.DrawRay(transform.position + transform.up * offset, groundCheckDirection, Color.red);
-		return Physics.RaycastAll(transform.position + transform.up * offset, groundCheckDirection, offset + groundCheckRange * rangeMultiplier);
+        Vector3 o = new Vector3(offset.x, GetCheckOffset(), offset.y);
+        List <RaycastHit> result = new List<RaycastHit>();
+
+        Vector3 start = transform.position + o;
+        Vector3 direction = groundCheckDirection;
+        float distance = o.y + groundCheckRange * range;
+
+        RaycastHit[] hits = Physics.RaycastAll(start, direction, distance);
+        Debug.DrawRay(start, direction);
+
+        foreach (RaycastHit h in hits) result.Add(h);
+
+        return result;
 	}
 
     public Vector3? GetGroundNormal()
     {
         if (!IsGrounded()) throw new System.Exception("Tried to get ground normal BUT controller is not grounded. Please add a check.");
 
-        RaycastHit[] hits = RaycastAllToGround();
+        List<RaycastHit> hits = RaycastAllToGround();
         foreach (RaycastHit h in hits) {
             if (!transform.IsYourselfCheck(h.transform) && !h.collider.isTrigger) {
                 return h.normal;
@@ -263,7 +283,7 @@ public class Locomotion : Walker
 
     public Vector3? GetBelowSurface(float multiplier = 1f)
     {
-        RaycastHit[] hits = RaycastAllToGround(multiplier);
+        List<RaycastHit> hits = RaycastAllToGround(multiplier);
         foreach (RaycastHit h in hits)
         {
             if (!transform.IsYourselfCheck(h.transform) && !h.collider.isTrigger) return h.point;
@@ -275,23 +295,4 @@ public class Locomotion : Walker
     {
         return locomotionAnimation.GetHeadDummy();
     }
-
-/*
-#if UNITY_EDITOR
-    void OnDrawGizmos()
-    {
-        if (EditorApplication.isPlaying) {
-            Gizmos.color = Color.red;
-			Vector3 os = GetCheckOffset();
-			if (AreLegsRetracted())
-			{
-				Gizmos.DrawLine(
-					transform.position + transform.TransformDirection(os),
-					transform.position - transform.TransformDirection(os + groundCheckDirection * groundCheckRange)
-				);
-			}   
-        }
-    }
-#endif
-*/
 }

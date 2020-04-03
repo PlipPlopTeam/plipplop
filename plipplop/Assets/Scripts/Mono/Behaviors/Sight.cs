@@ -43,13 +43,8 @@ public class Sight : MonoBehaviour
 		float angle = Vector3.Angle(direction, transform.forward);
 		if (angle < settings.fieldOfViewAngle * 0.5f * multiplier)
 		{
-
-			// Check if an object is hiding the seen object from the sight
-			RaycastHit[] rayHits;
-			rayHits = Physics.RaycastAll(headPosition, direction, settings.range * multiplier, 5, QueryTriggerInteraction.Ignore);
-
 			bool seen = true;
-			foreach (RaycastHit hit in rayHits)
+			foreach (RaycastHit hit in Physics.RaycastAll(headPosition, direction, settings.range * multiplier, 5, QueryTriggerInteraction.Ignore))
 			{
 				if (hit.transform != transform && !o.transform.IsYourselfCheck(hit.transform))
 				{
@@ -61,7 +56,7 @@ public class Sight : MonoBehaviour
 		}
 		else return false;
 	}
-
+/*
 #if UNITY_EDITOR
     void OnDrawGizmosSelected()
     {
@@ -87,4 +82,5 @@ public class Sight : MonoBehaviour
         else if(settings.fieldOfViewAngle > 359f) settings.fieldOfViewAngle = 359f;
     }
 #endif
+*/
 }

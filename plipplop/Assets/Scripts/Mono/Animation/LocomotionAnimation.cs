@@ -6,16 +6,19 @@ public class LocomotionAnimation
 {
     public float legsHeight;
     public Vector3 legsOffset;
+    public Vector2 moveInput;
 	public bool grounded;
-	public bool landed = true;
+    public bool landed = true;
 	public bool jumped;
 	public bool isWalking;
     public bool isFlattened;
     public bool isFlying;
+    public bool isImmerged;
+
 	public System.Action onLegAnimationEnd;
 	public Rigidbody rigidbody;
 	Transform parentTransform;
-    BoxCollider legsCollider;
+    CapsuleCollider legsCollider;
     LegAnimator legs;
     Transform visualsTransform;
     Transform headDummy;
@@ -24,7 +27,7 @@ public class LocomotionAnimation
 
 	Dictionary<float, string> movementAnimationMagnitude = new Dictionary<float, string>();
 
-    public LocomotionAnimation(Rigidbody rb, BoxCollider legsCollider, Transform visualsTransform)
+    public LocomotionAnimation(Rigidbody rb, CapsuleCollider legsCollider, Transform visualsTransform)
     {
         this.rigidbody = rb;
         this.legsCollider = legsCollider;
@@ -43,7 +46,13 @@ public class LocomotionAnimation
         legs.transform.localPosition = legsOffset - Vector3.up*(legsHeight);
         SetLegHeight();
 
-        if (isFlattened)
+        if(isImmerged)
+        {
+            legs.gameObject.SetActive(true);
+            legs.speed = 1f;
+            legs.PlayOnce("Water");
+        }
+        else if(isFlattened)
 		{
             legs.gameObject.SetActive(true);
             legs.speed = 1f;
@@ -82,7 +91,7 @@ public class LocomotionAnimation
 			}
 			else if (landed)
 			{
-				PlayAnimation(new Vector2(rigidbody.velocity.x, rigidbody.velocity.z).magnitude);
+				PlayAnimation(new Vector2(rigidbody.velocity.x, rigidbody.velocity.z).magnitude * moveInput.magnitude);
 			}
         }
     }
@@ -179,7 +188,7 @@ public class LocomotionAnimation
 
     void SetLegHeight()
     {
-		/*
+        /*
         if (areLegsRetracted) {
             legsCollider.size = new Vector3(0.2f, 0.2f, 0.2f);
             legsCollider.center = Vector3.zero;
@@ -189,8 +198,8 @@ public class LocomotionAnimation
             legsCollider.center = Vector3.Lerp(legsCollider.center, (-legsOffset / 2f), legsGrowSpeed * Time.deltaTime);
         }
 		*/
-
-		legsCollider.size = new Vector3(0.2f, legsHeight/2f, 0.2f);
+        legsCollider.radius = 0.25f;
+        legsCollider.height = legsHeight/2f;
 		legsCollider.center = -legsOffset/2f;
 	}
 
