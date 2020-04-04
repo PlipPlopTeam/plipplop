@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class ControllerSensor : MonoBehaviour
 {
+    public Vector3 betweenCheckPointOffset;
     [Range(1, 10)] public float sensorRadius = 5f;
     [Range(0, 5)] public float sensorForwardPosition = 3f;
 
@@ -22,7 +23,7 @@ public class ControllerSensor : MonoBehaviour
     private void OnControllerEnter(Collider obj)
     {
         var ctrl = obj.GetComponent<Controller>();
-        if (ctrl/* && NothingBetween(obj.gameObject)*/) controllers.Add(ctrl);
+        if (ctrl && NothingBetween(obj.gameObject)) controllers.Add(ctrl);
     }
 
     private void OnControllerExit(Collider obj)
@@ -34,18 +35,20 @@ public class ControllerSensor : MonoBehaviour
     public bool NothingBetween(GameObject obj)
     {
         float dis = Vector3.Distance(transform.position, obj.transform.position);
-        Vector3 dir = (obj.transform.position - transform.position).normalized;
-        RaycastHit[] hits = Physics.RaycastAll(transform.position, dir, dis);
+        Vector3 dir = (obj.transform.position + Vector3.up * 0.25f - transform.position).normalized;
+        RaycastHit[] hits = Physics.RaycastAll(transform.position + new Vector3(sensorForwardPosition, 0f, 0f) + betweenCheckPointOffset, dir, dis);
 
-        foreach(RaycastHit h in hits)
+        foreach(RaycastHit h in hits) 
         {
-            if(h.collider.gameObject != gameObject
+            if(h.collider.enabled
+            && !h.collider.isTrigger
+            && h.collider.gameObject != gameObject
             && h.collider.gameObject != obj)
             {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     public bool IsThereAnyController()

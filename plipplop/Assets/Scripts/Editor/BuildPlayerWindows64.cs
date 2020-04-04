@@ -8,7 +8,7 @@ using System;
 public class BuildPlayerWindows64 : MonoBehaviour
 {
     static readonly string buildLocation = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).FullName, @"builds\current");
-    static readonly string shareExportPath = @"S:\SIG\J002\09_PROJETS\PLIP_PLOP\BUILDS";
+    static readonly string shareExportPath = @"D:\BUILDS";
     static readonly string format = @"yyyy.MM.dd_HH'h'mm";
 
     [MenuItem("Tools/Build diorama")]
