@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Sight : MonoBehaviour
 {
@@ -12,14 +13,30 @@ public class Sight : MonoBehaviour
 	}
 	public Settings settings;
 	[Range(0f, 1f)] public float multiplier = 1f;
+	const float refresh = 0.5f;
+
+
+	public Dictionary<string, float> memory = new Dictionary<string, float>();
 
 	public GameObject[] Scan()
 	{
         return Scan<GameObject>();
     }
 
-    public T[] Scan<T>()
+	public void Update()
+	{
+		for (int i = 0; i < memory.Count; i++)
+		{
+			if (memory.ElementAt(i).Value > 0f) memory[memory.ElementAt(i).Key] -= Time.deltaTime;
+			else memory.Remove(memory.ElementAt(i).Key);
+		}
+	}
+
+	public T[] Scan<T>()
     {
+		if (memory.ContainsKey(typeof(T).ToString())) return new List<T>().ToArray();
+		else memory.Add(typeof(T).ToString(), refresh);
+
         List<T> objects = new List<T>();
         Vector3 headPosition = transform.position + settings.offset;
 
@@ -28,7 +45,7 @@ public class Sight : MonoBehaviour
         sphereHits = Physics.SphereCastAll(headPosition, settings.range * multiplier, transform.forward, settings.range);
         for(int i = 0; i < sphereHits.Length; i++)
         {
-			if(See(sphereHits[i].transform.gameObject) && sphereHits[i].transform.gameObject.GetComponent<T>() != null)
+			if(sphereHits[i].transform.gameObject.GetComponent<T>() != null && See(sphereHits[i].transform.gameObject))
 			{
 				objects.Add(sphereHits[i].transform.gameObject.GetComponent<T>());
 			}
