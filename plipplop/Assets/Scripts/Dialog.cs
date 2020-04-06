@@ -14,6 +14,7 @@ public class Dialog {
     public bool isAutomatic = false;
     public List<IElement> elements = new List<IElement>();
     public float intervalMultiplier = 1f;
+    public readonly string talker = "???";
 
     static readonly List<string> TMProSupportedTags = new List<string>()
     {
@@ -68,6 +69,7 @@ public class Dialog {
         public readonly string tmpReadyXml;
         public readonly string pureText;
         public readonly int length = 0;
+        public readonly string talker = string.Empty;
 
         public List<Event> events = new List<Event>();
 
@@ -75,6 +77,7 @@ public class Dialog {
         {
             this.pureText = cnt.InnerText;
             var xml = cnt.InnerXml;
+            if (cnt.Attributes["talker"] != null) this.talker = cnt.Attributes["talker"].Value;
 
             // Tag interpolation
             tmpReadyXml = xml.Replace(Environment.NewLine, "");
@@ -219,6 +222,7 @@ public class Dialog {
     {
         this.isAutomatic = contents.Attributes["automatic"] != null ? contents.Attributes["automatic"].Value == "true" : false;
         this.intervalMultiplier = contents.Attributes["speed"] != null ? GetMultiplier(contents.Attributes["speed"].Value) : 1f;
+        this.talker = contents.Attributes["talker"] != null ? contents.Attributes["talker"].Value : "???";
 
         foreach (var dialogElement in contents.ChildNodes)
         {

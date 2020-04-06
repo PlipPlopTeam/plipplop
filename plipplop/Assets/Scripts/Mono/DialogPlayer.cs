@@ -19,6 +19,7 @@ public class DialogPlayer : MonoBehaviour
 
     public Dictionary<string, List<Tuple<int, int>>> vertexFXs = new Dictionary<string, List<Tuple<int, int>>>();
     public Image prompt;
+    public TextMeshProUGUI nameTag;
     public RectTransform parent;
     public Action triggerVFX;
     public int lineIndex { get { return currentLineIndex; } }
@@ -79,6 +80,7 @@ public class DialogPlayer : MonoBehaviour
         currentLineIndex = 0;
         currentCharIndex = 0;
         textMesh.text = "";
+        nameTag.text = dialog.talker;
         currentDialogue = dialog;
     }
 
@@ -114,6 +116,7 @@ public class DialogPlayer : MonoBehaviour
         else if (currentElement is Dialog.Line)
         {
             textMesh.text = "";
+            if (!string.IsNullOrEmpty(currentLine.talker)) nameTag.text = currentLine.talker;
             teletypeRoutine = StartCoroutine(Teletype());
         }
     }
@@ -136,6 +139,9 @@ public class DialogPlayer : MonoBehaviour
             }
             return;
         }
+
+        nameTag.SetLayoutDirty();
+
         parent.localScale = Vector3.Slerp(parent.localScale, Vector3.one, scaleSpeed * Time.deltaTime);
 
         if (isWaitingDelay) return;
@@ -246,9 +252,11 @@ public class DialogPlayer : MonoBehaviour
                 }
             }
 
-            if (line.pureText.Length > currentCharIndex && pausingChars.Contains(line.pureText[currentCharIndex].ToString()))
+            if (line.pureText.Length > currentCharIndex+1 && pausingChars.Contains(line.pureText[currentCharIndex].ToString()))
             {
+                currentCharIndex++;
                 yield return new WaitForSeconds(periodInterval); // Pause on period
+                currentCharIndex--;
             }
             currentCharIndex++;
             yield return new WaitForSeconds(currentDialogue.intervalMultiplier * (isGoingFaster ? fastInterval : (isSlowingDown ? slowInterval : baseInterval)));
