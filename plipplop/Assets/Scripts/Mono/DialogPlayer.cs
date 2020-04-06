@@ -35,6 +35,7 @@ public class DialogPlayer : MonoBehaviour
 
     int slowingDown = 0;
     int goingFaster = 0;
+    Action callback = null;
     DialogLibrary library;
     DialogEffect dfx;
 
@@ -81,9 +82,10 @@ public class DialogPlayer : MonoBehaviour
         currentDialogue = dialog;
     }
 
-    public void Play()
+    public void Play(System.Action callback=null)
     {
         if (Game.i) Game.i.player.Paralyze();
+        this.callback = callback;
         isPlaying = true;
         currentLineIndex = -1;
         Next();
@@ -102,6 +104,7 @@ public class DialogPlayer : MonoBehaviour
         {
             isPlaying = false;
             if (Game.i) Game.i.player.Deparalyze();
+            if (callback != null) callback.Invoke();
             return;
         }
         if (currentElement is Dialog.Pause)
@@ -251,7 +254,6 @@ public class DialogPlayer : MonoBehaviour
             yield return new WaitForSeconds(currentDialogue.intervalMultiplier * (isGoingFaster ? fastInterval : (isSlowingDown ? slowInterval : baseInterval)));
         }
 
-        Debug.Log("Ending teletype because " + currentCharIndex + " > " + line.length);
         isWaitingForInput = true;
 
     }

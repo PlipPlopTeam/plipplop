@@ -21,7 +21,6 @@ public class DialogLibrary
     public void Rebuild()
     {
         dialogs.Clear();
-        Debug.Log("Rebuilding the dialog library...");
 
         var path = Path.Combine(Application.streamingAssetsPath, FOLDER_NAME, locale);
         foreach (var element in Directory.GetFiles(path))

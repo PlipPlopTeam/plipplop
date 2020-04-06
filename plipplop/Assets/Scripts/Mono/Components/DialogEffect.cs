@@ -49,7 +49,6 @@ public class DialogEffect : MonoBehaviour
             if (routine != null) StopCoroutine(routine);
             
             currentIndex = player.lineIndex;
-            Debug.Log("Animating text");
             routine = StartCoroutine(AnimateText());
         }
     }
