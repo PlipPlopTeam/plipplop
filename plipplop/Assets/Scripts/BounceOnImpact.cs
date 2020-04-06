@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class BounceOnImpact : MonoBehaviour
 {
@@ -17,9 +19,30 @@ public class BounceOnImpact : MonoBehaviour
 
     private bool bouncing;
 
+    public Transform transformToMove;
+
+    public string gfxToPlay = "gfx_bush";
+    public Transform gfxSpawnPoint;
+        
+    private void Start()
+    {
+        if (transformToMove == null)
+        {
+            transformToMove = transform;
+        }
+    }
+
     private void OnCollisionEnter(Collision other)
     {
         Bounce();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.isTrigger == false)
+        {
+            Bounce();
+        }
     }
 
     void Bounce()
@@ -27,8 +50,20 @@ public class BounceOnImpact : MonoBehaviour
         if (DOTween.IsTweening(transform) || bouncing)
         {
             return;
-        } 
+        }
 
+        if (gfxToPlay != null)
+        {
+            if (gfxSpawnPoint != null)
+            {
+                Pyromancer.PlayGameEffect(gfxToPlay, gfxSpawnPoint.position);
+            }
+            else
+            {
+                Pyromancer.PlayGameEffect(gfxToPlay, transform.position);
+            }
+        }
+        
         if (scale)
         {
             //transform.DOPunchScale(Vector3.one * scaleValue, scaleDuration);
@@ -37,7 +72,7 @@ public class BounceOnImpact : MonoBehaviour
 
         if (tilt)
         {
-            transform.DOPunchRotation(new Vector3(
+            transformToMove.DOPunchRotation(new Vector3(
                 Random.Range(-rotationValue,rotationValue),
                 Random.Range(-rotationValue,rotationValue),
                 Random.Range(-rotationValue,rotationValue)), 
@@ -53,7 +88,7 @@ public class BounceOnImpact : MonoBehaviour
 
         while (timer < _duration)
         {
-            transform.localScale = Vector3.one * bounceCurve.Evaluate(timer / _duration) * _scale;
+            transformToMove.localScale = Vector3.one * bounceCurve.Evaluate(timer / _duration) * _scale;
 
             timer += Time.deltaTime;
             yield return null;
