@@ -97,6 +97,8 @@ public class Bird : MonoBehaviour
 
 	void Start()
     {
+		refreshTimer = Random.Range(0f, refreshTime);
+
 		visuals.transform.localScale = Vector3.one * Random.Range(sizeRange.x, sizeRange.y);
 		timeOffset = Random.Range(-1f, 1f);
 		position = transform.position;
@@ -414,11 +416,11 @@ public class Bird : MonoBehaviour
     void Update()
     {
 		UpdateState();
+		Frame();
 
 		if (refreshTimer > 0) refreshTimer -= Time.deltaTime;
 		else
 		{
-			Frame();
 			UpdateFrameState();
 			refreshTimer = refreshTime;
 		}
