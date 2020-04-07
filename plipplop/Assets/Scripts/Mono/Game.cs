@@ -84,15 +84,22 @@ public class Game : MonoBehaviour
     public void Transition(float closeTime, float waitTime, Action onClosed = null, Action onOpenned = null)
     {
         if (onTransitionCalled != null) onTransitionCalled.Invoke(closeTime, waitTime);
-        StartCoroutine(WaitAndDo(closeTime, () => {
+        
+        WaitAndDo(closeTime, () => {
             if (onClosed != null) onClosed.Invoke();
-            StartCoroutine(WaitAndDo(waitTime, () => {
+            WaitAndDo(waitTime, () => {
                 if (onOpenned != null) onOpenned.Invoke();
-            }));
-        }));
+            });
+        });
     }
 
-    IEnumerator WaitAndDo(float time, Action then)
+    public void WaitAndDo(float time, Action then)
+    {
+        if (then == null) return;
+        StartCoroutine(CWaitAndDo(time, then));
+    }
+
+    public IEnumerator CWaitAndDo(float time, Action then)
     {
         yield return new WaitForSeconds(time);
         if (then != null) then.Invoke();

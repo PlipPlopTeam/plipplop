@@ -45,6 +45,8 @@ GameObject:
   - component: {fileID: 1059592398460033694}
   - component: {fileID: 825877780}
   - component: {fileID: 5013049227183545924}
+  - component: {fileID: 7089000532999967023}
+  - component: {fileID: 1032916739}
   m_Layer: 0
   m_Name: Bucket
   m_TagString: Untagged
@@ -103,20 +105,21 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4070197355663839833}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 22b8d1c39dccc7a43902416881ea551e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   shape: 0
-  rb: {fileID: 0}
-  collider: {fileID: 0}
+  rb: {fileID: 1059592398460033694}
+  collider: {fileID: 8431864367378909543}
+  weight: 2
   type: 3
-  visuals: {fileID: 0}
+  visuals: {fileID: 2311994614255438416}
   showStoredItem: 1
   randomizeStoreItemRotation: 1
-  storedOffset: {x: 0, y: 0, z: 0}
-  storedRange: 0
+  storedOffset: {x: 0, y: 0.35, z: 0}
+  storedRange: 0.15
   madeFor: 
   emptyIfReversed: 1
   reverseAngle: 45
@@ -146,6 +149,53 @@ MonoBehaviour:
   face: {fileID: 0}
   visualsOffset: {x: 0, y: -0.15, z: 0}
   unpossessSpawnDistance: 1
+--- !u!114 &7089000532999967023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4070197355663839833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7d2135024fe5114fa9f21a847e7cd56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activated: 1
+  working: 1
+  userMax: 0
+  spectatorMax: 0
+  spectatorRange: {x: 0, y: 0}
+  awarnessMultiplier: 1
+  use:
+    boredom: 1
+    hunger: 0
+    tiredness: 0
+  spectate:
+    boredom: 1
+    hunger: 0
+    tiredness: 0
+  container: {fileID: 825877780}
+  shellPrefab: {fileID: -927199367670048503, guid: f7543f77eb3c11f429baf5e346a5ed3a,
+    type: 3}
+  radius: {x: 1.5, y: 2}
+  count: 10
+--- !u!208 &1032916739
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4070197355663839833}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.05, y: 0.25, z: 0.05}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0.25, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &4392316628912808224
 GameObject:
   m_ObjectHideFlags: 0

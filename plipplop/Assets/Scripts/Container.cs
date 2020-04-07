@@ -32,7 +32,10 @@ public class Container : Item
 		item.transform.SetParent(visuals.transform);
 		item.transform.localPosition = Vector3.zero;
 		items.Add(item);
-		if(showStoredItem)
+
+		SoundPlayer.PlayAtPosition("sfx_item_bump", transform.position, 1f, true);
+
+		if (showStoredItem)
 		{
 			if (randomizeStoreItemRotation) item.transform.localEulerAngles = new Vector3(Random.Range(0f, 360f), Random.Range(0f, 360f), Random.Range(0f, 360f));
 			item.transform.localPosition = storedOffset + Geometry.GetRandomPointInSphere(storedRange);

@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-
-
 public class Item : MonoBehaviour, ICarryable
 {
 	public enum EColliderShape { BOX, SPHERE, CAPSULE }
@@ -10,6 +8,7 @@ public class Item : MonoBehaviour, ICarryable
 	public EColliderShape shape;
     public Rigidbody rb;
 	public Collider collider;
+    public float weight = 1f;
 
     [Header("Item")]
 	public EType type = EType.OTHER;
@@ -41,7 +40,7 @@ public class Item : MonoBehaviour, ICarryable
             if(mf.mesh.bounds.size.magnitude > size.magnitude)
                 size = mf.mesh.bounds.size;
         }
-        return transform.localScale.magnitude * size.magnitude * rb.mass;
+        return transform.localScale.magnitude * size.magnitude * rb.mass * weight;
     }
 
     public virtual void Visual(GameObject go)
@@ -75,20 +74,47 @@ public class Item : MonoBehaviour, ICarryable
 		}
     }
 
+    public virtual void Constraint()
+    {
+        if (rb != null)
+        {
+            rb.constraints = RigidbodyConstraints.FreezeAll;
+        }
+    }
+
+    public virtual void UnConstraint()
+    {
+        if (rb != null)
+        {
+            rb.constraints = RigidbodyConstraints.None;
+        }
+    }
+
+    public virtual void Ghost()
+    {
+        if (collider != null) collider.enabled = false;
+        if (rb != null) rb.isKinematic = true;
+        if (rb != null) rb.useGravity = false;
+    }
+
+    public virtual void UnGhost()
+    {
+        if (collider != null) collider.enabled = false;
+        if (rb != null) rb.isKinematic = true;
+        if (rb != null) rb.useGravity = false;
+    }
+
+
     public virtual void Carry()
     {
 		carried = true;
-		if (collider != null) collider.enabled = false;
-        if(rb != null) rb.isKinematic = true;
-        if(rb != null) rb.useGravity = false;
+        Ghost();
     }
 
     public virtual void Drop()
     {
         carried = false;
-		if (collider != null) collider.enabled = true;
-        if(rb != null) rb.isKinematic = false;
-        if(rb != null) rb.useGravity = true;
+        UnGhost();
     }
     
     public virtual void Destroy()
