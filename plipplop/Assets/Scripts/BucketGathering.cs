@@ -42,10 +42,8 @@ public class BucketGathering : Activity
     {
         base.StartUsing(user);
         Initialize();
-
         if (user.look != null) user.look.FocusOn(transform);
         collecting = true;
-
         container.Constraint();
     }
 
