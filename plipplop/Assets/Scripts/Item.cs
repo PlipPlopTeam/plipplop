@@ -99,9 +99,9 @@ public class Item : MonoBehaviour, ICarryable
 
     public virtual void UnGhost()
     {
-        if (collider != null) collider.enabled = false;
-        if (rb != null) rb.isKinematic = true;
-        if (rb != null) rb.useGravity = false;
+        if (collider != null) collider.enabled = true;
+        if (rb != null) rb.isKinematic = false;
+        if (rb != null) rb.useGravity = true;
     }
 
 
