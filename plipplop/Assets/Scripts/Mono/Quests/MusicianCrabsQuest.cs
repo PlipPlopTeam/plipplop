@@ -13,7 +13,7 @@ public class MusicianCrabsQuest : TalkableCharacter
         } }
 
     bool hasAlreadyComeWithZeroShell = false;
-    bool isFirstTime = false;
+    bool isFirstTime = true;
     byte isFinished = 0;
 
     public override Dialog OnDialogTrigger()
@@ -21,6 +21,7 @@ public class MusicianCrabsQuest : TalkableCharacter
         var dials = Game.i.library.dialogs;
 
         if (isFirstTime) {
+            isFirstTime = false;
             return dials.Get("unlock the quest_claw's comeback");
         }
         else {
