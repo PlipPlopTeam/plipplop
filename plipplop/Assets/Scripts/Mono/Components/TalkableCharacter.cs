@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class TalkableCharacter : MonoBehaviour
 {
+    public string questUniqueId = "";
     public float talkRadius = 2f;
 
     SphereCollider sphereTrigger;
@@ -55,6 +56,9 @@ public abstract class TalkableCharacter : MonoBehaviour
         Game.i.PlayDialogue(dial);
     }
 
+    public abstract void Load(byte[] data);
+    public abstract byte[] Save();
+
 #if UNITY_EDITOR
     void OnDrawGizmosSelected()
     {
@@ -65,6 +69,17 @@ public abstract class TalkableCharacter : MonoBehaviour
                 Gizmos.color = Color.green;
         }
         Gizmos.DrawWireSphere(transform.position, talkRadius);
+    }
+
+    private void OnDrawGizmos()
+    {
+        var style = new GUIStyle();
+        style.imagePosition = ImagePosition.ImageAbove;
+        style.alignment = TextAnchor.MiddleCenter;
+        var tex = Resources.Load<Texture2D>("Editor/Sprites/SPR_D_Quest");
+        var content = new GUIContent();
+        content.image = tex;
+        UnityEditor.Handles.Label(transform.position + Vector3.up, content, style);
     }
 #endif
 

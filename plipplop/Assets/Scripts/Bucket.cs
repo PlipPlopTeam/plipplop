@@ -3,10 +3,11 @@ using UnityEngine;
 
 public class Bucket : Controller
 {
-	private Dictionary<int, float> slowdown = new Dictionary<int, float>();
-	private int currentSlow = -1;
-	private Container container;
+	Dictionary<int, float> slowdown = new Dictionary<int, float>();
+	int currentSlow = -1;
+	Container container;
 	public FoodData debugFoodItem;
+    public int itemCount { get { return container.GetItemCount(); } }
 
 	public void DebugSpawnFood()
 	{
