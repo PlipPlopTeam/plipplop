@@ -18,7 +18,7 @@ public class Dialog {
 
     static readonly List<string> TMProSupportedTags = new List<string>()
     {
-        "size", "color", "nobr", "font", "mark"
+        "size", "color", "nobr", "font", "mark", "b", "i", "u"
     };
 
     static readonly List<string> flowControlTags = new List<string>()
@@ -92,7 +92,7 @@ public class Dialog {
             }
 
            // Color interpolation
-           var match = Regex.Match(tmpReadyXml, "(\")(?:#[AF0-9]{6})(\")");
+           var match = Regex.Match(tmpReadyXml, "(\")(?:#[A-F0-9]{6})(\")");
             while (match != null && match.Success && match.Length > 0)
             {
                 if (match.Value.Length == 9)
