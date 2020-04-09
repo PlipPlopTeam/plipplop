@@ -62,6 +62,7 @@ public class Cloth : MonoBehaviour
 
 			mats[i].SetTexture(info.textureProperty, info.patern.texture);
 			mats[i].SetVector(info.tillingProperty, vec);
+			mats[i].SetInt(info.maskProperty, info.patern.useTextureColor);
 		}
 		renderer.sharedMaterials = mats;
 	}

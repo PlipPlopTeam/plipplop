@@ -37,6 +37,7 @@ public class ClothData : ScriptableObject
 			info.patern = paternPalette.Get();
 			info.textureProperty = paternPalette.texturePropertyName;
 			info.tillingProperty = paternPalette.tillingPropertyName;
+			info.maskProperty = paternPalette.maskPropertyName;
 		}
 		return info;
 	}
