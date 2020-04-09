@@ -125,6 +125,7 @@ public class Brain
         if (clone!= null && !isImmediate) {
             var animator = clone.GetComponent<LegAnimator>();
             animator.onAnimationEnded += effectivePossess;
+            animator.speed = 1f;
             animator.Play("Morph");
             animator.MoveTo(controller.transform);
         }
