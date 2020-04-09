@@ -35,6 +35,7 @@ public class Balloon : Activity, ICarryable
 	{
 		rb = GetComponent<Rigidbody>();
 		col = GetComponent<Collider>();
+		Drop();
 	}
 	public virtual void Carry()
     {

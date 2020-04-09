@@ -5,7 +5,6 @@ public class Valuable : Item, INoticeable, ICarryable
 {
     [HideInInspector] public Vector3 origin;
     [Header("Settings")]
-    public float weight = 1f;
     public float distanceThreshold = 2f;
     public bool hidden = false;
 

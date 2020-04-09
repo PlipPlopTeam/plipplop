@@ -7,7 +7,6 @@ public class Serviette : Activity
 	public override void StartUsing(NonPlayableCharacter user)
 	{
 		base.StartUsing(user);
-
 		user.agentMovement.GoThere(transform.position, true);
 		user.agentMovement.onDestinationReached += () =>
 		{
