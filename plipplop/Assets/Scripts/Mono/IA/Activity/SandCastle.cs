@@ -71,6 +71,7 @@ public class SandCastle : Activity
 			smr.SetBlendShapeWeight(0, 100f);
 
 		selected = 0;
+		refreshTime = 0.5f;
 		built = false;
 	}
 

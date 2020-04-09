@@ -45,11 +45,13 @@ public class BucketGathering : Activity
         if (user.look != null) user.look.FocusOn(transform);
         collecting = true;
         container.Constraint();
+        transform.up = Vector3.up;
     }
 
     public override void StopUsing(NonPlayableCharacter user)
     {
         base.StopUsing(user);
+        user.Drop();
         container.UnConstraint();
     }
 
