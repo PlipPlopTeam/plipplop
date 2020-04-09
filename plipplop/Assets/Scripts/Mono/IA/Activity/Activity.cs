@@ -22,8 +22,8 @@ public class Activity : MonoBehaviour
 	public float awarnessMultiplier = 1f;
 	public StatMultiplier use = new StatMultiplier();
 	public StatMultiplier spectate = new StatMultiplier();
-	internal List<NonPlayableCharacter> users = new List<NonPlayableCharacter>();
-	internal List<NonPlayableCharacter> spectators = new List<NonPlayableCharacter>();
+	public List<NonPlayableCharacter> users = new List<NonPlayableCharacter>();
+	public List<NonPlayableCharacter> spectators = new List<NonPlayableCharacter>();
 	internal float timer = 0f;
 	internal bool full = false;
 	
@@ -31,14 +31,21 @@ public class Activity : MonoBehaviour
 
 	public virtual void Enter(NonPlayableCharacter user)
     {
+		if (!full) StartUsing(user);
+		else if (spectatorMax > 0) StartSpectate(user);
+		else Vanish(user);
+
 		user.agentMovement.StopFollowingPath();
         user.stats[NonPlayableCharacter.EStat.BOREDOM] = 0f;
         user.activity = this;
 		user.sight.multiplier = awarnessMultiplier;
-
-		if (!full) StartUsing(user);
-		else StartSpectate(user);
     }
+
+	public void Vanish(NonPlayableCharacter user)
+	{
+		Exit(user);
+		user.previousActivity = null;
+	}
 
 	public bool Used()
 	{
@@ -48,11 +55,13 @@ public class Activity : MonoBehaviour
 	public virtual void StartUsing(NonPlayableCharacter user)
 	{
 		users.Add(user);
+		if (users.Count >= userMax) full = true;
 	}
 
 	public virtual void StopUsing(NonPlayableCharacter user)
 	{
 		users.Remove(user);
+		if (users.Count < userMax) full = false;
 	}
 
 	public virtual void Exit(NonPlayableCharacter user)
