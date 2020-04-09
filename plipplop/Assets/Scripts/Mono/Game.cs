@@ -15,6 +15,7 @@ public class Game : MonoBehaviour
     public Switches switches;
     public CheatCodeListener cheatCodeListener;
     public ChunkLoader chunkLoader;
+    public QuestMaster quests;
     [HideInInspector] public Aperture aperture;
 
     public Action<float, float> onTransitionCalled;
@@ -45,6 +46,7 @@ public class Game : MonoBehaviour
         cheatCodeListener = new CheatCodeListener(new Cheats());
         chunkLoader = new ChunkLoader();
         aiZone = new AIZone();
+        quests = new QuestMaster();
 
         library.dialogs = new DialogLibrary();
         library.dialogs.Rebuild();  // 🔥
