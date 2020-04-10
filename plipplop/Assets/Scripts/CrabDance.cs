@@ -7,15 +7,23 @@ public class CrabDance : MonoBehaviour
 {
     public List<Crab> crabs;
 
-    public bool dancing;
+    public int bpm = 90;
 
-    private Radio radio;
+    public bool areDancing { private set; get; }
 
-    public void StartDancing(bool _isRadio = true)
+    private void Awake()
     {
-        if (!dancing)
+        foreach(var crab in crabs) {
+            crab.isStatic = true;
+        }
+    }
+
+    [ContextMenu("Dance")]
+    public void StartDancing()
+    {
+        if (!areDancing)
         {
-            dancing = true;
+            areDancing = true;
             StartCoroutine(DanceDelay());
             
             SoundPlayer.PlayAtPosition("bgm_crab_rave", transform.position, .4f, false, true);
@@ -24,50 +32,19 @@ public class CrabDance : MonoBehaviour
 
     IEnumerator DanceDelay()
     {
-        foreach (var _crab in crabs)
-        {
-            _crab.gameObject.SetActive(true);
-            _crab.Pop();
-            
-            yield return new WaitForSecondsRealtime(.1f);
-        }
-    }
+        while (true) {
+            foreach (var _crab in crabs) {
+                _crab.gameObject.SetActive(true);
+                if (_crab.hidden) {
+                    _crab.Show();
+                }
+                else {
+                    _crab.Hide(true);
+                }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (!radio)
-        {
-            radio = other.gameObject.GetComponent<Radio>();
-        }
-
-        if (radio)
-        {
-            if (radio.IsRadioOn())
-            {
-                StartDancing();
+                yield return new WaitForSeconds(.02f);
             }
-        }
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        if (radio)
-        {
-            if (radio.IsRadioOn())
-            {
-                StartDancing();
-            }
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (radio)
-        {
-            if (radio.gameObject == other.gameObject)
-            {
-                radio = null;
-            }
+            yield return new WaitForSeconds(60f/bpm - .02f * crabs.Count);
         }
     }
 }
