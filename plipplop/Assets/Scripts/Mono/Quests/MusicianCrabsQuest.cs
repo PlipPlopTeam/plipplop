@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class MusicianCrabsQuest : TalkableCharacter
 {
+    public CrabDance crabDance;
+
+
     bool hasPlayerTheRightController { get {
             return Game.i.player.GetCurrentController() != null && Game.i.player.GetCurrentController() is Bucket;
         } }
@@ -50,6 +53,13 @@ public class MusicianCrabsQuest : TalkableCharacter
             else {
                 return dials.Get("back with wrong controller_claw's comeback");
             }
+        }
+    }
+
+    private void Update()
+    {
+        if (isFinished > 0 && !Game.i.player.IsParalyzed() && !crabDance.areDancing) {
+            crabDance.StartDancing();
         }
     }
 

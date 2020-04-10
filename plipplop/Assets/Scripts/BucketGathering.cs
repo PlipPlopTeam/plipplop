@@ -50,8 +50,10 @@ public class BucketGathering : Activity
 
     public override void StopUsing(NonPlayableCharacter user)
     {
+        collecting = false;
         base.StopUsing(user);
         user.Drop();
+        user.agentMovement.onDestinationReached = null;
         container.UnConstraint();
     }
 
@@ -76,14 +78,15 @@ public class BucketGathering : Activity
                     users[0].animator.SetTrigger("Pickup Ground");
                     Game.i.WaitAndDo(0.5f, () =>
                     {
+                        if (users.Count < 1) return; // No one is using me anymore
 
                         shellItem = new GameObject().AddComponent<Item>();
                         shellItem.Visual(shellPrefab);
                         shellItem.gameObject.name = "Shell";
                         users[0].Carry(shellItem);
                         Pyromancer.PlayGameEffect("gfx_sand_poof", shellItem.transform.position);
-                        Game.i.WaitAndDo(0.5f, () =>
-                        {
+                        Game.i.WaitAndDo(0.5f, () => {
+                            if (users.Count < 1) return; // No one is using me anymore
                             users[0].agentMovement.GoThere(transform.position, true);
                             storing = true;
                         });
@@ -98,8 +101,8 @@ public class BucketGathering : Activity
                     users[0].agentMovement.Stop();
                     users[0].agentMovement.OrientToward(transform.position);
                     users[0].animator.SetTrigger("Pickup Ground");
-                    Game.i.WaitAndDo(0.5f, () =>
-                    {
+                    Game.i.WaitAndDo(0.5f, () => {
+                        if (users.Count < 1) return; // No one is using me anymore
                         users[0].Drop();
                         container.Store(shellItem);
                         currentCount++;
