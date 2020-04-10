@@ -48,6 +48,12 @@ public class Mapping : ScriptableObject
         }
     }
 
+    public bool AreOverlapping(EAction action, EAction otherAction)
+    {
+        return 
+            registeredInputs[action].FindAll(o=> registeredInputs[otherAction].FindAll(p => p.input == o.input).Count > 0).Count == registeredInputs[action].Count;
+    }
+
     float this[EAction a] {
         get {
             if (!registeredInputs.ContainsKey(a)) throw new System.Exception("Unknown input " + a);

@@ -95,9 +95,8 @@ public class Brain
         }
 
         if (controller is null) return;
-
         if (mapping.IsPressed(EAction.JUMP)) controller.OnJump();
-        if (mapping.IsPressed(EAction.POSSESS)) controller.OnTryPossess();
+        if (mapping.IsPressed(EAction.POSSESS) && (!mapping.AreOverlapping(EAction.TALK, EAction.POSSESS) || currentChatOpportunity == null)) controller.OnTryPossess();
         if (mapping.IsHeld(EAction.JUMP)) controller.OnHoldJump();
 		if (mapping.IsPressed(EAction.TOGGLE_LEGS)) controller.ToggleLegs();
         if (mapping.IsPressed(EAction.SHOUT)) controller.Shout();
