@@ -18,6 +18,8 @@ public abstract class Volume : MonoBehaviour
     bool isInside = false;
     internal Vector3 offset = new Vector3();
 
+    internal BoxCollider bc;
+
 #if UNITY_EDITOR
 	internal virtual void OnDrawGizmos()
     {
@@ -31,7 +33,19 @@ public abstract class Volume : MonoBehaviour
     }
 #endif
 
-	internal Vector3 GetSize()
+    public bool IsInside(Vector3 point)
+    {
+        point = bc.transform.InverseTransformPoint(point) - bc.center;
+        float x = (bc.size.x / 2f);
+        float y = (bc.size.y / 2f);
+        float z = (bc.size.z / 2f);
+        if (point.x < x && point.x > -x &&
+            point.y < y && point.y > -y &&
+            point.z < z && point.z > -z) return true;
+        else return false;
+    }
+
+    internal Vector3 GetSize()
     {
         return new Vector3(width, height, length);
     }
@@ -39,8 +53,8 @@ public abstract class Volume : MonoBehaviour
     private void Awake()
     {
         transform.localScale = Vector3.one;
-        var box = gameObject.AddComponent<BoxCollider>();
-        box.isTrigger = true;
+        bc = gameObject.AddComponent<BoxCollider>();
+        bc.isTrigger = true;
         UpdateSize();
 
         var col = GetComponent<CollisionEventTransmitter>();
