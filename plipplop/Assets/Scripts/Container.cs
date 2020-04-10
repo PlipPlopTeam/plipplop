@@ -16,8 +16,9 @@ public class Container : Item
 	public System.Action onItemStored;
 	public System.Action onItemRemoved;
 
-	public void Awake()
+	public override void Awake()
 	{
+        base.Awake();
 		Game.i.aiZone.Register(this);
 	}
 
