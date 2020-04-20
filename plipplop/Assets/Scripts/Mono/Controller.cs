@@ -34,9 +34,8 @@ public abstract class Controller : MonoBehaviour
 	int freeze = 0;
     int immersion = 0;
 
-	bool isParalysed = false;
-	public void Paralyse() { isParalysed = true; }
-	public void UnParalyse() { isParalysed = false; }
+	public void Paralyse() { Game.i.player.Paralyze(); }
+	public void UnParalyse() { Game.i.player.Deparalyze(); }
 
 	public virtual void Throw(Vector3 direction, float force)
 	{
@@ -137,7 +136,7 @@ public abstract class Controller : MonoBehaviour
 
     virtual internal void BaseMove(Vector3 direction)
     {
-		if (IsFrozen() || isParalysed) return;
+		if (IsFrozen()) return;
 		if (AreLegsRetracted()) SpecificMove(direction);
         else locomotion.Move(direction);
     }

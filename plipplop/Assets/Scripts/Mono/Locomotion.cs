@@ -168,6 +168,8 @@ public class Locomotion : Walker
 				grounded ? 1f : direction.magnitude
             ).normalized;
 
+            if (Game.i.player.IsParalyzed()) virtualStick = Vector3.zero;
+
             float frictionMultiplier = (grounded || isImmerged) ? 1f : 1f-preset.airFriction;
 
             Vector3 velocity =
