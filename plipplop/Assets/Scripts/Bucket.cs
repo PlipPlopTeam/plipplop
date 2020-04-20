@@ -27,22 +27,21 @@ public class Bucket : Controller
 			return;
 		}
 
-		container.onItemStored += () =>
-		{
-			this.Slow(container.GetItemCount());
-		};
-
-		container.onItemStored += () =>
-		{
-			this.Slow(container.GetItemCount());
-		};
-
 		slowdown.Add(0, 0.9f);        
 		slowdown.Add(1, 0.85f);
 		slowdown.Add(2, 0.70f);
 		slowdown.Add(3, 0.55f);
 		slowdown.Add(4, 0.40f);
 		slowdown.Add(5, 0.25f);
+
+		container.onItemStored += () =>
+		{
+			this.Slow(container.GetItemCount());
+		};
+		container.onItemRemoved += () =>
+		{
+			this.Slow(container.GetItemCount());
+		};
 	}
 
 	public void Slow(int itemStored)

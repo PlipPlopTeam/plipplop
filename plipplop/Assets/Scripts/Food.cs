@@ -29,7 +29,7 @@ public class Food : Item
 
     public void Assemble(GameObject obj)
     {
-        Visual(data.pristine);
+        Visual(obj);
         if (visuals != null)
         {
             visuals.transform.localEulerAngles = data.rotationOffset;
