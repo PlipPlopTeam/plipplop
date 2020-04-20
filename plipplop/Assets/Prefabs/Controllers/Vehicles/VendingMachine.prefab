@@ -366,6 +366,7 @@ GameObject:
   - component: {fileID: 8231066622640970221}
   - component: {fileID: 228769047}
   - component: {fileID: 4290024513775033360}
+  - component: {fileID: 181154977622531321}
   m_Layer: 0
   m_Name: VendingMachine
   m_TagString: Untagged
@@ -430,8 +431,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 011d63a14cf4d8347a5660a929242412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modifiers: []
   preset: {fileID: 11400000, guid: 1fd4bd979846d8d419a55b058d680ec3, type: 2}
-  groundCheckOffset: 0.5
   isFlattened: 0
   rigidbody: {fileID: 0}
   targetDirection: {x: 0, y: 0, z: 0}
@@ -556,6 +557,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a15cd58957a760249a3a123767c2237a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!208 &181154977622531321
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5348957801613606142}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.7, y: 1, z: 0.6}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 1, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &7233166334585222326
 GameObject:
   m_ObjectHideFlags: 0
@@ -733,12 +750,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90.00001
       objectReference: {fileID: 0}
-    - target: {fileID: -3067065580807383770, guid: 5b87970a2eeea3748b4d546b62129774,
+    - target: {fileID: -4554713794092637562, guid: 5b87970a2eeea3748b4d546b62129774,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: e1f53f7068846684399849b4ef8ab72f, type: 2}
-    - target: {fileID: -4554713794092637562, guid: 5b87970a2eeea3748b4d546b62129774,
+    - target: {fileID: -3067065580807383770, guid: 5b87970a2eeea3748b4d546b62129774,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 

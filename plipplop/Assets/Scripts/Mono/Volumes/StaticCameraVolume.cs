@@ -14,6 +14,17 @@ public class StaticCameraVolume : Volume {
 
     int lookAtIndex = 0;
     Geometry.PositionAndRotation objective;
+    Controller controller;
+    public void Update()
+    {
+        if(controller != null && !controller.IsPossessed())
+        {
+            if (Game.i.player.GetCurrentController() != null && !IsInside(Game.i.player.GetCurrentController().transform.position))
+            {
+                OnPlayerExit(controller);
+            }
+        }
+    }
 
     public override void OnPlayerEnter(Controller player)
     {
@@ -40,8 +51,6 @@ public class StaticCameraVolume : Volume {
         // Stop control for 1 frame
         StartCoroutine(FreezeForSomeTime());
 
-
-        // TODO : Replace by a fadeout
         foreach (GameObject o in objectsToHide)
         {
             var fade = o.GetComponent<FadedApparition>();
@@ -54,6 +63,8 @@ public class StaticCameraVolume : Volume {
                 o.SetActive(false);
             }
         }
+
+        controller = player;
     }
 
     public override void OnPlayerExit(Controller player)
@@ -65,7 +76,7 @@ public class StaticCameraVolume : Volume {
             Game.i.aperture.RemoveStaticPosition(objective);
         }
 
-        if (!lookAtTarget)
+        if (!lookAtTarget && lookAtIndex > -1)
         {
             Game.i.aperture.RestoreLookAt(lookAtIndex);
         }
@@ -84,6 +95,8 @@ public class StaticCameraVolume : Volume {
                 o.SetActive(true);
             }
         }
+
+        controller = null;
     }
 
     IEnumerator FreezeForSomeTime()

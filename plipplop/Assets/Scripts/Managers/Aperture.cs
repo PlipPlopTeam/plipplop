@@ -193,7 +193,8 @@ public class Aperture
 
     public void RestoreLookAt(int index)
     {
-        lookAtTarget.RemoveAt(index);
+        if(index >= 0 && index < lookAtTarget.Count)
+            lookAtTarget.RemoveAt(index);
     }
 
     public int EnableLookAt()
