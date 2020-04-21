@@ -29,7 +29,7 @@ public abstract class Controller : MonoBehaviour
     internal ControllerSensor controllerSensor;
     internal bool isImmerged { get { return immersion > 0; } }
     RigidbodyConstraints previousConstraints;
-
+    internal bool movingStick;
 	bool isBeingThrown = false;
 	int freeze = 0;
     int immersion = 0;
@@ -137,7 +137,10 @@ public abstract class Controller : MonoBehaviour
 
     virtual internal void BaseMove(Vector3 direction)
     {
-		if (IsFrozen() || isParalysed) return;
+        if (direction.magnitude > 0.1f) movingStick = true;
+        else movingStick = false;
+
+        if (IsFrozen() || isParalysed) return;
 		if (AreLegsRetracted()) SpecificMove(direction);
         else locomotion.Move(direction);
     }

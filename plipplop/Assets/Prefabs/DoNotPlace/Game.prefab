@@ -213,7 +213,52 @@ MonoBehaviour:
         - name: sfx_item_bump
           clip: {fileID: 8300000, guid: bf7654b3989986847ab3706d6423a3a5, type: 3}
           loop: 0
-        childCount: 40
+        - name: bgs_guitar_ambiance
+          clip: {fileID: 8300000, guid: 392296c80edfbca4db04970974144054, type: 3}
+          loop: 1
+        - name: bgm_ghetto_blaster
+          clip: {fileID: 8300000, guid: 213aff950edba34408dc6cdb76fe2b79, type: 3}
+          loop: 1
+        - name: bgm_gymtonic
+          clip: {fileID: 8300000, guid: cffc870163af56540b5a12d49d5a0639, type: 3}
+          loop: 1
+        - name: bgm_villa
+          clip: {fileID: 8300000, guid: 4f84fd235233ebb4abbb2862f592465a, type: 3}
+          loop: 1
+        - name: bgm_volcano
+          clip: {fileID: 8300000, guid: c9ac3307487886b4cb28adc031858ddc, type: 3}
+          loop: 1
+        - name: bgs_bonfire
+          clip: {fileID: 8300000, guid: 1a0d75c29f7d5f2498c6fbfc3c0b58db, type: 3}
+          loop: 1
+        - name: bgm_waves
+          clip: {fileID: 8300000, guid: 073467f072328c149ba9b3aea76acf0e, type: 3}
+          loop: 1
+        - name: sfx_guitar_break
+          clip: {fileID: 8300000, guid: 543e72f6abd41d2409b9c705e5b43937, type: 3}
+          loop: 0
+        - name: sfx_guitar_impact
+          clip: {fileID: 8300000, guid: 04700f147a405dd4d9e8686341aaab99, type: 3}
+          loop: 0
+        - name: sfx_good_chord_1
+          clip: {fileID: 8300000, guid: 4899b4e6de207954892ad292fa115918, type: 3}
+          loop: 0
+        - name: sfx_good_chord_2
+          clip: {fileID: 8300000, guid: 6cde81c78998e834bb8dcd5fa5dca6a8, type: 3}
+          loop: 0
+        - name: sfx_good_chord_3
+          clip: {fileID: 8300000, guid: 355dfcb8b5f31074eb4c8f0b0b84c441, type: 3}
+          loop: 0
+        - name: sfx_good_chord_4
+          clip: {fileID: 8300000, guid: 717e3ae25e01bca46ab5fd453c5b26bc, type: 3}
+          loop: 0
+        - name: sfx_bad_chord_1
+          clip: {fileID: 8300000, guid: a8bf3bc9f7964d141a5f235b71c822b2, type: 3}
+          loop: 0
+        - name: sfx_bad_chord_2
+          clip: {fileID: 8300000, guid: 662d2341ffa4f0847a40dcc5db4d03b7, type: 3}
+          loop: 0
+        childCount: 55
     vfxs:
       serializableEffects:
         list:
@@ -238,17 +283,20 @@ MonoBehaviour:
         - name: vfx_splash
           prefab: {fileID: 3549938389114782582, guid: 5bff4749ca0f75d4db0ee873e184842a,
             type: 3}
-        - name: vfx_FootStepDecal
+        - name: vfx_foot_step_decal
           prefab: {fileID: 5587164724240556433, guid: d8b68b4af63c8d149903385ed47cbcf2,
             type: 3}
-        - name: vfx_LeafBurst
+        - name: vfx_leaf_burst
           prefab: {fileID: 2090861921935899067, guid: 0b029edf3d0ace34d8beb9ae6f9daa8d,
             type: 3}
-        childCount: 9
+        - name: vfx_note_burst
+          prefab: {fileID: 7081559059158549950, guid: 8598ae02b7c3bac438fefb52ce27ff0a,
+            type: 3}
+        childCount: 10
     gfxs:
       serializableEffects:
         list:
-        - name: gfx_stepLeft
+        - name: gfx_step_left
           gfxScriptableObject: {fileID: 11400000, guid: c1decd4f3e7fafc45a491c7adca44f6a,
             type: 2}
         - name: gfx_morph
@@ -266,7 +314,7 @@ MonoBehaviour:
         - name: gfx_sand_poof
           gfxScriptableObject: {fileID: 11400000, guid: f81790023375eab4f80c504b98c13a80,
             type: 2}
-        - name: gfx_stepRight
+        - name: gfx_step_right
           gfxScriptableObject: {fileID: 11400000, guid: 80622770bd4db0445bf09e6f2234f648,
             type: 2}
         - name: gfx_step
@@ -275,13 +323,22 @@ MonoBehaviour:
         - name: gfx_splash
           gfxScriptableObject: {fileID: 11400000, guid: d5ca0d676036ed74e94fe713f24d4bfe,
             type: 2}
-        - name: gfx_SmallStep
+        - name: gfx_small_step
           gfxScriptableObject: {fileID: 11400000, guid: 66c5ad226784a214a9a2601514e04577,
             type: 2}
         - name: gfx_bush
           gfxScriptableObject: {fileID: 11400000, guid: 5756fccc1476f584cab844857a4357f6,
             type: 2}
-        childCount: 11
+        - name: gfx_guitar_bad_chord
+          gfxScriptableObject: {fileID: 11400000, guid: 919bd16e1ac04a54abcbd4438671df7c,
+            type: 2}
+        - name: gfx_guitar_good_chord
+          gfxScriptableObject: {fileID: 11400000, guid: 7acd73955e5208740b139c584429de4e,
+            type: 2}
+        - name: gfx_guitar_impact
+          gfxScriptableObject: {fileID: 11400000, guid: 436cfe4ef7809b34f930298e1f94715f,
+            type: 2}
+        childCount: 14
     npcLibrary: {fileID: 11400000, guid: d52e8e370a131fe4fa27843e9bddccee, type: 2}
     cinematics:
       serializableEffects:
