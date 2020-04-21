@@ -234,7 +234,31 @@ MonoBehaviour:
         - name: bgm_waves
           clip: {fileID: 8300000, guid: 073467f072328c149ba9b3aea76acf0e, type: 3}
           loop: 1
-        childCount: 47
+        - name: sfx_guitar_break
+          clip: {fileID: 8300000, guid: 543e72f6abd41d2409b9c705e5b43937, type: 3}
+          loop: 0
+        - name: sfx_guitar_impact
+          clip: {fileID: 8300000, guid: 04700f147a405dd4d9e8686341aaab99, type: 3}
+          loop: 0
+        - name: sfx_good_chord_1
+          clip: {fileID: 8300000, guid: 4899b4e6de207954892ad292fa115918, type: 3}
+          loop: 0
+        - name: sfx_good_chord_2
+          clip: {fileID: 8300000, guid: 6cde81c78998e834bb8dcd5fa5dca6a8, type: 3}
+          loop: 0
+        - name: sfx_good_chord_3
+          clip: {fileID: 8300000, guid: 355dfcb8b5f31074eb4c8f0b0b84c441, type: 3}
+          loop: 0
+        - name: sfx_good_chord_4
+          clip: {fileID: 8300000, guid: 717e3ae25e01bca46ab5fd453c5b26bc, type: 3}
+          loop: 0
+        - name: sfx_bad_chord_1
+          clip: {fileID: 8300000, guid: a8bf3bc9f7964d141a5f235b71c822b2, type: 3}
+          loop: 0
+        - name: sfx_bad_chord_2
+          clip: {fileID: 8300000, guid: 662d2341ffa4f0847a40dcc5db4d03b7, type: 3}
+          loop: 0
+        childCount: 55
     vfxs:
       serializableEffects:
         list:
@@ -302,7 +326,16 @@ MonoBehaviour:
         - name: gfx_bush
           gfxScriptableObject: {fileID: 11400000, guid: 5756fccc1476f584cab844857a4357f6,
             type: 2}
-        childCount: 11
+        - name: gfx_guitar_bad_chord
+          gfxScriptableObject: {fileID: 11400000, guid: 919bd16e1ac04a54abcbd4438671df7c,
+            type: 2}
+        - name: gfx_guitar_good_chord
+          gfxScriptableObject: {fileID: 11400000, guid: 7acd73955e5208740b139c584429de4e,
+            type: 2}
+        - name: gfx_guitar_impact
+          gfxScriptableObject: {fileID: 11400000, guid: 436cfe4ef7809b34f930298e1f94715f,
+            type: 2}
+        childCount: 14
     npcLibrary: {fileID: 11400000, guid: d52e8e370a131fe4fa27843e9bddccee, type: 2}
     cinematics:
       serializableEffects:
