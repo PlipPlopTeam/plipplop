@@ -41,7 +41,7 @@ public class Guitar : Activity, ICarryable
 
 		if (musicNames.Count == 0) return;
 		currentMusicName = musicNames.PickRandom();
-		SoundPlayer.PlaySoundAttached(currentMusicName, transform, 1f, false, true);
+		SoundPlayer.PlaySoundAttached(currentMusicName, transform, 0.25f, false, true);
 	}
 
 	void StopMusic()
