@@ -17,7 +17,6 @@ public class Ball : Controller
 	bool hopped = false;
     bool canJumpAgain = true;
     Vector3 lastOrientation;
-    bool movingStick = false;
 
 	public override void OnEject()
 	{
@@ -58,7 +57,7 @@ public class Ball : Controller
 
 	internal override void SpecificMove(Vector3 direction)
     {
-		if(direction.magnitude > 0.1f)
+		if(movingStick)
 		{
 			Rotate(direction);
 			if (!hopped)
@@ -66,12 +65,7 @@ public class Ball : Controller
 				Bump(direction);
 				hopped = true;
 			}
-            movingStick = true;
-
-        }
-        else {
-            movingStick = false;
-        }
+		}
 
 		if(direction.magnitude > 0.25f)
 		{
