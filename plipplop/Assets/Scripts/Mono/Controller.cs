@@ -162,7 +162,7 @@ public abstract class Controller : MonoBehaviour
     }
     internal bool IsPossessed()
     {
-        return Game.i.player.IsPossessing(this);
+        return Game.i != null && Game.i.player != null && Game.i.player.IsPossessing(this);
     }
 
 	public virtual bool IsVisibleByNPC()
