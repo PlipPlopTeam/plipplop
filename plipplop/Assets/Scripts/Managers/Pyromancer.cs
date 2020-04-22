@@ -16,20 +16,46 @@ public class Pyromancer
 
     public static void PlayGameEffect(GameFX gfx, Vector3 position)
     {
-        foreach (var sound in gfx.sfx) {
-            if (sound.spatializedSound) {
-                SoundPlayer.PlayAtPosition(sound.name, position, sound.volume, sound.randomPitch);
-            }
-            else if (sound.randomPitch) {
-                SoundPlayer.PlayWithRandomPitch(sound.name, sound.volume);
-            }
-            else {
-                SoundPlayer.Play(sound.name, sound.volume);
+        if(!gfx.randomSound)
+        {
+            foreach (var sound in gfx.sfx)
+            {
+                PlayGameEffectSound(sound, position);
             }
         }
+        else
+        {
+            var sound = gfx.sfx.PickRandom();
+            PlayGameEffectSound(sound, position);
+        }
 
-        foreach (var vfx in gfx.vfx) {
-            PlayVFX(vfx, position);
+        if (!gfx.randomEffect)
+        {
+            foreach (var vfx in gfx.vfx)
+            {
+                PlayVFX(vfx, position);
+            }
+        }
+        else
+        {
+            var effect = gfx.vfx.PickRandom();
+            PlayVFX(effect, position);
+        }
+    }
+
+    public static void PlayGameEffectSound(GameFX.SFXParameter sfxParam, Vector3 pos)
+    {
+        if (sfxParam.spatializedSound)
+        {
+            SoundPlayer.PlayAtPosition(sfxParam.name, pos, sfxParam.volume, sfxParam.randomPitch);
+        }
+        else if (sfxParam.randomPitch)
+        {
+            SoundPlayer.PlayWithRandomPitch(sfxParam.name, sfxParam.volume);
+        }
+        else
+        {
+            SoundPlayer.Play(sfxParam.name, sfxParam.volume);
         }
     }
 
