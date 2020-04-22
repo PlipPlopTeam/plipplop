@@ -138,8 +138,9 @@ public class SoundPlayer
     public static void StopSounds(string soundName, bool shouldFade = false)
     {
         var snd = GetSoundFromName(soundName);
-        foreach (var src in managedSources) {
-            if (src.clip != snd.clip) continue;
+        foreach (var src in managedSources)
+        {
+            if (src != null && src.clip != snd.clip) continue;
             StopSound(src, shouldFade);
         }
     }
