@@ -126,7 +126,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   autoPossess: 1
-  beginCrouched: 0
+  beginCrouched: 1
   canRetractLegs: 1
   freezeUntilPossessed: 0
   useGravity: 1
@@ -137,12 +137,15 @@ MonoBehaviour:
   locomotion: {fileID: 0}
   visuals: {fileID: 0}
   face: {fileID: 0}
-  visualsOffset: {x: 0, y: 0.2, z: 0}
+  visualsOffset: {x: 0, y: 0.18, z: 0}
   unpossessSpawnDistance: 0.5
   impactDetection: {fileID: 8242818477413934955}
   noteBurstParticle: {fileID: 7079126786595257333}
+  linkedActivity: {fileID: 0}
   angularForce: 50
+  breakMagnitude: 5
   maxVelocityMagnitude: 5
+  alsoBreakActivity: 0
 --- !u!65 &1546279727
 BoxCollider:
   m_ObjectHideFlags: 0

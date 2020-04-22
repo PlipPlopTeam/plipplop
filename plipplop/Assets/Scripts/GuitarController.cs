@@ -9,9 +9,12 @@ public class GuitarController : Controller
 	[Header("References")]
 	public CollisionEventTransmitter impactDetection;
 	public ParticleSystem noteBurstParticle;
+	public Activity linkedActivity;
 	[Header("Settings")]
 	public float angularForce = 50f;
+	public float breakMagnitude = 5f;
 	public float maxVelocityMagnitude = 1f;
+	public bool alsoBreakActivity = false;
 
 	private bool broken;
 
@@ -25,6 +28,31 @@ public class GuitarController : Controller
 				Pyromancer.PlayGameEffect("gfx_guitar_impact", transform.position);
 			}
 		};
+	}
+
+	private void OnCollisionEnter(Collision collision)
+	{
+		if(rigidbody != null && rigidbody.velocity.magnitude > breakMagnitude)
+		{
+			Break();
+		}
+		else
+		{
+			if(collision.gameObject.TryGetComponent<Rigidbody>(out Rigidbody otherRb))
+			{
+				if (otherRb.velocity.magnitude > breakMagnitude)
+				{
+					Break();
+				}
+			}
+		}
+	}
+
+	public void Break()
+	{
+		SoundPlayer.PlayAtPosition("sfx_guitar_break", transform.position);
+		if (linkedActivity != null && alsoBreakActivity) linkedActivity.Break();
+		broken = true;
 	}
 
 	internal override void Shout()
