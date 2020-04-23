@@ -8384,6 +8384,16 @@ PrefabInstance:
       propertyPath: fearObjectMagnitude
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 7831866960926014051, guid: 425e43f192aaae34f8faf42937583f5c,
+        type: 3}
+      propertyPath: m_BlendShapeWeights.Array.data[0]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7831866960926014051, guid: 425e43f192aaae34f8faf42937583f5c,
+        type: 3}
+      propertyPath: m_BlendShapeWeights.Array.data[1]
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2588154409790991444, guid: 425e43f192aaae34f8faf42937583f5c,
         type: 3}
       propertyPath: m_BlendShapeWeights.Array.data[0]
@@ -8403,16 +8413,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_UpdateWhenOffscreen
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7831866960926014051, guid: 425e43f192aaae34f8faf42937583f5c,
-        type: 3}
-      propertyPath: m_BlendShapeWeights.Array.data[0]
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7831866960926014051, guid: 425e43f192aaae34f8faf42937583f5c,
-        type: 3}
-      propertyPath: m_BlendShapeWeights.Array.data[1]
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 425e43f192aaae34f8faf42937583f5c, type: 3}
@@ -10684,6 +10684,11 @@ PrefabInstance:
       propertyPath: autoPossess
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6665907460514541257, guid: b0d1cfadf34ecd242a7444aed435a712,
+        type: 3}
+      propertyPath: force
+      value: 250
+      objectReference: {fileID: 0}
     - target: {fileID: 228769047, guid: b0d1cfadf34ecd242a7444aed435a712, type: 3}
       propertyPath: range
       value: 3
@@ -11470,55 +11475,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!114 &1195154432
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59b6606ef2548734bb6d11b9d160bc7e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  active: 1
-  m_AdvancedMode: 0
-  rotation:
-    m_OverrideState: 0
-    m_Value: 0
-    min: 0
-    max: 360
-  skyIntensityMode:
-    m_OverrideState: 0
-    m_Value: 0
-  exposure:
-    m_OverrideState: 0
-    m_Value: 15
-  multiplier:
-    m_OverrideState: 0
-    m_Value: 1
-    min: 0
-  upperHemisphereLuxValue:
-    m_OverrideState: 0
-    m_Value: 0.6774997
-    min: 0
-  desiredLuxValue:
-    m_OverrideState: 0
-    m_Value: 20000
-  updateMode:
-    m_OverrideState: 0
-    m_Value: 0
-  updatePeriod:
-    m_OverrideState: 0
-    m_Value: 0
-    min: 0
-  includeSunInBaking:
-    m_OverrideState: 0
-    m_Value: 0
-  hdriSky:
-    m_OverrideState: 0
-    m_Value: {fileID: 8900000, guid: 87864a6939bb564409e4973ec3247af2, type: 3}
 --- !u!4 &1202282304 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9150291970329554038, guid: 593b4b1fd430c294e9b10e672bd632d8,
@@ -13522,6 +13478,55 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: a508d5d577a9ed74da7f523abe0c7be7, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f7543f77eb3c11f429baf5e346a5ed3a, type: 3}
+--- !u!114 &1622476698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59b6606ef2548734bb6d11b9d160bc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  active: 1
+  m_AdvancedMode: 0
+  rotation:
+    m_OverrideState: 0
+    m_Value: 0
+    min: 0
+    max: 360
+  skyIntensityMode:
+    m_OverrideState: 0
+    m_Value: 0
+  exposure:
+    m_OverrideState: 0
+    m_Value: 15
+  multiplier:
+    m_OverrideState: 0
+    m_Value: 1
+    min: 0
+  upperHemisphereLuxValue:
+    m_OverrideState: 0
+    m_Value: 0.6774997
+    min: 0
+  desiredLuxValue:
+    m_OverrideState: 0
+    m_Value: 20000
+  updateMode:
+    m_OverrideState: 0
+    m_Value: 0
+  updatePeriod:
+    m_OverrideState: 0
+    m_Value: 0
+    min: 0
+  includeSunInBaking:
+    m_OverrideState: 0
+    m_Value: 0
+  hdriSky:
+    m_OverrideState: 0
+    m_Value: {fileID: 8900000, guid: 87864a6939bb564409e4973ec3247af2, type: 3}
 --- !u!1001 &1642835868
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13972,7 +13977,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Profile: {fileID: 11400000, guid: c8e3472f8e8997644bd1b3ddf70aecf4, type: 2}
   m_StaticLightingSkyUniqueID: 1
-  m_SkySettings: {fileID: 1195154432}
+  m_SkySettings: {fileID: 1622476698}
   m_SkySettingsFromProfile: {fileID: 1332542512067647828, guid: c8e3472f8e8997644bd1b3ddf70aecf4,
     type: 2}
 --- !u!114 &1690392957
@@ -15242,7 +15247,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   material: 0
-  adherence: 0.25
+  adherence: 0
 --- !u!54 &1771011389 stripped
 Rigidbody:
   m_CorrespondingSourceObject: {fileID: 585845354, guid: 52621e3bdadc97b4295606d9eb59d4e3,
@@ -15429,10 +15434,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 585845354, guid: 52621e3bdadc97b4295606d9eb59d4e3, type: 3}
-      propertyPath: m_Constraints
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8531234996077495959, guid: 52621e3bdadc97b4295606d9eb59d4e3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -15542,6 +15543,10 @@ PrefabInstance:
         type: 3}
       propertyPath: plunge.position.y
       value: 2.2215776
+      objectReference: {fileID: 0}
+    - target: {fileID: 585845354, guid: 52621e3bdadc97b4295606d9eb59d4e3, type: 3}
+      propertyPath: m_Constraints
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 585845355, guid: 52621e3bdadc97b4295606d9eb59d4e3, type: 3}
       propertyPath: customExternalRigidbody
