@@ -21,6 +21,8 @@ public class BounceOnImpact : MonoBehaviour
 
     public Transform transformToMove;
 
+    public float chanceToDetachObject = .5f;
+    
     public List<GameObject> objectsToDetach;
     
     public string gfxToPlay = "gfx_bush";
@@ -68,7 +70,10 @@ public class BounceOnImpact : MonoBehaviour
 
         if (objectsToDetach.Count > 0)
         {
-            DetachObject();
+            if (Random.Range(0f, 1f) < chanceToDetachObject)
+            {
+                DetachObject();
+            }
         }
         
         
