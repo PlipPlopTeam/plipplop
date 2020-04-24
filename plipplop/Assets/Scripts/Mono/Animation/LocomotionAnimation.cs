@@ -19,7 +19,7 @@ public class LocomotionAnimation
 	public Rigidbody rigidbody;
 	Transform parentTransform;
     CapsuleCollider legsCollider;
-    LegAnimator legs;
+    public LegAnimator legs;
     Transform visualsTransform;
     Transform headDummy;
     bool areLegsRetracted = false;
