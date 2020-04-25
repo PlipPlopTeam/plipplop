@@ -128,6 +128,11 @@ public class LegAnimator : MonoBehaviour
 		{
 			Pyromancer.PlayGameEffect(f.gameEffect, transform.position + f.gameEffectOffset);
 		}
+
+		if(f.function != "")
+		{
+			Invoke(f.function, 0f);
+		}
 	}
 
     public void MoveTo(Transform tr)
@@ -146,4 +151,10 @@ public class LegAnimator : MonoBehaviour
     {
         head.parent = null;
     }
+
+	[HideInInspector] public string stepGFX = ""; 
+	public void Step()
+	{
+		if(stepGFX != "") Pyromancer.PlayGameEffect(stepGFX, transform.position);
+	}
 }

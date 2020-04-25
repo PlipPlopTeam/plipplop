@@ -21,6 +21,9 @@ public abstract class Controller : MonoBehaviour
 
 	public Vector3 visualsOffset;
 	public float unpossessSpawnDistance = 1f;
+    public bool applyConstraints = false;
+    public RigidbodyConstraints extendLegsConstraint;
+    public RigidbodyConstraints retractedLegsConstraint;
 
     float lastTimeGrounded = 0f;
     new internal Rigidbody rigidbody;
@@ -77,7 +80,6 @@ public abstract class Controller : MonoBehaviour
         
 		ToggleFace(true);
 		foreach (Transform t in visuals.GetComponentsInChildren<Transform>()) t.gameObject.layer = 0;
-
 	}
 
 	internal virtual void SpecificJump() {}
@@ -99,23 +101,23 @@ public abstract class Controller : MonoBehaviour
         if (!canRetractLegs) return;
         locomotion.RetractLegs();
         OnLegsRetracted();
-
 		// Reset visual local position when legs are retracted
 		visuals.transform.localPosition = previousVisualLocalPosition;
-
 		Activity activity = gameObject.GetComponent<Activity>();
 		if (activity != null) activity.Repair();
-	}
+        if (applyConstraints) rigidbody.constraints = extendLegsConstraint;
+    }
 
-	internal void ExtendLegs()
+    internal void ExtendLegs()
     {
 		Activity activity = gameObject.GetComponent<Activity>();
 		if (activity != null) activity.Break();
 		locomotion.ExtendLegs();
         OnLegsExtended();
+        if(applyConstraints) rigidbody.constraints = retractedLegsConstraint;
     }
 
-	public void ToggleLegs()
+    public void ToggleLegs()
 	{
 		if (AreLegsRetracted()) ExtendLegs();
 		else RetractLegs();

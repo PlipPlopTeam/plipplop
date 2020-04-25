@@ -194,14 +194,17 @@ public class SoundPlayer
 
     public static IEnumerator FadeVolumeOverTime(AudioSource src, float targetVolume, Action callback = null)
     {
-        var originalVolume = src.volume;
-        var state = 0f;
-        while (state < 1f) {
-            state += Time.deltaTime * fadeSpeed;
-            src.volume = Mathf.Lerp(originalVolume, targetVolume, state);
-            yield return new WaitForEndOfFrame();
+        if(src != null)
+        {
+            var originalVolume = src.volume;
+            var state = 0f;
+            while (state < 1f)
+            {
+                state += Time.deltaTime * fadeSpeed;
+                src.volume = Mathf.Lerp(originalVolume, targetVolume, state);
+                yield return new WaitForEndOfFrame();
+            }
+            if (callback != null) callback.Invoke();
         }
-        if (callback != null)
-            callback.Invoke();
     }
 }

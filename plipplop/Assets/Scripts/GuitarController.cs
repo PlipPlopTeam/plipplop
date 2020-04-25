@@ -18,6 +18,19 @@ public class GuitarController : Controller
 
 	private bool broken;
 
+	public override void OnEject()
+	{
+		base.OnEject();
+		locomotion.locomotionAnimation.legs.stepGFX = "";
+	}
+
+	public override void OnPossess()
+	{
+		base.OnPossess();
+		if (broken) locomotion.locomotionAnimation.legs.stepGFX = "gfx_guitar_bad_chord";
+		else locomotion.locomotionAnimation.legs.stepGFX = "gfx_guitar_good_chord";
+	}
+
 	internal override void Start()
 	{
 		base.Start();
@@ -51,6 +64,8 @@ public class GuitarController : Controller
 	public void Break()
 	{
 		SoundPlayer.PlayAtPosition("sfx_guitar_break", transform.position);
+		locomotion.locomotionAnimation.legs.stepGFX = "gfx_guitar_bad_chord";
+
 		if (linkedActivity != null && alsoBreakActivity) linkedActivity.Break();
 		broken = true;
 	}

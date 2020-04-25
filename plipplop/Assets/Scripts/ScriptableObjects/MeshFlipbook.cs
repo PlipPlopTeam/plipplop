@@ -18,6 +18,8 @@ public class MeshFlipbook : ScriptableObject
 
         public string gameEffect;
         public Vector3 gameEffectOffset;
+
+        public string function = "";
 	}
 
 	public string animationName;
