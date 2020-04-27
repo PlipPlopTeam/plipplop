@@ -464,7 +464,9 @@ public class NonPlayableCharacter : MonoBehaviour
 #if UNITY_EDITOR
 	void OnDrawGizmos()
     {
-        if(EditorApplication.isPlaying)
+        if(EditorApplication.isPlaying 
+		&& graph != null 
+		&& graph.GetState() != null)
 		{
 			GUIStyle s = new GUIStyle();
 			s.alignment = TextAnchor.MiddleCenter;
