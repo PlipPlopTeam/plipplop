@@ -22,6 +22,17 @@ public class Container : Item
 		Game.i.aiZone.Register(this);
 	}
 
+	public void Start()
+	{
+		foreach (Transform c in transform)
+		{
+			if (c != transform && c.transform.gameObject.TryGetComponent<Item>(out Item i))
+			{
+				Store(i);
+			}
+		}
+	}
+
 	public int GetItemCount()
 	{
 		return items.Count;

@@ -21,8 +21,8 @@ public abstract class Controller : MonoBehaviour
 
 	public Vector3 visualsOffset;
 	public float unpossessSpawnDistance = 1f;
-    public bool freezeRotationWithLegs = true;
-    public bool unFreezeRotationWithLegs = true;
+    private float legsExtendedAngularDrag = 3f;
+    public float legsRetractedAngularDrag = 0.1f;
 
     float lastTimeGrounded = 0f;
     new internal Rigidbody rigidbody;
@@ -105,7 +105,7 @@ public abstract class Controller : MonoBehaviour
 		Activity activity = gameObject.GetComponent<Activity>();
 		if (activity != null) activity.Repair();
         
-        if (unFreezeRotationWithLegs) rigidbody.constraints = RigidbodyConstraints.None;
+        rigidbody.angularDrag = legsRetractedAngularDrag;
     }
 
     internal void ExtendLegs()
@@ -114,7 +114,8 @@ public abstract class Controller : MonoBehaviour
 		if (activity != null) activity.Break();
 		locomotion.ExtendLegs();
         OnLegsExtended();
-        if (freezeRotationWithLegs) rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+
+        rigidbody.angularDrag = legsExtendedAngularDrag;
     }
 
     public void ToggleLegs()
