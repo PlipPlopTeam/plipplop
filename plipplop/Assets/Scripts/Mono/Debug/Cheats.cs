@@ -78,7 +78,6 @@ public class Cheats : Dictionary<string, System.Action>
 			npc.agentMovement.Chase(Game.i.player.GetCurrentController().transform);
 			npc.Carry(torch);
 			npc.sight.multiplier = 0f;
-			npc.emo.Show("Angry");
 		}
 		Game.i.aperture.currentCamera.GetComponent<UnityEngine.Experimental.Rendering.HDPipeline.HDAdditionalCameraData>().backgroundColorHDR = Color.red;
 	}

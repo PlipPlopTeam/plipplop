@@ -1,62 +1,54 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
-class Board
-{
-    public GameObject obj;
-    public MeshRenderer mr;
-}
+using System.Linq;
 
 public class EmotionRenderer : MonoBehaviour
 {
     [Header("Settings")]
-    public List<Emotion> emotions = new List<Emotion>();
     public Transform headTransform;
     public Vector3 adjustment;
     public float size = 1f;
+    public MeshRenderer bubbleBackground;
 
-    Board board;
+    EmotionBubble bubble;
     Emotion emotion;
     float timer;
     int frameIndex;
+    Emotions library { get { return Game.i.library.emotions; } }
 
-    public void Load()
+    readonly float speed = 0.5f;
+    readonly float duration = 3f;
+
+    // Fired once on awake by the NPCs
+    public void Initialize()
     {
-        board = CreateBoard();
+        bubble = CreateBoard();
+        bubbleBackground.material = Object.Instantiate(bubbleBackground.material);
         Hide();
     }
 
-    Board CreateBoard()
+    EmotionBubble CreateBoard()
     {
-        Board newBoard = new Board();
-        newBoard.obj = new GameObject();
-        newBoard.obj.name = "EmotionBoard";
-        // Mesh Renderer
-        newBoard.mr = newBoard.obj.AddComponent<MeshRenderer>();
-        newBoard.mr.material = Instantiate(Game.i.library.emotionBoardMaterial);
-        // Mesh Filter
-        newBoard.obj.AddComponent<MeshFilter>().mesh = Game.i.library.primitiveQuadMesh;
-        // Transform adjustment
-        newBoard.obj.transform.localScale *= size;
-
-        return newBoard;
+        EmotionBubble bubble = GameObject.Instantiate(Game.i.library.bubblePrefab).GetComponent<EmotionBubble>();
+        bubble.gameObject.name = "EmotionBoard for "+gameObject.name;
+        return bubble;
     }
 
     void Update()
     {
         // Face camera
-        if(board.obj.activeSelf && Game.i.aperture != null)
+        if(bubble.gameObject.activeSelf && Game.i.aperture != null)
         {
-            board.obj.transform.forward = -(Game.i.aperture.position.current - board.obj.transform.position);
-            board.obj.transform.position = headTransform.position + adjustment;
+            bubble.transform.forward = -(Game.i.aperture.position.current - bubble.transform.position);
+            bubble.transform.position = headTransform.position + adjustment;
 
 
             // Animation
             if(emotion != null)
             {
                 timer += Time.deltaTime;
-                if(timer > emotion.speed)
+                if(timer > speed)
                 {
                     NextFrame();
                     timer = 0f;
@@ -65,28 +57,30 @@ public class EmotionRenderer : MonoBehaviour
         }
     }
 
-    public void Show(string emotionName, float duration = 0f)
+    public void Show(Emotion.EVerb verbId, string subjectName, Emotion.EBubble bubble = Emotion.EBubble.THINK)
     {
-        emotion = FindEmotion(emotionName);
-        if(emotion == null) return;
-        timer = 0f;
-        frameIndex = 0;
-        board.mr.material.SetTexture("_MainTex", emotion.frames[0]);
-        board.obj.SetActive(true);
-
-        if(duration > 0f) StartCoroutine(HideAfter(duration));
+        Show(verbId, new string[] { subjectName }, bubble);
     }
 
-    public void Show(Emotion newEmotion, float duration = 0f)
+    public void Show(Emotion.EVerb verbId, string[] subjectNames, Emotion.EBubble bubble=Emotion.EBubble.THINK)
+    {
+        var verb = library.GetVerb(verbId);
+        var subjects = subjectNames.Select(o => library.GetSubject(o));
+            
+        emotion = new Emotion(bubble, verb, subjects.ToArray());
+
+        Show(emotion);
+    }
+
+    public void Show(Emotion newEmotion)
     {
         emotion = newEmotion;
         timer = 0f;
         frameIndex = 0;
-        board.mr.material.mainTexture = emotion.frames[0];
-        board.obj.SetActive(true);
+        bubble.Set(emotion);
+        bubbleBackground.material.mainTexture = library.GetBubbleSprite(newEmotion.bubbleType);
 
-		if (duration > 0f) StartCoroutine(HideAfter(duration));
-		else StopAllCoroutines();
+        StartCoroutine(HideAfter(duration));
     }
 
     IEnumerator HideAfter(float time)
@@ -98,26 +92,11 @@ public class EmotionRenderer : MonoBehaviour
     public void Hide()
     {
         emotion = null;
-
-        if(board != null) board.obj.SetActive(false);
+        bubble.VoidRenderers();
     }
 
     void NextFrame()
     {
-        frameIndex++;
-        if(frameIndex >= emotion.frames.Length) frameIndex = 0;
-
-        board.mr.material.mainTexture = emotion.frames[frameIndex];
-    }
-
-    Emotion FindEmotion(string name)
-    {
-        if(emotions.Count == 0) return null;
-
-        foreach(Emotion e in emotions)
-        {
-            if(e.name == name) return e;
-        }
-        return null;
+        bubble.NextFrames();
     }
 }
