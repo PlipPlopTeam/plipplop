@@ -129,7 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e362031a56a4ed4ba1adeffdf97d2b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoPossess: 1
+  autoPossess: 0
   beginCrouched: 1
   canRetractLegs: 1
   freezeUntilPossessed: 0
@@ -143,6 +143,9 @@ MonoBehaviour:
   face: {fileID: 7615949197226608932}
   visualsOffset: {x: 0, y: -0.2, z: 0}
   unpossessSpawnDistance: 1
+  applyConstraints: 1
+  extendLegsConstraint: 112
+  retractedLegsConstraint: 0
   pushMovementForce: 250
   pushCooldown: 1
   pushThreshold: 0.75
@@ -238,10 +241,10 @@ MonoBehaviour:
   shape: 0
   rb: {fileID: 6636483350066690593}
   collider: {fileID: 6636483350066690607}
+  weight: 5
   type: 3
   visuals: {fileID: 0}
   origin: {x: 0, y: 0, z: 0}
-  weight: 5
   distanceThreshold: 3
   hidden: 0
 --- !u!114 &1896340292651904954
