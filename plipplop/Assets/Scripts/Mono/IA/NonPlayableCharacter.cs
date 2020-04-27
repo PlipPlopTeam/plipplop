@@ -378,7 +378,7 @@ public class NonPlayableCharacter : MonoBehaviour
 		if (controller.IsPossessed()) Game.i.player.TeleportBaseControllerAndPossess();
 	}
 
-	public void Drop()
+	public virtual void Drop()
 	{
 		if(carried == null) return;
 		carried.Drop();
