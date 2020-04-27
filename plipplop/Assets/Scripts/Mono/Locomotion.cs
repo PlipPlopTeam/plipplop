@@ -18,7 +18,7 @@ public class Locomotion : Walker
     [HideInInspector] public bool isImmerged = false;
     public event System.Action onLegAnimationEnd;
 
-    LocomotionAnimation locomotionAnimation;
+    public LocomotionAnimation locomotionAnimation;
     Controller parentController;
 	Vector3 lastDirection = new Vector3();
 	float speedMultiplier = 1f;

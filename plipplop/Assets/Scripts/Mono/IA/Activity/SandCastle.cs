@@ -127,11 +127,14 @@ public class SandCastle : Activity
 
 	private void OnTriggerEnter(Collider other)
 	{
-		if(built) Stomp();
-		else if(constructionInProgress)
+		if(other.isTrigger)
 		{
-			Stomp();
-			Initialize();
+			if (built) Stomp();
+			else if (constructionInProgress)
+			{
+				Stomp();
+				Initialize();
+			}
 		}
 	}
 

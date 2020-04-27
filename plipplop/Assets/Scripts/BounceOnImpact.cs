@@ -21,6 +21,10 @@ public class BounceOnImpact : MonoBehaviour
 
     public Transform transformToMove;
 
+    public float chanceToDetachObject = .5f;
+    
+    public List<GameObject> objectsToDetach;
+    
     public string gfxToPlay = "gfx_bush";
     public Transform gfxSpawnPoint;
         
@@ -63,6 +67,15 @@ public class BounceOnImpact : MonoBehaviour
                 Pyromancer.PlayGameEffect(gfxToPlay, transform.position);
             }
         }
+
+        if (objectsToDetach.Count > 0)
+        {
+            if (Random.Range(0f, 1f) < chanceToDetachObject)
+            {
+                DetachObject();
+            }
+        }
+        
         
         if (scale)
         {
@@ -96,4 +109,25 @@ public class BounceOnImpact : MonoBehaviour
 
         bouncing = false;
     }
+
+    void DetachObject()
+    {
+        GameObject _g = objectsToDetach[0];
+        _g.transform.parent = null;
+        Rigidbody _rb = _g.GetComponent<Rigidbody>();
+
+        if (!_rb)
+        {
+            _rb = _g.AddComponent<Rigidbody>();
+        }
+        else
+        {
+            _rb.isKinematic = false;
+        }
+        
+        _rb.AddForce(Random.insideUnitSphere);
+
+        objectsToDetach.Remove(_g);
+    }
+    
 }

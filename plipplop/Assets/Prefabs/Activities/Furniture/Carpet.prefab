@@ -450,7 +450,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.5003681, y: 0.00047853135, z: 0.0007748804}
+  m_ConnectedAnchor: {x: -0.5003686, y: 0.00047853135, z: 0.0007748804}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -630,6 +630,8 @@ MonoBehaviour:
   currentAnimation: {fileID: 11400000, guid: c641a4597ad45e340849f77ee66d3a45, type: 2}
   meshFilter: {fileID: 9019254820334012908}
   meshRenderer: {fileID: 9019254820334012909}
+  speed: 1
+  stepGFX: 
 --- !u!1 &9019254820499330812
 GameObject:
   m_ObjectHideFlags: 0
@@ -700,6 +702,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d571dcd1972a92a4b8d313551af2ddb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  betweenCheckPointOffset: {x: 0, y: 0, z: 0}
   sensorRadius: 1.5
   sensorForwardPosition: 0.5
 --- !u!1 &9019254820639134282
@@ -799,6 +802,8 @@ MonoBehaviour:
   face: {fileID: 6535185812442962811}
   visualsOffset: {x: 0, y: 0, z: 0}
   unpossessSpawnDistance: 1
+  legsExtendedAngularDrag: 5
+  legsRetractedAngularDrag: 3
   spring: {fileID: 9019254821776289794}
   maxExtension: 0.75
   muscleSpeed: 3
@@ -858,8 +863,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 011d63a14cf4d8347a5660a929242412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modifiers: []
   preset: {fileID: 11400000, guid: 0e15b40cb9230184db3254be486dfcc4, type: 2}
-  groundCheckOffset: 0
   isFlattened: 0
   rigidbody: {fileID: 9019254820768127469}
   targetDirection: {x: 0, y: 0, z: 0}
@@ -876,6 +881,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebda1c927e5956243947b1e9d58ad72c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  activated: 1
   working: 1
   userMax: 1
   spectatorMax: 0
@@ -889,6 +895,8 @@ MonoBehaviour:
     boredom: 1
     hunger: 0
     tiredness: 0
+  users: []
+  spectators: []
   offset: -1.2
 --- !u!114 &9019254820768127473
 MonoBehaviour:
@@ -930,9 +938,10 @@ MonoBehaviour:
   shape: 0
   rb: {fileID: 9019254820768127469}
   collider: {fileID: 0}
-  visual: {fileID: 9019254820882697964}
-  origin: {x: 0, y: 0, z: 0}
   weight: 1
+  type: 3
+  visuals: {fileID: 0}
+  origin: {x: 0, y: 0, z: 0}
   distanceThreshold: 2
   hidden: 0
 --- !u!1 &9019254820882697964
@@ -1170,7 +1179,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.4989148, y: 0.00035096053, z: -0.00946632}
+  m_ConnectedAnchor: {x: -0.49891528, y: 0.0003504837, z: -0.009466261}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -1327,7 +1336,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.49321756, y: 0.0020003403, z: 0.00027897954}
+  m_ConnectedAnchor: {x: -0.49321803, y: 0.0019998634, z: 0.00027886033}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -1485,7 +1494,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.49901384, y: 0.000798931, z: 0.0020024804}
+  m_ConnectedAnchor: {x: -0.49901432, y: 0.000798931, z: 0.0020024804}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -1575,7 +1584,7 @@ SpringJoint:
   m_ConnectedBody: {fileID: 9019254821111175583}
   m_Anchor: {x: 0, y: 0.7500001, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -1.4911462, y: 0.75315046, z: -0.007184863}
+  m_ConnectedAnchor: {x: -1.4911467, y: 0.75315, z: -0.007184863}
   serializedVersion: 2
   m_Spring: 200
   m_Damper: 0.2

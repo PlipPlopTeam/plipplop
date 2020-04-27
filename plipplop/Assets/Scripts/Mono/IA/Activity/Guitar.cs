@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 public class Guitar : Activity, ICarryable
@@ -7,10 +6,13 @@ public class Guitar : Activity, ICarryable
 	private Rigidbody rb;
 	private Collider col;
 	private NonPlayableCharacter player;
-	public ParticleSystem music;
 
-	public Transform visual;
+	[Header("References")]
+	public ParticleSystem musicParticle;
+	public Transform visuals;
+	public List<string> musicNames = new List<string>();
 
+	private string currentMusicName = "";
 	private bool carried = false;
 	public bool IsCarried() { return carried; }
 
@@ -26,33 +28,61 @@ public class Guitar : Activity, ICarryable
 			player.agentMovement.Stop();
 			player.animator.SetBool("Guitaring", true);
 			player.animator.SetBool("Carrying", false);
-			music.Play();
 
-			visual = transform.GetChild(0);
-			visual.localPosition = new Vector3(0.114f,-0.08f,-0.155f);
-			visual.localEulerAngles = new Vector3(3.809f,5.44f,55.098f);
+			Game.i.WaitAndDo(1f, () =>
+			{
+				visuals.localPosition = new Vector3(0.114f, -0.08f, -0.155f);
+				visuals.localEulerAngles = new Vector3(3.809f, 5.44f, 55.098f);
+				PlayMusic();
+			});
 		};
+	}
+
+	void PlayMusic()
+	{
+		musicParticle.Play();
+
+		if (musicNames.Count == 0) return;
+		currentMusicName = musicNames.PickRandom();
+		SoundPlayer.PlaySoundAttached(currentMusicName, transform, 0.25f, false, true);
+	}
+
+	void StopMusic()
+	{
+		musicParticle.Stop();
+		if (currentMusicName == "") return;
+		SoundPlayer.StopSounds(currentMusicName, true);
+		currentMusicName = "";
 	}
 
 	public override void StopUsing(NonPlayableCharacter user)
 	{
 		base.StopUsing(user);
-		
 		user.Drop();
 		user.StopCollecting();
-		user.animator.SetBool("Guitaring", false);
 
-		visual.localPosition = Vector3.zero;
-		visual.localEulerAngles = Vector3.zero;
-		
+		player.agentMovement.onDestinationReached -= () =>
+		{
+			player.agentMovement.Stop();
+			player.animator.SetBool("Guitaring", true);
+			player.animator.SetBool("Carrying", false);
+			visuals = transform.GetChild(0);
+			visuals.localPosition = new Vector3(0.114f, -0.08f, -0.155f);
+			visuals.localEulerAngles = new Vector3(3.809f, 5.44f, 55.098f);
+			PlayMusic();
+		};
+
+		user.animator.SetBool("Guitaring", false);
+		visuals.localPosition = Vector3.zero;
+		visuals.localEulerAngles = Vector3.zero;
 		full = false;
-		music.Stop();
-		if(spectators.Count > 0)
+		if (spectators.Count > 0)
 		{
 			NonPlayableCharacter newPlayer = spectators[0];
 			StopSpectate(newPlayer);
 			StartUsing(newPlayer);
 		}
+		StopMusic();
 	}
 	
 	public override void StopSpectate(NonPlayableCharacter npc)
@@ -106,6 +136,4 @@ public class Guitar : Activity, ICarryable
 	{
 		return transform;
 	}
-
-	
 }

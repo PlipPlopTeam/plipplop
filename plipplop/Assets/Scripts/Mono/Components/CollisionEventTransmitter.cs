@@ -16,17 +16,17 @@ public class CollisionEventTransmitter : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if(onTriggerEnter != null) onTriggerExit.Invoke(other);
+        if(onTriggerExit != null) onTriggerExit.Invoke(other);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(onTriggerEnter != null) onColliderEnter.Invoke(collision);
+        if(onColliderEnter != null) onColliderEnter.Invoke(collision);
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        if(onTriggerEnter != null) onColliderExit.Invoke(collision);
+        if(onColliderExit != null) onColliderExit.Invoke(collision);
     }
     
 }

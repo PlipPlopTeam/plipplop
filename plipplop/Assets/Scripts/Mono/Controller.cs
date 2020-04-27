@@ -21,6 +21,8 @@ public abstract class Controller : MonoBehaviour
 
 	public Vector3 visualsOffset;
 	public float unpossessSpawnDistance = 1f;
+    private float legsExtendedAngularDrag = 3f;
+    public float legsRetractedAngularDrag = 0.1f;
 
     float lastTimeGrounded = 0f;
     new internal Rigidbody rigidbody;
@@ -29,7 +31,7 @@ public abstract class Controller : MonoBehaviour
     internal ControllerSensor controllerSensor;
     internal bool isImmerged { get { return immersion > 0; } }
     RigidbodyConstraints previousConstraints;
-
+    internal bool movingStick;
 	bool isBeingThrown = false;
 	int freeze = 0;
     int immersion = 0;
@@ -76,7 +78,6 @@ public abstract class Controller : MonoBehaviour
         
 		ToggleFace(true);
 		foreach (Transform t in visuals.GetComponentsInChildren<Transform>()) t.gameObject.layer = 0;
-
 	}
 
 	internal virtual void SpecificJump() {}
@@ -98,23 +99,25 @@ public abstract class Controller : MonoBehaviour
         if (!canRetractLegs) return;
         locomotion.RetractLegs();
         OnLegsRetracted();
-
 		// Reset visual local position when legs are retracted
 		visuals.transform.localPosition = previousVisualLocalPosition;
-
 		Activity activity = gameObject.GetComponent<Activity>();
 		if (activity != null) activity.Repair();
-	}
+        
+        rigidbody.angularDrag = legsRetractedAngularDrag;
+    }
 
-	internal void ExtendLegs()
+    internal void ExtendLegs()
     {
 		Activity activity = gameObject.GetComponent<Activity>();
 		if (activity != null) activity.Break();
 		locomotion.ExtendLegs();
         OnLegsExtended();
+
+        rigidbody.angularDrag = legsExtendedAngularDrag;
     }
 
-	public void ToggleLegs()
+    public void ToggleLegs()
 	{
 		if (AreLegsRetracted()) ExtendLegs();
 		else RetractLegs();
@@ -136,7 +139,11 @@ public abstract class Controller : MonoBehaviour
 
     virtual internal void BaseMove(Vector3 direction)
     {
-		if (IsFrozen()) return;
+        if (direction.magnitude > 0.1f) movingStick = true;
+        else movingStick = false;
+
+        if (IsFrozen() || isParalysed) return;
+		
 		if (AreLegsRetracted()) SpecificMove(direction);
         else locomotion.Move(direction);
     }
@@ -158,7 +165,7 @@ public abstract class Controller : MonoBehaviour
     }
     internal bool IsPossessed()
     {
-        return Game.i.player.IsPossessing(this);
+        return Game.i != null && Game.i.player != null && Game.i.player.IsPossessing(this);
     }
 
 	public virtual bool IsVisibleByNPC()

@@ -81,8 +81,11 @@ public abstract class Volume : MonoBehaviour
     {
         OnObjectEnter(obj);
         var c = obj.gameObject.GetComponent<Controller>();
-        if (!isInside && c && Game.i.player.IsPossessing(c)) {
-
+        if (!isInside && c 
+        && Game.i != null 
+        && Game.i.player != null 
+        && Game.i.player.IsPossessing(c))
+        {
             isInside = true;
             OnPlayerEnter(c);
         }

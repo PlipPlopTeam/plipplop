@@ -230,7 +230,7 @@ public class Dialog {
             switch (dialNode.Name)
             {
                 default:
-                    throw new Exception("Unknown dialog node: " + dialNode.Name+"");
+                    throw new Exception("Unknown dialog node: " + dialNode.Name+". PLEASE CHECK THE DIALOGUE FILE.");
 
                 case "pause":
                     elements.Add(new Pause(XmlConvert.ToSingle(dialNode.Attributes["miliseconds"].Value)));

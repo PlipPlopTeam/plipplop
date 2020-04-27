@@ -14,9 +14,13 @@ public class GameFX : ScriptableObject
         [Range(0f, 1f)] public float volume = 1f;
     }
 
+    [Header("Sounds")]
     [Tooltip("List of sounds to play")]
+    public bool randomSound = false;
     public List<SFXParameter> sfx;
-    [Tooltip("List of vfx to play")]
-    public List<string> vfx;
 
+    [Header("Effects")]
+    [Tooltip("List of vfx to play")]
+    public bool randomEffect = false;
+    public List<string> vfx;
 }
