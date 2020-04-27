@@ -24,9 +24,10 @@ public class Container : Item
 
 	public void Start()
 	{
-		foreach (Transform c in transform)
+		Item[] itemsInMe = gameObject.GetComponentsInChildren<Item>();
+		foreach (Item i in itemsInMe)
 		{
-			if (c != transform && c.transform.gameObject.TryGetComponent<Item>(out Item i))
+			if (i.transform != this.transform)
 			{
 				Store(i);
 			}
