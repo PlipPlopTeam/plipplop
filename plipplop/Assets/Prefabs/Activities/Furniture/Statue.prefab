@@ -642,13 +642,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2095127333375553499}
-  - component: {fileID: 2095127333375553502}
   - component: {fileID: 2095127333375553501}
   - component: {fileID: 2095127333375553500}
   - component: {fileID: 2095127333375553488}
   - component: {fileID: -212437679873209963}
   - component: {fileID: 1115021647775620768}
   - component: {fileID: 2123568107042607502}
+  - component: {fileID: 1648546890655662376}
   m_Layer: 0
   m_Name: Statue
   m_TagString: Untagged
@@ -671,44 +671,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2095127333375553502
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2095127333375553498}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4194289d42295894e9edeb06fa29964c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  autoPossess: 0
-  beginCrouched: 1
-  canRetractLegs: 1
-  freezeUntilPossessed: 0
-  useGravity: 1
-  animateHead: 0
-  gravityMultiplier: 100
-  customExternalRigidbody: {fileID: 2095127333375553500}
-  customCamera: {fileID: 11400000, guid: 7996e3911da91fa458f8eceaab8b2c2f, type: 2}
-  locomotion: {fileID: 0}
-  visuals: {fileID: 2095127333941081580}
-  face: {fileID: 2012210394792238451}
-  visualsOffset: {x: 0, y: 0, z: 0}
-  unpossessSpawnDistance: 1
-  legsExtendedAngularDrag: 5
-  legsRetractedAngularDrag: 0.1
-  pushMovementForce: 3000
-  pushCooldown: 2
-  pushThreshold: 0.5
-  pushJumpForce: 3000
-  jumpForce: 10
-  speedBeforeLegs: 1
-  rotationVelocityThreshold: 0.25
-  rotationLerpSpeed: 2
-  crouchCooldown: 2
-  drag: 1
 --- !u!65 &2095127333375553501
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -751,13 +713,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shape: 0
-  rb: {fileID: 0}
-  collider: {fileID: 0}
+  rb: {fileID: 2095127333375553500}
+  collider: {fileID: 2095127333375553501}
   weight: 25
   type: 3
-  visuals: {fileID: 0}
+  visuals: {fileID: 2095127333941081579}
   origin: {x: 0, y: 0, z: 0}
-  distanceThreshold: 5
+  distanceThreshold: 1
   hidden: 0
 --- !u!114 &-212437679873209963
 MonoBehaviour:
@@ -772,7 +734,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buyoyancy: 0
-  waterline: 0
+  waterline: -1.5
 --- !u!114 &1115021647775620768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -814,6 +776,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a15cd58957a760249a3a123767c2237a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1648546890655662376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2095127333375553498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a52f01500a9590a4d99cb5c7e61c9b57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoPossess: 0
+  beginCrouched: 1
+  canRetractLegs: 1
+  freezeUntilPossessed: 0
+  useGravity: 1
+  animateHead: 1
+  gravityMultiplier: 100
+  customExternalRigidbody: {fileID: 2095127333375553500}
+  customCamera: {fileID: 11400000, guid: df6437ca0d9bc60498aeb18a4dd62019, type: 2}
+  locomotion: {fileID: 0}
+  visuals: {fileID: 2095127333941081580}
+  face: {fileID: 0}
+  visualsOffset: {x: 0, y: 0, z: 0}
+  unpossessSpawnDistance: 1
+  legsRetractedAngularDrag: 0.1
 --- !u!1 &2095127333879700217
 GameObject:
   m_ObjectHideFlags: 0
@@ -3064,12 +3053,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42edcef2484d1d446ab328bcc85a43fa, type: 3}
---- !u!1 &2012210394792238451 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2028403518381436196, guid: 42edcef2484d1d446ab328bcc85a43fa,
-    type: 3}
-  m_PrefabInstance: {fileID: 561429267179090007}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7586509003147191622 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7962972514405291281, guid: 42edcef2484d1d446ab328bcc85a43fa,

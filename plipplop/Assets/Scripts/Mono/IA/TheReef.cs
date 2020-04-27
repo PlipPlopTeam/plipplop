@@ -69,4 +69,27 @@ public class TheReef : NonPlayableCharacter
 		base.Carrying(carryable);
 		carryable.Self().up = Vector3.up;
 	}
+
+	public override void Carry(ICarryable carryable)
+	{
+		if (carried != null) Drop();
+		carried = carryable;
+		carried.Carry();
+		if (animator != null) animator.SetBool("Holding", true);
+		if (skeleton != null) skeleton.Attach(carried.Self(), Cloth.ESlot.RIGHT_HAND, true);
+		carried.Self().localPosition = Vector3.zero;
+	}
+
+	public override void Drop()
+	{
+		if (carried == null) return;
+		carried.Drop();
+		skeleton.Drop(Cloth.ESlot.RIGHT_HAND);
+		if (animator != null)
+		{
+			animator.SetBool("Holding", false);
+			animator.SetBool("Carrying", false);
+		}
+		carried = null;
+	}
 }
