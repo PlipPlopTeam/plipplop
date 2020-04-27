@@ -22,6 +22,7 @@ public abstract class Controller : MonoBehaviour
 	public Vector3 visualsOffset;
 	public float unpossessSpawnDistance = 1f;
     public bool freezeRotationWithLegs = true;
+    public bool unFreezeRotationWithLegs = true;
 
     float lastTimeGrounded = 0f;
     new internal Rigidbody rigidbody;
@@ -104,7 +105,7 @@ public abstract class Controller : MonoBehaviour
 		Activity activity = gameObject.GetComponent<Activity>();
 		if (activity != null) activity.Repair();
         
-        if (freezeRotationWithLegs) rigidbody.constraints = RigidbodyConstraints.None;
+        if (unFreezeRotationWithLegs) rigidbody.constraints = RigidbodyConstraints.None;
     }
 
     internal void ExtendLegs()
