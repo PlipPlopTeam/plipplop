@@ -24,7 +24,7 @@ public class EmotionRenderer : MonoBehaviour
     public void Initialize()
     {
         bubble = CreateBoard();
-        bubbleBackground.material = Object.Instantiate(bubbleBackground.material);
+        if(bubbleBackground != null) bubbleBackground.material = Object.Instantiate(bubbleBackground.material);
         Hide();
     }
 

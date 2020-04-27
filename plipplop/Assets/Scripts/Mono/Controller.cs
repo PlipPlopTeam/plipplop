@@ -142,7 +142,7 @@ public abstract class Controller : MonoBehaviour
         if (direction.magnitude > 0.1f) movingStick = true;
         else movingStick = false;
 
-        if (IsFrozen() || isParalysed) return;
+        if (IsFrozen()/* || isParalysed*/) return;
 		
 		if (AreLegsRetracted()) SpecificMove(direction);
         else locomotion.Move(direction);
