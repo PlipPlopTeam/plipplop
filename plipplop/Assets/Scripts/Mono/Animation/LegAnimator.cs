@@ -76,7 +76,7 @@ public class LegAnimator : MonoBehaviour
 	float timer = 0f;
 	int frameIndex = 0;
 	bool playing = false;
-	void Update()
+	void FixedUpdate()
 	{
 		if (!playing) return;
 
