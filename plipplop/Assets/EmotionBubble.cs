@@ -9,7 +9,9 @@ public class EmotionBubble : MonoBehaviour
     public MeshRenderer verbRenderer;
     public MeshRenderer singleSubjectRenderer;
     public MeshRenderer[] smallSubjectsRenderers;
-
+    public MeshRenderer background;
+    public Animator animator;
+    public bool isLeftSide = false;
     List<TextureRoll> textureRolls = new List<TextureRoll>();
 
     public class TextureRoll
@@ -39,12 +41,21 @@ public class EmotionBubble : MonoBehaviour
         foreach (var ren in smallSubjectsRenderers) {
             ren.material = Instantiate(verbRenderer.material);
         }
+        background.material = UnityEngine.Object.Instantiate(background.material);
+    }
+
+    private void Update()
+    {
+        background.transform.localScale = new Vector3(isLeftSide ? -1f : 1f, 1f, 1f);
     }
 
     public void Set(Emotion emotion)
     {
         textureRolls.Clear();
         VoidRenderers();
+        background.enabled = true;
+        var sprite = Game.i.library.emotions.GetBubbleSprite(emotion.bubbleType); 
+        background.material.mainTexture = sprite;
 
         try {
             verbRenderer.material.mainTexture = emotion.verb.frames[0];
@@ -84,6 +95,7 @@ public class EmotionBubble : MonoBehaviour
         foreach(var ren in smallSubjectsRenderers) {
             ren.enabled = false;
         }
+        background.enabled = false;
     }
 
     public void NextFrames()

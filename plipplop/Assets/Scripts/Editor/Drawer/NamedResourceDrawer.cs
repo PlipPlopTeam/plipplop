@@ -6,6 +6,8 @@ using UnityEngine;
 [CustomPropertyDrawer(typeof(NamedPrefabResource))]
 [CustomPropertyDrawer(typeof(VisualEffect))]
 [CustomPropertyDrawer(typeof(GameEffect))]
+[CustomPropertyDrawer(typeof(SerializableEmotionVerb))]
+[CustomPropertyDrawer(typeof(Emotions.BubbleSprite))]
 
 public class NamedResourceDrawer : PropertyDrawer
 {
