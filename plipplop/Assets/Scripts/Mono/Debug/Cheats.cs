@@ -26,9 +26,16 @@ public class Cheats : Dictionary<string, System.Action>
         Add("BRRRRR", Rumble);
         Add("BIRDS", Hitchcock);
         Add("GRIFFIN", Griffin);
-	}
+        Add("BUBBLE", DisplayDefaultBubble);
+    }
 
-	public void Hitchcock()
+    public void DisplayDefaultBubble()
+    {
+        Object.FindObjectOfType<NonPlayableCharacter>().emo.Show(Emotion.EVerb.LOVE, "beach_ball", Emotion.EBubble.THINK);
+    }
+
+
+    public void Hitchcock()
 	{
 		foreach (Bird b in Object.FindObjectsOfType<Bird>())
 		{
