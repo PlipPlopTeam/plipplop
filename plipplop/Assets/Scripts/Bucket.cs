@@ -42,6 +42,8 @@ public class Bucket : Controller
 		{
 			this.Slow(container.GetItemCount());
 		};
+
+		this.Slow(container.GetItemCount());
 	}
 
 	public void Slow(int itemStored)

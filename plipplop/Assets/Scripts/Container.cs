@@ -80,8 +80,6 @@ public class Container : Item
 	{
 		Free(item);
 		items.Remove(item);
-
-		if (onItemRemoved != null) onItemRemoved.Invoke();
 	}
 	public virtual void Remove(int index)
 	{
@@ -92,14 +90,15 @@ public class Container : Item
 
 	public virtual void Free(Item item)
 	{
-		item.visuals.SetActive(true);
+		if(item.visuals != null) item.visuals.SetActive(true);
 		item.Drop();
 		item.transform.SetParent(null);
+		if (onItemRemoved != null) onItemRemoved.Invoke();
 	}
 
 	public virtual void Empty()
 	{
-		foreach(Item i in items) Free(i);
+		foreach(Item i in items) Remove(i);
 		items.Clear();
 	}
 
