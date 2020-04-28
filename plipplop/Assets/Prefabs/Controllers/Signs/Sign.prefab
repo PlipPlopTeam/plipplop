@@ -3121,7 +3121,7 @@ BoxCollider:
   m_GameObject: {fileID: 5635840535407781899}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.4, y: 2, z: 0.4}
   m_Center: {x: 0, y: 1, z: 0}
@@ -3151,8 +3151,7 @@ MonoBehaviour:
   face: {fileID: 0}
   visualsOffset: {x: 0, y: 0, z: 0}
   unpossessSpawnDistance: 1
-  freezeRotationWithLegs: 1
-  unFreezeRotationWithLegs: 0
+  legsRetractedAngularDrag: 0.1
 --- !u!1 &5635840535689076516
 GameObject:
   m_ObjectHideFlags: 0
@@ -3921,16 +3920,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5635840534161721606}
     m_Modifications:
-    - target: {fileID: 354694636263562217, guid: cc23288d8b0be0741ba3d8184d71028c,
-        type: 3}
-      propertyPath: m_Name
-      value: AfficheSpot
-      objectReference: {fileID: 0}
-    - target: {fileID: 354694636263562217, guid: cc23288d8b0be0741ba3d8184d71028c,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 354694636263562219, guid: cc23288d8b0be0741ba3d8184d71028c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4000,6 +3989,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 0.75029063
+      objectReference: {fileID: 0}
+    - target: {fileID: 354694636263562217, guid: cc23288d8b0be0741ba3d8184d71028c,
+        type: 3}
+      propertyPath: m_Name
+      value: AfficheSpot
+      objectReference: {fileID: 0}
+    - target: {fileID: 354694636263562217, guid: cc23288d8b0be0741ba3d8184d71028c,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 354694636263562218, guid: cc23288d8b0be0741ba3d8184d71028c,
         type: 3}
@@ -4032,16 +4031,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7826279436787914328}
     m_Modifications:
-    - target: {fileID: 354694636263562217, guid: cc23288d8b0be0741ba3d8184d71028c,
-        type: 3}
-      propertyPath: m_Name
-      value: AfficheSpot
-      objectReference: {fileID: 0}
-    - target: {fileID: 354694636263562217, guid: cc23288d8b0be0741ba3d8184d71028c,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 354694636263562219, guid: cc23288d8b0be0741ba3d8184d71028c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4111,6 +4100,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 0.75029063
+      objectReference: {fileID: 0}
+    - target: {fileID: 354694636263562217, guid: cc23288d8b0be0741ba3d8184d71028c,
+        type: 3}
+      propertyPath: m_Name
+      value: AfficheSpot
+      objectReference: {fileID: 0}
+    - target: {fileID: 354694636263562217, guid: cc23288d8b0be0741ba3d8184d71028c,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 354694636263562218, guid: cc23288d8b0be0741ba3d8184d71028c,
         type: 3}

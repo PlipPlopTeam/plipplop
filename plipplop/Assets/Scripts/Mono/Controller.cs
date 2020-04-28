@@ -21,6 +21,8 @@ public abstract class Controller : MonoBehaviour
 
 	public Vector3 visualsOffset;
 	public float unpossessSpawnDistance = 1f;
+    private RigidbodyConstraints legsExtendedConstraints = RigidbodyConstraints.FreezeRotation;
+    private RigidbodyConstraints legsRetractedConstraints = RigidbodyConstraints.None;
     private float legsExtendedAngularDrag = 3f;
     public float legsRetractedAngularDrag = 0.1f;
 
@@ -94,7 +96,7 @@ public abstract class Controller : MonoBehaviour
         }
 	}
 
-    internal void RetractLegs()
+    internal void RetractLegs(bool input = true)
     {
         if (!canRetractLegs) return;
         locomotion.RetractLegs();
@@ -102,19 +104,31 @@ public abstract class Controller : MonoBehaviour
 		// Reset visual local position when legs are retracted
 		visuals.transform.localPosition = previousVisualLocalPosition;
 		Activity activity = gameObject.GetComponent<Activity>();
-		if (activity != null) activity.Repair();
+        if (activity != null)
+        {
+            activity.KickAll();
+            activity.activated = true;
+        }
         
-        rigidbody.angularDrag = legsRetractedAngularDrag;
+        if(input)
+        {
+            rigidbody.angularDrag = legsRetractedAngularDrag;
+            rigidbody.constraints = legsRetractedConstraints;
+        }
     }
 
     internal void ExtendLegs()
     {
 		Activity activity = gameObject.GetComponent<Activity>();
-		if (activity != null) activity.Break();
+        if (activity != null)
+        {
+            activity.activated = false;
+        }
 		locomotion.ExtendLegs();
         OnLegsExtended();
 
         rigidbody.angularDrag = legsExtendedAngularDrag;
+        rigidbody.constraints = legsExtendedConstraints;
     }
 
     public void ToggleLegs()
@@ -230,7 +244,7 @@ public abstract class Controller : MonoBehaviour
     {
         if (autoPossess) Game.i.player.Possess(this);
 
-        if (!IsPossessed()) RetractLegs();
+        if (!IsPossessed()) RetractLegs(false);
 
         rigidbody.useGravity = false;
     }
