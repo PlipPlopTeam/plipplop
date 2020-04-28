@@ -1,0 +1,130 @@
+{
+    "format": {
+        "version": "1.0"
+    },
+    "shaders": {
+        "Main shader": {
+            "parameters": {
+                "Common Parameters": {
+                    "ao_intensity": 0.75,
+                    "emissive_intensity": 1,
+                    "horizonFade": 1.2999999523162842,
+                    "nbSamples": 16
+                },
+                "Parallax Occlusion Mapping": {
+                    "maxPOMSamples": 16,
+                    "minPOMSamples": 4,
+                    "pomStrength": 1,
+                    "usePOM": false
+                },
+                "Subsurface Scattering Parameters": {
+                    "sssColor": [
+                        0.7009999752044678,
+                        0.3009999990463257,
+                        0.3050000071525574
+                    ],
+                    "sssEnabled": true,
+                    "sssScale": 0.5,
+                    "sssType": 1
+                }
+            },
+            "shader": "pbr-metal-rough",
+            "shaderInstance": "Main shader"
+        }
+    },
+    "texturesets": {
+        "Ball": {
+            "shader": "Main shader"
+        },
+        "Cloud": {
+            "shader": "Main shader"
+        },
+        "CoconutDrink": {
+            "shader": "Main shader"
+        },
+        "DefaultMaterial": {
+            "shader": "Main shader"
+        },
+        "Face": {
+            "shader": "Main shader"
+        },
+        "Grass": {
+            "shader": "Main shader"
+        },
+        "Material.001": {
+            "shader": "Main shader"
+        },
+        "Palmes": {
+            "shader": "Main shader"
+        },
+        "Plant": {
+            "shader": "Main shader"
+        },
+        "Pot": {
+            "shader": "Main shader"
+        },
+        "PotBody": {
+            "shader": "Main shader"
+        },
+        "Poteau": {
+            "shader": "Main shader"
+        },
+        "Radio": {
+            "shader": "Main shader"
+        },
+        "Rock": {
+            "shader": "Main shader"
+        },
+        "Seagull": {
+            "shader": "Main shader"
+        },
+        "Straw": {
+            "shader": "Main shader"
+        },
+        "TT_checker_512x512_UV_GRID": {
+            "shader": "Main shader"
+        },
+        "TT_checker_512x512_UV_GRID.001": {
+            "shader": "Main shader"
+        },
+        "TT_checker_512x512_UV_GRID.002": {
+            "shader": "Main shader"
+        },
+        "TT_checker_512x512_UV_GRID.003": {
+            "shader": "Main shader"
+        },
+        "Table": {
+            "shader": "Main shader"
+        },
+        "Tapis": {
+            "shader": "Main shader"
+        },
+        "Towel": {
+            "shader": "Main shader"
+        },
+        "UmbrellaBody": {
+            "shader": "Main shader"
+        },
+        "UmbrellaPole": {
+            "shader": "Main shader"
+        },
+        "Wood": {
+            "shader": "Main shader"
+        },
+        "coconut": {
+            "shader": "Main shader"
+        },
+        "cocotier": {
+            "shader": "Main shader"
+        },
+        "crab": {
+            "shader": "Main shader"
+        },
+        "shells": {
+            "shader": "Main shader"
+        },
+        "umbrella": {
+            "shader": "Main shader"
+        }
+    }
+}
