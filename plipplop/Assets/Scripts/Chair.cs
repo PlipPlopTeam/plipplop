@@ -129,8 +129,13 @@ public class Chair : MonoBehaviour
         return true;
     }
 
+	public void OnDestroy()
+	{
+		Dismount();
+	}
+
 #if UNITY_EDITOR
-    void OnDrawGizmosSelected()
+	void OnDrawGizmosSelected()
     {
         Gizmos.color = new Color32(255, 215, 0, 255);
 

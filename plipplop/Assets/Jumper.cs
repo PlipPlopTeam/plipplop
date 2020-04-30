@@ -3,14 +3,25 @@
 public class Jumper : Controller
 {
 	[Header("Jumper")]
+
+	[Header("Charge")]
 	public float scaleModification = 0.25f;
-	public float flipUpForce = 500f;
-	public float flipTorqueForce = 500f;
 	public float chargeMaxTime = 2f;
 	public float chargeMaxForce = 30000f;
 
+	[Header("Flip")]
+	public float flipUpForce = 500f;
+	public float flipTorqueForce = 500f;
+
+	[Header("Roll")]
 	public float angularForce = 50f;
 	public float maxVelocityMagnitude = 1f;
+
+	[Header("Other")]
+	public float breakVelocity = 2f;
+
+	[Header("References")]
+	public Transform body;
 
 	private float chargeForce = 0f;
 	private float chargeTime = 0f;
@@ -50,14 +61,12 @@ public class Jumper : Controller
 			chargeForce = (chargeTime / chargeMaxTime) * chargeMaxForce;
 			float f = ForcePercentage();
 			visuals.localScale = new Vector3(1f + (f * scaleModification), 1f - (f * scaleModification), 1f + (f * scaleModification));
-			Debug.Log(f);
 		}
 	}
 
 	void Bump(Vector3 direction, float force)
 	{
 		Vector3 dir = (Game.i.aperture.Right() * direction.x + Game.i.aperture.Forward() * direction.z);
-		//rigidbody.AddTorque(dir * force * Time.deltaTime);
 		rigidbody.AddForce(dir * force * Time.deltaTime);
 		rigidbody.AddForce(Vector3.up * force * Time.deltaTime);
 		inAir = true;
@@ -73,7 +82,7 @@ public class Jumper : Controller
 		base.OnReleasedJump();
 		float f = ForcePercentage();
 
-		if (f > 0.1f) Bump(dir, chargeForce);
+		if (f > 0.25f) Bump(dir, chargeForce);
 		else Flip();
 
 		Initialize();
@@ -82,9 +91,23 @@ public class Jumper : Controller
 	public void Initialize()
 	{
 		visuals.localScale = Vector3.one;
+		visuals.up = transform.up;
 		chargeForce = 0f;
 		chargeTime = 0f;
 		charging = false;
+
+	}
+
+	public void Break()
+	{
+		foreach(Transform part in body)
+		{
+			part.gameObject.AddComponent<Rigidbody>();
+			part.gameObject.AddComponent<BoxCollider>();
+			part.SetParent(null);
+		}
+		Kick();
+		Destroy(gameObject);
 	}
 
 	internal override void Update()
@@ -95,10 +118,17 @@ public class Jumper : Controller
 		{
 			transform.up = rigidbody.velocity.normalized;
 		}
+		else if(charging)
+		{
+			Vector3 d = (Game.i.aperture.Right() * dir.x + Game.i.aperture.Forward() * dir.z);
+			visuals.up = new Vector3(d.x * 0.5f, 1f, d.z * 0.5f);
+		}
 	}
 
 	public void OnCollisionEnter(Collision collision)
 	{
 		inAir = false;
+
+		if(rigidbody.velocity.magnitude > breakVelocity) Break();
 	}
 }
