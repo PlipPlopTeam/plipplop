@@ -6,15 +6,18 @@ public abstract class TalkableCharacter : MonoBehaviour
 {
     public string questUniqueId = "";
     public float talkRadius = 2f;
+    public Transform staticCameraObjective;
 
     SphereCollider sphereTrigger;
+    bool wasTalkingToMe = false;
+    Aperture.StaticObjective objective;
 
     private void Awake()
     {
         sphereTrigger = gameObject.AddComponent<SphereCollider>();
         sphereTrigger.radius = talkRadius;
         sphereTrigger.isTrigger = true;
-
+        objective = new Aperture.StaticObjective(new Geometry.PositionAndRotation() { position = staticCameraObjective.position, rotation = staticCameraObjective.rotation });
     }
 
     private void OnTriggerEnter(Collider other)
@@ -48,12 +51,21 @@ public abstract class TalkableCharacter : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (wasTalkingToMe && !Game.i.player.IsParalyzed()) {
+            wasTalkingToMe = false;
+            Game.i.aperture.RemoveStaticObjective(objective);
+        }
+    }
+
     public abstract Dialog OnDialogTrigger();
 
     public void StartDialogue()
     {
         var dial = OnDialogTrigger();
         Game.i.PlayDialogue(dial);
+        Game.i.aperture.AddStaticObjective(objective);
     }
 
     public abstract void Load(byte[] data);
