@@ -21,9 +21,9 @@ public abstract class Controller : MonoBehaviour
 
 	public Vector3 visualsOffset;
 	public float unpossessSpawnDistance = 1f;
-    private RigidbodyConstraints legsExtendedConstraints = RigidbodyConstraints.FreezeRotation;
+    private RigidbodyConstraints legsExtendedConstraints = RigidbodyConstraints.FreezeRotationY;
     private RigidbodyConstraints legsRetractedConstraints = RigidbodyConstraints.None;
-    private float legsExtendedAngularDrag = 3f;
+    private float legsExtendedAngularDrag = 1f;
     public float legsRetractedAngularDrag = 0.1f;
 
     float lastTimeGrounded = 0f;
@@ -98,6 +98,12 @@ public abstract class Controller : MonoBehaviour
 
     internal void RetractLegs(bool input = true)
     {
+        if (input)
+        {
+            rigidbody.angularDrag = legsRetractedAngularDrag;
+            rigidbody.constraints = legsRetractedConstraints;
+        }
+
         if (!canRetractLegs) return;
         locomotion.RetractLegs();
         OnLegsRetracted();
@@ -109,26 +115,20 @@ public abstract class Controller : MonoBehaviour
             activity.KickAll();
             activity.activated = true;
         }
-        
-        if(input)
-        {
-            rigidbody.angularDrag = legsRetractedAngularDrag;
-            rigidbody.constraints = legsRetractedConstraints;
-        }
     }
 
     internal void ExtendLegs()
     {
-		Activity activity = gameObject.GetComponent<Activity>();
+        rigidbody.angularDrag = legsExtendedAngularDrag;
+        rigidbody.constraints = legsExtendedConstraints;
+
+        Activity activity = gameObject.GetComponent<Activity>();
         if (activity != null)
         {
             activity.activated = false;
         }
 		locomotion.ExtendLegs();
         OnLegsExtended();
-
-        rigidbody.angularDrag = legsExtendedAngularDrag;
-        rigidbody.constraints = legsExtendedConstraints;
     }
 
     public void ToggleLegs()
@@ -141,6 +141,7 @@ public abstract class Controller : MonoBehaviour
     internal virtual bool IsGrounded(float rangeMultiplier = 1f) { return locomotion.IsGrounded(); }
     internal virtual bool WasGrounded() { return Time.time - locomotion.preset.groundedBufferToleranceSeconds < lastTimeGrounded; }
     internal virtual void OnHoldJump() {}
+    internal virtual void OnReleasedJump() {}
 	internal virtual void OnLegsRetracted() {}
 	internal virtual void OnLegsExtended() {}
     internal virtual void SpecificMove(Vector3 direction) {}
