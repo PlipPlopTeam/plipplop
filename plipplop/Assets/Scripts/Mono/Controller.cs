@@ -21,7 +21,7 @@ public abstract class Controller : MonoBehaviour
 
 	public Vector3 visualsOffset;
 	public float unpossessSpawnDistance = 1f;
-    private RigidbodyConstraints legsExtendedConstraints = RigidbodyConstraints.FreezeRotationY;
+    private RigidbodyConstraints legsExtendedConstraints = RigidbodyConstraints.FreezeRotation;
     private RigidbodyConstraints legsRetractedConstraints = RigidbodyConstraints.None;
     private float legsExtendedAngularDrag = 1f;
     public float legsRetractedAngularDrag = 0.1f;
