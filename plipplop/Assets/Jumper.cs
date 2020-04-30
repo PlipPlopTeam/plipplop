@@ -66,6 +66,7 @@ public class Jumper : Controller
 
 	void Bump(Vector3 direction, float force)
 	{
+		transform.position += Vector3.up * 0.1f;
 		Vector3 dir = (Game.i.aperture.Right() * direction.x + Game.i.aperture.Forward() * direction.z);
 		rigidbody.AddForce(dir * force * Time.deltaTime);
 		rigidbody.AddForce(Vector3.up * force * Time.deltaTime);
