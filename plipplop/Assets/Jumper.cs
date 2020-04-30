@@ -83,7 +83,7 @@ public class Jumper : Controller
 		base.OnReleasedJump();
 		float f = ForcePercentage();
 
-		if (f > 0.25f) Bump(dir, chargeForce);
+		if (f > 0.05f) Bump(dir, chargeForce);
 		else Flip();
 
 		Initialize();
@@ -128,8 +128,7 @@ public class Jumper : Controller
 
 	public void OnCollisionEnter(Collision collision)
 	{
+		if (rigidbody.velocity.magnitude > breakVelocity && inAir && AreLegsRetracted()) Break();
 		inAir = false;
-
-		if(rigidbody.velocity.magnitude > breakVelocity) Break();
 	}
 }
