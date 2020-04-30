@@ -31,7 +31,7 @@ public class Jumper : Controller
 	{
 		dir = direction;
 
-		if(!charging)
+		if(AreLegsRetracted() && !charging)
 		{
 			Vector3 d = (Game.i.aperture.Forward() * -dir.x + Game.i.aperture.Right() * dir.z);
 			rigidbody.angularVelocity += d * angularForce;
