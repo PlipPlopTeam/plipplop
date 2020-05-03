@@ -36,8 +36,10 @@ public class AgentMovement : Walker
 	NavMeshAgent agent;
 
 	[HideInInspector] public Vector3 orientation;
+    public float orientLerp = 5f;
+    public float cOrientLerp;
 	Vector3 rotationLast;
-	Vector3 rotationDelta;
+    Vector3 rotationDelta;
 
 	public override void ApplyModifier(float value)
 	{
@@ -53,6 +55,7 @@ public class AgentMovement : Walker
 
     public void Awake()
     {
+        cOrientLerp = orientLerp;
         agent = GetComponent<NavMeshAgent>();
         going = false;
         SetSpeed(settings.speed);
@@ -158,7 +161,7 @@ public class AgentMovement : Walker
             Quaternion q = new Quaternion();
             if (orientation != Vector3.zero) q = Quaternion.LookRotation(orientation);
 
-            transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * 5f);
+            transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * cOrientLerp);
 		}
 
 		if (reached) reached = false;
