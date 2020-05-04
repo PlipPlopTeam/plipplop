@@ -25,9 +25,10 @@ public class Library
     public GameObject baseControllerPrefab;
 	public GameObject teleporterVolumePrefab;
 	public GameObject torchPrefab;
+	public GameObject sweatParticle;
     public GameObject canvas;
 
-	[Header("Cloth")]
+    [Header("Cloth")]
     public List<ClothData> headClothes;
     public List<ClothData> hairs;
     public List<ClothData> torsoClothes;

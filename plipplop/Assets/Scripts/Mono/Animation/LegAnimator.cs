@@ -152,9 +152,11 @@ public class LegAnimator : MonoBehaviour
         head.parent = null;
     }
 
-	[HideInInspector] public string stepGFX = ""; 
+	[HideInInspector] public string stepGFX = "";
+	public Action onStep;
 	public void Step()
 	{
-		if(stepGFX != "") Pyromancer.PlayGameEffect(stepGFX, transform.position);
+		if (stepGFX != "") Pyromancer.PlayGameEffect(stepGFX, transform.position);
+		if (onStep != null) onStep.Invoke();
 	}
 }
