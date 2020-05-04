@@ -6,14 +6,18 @@ public class Bucket : Controller
 	Dictionary<int, float> slowdown = new Dictionary<int, float>();
 	int currentSlow = -1;
 	Container container;
-	public FoodData debugFoodItem;
     public int itemCount { get { return container.GetItemCount(); } }
 
-	public void DebugSpawnFood()
+	public override void OnPossess()
 	{
-		Food fo = new GameObject().AddComponent<Food>();
-		fo.Create(debugFoodItem);
-		container.Store(fo);
+		base.OnPossess();
+		locomotion.locomotionAnimation.HeavyWalkCycle();
+	}
+
+	public override void OnEject()
+	{
+		base.OnEject();
+		locomotion.locomotionAnimation.DefaultWalkCycle();
 	}
 
 	override internal void Awake()

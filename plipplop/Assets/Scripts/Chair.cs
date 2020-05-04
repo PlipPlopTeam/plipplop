@@ -18,6 +18,7 @@ public class Chair : MonoBehaviour
 	[Range(0f, 90f)] public float minStraightAngle = 45f;
 	public Transform visual;
     public Chair.Spot[] spots;
+	[HideInInspector] public bool locked;
 
 	List<NonPlayableCharacter> users
 	{
@@ -92,7 +93,7 @@ public class Chair : MonoBehaviour
 		}
 		else if (isStraight)
 		{
-			Dismount();
+			if(!locked) Dismount();
 			isStraight = false;
 		}
 	}

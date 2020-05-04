@@ -22,6 +22,7 @@ public class Jumper : Controller
 
 	[Header("References")]
 	public Transform body;
+	public Chair chair;
 
 	private float chargeForce = 0f;
 	private float chargeTime = 0f;
@@ -117,12 +118,18 @@ public class Jumper : Controller
 	
 		if(inAir)
 		{
+			if (chair != null) chair.locked = true;
 			transform.up = rigidbody.velocity.normalized;
 		}
 		else if(charging)
 		{
+			if (chair != null) chair.locked = true;
 			Vector3 d = (Game.i.aperture.Right() * dir.x + Game.i.aperture.Forward() * dir.z);
-			visuals.up = new Vector3(d.x * 0.5f, 1f, d.z * 0.5f);
+			visuals.up = Vector3.Lerp(visuals.up, new Vector3(d.x * 0.1f, 1f, d.z * 0.1f), Time.deltaTime * 10f);
+		}
+		else
+		{
+			if (chair != null) chair.locked = false;
 		}
 	}
 
