@@ -9,18 +9,6 @@ public class Bucket : Controller
 	ParticleSystem sweat;
     public int itemCount { get { return container.GetItemCount(); } }
 
-	public override void OnPossess()
-	{
-		base.OnPossess();
-		locomotion.locomotionAnimation.HeavyWalkCycle();
-	}
-
-	public override void OnEject()
-	{
-		base.OnEject();
-		locomotion.locomotionAnimation.DefaultWalkCycle();
-	}
-
 	override internal void Awake()
     {
 		base.Awake();
@@ -56,8 +44,12 @@ public class Bucket : Controller
 		{
 			if (this.currentSlow != -1) this.locomotion.RemoveModifier(this.currentSlow);
 			currentSlow = locomotion.AddModifier(slow);
-			
-			if(sweat != null) sweat.emissionRate = 100f * slow * 1000f;
+
+		
+			if(itemStored == 0f) locomotion.locomotionAnimation.DefaultWalkCycle();
+			else locomotion.locomotionAnimation.HeavyWalkCycle();
+
+			if (sweat != null) sweat.emissionRate = 100f * slow * 1000f;
 		}
 	}
 }
