@@ -23,7 +23,7 @@ public class NonPlayableCharacter : MonoBehaviour
 	[HideInInspector] public EmotionRenderer emo;
 	[HideInInspector] public Range range;
 	[HideInInspector] public Face face;
-	[HideInInspector] public Collider collider;
+	[HideInInspector] new public Collider collider;
 	public SkinnedMeshRenderer skin;
 	[HideInInspector] public ICarryable carried;
 	[Header("Read-Only")]
@@ -61,7 +61,7 @@ public class NonPlayableCharacter : MonoBehaviour
 		animator = GetComponentInChildren<Animator>();
 		range = GetComponent<Range>();
 		emo = GetComponent<EmotionRenderer>();
-		emo.Load();
+		emo.Initialize();
 		agentMovement = GetComponent<AgentMovement>();
 		agentMovement.animator = animator;
 		face = GetComponent<Face>();
@@ -378,7 +378,7 @@ public class NonPlayableCharacter : MonoBehaviour
 		if (controller.IsPossessed()) Game.i.player.TeleportBaseControllerAndPossess();
 	}
 
-	public void Drop()
+	public virtual void Drop()
 	{
 		if(carried == null) return;
 		carried.Drop();
@@ -464,7 +464,9 @@ public class NonPlayableCharacter : MonoBehaviour
 #if UNITY_EDITOR
 	void OnDrawGizmos()
     {
-        if(EditorApplication.isPlaying)
+        if(EditorApplication.isPlaying 
+		&& graph != null 
+		&& graph.GetState() != null)
 		{
 			GUIStyle s = new GUIStyle();
 			s.alignment = TextAnchor.MiddleCenter;

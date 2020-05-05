@@ -7,15 +7,17 @@ namespace Behavior.NPC
     [CreateAssetMenu(menuName = "Behavior/Action/NonPlayableCharacter/ShowEmotion")]
     public class ShowEmotion : AIAction
     {
-        public Emotion emotion = null;
+        public Emotion.EVerb verb;
+        public string[] subjects;
+        public Emotion.EBubble bubbleType;
         public float duration = 1f;
 
         public override void Execute(NonPlayableCharacter target)
         {
             NonPlayableCharacter npc = target;
-            if (npc != null && emotion != null)
+            if (npc != null)
 			{
-				npc.emo.Show(emotion, duration);
+				npc.emo.Show(verb, subjects, bubbleType);
             }
         }
     }

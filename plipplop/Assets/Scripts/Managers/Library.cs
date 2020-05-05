@@ -25,18 +25,14 @@ public class Library
     public GameObject baseControllerPrefab;
 	public GameObject teleporterVolumePrefab;
 	public GameObject torchPrefab;
+	public GameObject sweatParticle;
     public GameObject canvas;
 
-	[Header("Cloth")]
+    [Header("Cloth")]
     public List<ClothData> headClothes;
     public List<ClothData> hairs;
     public List<ClothData> torsoClothes;
     public List<ClothData> legsClothes;
-	/*
-	public Color[] headColors;
-	public Color[] torsoColors;
-	public Color[] legsColors;
-	*/
 
 	public List<ClothData> GetOutfit()
 	{
@@ -49,16 +45,6 @@ public class Library
 		outfit.Add(legsClothes[Random.Range(0, legsClothes.Count)]);
 		return outfit;
 	}
-	/*
-	public Dictionary<Cloth.ESlot, Color> GetRandomOutfitColor()
-	{
-		Dictionary<Cloth.ESlot, Color> dic = new Dictionary<Cloth.ESlot, Color>();
-		dic.Add(Cloth.ESlot.HEAD, headColors.Length > 0 ? headColors[Random.Range(0, headColors.Length)] : Color.white);
-		dic.Add(Cloth.ESlot.TORSO, torsoColors.Length > 0 ? torsoColors[Random.Range(0, torsoColors.Length)] : Color.white);
-		dic.Add(Cloth.ESlot.LEGS, legsColors.Length > 0 ? legsColors[Random.Range(0, legsColors.Length)] : Color.white);
-		return dic;
-	}
-	*/
 
 	[Header("Material")]
     public Material emotionBoardMaterial;
@@ -83,6 +69,9 @@ public class Library
     [Header("Cinematics")]
     public NamedPrefabResources cinematics;
 
+    [Header("Emotions")]
+    public GameObject bubblePrefab;
+    public Emotions emotions;
 
     // Hidden
     public DialogLibrary dialogs;

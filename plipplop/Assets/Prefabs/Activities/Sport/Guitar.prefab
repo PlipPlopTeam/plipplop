@@ -61,7 +61,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 1
+  m_AngularDrag: 0.1
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -139,9 +139,8 @@ MonoBehaviour:
   face: {fileID: 0}
   visualsOffset: {x: 0, y: 0.18, z: 0}
   unpossessSpawnDistance: 0.5
-  applyConstraints: 1
-  extendLegsConstraint: 112
-  retractedLegsConstraint: 0
+  legsExtendedAngularDrag: 5
+  legsRetractedAngularDrag: 0.1
   impactDetection: {fileID: 8242818477413934955}
   noteBurstParticle: {fileID: 7079126786595257333}
   linkedActivity: {fileID: 2108323508247141257}

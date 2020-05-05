@@ -1,0 +1,90 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aaff89a50f4982342a69e2d8164e69c7, type: 3}
+  m_Name: WalkHeavy
+  m_EditorClassIdentifier: 
+  animationName: WalkHeavy
+  meshes:
+  - mesh: {fileID: -246761979630551762, guid: 9e45abc3e2d5bed4d801f3dcb9a798d6, type: 3}
+    position: {x: -0.03, y: 0.65, z: 0.03}
+    euler: {x: 0, y: 5, z: 8}
+    scale: {x: 1, y: 0.9, z: 1}
+    mat:
+    - {fileID: 2100000, guid: b0e14b07f3c4f9f41b1889b89a0c6e89, type: 2}
+    gameEffect: 
+    gameEffectOffset: {x: 0, y: 0, z: 0}
+    function: 
+  - mesh: {fileID: 6341110550154594318, guid: 9e45abc3e2d5bed4d801f3dcb9a798d6, type: 3}
+    position: {x: -0.06, y: 0.7, z: 0.02}
+    euler: {x: 0, y: -1, z: 20}
+    scale: {x: 1, y: 0.925, z: 1}
+    mat:
+    - {fileID: 2100000, guid: b0e14b07f3c4f9f41b1889b89a0c6e89, type: 2}
+    gameEffect: gfx_small_step
+    gameEffectOffset: {x: 0, y: 0, z: 0}
+    function: Step
+  - mesh: {fileID: 6341110550154594318, guid: 9e45abc3e2d5bed4d801f3dcb9a798d6, type: 3}
+    position: {x: -0.04, y: 0.8, z: 0.01}
+    euler: {x: 0, y: -2, z: 9}
+    scale: {x: 1, y: 0.95, z: 1}
+    mat:
+    - {fileID: 2100000, guid: b0e14b07f3c4f9f41b1889b89a0c6e89, type: 2}
+    gameEffect: gfx_small_step
+    gameEffectOffset: {x: 0, y: 0, z: 0}
+    function: Step
+  - mesh: {fileID: 4998022415145371176, guid: 9e45abc3e2d5bed4d801f3dcb9a798d6, type: 3}
+    position: {x: 0, y: 0.7, z: -0.01}
+    euler: {x: 0, y: -10, z: 6}
+    scale: {x: 1, y: 1.03, z: 1}
+    mat:
+    - {fileID: 2100000, guid: b0e14b07f3c4f9f41b1889b89a0c6e89, type: 2}
+    gameEffect: 
+    gameEffectOffset: {x: 0, y: 0, z: 0}
+    function: 
+  - mesh: {fileID: -97063020295290404, guid: 9e45abc3e2d5bed4d801f3dcb9a798d6, type: 3}
+    position: {x: 0.03, y: 0.65, z: 0.03}
+    euler: {x: 0, y: -5, z: 9}
+    scale: {x: 1, y: 0.9, z: 1}
+    mat:
+    - {fileID: 2100000, guid: b0e14b07f3c4f9f41b1889b89a0c6e89, type: 2}
+    gameEffect: 
+    gameEffectOffset: {x: 0, y: 0, z: 0}
+    function: 
+  - mesh: {fileID: -2199023369549149479, guid: 9e45abc3e2d5bed4d801f3dcb9a798d6, type: 3}
+    position: {x: 0.06, y: 0.7, z: 0.02}
+    euler: {x: 0, y: -1, z: -19.3}
+    scale: {x: 1, y: 0.925, z: 1}
+    mat:
+    - {fileID: 2100000, guid: b0e14b07f3c4f9f41b1889b89a0c6e89, type: 2}
+    gameEffect: 
+    gameEffectOffset: {x: 0, y: 0, z: 0}
+    function: 
+  - mesh: {fileID: -2199023369549149479, guid: 9e45abc3e2d5bed4d801f3dcb9a798d6, type: 3}
+    position: {x: 0.08, y: 0.8, z: 0.01}
+    euler: {x: 0, y: 2, z: -10}
+    scale: {x: 1, y: 0.95, z: 1}
+    mat:
+    - {fileID: 2100000, guid: b0e14b07f3c4f9f41b1889b89a0c6e89, type: 2}
+    gameEffect: gfx_small_step
+    gameEffectOffset: {x: 0, y: 0, z: 0}
+    function: Step
+  - mesh: {fileID: 2077275587472499575, guid: 9e45abc3e2d5bed4d801f3dcb9a798d6, type: 3}
+    position: {x: 0, y: 0.7, z: -0.01}
+    euler: {x: 0, y: 10, z: -6}
+    scale: {x: 1, y: 1.03, z: 1}
+    mat:
+    - {fileID: 2100000, guid: b0e14b07f3c4f9f41b1889b89a0c6e89, type: 2}
+    gameEffect: 
+    gameEffectOffset: {x: 0, y: 0, z: 0}
+    function: 
+  fps: 8
+  loop: 1

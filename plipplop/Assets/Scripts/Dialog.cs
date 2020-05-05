@@ -11,6 +11,9 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 public class Dialog {
+
+    public class DialogSyntaxErrorException : Exception { public DialogSyntaxErrorException(string str) : base(str) { } }
+
     public bool isAutomatic = false;
     public List<IElement> elements = new List<IElement>();
     public float intervalMultiplier = 1f;
@@ -230,7 +233,12 @@ public class Dialog {
             switch (dialNode.Name)
             {
                 default:
-                    throw new Exception("Unknown dialog node: " + dialNode.Name+". PLEASE CHECK THE DIALOGUE FILE.");
+                    if (dialNode is XmlText) {
+                        throw new DialogSyntaxErrorException("There is raw text outside of the tags in a dialogue file: "+dialNode.Value+". CHECK THE DIALOGUE FILES.");
+                    }
+                    else {
+                        throw new DialogSyntaxErrorException("Unknown dialog node: " + dialNode.Name + ". PLEASE CHECK THE DIALOGUE FILE.");
+                    }
 
                 case "pause":
                     elements.Add(new Pause(XmlConvert.ToSingle(dialNode.Attributes["miliseconds"].Value)));

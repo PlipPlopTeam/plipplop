@@ -95,6 +95,10 @@ MonoBehaviour:
   visuals: {fileID: 8132795082402124948}
   face: {fileID: 0}
   visualsOffset: {x: 0, y: -0.2, z: 0}
+  unpossessSpawnDistance: 1
+  applyConstraints: 1
+  extendLegsConstraint: 112
+  retractedLegsConstraint: 0
   pushMovementForce: 500
   pushCooldown: 2
   pushThreshold: 0.5
@@ -155,9 +159,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 011d63a14cf4d8347a5660a929242412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modifiers: []
   preset: {fileID: 11400000, guid: 81c5435995369f048ab3d3d178e1aa7c, type: 2}
-  groundCheckRange: 1
-  legsOffset: {x: 0, y: 0.4, z: 0}
   isFlattened: 0
   rigidbody: {fileID: 0}
   targetDirection: {x: 0, y: 0, z: 0}
@@ -177,9 +180,10 @@ MonoBehaviour:
   shape: 0
   rb: {fileID: 0}
   collider: {fileID: 0}
-  visual: {fileID: 0}
-  origin: {x: 0, y: 0, z: 0}
   weight: 20
+  type: 3
+  visuals: {fileID: 0}
+  origin: {x: 0, y: 0, z: 0}
   distanceThreshold: 2
   hidden: 0
 --- !u!114 &2370884390476261711
@@ -194,6 +198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc33e5da256a36d48bd9814faa9bcd5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  activated: 1
   working: 1
   userMax: 5
   spectatorMax: 12
@@ -207,6 +212,8 @@ MonoBehaviour:
     boredom: 6
     hunger: 0
     tiredness: 0
+  users: []
+  spectators: []
   radius: {x: 1, y: 1.5}
   ps: {fileID: 3517644232397957827}
   doesPlayMusicForReal: 0

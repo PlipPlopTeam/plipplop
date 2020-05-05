@@ -21,9 +21,10 @@ public abstract class Controller : MonoBehaviour
 
 	public Vector3 visualsOffset;
 	public float unpossessSpawnDistance = 1f;
-    public bool applyConstraints = false;
-    public RigidbodyConstraints extendLegsConstraint;
-    public RigidbodyConstraints retractedLegsConstraint;
+    private RigidbodyConstraints legsExtendedConstraints = RigidbodyConstraints.FreezeRotation;
+    private RigidbodyConstraints legsRetractedConstraints = RigidbodyConstraints.None;
+    private float legsExtendedAngularDrag = 1f;
+    public float legsRetractedAngularDrag = 0.1f;
 
     float lastTimeGrounded = 0f;
     new internal Rigidbody rigidbody;
@@ -37,9 +38,8 @@ public abstract class Controller : MonoBehaviour
 	int freeze = 0;
     int immersion = 0;
 
-	bool isParalysed = false;
-	public void Paralyse() { isParalysed = true; }
-	public void UnParalyse() { isParalysed = false; }
+	public void Paralyse() { Game.i.player.Paralyze(); }
+	public void UnParalyse() { Game.i.player.Deparalyze(); }
 
 	public virtual void Throw(Vector3 direction, float force)
 	{
@@ -96,25 +96,39 @@ public abstract class Controller : MonoBehaviour
         }
 	}
 
-    internal void RetractLegs()
+    internal void RetractLegs(bool input = true)
     {
+        if (input)
+        {
+            rigidbody.angularDrag = legsRetractedAngularDrag;
+            rigidbody.constraints = legsRetractedConstraints;
+        }
+
         if (!canRetractLegs) return;
         locomotion.RetractLegs();
         OnLegsRetracted();
 		// Reset visual local position when legs are retracted
 		visuals.transform.localPosition = previousVisualLocalPosition;
 		Activity activity = gameObject.GetComponent<Activity>();
-		if (activity != null) activity.Repair();
-        if (applyConstraints) rigidbody.constraints = extendLegsConstraint;
+        if (activity != null)
+        {
+            activity.KickAll();
+            activity.activated = true;
+        }
     }
 
     internal void ExtendLegs()
     {
-		Activity activity = gameObject.GetComponent<Activity>();
-		if (activity != null) activity.Break();
+        rigidbody.angularDrag = legsExtendedAngularDrag;
+        rigidbody.constraints = legsExtendedConstraints;
+
+        Activity activity = gameObject.GetComponent<Activity>();
+        if (activity != null)
+        {
+            activity.activated = false;
+        }
 		locomotion.ExtendLegs();
         OnLegsExtended();
-        if(applyConstraints) rigidbody.constraints = retractedLegsConstraint;
     }
 
     public void ToggleLegs()
@@ -127,6 +141,7 @@ public abstract class Controller : MonoBehaviour
     internal virtual bool IsGrounded(float rangeMultiplier = 1f) { return locomotion.IsGrounded(); }
     internal virtual bool WasGrounded() { return Time.time - locomotion.preset.groundedBufferToleranceSeconds < lastTimeGrounded; }
     internal virtual void OnHoldJump() {}
+    internal virtual void OnReleasedJump() {}
 	internal virtual void OnLegsRetracted() {}
 	internal virtual void OnLegsExtended() {}
     internal virtual void SpecificMove(Vector3 direction) {}
@@ -142,7 +157,8 @@ public abstract class Controller : MonoBehaviour
         if (direction.magnitude > 0.1f) movingStick = true;
         else movingStick = false;
 
-        if (IsFrozen() || isParalysed) return;
+        if (IsFrozen()/* || isParalysed*/) return;
+		
 		if (AreLegsRetracted()) SpecificMove(direction);
         else locomotion.Move(direction);
     }
@@ -229,7 +245,7 @@ public abstract class Controller : MonoBehaviour
     {
         if (autoPossess) Game.i.player.Possess(this);
 
-        if (!IsPossessed()) RetractLegs();
+        if (!IsPossessed()) RetractLegs(false);
 
         rigidbody.useGravity = false;
     }

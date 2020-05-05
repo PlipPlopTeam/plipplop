@@ -112,10 +112,9 @@ public class SandCastle : Activity
 
 	public void Stomp()
 	{
-		foreach (NonPlayableCharacter npc in users)
-		{
-			npc.emo.Show("Angry", 2f);
-		}
+		foreach (NonPlayableCharacter npc in users) {
+            npc.emo.Show(Emotion.EVerb.HATE, "plipplop", Emotion.EBubble.THINK);
+        }
 
 		foreach (SkinnedMeshRenderer smr in towers)
 		{

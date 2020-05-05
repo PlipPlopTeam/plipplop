@@ -28,10 +28,13 @@ public class Guitar : Activity, ICarryable
 			player.agentMovement.Stop();
 			player.animator.SetBool("Guitaring", true);
 			player.animator.SetBool("Carrying", false);
-			visuals = transform.GetChild(0);
-			visuals.localPosition = new Vector3(0.114f,-0.08f,-0.155f);
-			visuals.localEulerAngles = new Vector3(3.809f,5.44f,55.098f);
-			PlayMusic();
+
+			Game.i.WaitAndDo(1f, () =>
+			{
+				visuals.localPosition = new Vector3(0.114f, -0.08f, -0.155f);
+				visuals.localEulerAngles = new Vector3(3.809f, 5.44f, 55.098f);
+				PlayMusic();
+			});
 		};
 	}
 
@@ -57,6 +60,18 @@ public class Guitar : Activity, ICarryable
 		base.StopUsing(user);
 		user.Drop();
 		user.StopCollecting();
+
+		player.agentMovement.onDestinationReached -= () =>
+		{
+			player.agentMovement.Stop();
+			player.animator.SetBool("Guitaring", true);
+			player.animator.SetBool("Carrying", false);
+			visuals = transform.GetChild(0);
+			visuals.localPosition = new Vector3(0.114f, -0.08f, -0.155f);
+			visuals.localEulerAngles = new Vector3(3.809f, 5.44f, 55.098f);
+			PlayMusic();
+		};
+
 		user.animator.SetBool("Guitaring", false);
 		visuals.localPosition = Vector3.zero;
 		visuals.localEulerAngles = Vector3.zero;

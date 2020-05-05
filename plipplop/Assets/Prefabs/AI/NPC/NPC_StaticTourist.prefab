@@ -139,15 +139,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624b99fe1e8a4194caf25db18f2a8455, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  emotions:
-  - {fileID: 11400000, guid: 40f0de35f7a994b4c8aa2a3609b97628, type: 2}
-  - {fileID: 11400000, guid: 8abc0f3691686394688a19a27cb07e84, type: 2}
-  - {fileID: 11400000, guid: 4b828bfec40814747b1fcfc752b63b01, type: 2}
-  - {fileID: 11400000, guid: 87034e14774db93459a458f28317a21f, type: 2}
-  - {fileID: 11400000, guid: 3907b5d3b2918044986601ab716aa222, type: 2}
-  - {fileID: 11400000, guid: cd269b1a8ec19e842bc8de3e04a06459, type: 2}
   headTransform: {fileID: 6112613422909465329}
-  adjustment: {x: 0, y: 0.5, z: 0}
+  vOffset: 1
+  hOffset: 1
   size: 0.5
 --- !u!114 &6139292085590463810
 MonoBehaviour:
@@ -181,8 +175,9 @@ MonoBehaviour:
   chair: {fileID: 0}
   food: {fileID: 0}
   feeder: {fileID: 0}
+  container: {fileID: 0}
   settings: {fileID: 11400000, guid: 7739a2840a1b2a44d8adf298bc5c78bf, type: 2}
-  graph: {fileID: 11400000, guid: adef83b68e50c894dbab17f5bc34ea86, type: 2}
+  graph: {fileID: 0}
   spawnPosition: {x: 0, y: 0, z: 0}
   hasWaited: 0
 --- !u!114 &6139292085590463811
@@ -197,12 +192,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d32d2f021836fd4ab299067088d9cac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modifiers: []
   path: {fileID: 0}
   slowMultiplier: 1
   settings:
     speed: 2
     navTreshold: 1
     animatorRunSpeed: 3
+    animatorRotationSpeed: 5
     minimumCarrySpeed: 1
   going: 0
   reached: 0

@@ -168,6 +168,8 @@ public class Locomotion : Walker
 				grounded ? 1f : direction.magnitude
             ).normalized;
 
+            if (Game.i.player.IsParalyzed()) virtualStick = Vector3.zero;
+
             float frictionMultiplier = (grounded || isImmerged) ? 1f : 1f-preset.airFriction;
 
             Vector3 velocity =
@@ -190,7 +192,7 @@ public class Locomotion : Walker
 			lastDirection = direction;
 
             // Animation
-            if (rigidbody.velocity.normalized.magnitude > 0 && direction.magnitude > 0f) {
+            if (rigidbody.velocity.normalized.magnitude > 0f && direction.magnitude > 0.1f) {
                 transform.forward = Vector3.Lerp(
                     Vector3.Scale(Vector3.one - Vector3.up, transform.forward),
                     Vector3.Scale(Vector3.one - Vector3.up, rigidbody.velocity.normalized),

@@ -8,7 +8,7 @@ using System;
 
 public class DialogLibrary
 {
-    public class MissingDialogException : Exception { }
+    public class MissingDialogException : Exception { public MissingDialogException(string str) : base(str) { } }
 
     public const string VERSION = "1";
     public const string MARKER_TAG = "zola";
@@ -45,7 +45,7 @@ public class DialogLibrary
     {
         if (!dialogs.ContainsKey(id))
         {
-            throw new MissingDialogException();
+            throw new MissingDialogException("No such dialog : "+id+". CHECK THE DIALOG FILES!");
         }
 
         return dialogs[id];

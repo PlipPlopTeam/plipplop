@@ -59,6 +59,8 @@ MonoBehaviour:
       type: 3}
     torchPrefab: {fileID: 4271952900627128956, guid: 6a1e03e3dcfc34140adafcac6b99bd4f,
       type: 3}
+    sweatParticle: {fileID: 2265205593015572811, guid: fac342b8c625f2841874e341d5c527ef,
+      type: 3}
     canvas: {fileID: 4172911346711415329, guid: 57e70eba01bf88f4fb4c39a043c1497f,
       type: 3}
     headClothes:
@@ -67,6 +69,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 74c95a989d8df204592fd9baed416483, type: 2}
     - {fileID: 11400000, guid: ada1c5ac52792a74587a23ceeef52d3e, type: 2}
     - {fileID: 11400000, guid: 6130c999545f7734196346047bbed98a, type: 2}
+    - {fileID: 11400000, guid: 8d5f31cebb0afe541ae9d6980163c442, type: 2}
     hairs:
     - {fileID: 11400000, guid: 93fd89244b7cacd45a7eee8b252ee489, type: 2}
     - {fileID: 11400000, guid: 631b62b7eec6d4e4f9b474a793d40276, type: 2}
@@ -358,7 +361,10 @@ MonoBehaviour:
         - name: vfx_note_burst
           prefab: {fileID: 7081559059158549950, guid: 8598ae02b7c3bac438fefb52ce27ff0a,
             type: 3}
-        childCount: 10
+        - name: vfx_sweat
+          prefab: {fileID: 2265205593015572811, guid: fac342b8c625f2841874e341d5c527ef,
+            type: 3}
+        childCount: 11
     gfxs:
       serializableEffects:
         list:
@@ -416,5 +422,26 @@ MonoBehaviour:
           prefab: {fileID: 4819693678405633835, guid: 96cf5bcde76c2f143b59fa47404c8adc,
             type: 3}
         childCount: 2
+    bubblePrefab: {fileID: 6557741612811261699, guid: 1b692f290d9f0b141a223f59ad446f28,
+      type: 3}
+    emotions:
+      emotionVerbs:
+      - id: 0
+        verb: {fileID: 0}
+      - id: 1
+        verb: {fileID: 11400000, guid: ce10c83969068984ea0ed515b0e513bd, type: 2}
+      - id: 2
+        verb: {fileID: 0}
+      - id: 3
+        verb: {fileID: 0}
+      - id: 4
+        verb: {fileID: 0}
+      subjects:
+      - {fileID: 11400000, guid: 573f68f2fd6fcae4c8537a42b18c4ce1, type: 2}
+      bubbleSprites:
+      - bubbleType: 0
+        texture: {fileID: 2800000, guid: 5e6a40a9c4fd33f4e9213fe735d51339, type: 3}
+      - bubbleType: 1
+        texture: {fileID: 2800000, guid: a2d2afa8eaa9ca64ba8e3b4edada6618, type: 3}
   mapping: {fileID: 11400000, guid: b03c7b6991b2d3147aad73a7ac20f24a, type: 2}
   switches: {fileID: 11400000, guid: 3559daa51da5d2149b80fadc540a12e1, type: 2}

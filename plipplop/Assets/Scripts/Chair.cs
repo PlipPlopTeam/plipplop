@@ -11,12 +11,14 @@ public class Chair : MonoBehaviour
         public Vector2 orientation;
         [HideInInspector] public NonPlayableCharacter user = null;
 		[HideInInspector] public bool isSitted;
+		[HideInInspector] public float cRotation;
     }
 
 	[Header("Settings")]
 	[Range(0f, 90f)] public float minStraightAngle = 45f;
 	public Transform visual;
     public Chair.Spot[] spots;
+	[HideInInspector] public bool locked;
 
 	List<NonPlayableCharacter> users
 	{
@@ -41,6 +43,7 @@ public class Chair : MonoBehaviour
 
 	public void Sit(NonPlayableCharacter sitter, Spot spot)
 	{
+		spot.cRotation = Random.Range(spot.orientation.x, spot.orientation.y);
 		Align(sitter, spot);
 		spot.isSitted = true;
 
@@ -69,10 +72,9 @@ public class Chair : MonoBehaviour
 
 	public void Align(NonPlayableCharacter sitter, Spot spot)
 	{
-		sitter.transform.localPosition = Vector3.zero;
 		sitter.transform.localPosition = new Vector3(spot.position.x, spot.position.y - spot.user.skeleton.GetButtHeight(), spot.position.z);
-		sitter.transform.forward = transform.forward;
-		sitter.transform.Rotate(transform.up * Random.Range(spot.orientation.x, spot.orientation.y));
+		//sitter.agentMovement.Orient(visual.up * spot.cRotation);
+		sitter.transform.localRotation = Quaternion.Euler(visual.up * spot.cRotation);
 	}
 
 	public void Update()
@@ -81,14 +83,17 @@ public class Chair : MonoBehaviour
 		{
 			foreach(Spot s in spots)
 			{
-				if (s.user != null && s.isSitted) 
+				if (s.user != null && s.isSitted)
+				{
+					//Align(s.user, s);
 					s.user.transform.localPosition = new Vector3(s.position.x, s.position.y - s.user.skeleton.GetButtHeight(), s.position.z);
+				}
 			}
 			if (!isStraight) isStraight = true;
 		}
 		else if (isStraight)
 		{
-			Dismount();
+			if(!locked) Dismount();
 			isStraight = false;
 		}
 	}
@@ -97,7 +102,10 @@ public class Chair : MonoBehaviour
 	{
 		foreach (Spot s in spots)
 		{
-			if (s.user != null) s.user.GetUp();
+			if (s.user != null)
+			{
+				s.user.GetUp();
+			}
 		}
 	}
 
@@ -122,8 +130,13 @@ public class Chair : MonoBehaviour
         return true;
     }
 
+	public void OnDestroy()
+	{
+		Dismount();
+	}
+
 #if UNITY_EDITOR
-    void OnDrawGizmosSelected()
+	void OnDrawGizmosSelected()
     {
         Gizmos.color = new Color32(255, 215, 0, 255);
 
