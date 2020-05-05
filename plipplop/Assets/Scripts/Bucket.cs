@@ -56,7 +56,8 @@ public class Bucket : Controller
 		{
 			if (this.currentSlow != -1) this.locomotion.RemoveModifier(this.currentSlow);
 			currentSlow = locomotion.AddModifier(slow);
-			//sweat.emission.burstCount = Random.Range(6, 10) + Mathf.Round(slow * 10f);
+			
+			if(sweat != null) sweat.emissionRate = 100f * slow * 1000f;
 		}
 	}
 }
