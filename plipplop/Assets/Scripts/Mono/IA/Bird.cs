@@ -359,11 +359,13 @@ public class Bird : MonoBehaviour
 
 		if(faceDirection)
 		{
-			visuals.transform.forward = -positionDelta.normalized;
+			if(positionDelta.normalized != Vector3.zero)
+				visuals.transform.forward = -positionDelta.normalized;
 		}
 		else
 		{
-			visuals.localEulerAngles = positionDelta.normalized * angleMax;
+			if (positionDelta.normalized != Vector3.zero)
+				visuals.localEulerAngles = positionDelta.normalized * angleMax;
 		}
 	}
 
