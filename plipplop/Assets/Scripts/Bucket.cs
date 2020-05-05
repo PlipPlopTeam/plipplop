@@ -34,7 +34,11 @@ public class Bucket : Controller
 		base.Start();
 		sweat = Instantiate(Game.i.library.sweatParticle, transform).GetComponent<ParticleSystem>();
 		sweat.Stop();
-		locomotion.locomotionAnimation.legs.onStep += () => { this.sweat.Play(); };
+		locomotion.locomotionAnimation.legs.onStep += () =>
+		{ 
+			if(this.itemCount > 0 && this.sweat != null) 
+				this.sweat.Play(); 
+		};
 	}
 
 	public void Slow(int itemStored)
@@ -46,8 +50,8 @@ public class Bucket : Controller
 			currentSlow = locomotion.AddModifier(slow);
 
 		
-			if(itemStored == 0f) locomotion.locomotionAnimation.DefaultWalkCycle();
-			else locomotion.locomotionAnimation.HeavyWalkCycle();
+			if(itemStored > 0) locomotion.locomotionAnimation.HeavyWalkCycle();
+			else locomotion.locomotionAnimation.DefaultWalkCycle();
 
 			if (sweat != null) sweat.emissionRate = 100f * slow * 1000f;
 		}
