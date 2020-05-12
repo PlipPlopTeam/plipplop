@@ -3,23 +3,19 @@
 public class Jumper : Controller
 {
 	[Header("Jumper")]
-
 	[Header("Charge")]
 	public float scaleModification = 0.25f;
 	public float chargeMaxTime = 2f;
+	public float chargePercentage = 0.25f;
 	public float chargeMaxForce = 30000f;
-
 	[Header("Flip")]
 	public float flipUpForce = 500f;
 	public float flipTorqueForce = 500f;
-
 	[Header("Roll")]
 	public float angularForce = 50f;
 	public float maxVelocityMagnitude = 1f;
-
 	[Header("Other")]
 	public float breakVelocity = 2f;
-
 	[Header("References")]
 	public Transform body;
 	public Chair chair;
@@ -67,7 +63,7 @@ public class Jumper : Controller
 
 	void Bump(Vector3 direction, float force)
 	{
-		transform.position += Vector3.up * 0.1f;
+		transform.position += Vector3.up * 0.5f;
 		Vector3 dir = (Game.i.aperture.Right() * direction.x + Game.i.aperture.Forward() * direction.z);
 		rigidbody.AddForce(dir * force * Time.deltaTime);
 		rigidbody.AddForce(Vector3.up * force * Time.deltaTime);
@@ -84,7 +80,7 @@ public class Jumper : Controller
 		base.OnReleasedJump();
 		float f = ForcePercentage();
 
-		if (f > 0.05f) Bump(dir, chargeForce);
+		if (f > chargePercentage) Bump(dir, chargeForce);
 		else Flip();
 
 		Initialize();
