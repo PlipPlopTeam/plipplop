@@ -79,6 +79,7 @@ MonoBehaviour:
   face: {fileID: 7723396102312926875}
   visualsOffset: {x: 0, y: 0, z: 0}
   unpossessSpawnDistance: 1
+  legsRetractedAngularDrag: 0.1
   radiusWhenFlat: 0.1
 --- !u!135 &-6757618450328107466
 SphereCollider:
@@ -105,8 +106,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7f1354dc4d3d4a40bbb2a193721f212, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buyoyancy: 10
-  waterline: -0.11
+  buyoyancy: 1
+  waterline: 0.5
 --- !u!114 &-1075089101332401572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,8 +132,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 011d63a14cf4d8347a5660a929242412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modifiers: []
   preset: {fileID: 11400000, guid: 81c5435995369f048ab3d3d178e1aa7c, type: 2}
-  groundCheckOffset: 0.5
   isFlattened: 0
   rigidbody: {fileID: 0}
   targetDirection: {x: 0, y: 0, z: 0}
