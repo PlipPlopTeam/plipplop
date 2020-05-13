@@ -46,7 +46,7 @@ public class Chair : MonoBehaviour
 		spot.cRotation = Random.Range(spot.orientation.x, spot.orientation.y);
 		Align(sitter, spot);
 		spot.isSitted = true;
-		if (IsStraight()) transform.up = Vector3.up;
+		if (!IsStraight()) transform.up = Vector3.up;
 		if (visual != null) sitter.transform.SetParent(visual);
 	}
 
