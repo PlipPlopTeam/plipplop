@@ -35,6 +35,12 @@ public class Jumper : Controller
 		}
 	}
 
+	internal override void OnLegsExtended()
+	{
+		base.OnLegsExtended();
+		inAir = false;
+	}
+
 	internal override void SpecificMove(Vector3 direction)
 	{
 		dir = direction;
@@ -50,7 +56,7 @@ public class Jumper : Controller
 	internal override void OnHoldJump()
 	{
 		base.OnHoldJump();
-		if (IsGrounded())
+		if (AreLegsRetracted() && IsGrounded())
 		{
 			charging = true;
 			if (chargeTime < chargeMaxTime) chargeTime += Time.deltaTime;
