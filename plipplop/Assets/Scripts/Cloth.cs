@@ -10,6 +10,7 @@ public class Cloth : MonoBehaviour
     public List<Transform> attachs = new List<Transform>();
     public Skeleton.Socket socket;
 	public Renderer renderer;
+	public MaterialPropertyBlock property;
 
     public virtual void Destroy()
     {
@@ -33,6 +34,7 @@ public class Cloth : MonoBehaviour
 
 	public virtual void SetColors(Dictionary<string, Color> colors) // TODO : Should become an array at some point
 	{
+		/*
 		Material[] mats = renderer.sharedMaterials;
 		for (int i = 0; i < mats.Length; i++)
 		{
@@ -42,29 +44,44 @@ public class Cloth : MonoBehaviour
 			}
 		}
 		renderer.sharedMaterials = mats;
+		*/
+		property = new MaterialPropertyBlock();
+		foreach (KeyValuePair<string, Color> c in colors)
+		{
+			property.SetColor(c.Key, c.Value);
+		}
 	}
 	public virtual void SetPatern(ClothPaternPalette.Info info) // TODO : Should become an array at some point
 	{
-		Material[] mats = renderer.sharedMaterials;
+		//Material[] mats = renderer.sharedMaterials;
+		Vector4 vec = new Vector4();
+		float tilling = 1f;
+		if (info.patern.tillingRange.x == info.patern.tillingRange.y)
+		{
+			tilling = info.patern.tillingRange.x;
+		}
+		else
+		{
+			tilling = Random.Range(info.patern.tillingRange.x, info.patern.tillingRange.y);
+		}
+		vec.x = vec.y = tilling;
+
+		if(info.patern.texture != null) property.SetTexture(info.textureProperty, info.patern.texture);
+		property.SetVector(info.tillingProperty, vec);
+		property.SetInt(info.maskProperty, info.patern.useTextureColor);
+
+		/*
 		for (int i = 0; i < mats.Length; i++)
 		{
-			Vector4 vec = new Vector4();
-			float tilling = 1f;
-			if(info.patern.tillingRange.x == info.patern.tillingRange.y)
-			{
-				tilling = info.patern.tillingRange.x;
-			}
-			else
-			{
-				tilling = Random.Range(info.patern.tillingRange.x, info.patern.tillingRange.y);
-			}
-			vec.x = vec.y = tilling;
 
-			mats[i].SetTexture(info.textureProperty, info.patern.texture);
-			mats[i].SetVector(info.tillingProperty, vec);
-			mats[i].SetInt(info.maskProperty, info.patern.useTextureColor);
+
+			mats[i].SetPropertyBlock(mpb);
+
+			//mats[i].SetTexture(info.textureProperty, info.patern.texture);
+			//mats[i].SetVector(info.tillingProperty, vec);
+			//mats[i].SetInt(info.maskProperty, info.patern.useTextureColor);
 		}
-		renderer.sharedMaterials = mats;
+		renderer.sharedMaterials = mats;*/
 	}
 
 	public virtual void Scale(float amount)
@@ -99,13 +116,17 @@ public class Cloth : MonoBehaviour
 		}
 
 		// COPY MATERIAL
+
+		property = new MaterialPropertyBlock();
 		renderer = root.GetComponentInChildren<Renderer>();
-		Material[] mats = renderer.sharedMaterials;
-		for (int i = 0; i < mats.Length; i++) mats[i] = Instantiate(mats[i]);
-		renderer.sharedMaterials = mats;
+		//Material[] mats = renderer.sharedMaterials;
+		//for (int i = 0; i < mats.Length; i++) mats[i] = Instantiate(mats[i]);
+		//renderer.sharedMaterials = mats;
 
 		SetColors(data.GetColors());
 		SetPatern(data.GetPaternInfo());
+
+		renderer.SetPropertyBlock(property);
 	}
 
 	public virtual void Attach(Skeleton target)
