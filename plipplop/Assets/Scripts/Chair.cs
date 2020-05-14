@@ -46,7 +46,7 @@ public class Chair : MonoBehaviour
 		spot.cRotation = Random.Range(spot.orientation.x, spot.orientation.y);
 		Align(sitter, spot);
 		spot.isSitted = true;
-
+		if (!IsStraight()) transform.up = Vector3.up;
 		if (visual != null) sitter.transform.SetParent(visual);
 	}
 
@@ -74,27 +74,29 @@ public class Chair : MonoBehaviour
 	{
 		sitter.transform.localPosition = new Vector3(spot.position.x, spot.position.y - spot.user.skeleton.GetButtHeight(), spot.position.z);
 		//sitter.agentMovement.Orient(visual.up * spot.cRotation);
-		sitter.transform.rotation = Quaternion.Euler(visual.up * spot.cRotation);
+		sitter.transform.rotation = Quaternion.Euler(transform.up * spot.cRotation);
 	}
 
 	public void Update()
 	{
-		if(IsStraight())
+		AlignUsers();
+
+		if (IsStraight())
 		{
-			foreach(Spot s in spots)
-			{
-				if (s.user != null && s.isSitted)
-				{
-					Align(s.user, s);
-					//s.user.transform.localPosition = new Vector3(s.position.x, s.position.y - s.user.skeleton.GetButtHeight(), s.position.z);
-				}
-			}
 			if (!isStraight) isStraight = true;
 		}
 		else if (isStraight)
 		{
-			if(!locked) Dismount();
+			if (!locked) Dismount();
 			isStraight = false;
+		}
+	}
+
+	public void AlignUsers()
+	{
+		foreach (Spot s in spots)
+		{
+			if (s.user != null && s.isSitted) Align(s.user, s);
 		}
 	}
 

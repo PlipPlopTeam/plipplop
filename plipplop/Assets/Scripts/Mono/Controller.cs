@@ -269,7 +269,7 @@ public abstract class Controller : MonoBehaviour
 				{
 					foreach (Transform t in lastFocusedController.visuals.GetComponentsInChildren<Transform>()) t.gameObject.layer = 0;
 				}
-				foreach (Transform t in focusedController.visuals.GetComponentsInChildren<Transform>()) t.gameObject.layer = 9;
+				foreach (Transform t in focusedController.visuals.GetComponentsInChildren<Transform>()) if (t!= null && t.gameObject != null) t.gameObject.layer = 9;
 				lastFocusedController = focusedController;
 			}
 			else if (lastFocusedController != null)
