@@ -168,36 +168,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed02b76bef1c4dc4abf0eb39799d0558, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &277441068
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 277441069}
-  m_Layer: 0
-  m_Name: CameraObjective
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &277441069
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 277441068}
-  m_LocalRotation: {x: -0, y: -0.4999996, z: -0, w: 0.8660257}
-  m_LocalPosition: {x: -2, y: 1, z: -2}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 421273246}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: -60.000004, z: 0}
 --- !u!1 &295666130
 GameObject:
   m_ObjectHideFlags: 0
@@ -599,18 +569,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2930048882873198662, guid: a9b12a5410f258e478d73083ef154f28,
+        type: 3}
+      propertyPath: m_BlendShapeWeights.Array.data[1]
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 753102542, guid: a9b12a5410f258e478d73083ef154f28, type: 3}
-      propertyPath: staticCameraObjective
+      propertyPath: faceMesh
       value: 
-      objectReference: {fileID: 277441069}
+      objectReference: {fileID: 1670443261}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a9b12a5410f258e478d73083ef154f28, type: 3}
---- !u!4 &421273246 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6065630409085648873, guid: a9b12a5410f258e478d73083ef154f28,
-    type: 3}
-  m_PrefabInstance: {fileID: 421273245}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &679940914
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -794,7 +763,7 @@ PrefabInstance:
     - target: {fileID: 4275866964964789025, guid: e2c0836e3e7de4740a9847a65ae9b4fe,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.16
+      value: 12.73
       objectReference: {fileID: 0}
     - target: {fileID: 4275866964964789025, guid: e2c0836e3e7de4740a9847a65ae9b4fe,
         type: 3}
@@ -804,7 +773,7 @@ PrefabInstance:
     - target: {fileID: 4275866964964789025, guid: e2c0836e3e7de4740a9847a65ae9b4fe,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -21.93
+      value: 14.7
       objectReference: {fileID: 0}
     - target: {fileID: 4275866964964789025, guid: e2c0836e3e7de4740a9847a65ae9b4fe,
         type: 3}
@@ -1100,6 +1069,12 @@ MonoBehaviour:
       enableFptlForForwardOpaque: 0
       enableBigTilePrepass: 0
       isFptlEnabled: 0
+--- !u!137 &1670443261 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2930048882873198662, guid: a9b12a5410f258e478d73083ef154f28,
+    type: 3}
+  m_PrefabInstance: {fileID: 421273245}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1783698855
 PrefabInstance:
   m_ObjectHideFlags: 0

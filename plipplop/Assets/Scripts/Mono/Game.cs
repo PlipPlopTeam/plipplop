@@ -5,7 +5,6 @@ using System;
 
 public class Game : MonoBehaviour
 {
-    [Range(0, -100)] public int killZ = -20;
     public Library library;
     public Pyromancer vfx;
     public Spielberg cinematics;
@@ -17,11 +16,11 @@ public class Game : MonoBehaviour
     public ChunkLoader chunkLoader;
     public QuestMaster quests;
     [HideInInspector] public Aperture aperture;
+    [Range(0, -100)] public int killZ = -20;
 
     public Action<float, float> onTransitionCalled;
 
-    public Dialog dialogToBeGrabbed;
-
+    // Dialogs
     static public Game i;
     static public Switches s;
 
@@ -127,9 +126,10 @@ public class Game : MonoBehaviour
         volume.isInvisible = true;
     }
 
-    public void PlayDialogue(Dialog dial)
+    public void PlayDialogue(Dialog dial, TalkableCharacter character)
     {
-        dialogToBeGrabbed = dial;
+        DialogHooks.dialogToBeGrabbed = dial;
+        DialogHooks.currentInterlocutor = character;
     }
 
 }

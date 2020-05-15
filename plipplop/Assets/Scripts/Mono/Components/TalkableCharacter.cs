@@ -7,10 +7,14 @@ public abstract class TalkableCharacter : MonoBehaviour
     public string questUniqueId = "";
     public float talkRadius = 2f;
     public Transform staticCameraObjective;
+    public SkinnedMeshRenderer faceMesh;
 
     SphereCollider sphereTrigger;
-    bool wasTalkingToMe = false;
     Aperture.StaticObjective objective;
+    int? blendShapeIndex = null;
+    List<string> vowels = new List<string>(){ "O", "U", "A", "E", "I" };
+    bool isTalkingToMe { get { return DialogHooks.currentInterlocutor == this; } }
+    float lastVowelTime = 0f;
 
     private void Awake()
     {
@@ -18,6 +22,7 @@ public abstract class TalkableCharacter : MonoBehaviour
         sphereTrigger.radius = talkRadius;
         sphereTrigger.isTrigger = true;
         objective = new Aperture.StaticObjective(new Geometry.PositionAndRotation() { position = staticCameraObjective.position, rotation = staticCameraObjective.rotation });
+        if (faceMesh != null) blendShapeIndex = faceMesh.sharedMesh.GetBlendShapeIndex("Oh");
     }
 
     private void OnTriggerEnter(Collider other)
@@ -51,20 +56,32 @@ public abstract class TalkableCharacter : MonoBehaviour
         }
     }
 
-    private void Update()
+    internal void Update()
     {
-        if (wasTalkingToMe && !Game.i.player.IsParalyzed()) {
-            wasTalkingToMe = false;
-            Game.i.aperture.RemoveStaticObjective(objective);
+        if (isTalkingToMe) {
+            Game.i.player.GetCurrentController().transform.LookAt(this.transform);
+            if (Time.time - lastVowelTime > 0.4f) {
+                var letterIndex = vowels.FindIndex(o => o == DialogHooks.currentPronouncedLetter.ToUpper());
+                var oAmount = (letterIndex >= 0 ? (vowels.Count - (float)letterIndex) / vowels.Count : 0f) * 100f;
+
+                if (blendShapeIndex.HasValue) faceMesh.SetBlendShapeWeight(blendShapeIndex.Value, oAmount);
+                if (oAmount > 0) lastVowelTime = Time.time;
+            }
+        }
+        else {
+            if (blendShapeIndex.HasValue) faceMesh.SetBlendShapeWeight(blendShapeIndex.Value, 0f);
+            if (Game.i.aperture.GetStaticPositionsCount() > 0) Game.i.aperture.RemoveStaticObjective(objective);
         }
     }
 
     public abstract Dialog OnDialogTrigger();
 
+
+
     public void StartDialogue()
     {
         var dial = OnDialogTrigger();
-        Game.i.PlayDialogue(dial);
+        Game.i.PlayDialogue(dial, this);
         Game.i.aperture.AddStaticObjective(objective);
     }
 

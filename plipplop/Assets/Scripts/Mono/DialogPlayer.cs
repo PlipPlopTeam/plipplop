@@ -132,10 +132,13 @@ public class DialogPlayer : MonoBehaviour
         if (!isPlaying)
         {
             parent.localScale = Vector3.Slerp(parent.localScale, Vector3.zero, scaleSpeed * Time.deltaTime);
-            if (Game.i && Game.i.dialogToBeGrabbed != null) {
-                LoadDialogue(Game.i.dialogToBeGrabbed);
-                Game.i.dialogToBeGrabbed = null;
-                Play();
+            if (DialogHooks.dialogToBeGrabbed != null) {
+
+                LoadDialogue(DialogHooks.dialogToBeGrabbed);
+                Play(DialogHooks.callback);
+
+                DialogHooks.callback = null;
+                DialogHooks.dialogToBeGrabbed = null;
             }
             return;
         }
@@ -258,6 +261,11 @@ public class DialogPlayer : MonoBehaviour
                 yield return new WaitForSeconds(periodInterval); // Pause on period
                 currentCharIndex--;
             }
+
+            if (currentCharIndex < line.pureText.Length) {
+                DialogHooks.currentPronouncedLetter = line.pureText[currentCharIndex].ToString();
+            }
+
             currentCharIndex++;
             yield return new WaitForSeconds(currentDialogue.intervalMultiplier * (isGoingFaster ? fastInterval : (isSlowingDown ? slowInterval : baseInterval)));
         }
