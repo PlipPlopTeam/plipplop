@@ -47,20 +47,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minStraightAngle: 45
-  visual: {fileID: 0}
+  visual: {fileID: 2404294134024947214}
   spots:
   - position: {x: 0.01, y: 0.49, z: 0}
     orientation: {x: -30, y: 30}
     user: {fileID: 0}
     isSitted: 0
+    cRotation: 0
   - position: {x: -0.8, y: 0.52, z: 0}
     orientation: {x: -210, y: 45}
     user: {fileID: 0}
     isSitted: 0
+    cRotation: 0
   - position: {x: 0.76, y: 0.52, z: 0}
     orientation: {x: -45, y: 201}
     user: {fileID: 0}
     isSitted: 0
+    cRotation: 0
 --- !u!65 &5372627525623127111
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -100,7 +103,7 @@ MonoBehaviour:
   face: {fileID: 0}
   visualsOffset: {x: 0, y: -0.2, z: 0}
   unpossessSpawnDistance: 1
-  freezeRotationWithLegs: 1
+  legsRetractedAngularDrag: 0.1
 --- !u!1 &9064353907385390030
 GameObject:
   m_ObjectHideFlags: 0

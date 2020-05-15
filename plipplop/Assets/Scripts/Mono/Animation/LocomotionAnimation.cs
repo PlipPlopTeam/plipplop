@@ -35,12 +35,25 @@ public class LocomotionAnimation
         this.visualsTransform = visualsTransform;
         GrowLegs();
         onLegAnimationEnd += legs.onAnimationEnded;
-		movementAnimationMagnitude.Add(0f, "Idle");
-		movementAnimationMagnitude.Add(0.25f, "Walk");
-		movementAnimationMagnitude.Add(4f, "Run");
-	}
+        DefaultWalkCycle();
+    }
 
-	public void Update()
+    public void DefaultWalkCycle()
+    {
+        movementAnimationMagnitude.Clear();
+        movementAnimationMagnitude.Add(0f, "Idle");
+        movementAnimationMagnitude.Add(0.25f, "Walk");
+        movementAnimationMagnitude.Add(4f, "Run");
+    }
+
+    public void HeavyWalkCycle()
+    {
+        movementAnimationMagnitude.Clear();
+        movementAnimationMagnitude.Add(0f, "Idle");
+        movementAnimationMagnitude.Add(0.25f, "WalkHeavy");
+    }
+
+    public void Update()
     {
         if (Game.i.player.GetCurrentController() == null) return;
         legs.transform.localPosition = legsOffset - Vector3.up*(legsHeight);
