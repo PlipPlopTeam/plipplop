@@ -20,7 +20,11 @@ namespace Behavior.NPC
 						}
 						break;
 					case NonPlayableCharacter.ESubject.FOOD:
-						if (npc.food != null) npc.Collect(npc.food);
+						if (npc.food != null)
+						{
+							npc.Collect(npc.food);
+							npc.emo.Show(Emotion.EVerb.SEARCH, npc.food.name);
+						}
 						break;
 				}
 			}

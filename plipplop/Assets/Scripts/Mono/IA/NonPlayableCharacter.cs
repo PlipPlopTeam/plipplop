@@ -342,10 +342,12 @@ public class NonPlayableCharacter : MonoBehaviour
 			if(this.food != null)
 			{
 				this.AddToStat(NonPlayableCharacter.EStat.HUNGER, -this.food.data.calory);
+				this.emo.Show(Emotion.EVerb.SEARCH, "bin");
 				Container c = Game.i.aiZone.GetContainerMadeFor(this.food.type);
 				if (c != null)
 				{
 					this.onStoredItem += () => { this.food = null; };
+					this.emo.Show(Emotion.EVerb.SEARCH, "bin");
 					this.StoreCarriedItem(c);
 				}
 				else
