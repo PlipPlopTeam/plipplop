@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Balloon : Activity, ICarryable
+public class Balloon : Activity
 {
     [Header("BALLOON")]
     public float minDistanceBetween = 3f;
@@ -18,11 +18,6 @@ public class Balloon : Activity, ICarryable
     private List<bool> inPlace = new List<bool>();
     private bool playing;
     private bool flying;
-	private Rigidbody rb;
-	private Collider col;
-
-	private bool carried = false;
-	public bool IsCarried() { return carried; }
 
 	public override void Break()
 	{
@@ -30,46 +25,6 @@ public class Balloon : Activity, ICarryable
 		if(users.Count > 0) users[carrier].Drop();
 		Initialize();
 	}
-
-	void Awake()
-	{
-		rb = GetComponent<Rigidbody>();
-		col = GetComponent<Collider>();
-		Drop();
-	}
-	public virtual void Carry()
-    {
-        if(col != null) col.enabled = false;
-        if(rb != null) rb.isKinematic = true;
-		carried = true;
-    }
-    public virtual void Drop()
-    {
-        if(col != null) col.enabled = true;
-        if(rb != null) rb.isKinematic = false;
-		carried = false;
-	}
-    public float Mass()
-    {
-        if(rb == null) return 0;
-        MeshFilter[] meshFilters = gameObject.GetComponentsInChildren<MeshFilter>();
-        Vector3 size = Vector3.one;
-        foreach(MeshFilter mf in meshFilters)
-        {
-            if(mf.mesh.bounds.size.magnitude > size.magnitude)
-                size = mf.mesh.bounds.size;
-        }
-        return (transform.localScale.magnitude * 3f) * size.magnitude * rb.mass;
-    }
-    public Transform Self()
-    {
-        return transform;
-    }
-
-    void Start()
-    {
-        originPosition = transform.position;
-    }
 
 	public override void StopUsing(NonPlayableCharacter user)
 	{

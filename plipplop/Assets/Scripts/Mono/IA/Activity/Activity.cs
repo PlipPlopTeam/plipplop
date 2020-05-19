@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Linq;
 
-public class Activity : MonoBehaviour
+public class Activity : Valuable
 {
 	[System.Serializable]
 	public class StatMultiplier
@@ -12,13 +12,12 @@ public class Activity : MonoBehaviour
 		public float tiredness = 0f;
 	}
 
-	[Header("Parameters")]
+	[Header("Activity")]
 	public bool activated = true;
 	[HideInInspector] public bool working = true;
 	public int userMax = 0;
 	public int spectatorMax = 0;
 	public Vector2 spectatorRange;
-	[Header("Modifiers")]
 	public float awarnessMultiplier = 1f;
 	public StatMultiplier use = new StatMultiplier();
 	public StatMultiplier spectate = new StatMultiplier();
@@ -39,7 +38,9 @@ public class Activity : MonoBehaviour
         user.stats[NonPlayableCharacter.EStat.BOREDOM] = 0f;
         user.activity = this;
 		user.sight.multiplier = awarnessMultiplier;
-    }
+
+		hidden = Used();
+	}
 
 	public void Vanish(NonPlayableCharacter user)
 	{
@@ -72,6 +73,8 @@ public class Activity : MonoBehaviour
 
 		if (users.Contains(user)) StopUsing(user);
 		else if (spectators.Contains(user)) StopSpectate(user);
+
+		hidden = Used();
 	}
 
 	public void Dismantle()
@@ -89,6 +92,7 @@ public class Activity : MonoBehaviour
 		npc.agentMovement.onDestinationReached += () =>
 		{
 			Look(npc, transform.position);
+			npc.emo.Show(Emotion.EVerb.LOVE, Name());
 		};
 	}
 
@@ -129,7 +133,13 @@ public class Activity : MonoBehaviour
 		}
 	}
 
-    [ContextMenu("Break")]
+	public virtual void Kick(NonPlayableCharacter user)
+	{
+		user.emo.Show(Emotion.EVerb.HATE, Name());
+		Exit(user);
+	}
+
+	[ContextMenu("Break")]
     public virtual void Break()
     {
         KickAll();
@@ -168,6 +178,12 @@ public class Activity : MonoBehaviour
 					user.AddToStat(NonPlayableCharacter.EStat.BOREDOM, use.boredom);
 					user.AddToStat(NonPlayableCharacter.EStat.TIREDNESS, use.tiredness);
 					user.AddToStat(NonPlayableCharacter.EStat.HUNGER, use.hunger);
+
+					if(user.GetStat(NonPlayableCharacter.EStat.BOREDOM) > 50f
+					&& user.GetStat(NonPlayableCharacter.EStat.BOREDOM) < 60f)
+					{
+						user.emo.Show(Emotion.EVerb.LOVE, Name());
+					}
 				}
 			}
 		}

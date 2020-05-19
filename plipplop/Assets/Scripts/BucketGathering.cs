@@ -16,7 +16,6 @@ public class BucketGathering : Activity
     private int currentCount = 0;
     private Item shellItem;
     private Vector3 target;
-    private Vector3 origin;
 
     public void Start()
     {
@@ -29,7 +28,6 @@ public class BucketGathering : Activity
         going = false;
         storing = false;
         currentCount = 0;
-        origin = transform.position;
     }
 
     public override void Break()
@@ -44,7 +42,7 @@ public class BucketGathering : Activity
         Initialize();
         if (user.look != null) user.look.FocusOn(transform);
         collecting = true;
-        container.Constraint();
+        Constraint();
         transform.up = Vector3.up;
     }
 
@@ -54,7 +52,7 @@ public class BucketGathering : Activity
         base.StopUsing(user);
         user.Drop();
         user.agentMovement.onDestinationReached = null;
-        container.UnConstraint();
+        UnConstraint();
     }
 
     public Vector3 GetLootPosition()

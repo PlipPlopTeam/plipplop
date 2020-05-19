@@ -110,12 +110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22b8d1c39dccc7a43902416881ea551e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shape: 0
-  rb: {fileID: 1059592398460033694}
-  collider: {fileID: 8431864367378909543}
-  weight: 2
-  type: 3
-  visuals: {fileID: 2311994614255438416}
+  holder: {fileID: 5890182067551119135}
   showStoredItem: 1
   randomizeStoreItemRotation: 1
   storedOffset: {x: 0, y: 0.35, z: 0}
@@ -135,6 +130,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7d2135024fe5114fa9f21a847e7cd56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  physiqued: 1
+  shape: 0
+  rb: {fileID: 1059592398460033694}
+  collider: {fileID: 8431864367378909543}
+  type: 3
+  weight: 1
+  visuals: {fileID: 2311994614255438416}
+  origin: {x: 0, y: 0, z: 0}
+  distanceThreshold: 2
+  hidden: 0
   activated: 1
   working: 1
   userMax: 0
@@ -198,10 +203,7 @@ MonoBehaviour:
   face: {fileID: 0}
   visualsOffset: {x: 0, y: -0.15, z: 0}
   unpossessSpawnDistance: 1
-  applyConstraints: 1
-  extendLegsConstraint: 112
-  retractedLegsConstraint: 0
-  debugFoodItem: {fileID: 0}
+  legsRetractedAngularDrag: 0.1
 --- !u!1 &4392316628912808224
 GameObject:
   m_ObjectHideFlags: 0

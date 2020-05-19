@@ -4,32 +4,31 @@ using System.Collections.Generic;
 public class Valuable : Item, INoticeable, ICarryable
 {
     [HideInInspector] public Vector3 origin;
-    [Header("Settings")]
+    [Header("Valuable")]
     public float distanceThreshold = 2f;
     public bool hidden = false;
 
-	void Start()
+	public virtual void Awake()
     {
         origin = transform.position;
     }
-	public void Notice()
+	public virtual void Notice()
     {
         // Does things..
     }
-    public bool IsVisible()
+	public virtual bool IsVisible()
     {
 		return !hidden;// && !IsSurroundedBySameItem();
     }
-    public void SetVisible(bool value)
+	public virtual void SetVisible(bool value)
     {
         hidden = value;
     }
-    public bool HasMoved()
+	public virtual bool HasMoved()
     {
         return Vector3.Distance(origin, transform.position) > distanceThreshold;
     }
-
-	public bool IsSurroundedBySameItem()
+	public virtual bool IsSurroundedBySameItem()
 	{
 		MeshFilter mf = gameObject.GetComponentInChildren<MeshFilter>();
 		if (mf != null)

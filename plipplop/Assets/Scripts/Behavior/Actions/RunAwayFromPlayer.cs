@@ -18,6 +18,7 @@ namespace Behavior.NPC
 				Vector3 direction = (npc.transform.position - pos).normalized;
 				Vector3 position = npc.transform.position + direction * Random.Range(distanceRange.x, distanceRange.y);
 				npc.agentMovement.GoThere(position);
+				npc.emo.Show(Emotion.EVerb.SURPRISE, "plipplop");
 			}
 
 		}
