@@ -31,7 +31,7 @@ Transform:
   m_LocalPosition: {x: 161, y: 6, z: 149.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 5538838702860065191}
+  - {fileID: 6561289346624892208}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 11.961, z: 0}
@@ -310,12 +310,43 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 14
   m_Mesh: {fileID: 0}
+--- !u!1 &4533275486353880972
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6561289346624892208}
+  m_Layer: 0
+  m_Name: Visuals
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6561289346624892208
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4533275486353880972}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 5538838702860065191}
+  m_Father: {fileID: 1687719068054473794}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &695626624769553085
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 1687719068054473794}
+    m_TransformParent: {fileID: 6561289346624892208}
     m_Modifications:
     - target: {fileID: -927199367670048503, guid: 5ff05112240abdf498b784e52beaf0cc,
         type: 3}
@@ -325,7 +356,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 5ff05112240abdf498b784e52beaf0cc,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.19
+      value: 3.1899931
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 5ff05112240abdf498b784e52beaf0cc,
         type: 3}
@@ -335,7 +366,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 5ff05112240abdf498b784e52beaf0cc,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.09
+      value: -3.089996
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 5ff05112240abdf498b784e52beaf0cc,
         type: 3}
