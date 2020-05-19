@@ -347,7 +347,6 @@ public class NonPlayableCharacter : MonoBehaviour
 				if (c != null)
 				{
 					this.onStoredItem += () => { this.food = null; };
-					this.emo.Show(Emotion.EVerb.SEARCH, "bin");
 					this.StoreCarriedItem(c);
 				}
 				else
