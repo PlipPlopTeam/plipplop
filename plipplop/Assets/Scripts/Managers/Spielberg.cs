@@ -86,6 +86,36 @@ public class Spielberg
 
     }
 
+    public void KinoDisableNPC(string npcName)
+    {
+        currentAssistant.ToggleNPCAI(npcName, false);
+    }
+
+    public void KinoEnableNPC(string npcName)
+    {
+        currentAssistant.ToggleNPCAI(npcName, false);
+    }
+
+    public void KinoNPCGoTo(string npcGoTo, string objectiveName)
+    {
+        currentAssistant.NPCGoTo(npcGoTo, objectiveName);
+    }
+
+    public void KinoNPCUseActivity(string npc, string act)
+    {
+        currentAssistant.ToggleNPCActivity(npc, act, true);
+    }
+
+    public void KinoNPCStopUsingActivity(string npc, string act)
+    {
+        currentAssistant.ToggleNPCActivity(npc, act, false);
+    }
+
+    public void KinoNPCEject(NonPlayableCharacter npc, Emotion.EVerb verb, string[] subjects, Emotion.EBubble bubbleType)
+    {
+        npc.emo.Show(verb, subjects, bubbleType);
+    }   
+
     public void KinoScreenShake(float time, float force)
     {
         Game.i.aperture.Shake(force, time);
