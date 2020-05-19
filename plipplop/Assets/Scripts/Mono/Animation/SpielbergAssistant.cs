@@ -194,6 +194,56 @@ public class SpielbergAssistant : MonoBehaviour
         Game.i.cinematics.OnCinematicEnded();
     }
 
+    public void ToggleNPCAI(string npcName, bool toggle)
+    {
+        var npc = GetNPCByName(npcName);
+        if (toggle) {
+            npc.graph.Play();
+        }
+        else {
+            npc.graph.Pause();
+        }
+    }
+
+    public void ToggleNPCActivity(string npcName, string activity, bool toggle)
+    {
+        var npc = GetNPCByName(npcName);
+        var t = GetChildInChildren(transform, activity);
+        if (t == null) {
+            Debug.LogError("SPIELBERG ERROR: Activity " + activity + " does not exist or is not a CHILD of SpielbergAssistant");
+        }
+        var activityComponent = t.GetComponent<Activity>();
+
+        if (toggle) {
+            activityComponent.Enter(npc);
+        }
+        else {
+            activityComponent.Exit(npc);
+        }
+    }
+
+    public void NPCGoTo(string npcName, string target)
+    {
+        var t = GetChildInChildren(transform, target);
+        if (t == null) {
+            Debug.LogError("SPIELBERG ERROR: TARGET " + target + " does not exist or is not a CHILD of SpielbergAssistant");
+        }
+        var targetPosition = t.position;
+        var npc = GetNPCByName(npcName);
+
+        npc.agentMovement.GoThere(targetPosition, true);
+    }
+
+    NonPlayableCharacter GetNPCByName(string npcName)
+    {
+        var t = GetChildInChildren(transform, npcName);
+        if (t == null) {
+            Debug.LogError("SPIELBERG ERROR: NPC " + npcName + " does not exist or is not a CHILD of SpielbergAssistant");
+        }
+        var npc = t.GetComponent<NonPlayableCharacter>();
+        return npc;
+    }
+
     public void SwitchCamera(string cameraName)
     {
         var t = GetChildInChildren(transform, cameraName);
@@ -214,15 +264,16 @@ public class SpielbergAssistant : MonoBehaviour
 
     Transform GetChildInChildren(Transform t, string name)
     {
-        if (t.name == name) {
+        if (t.gameObject.name == name) {
             return t;
         }
-        else {
-            for (int i = 0; i < t.childCount; i++) {
-                var child = t.GetChild(i);
-                return GetChildInChildren(child, name);
-            }
+      
+        for (int i = 0; i < t.childCount; i++) {
+            var child = t.GetChild(i);
+            var match = GetChildInChildren(child, name);
+            if (match != null) return match;
         }
+
         return null;
     }
 }
