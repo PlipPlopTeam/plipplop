@@ -48,10 +48,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bccc8716c5c04ea4b98779e513411550, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  physiqued: 1
   shape: 0
   rb: {fileID: 2158725821823055558}
   collider: {fileID: 926692690632261237}
-  visual: {fileID: 8824192381437080294}
+  type: 3
+  weight: 1
+  visuals: {fileID: 8824192381437080294}
   line: {fileID: 7411207402727220484}
   maxHeight: 5
   maxRange: 1
@@ -224,6 +227,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70f2a96fce2d1444591ad435ad7ee215, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  physiqued: 1
+  shape: 0
+  rb: {fileID: 0}
+  collider: {fileID: 0}
+  type: 3
+  weight: 1
+  visuals: {fileID: 0}
+  origin: {x: 0, y: 0, z: 0}
+  distanceThreshold: 2
+  hidden: 0
+  activated: 1
   working: 1
   userMax: 1
   spectatorMax: 3
@@ -237,6 +251,8 @@ MonoBehaviour:
     boredom: 1
     hunger: 0
     tiredness: 1
+  users: []
+  spectators: []
   kite: {fileID: 4921190021556312007}
 --- !u!1 &8824192381437080294
 GameObject:

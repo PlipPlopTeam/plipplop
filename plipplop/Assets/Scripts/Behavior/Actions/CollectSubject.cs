@@ -13,10 +13,18 @@ namespace Behavior.NPC
 				switch (subject)
 				{
 					case NonPlayableCharacter.ESubject.VALUABLE:
-						if (npc.valuable != null) npc.Collect(npc.valuable);
+						if (npc.valuable != null)
+						{
+							npc.Collect(npc.valuable);
+							npc.emo.Show(Emotion.EVerb.HATE, npc.valuable.Name());
+						}
 						break;
 					case NonPlayableCharacter.ESubject.FOOD:
-						if (npc.food != null) npc.Collect(npc.food);
+						if (npc.food != null)
+						{
+							npc.Collect(npc.food);
+							npc.emo.Show(Emotion.EVerb.SEARCH, npc.food.name);
+						}
 						break;
 				}
 			}

@@ -11,8 +11,6 @@ public class Bike : Activity
     [Header("BIKE")]
     public float speed = 10f;
 	public AIPath path;
-    public Collider col;
-    public Rigidbody rb;
 
 	public override void StartUsing(NonPlayableCharacter user)
 	{
@@ -23,7 +21,7 @@ public class Bike : Activity
 		transform.SetParent(user.transform);
 		transform.localPosition = Vector3.zero;
 		transform.forward = user.transform.forward;
-		col.enabled = false;
+		collider.enabled = false;
 		rb.isKinematic = true;
 	}
 	public override void StopUsing(NonPlayableCharacter user)
@@ -32,7 +30,7 @@ public class Bike : Activity
 		user.agentMovement.ResetSpeed();
 		full = false;
 		transform.SetParent(null);
-		col.enabled = true;
+		collider.enabled = true;
 		rb.isKinematic = false;
 	}
 

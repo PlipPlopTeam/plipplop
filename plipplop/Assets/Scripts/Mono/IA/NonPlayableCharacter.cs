@@ -342,6 +342,7 @@ public class NonPlayableCharacter : MonoBehaviour
 			if(this.food != null)
 			{
 				this.AddToStat(NonPlayableCharacter.EStat.HUNGER, -this.food.data.calory);
+				this.emo.Show(Emotion.EVerb.SEARCH, "bin");
 				Container c = Game.i.aiZone.GetContainerMadeFor(this.food.type);
 				if (c != null)
 				{
@@ -405,6 +406,10 @@ public class NonPlayableCharacter : MonoBehaviour
 		stats[name] = value;
 		if(stats[name] >= 100f) stats[name] = 100f;
 		else if(stats[name] < 0f) stats[name] = 0f;
+	}
+	public float GetStat(EStat name)
+	{
+		return stats[name];
 	}
 
 	public void GoSitThere(Vector3 where)

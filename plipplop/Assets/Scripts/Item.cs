@@ -4,23 +4,26 @@ public class Item : MonoBehaviour, ICarryable
 	public enum EColliderShape { BOX, SPHERE, CAPSULE }
 	public enum EType { TRASH, FOOD, ABSTRACT, OTHER }
 
-	[Header("Physics")]
-	public EColliderShape shape;
+    [Header("Item")]
+    public bool physiqued = true;
+    public EColliderShape shape;
     public Rigidbody rb;
 	public Collider collider;
-    public float weight = 1f;
-
-    [Header("Item")]
+    [Space(5)]
 	public EType type = EType.OTHER;
-	public GameObject visuals;
+    public float weight = 1f;
+    public GameObject visuals;
 
     private bool carried = false;
 	public bool IsCarried() { return carried; }
 
 	public virtual void Awake()
     {
-        if(rb == null) rb = GetComponent<Rigidbody>();
-        if(rb == null) rb = gameObject.AddComponent<Rigidbody>();
+        if(physiqued)
+        {
+            if (rb == null) rb = GetComponent<Rigidbody>();
+            if (rb == null) rb = gameObject.AddComponent<Rigidbody>();
+        }
         if(carried) Carry();
         else Drop();
     }
@@ -28,6 +31,11 @@ public class Item : MonoBehaviour, ICarryable
     public Transform Self()
     {
         return transform;
+    }
+
+    public string Name()
+    {
+        return GetType().ToString().ToLower();
     }
 
     public virtual float Mass()

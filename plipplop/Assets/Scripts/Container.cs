@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class Container : Item
+public class Container : MonoBehaviour
 {
 	[Header("Settings")]
+	public Transform holder;
 	public bool showStoredItem = true;
 	public bool randomizeStoreItemRotation = true;
 	public Vector3 storedOffset;
@@ -16,9 +17,8 @@ public class Container : Item
 	public System.Action onItemStored;
 	public System.Action onItemRemoved;
 
-	public override void Awake()
+	public void Awake()
 	{
-        base.Awake();
 		Game.i.aiZone.Register(this);
 	}
 
@@ -42,7 +42,10 @@ public class Container : Item
 	public virtual void Store(Item item)
 	{
 		item.Carry();
-		item.transform.SetParent(visuals.transform);
+
+		if(holder != null) item.transform.SetParent(holder);
+		else item.transform.SetParent(transform);
+
 		item.transform.localPosition = Vector3.zero;
 		items.Add(item);
 

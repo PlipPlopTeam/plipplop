@@ -140,6 +140,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abc82ba538b305d408e7b9fd325dd89d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  physiqued: 0
+  shape: 0
+  rb: {fileID: 0}
+  collider: {fileID: 0}
+  type: 3
+  weight: 1
+  visuals: {fileID: 0}
+  origin: {x: 0, y: 0, z: 0}
+  distanceThreshold: 2
+  hidden: 0
   activated: 1
   working: 1
   userMax: 1
@@ -154,6 +164,8 @@ MonoBehaviour:
     boredom: 1
     hunger: 0
     tiredness: 0
+  users: []
+  spectators: []
   castlePrefab: {fileID: -927199367670048503, guid: e3726fd690310d74fa371208470d0c42,
     type: 3}
   radius: 0.1

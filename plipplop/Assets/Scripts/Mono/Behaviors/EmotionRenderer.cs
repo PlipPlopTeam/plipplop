@@ -58,7 +58,8 @@ public class EmotionRenderer : MonoBehaviour
 
     public void Show(Emotion.EVerb verbId, string subjectName, Emotion.EBubble bubble = Emotion.EBubble.THINK)
     {
-        Show(verbId, new string[] { subjectName }, bubble);
+        if(!isDisplayingEmotion)
+            Show(verbId, new string[] { subjectName }, bubble);
     }
 
     public void Show(Emotion.EVerb verbId, string[] subjectNames, Emotion.EBubble bubble=Emotion.EBubble.THINK)

@@ -84,6 +84,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf1a434f98f934e4a9967fc76afcf94c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  physiqued: 0
+  shape: 0
+  rb: {fileID: 0}
+  collider: {fileID: 0}
+  type: 3
+  weight: 1
+  visuals: {fileID: 1594647129514542324}
+  origin: {x: 0, y: 0, z: 0}
+  distanceThreshold: 2
+  hidden: 1
   activated: 1
   working: 1
   userMax: 6
@@ -98,6 +108,8 @@ MonoBehaviour:
     boredom: 1
     hunger: 0
     tiredness: 0
+  users: []
+  spectators: []
   radius: {x: 1.5, y: 5}
 --- !u!135 &1594647130759019486
 SphereCollider:
@@ -1092,6 +1104,11 @@ PrefabInstance:
         type: 3}
       propertyPath: NoiseModule.frequency
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1645384255591696246, guid: 9750408f399c29b4ab2ce962758d2996,
+        type: 3}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9750408f399c29b4ab2ce962758d2996, type: 3}
@@ -2407,6 +2424,11 @@ PrefabInstance:
         type: 3}
       propertyPath: NoiseModule.frequency
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1645384255591696246, guid: 9750408f399c29b4ab2ce962758d2996,
+        type: 3}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9750408f399c29b4ab2ce962758d2996, type: 3}

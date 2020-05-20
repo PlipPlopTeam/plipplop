@@ -644,7 +644,6 @@ GameObject:
   - component: {fileID: 2095127333375553499}
   - component: {fileID: 2095127333375553501}
   - component: {fileID: 2095127333375553500}
-  - component: {fileID: 2095127333375553488}
   - component: {fileID: -212437679873209963}
   - component: {fileID: 1115021647775620768}
   - component: {fileID: 2123568107042607502}
@@ -700,27 +699,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &2095127333375553488
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2095127333375553498}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27bebb278a4489e489e5558d1c6671af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shape: 0
-  rb: {fileID: 2095127333375553500}
-  collider: {fileID: 2095127333375553501}
-  weight: 25
-  type: 3
-  visuals: {fileID: 2095127333941081579}
-  origin: {x: 0, y: 0, z: 0}
-  distanceThreshold: 1
-  hidden: 0
 --- !u!114 &-212437679873209963
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -747,6 +725,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aabc07795cb8444449e1d9061cd21258, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  physiqued: 1
+  shape: 0
+  rb: {fileID: 2095127333375553500}
+  collider: {fileID: 2095127333375553501}
+  type: 3
+  weight: 1
+  visuals: {fileID: 2095127333941081579}
+  origin: {x: 0, y: 0, z: 0}
+  distanceThreshold: 2
+  hidden: 0
   activated: 1
   working: 1
   userMax: 0
@@ -2971,16 +2959,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2095127333941081580}
     m_Modifications:
-    - target: {fileID: 2028403518381436196, guid: 42edcef2484d1d446ab328bcc85a43fa,
-        type: 3}
-      propertyPath: m_Name
-      value: Face_Plip
-      objectReference: {fileID: 0}
-    - target: {fileID: 2028403518381436196, guid: 42edcef2484d1d446ab328bcc85a43fa,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7962972514405291281, guid: 42edcef2484d1d446ab328bcc85a43fa,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3050,6 +3028,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2028403518381436196, guid: 42edcef2484d1d446ab328bcc85a43fa,
+        type: 3}
+      propertyPath: m_Name
+      value: Face_Plip
+      objectReference: {fileID: 0}
+    - target: {fileID: 2028403518381436196, guid: 42edcef2484d1d446ab328bcc85a43fa,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42edcef2484d1d446ab328bcc85a43fa, type: 3}
