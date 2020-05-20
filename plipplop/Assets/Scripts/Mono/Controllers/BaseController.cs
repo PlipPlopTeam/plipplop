@@ -61,10 +61,12 @@ public class BaseController : Controller
     internal override void OnLegsRetracted()
     {
         // Code here
+        rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
     }
 
     internal override void OnLegsExtended()
     {
         // Code here
+        
     }
 }
