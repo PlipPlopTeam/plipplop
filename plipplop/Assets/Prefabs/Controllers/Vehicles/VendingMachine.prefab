@@ -420,6 +420,10 @@ MonoBehaviour:
   throwers:
   - {fileID: 6665907460514541257}
   rotateSpeed: 100
+  lateralSpeed: 2
+  chargeMaxTime: 1.5
+  chargeMaxForce: 1000
+  aimDistanceMax: 25
   sensitivity: 0.5
   lerpRotation: 10
   lerpPosition: 5
@@ -429,7 +433,10 @@ MonoBehaviour:
   minAngle: -45
   maxAngle: 45
   camerOffset: {x: 2.25, y: 1.5, z: -3.35}
+  aimOffset: {x: 0, y: 0, z: 0}
+  shoot: 0
   aim: 0
+  chargePercentage: 0
 --- !u!114 &5348957801613606141
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -507,7 +514,9 @@ MonoBehaviour:
     type: 3}
   gunEnd: {fileID: 1418834894459689619}
   ps: {fileID: 0}
+  sfx: 
   force: 100
+  torque: 100
 --- !u!111 &535352308131647234
 Animation:
   m_ObjectHideFlags: 0

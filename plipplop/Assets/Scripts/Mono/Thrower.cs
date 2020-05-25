@@ -6,9 +6,12 @@ public class Thrower : MonoBehaviour
     public GameObject prefabToThrow;
     public Transform gunEnd;
     public ParticleSystem ps;
+    public string sfx;
 
     [Header("Settings")]
-    public float force;
+    public float force = 1000f;
+    public float torque = 0f;
+
     private Projectile arrow;
 
     public void Reload()
@@ -27,11 +30,12 @@ public class Thrower : MonoBehaviour
         if(arrow != null)
         {
             arrow.transform.SetParent(null);
-            arrow.Throw(gunEnd.forward, force);
+            arrow.Throw(gunEnd.forward, force, torque);
             arrow = null;
         }
 
         if(ps != null) ps.Play();
+        if (sfx != "") SoundPlayer.PlayAtPosition(sfx, transform.position);
     }
 
     public void OnDestroy()
