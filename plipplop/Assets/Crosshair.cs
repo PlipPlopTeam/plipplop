@@ -4,8 +4,8 @@ public class Crosshair : MonoBehaviour
 {
 
 	[Header("Settings")]
-	public float openDistance = 100f;
-	public float closedDistance = 50f;
+	public float minGap = 40f;
+	public float maxGap = 70f;
 	[Header("References")]
 	public RectTransform up;
 	public RectTransform right;
@@ -14,7 +14,6 @@ public class Crosshair : MonoBehaviour
 
 
 	private bool shown;
-	private bool closed;
 
 	public void Show()
 	{
@@ -23,8 +22,7 @@ public class Crosshair : MonoBehaviour
 		right.gameObject.SetActive(true);
 		down.gameObject.SetActive(true);
 		left.gameObject.SetActive(true);
-		Open();
-
+		Gap(maxGap);
 	}
 
 	public void Hide()
@@ -36,22 +34,12 @@ public class Crosshair : MonoBehaviour
 		left.gameObject.SetActive(false);
 	}
 
-	public void Open()
+	public void Gap(float d)
 	{
-		closed = false;
-		up.transform.localPosition = new Vector3(0f, openDistance, 0f);
-		down.transform.localPosition = new Vector3(0f, -openDistance, 0f);
-		right.transform.localPosition = new Vector3(openDistance, 0f, 0f);
-		left.transform.localPosition = new Vector3(-openDistance, 0f, 0f);
-	}
-
-	public void Close()
-	{
-		closed = true;
-		up.transform.localPosition = new Vector3(0f, closedDistance, 0f);
-		down.transform.localPosition = new Vector3(0f, -closedDistance, 0f);
-		right.transform.localPosition = new Vector3(closedDistance, 0f, 0f);
-		left.transform.localPosition = new Vector3(-closedDistance, 0f, 0f);
+		up.transform.localPosition = new Vector3(0f, d, 0f);
+		down.transform.localPosition = new Vector3(0f, -d, 0f);
+		right.transform.localPosition = new Vector3(d, 0f, 0f);
+		left.transform.localPosition = new Vector3(-d, 0f, 0f);
 	}
 
 	void Update()
@@ -63,12 +51,7 @@ public class Crosshair : MonoBehaviour
 				if (!s.AreLegsRetracted())
 				{
 					if (!shown) Show();
-
-					if(s.aim)
-					{
-						if (!closed) Close();
-					}
-					else if (closed) Open();
+					else Gap(minGap + ((1f - s.chargePercentage) * (maxGap - minGap)));
 				}
 				else if (shown) Hide();
 			}

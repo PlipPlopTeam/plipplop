@@ -4,7 +4,15 @@ public class Shooter : Controller
 {
     [Header("Shooter")]
     public Thrower[] throwers;
+
+    [Header("Movement")]
     public float rotateSpeed = 100f;
+    public float lateralSpeed = 1f;
+
+    [Header("Shoot")]
+    public float chargeMaxTime = 3f;
+    public float chargeMaxForce = 1000f;
+    public float aimDistanceMax = 10f;
 
     [Header("Camera")]
     public float sensitivity = 1f;
@@ -20,7 +28,13 @@ public class Shooter : Controller
     private Vector3 look;
     private float vertical;
     private float fov;
+    private float chargeForce = 0f;
+    private float chargeTime = 3f;
+    public Vector3 aimOffset;
+
+    [HideInInspector] public bool shoot;
     [HideInInspector] public bool aim;
+    [HideInInspector] public float chargePercentage;
 
     public override void OnPossess()
     {
@@ -42,13 +56,62 @@ public class Shooter : Controller
         SoundPlayer.Play("sfx_click");
     }
 
+    internal override void OnHoldShoot()
+    {
+        base.OnHoldShoot();
+        if (!AreLegsRetracted())
+        {
+            if (chargeTime < chargeMaxTime) chargeTime += Time.deltaTime;
+            else Shoot();
+
+            chargePercentage = chargeTime / chargeMaxTime;
+            chargeForce = chargePercentage * chargeMaxForce;
+        }
+    }
+
+    internal override void OnShootDown()
+    {
+        base.OnShootDown();
+        shoot = false;
+    }
+
+    public void Shoot()
+    {
+        Ray ray = Game.i.aperture.currentCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+
+        Vector3 target = transform.position + ray.direction * aimDistanceMax;
+
+        if (Physics.Raycast(ray, out RaycastHit h, aimDistanceMax))
+        {
+            target = h.point;
+        }
+
+        foreach (Thrower t in throwers)
+        {
+            t.gunEnd.forward = (target - t.gunEnd.transform.position).normalized;
+            t.force = chargeForce;
+            t.Shoot();
+            t.Reload();
+        }
+
+        chargePercentage = 0f;
+        chargeForce = 0f;
+        chargeTime = 0f;
+        shoot = true;
+    }
+
+    internal override void OnShootUp()
+    {
+        base.OnShootUp();
+        if (!shoot) Shoot();
+    }
+
     internal override void OnAimUp()
     {
         aim = false;
         fov = defaultFOV;
         SoundPlayer.Play("sfx_clack");
     }
-
 
     internal override void Update()
     {
@@ -71,6 +134,7 @@ public class Shooter : Controller
             Game.i.aperture.currentCamera.fieldOfView = Mathf.Lerp(Game.i.aperture.currentCamera.fieldOfView, fov, Time.deltaTime * lerpFOV);
 
             transform.Rotate(transform.up * Game.i.player.mapping.Axis(EAction.CAMERA_HORIZONTAL) * Time.deltaTime * rotateSpeed);
+            transform.position += transform.right * Game.i.player.mapping.Axis(EAction.MOVE_RIGHT_LEFT) * Time.deltaTime * lateralSpeed;
         }
     }
 
@@ -88,14 +152,5 @@ public class Shooter : Controller
     internal override void OnLegsExtended()
     {
         Game.i.aperture.Freeze();
-    }
-
-    internal override void OnJump()
-    {
-        foreach(Thrower t in throwers)
-        {
-            t.Shoot();
-            t.Reload();
-        }
     }
 }
