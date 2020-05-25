@@ -24,8 +24,9 @@ public class Library
     public GameObject controllerSensor;
     public GameObject baseControllerPrefab;
 	public GameObject teleporterVolumePrefab;
+	public GameObject shooterCamera;
 	public GameObject torchPrefab;
-	public GameObject sweatParticle;
+    public GameObject sweatParticle;
     public GameObject canvas;
 
     [Header("Cloth")]
