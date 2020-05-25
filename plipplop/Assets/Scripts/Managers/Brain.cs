@@ -101,9 +101,17 @@ public class Brain
         if (mapping.IsReleased(EAction.JUMP)) controller.OnReleasedJump();
 		if (mapping.IsPressed(EAction.TOGGLE_LEGS)) controller.ToggleLegs();
         if (mapping.IsPressed(EAction.SHOUT)) controller.Shout();
+
+        if (mapping.IsPressed(EAction.AIM)) controller.OnAimDown();
+        if (mapping.IsHeld(EAction.AIM)) controller.OnHoldAim();
+        if (mapping.IsReleased(EAction.AIM)) controller.OnAimUp();
+
+        if (mapping.IsPressed(EAction.SHOOT)) controller.OnShootDown();
+        if (mapping.IsHeld(EAction.SHOOT)) controller.OnHoldShoot();
+        if (mapping.IsReleased(EAction.SHOOT)) controller.OnShootUp();
     }
 
-	public void Possess(Controller controller, bool isImmediate=false)
+    public void Possess(Controller controller, bool isImmediate=false)
     {
         if (controller != baseController) SoundPlayer.Play("sfx_morph");
 
