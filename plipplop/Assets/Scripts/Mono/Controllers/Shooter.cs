@@ -8,11 +8,14 @@ public class Shooter : Controller
     [Header("Movement")]
     public float rotateSpeed = 100f;
     public float lateralSpeed = 1f;
-
+    public float stepShakeIntensity;
+    public float stepShakeDuration;
     [Header("Shoot")]
     public float chargeMaxTime = 3f;
     public float chargeMaxForce = 1000f;
     public float aimDistanceMax = 10f;
+    public float shootShakeIntensity;
+    public float shootShakeDuration;
 
     [Header("Camera")]
     public float sensitivity = 1f;
@@ -41,6 +44,63 @@ public class Shooter : Controller
         base.OnPossess();
         foreach(Thrower t in throwers) t.Reload();
         OnAimUp();
+        locomotion.locomotionAnimation.HeavyWalkCycle();
+        locomotion.locomotionAnimation.legs.onStep += () =>
+        {
+            Shake(stepShakeIntensity, stepShakeDuration);
+        };
+    }
+
+    private float shakeTimer;
+    private float shakeDuration;
+    private float shakeIntensity;
+    private bool shaking = false;
+
+    public void Shake(float intensity = 0.5f, float duration = 0.25f)
+    {
+        shakeIntensity = intensity;
+        shakeDuration = duration;
+        shakeTimer = shakeDuration;
+        shaking = true;
+    }
+
+    internal override void Update()
+    {
+        base.Update();
+        if (IsPossessed() && !AreLegsRetracted())
+        {
+            Vector3 camOffset = Vector3.zero;
+
+            if (shaking)
+            {
+                if (shakeTimer > 0f) shakeTimer -= Time.deltaTime;
+                else shaking = false;
+                camOffset = Random.insideUnitCircle * shakeIntensity * (shakeTimer / shakeDuration);
+            }
+
+            // Calculate Camera Position
+            Vector3 o = transform.position + camOffset;
+            o += camerOffset.x * transform.right;
+            o += camerOffset.y * transform.up;
+            o += camerOffset.z * transform.forward;
+            // Calculate Camera Rotation
+            vertical -= Game.i.player.mapping.Axis(EAction.CAMERA_VERTICAL) * sensitivity;
+            look = transform.eulerAngles;
+            look.z = 0f;
+            look.x = Mathf.Clamp(vertical, minAngle, maxAngle);
+            // Apply Camera Position and Rotation
+            Game.i.aperture.currentCamera.transform.rotation = Quaternion.Lerp(Game.i.aperture.currentCamera.transform.rotation, Quaternion.Euler(look), Time.deltaTime * lerpRotation);
+            Game.i.aperture.currentCamera.transform.position = Vector3.Lerp(Game.i.aperture.currentCamera.transform.position, o, Time.deltaTime * lerpPosition);
+            Game.i.aperture.currentCamera.fieldOfView = Mathf.Lerp(Game.i.aperture.currentCamera.fieldOfView, fov, Time.deltaTime * lerpFOV);
+
+            float r = Game.i.player.mapping.Axis(EAction.MOVE_RIGHT_LEFT);
+            float f = Game.i.player.mapping.Axis(EAction.MOVE_FORWARD_BACK);
+
+            transform.Rotate(transform.up * Game.i.player.mapping.Axis(EAction.CAMERA_HORIZONTAL) * Time.deltaTime * rotateSpeed);
+            rigidbody.AddForce(transform.right * r * Time.deltaTime * lateralSpeed);
+
+            locomotion.locomotionAnimation.legs.transform.localEulerAngles = new Vector3(0f, r * 90f, 0f);
+        }
     }
 
     public override void OnEject()
@@ -62,7 +122,7 @@ public class Shooter : Controller
         if (!AreLegsRetracted())
         {
             if (chargeTime < chargeMaxTime) chargeTime += Time.deltaTime;
-            else Shoot();
+            else if(shhot Shoot();
 
             chargePercentage = chargeTime / chargeMaxTime;
             chargeForce = chargePercentage * chargeMaxForce;
@@ -98,6 +158,8 @@ public class Shooter : Controller
         chargeForce = 0f;
         chargeTime = 0f;
         shoot = true;
+
+        Shake(shootShakeIntensity, shootShakeDuration);
     }
 
     internal override void OnShootUp()
@@ -113,35 +175,11 @@ public class Shooter : Controller
         SoundPlayer.Play("sfx_clack");
     }
 
-    internal override void Update()
-    {
-        base.Update();
-        if (IsPossessed() && !AreLegsRetracted())
-        {
-            // Calculate Camera Position
-            Vector3 o = transform.position;
-            o += camerOffset.x * transform.right;
-            o += camerOffset.y * transform.up;
-            o += camerOffset.z * transform.forward;
-            // Calculate Camera Rotation
-            vertical -= Game.i.player.mapping.Axis(EAction.CAMERA_VERTICAL) * sensitivity;
-            look = transform.eulerAngles;
-            look.z = 0f;
-            look.x = Mathf.Clamp(vertical, minAngle, maxAngle);
-            // Apply Camera Position and Rotation
-            Game.i.aperture.currentCamera.transform.rotation = Quaternion.Lerp(Game.i.aperture.currentCamera.transform.rotation, Quaternion.Euler(look), Time.deltaTime * lerpRotation);
-            Game.i.aperture.currentCamera.transform.position = Vector3.Lerp(Game.i.aperture.currentCamera.transform.position, o, Time.deltaTime * lerpPosition);
-            Game.i.aperture.currentCamera.fieldOfView = Mathf.Lerp(Game.i.aperture.currentCamera.fieldOfView, fov, Time.deltaTime * lerpFOV);
-
-            transform.Rotate(transform.up * Game.i.player.mapping.Axis(EAction.CAMERA_HORIZONTAL) * Time.deltaTime * rotateSpeed);
-            transform.position += transform.right * Game.i.player.mapping.Axis(EAction.MOVE_RIGHT_LEFT) * Time.deltaTime * lateralSpeed;
-        }
-    }
-
     public override void Move(float fb, float rl)
     {
         if (IsFrozen()) return;
         BaseMove(Vector3.ClampMagnitude(new Vector3(0f, 0f, fb), 1f));
+        locomotion.locomotionAnimation.moveInput = new Vector2(rl, fb);
     }
 
     internal override void OnLegsRetracted()

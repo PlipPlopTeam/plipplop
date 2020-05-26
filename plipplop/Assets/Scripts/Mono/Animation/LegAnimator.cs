@@ -119,7 +119,7 @@ public class LegAnimator : MonoBehaviour
 		MeshFlipbook.MeshFrame f = currentAnimation.meshes[index];
 		meshFilter.mesh = f.mesh;
 		headTransform.localPosition = f.position;
-		headTransform.localEulerAngles = f.euler;
+		headTransform.localEulerAngles = f.euler - transform.localEulerAngles;
 		headTransform.localScale = f.scale;
 
 		meshRenderer.sharedMaterials = f.mat.ToArray();
