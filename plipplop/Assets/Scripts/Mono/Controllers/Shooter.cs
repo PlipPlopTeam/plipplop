@@ -122,7 +122,7 @@ public class Shooter : Controller
         if (!AreLegsRetracted())
         {
             if (chargeTime < chargeMaxTime) chargeTime += Time.deltaTime;
-            else if(shhot Shoot();
+            else Shoot();
 
             chargePercentage = chargeTime / chargeMaxTime;
             chargeForce = chargePercentage * chargeMaxForce;
