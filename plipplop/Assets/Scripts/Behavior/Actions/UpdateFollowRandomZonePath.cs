@@ -12,10 +12,10 @@ namespace Behavior.NPC
 			var randomPath = Game.i.aiZone.GetRandomPath();
 			if (npc != null 
 				&& npc.settings.followPath 
-				&& npc.agentMovement.path == null
+				&& npc.movement.path == null
 				&& randomPath != null)
 			{
-				npc.agentMovement.FollowPath(randomPath);
+				npc.movement.FollowPath(randomPath);
 			}
 		}
 	}

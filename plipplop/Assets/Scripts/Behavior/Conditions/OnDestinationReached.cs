@@ -12,7 +12,7 @@ namespace Behavior.NPC
 			NonPlayableCharacter npc = target;
 			if(npc != null)
 			{
-				return npc.agentMovement.reached == true;
+				return npc.movement.reached == true;
 			}
 			return false;
 		}
