@@ -12,7 +12,8 @@ public class Thrower : MonoBehaviour
     public float force = 1000f;
     public float torque = 0f;
 
-    private Projectile arrow;
+    [Header("Settings")]
+    public Projectile arrow;
 
     public void Reload()
     {

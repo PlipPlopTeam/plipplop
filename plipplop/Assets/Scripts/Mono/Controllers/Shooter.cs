@@ -4,6 +4,7 @@ public class Shooter : Controller
 {
     [Header("Shooter")]
     public Thrower[] throwers;
+    public Feeder feeder;
 
     [Header("Movement")]
     public float rotateSpeed = 100f;
@@ -97,7 +98,7 @@ public class Shooter : Controller
             float f = Game.i.player.mapping.Axis(EAction.MOVE_FORWARD_BACK);
 
             transform.Rotate(transform.up * Game.i.player.mapping.Axis(EAction.CAMERA_HORIZONTAL) * Time.deltaTime * rotateSpeed);
-            rigidbody.AddForce(transform.right * r * Time.deltaTime * lateralSpeed);
+            if (IsGrounded()) rigidbody.AddForce(transform.right * r * Time.deltaTime * lateralSpeed);
 
             locomotion.locomotionAnimation.legs.transform.localEulerAngles = new Vector3(0f, r * 90f, 0f);
         }
@@ -150,6 +151,15 @@ public class Shooter : Controller
         {
             t.gunEnd.forward = (target - t.gunEnd.transform.position).normalized;
             t.force = chargeForce;
+
+            t.arrow.onImpact += (other) =>
+            {
+                if(other.transform.TryGetComponent<NonPlayableCharacter>(out NonPlayableCharacter npc))
+                {
+                    npc.Stun(3f);
+                }
+            };
+
             t.Shoot();
             t.Reload();
         }
@@ -184,11 +194,19 @@ public class Shooter : Controller
 
     internal override void OnLegsRetracted()
     {
-        Game.i.aperture.Unfreeze();
+        if(IsPossessed())
+        {
+            Game.i.aperture.Unfreeze();
+            if (feeder != null) feeder.activated = true;
+        }
     }
 
     internal override void OnLegsExtended()
     {
-        Game.i.aperture.Freeze();
+        if (IsPossessed())
+        {
+            Game.i.aperture.Freeze();
+            if (feeder != null) feeder.activated = false;
+        }
     }
 }

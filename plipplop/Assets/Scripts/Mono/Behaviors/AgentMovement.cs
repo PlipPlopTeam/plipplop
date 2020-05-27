@@ -35,7 +35,20 @@ public class AgentMovement : Walker
     int currentIndexOnPath;
 	NavMeshAgent agent;
 
-	[HideInInspector] public Vector3 orientation;
+    public Vector3 point;
+    public void Pause()
+    {
+        Stop();
+    }
+    public void Resume()
+    {
+        if(going && point != Vector3.zero)
+        {
+            GoThere(point);
+        }
+    }
+
+    [HideInInspector] public Vector3 orientation;
     public float orientLerp = 5f;
     public float cOrientLerp;
 	Vector3 rotationLast;
@@ -125,6 +138,7 @@ public class AgentMovement : Walker
         {
 			//StopFollowingPath();
 			agent.SetDestination(pos);
+            point = pos;
             going = true;
             reached = false;
             return true;

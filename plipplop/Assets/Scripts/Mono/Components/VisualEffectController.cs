@@ -49,7 +49,7 @@ public class ShurikenEffectController : MonoBehaviour,IVisualEffectController
 
     public bool IsAlive()
     {
-        return shuriken.IsAlive();
+        return shuriken != null && shuriken.IsAlive();
     }
 
     private void Update()

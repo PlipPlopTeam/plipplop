@@ -18,6 +18,8 @@ public class Projectile : MonoBehaviour
     public float timer;
     public bool beingDestroy;
 
+    public System.Action<Collision> onImpact;
+
     void Start()
     {
         if(stuckOnAwake) Stuck();
@@ -76,5 +78,7 @@ public class Projectile : MonoBehaviour
     public virtual void OnCollisionEnter(Collision other)
     {
         if(stuckOnImpact) Stuck(other.transform);
+
+        if (onImpact != null) onImpact.Invoke(other);
     }
 }
