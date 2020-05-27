@@ -4,6 +4,11 @@ using UnityEngine;
 
 public static class Geometry
 {
+    public static Vector3 Round(this Vector3 vec3)
+    {
+        return new Vector3(Mathf.Round(vec3.x), Mathf.Round(vec3.y), Mathf.Round(vec3.z));
+    }
+
     public static Vector3 GetHorizontalVelocity (this Rigidbody rigidbody)
     {
         return new Vector3(rigidbody.velocity.x, 0f, rigidbody.velocity.z);
