@@ -83,13 +83,16 @@ public class Jumper : Controller
 
 	internal override void OnReleasedJump()
 	{
-		base.OnReleasedJump();
-		float f = ForcePercentage();
+		if(AreLegsRetracted())
+		{
+			base.OnReleasedJump();
+			float f = ForcePercentage();
 
-		if (f > chargePercentage) Bump(dir, chargeForce);
-		else Flip();
+			if (f > chargePercentage) Bump(dir, chargeForce);
+			else Flip();
 
-		Initialize();
+			Initialize();
+		}
 	}
 
 	public void Initialize()
@@ -121,7 +124,7 @@ public class Jumper : Controller
 		if(inAir)
 		{
 			if (chair != null) chair.locked = true;
-			transform.up = rigidbody.velocity.normalized;
+			if(rigidbody.velocity.y > 0) transform.up = rigidbody.velocity.normalized;
 		}
 		else if(charging)
 		{
