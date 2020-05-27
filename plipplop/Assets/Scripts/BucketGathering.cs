@@ -51,7 +51,7 @@ public class BucketGathering : Activity
         collecting = false;
         base.StopUsing(user);
         user.Drop();
-        user.agentMovement.onDestinationReached = null;
+        user.movement.onDestinationReached = null;
         UnConstraint();
     }
 
@@ -70,8 +70,8 @@ public class BucketGathering : Activity
             {
                 target = GetLootPosition();
                 going = true;
-                users[0].agentMovement.GoThere(target, true);
-                users[0].agentMovement.onDestinationReached += () =>
+                users[0].movement.GoThere(target, true);
+                users[0].movement.onDestinationReached += () =>
                 {
                     users[0].animator.SetTrigger("Pickup Ground");
                     Game.i.WaitAndDo(0.5f, () =>
@@ -85,7 +85,7 @@ public class BucketGathering : Activity
                         Pyromancer.PlayGameEffect("gfx_sand_poof", shellItem.transform.position);
                         Game.i.WaitAndDo(0.5f, () => {
                             if (users.Count < 1) return; // No one is using me anymore
-                            users[0].agentMovement.GoThere(transform.position, true);
+                            users[0].movement.GoThere(transform.position, true);
                             storing = true;
                         });
                     });
@@ -96,8 +96,8 @@ public class BucketGathering : Activity
                 if(users[0].range.IsInRange(gameObject))
                 {
                     storing = false;
-                    users[0].agentMovement.Stop();
-                    users[0].agentMovement.OrientToward(transform.position);
+                    users[0].movement.Stop();
+                    users[0].movement.OrientToward(transform.position);
                     users[0].animator.SetTrigger("Pickup Ground");
                     Game.i.WaitAndDo(0.5f, () => {
                         if (users.Count < 1) return; // No one is using me anymore

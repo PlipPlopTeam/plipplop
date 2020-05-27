@@ -23,23 +23,23 @@ public class FishingBox : Activity
     public override void Enter(NonPlayableCharacter user)
     {
         base.Enter(user);
-        user.agentMovement.Stop();
-        user.agentMovement.GoThere(transform.position, true);
-        user.agentMovement.onDestinationReached += () =>
+        user.movement.Stop();
+        user.movement.GoThere(transform.position, true);
+        user.movement.onDestinationReached += () =>
         {
 			user.Carry(Instantiate(fishingPole).GetComponent<FishingPole>());
             Vector3 pos = stand.position + Geometry.GetRandomPointInRange(stand.radius);
-			user.agentMovement.Stop();
-			user.agentMovement.GoThere(pos, true);
+			user.movement.Stop();
+			user.movement.GoThere(pos, true);
 			StartCoroutine(DelayedSetup(user));
         };
     }
     IEnumerator DelayedSetup(NonPlayableCharacter user)
     {
         yield return new WaitForEndOfFrame();
-        user.agentMovement.onDestinationReached += () =>
+        user.movement.onDestinationReached += () =>
         {
-			user.agentMovement.Stop();
+			user.movement.Stop();
             user.animator.SetBool("Fishing", true);
 
 			FishingPole fp = user.carried.Self().GetComponent<FishingPole>();
@@ -47,7 +47,7 @@ public class FishingBox : Activity
 			fp.Plunge(plunge.position + Geometry.GetRandomPointInRange(plunge.radius));
 
 			user.look.FocusOn(fp.plug);
-			user.agentMovement.OrientToward(fp.plug.position);
+			user.movement.OrientToward(fp.plug.position);
 		};
     }
 

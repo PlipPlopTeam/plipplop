@@ -21,7 +21,7 @@ public class Firepit : Activity
             Vector3 pos = Geometry.GetRandomPointOnCircle(Random.Range(radius.x, radius.y)) + transform.position;
 
             user.GoSitThere(pos);
-            user.agentMovement.onDestinationReached += () =>
+            user.movement.onDestinationReached += () =>
             {
                 user.transform.LookAt(transform.position);
             };

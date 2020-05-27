@@ -85,7 +85,7 @@ public class Cheats : Dictionary<string, System.Action>
 		foreach (NonPlayableCharacter npc in Object.FindObjectsOfType<NonPlayableCharacter>())
 		{
 			ICarryable torch = Game.Instantiate(Game.i.library.torchPrefab).GetComponent<ICarryable>();
-			npc.agentMovement.Chase(Game.i.player.GetCurrentController().transform);
+			npc.movement.Chase(Game.i.player.GetCurrentController().transform);
 			npc.Carry(torch);
 			npc.sight.multiplier = 0f;
 		}

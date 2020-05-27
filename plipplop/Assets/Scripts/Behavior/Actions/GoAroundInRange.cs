@@ -15,9 +15,9 @@ namespace Behavior.NPC
             NonPlayableCharacter npc = target;
             if (npc != null)
 			{
-				if (overrideMovement) npc.agentMovement.settings = overrideMovementSettings;
+				if (overrideMovement) npc.movement.settings = overrideMovementSettings;
 
-				if(!npc.agentMovement.GoThere(
+				if(!npc.movement.GoThere(
 					new Vector3(
 						npc.transform.position.x + Random.Range(-range, range),
 						npc.transform.position.y,
@@ -25,7 +25,7 @@ namespace Behavior.NPC
 					)
 				))
 				{
-					npc.agentMovement.GoThere(npc.transform.position);
+					npc.movement.GoThere(npc.transform.position);
 				}
 
 			}

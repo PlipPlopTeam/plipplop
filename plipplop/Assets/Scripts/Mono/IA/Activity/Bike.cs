@@ -16,8 +16,8 @@ public class Bike : Activity
 	{
 		base.StartUsing(user);
 		full = true;
-		user.agentMovement.SetSpeed(speed);
-		user.agentMovement.FollowPath(path);
+		user.movement.SetSpeed(speed);
+		user.movement.FollowPath(path);
 		transform.SetParent(user.transform);
 		transform.localPosition = Vector3.zero;
 		transform.forward = user.transform.forward;
@@ -27,7 +27,7 @@ public class Bike : Activity
 	public override void StopUsing(NonPlayableCharacter user)
 	{
 		base.StopSpectate(user);
-		user.agentMovement.ResetSpeed();
+		user.movement.ResetSpeed();
 		full = false;
 		transform.SetParent(null);
 		collider.enabled = true;

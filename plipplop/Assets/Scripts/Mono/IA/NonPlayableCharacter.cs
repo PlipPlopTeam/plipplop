@@ -17,7 +17,7 @@ public class NonPlayableCharacter : MonoBehaviour
 	[HideInInspector] public Sight sight;
 	[HideInInspector] public FocusLook look;
 	[HideInInspector] public NavMeshAgent agent;
-	[HideInInspector] public AgentMovement agentMovement;
+	[HideInInspector] public AgentMovement movement;
 	[HideInInspector] public Animator animator;
 	[HideInInspector] public Skeleton skeleton;
 	[HideInInspector] public EmotionRenderer emo;
@@ -62,8 +62,8 @@ public class NonPlayableCharacter : MonoBehaviour
 		range = GetComponent<Range>();
 		emo = GetComponent<EmotionRenderer>();
 		emo.Initialize();
-		agentMovement = GetComponent<AgentMovement>();
-		agentMovement.animator = animator;
+		movement = GetComponent<AgentMovement>();
+		movement.animator = animator;
 		face = GetComponent<Face>();
 		collider = GetComponent<Collider>();
 
@@ -161,7 +161,7 @@ public class NonPlayableCharacter : MonoBehaviour
 		UpdateCollecting();
 		UpdateWaiting();
 		UpdateStoring();
-		agentMovement.Tick();
+		movement.Tick();
 		if (carried != null)
 		{
 			if (carried.Mass() > settings.strength) Lift(carried);
@@ -257,7 +257,7 @@ public class NonPlayableCharacter : MonoBehaviour
 	{
 		tContainer = c;
 		itemToStore = item;
-		agentMovement.Chase(c.transform);
+		movement.Chase(c.transform);
 	}
 	public void UpdateStoring()
 	{
@@ -269,7 +269,7 @@ public class NonPlayableCharacter : MonoBehaviour
 				if (item == itemToStore) Drop();
 			}
 
-			agentMovement.StopChase();
+			movement.StopChase();
 			tContainer.Store(itemToStore);
 			StopStoring();
 
@@ -298,13 +298,44 @@ public class NonPlayableCharacter : MonoBehaviour
 		carryable.Self().forward = transform.forward;
 	}
 
+	int stun = 0;
+	public void Stun(float duration = 1f)
+	{
+		stun++;
+		RefreshStun();
+		Game.i.WaitAndDo(duration, () => Unstun());
+	}
+	public void Unstun()
+	{
+		stun--;
+		RefreshStun();
+	}
+	public void RefreshStun()
+	{
+		if(stun > 0)
+		{
+			Debug.Log(stun);
+			graph.Pause();
+			movement.Pause();
+			look.LooseFocus();
+			look.FocusOn(transform.position + transform.forward * 1f + transform.up * 1f);
+			Pyromancer.PlayVFXAttached("vfx_stun", skeleton.GetSocketBySlot(Cloth.ESlot.HEAD).bone, new Vector3(0f, 0.5f, 0f));
+		}
+		else
+		{
+			graph.Play();
+			look.LooseFocus();
+			movement.Resume();
+		}
+	}
+
 	public void UpdateCollecting()
 	{
 		if(carryableToCollect != null)
 		{
 			if(range.IsInRange(carryableToCollect.Self().gameObject))
 			{
-				agentMovement.StopChase();
+				movement.StopChase();
 				Carry(carryableToCollect);
 				carryableToCollect = null;
 				if(onCollect != null)
@@ -323,12 +354,12 @@ public class NonPlayableCharacter : MonoBehaviour
 	public void StopCollecting()
 	{
 		carryableToCollect = null;
-		agentMovement.StopChase();
+		movement.StopChase();
 	}
 	public void Collect(ICarryable carryable, System.Action then = null)
 	{
 		carryableToCollect = carryable;
-		agentMovement.Chase(carryableToCollect.Self());
+		movement.Chase(carryableToCollect.Self());
 
 		if (then != null) onCollect += then;
 	}
@@ -336,7 +367,7 @@ public class NonPlayableCharacter : MonoBehaviour
 	public void Consume(Food f)
 	{
 		food = f;
-		agentMovement.Stop();
+		movement.Stop();
 		food.Consume(delegate{
 			animator.SetBool("Consuming", false);
 			if(this.food != null)
@@ -414,14 +445,14 @@ public class NonPlayableCharacter : MonoBehaviour
 
 	public void GoSitThere(Vector3 where)
 	{
-		agentMovement.GoThere(where);
-		agentMovement.onDestinationReached += () => {Sit();};
+		movement.GoThere(where);
+		movement.onDestinationReached += () => {Sit();};
 	}
 
 	public void GoSitThere(Chair chair, Chair.Spot spot)
 	{
-		agentMovement.GoThere(chair.transform.position + spot.position);
-		agentMovement.onDestinationReached += () =>
+		movement.GoThere(chair.transform.position + spot.position);
+		movement.onDestinationReached += () =>
 		{
 			Sit(chair);
 			chair.Sit(this, spot);
@@ -430,14 +461,14 @@ public class NonPlayableCharacter : MonoBehaviour
 
 	public void Sit()
 	{
-		agentMovement.Stop();
+		movement.Stop();
 		agent.enabled = false;
 		animator.SetBool("Sitting", true);
 	}
 
 	public void Sit(Vector3 pos)
 	{
-		agentMovement.Stop();
+		movement.Stop();
 		agent.enabled = false;
 		transform.position = pos;
 		animator.SetBool("Sitting", true);
@@ -446,7 +477,7 @@ public class NonPlayableCharacter : MonoBehaviour
 	{
 		collider.enabled = false;
 		chair = c;
-		agentMovement.Stop();
+		movement.Stop();
 		agent.enabled = false;
 		transform.SetParent(c.transform);
 		transform.localPosition = Vector3.zero;

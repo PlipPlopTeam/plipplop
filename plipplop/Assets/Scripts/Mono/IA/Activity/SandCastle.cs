@@ -33,9 +33,9 @@ public class SandCastle : Activity
 		base.StartUsing(user);
 		user.look.FocusOn(transform);
 		user.GoSitThere(transform.position + Geometry.GetRandomPointOnCircle(radius + 0.25f));
-		user.agentMovement.onDestinationReached += () =>
+		user.movement.onDestinationReached += () =>
 		{
-			user.agentMovement.OrientToward(transform.position);
+			user.movement.OrientToward(transform.position);
 			constructionInProgress = true;
 			user.animator.SetBool("Crafting", true);
 		};

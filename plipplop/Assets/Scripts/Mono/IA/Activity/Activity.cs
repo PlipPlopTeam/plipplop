@@ -34,7 +34,7 @@ public class Activity : Valuable
 		else if (spectatorMax > 0) StartSpectate(user);
 		else Vanish(user);
 
-		user.agentMovement.StopFollowingPath();
+		user.movement.StopFollowingPath();
         user.stats[NonPlayableCharacter.EStat.BOREDOM] = 0f;
         user.activity = this;
 		user.sight.multiplier = awarnessMultiplier;
@@ -87,9 +87,9 @@ public class Activity : Valuable
 	{
 		spectators.Add(npc);
 		Vector3 pos = transform.position + Geometry.GetRandomPointOnCircle(Random.Range(spectatorRange.x, spectatorRange.y));
-		npc.agentMovement.Stop();
-		npc.agentMovement.GoThere(pos);
-		npc.agentMovement.onDestinationReached += () =>
+		npc.movement.Stop();
+		npc.movement.GoThere(pos);
+		npc.movement.onDestinationReached += () =>
 		{
 			Look(npc, transform.position);
 			npc.emo.Show(Emotion.EVerb.LOVE, Name());
@@ -99,13 +99,13 @@ public class Activity : Valuable
 	public virtual void StopSpectate(NonPlayableCharacter npc)
 	{
 		spectators.Remove(npc);
-		npc.agentMovement.Stop();
+		npc.movement.Stop();
 	}
 
 	public virtual void Look(NonPlayableCharacter npc, Vector3 position)
 	{
-		npc.agentMovement.Stop();
-		npc.agentMovement.OrientToward(transform.position);
+		npc.movement.Stop();
+		npc.movement.OrientToward(transform.position);
 	}
 
 	public virtual bool AvailableFor(NonPlayableCharacter npc)

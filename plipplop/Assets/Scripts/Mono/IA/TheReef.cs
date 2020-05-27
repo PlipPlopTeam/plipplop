@@ -14,7 +14,7 @@ public class TheReef : NonPlayableCharacter
 	{
 		controller = c;
 		animator.SetTrigger("Eject");
-		agentMovement.Stop();
+		movement.Stop();
 		StartCoroutine(WaitAndKick());
 	}
 	IEnumerator WaitAndKick()
@@ -49,8 +49,8 @@ public class TheReef : NonPlayableCharacter
 		target = npc;
 
 		target.graph.Pause();
-		target.agentMovement.Stop();
-		agentMovement.Stop();
+		target.movement.Stop();
+		movement.Stop();
 		Vector3 dir = (target.transform.position - transform.position).normalized;
 		target.transform.forward = -dir;
 		transform.forward = dir;

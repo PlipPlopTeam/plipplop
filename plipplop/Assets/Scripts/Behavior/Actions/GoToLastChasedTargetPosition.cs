@@ -9,8 +9,8 @@ namespace Behavior.NPC
             NonPlayableCharacter npc = target;
 			if(npc != null)
 			{
-				npc.agentMovement.GoThere(npc.agentMovement.chaseTargetPosition);
-				npc.agentMovement.StopChase();
+				npc.movement.GoThere(npc.movement.chaseTargetPosition);
+				npc.movement.StopChase();
 			}
         }
     }

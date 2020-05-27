@@ -88,8 +88,8 @@ public class Balloon : Activity
 			inPlace.Add(false);
 			float angle = ((Mathf.PI * 2f) / users.Count) * count;
 			Vector3 pos = new Vector3(Mathf.Cos(angle) * distance, 0f, Mathf.Sin(angle) * distance);
-			user.agentMovement.GoThere(originPosition + pos);
-			user.agentMovement.onDestinationReached += () =>
+			user.movement.GoThere(originPosition + pos);
+			user.movement.onDestinationReached += () =>
 			{
 				inPlace[spot] = true;
 				IsAllInPlace();
@@ -147,7 +147,7 @@ public class Balloon : Activity
 					if (users[carrier].IsCarrying(this))
                     {
                         LookAtEachOthers();
-                        users[carrier].agentMovement.Stop();
+                        users[carrier].movement.Stop();
                         throwTimer = timeBetweenThrows;
                         flying = false;
                     }
@@ -165,7 +165,7 @@ public class Balloon : Activity
 		foreach (NonPlayableCharacter user in users)
 		{
 			user.GetUp();
-			user.agentMovement.OrientToward(center);
+			user.movement.OrientToward(center);
 		}
 	}
 

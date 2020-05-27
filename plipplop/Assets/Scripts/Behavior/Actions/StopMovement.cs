@@ -12,7 +12,7 @@ namespace Behavior.NPC
             NonPlayableCharacter npc = target;
             if (npc != null)
 			{
-				npc.agentMovement.Stop();
+				npc.movement.Stop();
 			}
 		}
 	}

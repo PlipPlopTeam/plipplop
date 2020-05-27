@@ -9,7 +9,7 @@ namespace Behavior.NPC
 		public override void Execute(NonPlayableCharacter target)
         {
             NonPlayableCharacter npc = target;
-            if (npc != null) npc.agentMovement.GoThere(position);
+            if (npc != null) npc.movement.GoThere(position);
 		}
 	}
 }

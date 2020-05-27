@@ -231,7 +231,7 @@ public class SpielbergAssistant : MonoBehaviour
         var targetPosition = t.position;
         var npc = GetNPCByName(npcName);
 
-        npc.agentMovement.GoThere(targetPosition, true);
+        npc.movement.GoThere(targetPosition, true);
     }
 
     NonPlayableCharacter GetNPCByName(string npcName)

@@ -19,7 +19,7 @@ public class Dispenser : Feeder
         base.Catch(client);
 
         clients.Add(client);
-        client.agentMovement.GoThere(transform.position + transform.forward * clients.Count * distanceBetween);
+        client.movement.GoThere(transform.position + transform.forward * clients.Count * distanceBetween);
         if(!serving) Next();
     }
 
@@ -44,7 +44,7 @@ public class Dispenser : Feeder
                 c.Wait(
                     Random.Range(0.25f, 0.75f), 
                     delegate{
-                        c.agentMovement.GoThere(
+                        c.movement.GoThere(
                             transform.position 
                             + transform.forward * (index + 1) * distanceBetween
                             + new Vector3(Random.Range(-queueDispersion, queueDispersion), 0f, Random.Range(-queueDispersion, queueDispersion))

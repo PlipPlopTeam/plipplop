@@ -10,8 +10,8 @@ public class Cake : Feeder
     public override void Catch(NonPlayableCharacter npc)
     {
         base.Catch(npc);
-        npc.agentMovement.GoThere(transform.position, true);
-        npc.agentMovement.onDestinationReached += () =>
+        npc.movement.GoThere(transform.position, true);
+        npc.movement.onDestinationReached += () =>
         {
             Serve(npc);
         };

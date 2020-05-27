@@ -24,7 +24,7 @@ namespace Behavior.NPC
 					{
 						npc.WaitAndDo(oc.time, () =>
 						{
-							npc.agentMovement.Orient(new Vector3(Mathf.Cos(oc.angle), 0f, Mathf.Sin(oc.angle)));
+							npc.movement.Orient(new Vector3(Mathf.Cos(oc.angle), 0f, Mathf.Sin(oc.angle)));
 						});
 						 t += oc.time;
 					}

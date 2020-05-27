@@ -27,7 +27,7 @@ public class Artwork : Activity
 		base.Update();
 		foreach (var s  in spectators)
 		{
-			s.agentMovement.OrientToward(transform.position);
+			s.movement.OrientToward(transform.position);
 			s.look.FocusOn(transform.position + focusOffset);
 		}
 	}

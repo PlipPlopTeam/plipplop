@@ -13,7 +13,7 @@ public class KiteActivity : Activity
         
         npc.look.FocusOn(kite.visuals.transform);
         
-        npc.agentMovement.OrientToward(kite.visuals.transform.position);
+        npc.movement.OrientToward(kite.visuals.transform.position);
 
     }
 
@@ -28,11 +28,11 @@ public class KiteActivity : Activity
     {
         base.StartUsing(user);
         
-        user.agentMovement.Stop();
+        user.movement.Stop();
         
         user.look.FocusOn(kite.visuals.transform);
 
-        user.agentMovement.OrientToward(kite.visuals.transform.position);
+        user.movement.OrientToward(kite.visuals.transform.position);
         
         user.skeleton.Attach(transform, Cloth.ESlot.RIGHT_HAND);
         
@@ -48,12 +48,12 @@ public class KiteActivity : Activity
 
         if (users.Count > 0)
         {
-            users[0].agentMovement.OrientToward(kite.visuals.transform.position);
+            users[0].movement.OrientToward(kite.visuals.transform.position);
         }
 
         foreach (var _s  in spectators)
         {
-            _s.agentMovement.OrientToward(kite.visuals.transform.position);
+            _s.movement.OrientToward(kite.visuals.transform.position);
         }
     }
 

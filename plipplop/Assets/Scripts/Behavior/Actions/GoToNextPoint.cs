@@ -14,8 +14,8 @@ namespace Behavior.NPC
             NonPlayableCharacter npc = target;
             if (npc != null)
 			{
-				if(overrideMovement) npc.agentMovement.settings = overrideMovementSettings;
-				npc.agentMovement.GoToNextPoint();
+				if(overrideMovement) npc.movement.settings = overrideMovementSettings;
+				npc.movement.GoToNextPoint();
 			}
 		}
 	}

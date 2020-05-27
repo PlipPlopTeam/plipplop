@@ -14,11 +14,11 @@ namespace Behavior.NPC
 				if(npc.settings.followPath)
 				{
 					var randomPath = Game.i.aiZone.GetRandomPath();
-					if (randomPath != null) npc.agentMovement.FollowPath(randomPath);
+					if (randomPath != null) npc.movement.FollowPath(randomPath);
 				}
 				else
 				{
-					npc.agentMovement.GoThere(npc.spawnPosition);
+					npc.movement.GoThere(npc.spawnPosition);
 				}
 			}
 		}

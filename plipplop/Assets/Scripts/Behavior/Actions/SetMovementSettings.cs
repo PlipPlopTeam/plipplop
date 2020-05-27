@@ -12,7 +12,7 @@ namespace Behavior.NPC
             NonPlayableCharacter npc = target;
             if (npc != null && npc.sight != null)
 			{
-				npc.agentMovement.settings = this.settings;
+				npc.movement.settings = this.settings;
             }
         }
     }

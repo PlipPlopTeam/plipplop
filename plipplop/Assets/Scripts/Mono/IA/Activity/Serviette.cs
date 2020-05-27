@@ -7,13 +7,13 @@ public class Serviette : Activity
 	public override void StartUsing(NonPlayableCharacter user)
 	{
 		base.StartUsing(user);
-		user.agentMovement.GoThere(transform.position, true);
-		user.agentMovement.onDestinationReached += () =>
+		user.movement.GoThere(transform.position, true);
+		user.movement.onDestinationReached += () =>
 		{
 			user.transform.position = transform.position + transform.forward * offset;
-			user.agentMovement.Orient(-transform.forward);
+			user.movement.Orient(-transform.forward);
 			user.animator.SetBool("Tanning", true);
-			user.agentMovement.Stop();
+			user.movement.Stop();
 		};
 	}
 	public override void StopUsing(NonPlayableCharacter user)

@@ -15,9 +15,9 @@ public class Guitar : Activity, ICarryable
 		full = true;
 		player = user;
 		player.Collect(this);
-		player.agentMovement.onDestinationReached += () =>
+		player.movement.onDestinationReached += () =>
 		{
-			player.agentMovement.Stop();
+			player.movement.Stop();
 			player.animator.SetBool("Guitaring", true);
 			player.animator.SetBool("Carrying", false);
 
@@ -53,9 +53,9 @@ public class Guitar : Activity, ICarryable
 		user.Drop();
 		user.StopCollecting();
 
-		player.agentMovement.onDestinationReached -= () =>
+		player.movement.onDestinationReached -= () =>
 		{
-			player.agentMovement.Stop();
+			player.movement.Stop();
 			player.animator.SetBool("Guitaring", true);
 			player.animator.SetBool("Carrying", false);
 			visuals.transform.localPosition = new Vector3(0.114f, -0.08f, -0.155f);

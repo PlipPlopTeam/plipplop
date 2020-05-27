@@ -13,7 +13,7 @@ public class Jukebox : Activity
 
     float animDelta = 0f;
     float radioBeatScale = 0.4f;
-    Transform visuals;
+    Transform v;
     AudioSource attachedSource;
 
     public void SetAnimDelta(float v)
@@ -28,7 +28,7 @@ public class Jukebox : Activity
 
     private void Start()
     {
-        visuals = transform.GetChild(0);
+        v = transform.GetChild(0);
     }
 
     public void PlayMusic()
@@ -70,7 +70,7 @@ public class Jukebox : Activity
         if (animateWithSound) {
             animDelta = (1 + Mathf.Sin(Time.time * 10f)) * 0.1f;
         }
-        visuals.localScale = Vector3.one + Vector3.one * animDelta * radioBeatScale;
+        v.localScale = Vector3.one + Vector3.one * animDelta * radioBeatScale;
     }
 
 	public override void StartUsing(NonPlayableCharacter user)
@@ -78,9 +78,9 @@ public class Jukebox : Activity
 		base.StartUsing(user);
 
 		Vector3 pos = Geometry.GetRandomPointOnCircle(Random.Range(radius.x, radius.y)) + transform.position;
-		user.agentMovement.StopFollowingPath();
-		user.agentMovement.GoThere(pos, true);
-		user.agentMovement.onDestinationReached += () =>
+		user.movement.StopFollowingPath();
+		user.movement.GoThere(pos, true);
+		user.movement.onDestinationReached += () =>
 		{
 			user.transform.LookAt(transform.position);
 			user.animator.SetBool("Dancing", true);

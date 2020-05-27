@@ -14,25 +14,25 @@ namespace Behavior.NPC
 				switch (subject)
 				{
 					case NonPlayableCharacter.ESubject.PLAYER:
-						if (npc.player != null) npc.agentMovement.Chase(npc.player.transform);
+						if (npc.player != null) npc.movement.Chase(npc.player.transform);
 						break;
 					case NonPlayableCharacter.ESubject.VALUABLE:
-						if (npc.valuable != null) npc.agentMovement.Chase(npc.valuable.transform);
+						if (npc.valuable != null) npc.movement.Chase(npc.valuable.transform);
 						break;
 					case NonPlayableCharacter.ESubject.ACTIVITY:
-						if (npc.activity != null) npc.agentMovement.Chase(npc.activity.transform);
+						if (npc.activity != null) npc.movement.Chase(npc.activity.transform);
 						break;
 					case NonPlayableCharacter.ESubject.CHAIR:
-						if (npc.chair != null) npc.agentMovement.Chase(npc.chair.transform);
+						if (npc.chair != null) npc.movement.Chase(npc.chair.transform);
 						break;
 					case NonPlayableCharacter.ESubject.FOOD:
-						if (npc.food != null) npc.agentMovement.Chase(npc.food.transform);
+						if (npc.food != null) npc.movement.Chase(npc.food.transform);
 						break;
 					case NonPlayableCharacter.ESubject.FEEDER:
-						if (npc.feeder != null) npc.agentMovement.Chase(npc.feeder.transform);
+						if (npc.feeder != null) npc.movement.Chase(npc.feeder.transform);
 						break;
 					case NonPlayableCharacter.ESubject.CHARACTER:
-						if (npc.character != null) npc.agentMovement.Chase(npc.character.transform);
+						if (npc.character != null) npc.movement.Chase(npc.character.transform);
 						break;
 				}
 			}
