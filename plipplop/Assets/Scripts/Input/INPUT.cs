@@ -36,5 +36,6 @@
 
     MS_X,
     MS_Y,
-    MS_LMB
+    MS_LMB,
+    MS_RMB
 }

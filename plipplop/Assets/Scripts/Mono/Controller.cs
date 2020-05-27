@@ -152,6 +152,13 @@ public abstract class Controller : MonoBehaviour
         Pyromancer.PlayGameEffect(Game.i.library.gfxs["gfx_speak"], transform, Vector3.up*0.5f);
     }
 
+    internal virtual void OnAimDown() {}
+    internal virtual void OnHoldAim() {}
+    internal virtual void OnAimUp() {}
+    internal virtual void OnShootDown() {}
+    internal virtual void OnHoldShoot() {}
+    internal virtual void OnShootUp() {}
+
     virtual internal void BaseMove(Vector3 direction)
     {
         if (direction.magnitude > 0.1f) movingStick = true;
@@ -168,7 +175,7 @@ public abstract class Controller : MonoBehaviour
         rigidbody.velocity = Vector3.Scale(rigidbody.velocity, Vector3.up);
     }
 
-    public void Move(float fb, float rl)
+    public virtual void Move(float fb, float rl)
     {
 		if (IsFrozen()) return;
 		BaseMove(Vector3.ClampMagnitude(new Vector3(rl, 0f, fb), 1f));
@@ -375,7 +382,7 @@ public abstract class Controller : MonoBehaviour
 		RefreshFreeze();
 	}
 
-	bool IsFrozen()
+    public bool IsFrozen()
     {
 		return freeze > 0;
     }

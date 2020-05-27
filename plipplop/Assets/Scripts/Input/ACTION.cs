@@ -9,5 +9,7 @@
     CAMERA_VERTICAL,
     CAMERA_RESET,
     SHOUT,
-    TALK
+    TALK,
+    AIM,
+    SHOOT
 }

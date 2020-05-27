@@ -59,10 +59,11 @@ public class Projectile : MonoBehaviour
         stuck = false;
     }
 
-    public virtual void Throw(Vector3 direction, float force)
+    public virtual void Throw(Vector3 direction, float force, float torque = 0f)
     {
         Unstuck();
         rb.AddForce(direction * force * Time.deltaTime, ForceMode.Impulse);
+        if (torque != 0f) rb.AddTorque(Random.insideUnitCircle.normalized * torque * Time.deltaTime);
         stuck = false;
 
         if(destroyAfter > 0f)

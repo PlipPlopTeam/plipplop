@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.SceneManagement;
 
 public class Cheats : Dictionary<string, System.Action> 
@@ -27,6 +29,7 @@ public class Cheats : Dictionary<string, System.Action>
         Add("BIRDS", Hitchcock);
         Add("GRIFFIN", Griffin);
         Add("BUBBLE", DisplayDefaultBubble);
+        Add("POSTPROCESS", PostProcess);
     }
 
     public void DisplayDefaultBubble()
@@ -152,6 +155,21 @@ public class Cheats : Dictionary<string, System.Action>
 		    GameObject _crab = Object.Instantiate(_c, Game.i.player.GetCurrentController().visuals.transform);
 		    _crab.transform.localPosition = new Vector3(0, .2f, 0);
 		    _crab.transform.localEulerAngles = new Vector3(0, 180, 0);
+	    }
+    }
+
+    public void PostProcess()
+    {
+	    UnityEngine.Rendering.Volume _v = Object.FindObjectOfType<UnityEngine.Rendering.Volume>();
+	    VolumeProfile _p = _v.profile;
+	    _p = Object.Instantiate(_p);
+
+	    UnityEngine.Experimental.Rendering.HDPipeline.DepthOfField _d;
+
+	    _p.TryGet<UnityEngine.Experimental.Rendering.HDPipeline.DepthOfField>(out _d);
+	    if (_d != null)
+	    {
+		    _d.active = !_d.active;
 	    }
     }
 }

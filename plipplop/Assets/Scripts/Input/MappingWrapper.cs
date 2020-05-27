@@ -53,6 +53,7 @@ public class MappingWrapper : Dictionary<EInput, Func<float>>
         Add(EInput.MS_X, () => { return Input.GetAxis("Mouse X"); });
         Add(EInput.MS_Y, () => { return Input.GetAxis("Mouse Y"); });
         Add(EInput.MS_LMB, () => { return Input.GetMouseButton(0) ? 1f : 0f; });
+        Add(EInput.MS_RMB, () => { return Input.GetMouseButton(1) ? 1f : 0f; });
 
         // Keyboard
         foreach (var c in keyCorrespondances) {

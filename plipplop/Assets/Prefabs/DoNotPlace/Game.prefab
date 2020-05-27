@@ -56,6 +56,8 @@ MonoBehaviour:
       type: 3}
     teleporterVolumePrefab: {fileID: 6748581491998726343, guid: b59d7c1ae63e58f4bb4be403ab1d8fac,
       type: 3}
+    shooterCamera: {fileID: 8386942187253199050, guid: 65af66ee94e9ef64ca6ccf6603729fe3,
+      type: 3}
     torchPrefab: {fileID: 4271952900627128956, guid: 6a1e03e3dcfc34140adafcac6b99bd4f,
       type: 3}
     sweatParticle: {fileID: 2265205593015572811, guid: fac342b8c625f2841874e341d5c527ef,
@@ -326,7 +328,13 @@ MonoBehaviour:
         - name: sfx_whistle_thereef_3
           clip: {fileID: 8300000, guid: da6fd67de1e5f0b4d8f6fbb2bd85e22c, type: 3}
           loop: 0
-        childCount: 77
+        - name: sfx_click
+          clip: {fileID: 8300000, guid: 0f7bab8537919534596c622559738fc6, type: 3}
+          loop: 0
+        - name: sfx_clack
+          clip: {fileID: 8300000, guid: 488462aa7e6072540bda6ced9e4102e7, type: 3}
+          loop: 0
+        childCount: 79
     vfxs:
       serializableEffects:
         list:
@@ -420,7 +428,13 @@ MonoBehaviour:
         - name: cine_test_2
           prefab: {fileID: 4819693678405633835, guid: 96cf5bcde76c2f143b59fa47404c8adc,
             type: 3}
-        childCount: 2
+        - name: cine_landscape_1
+          prefab: {fileID: 3209900004009148955, guid: 95cb2b8957a0d2440aaf4290998294aa,
+            type: 3}
+        - name: cine_landscape_2
+          prefab: {fileID: 3209900004009148955, guid: 0ad107efc0451b643be360ae2e1a2205,
+            type: 3}
+        childCount: 4
     bubblePrefab: {fileID: 6557741612811261699, guid: 1b692f290d9f0b141a223f59ad446f28,
       type: 3}
     emotions:
@@ -448,6 +462,8 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 4e2bbe779712c8f47a1305039e8d3b32, type: 2}
       - {fileID: 11400000, guid: ca2b3f1d5c19e5c479441c423121a3e3, type: 2}
       - {fileID: 11400000, guid: 21d9e36a2b374b24fa7301f82e72c0fe, type: 2}
+      - {fileID: 11400000, guid: c3d248e0a2044384eab93fcf1161c822, type: 2}
+      - {fileID: 11400000, guid: dc123d3214087904fb139783f41c83e0, type: 2}
       bubbleSprites:
       - bubbleType: 0
         texture: {fileID: 2800000, guid: 5e6a40a9c4fd33f4e9213fe735d51339, type: 3}

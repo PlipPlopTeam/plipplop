@@ -1,5 +1,50 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!64 &2597168665698820984
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 108957184869619657}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: -7515076094563499484, guid: c9ea1b1cc3406fc44b42ef089ba3964b, type: 3}
+--- !u!1 &3458501832379682685
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 3585664776711188533}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5710152066230000707}
+  m_Layer: 0
+  m_Name: Missing Prefab (Dummy)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5710152066230000707
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 9150291970329554038, guid: 593b4b1fd430c294e9b10e672bd632d8,
+    type: 3}
+  m_PrefabInstance: {fileID: 3585664776711188533}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3458501832379682685}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8244783231354372162}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3585664776129120140
 GameObject:
   m_ObjectHideFlags: 0
@@ -309,6 +354,51 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 14
   m_Mesh: {fileID: 0}
+--- !u!1 &5944447671865463359
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 3585664776711188533}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8244783231354372162}
+  m_Layer: 0
+  m_Name: BeachShelter (5) (Missing Prefab)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8244783231354372162
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 3585664776711188533}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5944447671865463359}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 5710152066230000707}
+  m_Father: {fileID: 1788863141712484527}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &2202802405197518109
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7182821065747281509}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 8742539567897351022, guid: c9ea1b1cc3406fc44b42ef089ba3964b, type: 3}
 --- !u!1 &7263291903432474234
 GameObject:
   m_ObjectHideFlags: 0
@@ -337,7 +427,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5458099677471361490}
-  - {fileID: 5710152066230000707}
+  - {fileID: 8244783231354372162}
   - {fileID: 5458099677598689474}
   - {fileID: 3585664776129120177}
   - {fileID: 2875054733966084115}
@@ -501,16 +591,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1788863141712484527}
     m_Modifications:
-    - target: {fileID: 9150291970329554037, guid: 593b4b1fd430c294e9b10e672bd632d8,
-        type: 3}
-      propertyPath: m_Name
-      value: BeachShelter (5)
-      objectReference: {fileID: 0}
-    - target: {fileID: 9150291970329554037, guid: 593b4b1fd430c294e9b10e672bd632d8,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 9150291970329554038, guid: 593b4b1fd430c294e9b10e672bd632d8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -566,14 +646,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9150291970329554037, guid: 593b4b1fd430c294e9b10e672bd632d8,
+        type: 3}
+      propertyPath: m_Name
+      value: BeachShelter (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 9150291970329554037, guid: 593b4b1fd430c294e9b10e672bd632d8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 593b4b1fd430c294e9b10e672bd632d8, type: 3}
---- !u!4 &5710152066230000707 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 9150291970329554038, guid: 593b4b1fd430c294e9b10e672bd632d8,
-    type: 3}
-  m_PrefabInstance: {fileID: 3585664776711188533}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7105707980615787273
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -646,6 +730,18 @@ PrefabInstance:
 --- !u!4 &2875054733966084115 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: c9ea1b1cc3406fc44b42ef089ba3964b,
+    type: 3}
+  m_PrefabInstance: {fileID: 7105707980615787273}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7182821065747281509 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -9137229212404673172, guid: c9ea1b1cc3406fc44b42ef089ba3964b,
+    type: 3}
+  m_PrefabInstance: {fileID: 7105707980615787273}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &108957184869619657 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -2080772730879052608, guid: c9ea1b1cc3406fc44b42ef089ba3964b,
     type: 3}
   m_PrefabInstance: {fileID: 7105707980615787273}
   m_PrefabAsset: {fileID: 0}

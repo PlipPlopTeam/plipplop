@@ -53,7 +53,7 @@ public class Bucket : Controller
 			if(itemStored > 0) locomotion.locomotionAnimation.HeavyWalkCycle();
 			else locomotion.locomotionAnimation.DefaultWalkCycle();
 
-			if (sweat != null) sweat.emissionRate = 100f * slow * 1000f;
+			if (sweat != null) sweat.emissionRate = 100f * slow * 10f;
 		}
 	}
 }
