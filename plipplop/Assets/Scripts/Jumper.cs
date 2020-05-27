@@ -19,12 +19,17 @@ public class Jumper : Controller
 	[Header("References")]
 	public Transform body;
 	public Chair chair;
+    public int flips { get; private set; } = 0;
 
 	private float chargeForce = 0f;
 	private float chargeTime = 0f;
 	private Vector3 dir = new Vector3();
 	private bool charging = false;
 	private bool inAir = false;
+
+    float xAccumulatedAngle = 0f;
+    float zAccumulatedAngle = 0f;
+    Vector3 previousAngle;
 
 	void Flip()
 	{
@@ -35,7 +40,13 @@ public class Jumper : Controller
 		}
 	}
 
-	internal override void OnLegsExtended()
+    public override void OnPossess()
+    {
+        base.OnPossess();
+        flips = 0;
+    }
+
+    internal override void OnLegsExtended()
 	{
 		base.OnLegsExtended();
 		inAir = false;
@@ -117,7 +128,32 @@ public class Jumper : Controller
 		Destroy(gameObject);
 	}
 
-	internal override void Update()
+    internal override void FixedUpdate()
+    {
+        base.FixedUpdate();
+
+        var currAngle = transform.eulerAngles.Round();
+
+        var rightAngle = Vector3.SignedAngle(previousAngle, currAngle, Vector3.right);
+        var forwardAngle = Vector3.SignedAngle(previousAngle, currAngle, Vector3.forward);
+        xAccumulatedAngle += rightAngle;
+        zAccumulatedAngle += forwardAngle;
+
+        // "standing straight"
+        if (IsGrounded()) {
+
+            if (Mathf.Abs(xAccumulatedAngle) > 170f || Mathf.Abs(zAccumulatedAngle) > 170f) {
+                flips++;
+                Pyromancer.PlayGameEffect(Game.i.library.gfxs["gfx_bottle_flip_success"], transform);
+            }
+            xAccumulatedAngle = 0f;
+            zAccumulatedAngle = 0f;
+        }
+
+        previousAngle = currAngle;
+    }
+
+    internal override void Update()
 	{
 		base.Update();
 	

@@ -105,6 +105,7 @@ public class DialogPlayer : MonoBehaviour
         if (currentLineIndex >= currentDialogue.elements.Count)
         {
             isPlaying = false;
+            DialogHooks.currentInterlocutor = null;
             if (Game.i) Game.i.player.Deparalyze();
             if (callback != null) callback.Invoke();
             return;

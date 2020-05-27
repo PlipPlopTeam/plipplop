@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &222195418
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 222195419}
+  m_Layer: 0
+  m_Name: CameraPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &222195419
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 222195418}
+  m_LocalRotation: {x: 0.23911753, y: -0.36964363, z: 0.099045664, w: 0.89239925}
+  m_LocalPosition: {x: 3.081, y: 1.705, z: -0.219}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7106242847018402286}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 30.000002, y: -45.000004, z: 0}
 --- !u!1 &911574936898953392
 GameObject:
   m_ObjectHideFlags: 0
@@ -399,8 +429,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7106242847018402286}
+  - component: {fileID: 1721359108}
   m_Layer: 0
-  m_Name: Taka
+  m_Name: MouiMoui_Rock_Taka
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -418,9 +449,28 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3943170226359180636}
+  - {fileID: 222195419}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1721359108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3915009018228165983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1ffb8cc4fc864049a32c093050d8f37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  questUniqueId: stuntman_quest
+  talkRadius: 2
+  staticCameraObjective: {fileID: 222195419}
+  faceMesh: {fileID: 5258874759365940646}
+  stuntManHelmet: {fileID: -927199367670048503, guid: 72b798d9bf480204fa1e0cbd9c47e324,
+    type: 3}
 --- !u!1 &4666892639116232165
 GameObject:
   m_ObjectHideFlags: 0
@@ -1356,8 +1406,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8432493149586798388}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 0, y: 0.335, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 435007330714625748}
@@ -1380,7 +1430,7 @@ Transform:
   - {fileID: 4666892639346117328}
   m_Father: {fileID: 7106242847018402286}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1001 &4666892639606500593
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1388,11 +1438,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3943170226359180636}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: e3f909a1c82276f498af1d79827e31d0,
-        type: 3}
-      propertyPath: m_Name
-      value: SK_Taka
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: e3f909a1c82276f498af1d79827e31d0,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1448,48 +1493,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -1504981713932161579, guid: e3f909a1c82276f498af1d79827e31d0,
+    - target: {fileID: -927199367670048503, guid: e3f909a1c82276f498af1d79827e31d0,
         type: 3}
-      propertyPath: m_Materials.Array.size
-      value: 3
+      propertyPath: m_Name
+      value: SK_Taka
       objectReference: {fileID: 0}
-    - target: {fileID: -1504981713932161579, guid: e3f909a1c82276f498af1d79827e31d0,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 62601599fbbc7804e9b48578aad9df94, type: 2}
-    - target: {fileID: -1504981713932161579, guid: e3f909a1c82276f498af1d79827e31d0,
-        type: 3}
-      propertyPath: m_Materials.Array.data[1]
-      value: 
-      objectReference: {fileID: 2100000, guid: 2b223d26e36202847a331e19c8daa705, type: 2}
-    - target: {fileID: -1504981713932161579, guid: e3f909a1c82276f498af1d79827e31d0,
-        type: 3}
-      propertyPath: m_Materials.Array.data[2]
-      value: 
-      objectReference: {fileID: 2100000, guid: 85969e2d33bc0184fa4d0ff20619743e, type: 2}
-    - target: {fileID: 1398293081564078693, guid: e3f909a1c82276f498af1d79827e31d0,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 89d50a20a3d59654083690b9a5704dbf, type: 2}
-    - target: {fileID: 9161697520621778570, guid: e3f909a1c82276f498af1d79827e31d0,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 9f4d59919928e3941b4f9d07003338b5, type: 2}
-    - target: {fileID: 9161697520621778570, guid: e3f909a1c82276f498af1d79827e31d0,
-        type: 3}
-      propertyPath: m_Materials.Array.data[2]
-      value: 
-      objectReference: {fileID: 2100000, guid: 85969e2d33bc0184fa4d0ff20619743e, type: 2}
-    - target: {fileID: 9161697520621778570, guid: e3f909a1c82276f498af1d79827e31d0,
-        type: 3}
-      propertyPath: m_Materials.Array.data[1]
-      value: 
-      objectReference: {fileID: 2100000, guid: 988d4556dfef5d949ac341674e1a3ef8, type: 2}
-    m_RemovedComponents:
-    - {fileID: -1569174783567144394, guid: e3f909a1c82276f498af1d79827e31d0, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3f909a1c82276f498af1d79827e31d0, type: 3}
 --- !u!1 &7850070064005026622 stripped
 GameObject:
@@ -1510,11 +1519,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3943170226359180636}
     m_Modifications:
-    - target: {fileID: 3764740218143155799, guid: 0382fe6e8dc36184d8f162f57bd6c1ab,
-        type: 3}
-      propertyPath: m_Name
-      value: Snail
-      objectReference: {fileID: 0}
     - target: {fileID: 4645133016123921503, guid: 0382fe6e8dc36184d8f162f57bd6c1ab,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1569,6 +1573,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3764740218143155799, guid: 0382fe6e8dc36184d8f162f57bd6c1ab,
+        type: 3}
+      propertyPath: m_Name
+      value: Snail
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0382fe6e8dc36184d8f162f57bd6c1ab, type: 3}

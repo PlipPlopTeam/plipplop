@@ -334,7 +334,10 @@ MonoBehaviour:
         - name: sfx_clack
           clip: {fileID: 8300000, guid: 488462aa7e6072540bda6ced9e4102e7, type: 3}
           loop: 0
-        childCount: 79
+        - name: sfx_tada
+          clip: {fileID: 8300000, guid: 488462aa7e6072540bda6ced9e4102e7, type: 3}
+          loop: 0
+        childCount: 80
     vfxs:
       serializableEffects:
         list:
@@ -371,8 +374,8 @@ MonoBehaviour:
         - name: vfx_sweat
           prefab: {fileID: 2265205593015572811, guid: fac342b8c625f2841874e341d5c527ef,
             type: 3}
-        - name: vfx_stun
-          prefab: {fileID: 7342928290526327994, guid: 808fee357df574d419d279f0642208e3,
+        - name: vfx_confetti
+          prefab: {fileID: 717537599371459609, guid: 7987b8d4f48bbff4a9377dcf1cb95e87,
             type: 3}
         childCount: 12
     gfxs:
@@ -420,7 +423,10 @@ MonoBehaviour:
         - name: gfx_guitar_impact
           gfxScriptableObject: {fileID: 11400000, guid: 436cfe4ef7809b34f930298e1f94715f,
             type: 2}
-        childCount: 14
+        - name: gfx_bottle_flip_success
+          gfxScriptableObject: {fileID: 11400000, guid: 3d2c73a9fd7cca144a28d872fd90375a,
+            type: 2}
+        childCount: 15
     npcLibrary: {fileID: 11400000, guid: d52e8e370a131fe4fa27843e9bddccee, type: 2}
     cinematics:
       serializableEffects:
@@ -437,7 +443,16 @@ MonoBehaviour:
         - name: cine_landscape_2
           prefab: {fileID: 3209900004009148955, guid: 0ad107efc0451b643be360ae2e1a2205,
             type: 3}
-        childCount: 4
+        - name: cine_close_1
+          prefab: {fileID: 3209900004009148955, guid: 6c0158a22a9298c46a5afa7782d77eb2,
+            type: 3}
+        - name: cine_close_2
+          prefab: {fileID: 3209900004009148955, guid: 203e43d7c9137ef4d878f09656e1c300,
+            type: 3}
+        - name: cine_final
+          prefab: {fileID: 3209900004009148955, guid: 1f4bf16b74da33a469bc405fe805afce,
+            type: 3}
+        childCount: 7
     bubblePrefab: {fileID: 6557741612811261699, guid: 1b692f290d9f0b141a223f59ad446f28,
       type: 3}
     emotions:

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 486572476627216221}
   - component: {fileID: 590627314467118699}
   - component: {fileID: 5372627525623127111}
-  - component: {fileID: 6811350663744027178}
+  - component: {fileID: 185521931}
   m_Layer: 0
   m_Name: WoodBench
   m_TagString: Untagged
@@ -64,6 +64,7 @@ MonoBehaviour:
     user: {fileID: 0}
     isSitted: 0
     cRotation: 0
+  locked: 0
 --- !u!65 &5372627525623127111
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -77,7 +78,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.1, y: 0.54, z: 0.41}
   m_Center: {x: -0.03, y: 0.26, z: 0.00000023841858}
---- !u!114 &6811350663744027178
+--- !u!114 &185521931
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -86,7 +87,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3601312113087290584}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a52f01500a9590a4d99cb5c7e61c9b57, type: 3}
+  m_Script: {fileID: 11500000, guid: db2a115faa10b234291ccedf7a58b1c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   autoPossess: 0
@@ -104,6 +105,17 @@ MonoBehaviour:
   visualsOffset: {x: 0, y: -0.2, z: 0}
   unpossessSpawnDistance: 1
   legsRetractedAngularDrag: 0.1
+  scaleModification: 0.25
+  chargeMaxTime: 2
+  chargePercentage: 0.25
+  chargeMaxForce: 25000
+  flipUpForce: 10000
+  flipTorqueForce: 2000
+  angularForce: 2000
+  maxVelocityMagnitude: 5
+  breakVelocity: 2
+  body: {fileID: 1175912882771689937}
+  chair: {fileID: 590627314467118699}
 --- !u!1 &9064353907385390030
 GameObject:
   m_ObjectHideFlags: 0

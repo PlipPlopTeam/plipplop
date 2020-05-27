@@ -22,6 +22,11 @@ public class BuildPlayerWindows64 : MonoBehaviour
     {
         Build(buildLocation, new[] { "Assets/Scenes/Main.unity" });
     }
+    [MenuItem("Tools/Build cinematic scene")]
+    public static void BuildCinematic()
+    {
+        Build(buildLocation, new[] { "Assets/Scenes/CineScene.unity" });
+    }
 
     static void Build(string location, params string[] scenes)
     {
