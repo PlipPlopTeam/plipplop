@@ -10,7 +10,7 @@ public class Brain
     int isParalyzed = 0;
 
     Controller controller = null;
-    Controller baseController = null;
+    public Controller baseController { private set; get; } = null;
 
     Coroutine rumbleCoroutine;
 
