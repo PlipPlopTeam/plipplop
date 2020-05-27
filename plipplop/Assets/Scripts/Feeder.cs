@@ -10,10 +10,11 @@ public class Feeder : MonoBehaviour
     public int stock;
     public bool destroyOnceEmpty = false;
 	public float range = 3f;
+    public bool activated = true;
 
 	public bool IsEmpty()
 	{
-		return stock > 0;
+		return stock > 0 || !activated;
 	}
 
     private void Start()
@@ -23,8 +24,7 @@ public class Feeder : MonoBehaviour
 
     public virtual void Catch(NonPlayableCharacter npc)
     {
-        if(stock <= 0) 
-            npc.feeder = null;
+        if(stock <= 0 || !activated) npc.feeder = null;
     }
 
 	public virtual bool InRange(NonPlayableCharacter npc)
