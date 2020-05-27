@@ -141,6 +141,7 @@ public class Jumper : Controller
 
             if (Mathf.Abs(xAccumulatedAngle) > 170f || Mathf.Abs(zAccumulatedAngle) > 170f) {
                 flips++;
+                Pyromancer.PlayGameEffect(Game.i.library.gfxs["gfx_bottle_flip_success"], transform);
             }
             xAccumulatedAngle = 0f;
             zAccumulatedAngle = 0f;
