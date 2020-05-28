@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   autoPossess: 0
-  beginCrouched: 0
+  beginCrouched: 1
   canRetractLegs: 1
   freezeUntilPossessed: 1
   useGravity: 1
@@ -110,7 +110,6 @@ MonoBehaviour:
   face: {fileID: 4372214418793336870}
   visualsOffset: {x: 0, y: 0, z: 0}
   unpossessSpawnDistance: 1
-  legsExtendedAngularDrag: 5
   legsRetractedAngularDrag: 0.03
   airControlSpeed: 5
   airLerpSpeed: 3
@@ -186,21 +185,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1123944791841484717}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: bee3e5b43e850744caecae7af72caf6f,
-        type: 3}
-      propertyPath: m_Name
-      value: KM_Umbrella01
-      objectReference: {fileID: 0}
-    - target: {fileID: 9117771922401743338, guid: bee3e5b43e850744caecae7af72caf6f,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -4109300951667726200, guid: bee3e5b43e850744caecae7af72caf6f,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: bee3e5b43e850744caecae7af72caf6f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -256,6 +240,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: bee3e5b43e850744caecae7af72caf6f,
+        type: 3}
+      propertyPath: m_Name
+      value: KM_Umbrella01
+      objectReference: {fileID: 0}
     - target: {fileID: 6494845513852623121, guid: bee3e5b43e850744caecae7af72caf6f,
         type: 3}
       propertyPath: m_LocalRotation.x
@@ -280,6 +269,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 90.00001
+      objectReference: {fileID: 0}
+    - target: {fileID: -4109300951667726200, guid: bee3e5b43e850744caecae7af72caf6f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8593181160642101903, guid: bee3e5b43e850744caecae7af72caf6f,
         type: 3}
@@ -314,6 +308,11 @@ PrefabInstance:
     - target: {fileID: -8593181160642101903, guid: bee3e5b43e850744caecae7af72caf6f,
         type: 3}
       propertyPath: m_DirtyAABB
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9117771922401743338, guid: bee3e5b43e850744caecae7af72caf6f,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -6848403497339999135, guid: bee3e5b43e850744caecae7af72caf6f,
