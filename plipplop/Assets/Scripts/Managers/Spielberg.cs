@@ -18,6 +18,11 @@ public class Spielberg
         Game.i.cinematics.Play(cinematicName);
     }
 
+    public static void PlayCinematic(GameObject cinematicObj)
+    {
+        Game.i.cinematics.Play(cinematicObj);
+    }
+
     public void Play(string cinematicName)
     {
         if (currentAssistant != null) return;
@@ -26,7 +31,15 @@ public class Spielberg
             Debug.LogError("SPIELBERG ERROR: Cinematic not found (" + cinematicName + "). Please check the library.");
             return;
         }
-        currentAssistant = GameObject.Instantiate(kino.prefab).GetComponent<SpielbergAssistant>();
+
+        var cineObj = GameObject.Instantiate(kino.prefab);
+        Play(cineObj);
+    }
+
+    public void Play(GameObject cinematicObj)
+    {
+        if (currentAssistant != null) return;
+        currentAssistant = cinematicObj.GetComponent<SpielbergAssistant>();
         currentAssistant.Play();
     }
 
@@ -71,9 +84,11 @@ public class Spielberg
         currentAssistant.LiberatePlayer();
     }
 
-    public void KinoStartDialogue()
+    public void KinoStartDialogue(string dialogName)
     {
-
+        // On mwon mwon only for now
+        var talking = GameObject.FindObjectOfType<MwonMwonIntroQuest>();
+        Game.i.PlayDialogue(Game.i.library.dialogs[dialogName], talking);
     }
 
     public void KinoDialogueNextStep()
@@ -81,9 +96,9 @@ public class Spielberg
 
     }
 
-    public void PauseUntilDialogueAdvance()
+    public void KinoWaitForInput(EAction action)
     {
-
+        currentAssistant.PauseAndWaitForInput(action);
     }
 
     public void KinoDisableNPC(string npcName)

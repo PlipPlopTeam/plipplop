@@ -271,7 +271,14 @@ public class DialogPlayer : MonoBehaviour
             yield return new WaitForSeconds(currentDialogue.intervalMultiplier * (isGoingFaster ? fastInterval : (isSlowingDown ? slowInterval : baseInterval)));
         }
 
-        isWaitingForInput = true;
+        if (currentDialogue.isAutomatic) {
+            yield return new WaitForSeconds(Mathf.Min(3f, line.length * 0.33f));
+            Next();
+
+        }
+        else {
+            isWaitingForInput = true;
+        }
 
     }
 
