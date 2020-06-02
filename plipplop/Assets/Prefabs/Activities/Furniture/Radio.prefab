@@ -96,16 +96,8 @@ MonoBehaviour:
   visualsOffset: {x: 0, y: -0.2, z: 0}
   unpossessSpawnDistance: 1
   legsRetractedAngularDrag: 0.1
-  pushMovementForce: 500
-  pushCooldown: 2
-  pushThreshold: 0.5
-  pushJumpForce: 250
-  jumpForce: 10
-  speedBeforeLegs: 1
-  rotationVelocityThreshold: 0.25
-  rotationLerpSpeed: 2
-  crouchCooldown: 2
-  drag: 1
+  angularForce: 2000
+  maxVelocityMagnitude: 5
   musics:
   - name: bgm_test
     bpm: 96
@@ -307,26 +299,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8132795082402124948}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: a6745308ab6de644dabcad8c5adb767b,
-        type: 3}
-      propertyPath: m_Name
-      value: KM_Radio
-      objectReference: {fileID: 0}
-    - target: {fileID: 2857767405178671617, guid: a6745308ab6de644dabcad8c5adb767b,
-        type: 3}
-      propertyPath: m_Name
-      value: Body
-      objectReference: {fileID: 0}
-    - target: {fileID: -1978887880731813374, guid: a6745308ab6de644dabcad8c5adb767b,
-        type: 3}
-      propertyPath: m_Name
-      value: Face
-      objectReference: {fileID: 0}
-    - target: {fileID: -1978887880731813374, guid: a6745308ab6de644dabcad8c5adb767b,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: a6745308ab6de644dabcad8c5adb767b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -381,6 +353,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: a6745308ab6de644dabcad8c5adb767b,
+        type: 3}
+      propertyPath: m_Name
+      value: KM_Radio
+      objectReference: {fileID: 0}
+    - target: {fileID: -1978887880731813374, guid: a6745308ab6de644dabcad8c5adb767b,
+        type: 3}
+      propertyPath: m_Name
+      value: Face
+      objectReference: {fileID: 0}
+    - target: {fileID: -1978887880731813374, guid: a6745308ab6de644dabcad8c5adb767b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2857767405178671617, guid: a6745308ab6de644dabcad8c5adb767b,
+        type: 3}
+      propertyPath: m_Name
+      value: Body
       objectReference: {fileID: 0}
     - target: {fileID: 53828880913542605, guid: a6745308ab6de644dabcad8c5adb767b,
         type: 3}

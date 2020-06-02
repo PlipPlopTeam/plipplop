@@ -23,6 +23,8 @@ public class Carpet : Controller
     float currentZAccumulator = 0f;
     float timeStarted = 0f;
 
+    public Transform head;
+
 
     public override void OnEject()
     {
@@ -30,6 +32,7 @@ public class Carpet : Controller
         foreach(var collider in GetComponentsInChildren<Collider>()) {
             collider.material = immobileMaterial;
         }
+        
         // Code here
     }
 
@@ -110,7 +113,7 @@ public class Carpet : Controller
 
     internal override void OnLegsRetracted()
     {
-        // Code here
+        head.localPosition = new Vector3(0f, 0f, 0f);
     }
 
     internal override void OnLegsExtended()
@@ -121,6 +124,7 @@ public class Carpet : Controller
             rb.isKinematic = false;
         }
 
+        head.localPosition = visualsOffset;
     }
 
 #if UNITY_EDITOR

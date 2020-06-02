@@ -47,13 +47,16 @@ public class Walker : MonoBehaviour
 	}
 
 	internal Floor floor = null;
-
+	
+	/*
 	public virtual void FixedUpdate()
 	{
+
 		Floor f = FindFloor();
 		if (f != null) Enter(f);
 		else if(floor != null) Leave();
 	}
+	*/
 
 	// GET ALL RAYCAST HITS BELOW FEETS
 	private RaycastHit[] RaycastAllToGround()

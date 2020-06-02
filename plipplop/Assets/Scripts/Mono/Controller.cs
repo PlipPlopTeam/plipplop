@@ -35,6 +35,7 @@ public abstract class Controller : MonoBehaviour
     RigidbodyConstraints previousConstraints;
     internal bool movingStick;
 	bool isBeingThrown = false;
+    bool savedCanRetractLegs;
 	int freeze = 0;
     int immersion = 0;
 
@@ -199,6 +200,8 @@ public abstract class Controller : MonoBehaviour
     {
         immersion++;
         locomotion.isImmerged = isImmerged;
+        canRetractLegs = false;
+        ExtendLegs();
         Kick();
     }
 
@@ -213,6 +216,7 @@ public abstract class Controller : MonoBehaviour
     public void SetOverwater()
     {
         immersion--;
+        canRetractLegs = savedCanRetractLegs;
         locomotion.isImmerged = isImmerged;
     }
 
@@ -241,6 +245,7 @@ public abstract class Controller : MonoBehaviour
         else locomotion.Initialize();
 
         previousVisualLocalPosition = visuals.transform.localPosition;
+        savedCanRetractLegs = canRetractLegs;
 
         //DEBUG
         foreach (var renderer in GetComponentsInChildren<Renderer>()) {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class Television : Hopper
+public class Television : Vanilla
 {
     [Header("TELEVISION")]
     [Space(5)]
@@ -26,27 +26,10 @@ public class Television : Hopper
         //fakeLight.SetActive(true);
     }
 
-    internal override void Push(Vector3 direction)
-    {
-        base.Push(direction);
-        anim.Play();
-    }
-
     internal override void Start()
     {
         base.Start();
         screenRenderer.material = Instantiate(screenRenderer.material);
-    }
-
-    internal override void OnJumpUp()
-    {
-        valuable.hidden = true;
-    }
-
-    internal override void OnJumpDown()
-    {
-        ps.Play();
-        valuable.hidden = false;
     }
 
     void OnDestroy() 

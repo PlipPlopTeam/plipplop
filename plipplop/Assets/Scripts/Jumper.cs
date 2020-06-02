@@ -132,45 +132,52 @@ public class Jumper : Controller
     {
         base.FixedUpdate();
 
-        var currAngle = transform.eulerAngles.Round();
+		if (IsPossessed())
+		{
+			Debug.Log("zdadazda");
+			var currAngle = transform.eulerAngles.Round();
+			var rightAngle = Vector3.SignedAngle(previousAngle, currAngle, Vector3.right);
+			var forwardAngle = Vector3.SignedAngle(previousAngle, currAngle, Vector3.forward);
+			xAccumulatedAngle += rightAngle;
+			zAccumulatedAngle += forwardAngle;
 
-        var rightAngle = Vector3.SignedAngle(previousAngle, currAngle, Vector3.right);
-        var forwardAngle = Vector3.SignedAngle(previousAngle, currAngle, Vector3.forward);
-        xAccumulatedAngle += rightAngle;
-        zAccumulatedAngle += forwardAngle;
+			// "standing straight"
+			if (IsGrounded())
+			{
 
-        // "standing straight"
-        if (IsGrounded()) {
-
-            if (Mathf.Abs(xAccumulatedAngle) > 170f || Mathf.Abs(zAccumulatedAngle) > 170f) {
-                flips++;
-                Pyromancer.PlayGameEffect(Game.i.library.gfxs["gfx_bottle_flip_success"], transform);
-            }
-            xAccumulatedAngle = 0f;
-            zAccumulatedAngle = 0f;
-        }
-
-        previousAngle = currAngle;
+				if (Mathf.Abs(xAccumulatedAngle) > 170f || Mathf.Abs(zAccumulatedAngle) > 170f)
+				{
+					flips++;
+					Pyromancer.PlayGameEffect(Game.i.library.gfxs["gfx_bottle_flip_success"], transform);
+				}
+				xAccumulatedAngle = 0f;
+				zAccumulatedAngle = 0f;
+			}
+			previousAngle = currAngle;
+		}
     }
 
     internal override void Update()
 	{
 		base.Update();
-	
-		if(inAir)
+
+		if (IsPossessed())
 		{
-			if (chair != null) chair.locked = true;
-			if(rigidbody.velocity.y > 0) transform.up = rigidbody.velocity.normalized;
-		}
-		else if(charging)
-		{
-			if (chair != null) chair.locked = true;
-			Vector3 d = (Game.i.aperture.Right() * dir.x + Game.i.aperture.Forward() * dir.z);
-			visuals.up = Vector3.Lerp(visuals.up, new Vector3(d.x * 0.1f, 1f, d.z * 0.1f), Time.deltaTime * 10f);
-		}
-		else
-		{
-			if (chair != null) chair.locked = false;
+			if (inAir)
+			{
+				if (chair != null) chair.locked = true;
+				if (rigidbody.velocity.y > 0) transform.up = rigidbody.velocity.normalized;
+			}
+			else if (charging)
+			{
+				if (chair != null) chair.locked = true;
+				Vector3 d = (Game.i.aperture.Right() * dir.x + Game.i.aperture.Forward() * dir.z);
+				visuals.up = Vector3.Lerp(visuals.up, new Vector3(d.x * 0.1f, 1f, d.z * 0.1f), Time.deltaTime * 10f);
+			}
+			else
+			{
+				if (chair != null) chair.locked = false;
+			}
 		}
 	}
 

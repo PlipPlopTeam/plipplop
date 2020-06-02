@@ -158,6 +158,8 @@ public class Shooter : Controller
                 {
                     npc.Stun(3f);
                 }
+
+                t.arrow.rb.velocity /= 10f;
             };
 
             t.Shoot();
