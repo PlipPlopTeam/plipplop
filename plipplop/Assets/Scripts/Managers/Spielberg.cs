@@ -96,6 +96,11 @@ public class Spielberg
 
     }
 
+    public void KinoWaitEndOfDialogue()
+    {
+        currentAssistant.PauseAndWaitForEndOfDialogue();
+    }
+
     public void KinoWaitForInput(EAction action)
     {
         currentAssistant.PauseAndWaitForInput(action);

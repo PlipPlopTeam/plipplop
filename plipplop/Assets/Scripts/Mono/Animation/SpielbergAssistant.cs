@@ -23,6 +23,7 @@ public class SpielbergAssistant : MonoBehaviour
 
     PlayableDirector director;
     EAction? waitingOnInput;
+    bool isWaitingOnDialogue;
 
     private void Awake()
     {
@@ -86,7 +87,13 @@ public class SpielbergAssistant : MonoBehaviour
             if (waitingOnInput.HasValue && Game.i.mapping.IsPressed(waitingOnInput.Value)) {
                 waitingOnInput = null;
                 director.Resume();
-                Debug.Log("resuming");
+            }
+
+            if (isWaitingOnDialogue) {
+                if (DialogHooks.currentInterlocutor == null) {
+                    isWaitingOnDialogue = false;
+                    director.Resume();
+                }
             }
         }   
     }
@@ -296,5 +303,11 @@ public class SpielbergAssistant : MonoBehaviour
     {
         director.Pause();
         waitingOnInput = action;
+    }
+
+    public void PauseAndWaitForEndOfDialogue()
+    {
+        director.Pause();
+        isWaitingOnDialogue = true;
     }
 }
