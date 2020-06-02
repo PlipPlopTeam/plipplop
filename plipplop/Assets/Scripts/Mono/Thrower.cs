@@ -7,6 +7,7 @@ public class Thrower : MonoBehaviour
     public Transform gunEnd;
     public ParticleSystem ps;
     public string sfx;
+    public bool show;
 
     [Header("Settings")]
     public float force = 1000f;
@@ -23,6 +24,7 @@ public class Thrower : MonoBehaviour
             .GetComponent<Projectile>();
             arrow.Stuck();
             arrow.transform.SetParent(transform);
+            arrow.gameObject.SetActive(show);
         }
     }
 
@@ -30,11 +32,11 @@ public class Thrower : MonoBehaviour
     {
         if(arrow != null)
         {
+            arrow.gameObject.SetActive(true);
             arrow.transform.SetParent(null);
             arrow.Throw(gunEnd.forward, force, torque);
             arrow = null;
         }
-
         if(ps != null) ps.Play();
         if (sfx != "") SoundPlayer.PlayAtPosition(sfx, transform.position);
     }
