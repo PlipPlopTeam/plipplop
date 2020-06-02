@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5348957800398331629}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Visuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -419,16 +419,18 @@ MonoBehaviour:
   legsRetractedAngularDrag: 0.1
   throwers:
   - {fileID: 6665907460514541257}
-  feeder: {fileID: 0}
+  feeder: {fileID: 228769047}
   rotateSpeed: 100
   lateralSpeed: 30000
   stepShakeIntensity: 0.5
   stepShakeDuration: 0.5
   chargeMaxTime: 1.5
   chargeMaxForce: 1000
+  chargeTreshold: 0.1
   aimDistanceMax: 25
   shootShakeIntensity: 2
   shootShakeDuration: 0.25
+  shootCooldown: 1
   sensitivity: 0.5
   lerpRotation: 10
   lerpPosition: 5
@@ -438,6 +440,7 @@ MonoBehaviour:
   minAngle: -45
   maxAngle: 45
   camerOffset: {x: 2.25, y: 1.5, z: -3.35}
+  cooldown: 0
   aimOffset: {x: 0, y: 0, z: 0}
   shoot: 0
   aim: 0
@@ -519,8 +522,9 @@ MonoBehaviour:
     type: 3}
   gunEnd: {fileID: 1418834894459689619}
   ps: {fileID: 0}
-  sfx: 
-  force: 915.86487
+  sfx: sfx_can_launch
+  show: 0
+  force: 0
   torque: 100
   arrow: {fileID: 0}
 --- !u!111 &535352308131647234
@@ -776,21 +780,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: KM_CanDispenser
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 5b87970a2eeea3748b4d546b62129774,
-        type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 571026297713463726, guid: 5b87970a2eeea3748b4d546b62129774,
-        type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 7083926584955890530, guid: 5b87970a2eeea3748b4d546b62129774,
-        type: 3}
-      propertyPath: m_Layer
-      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: -4554713794092637562, guid: 5b87970a2eeea3748b4d546b62129774,
         type: 3}
