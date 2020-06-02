@@ -25,14 +25,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 138854015}
-  m_LocalRotation: {x: -0.19072483, y: -0, z: -0, w: 0.98164356}
-  m_LocalPosition: {x: 0, y: 0.62, z: 0.9}
+  m_LocalRotation: {x: -0.14333518, y: -0, z: -0, w: 0.98967427}
+  m_LocalPosition: {x: 0, y: 0.514, z: 0.656}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1931240770}
   m_Father: {fileID: 8826430337641371454}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: -21.990002, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -16.482, y: 0, z: 0}
 --- !u!198 &138854018
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -9662,14 +9662,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8826430337641371454}
-  - component: {fileID: 8826430337641371453}
+  - component: {fileID: 1806998380}
   - component: {fileID: 8826430337641371452}
   - component: {fileID: 8826430337641371450}
   - component: {fileID: 8826430337641371451}
   - component: {fileID: 4955296962139947107}
-  - component: {fileID: 7837557356282742024}
   - component: {fileID: 7391532698718983640}
   - component: {fileID: 8248943116928911348}
+  - component: {fileID: 529629221297486088}
   m_Layer: 0
   m_Name: WashingMachine
   m_TagString: Untagged
@@ -9694,7 +9694,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8826430337641371453
+--- !u!114 &1806998380
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9703,7 +9703,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8826430337641371455}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74aa503b009d86446b1436c68f4a3297, type: 3}
+  m_Script: {fileID: 11500000, guid: c43b5e7f7db3c704fa2a5ea21287ca2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   autoPossess: 0
@@ -9711,29 +9711,20 @@ MonoBehaviour:
   canRetractLegs: 1
   freezeUntilPossessed: 0
   useGravity: 1
-  animateHead: 0
+  animateHead: 1
   gravityMultiplier: 100
-  customExternalRigidbody: {fileID: 0}
+  customExternalRigidbody: {fileID: 8826430337641371450}
   customCamera: {fileID: 11400000, guid: eefc08a948f35174db60d9790fff5b9d, type: 2}
-  locomotion: {fileID: 5348957801613606141, guid: b0d1cfadf34ecd242a7444aed435a712,
-    type: 3}
-  visuals: {fileID: 5348957800398331629, guid: b0d1cfadf34ecd242a7444aed435a712, type: 3}
+  locomotion: {fileID: 0}
+  visuals: {fileID: 8826430338838295852}
   face: {fileID: 0}
-  visualsOffset: {x: 0, y: 0, z: 0}
+  visualsOffset: {x: 0, y: -0.2, z: 0}
   unpossessSpawnDistance: 1
   legsRetractedAngularDrag: 0.1
-  throwers:
-  - {fileID: 6665907460514541257, guid: b0d1cfadf34ecd242a7444aed435a712, type: 3}
-  feeder: {fileID: 0}
   rotateSpeed: 100
-  lateralSpeed: 1
-  stepShakeIntensity: 0
-  stepShakeDuration: 0
-  chargeMaxTime: 3
-  chargeMaxForce: 1000
-  aimDistanceMax: 10
-  shootShakeIntensity: 0
-  shootShakeDuration: 0
+  lateralSpeed: 30000
+  stepShakeIntensity: 0.5
+  stepShakeDuration: 0.5
   sensitivity: 0.5
   lerpRotation: 10
   lerpPosition: 5
@@ -9742,11 +9733,10 @@ MonoBehaviour:
   defaultFOV: 70
   minAngle: -45
   maxAngle: 45
-  camerOffset: {x: 2.25, y: 1.5, z: -3.35}
-  aimOffset: {x: 0, y: 0, z: 0}
-  shoot: 0
-  aim: 0
+  cameraOffset: {x: 2, y: 1.5, z: -3}
   chargePercentage: 0
+  ps: {fileID: 138854018}
+  anim: {fileID: 7391532698718983640}
 --- !u!114 &8826430337641371452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9760,7 +9750,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   modifiers: []
-  preset: {fileID: 0}
+  preset: {fileID: 11400000, guid: 1fd4bd979846d8d419a55b058d680ec3, type: 2}
   isFlattened: 0
   rigidbody: {fileID: 0}
   targetDirection: {x: 0, y: 0, z: 0}
@@ -9792,8 +9782,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.4109936, y: 1.7112744, z: 1.4097074}
-  m_Center: {x: -0.0060310364, y: 0.8597077, z: -0.06656653}
+  m_Size: {x: 0.82, y: 1.25, z: 0.85}
+  m_Center: {x: 0, y: 0.625, z: 0}
 --- !u!114 &4955296962139947107
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9808,25 +9798,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buyoyancy: 10
   waterline: 0.4
---- !u!114 &7837557356282742024
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8826430337641371455}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40fcf05c5a65c1348a2d6a87b4018e12, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabToThrow: {fileID: 0}
-  gunEnd: {fileID: 0}
-  ps: {fileID: 0}
-  sfx: 
-  force: 0
-  torque: 0
-  arrow: {fileID: 0}
 --- !u!111 &7391532698718983640
 Animation:
   m_ObjectHideFlags: 0
@@ -9855,6 +9826,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a15cd58957a760249a3a123767c2237a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &529629221297486088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8826430337641371455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c43b5e7f7db3c704fa2a5ea21287ca2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoPossess: 0
+  beginCrouched: 0
+  canRetractLegs: 1
+  freezeUntilPossessed: 0
+  useGravity: 1
+  animateHead: 1
+  gravityMultiplier: 100
+  customExternalRigidbody: {fileID: 0}
+  customCamera: {fileID: 0}
+  locomotion: {fileID: 0}
+  visuals: {fileID: 0}
+  face: {fileID: 0}
+  visualsOffset: {x: 0, y: 0, z: 0}
+  unpossessSpawnDistance: 1
+  legsRetractedAngularDrag: 0.1
+  rotateSpeed: 100
+  lateralSpeed: 1
+  stepShakeIntensity: 0
+  stepShakeDuration: 0
+  sensitivity: 1
+  lerpRotation: 1
+  lerpPosition: 1
+  lerpFOV: 1
+  aimFOV: 50
+  defaultFOV: 70
+  minAngle: -45
+  maxAngle: 45
+  cameraOffset: {x: 0, y: 0, z: 0}
+  chargePercentage: 0
+  ps: {fileID: 0}
+  anim: {fileID: 0}
 --- !u!1 &8826430338838295853
 GameObject:
   m_ObjectHideFlags: 0
@@ -10038,21 +10052,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: d2018215839eac142a88bd101d97fd85,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: d2018215839eac142a88bd101d97fd85,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: d2018215839eac142a88bd101d97fd85,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -1504981713932161579, guid: d2018215839eac142a88bd101d97fd85,
         type: 3}

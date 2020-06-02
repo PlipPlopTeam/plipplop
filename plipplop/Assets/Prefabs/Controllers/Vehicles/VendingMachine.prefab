@@ -356,7 +356,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5348957801613606143}
-  - component: {fileID: 5348957801613606140}
+  - component: {fileID: 1000582681}
   - component: {fileID: 5348957801613606141}
   - component: {fileID: 5348957801613606139}
   - component: {fileID: 5348957801613606138}
@@ -390,7 +390,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5348957801613606140
+--- !u!114 &1000582681
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -399,38 +399,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 5348957801613606142}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74aa503b009d86446b1436c68f4a3297, type: 3}
+  m_Script: {fileID: 11500000, guid: 53c6e589057219248854e09364d55a75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   autoPossess: 0
-  beginCrouched: 1
+  beginCrouched: 0
   canRetractLegs: 1
   freezeUntilPossessed: 0
   useGravity: 1
   animateHead: 1
   gravityMultiplier: 100
-  customExternalRigidbody: {fileID: 5348957801613606139}
-  customCamera: {fileID: 11400000, guid: eefc08a948f35174db60d9790fff5b9d, type: 2}
-  locomotion: {fileID: 5348957801613606141}
-  visuals: {fileID: 5348957800398331629}
+  customExternalRigidbody: {fileID: 0}
+  customCamera: {fileID: 0}
+  locomotion: {fileID: 0}
+  visuals: {fileID: 0}
   face: {fileID: 0}
   visualsOffset: {x: 0, y: -0.2, z: 0}
   unpossessSpawnDistance: 1
   legsRetractedAngularDrag: 0.1
-  throwers:
-  - {fileID: 6665907460514541257}
-  feeder: {fileID: 228769047}
   rotateSpeed: 100
   lateralSpeed: 30000
   stepShakeIntensity: 0.5
   stepShakeDuration: 0.5
-  chargeMaxTime: 1.5
-  chargeMaxForce: 1000
-  chargeTreshold: 0.1
-  aimDistanceMax: 25
-  shootShakeIntensity: 2
-  shootShakeDuration: 0.25
-  shootCooldown: 1
   sensitivity: 0.5
   lerpRotation: 10
   lerpPosition: 5
@@ -439,12 +429,21 @@ MonoBehaviour:
   defaultFOV: 70
   minAngle: -45
   maxAngle: 45
-  camerOffset: {x: 2.25, y: 1.5, z: -3.35}
-  cooldown: 0
-  aimOffset: {x: 0, y: 0, z: 0}
+  cameraOffset: {x: 2, y: 1.5, z: -3}
+  chargePercentage: 0
+  throwers:
+  - {fileID: 6665907460514541257}
+  feeder: {fileID: 228769047}
+  anim: {fileID: 535352308131647234}
+  chargeMaxTime: 1.5
+  chargeMaxForce: 1000
+  chargeTreshold: 0.1
+  aimDistanceMax: 10
+  shootShakeIntensity: 1
+  shootShakeDuration: 0.5
+  shootCooldown: 1
   shoot: 0
   aim: 0
-  chargePercentage: 0
 --- !u!114 &5348957801613606141
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -523,8 +522,8 @@ MonoBehaviour:
   gunEnd: {fileID: 1418834894459689619}
   ps: {fileID: 0}
   sfx: sfx_can_launch
-  show: 0
-  force: 0
+  show: 1
+  force: 10
   torque: 100
   arrow: {fileID: 0}
 --- !u!111 &535352308131647234
@@ -641,6 +640,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5348957800398331629}
     m_Modifications:
+    - target: {fileID: -927199367670048503, guid: 5b87970a2eeea3748b4d546b62129774,
+        type: 3}
+      propertyPath: m_Name
+      value: KM_CanDispenser
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 5b87970a2eeea3748b4d546b62129774,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -775,11 +779,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90.00001
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 5b87970a2eeea3748b4d546b62129774,
-        type: 3}
-      propertyPath: m_Name
-      value: KM_CanDispenser
       objectReference: {fileID: 0}
     - target: {fileID: -4554713794092637562, guid: 5b87970a2eeea3748b4d546b62129774,
         type: 3}
