@@ -22,6 +22,8 @@ public class SpielbergAssistant : MonoBehaviour
     Camera lastCamera;
 
     PlayableDirector director;
+    EAction? waitingOnInput;
+    bool isWaitingOnDialogue;
 
     private void Awake()
     {
@@ -47,6 +49,11 @@ public class SpielbergAssistant : MonoBehaviour
         Game.i.player.Deparalyze();
     }
 
+    [ContextMenu("TEST CINEMATIC")]
+    public void PlayViaSpielberg_DO_NOT_USE_FROM_CODE_THIS_A_GUI_FUNCTION()
+    {
+        Spielberg.PlayCinematic(this.gameObject);
+    }
     public void Play()
     {
         if (isPlaying) {
@@ -68,10 +75,25 @@ public class SpielbergAssistant : MonoBehaviour
 
     private void Update()
     {
-        if (isPlaying && firstCamera) {
-            var currCamera = Aperture.GetCurrentlyActiveCamera();
-            if (!Object.ReferenceEquals(currCamera, lastCamera)) {
-                lastCamera = currCamera;
+        if (isPlaying) {
+            if (firstCamera) {
+                var currCamera = Aperture.GetCurrentlyActiveCamera();
+                if (!Object.ReferenceEquals(currCamera, lastCamera)) {
+                    lastCamera = currCamera;
+                }
+            }
+
+
+            if (waitingOnInput.HasValue && Game.i.mapping.IsPressed(waitingOnInput.Value)) {
+                waitingOnInput = null;
+                director.Resume();
+            }
+
+            if (isWaitingOnDialogue) {
+                if (DialogHooks.currentInterlocutor == null) {
+                    isWaitingOnDialogue = false;
+                    director.Resume();
+                }
             }
         }   
     }
@@ -275,5 +297,17 @@ public class SpielbergAssistant : MonoBehaviour
         }
 
         return null;
+    }
+
+    public void PauseAndWaitForInput(EAction action)
+    {
+        director.Pause();
+        waitingOnInput = action;
+    }
+
+    public void PauseAndWaitForEndOfDialogue()
+    {
+        director.Pause();
+        isWaitingOnDialogue = true;
     }
 }
