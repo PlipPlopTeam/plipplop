@@ -314,7 +314,6 @@ public class NonPlayableCharacter : MonoBehaviour
 	{
 		if(stun > 0)
 		{
-			Debug.Log(stun);
 			graph.Pause();
 			movement.Pause();
 			look.LooseFocus();
