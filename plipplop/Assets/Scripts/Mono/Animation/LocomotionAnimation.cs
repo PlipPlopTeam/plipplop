@@ -24,8 +24,10 @@ public class LocomotionAnimation
     Transform headDummy;
     bool areLegsRetracted = false;
     float legsGrowSpeed = 10f;
+    float walkAnimationSwitchCooldown = 1f;
+    float walkAnimationSwitchTimer = 0f;
 
-	Dictionary<float, string> movementAnimationMagnitude = new Dictionary<float, string>();
+    Dictionary<float, string> movementAnimationMagnitude = new Dictionary<float, string>();
 
     public LocomotionAnimation(Rigidbody rb, CapsuleCollider legsCollider, Transform visualsTransform)
     {
@@ -107,20 +109,35 @@ public class LocomotionAnimation
 				PlayAnimation(new Vector2(rigidbody.velocity.x, rigidbody.velocity.z).magnitude * moveInput.magnitude);
 			}
         }
+
+        if (walkAnimationSwitchTimer > 0) walkAnimationSwitchTimer -= Time.deltaTime;
     }
 
-	public void PlayAnimation(float hVelocity)
+    string previousAnimation = "";
+    public void PlayAnimation(float hVelocity)
 	{
 		string animName = "Idle";
 		foreach (KeyValuePair<float, string> entry in movementAnimationMagnitude)
 		{
-			if(hVelocity > entry.Key) animName = entry.Value;
+            if (hVelocity > entry.Key)
+            {
+                if(previousAnimation == "Walk" || previousAnimation == "Run") 
+                {
+                    if(entry.Value == "Walk" || entry.Value == "Run")
+                    {
+                        if (walkAnimationSwitchTimer <= 0f) animName = entry.Value;
+                    }
+                    else animName = entry.Value;
+                }
+                else animName = entry.Value;
+            }
 		}
 		if (animName != "Idle") legs.speed = Mathf.Clamp(hVelocity/2, 0.5f, 2f);
 		else legs.speed = 1f;
 
-		legs.PlayOnce(animName);
-	}
+        legs.PlayOnce(animName);
+        previousAnimation = animName;
+    }
 
     public bool AreLegsRetracted()
     {
