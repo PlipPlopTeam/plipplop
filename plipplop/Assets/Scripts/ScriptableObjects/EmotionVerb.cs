@@ -4,4 +4,5 @@
 public class EmotionVerb : ScriptableObject
 {
     public Texture[] frames;
+    public string[] sounds;
 }
