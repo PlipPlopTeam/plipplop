@@ -40,10 +40,11 @@ public class WaterVolume : Volume
         var rb = obj.GetComponent<Rigidbody>();
         if (rb) {
             bool isNew = objectsInWater.Add(rb, obj);
-            var con = obj.GetComponent<Controller>();
-            if (con && isNew) {
-                con.SetUnderwater();
+            if (rb.gameObject.TryGetComponent<Controller>(out Controller c) && isNew)
+            {
+                c.SetUnderwater();
             }
+
             if (isNew)
             {
                 // rentre
@@ -63,16 +64,13 @@ public class WaterVolume : Volume
         if (rb) {
             var outOfWater = objectsInWater.Remove(obj);
 
-            if (outOfWater) {
+            if (outOfWater) 
+            {
                 objectsInWater.Remove(rb);
-
-                // sort
-
                 rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y * aboveWaterSpeedReduction, rb.velocity.z);
-
-                var con = rb.GetComponent<Controller>();
-                if (con) {
-                    con.SetOverwater();
+                if(rb.gameObject.TryGetComponent<Controller>(out Controller c))
+                {
+                    c.SetOverwater();
                 }
             }
         }

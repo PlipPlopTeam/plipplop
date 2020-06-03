@@ -218,6 +218,7 @@ public abstract class Controller : MonoBehaviour
         immersion--;
         canRetractLegs = savedCanRetractLegs;
         locomotion.isImmerged = isImmerged;
+        ExtendLegs();
     }
 
     virtual internal void Awake()
