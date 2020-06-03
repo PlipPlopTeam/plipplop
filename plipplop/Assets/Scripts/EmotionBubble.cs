@@ -57,6 +57,12 @@ public class EmotionBubble : MonoBehaviour
         var sprite = Game.i.library.emotions.GetBubbleSprite(emotion.bubbleType); 
         background.material.mainTexture = sprite;
 
+        if(emotion.verb.sounds.Length > 0)
+        {
+            UnityEngine.Random.InitState(System.DateTime.Now.Millisecond);
+            SoundPlayer.PlayAtPosition(emotion.verb.sounds[UnityEngine.Random.Range(0, emotion.verb.sounds.Length)], transform.position);
+        }
+
         try {
             verbRenderer.material.mainTexture = emotion.verb.frames[0];
             verbRenderer.enabled = true;
