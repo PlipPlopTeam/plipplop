@@ -1,34 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-9051524675881246408
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2b18001350a6d447aa879b8844b4849, type: 3}
-  m_Name: WaitOnInput
-  m_EditorClassIdentifier: 
-  behaviour:
-    action: 1
---- !u!114 &-6936248081251989370
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc453eda5652b714c9b323b0c00c700c, type: 3}
-  m_Name: PlayDialogue(Clone)(Clone)
-  m_EditorClassIdentifier: 
-  behaviour:
-    dialogue: firststeps_afterjump
---- !u!114 &-6816835397369267378
+--- !u!114 &-8431754774808123521
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -40,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b26edd9f1c11e0d449bd49299881e090, type: 3}
   m_Name: WaitOnEndOfDialogue
   m_EditorClassIdentifier: 
---- !u!114 &-2869892397712172361
+--- !u!114 &-7092681749303225967
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -53,7 +25,208 @@ MonoBehaviour:
   m_Name: PlayDialogue
   m_EditorClassIdentifier: 
   behaviour:
-    dialogue: firststeps_introduction
+    dialogue: firststeps_aftermorphin
+--- !u!114 &-5148552889969830433
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b26edd9f1c11e0d449bd49299881e090, type: 3}
+  m_Name: WaitOnEndOfDialogue
+  m_EditorClassIdentifier: 
+--- !u!114 &-3642955806686187282
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc453eda5652b714c9b323b0c00c700c, type: 3}
+  m_Name: PlayDialogue
+  m_EditorClassIdentifier: 
+  behaviour:
+    dialogue: firststeps_aftermorphout
+--- !u!114 &-3348115206223097284
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 319d413c548a89547ae62eaf2df81673, type: 3}
+  m_Name: Spielberg Track (1)
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 0
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 11400000}
+  m_Children: []
+  m_Clips:
+  - m_Version: 1
+    m_Start: 0.15
+    m_ClipIn: 0
+    m_Asset: {fileID: -3642955806686187282}
+    m_Duration: 0.15
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: -3348115206223097284}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: 0
+    m_BlendOutDuration: 0
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 0
+    m_PreExtrapolationMode: 0
+    m_PostExtrapolationTime: 0
+    m_PreExtrapolationTime: 0
+    m_DisplayName: 'Mwon Mwon plays
+
+      firststeps_aftermorphout'
+  - m_Version: 1
+    m_Start: 0.11666666666666667
+    m_ClipIn: 0
+    m_Asset: {fileID: -2322859587415199994}
+    m_Duration: 0.033333333333333326
+    m_TimeScale: 1
+    m_ParentTrack: {fileID: -3348115206223097284}
+    m_EaseInDuration: 0
+    m_EaseOutDuration: 0
+    m_BlendInDuration: 0
+    m_BlendOutDuration: 0
+    m_MixInCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_MixOutCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_BlendInCurveMode: 0
+    m_BlendOutCurveMode: 0
+    m_ExposedParameterNames: []
+    m_AnimationCurves: {fileID: 0}
+    m_Recordable: 0
+    m_PostExtrapolationMode: 0
+    m_PreExtrapolationMode: 0
+    m_PostExtrapolationTime: 0
+    m_PreExtrapolationTime: 0
+    m_DisplayName: Eject player
+  m_Markers:
+    m_Objects: []
+--- !u!114 &-2322859587415199994
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d274e51f13237d549b91452ea8d6ba6d, type: 3}
+  m_Name: PlayerEject
+  m_EditorClassIdentifier: 
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,19 +237,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bfda56da833e2384a9677cd3c976a436, type: 3}
-  m_Name: Timeline_Tutorial
+  m_Name: Timeline_Tutorial_Part2
   m_EditorClassIdentifier: 
   m_Version: 0
   m_Tracks:
-  - {fileID: 8931120041888488107}
-  - {fileID: 2979078777214485129}
-  - {fileID: 1629659217158808908}
+  - {fileID: 8176200068324618551}
+  - {fileID: -3348115206223097284}
+  - {fileID: 8961634427959953467}
   m_FixedDuration: 0
   m_EditorSettings:
     m_Framerate: 60
   m_DurationMode: 0
-  m_MarkerTrack: {fileID: 0}
---- !u!114 &1629659217158808908
+  m_MarkerTrack: {fileID: 6311614956660302443}
+--- !u!114 &886546232440536576
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -85,8 +258,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 319d413c548a89547ae62eaf2df81673, type: 3}
-  m_Name: Spielberg Track (2)
+  m_Script: {fileID: 11500000, guid: f2b18001350a6d447aa879b8844b4849, type: 3}
+  m_Name: WaitOnInput
+  m_EditorClassIdentifier: 
+  behaviour:
+    action: 0
+--- !u!114 &6311614956660302443
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a16748d9461eae46a725db9776d5390, type: 3}
+  m_Name: Markers
   m_EditorClassIdentifier: 
   m_Version: 3
   m_AnimClip: {fileID: 0}
@@ -96,148 +283,10 @@ MonoBehaviour:
   m_Curves: {fileID: 0}
   m_Parent: {fileID: 11400000}
   m_Children: []
-  m_Clips:
-  - m_Version: 1
-    m_Start: 3.783333333333333
-    m_ClipIn: 0
-    m_Asset: {fileID: 5542583181973355175}
-    m_Duration: 0.7333333333333338
-    m_TimeScale: 1
-    m_ParentTrack: {fileID: 1629659217158808908}
-    m_EaseInDuration: 0
-    m_EaseOutDuration: 0
-    m_BlendInDuration: 0
-    m_BlendOutDuration: 0
-    m_MixInCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_MixOutCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_BlendInCurveMode: 0
-    m_BlendOutCurveMode: 0
-    m_ExposedParameterNames: []
-    m_AnimationCurves: {fileID: 0}
-    m_Recordable: 0
-    m_PostExtrapolationMode: 0
-    m_PreExtrapolationMode: 0
-    m_PostExtrapolationTime: 0
-    m_PreExtrapolationTime: 0
-    m_DisplayName: Toggle player legs
-  - m_Version: 1
-    m_Start: 0.18333333333333332
-    m_ClipIn: 0
-    m_Asset: {fileID: 6314466295103048729}
-    m_Duration: 0.7333333333333338
-    m_TimeScale: 1
-    m_ParentTrack: {fileID: 1629659217158808908}
-    m_EaseInDuration: 0
-    m_EaseOutDuration: 0
-    m_BlendInDuration: 0
-    m_BlendOutDuration: 0
-    m_MixInCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_MixOutCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_BlendInCurveMode: 0
-    m_BlendOutCurveMode: 0
-    m_ExposedParameterNames: []
-    m_AnimationCurves: {fileID: 0}
-    m_Recordable: 0
-    m_PostExtrapolationMode: 0
-    m_PreExtrapolationMode: 0
-    m_PostExtrapolationTime: 0
-    m_PreExtrapolationTime: 0
-    m_DisplayName: Toggle player legs
+  m_Clips: []
   m_Markers:
     m_Objects: []
---- !u!114 &2979078777214485129
+--- !u!114 &8176200068324618551
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -247,7 +296,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 319d413c548a89547ae62eaf2df81673, type: 3}
-  m_Name: Interrupts
+  m_Name: Spielberg Track
   m_EditorClassIdentifier: 
   m_Version: 3
   m_AnimClip: {fileID: 0}
@@ -259,12 +308,12 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 3.7333333333333334
+    m_Start: 0
     m_ClipIn: 0
-    m_Asset: {fileID: -9051524675881246408}
-    m_Duration: 0.6833333333333336
+    m_Asset: {fileID: -7092681749303225967}
+    m_Duration: 0.1
     m_TimeScale: 1
-    m_ParentTrack: {fileID: 2979078777214485129}
+    m_ParentTrack: {fileID: 8176200068324618551}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
     m_BlendInDuration: 0
@@ -326,16 +375,39 @@ MonoBehaviour:
     m_PreExtrapolationMode: 0
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
-    m_DisplayName: 'Wait until JUMP
+    m_DisplayName: 'Mwon Mwon plays
 
-      is pressed'
+      firststeps_aftermorphin'
+  m_Markers:
+    m_Objects: []
+--- !u!114 &8961634427959953467
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 319d413c548a89547ae62eaf2df81673, type: 3}
+  m_Name: Interrupt
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 0
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 11400000}
+  m_Children: []
+  m_Clips:
   - m_Version: 1
-    m_Start: 4.5166666666666675
+    m_Start: 0.016666666666666666
     m_ClipIn: 0
-    m_Asset: {fileID: -6816835397369267378}
-    m_Duration: 0.6666666666666661
+    m_Asset: {fileID: -5148552889969830433}
+    m_Duration: 0.016666666666666666
     m_TimeScale: 1
-    m_ParentTrack: {fileID: 2979078777214485129}
+    m_ParentTrack: {fileID: 8961634427959953467}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
     m_BlendInDuration: 0
@@ -400,60 +472,13 @@ MonoBehaviour:
     m_DisplayName: 'Wait until the end
 
       of the dialogue'
-  m_Markers:
-    m_Objects: []
---- !u!114 &5542583181973355175
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da6fb391116cbab4388fec8519765fa0, type: 3}
-  m_Name: ToggleLegs(Clone)(Clone)(Clone)(Clone)
-  m_EditorClassIdentifier: 
---- !u!114 &6314466295103048729
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da6fb391116cbab4388fec8519765fa0, type: 3}
-  m_Name: ToggleLegs(Clone)(Clone)
-  m_EditorClassIdentifier: 
---- !u!114 &8931120041888488107
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 319d413c548a89547ae62eaf2df81673, type: 3}
-  m_Name: Spielberg Track
-  m_EditorClassIdentifier: 
-  m_Version: 3
-  m_AnimClip: {fileID: 0}
-  m_Locked: 0
-  m_Muted: 0
-  m_CustomPlayableFullTypename: 
-  m_Curves: {fileID: 0}
-  m_Parent: {fileID: 11400000}
-  m_Children: []
-  m_Clips:
   - m_Version: 1
-    m_Start: 0.18333333333333332
+    m_Start: 0.1
     m_ClipIn: 0
-    m_Asset: {fileID: -2869892397712172361}
-    m_Duration: 3.5500000000000003
+    m_Asset: {fileID: 886546232440536576}
+    m_Duration: 0.033333333333333326
     m_TimeScale: 1
-    m_ParentTrack: {fileID: 8931120041888488107}
+    m_ParentTrack: {fileID: 8961634427959953467}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
     m_BlendInDuration: 0
@@ -515,16 +540,16 @@ MonoBehaviour:
     m_PreExtrapolationMode: 0
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
-    m_DisplayName: 'Mwon Mwon plays
+    m_DisplayName: 'Wait until POSSESS
 
-      firststeps_introduction'
+      is pressed'
   - m_Version: 1
-    m_Start: 3.783333333333333
+    m_Start: 0.2
     m_ClipIn: 0
-    m_Asset: {fileID: -6936248081251989370}
-    m_Duration: 0.7333333333333343
+    m_Asset: {fileID: -8431754774808123521}
+    m_Duration: 0.06666666666666665
     m_TimeScale: 1
-    m_ParentTrack: {fileID: 8931120041888488107}
+    m_ParentTrack: {fileID: 8961634427959953467}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
     m_BlendInDuration: 0
@@ -586,8 +611,8 @@ MonoBehaviour:
     m_PreExtrapolationMode: 0
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
-    m_DisplayName: 'Mwon Mwon plays
+    m_DisplayName: 'Wait until the end
 
-      firststeps_afterjump'
+      of the dialogue'
   m_Markers:
     m_Objects: []

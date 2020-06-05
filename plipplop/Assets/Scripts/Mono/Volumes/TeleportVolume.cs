@@ -26,8 +26,10 @@ public class TeleportVolume : Volume
 
     public override void OnPlayerEnter(Controller player)
     {
+        var delta = landingPoint.position - player.transform.position;
         player.transform.position = landingPoint.position;
         player.transform.forward = landingPoint.forward;
+        Game.i.aperture.currentCamera.transform.position += delta;
     }
 
     public override void OnPlayerExit(Controller player)

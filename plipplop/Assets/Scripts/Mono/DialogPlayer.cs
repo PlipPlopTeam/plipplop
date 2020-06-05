@@ -159,7 +159,8 @@ public class DialogPlayer : MonoBehaviour
             prompt.color = new Color(1f, 1f, 1f, 0f);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) || (Game.i && Game.i.player.mapping.IsPressed(EAction.TOGGLE_LEGS)))
+        // Fast skip
+        if (!currentDialogue.isAutomatic && (Input.GetKeyDown(KeyCode.Space) || (Game.i && Game.i.player.mapping.IsPressed(EAction.TOGGLE_LEGS))))
         {
             if (isWaitingForInput || currentElement is Dialog.Pause)
             {
