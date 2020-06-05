@@ -9,7 +9,7 @@ public abstract class TalkableCharacter : MonoBehaviour
     public Transform staticCameraObjective;
     public SkinnedMeshRenderer faceMesh;
 
-    SphereCollider sphereTrigger;
+    internal SphereCollider sphereTrigger;
     Aperture.StaticObjective objective;
     int? blendShapeIndex = null;
     List<string> vowels = new List<string>(){ "O", "U", "A", "E", "I" };
@@ -59,7 +59,8 @@ public abstract class TalkableCharacter : MonoBehaviour
     internal void Update()
     {
         if (isTalkingToMe) {
-            Game.i.player.GetCurrentController().transform.LookAt(this.transform);
+            var controller = Game.i.player.GetCurrentController();
+            if (controller != null) controller.transform.LookAt(this.transform);
             if (Time.time - lastVowelTime > 0.4f) {
                 var letterIndex = vowels.FindIndex(o => o == DialogHooks.currentPronouncedLetter.ToUpper());
                 var oAmount = (letterIndex >= 0 ? (vowels.Count - (float)letterIndex) / vowels.Count : 0f) * 100f;

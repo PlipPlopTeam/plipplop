@@ -151,6 +151,9 @@ public class Brain
 
     public bool IsPossessing(Controller controller)
     {
+        // Debugging
+        // if (this.controller != null) Debug.Log(controller + " " + controller.GetHashCode()+" VS "+ this.controller + " " + this.controller.GetHashCode() + " => "+(controller == this.controller));
+
         return controller == this.controller;
     }
 
