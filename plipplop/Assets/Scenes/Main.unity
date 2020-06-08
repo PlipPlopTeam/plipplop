@@ -707,7 +707,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &22490498
 Transform:
   m_ObjectHideFlags: 0
@@ -3088,6 +3088,55 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!114 &116504463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59b6606ef2548734bb6d11b9d160bc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  active: 1
+  m_AdvancedMode: 0
+  rotation:
+    m_OverrideState: 0
+    m_Value: 0
+    min: 0
+    max: 360
+  skyIntensityMode:
+    m_OverrideState: 0
+    m_Value: 0
+  exposure:
+    m_OverrideState: 0
+    m_Value: 15
+  multiplier:
+    m_OverrideState: 0
+    m_Value: 1
+    min: 0
+  upperHemisphereLuxValue:
+    m_OverrideState: 0
+    m_Value: 0.6774997
+    min: 0
+  desiredLuxValue:
+    m_OverrideState: 0
+    m_Value: 20000
+  updateMode:
+    m_OverrideState: 0
+    m_Value: 0
+  updatePeriod:
+    m_OverrideState: 0
+    m_Value: 0
+    min: 0
+  includeSunInBaking:
+    m_OverrideState: 0
+    m_Value: 0
+  hdriSky:
+    m_OverrideState: 0
+    m_Value: {fileID: 8900000, guid: 87864a6939bb564409e4973ec3247af2, type: 3}
 --- !u!1 &124680323
 GameObject:
   m_ObjectHideFlags: 0
@@ -9588,7 +9637,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Profile: {fileID: 11400000, guid: c8e3472f8e8997644bd1b3ddf70aecf4, type: 2}
   m_StaticLightingSkyUniqueID: 1
-  m_SkySettings: {fileID: 1991995186}
+  m_SkySettings: {fileID: 116504463}
   m_SkySettingsFromProfile: {fileID: 1332542512067647828, guid: c8e3472f8e8997644bd1b3ddf70aecf4,
     type: 2}
 --- !u!114 &699772736
@@ -14973,22 +15022,22 @@ PrefabInstance:
     - target: {fileID: 4275866964964789024, guid: e2c0836e3e7de4740a9847a65ae9b4fe,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4275866964964789025, guid: e2c0836e3e7de4740a9847a65ae9b4fe,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 91.58
+      value: 160
       objectReference: {fileID: 0}
     - target: {fileID: 4275866964964789025, guid: e2c0836e3e7de4740a9847a65ae9b4fe,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.28
+      value: 8.59
       objectReference: {fileID: 0}
     - target: {fileID: 4275866964964789025, guid: e2c0836e3e7de4740a9847a65ae9b4fe,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 129.22
+      value: 97.6
       objectReference: {fileID: 0}
     - target: {fileID: 4275866964964789025, guid: e2c0836e3e7de4740a9847a65ae9b4fe,
         type: 3}
@@ -33782,55 +33831,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!114 &1991995186
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59b6606ef2548734bb6d11b9d160bc7e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  active: 1
-  m_AdvancedMode: 0
-  rotation:
-    m_OverrideState: 0
-    m_Value: 0
-    min: 0
-    max: 360
-  skyIntensityMode:
-    m_OverrideState: 0
-    m_Value: 0
-  exposure:
-    m_OverrideState: 0
-    m_Value: 15
-  multiplier:
-    m_OverrideState: 0
-    m_Value: 1
-    min: 0
-  upperHemisphereLuxValue:
-    m_OverrideState: 0
-    m_Value: 0.6774997
-    min: 0
-  desiredLuxValue:
-    m_OverrideState: 0
-    m_Value: 20000
-  updateMode:
-    m_OverrideState: 0
-    m_Value: 0
-  updatePeriod:
-    m_OverrideState: 0
-    m_Value: 0
-    min: 0
-  includeSunInBaking:
-    m_OverrideState: 0
-    m_Value: 0
-  hdriSky:
-    m_OverrideState: 0
-    m_Value: {fileID: 8900000, guid: 87864a6939bb564409e4973ec3247af2, type: 3}
 --- !u!4 &1996061546 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3625417314325065356, guid: 3f2544e379d94e84ab677d36e8cd4154,
