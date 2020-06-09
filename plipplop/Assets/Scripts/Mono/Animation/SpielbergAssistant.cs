@@ -244,6 +244,13 @@ public class SpielbergAssistant : MonoBehaviour
         }
     }
 
+    public void NPCPanic(string npcName)
+    {
+        var npc = GetNPCByName(npcName);
+
+        // PANIC!
+    }
+
     public void NPCGoTo(string npcName, string target)
     {
         var t = GetChildInChildren(transform, target);

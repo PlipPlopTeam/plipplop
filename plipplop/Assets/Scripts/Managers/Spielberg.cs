@@ -121,6 +121,11 @@ public class Spielberg
         currentAssistant.NPCGoTo(npcGoTo, objectiveName);
     }
 
+    public void KinoNPCPanic(string npcGoTo)
+    {
+        currentAssistant.NPCPanic(npcGoTo);
+    }
+
     public void KinoNPCUseActivity(string npc, string act)
     {
         currentAssistant.ToggleNPCActivity(npc, act, true);
