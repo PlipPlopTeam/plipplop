@@ -11,6 +11,7 @@ public class DialogEffect : MonoBehaviour
     public float rumbleForce = 10f;
     public float waveForce = 10f;
     public float waveShiftBetweenLetters = 2f;
+    public float waveSpeed = 2f;
 
     DialogPlayer player;
     TextMeshProUGUI mesh { get { return player.textMesh; } }
@@ -123,7 +124,7 @@ public class DialogEffect : MonoBehaviour
                     Vector3 jitterOffset = new Vector3(UnityEngine.Random.Range(-.25f, .25f), UnityEngine.Random.Range(-.25f, .25f), 0);
                     if (!isRandom)
                     {
-                        jitterOffset = new Vector3(0f, Mathf.Sin(Time.time + i * waveShiftBetweenLetters), 0f);
+                        jitterOffset = new Vector3(0f, Mathf.Sin(Time.time * waveSpeed + i * waveShiftBetweenLetters), 0f);
                     }
 
                     matrix = Matrix4x4.TRS(jitterOffset * (isRandom ? rumbleForce : waveForce), Quaternion.Euler(0, 0, 0), Vector3.one);
