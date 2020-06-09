@@ -198,6 +198,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4385149542021893118}
+  - component: {fileID: 5279252288685214435}
+  - component: {fileID: 4527303442260077582}
   m_Layer: 0
   m_Name: Fougere01
   m_TagString: Untagged
@@ -220,6 +222,102 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &5279252288685214435
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4385149542021893119}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.21382618
+  m_Center: {x: -0.017446995, y: 0.08583498, z: -0.01554966}
+--- !u!114 &4527303442260077582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4385149542021893119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed2938b40ee067947b915b01fa2f2c87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scale: 1
+  tilt: 1
+  scaleValue: 1
+  scaleDuration: 0.3
+  rotationValue: 5
+  rotationDuration: 0.6
+  bounceCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.0022940934
+      value: 1.0529479
+      inSlope: Infinity
+      outSlope: Infinity
+      tangentMode: 103
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.1544674
+      value: 0.9682922
+      inSlope: Infinity
+      outSlope: Infinity
+      tangentMode: 103
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.34900063
+      value: 1.0251923
+      inSlope: Infinity
+      outSlope: Infinity
+      tangentMode: 103
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.112137705
+    - serializedVersion: 3
+      time: 0.5979381
+      value: 0.9771156
+      inSlope: Infinity
+      outSlope: Infinity
+      tangentMode: 103
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.90602875
+      value: 1.010472
+      inSlope: Infinity
+      outSlope: Infinity
+      tangentMode: 103
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.9790739
+      value: 1.0016788
+      inSlope: Infinity
+      outSlope: Infinity
+      tangentMode: 103
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  transformToMove: {fileID: 4385149540430457038}
+  chanceToDetachObject: 0.5
+  objectsToDetach: []
+  gfxToPlay: gfx_bush
+  gfxSpawnPoint: {fileID: 4385149540430457038}
 --- !u!1 &8928989282216786314
 GameObject:
   m_ObjectHideFlags: 0
