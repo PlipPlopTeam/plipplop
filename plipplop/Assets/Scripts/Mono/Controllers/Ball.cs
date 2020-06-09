@@ -121,13 +121,13 @@ public class Ball : Controller
 
     internal override void OnLegsRetracted()
     {
-		rigidbody.constraints = RigidbodyConstraints.None;
+		//rigidbody.constraints = RigidbodyConstraints.None;
 	}
 
     internal override void OnLegsExtended()
     {
 		AlignPropOnHeadDummy();
 		transform.forward = lastOrientation;
-		rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+		//rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
 	}
 }
