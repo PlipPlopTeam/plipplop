@@ -21,9 +21,10 @@ public abstract class Controller : MonoBehaviour
 
 	public Vector3 visualsOffset;
 	public float unpossessSpawnDistance = 1f;
+    private RigidbodyConstraints immergedConstraints = RigidbodyConstraints.FreezeRotation;
     private RigidbodyConstraints legsExtendedConstraints = RigidbodyConstraints.FreezeRotation;
     private RigidbodyConstraints legsRetractedConstraints = RigidbodyConstraints.None;
-    private float legsExtendedAngularDrag = 1f;
+	private float legsExtendedAngularDrag = 1f;
     public float legsRetractedAngularDrag = 0.1f;
 
     float lastTimeGrounded = 0f;
@@ -116,7 +117,8 @@ public abstract class Controller : MonoBehaviour
             activity.KickAll();
             activity.activated = true;
         }
-    }
+		ResetVisuals();
+	}
 
     internal void ExtendLegs()
     {
@@ -200,10 +202,25 @@ public abstract class Controller : MonoBehaviour
     {
         immersion++;
         locomotion.isImmerged = isImmerged;
-        canRetractLegs = false;
-        ExtendLegs();
-        Kick();
-    }
+		canRetractLegs = false;
+
+		//ExtendLegs();
+
+		if (IsPossessed())
+		{
+			rigidbody.constraints = immergedConstraints;
+			Kick();
+		}
+	}
+
+	public void SetOverwater()
+	{
+		immersion--;
+		locomotion.isImmerged = isImmerged;
+		canRetractLegs = savedCanRetractLegs;
+
+		if(IsPossessed()) ExtendLegs();
+	}
 
 	public void Kick()
 	{
@@ -211,15 +228,10 @@ public abstract class Controller : MonoBehaviour
 		{
 			Game.i.player.TeleportBaseControllerAndPossess();
 		}
+		//RetractLegs();
 	}
 
-    public void SetOverwater()
-    {
-        immersion--;
-        canRetractLegs = savedCanRetractLegs;
-        locomotion.isImmerged = isImmerged;
-        ExtendLegs();
-    }
+
 
     virtual internal void Awake()
     {
@@ -257,9 +269,7 @@ public abstract class Controller : MonoBehaviour
     virtual internal void Start()
     {
         if (autoPossess) Game.i.player.Possess(this);
-
         if (!IsPossessed()) RetractLegs(false);
-
         rigidbody.useGravity = false;
     }
 
@@ -300,24 +310,29 @@ public abstract class Controller : MonoBehaviour
             }
             if(!IsFrozen())
             {
-                Vector3? norm;
-                Vector3 up = Vector3.up;
-                try
-                {
-                    norm = locomotion.GetGroundNormal();
-                }
-                catch
-                {
-                    norm = null;
-                }
-                var y = transform.eulerAngles.y;
-                if (norm.HasValue)
-                {
-                    up = norm.Value;
-                }
-                transform.up = up;// Vector3.Lerp(transform.up, up, Time.deltaTime * 10f);
-                transform.Rotate(Vector3.up * y);
-            }
+				Vector3 forward = transform.forward;
+				Vector3 up = Vector3.up;
+				Vector3? norm;
+                if(!isImmerged)
+				{
+					try
+					{
+						norm = locomotion.GetGroundNormal();
+					}
+					catch
+					{
+						norm = null;
+					}
+					var y = transform.eulerAngles.y;
+					if (norm.HasValue)
+					{
+						up = norm.Value;
+					}
+				}
+                //transform.up = up;// Vector3.Lerp(transform.up, up, Time.deltaTime * 10f);
+                //transform.rotation = Quaternion.Euler(transform.eulerAngles.x, y, transform.eulerAngles.z);
+				transform.rotation = Quaternion.LookRotation(forward, up);
+			}
         }
 
         if (isBeingThrown && (IsGrounded()|| isImmerged))
