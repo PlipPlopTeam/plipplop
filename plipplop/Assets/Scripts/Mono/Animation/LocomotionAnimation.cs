@@ -44,8 +44,7 @@ public class LocomotionAnimation
     {
         movementAnimationMagnitude.Clear();
         movementAnimationMagnitude.Add(0f, "Idle");
-        movementAnimationMagnitude.Add(0.25f, "Walk");
-        movementAnimationMagnitude.Add(4f, "Run");
+        movementAnimationMagnitude.Add(0.25f, "Run");
     }
 
     public void HeavyWalkCycle()
