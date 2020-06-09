@@ -248,7 +248,15 @@ public class SpielbergAssistant : MonoBehaviour
     {
         var npc = GetNPCByName(npcName);
 
-        // PANIC!
+        npc.animator.SetBool("Scared", true);
+        npc.emo.Show(Emotion.EVerb.SURPRISE, "plipplop");
+    }
+
+    public void NPCCalm(string npcName)
+    {
+        var npc = GetNPCByName(npcName);
+
+        npc.animator.SetBool("Scared", false);
     }
 
     public void NPCGoTo(string npcName, string target)

@@ -121,6 +121,11 @@ public class Spielberg
         currentAssistant.NPCGoTo(npcGoTo, objectiveName);
     }
 
+    public void KinoNPCCalm(string npcGoTo)
+    {
+        currentAssistant.NPCCalm(npcGoTo);
+    }
+
     public void KinoNPCPanic(string npcGoTo)
     {
         currentAssistant.NPCPanic(npcGoTo);
