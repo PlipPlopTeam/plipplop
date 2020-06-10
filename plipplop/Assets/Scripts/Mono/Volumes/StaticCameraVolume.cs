@@ -83,16 +83,22 @@ public class StaticCameraVolume : Volume {
 
         StartCoroutine(FreezeForSomeTime());
 
-        foreach (GameObject o in objectsToHide)
+        if (objectsToHide != null)
         {
-            var fade = o.GetComponent<FadedApparition>();
-            if (fade != null)
+            foreach (GameObject o in objectsToHide)
             {
-                fade.StartFadeIn();
-            }
-            else
-            {
-                o.SetActive(true);
+                if (o != null)
+                {
+                    var fade = o.GetComponent<FadedApparition>();
+                    if (fade != null)
+                    {
+                        fade.StartFadeIn();
+                    }
+                    else
+                    {
+                        o.SetActive(true);
+                    }
+                }
             }
         }
 
@@ -103,7 +109,7 @@ public class StaticCameraVolume : Volume {
     {
 
         Game.i.player.Paralyze();
-        yield return new WaitForSeconds(0.75f);
+        yield return new WaitForSeconds(0.2f);
         Game.i.player.Deparalyze();
     }
 }
