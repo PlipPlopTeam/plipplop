@@ -200,26 +200,24 @@ public abstract class Controller : MonoBehaviour
 
     public void SetUnderwater()
     {
-        immersion++;
-        locomotion.isImmerged = isImmerged;
-		canRetractLegs = false;
-
-		//ExtendLegs();
-
 		if (IsPossessed())
 		{
-			rigidbody.constraints = immergedConstraints;
+			ExtendLegs();
 			Kick();
 		}
+
+		immersion++;
+        locomotion.isImmerged = isImmerged;
+		canRetractLegs = false;
 	}
 
 	public void SetOverwater()
 	{
+		if (IsPossessed()) ExtendLegs();
+
 		immersion--;
 		locomotion.isImmerged = isImmerged;
 		canRetractLegs = savedCanRetractLegs;
-
-		if(IsPossessed()) ExtendLegs();
 	}
 
 	public void Kick()
@@ -227,11 +225,9 @@ public abstract class Controller : MonoBehaviour
 		if (IsPossessed() && !Game.i.player.IsPossessingBaseController())
 		{
 			Game.i.player.TeleportBaseControllerAndPossess();
+			RetractLegs();
 		}
-		//RetractLegs();
 	}
-
-
 
     virtual internal void Awake()
     {
