@@ -12,7 +12,12 @@ public class FpsCounter : MonoBehaviour
         if (fpsText.gameObject.activeSelf)
         {
             var _objects = FindObjectsOfType(typeof(Object));
-            fpsText.text = Mathf.Floor(1 / Time.deltaTime).ToString() + "\n" + _objects.Length + "\n" + _objects[0].name + "\n" + _objects[1].name + "\n" + _objects[2].name;
+
+            string[] _lastObjects = new string[3]{_objects[0].name, _objects[1].name, _objects[2].name};
+            
+            string displayFormat = "{0} FPS\n{1} objects\n\nLast objects:\n{2}";
+            fpsText.text = string.Format(displayFormat, Mathf.Floor(1 / Time.deltaTime).ToString("n0"), _objects.Length.ToString(), string.Join(",", _lastObjects));
+            
         }
 
         if (Input.GetKeyDown(KeyCode.F))
