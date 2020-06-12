@@ -25,6 +25,7 @@ public class Aperture
         }
     }
 
+    [System.Serializable]
     public class StaticObjective
     {
         public PositionAndRotation positionAndRotation;
@@ -66,7 +67,7 @@ public class Aperture
     Camera cam;
 
     // Static cameras
-    List<StaticObjective> staticObjectives = new List<StaticObjective>();
+    public List<StaticObjective> staticObjectives = new List<StaticObjective>();
     List<bool> lookAtTarget = new List<bool>();
 
     // SPEED

@@ -10,7 +10,7 @@ public abstract class TalkableCharacter : MonoBehaviour
     public SkinnedMeshRenderer faceMesh;
 
     internal SphereCollider sphereTrigger;
-    Aperture.StaticObjective objective;
+    internal Aperture.StaticObjective objective;
     int? blendShapeIndex = null;
     List<string> vowels = new List<string>(){ "O", "U", "A", "E", "I" };
     bool isTalkingToMe { get { return DialogHooks.currentInterlocutor == this; } }
