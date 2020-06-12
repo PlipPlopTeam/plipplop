@@ -412,13 +412,12 @@ public abstract class Controller : MonoBehaviour
 
 	public void ApplyFreeze()
 	{
-		rigidbody.isKinematic = true;
+        rigidbody.velocity = Vector3.zero;
 		rigidbody.useGravity = false;
 	}
 
 	public void RemoveFreeze()
 	{
-		rigidbody.isKinematic = false;
 		rigidbody.useGravity = true;
 	}
 

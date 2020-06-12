@@ -39,9 +39,13 @@ public class Launcher : MonoBehaviour
 	private Geometry.PositionAndRotation objective;
 	private Vector3 lastPosition;
 
+	public List<Aperture.StaticObjective> tests = new List<Aperture.StaticObjective>();
+
 	public void Update()
 	{
 		if (throwing) Move();
+
+		tests = Game.i.aperture.staticObjectives;
 	}
 
 	public void Move()
@@ -59,8 +63,15 @@ public class Launcher : MonoBehaviour
 	public void Frame()
 	{
 		cart.m_Position = progression * (path.m_Waypoints.Length - 1);
-		if (alignWithVelocity && thrownObject != null) thrownObject.transform.Rotate(Vector3.up * rotationSpeed);
-		else thrownObject.transform.up = Vector3.up;
+
+		if(thrownObject != null)
+		{
+			/*
+			if (alignWithVelocity) thrownObject.transform.Rotate(Vector3.up * rotationSpeed);
+			else thrownObject.transform.up = Vector3.up;
+			*/
+		}
+
 		lastPosition = cart.gameObject.transform.position;
 	}
 
@@ -72,7 +83,6 @@ public class Launcher : MonoBehaviour
 			PlaceCamera();
 			Launch(obj, onArrivedEvent);
 		}
-		
 	}
 
 	IEnumerator WaitAndLaunch(float time, GameObject obj, Action<GameObject> onArrivedEvent = null)
@@ -84,17 +94,15 @@ public class Launcher : MonoBehaviour
 
 	public void PlaceCamera()
 	{
+		objective = Game.i.aperture.AddStaticPosition(aim);
+
+
 		if (isImmediate)
 		{
 			//Game.i.aperture.Freeze();
-			Game.i.aperture.AddStaticPosition(aim.position, aim.rotation);
 			Game.i.aperture.FixedUpdate();
 			Game.i.aperture.fieldOfView.destination = FOV;
 			Game.i.aperture.Teleport();
-		}
-		else
-		{
-			objective = Game.i.aperture.AddStaticPosition(aim);
 		}
 
 		if (!lookAtTarget)
@@ -115,14 +123,13 @@ public class Launcher : MonoBehaviour
 
 	public void ResetCamera()
 	{
+		Game.i.aperture.RemoveStaticPosition(objective);
+
 		if (isImmediate)
 		{
 			Game.i.aperture.Unfreeze();
 		}
-		else
-		{
-			Game.i.aperture.RemoveStaticPosition(objective);
-		}
+
 		if (!lookAtTarget)
 		{
 			Game.i.aperture.RestoreLookAt(lookAtIndex);
@@ -169,8 +176,6 @@ public class Launcher : MonoBehaviour
 			this.thrownObject.transform.SetParent(null);
 			this.thrownObject = null;
 		});
-
-
 	}
 
 	private void OnTriggerEnter(Collider other)
@@ -180,17 +185,22 @@ public class Launcher : MonoBehaviour
 			if (thrownObject != controller.gameObject) LaunchController(controller);
 		}
 	}
+
 	public void LaunchController(Controller controller)
 	{
 		controller.Paralyse();
 		controller.Freeze();
 		controller.locomotion.StartFly();
+		controller.rigidbody.constraints = RigidbodyConstraints.FreezeAll;
 		PrepareLaunch(controller.gameObject,
 		(go) =>
 		{
 			controller.UnParalyse();
 			controller.UnFreeze();
 			controller.locomotion.EndFly();
+			controller.rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+			controller.transform.up = Vector3.up;
+			Game.i.aperture.EnableLookAt();
 		});
 	}
 }

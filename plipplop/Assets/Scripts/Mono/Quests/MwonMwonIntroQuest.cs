@@ -8,13 +8,14 @@ public class MwonMwonIntroQuest : TalkableCharacter
     public GameObject DBG_FirstCinematic; // DEBUG
     public GameObject DBG_SecondCinematic; // DEBUG
     public GameObject stopGap;
-
+    public StaticCameraVolume scm;
     public Launcher launcher;
     public CollisionEventTransmitter exitVolume;
 
     bool hasLaunchedCinematicPartTwo = false;
     bool hasFinishedTutorial = false;
     float radius = 0f;
+
 
     public override Dialog OnDialogTrigger()
     {
@@ -34,7 +35,9 @@ public class MwonMwonIntroQuest : TalkableCharacter
     private void ExitVolume_onTriggerEnter(Collider obj)
     {
         var controller = Game.i.player.GetCurrentController();
-        if (controller!= null && obj.gameObject == controller.gameObject) {
+        if (controller!= null && obj.gameObject == controller.gameObject)
+        {
+            scm.OnPlayerExit(controller);
             launcher.LaunchController(controller);
         }
     }
