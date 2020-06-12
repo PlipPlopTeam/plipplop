@@ -550,12 +550,24 @@ public class Aperture
         // Absolute minimal distance so that whatever happens the camera can't be in my face
         var cameraDirection = -(Vector3.Scale(Vector3.one - Vector3.up, target.position) - Vector3.Scale(Vector3.one - Vector3.up, position.current));
         var dist = cameraDirection.magnitude;
-        var detect = settings.detectsSurroundings && false; // Fix me/ enable me later
+        var detect = settings.detectsSurroundings; // Fix me/ enable me later
 
         if (detect) {
             RaycastHit hit;
-            if (Physics.Raycast(target.position, cameraDirection, out hit)) {
-                dist = Vector3.Distance(hit.point, target.position) - 0.1f;
+            float radius = 3f;
+            var maskValue = settings.obstructibleLayerMask.value;
+            //Debug.Log("Casting on layer " + (maskValue) + "...");
+          //  Debug.DrawLine(target.position, target.position + dist * cameraDirection, Color.red, 1f);
+            if (Physics.SphereCast(
+                origin:target.position, 
+                radius:radius,
+                direction: cameraDirection,
+                out hit,
+                maxDistance: dist, 
+                layerMask:maskValue)
+             ) {
+                dist = Vector3.Distance(hit.point, target.position) - radius*0.5f;
+           //     Debug.Log("Hit! Dist is "+dist+" and hit is "+hit.collider.gameObject.name+" of layer "+ hit.collider.gameObject.layer+":"+ LayerMask.LayerToName(hit.collider.gameObject.layer));
             }
         }
 
