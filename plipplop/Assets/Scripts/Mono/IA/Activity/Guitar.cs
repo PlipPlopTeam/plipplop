@@ -21,10 +21,15 @@ public class Guitar : Activity, ICarryable
 			player.animator.SetBool("Guitaring", true);
 			player.animator.SetBool("Carrying", false);
 
-			Game.i.WaitAndDo(1f, () =>
+			visuals.transform.parent = null;
+			visuals.transform.SetParent(player.transform);
+			rb.isKinematic = true;
+			
+			visuals.transform.localPosition = new Vector3(-0.024f, 0.852f, 0.142f);
+			visuals.transform.localEulerAngles =  new Vector3(-5.062f, 10.575f, 57.788f);
+			
+			Game.i.WaitAndDo(.5f, () =>
 			{
-				visuals.transform.localPosition = new Vector3(0.114f, -0.08f, -0.155f);
-				visuals.transform.localEulerAngles = new Vector3(3.809f, 5.44f, 55.098f);
 				PlayMusic();
 			});
 		};
@@ -58,12 +63,18 @@ public class Guitar : Activity, ICarryable
 			player.movement.Stop();
 			player.animator.SetBool("Guitaring", true);
 			player.animator.SetBool("Carrying", false);
-			visuals.transform.localPosition = new Vector3(0.114f, -0.08f, -0.155f);
-			visuals.transform.localEulerAngles = new Vector3(3.809f, 5.44f, 55.098f);
+			visuals.transform.parent = null;
+			visuals.transform.SetParent(player.transform);
+			rb.isKinematic = true;
+			visuals.transform.localPosition = new Vector3(-0.006f, 0.804f, 0.142f);
+			visuals.transform.localEulerAngles =  new Vector3(-5.062f, 10.575f, 57.788f);
 			PlayMusic();
 		};
 
 		user.animator.SetBool("Guitaring", false);
+		rb.isKinematic=false;
+
+		visuals.transform.SetParent(transform);
 		visuals.transform.localPosition = Vector3.zero;
 		visuals.transform.localEulerAngles = Vector3.zero;
 		full = false;
