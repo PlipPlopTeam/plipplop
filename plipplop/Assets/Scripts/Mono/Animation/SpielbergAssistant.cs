@@ -19,6 +19,7 @@ public class SpielbergAssistant : MonoBehaviour
     public Camera firstCamera;
 
     bool isPlaying = false;
+    bool shouldAdvanceCinematic = false;
     Camera lastCamera;
 
     PlayableDirector director;
@@ -29,10 +30,19 @@ public class SpielbergAssistant : MonoBehaviour
     {
         director = GetComponent<PlayableDirector>();
         director.stopped += OnCinematicEnded;
+        director.timeUpdateMode = DirectorUpdateMode.Manual;
+    }
+
+    private void FixedUpdate()
+    {
+        if (shouldAdvanceCinematic && isPlaying) {
+            director.playableGraph.Evaluate(Time.fixedDeltaTime);
+        }
     }
 
     void OnCinematicEnded(PlayableDirector director)
     {
+        Debug.Log("Cinematic ended!");
         isPlaying = false;
 
         if (firstCamera) StartCoroutine(PrepareCinematicEnding());
@@ -86,13 +96,13 @@ public class SpielbergAssistant : MonoBehaviour
 
             if (waitingOnInput.HasValue && Game.i.mapping.IsPressed(waitingOnInput.Value)) {
                 waitingOnInput = null;
-                director.Resume();
+                shouldAdvanceCinematic = true;
             }
 
             if (isWaitingOnDialogue) {
                 if (DialogHooks.currentInterlocutor == null) {
                     isWaitingOnDialogue = false;
-                    director.Resume();
+                    shouldAdvanceCinematic = true;
                 }
             }
         }   
@@ -207,6 +217,7 @@ public class SpielbergAssistant : MonoBehaviour
         Game.i.aperture.UnloadLast();
         Game.i.aperture.Freeze();
         director.Play();
+        shouldAdvanceCinematic = true;
     }
 
     void EndInternal()
@@ -316,13 +327,13 @@ public class SpielbergAssistant : MonoBehaviour
 
     public void PauseAndWaitForInput(EAction action)
     {
-        director.Pause();
+        shouldAdvanceCinematic = false;
         waitingOnInput = action;
     }
 
     public void PauseAndWaitForEndOfDialogue()
     {
-        director.Pause();
+        shouldAdvanceCinematic = false;
         isWaitingOnDialogue = true;
     }
 }

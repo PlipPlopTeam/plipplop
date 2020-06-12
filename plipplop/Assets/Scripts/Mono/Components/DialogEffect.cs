@@ -85,6 +85,9 @@ public class DialogEffect : MonoBehaviour
             {
                 for (int i = rumble.Item1; i <= rumble.Item2; i++)
                 {
+                    if (i >= textInfo.characterInfo.Length)
+                        continue;
+
                     TMP_CharacterInfo charInfo = textInfo.characterInfo[i];
 
                     // Skip characters that are not visible and thus have no geometry to manipulate.

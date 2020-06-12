@@ -19,7 +19,8 @@ public class AperturePreset : ScriptableObject
     // Switches
     [HideInInspector] public bool canBeControlled = true;
     [HideInInspector] public bool canBeReset = true;
-    [HideInInspector] public bool detectsSurroundings = true;
+    [HideInInspector] public readonly bool detectsSurroundings = true;
+    [HideInInspector] public LayerMask obstructibleLayerMask;
 
     // Basic parameters
     [HideInInspector] [Range(2f, 200f)] public float fieldOfView = 75f;
