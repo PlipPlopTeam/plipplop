@@ -37,6 +37,8 @@ public class Menu : MonoBehaviour
        IntroQuest.BeginQuest();
 
         gameObject.SetActive(false);
+        
+        Game.i.player.Deparalyze();
     }
 
     public void Credits()

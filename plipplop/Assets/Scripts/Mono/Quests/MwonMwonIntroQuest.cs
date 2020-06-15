@@ -33,6 +33,8 @@ public class MwonMwonIntroQuest : TalkableCharacter
         else Spielberg.PlayCinematic("cine_tutorial_1");
 
         exitVolume.onTriggerEnter += ExitVolume_onTriggerEnter;
+        
+        SoundPlayer.PlayAtPosition("bgm_volcano", transform.position,.5f);
     }
 
     private void ExitVolume_onTriggerEnter(Collider obj)
