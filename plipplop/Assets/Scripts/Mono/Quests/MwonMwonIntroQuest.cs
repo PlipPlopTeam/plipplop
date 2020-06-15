@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,7 +23,7 @@ public class MwonMwonIntroQuest : TalkableCharacter
         return null;
     }
 
-    private void Start()
+    public void BeginQuest()
     {
         talkRadius = 0f; // FIX - should be removed at some point
 
