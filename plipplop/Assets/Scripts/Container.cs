@@ -101,7 +101,7 @@ public class Container : MonoBehaviour
 
 	public virtual void Empty()
 	{
-		foreach(Item i in items) Remove(i);
+		foreach(Item i in items.ToArray()) Remove(i);
 		items.Clear();
 	}
 
