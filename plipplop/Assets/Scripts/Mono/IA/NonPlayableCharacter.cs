@@ -44,6 +44,7 @@ public class NonPlayableCharacter : MonoBehaviour
 	[Header("Settings")]
 	public NonPlayableCharacterSettings settings;
 	public BehaviorGraphData graph;
+	public AIPath assignedPath = null;
     ICarryable carryableToCollect;
 	private float waitTimer;
 	private bool endWait;
