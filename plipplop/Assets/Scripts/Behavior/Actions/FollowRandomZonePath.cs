@@ -15,12 +15,12 @@ namespace Behavior.NPC
 				{
 					if(npc.assignedPath != null)
 					{
-						var randomPath = Game.i.aiZone.GetRandomPath();
-						if (randomPath != null) npc.movement.FollowPath(randomPath);
+						npc.movement.FollowPath(npc.assignedPath);
 					}
 					else
 					{
-						npc.movement.FollowPath(npc.assignedPath);
+						var randomPath = Game.i.aiZone.GetRandomPath();
+						if (randomPath != null) npc.movement.FollowPath(randomPath);
 					}
 				}
 				else

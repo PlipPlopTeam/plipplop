@@ -91,8 +91,11 @@ public class Activity : Valuable
 		npc.movement.GoThere(pos);
 		npc.movement.onDestinationReached += () =>
 		{
-			Look(npc, transform.position);
-			npc.emo.Show(Emotion.EVerb.LOVE, Name());
+			if(npc.activity != null)
+			{
+				Look(npc, transform.position);
+				npc.emo.Show(Emotion.EVerb.LOVE, Name());
+			}
 		};
 	}
 
