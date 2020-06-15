@@ -552,27 +552,28 @@ public class Aperture
         var cameraDirection = -(Vector3.Scale(Vector3.one - Vector3.up, target.position) - Vector3.Scale(Vector3.one - Vector3.up, position.current));
         var dist = cameraDirection.magnitude;
         var detect = settings.detectsSurroundings; // Fix me/ enable me later
+        var camera3AxisDirection = position.current - target.position;
 
+        // This is absolutely horrible but it roughly works
         if (detect) {
             RaycastHit hit;
-            float radius = 3f;
+            float radius = 0f;
             var maskValue = settings.obstructibleLayerMask.value;
-            //Debug.Log("Casting on layer " + (maskValue) + "...");
-          //  Debug.DrawLine(target.position, target.position + dist * cameraDirection, Color.red, 1f);
-            if (Physics.SphereCast(
+
+            if (Physics.Raycast(
                 origin:target.position, 
-                radius:radius,
-                direction: cameraDirection,
+                direction: camera3AxisDirection,
                 out hit,
                 maxDistance: dist, 
                 layerMask:maskValue)
              ) {
                 dist = Vector3.Distance(hit.point, target.position) - radius*0.5f;
-           //     Debug.Log("Hit! Dist is "+dist+" and hit is "+hit.collider.gameObject.name+" of layer "+ hit.collider.gameObject.layer+":"+ LayerMask.LayerToName(hit.collider.gameObject.layer));
+
+                position.current = Vector3.Lerp(position.current, target.position + camera3AxisDirection.normalized * dist, 10f*Time.deltaTime);
             }
         }
 
-        float outOfBounds = dist < settings.absoluteBoundaries.min && !detect ? settings.absoluteBoundaries.min : 
+        float outOfBounds = dist < settings.absoluteBoundaries.min ? settings.absoluteBoundaries.min : 
             dist > settings.absoluteBoundaries.max ? settings.absoluteBoundaries.max : 0f;
 
         if (outOfBounds != 0f) {
