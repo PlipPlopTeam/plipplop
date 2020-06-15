@@ -6,17 +6,18 @@ using UnityEngine;
 public class SpielbergTeleportPlayerBehaviour : SpielbergClipBehaviour
 {
 
-    public Transform teleportationTarget;
+    public Vector3 teleportPosition;
+    public Quaternion teleportRotation;
 
     public override void ExecuteBehaviour()
     {
         var controller = Game.i.player.GetCurrentController();
-        controller.transform.position = teleportationTarget.position;
-        controller.transform.rotation = teleportationTarget.rotation;
+        controller.transform.position = teleportPosition;
+        controller.transform.rotation = teleportRotation;
     }
 
     public override string ToString()
     {
-        return "Teleport player\nto "+teleportationTarget+"";
+        return "Teleport player\nto "+teleportPosition+"";
     }
 }
