@@ -352,6 +352,7 @@
               <e p="ReadOnlyInGameDrawer.cs" t="Include" />
               <e p="SoundDrawer.cs" t="Include" />
               <e p="SoundsDrawer.cs" t="Include" />
+              <e p="SpielbergClipDrawer.cs" t="Include" />
             </e>
             <e p="MapppingEditor.cs" t="Include" />
             <e p="NonPlayableCharacterSettingsEditor.cs" t="Include" />
@@ -364,61 +365,7 @@
             </e>
             <e p="PaletteEditor.cs" t="Include" />
             <e p="RigidbodyEditor.cs" t="Include" />
-            <e p="Spielberg" t="Include">
-              <e p="Clips" t="Include">
-                <e p="ModalClips" t="Include">
-                  <e p="CalmNPC.cs" t="Include" />
-                  <e p="DisableNPC.cs" t="Include" />
-                  <e p="EnableNPC.cs" t="Include" />
-                  <e p="LiberatePlayer.cs" t="Include" />
-                  <e p="NPCGoTo.cs" t="Include" />
-                  <e p="NPCStopUsingActivity.cs" t="Include" />
-                  <e p="NPCUseActivity.cs" t="Include" />
-                  <e p="PanicNPC.cs" t="Include" />
-                  <e p="ParalyzePlayer.cs" t="Include" />
-                  <e p="PlayDialogue.cs" t="Include" />
-                  <e p="PlayerEject.cs" t="Include" />
-                  <e p="PlayGameEffect.cs" t="Include" />
-                  <e p="PlayMusic.cs" t="Include" />
-                  <e p="PlaySound.cs" t="Include" />
-                  <e p="ScreenShake.cs" t="Include" />
-                  <e p="StopMusic.cs" t="Include" />
-                  <e p="SwitchCamera.cs" t="Include" />
-                  <e p="TeleportPlayer.cs" t="Include" />
-                  <e p="ToggleLegs.cs" t="Include" />
-                  <e p="WaitOnEndOfDialogue.cs" t="Include" />
-                  <e p="WaitOnInput.cs" t="Include" />
-                </e>
-                <e p="SpielbergCalmNPCClipBehaviour.cs" t="Include" />
-                <e p="SpielbergDisableNPC.cs" t="Include" />
-                <e p="SpielbergEnableNPC.cs" t="Include" />
-                <e p="SpielbergLiberatePlayerClipBehaviour.cs" t="Include" />
-                <e p="SpielbergModalClip.cs" t="Include" />
-                <e p="SpielbergNPCGoTo.cs" t="Include" />
-                <e p="SpielbergNPCStopUsingActivity.cs" t="Include" />
-                <e p="SpielbergNPCUseActivity.cs" t="Include" />
-                <e p="SpielbergParalyzePlayerClipBehaviour.cs" t="Include" />
-                <e p="SpielbergPlayDialogueClipBehaviour.cs" t="Include" />
-                <e p="SpielbergPlayerEjectClipBehaviour.cs" t="Include" />
-                <e p="SpielbergPlayerToggleLegsClipBehaviour.cs" t="Include" />
-                <e p="SpielbergPlayGameEffectClipBehaviour.cs" t="Include" />
-                <e p="SpielbergPlayMusicClipBehaviour.cs" t="Include" />
-                <e p="SpielbergPlaySoundClipBehaviour.cs" t="Include" />
-                <e p="SpielbergScreenShakeClipBehaviour.cs" t="Include" />
-                <e p="SpielbergStartleNPCClipBehaviour.cs" t="Include" />
-                <e p="SpielbergStopMusicClipBehaviour.cs" t="Include" />
-                <e p="SpielbergSwitchCameraClipBehaviour.cs" t="Include" />
-                <e p="SpielbergTeleportPlayerClipBehaviour.cs" t="Include" />
-                <e p="SpielbergWaitOnEndOfDialogueClipBehaviour.cs" t="Include" />
-                <e p="SpielbergWaitOnInputClipBehaviour.cs" t="Include" />
-              </e>
-              <e p="SpielbergClip.cs" t="Include" />
-              <e p="SpielbergClipBehaviour.cs" t="Include" />
-              <e p="SpielbergClipDrawer.cs" t="Include" />
-              <e p="SpielbergEventMixer.cs" t="Include" />
-              <e p="SpielbergTrack.cs" t="Include" />
-              <e p="SpielbergTrackEditor.cs" t="Include" />
-            </e>
+            <e p="SpielbergTrackEditor.cs" t="Include" />
           </e>
           <e p="EmotionBubble.cs" t="Include" />
           <e p="Face.cs" t="Include" />
@@ -613,6 +560,59 @@
             <e p="TransitionProfile.cs" t="Include" />
           </e>
           <e p="Smoke.cs" t="Include" />
+          <e p="Spielberg" t="Include">
+            <e p="Clips" t="Include">
+              <e p="ModalClips" t="Include">
+                <e p="CalmNPC.cs" t="Include" />
+                <e p="DisableNPC.cs" t="Include" />
+                <e p="EnableNPC.cs" t="Include" />
+                <e p="LiberatePlayer.cs" t="Include" />
+                <e p="NPCGoTo.cs" t="Include" />
+                <e p="NPCStopUsingActivity.cs" t="Include" />
+                <e p="NPCUseActivity.cs" t="Include" />
+                <e p="PanicNPC.cs" t="Include" />
+                <e p="ParalyzePlayer.cs" t="Include" />
+                <e p="PlayDialogue.cs" t="Include" />
+                <e p="PlayerEject.cs" t="Include" />
+                <e p="PlayGameEffect.cs" t="Include" />
+                <e p="PlayMusic.cs" t="Include" />
+                <e p="PlaySound.cs" t="Include" />
+                <e p="ScreenShake.cs" t="Include" />
+                <e p="StopMusic.cs" t="Include" />
+                <e p="SwitchCamera.cs" t="Include" />
+                <e p="TeleportPlayer.cs" t="Include" />
+                <e p="ToggleLegs.cs" t="Include" />
+                <e p="WaitOnEndOfDialogue.cs" t="Include" />
+                <e p="WaitOnInput.cs" t="Include" />
+              </e>
+              <e p="SpielbergCalmNPCClipBehaviour.cs" t="Include" />
+              <e p="SpielbergDisableNPC.cs" t="Include" />
+              <e p="SpielbergEnableNPC.cs" t="Include" />
+              <e p="SpielbergLiberatePlayerClipBehaviour.cs" t="Include" />
+              <e p="SpielbergModalClip.cs" t="Include" />
+              <e p="SpielbergNPCGoTo.cs" t="Include" />
+              <e p="SpielbergNPCStopUsingActivity.cs" t="Include" />
+              <e p="SpielbergNPCUseActivity.cs" t="Include" />
+              <e p="SpielbergParalyzePlayerClipBehaviour.cs" t="Include" />
+              <e p="SpielbergPlayDialogueClipBehaviour.cs" t="Include" />
+              <e p="SpielbergPlayerEjectClipBehaviour.cs" t="Include" />
+              <e p="SpielbergPlayerToggleLegsClipBehaviour.cs" t="Include" />
+              <e p="SpielbergPlayGameEffectClipBehaviour.cs" t="Include" />
+              <e p="SpielbergPlayMusicClipBehaviour.cs" t="Include" />
+              <e p="SpielbergPlaySoundClipBehaviour.cs" t="Include" />
+              <e p="SpielbergScreenShakeClipBehaviour.cs" t="Include" />
+              <e p="SpielbergStartleNPCClipBehaviour.cs" t="Include" />
+              <e p="SpielbergStopMusicClipBehaviour.cs" t="Include" />
+              <e p="SpielbergSwitchCameraClipBehaviour.cs" t="Include" />
+              <e p="SpielbergTeleportPlayerClipBehaviour.cs" t="Include" />
+              <e p="SpielbergWaitOnEndOfDialogueClipBehaviour.cs" t="Include" />
+              <e p="SpielbergWaitOnInputClipBehaviour.cs" t="Include" />
+            </e>
+            <e p="SpielbergClip.cs" t="Include" />
+            <e p="SpielbergClipBehaviour.cs" t="Include" />
+            <e p="SpielbergEventMixer.cs" t="Include" />
+            <e p="SpielbergTrack.cs" t="Include" />
+          </e>
           <e p="Transitioner.cs" t="Include" />
           <e p="Utility" t="Include">
             <e p="BillboardSprite.cs" t="Include" />
