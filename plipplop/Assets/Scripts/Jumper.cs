@@ -134,7 +134,6 @@ public class Jumper : Controller
 
 		if (IsPossessed())
 		{
-			Debug.Log("zdadazda");
 			var currAngle = transform.eulerAngles.Round();
 			var rightAngle = Vector3.SignedAngle(previousAngle, currAngle, Vector3.right);
 			var forwardAngle = Vector3.SignedAngle(previousAngle, currAngle, Vector3.forward);
