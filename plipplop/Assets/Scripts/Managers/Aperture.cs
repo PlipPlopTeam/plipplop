@@ -65,6 +65,7 @@ public class Aperture
     float stackTransitionState = 1f;
     AperturePreset previousStackSettings;
     Camera cam;
+    List<FadedApparition> cameraFadedObjects = new List<FadedApparition>();
 
     // Static cameras
     public List<StaticObjective> staticObjectives = new List<StaticObjective>();
@@ -378,8 +379,10 @@ public class Aperture
 
 		ComputePosition(targetPosition);
 		UpdatePosition(catchUpSpeed);
-		if (GetStaticObjective() == null) 
+        if (GetStaticObjective() == null) {
             EnsureMinimalCameraDistance();
+            FadeObjectsBeforeCamera();
+        }
 
 		// CameraFX
 		ComputeFieldOfView(targetPosition);
@@ -525,6 +528,41 @@ public class Aperture
         rCurrent.z = Mathf.Lerp(rCurrent.z, rDestination.z, longFollow);
 
         position.current = cam.transform.TransformPoint(rCurrent);
+    }
+
+    void FadeObjectsBeforeCamera()
+    {
+        if (target == null) return;
+
+        var camera3AxisDirection = position.current - target.position;
+        var dist = camera3AxisDirection.magnitude;
+
+
+        RaycastHit[] hits = Physics.RaycastAll(
+            origin: target.position,
+            direction: camera3AxisDirection,
+            maxDistance: dist,
+            queryTriggerInteraction:QueryTriggerInteraction.Collide,
+            layerMask: ~0);
+
+        List<FadedApparition> objectsToFade = new List<FadedApparition>();
+
+        if (hits.Length > 0){
+            foreach(var hit in hits) {
+                var fa = hit.collider.GetComponent<FadedApparition>();
+                if (fa) {
+                    objectsToFade.AddUnique(fa);
+                    fa.StartFadingOut();
+                }
+            }
+        }
+
+        // Update list
+        var previousObjects = cameraFadedObjects.Where(o => !objectsToFade.Contains(o));
+        foreach(var obj in previousObjects) {
+            obj.StartFadeIn();
+        }
+        cameraFadedObjects = objectsToFade;
     }
 
     public bool IsMovingToDestination()
