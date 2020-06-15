@@ -8,13 +8,14 @@ public class MwonMwonIntroQuest : TalkableCharacter
     public GameObject DBG_FirstCinematic; // DEBUG
     public GameObject DBG_SecondCinematic; // DEBUG
     public GameObject stopGap;
-
+    public StaticCameraVolume scm;
     public Launcher launcher;
     public CollisionEventTransmitter exitVolume;
 
     bool hasLaunchedCinematicPartTwo = false;
     bool hasFinishedTutorial = false;
     float radius = 0f;
+
 
     public override Dialog OnDialogTrigger()
     {
@@ -23,10 +24,12 @@ public class MwonMwonIntroQuest : TalkableCharacter
 
     private void Start()
     {
+        talkRadius = 0f; // FIX - should be removed at some point
+
         radius = talkRadius;
         talkRadius = 0f;
         if (DBG_FirstCinematic) Spielberg.PlayCinematic(DBG_FirstCinematic);
-        else Spielberg.PlayCinematic("cine_firststeps_introduction");
+        else Spielberg.PlayCinematic("cine_tutorial_1");
 
         exitVolume.onTriggerEnter += ExitVolume_onTriggerEnter;
     }
@@ -34,7 +37,9 @@ public class MwonMwonIntroQuest : TalkableCharacter
     private void ExitVolume_onTriggerEnter(Collider obj)
     {
         var controller = Game.i.player.GetCurrentController();
-        if (controller!= null && obj.gameObject == controller.gameObject) {
+        if (controller!= null && obj.gameObject == controller.gameObject)
+        {
+            scm.OnPlayerExit(controller);
             launcher.LaunchController(controller);
         }
     }
@@ -50,7 +55,7 @@ public class MwonMwonIntroQuest : TalkableCharacter
         else{
             if (Game.i.player.IsPossessing(tutorialController)) {
                 if (DBG_SecondCinematic) Spielberg.PlayCinematic(DBG_SecondCinematic);
-                else Spielberg.PlayCinematic("cine_firststeps_aftermorphin");
+                else Spielberg.PlayCinematic("cine_tutorial_2");
                 hasLaunchedCinematicPartTwo = true;
             }
         }

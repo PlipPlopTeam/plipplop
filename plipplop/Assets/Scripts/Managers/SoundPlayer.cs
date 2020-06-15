@@ -53,7 +53,7 @@ public class SoundPlayer
             if (snd.loop)
             {
                 MakeUnique(snd);
-                src = LoopClip(snd.clip, shouldFadeIn ? 0f : volume, pitch);
+                src = LoopClip(snd.clip, shouldFadeIn ? 0f : volume, pitch, src);
                 if (shouldFadeIn) {
                     UnityMainThreadDispatcher.Instance().StartCoroutine(FadeVolumeOverTime(src, volume));
                 }

@@ -36,12 +36,13 @@ public class EmotionBubble : MonoBehaviour
     private void Awake()
     {
         // Instantiate the materials of everyone 
-        verbRenderer.material = Instantiate(verbRenderer.material);
-        singleSubjectRenderer.material = Instantiate(singleSubjectRenderer.material);
+        verbRenderer.sharedMaterial = Instantiate(verbRenderer.material);
+        singleSubjectRenderer.sharedMaterial = Instantiate(singleSubjectRenderer.material);
         foreach (var ren in smallSubjectsRenderers) {
-            ren.material = Instantiate(verbRenderer.material);
+            ren.sharedMaterial = Instantiate(verbRenderer.material);
+            ren.sharedMaterial.SetFloat("_AlphaCutoffEnable", 1f);
         }
-        background.material = UnityEngine.Object.Instantiate(background.material);
+        background.sharedMaterial = UnityEngine.Object.Instantiate(background.material);
     }
 
     private void Update()
@@ -55,7 +56,7 @@ public class EmotionBubble : MonoBehaviour
         VoidRenderers();
         background.enabled = true;
         var sprite = Game.i.library.emotions.GetBubbleSprite(emotion.bubbleType); 
-        background.material.mainTexture = sprite;
+        background.sharedMaterial.mainTexture = sprite;
 
         if(emotion.verb.sounds.Length > 0)
         {
@@ -64,18 +65,18 @@ public class EmotionBubble : MonoBehaviour
         }
 
         try {
-            verbRenderer.material.mainTexture = emotion.verb.frames[0];
+            verbRenderer.sharedMaterial.SetTexture("_BaseColorMap", emotion.verb.frames[0]);
             verbRenderer.enabled = true;
-            textureRolls.Add(new TextureRoll(emotion.verb.frames, verbRenderer.material));
+            textureRolls.Add(new TextureRoll(emotion.verb.frames, verbRenderer.sharedMaterial));
         }
         catch (System.IndexOutOfRangeException) {
             Debug.LogError("!! The verb " + emotion.verb + " HAS NO FRAMES! Check the scriptable object in the library.");
         }
 
         if (emotion.subjects.Count == 1) {
-            singleSubjectRenderer.material.mainTexture = emotion.subjects[0].frames[0];
+            singleSubjectRenderer.sharedMaterial.SetTexture("_BaseColorMap", emotion.subjects[0].frames[0]);
             singleSubjectRenderer.enabled = true;
-            textureRolls.Add(new TextureRoll(emotion.subjects[0].frames, singleSubjectRenderer.material));
+            textureRolls.Add(new TextureRoll(emotion.subjects[0].frames, singleSubjectRenderer.sharedMaterial));
         }
         else if (emotion.subjects.Count == 0) {
             throw new System.Exception("!! NO SUBJECTS in given emotion " + emotion + ". This should NOT happen. Check who triggered that emotion.");
@@ -83,9 +84,9 @@ public class EmotionBubble : MonoBehaviour
         else {
             try {
                 for (int i = 0; i < smallSubjectsRenderers.Length; i++) {
-                    smallSubjectsRenderers[i].material.mainTexture = emotion.subjects[i].frames[0];
+                    smallSubjectsRenderers[i].sharedMaterial.SetTexture("_BaseColorMap", emotion.subjects[i].frames[0]);
                     smallSubjectsRenderers[i].enabled = true;
-                    textureRolls.Add(new TextureRoll(emotion.subjects[i].frames, smallSubjectsRenderers[i].material));
+                    textureRolls.Add(new TextureRoll(emotion.subjects[i].frames, smallSubjectsRenderers[i].sharedMaterial));
                 }
             }
             catch (System.IndexOutOfRangeException) {

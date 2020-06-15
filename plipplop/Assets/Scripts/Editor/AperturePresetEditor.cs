@@ -216,6 +216,7 @@ public class AperturePresetEditor : Editor
 
 		inheritableProperties[switches].Add("canBeControlled");
         inheritableProperties[switches].Add("canBeReset");
+        inheritableProperties[switches].Add("obstructibleLayerMask");
 
         inheritableProperties[basicParameters].Add("fieldOfView");
         inheritableProperties[basicParameters].Add("heightOffset");
