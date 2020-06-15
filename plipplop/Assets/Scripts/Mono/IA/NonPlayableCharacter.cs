@@ -489,11 +489,17 @@ public class NonPlayableCharacter : MonoBehaviour
 			transform.SetParent(null);
 			chair.Exit(this);
 			chair = null;
+			ResetLayer();
 		}
 		collider.enabled = true;
 		agent.enabled = true;
 		animator.SetBool("Sitting", false);
 		animator.SetBool("Chairing", false);
+	}
+
+	public void ResetLayer()
+	{
+		gameObject.layer = 0;
 	}
 	
 #if UNITY_EDITOR
