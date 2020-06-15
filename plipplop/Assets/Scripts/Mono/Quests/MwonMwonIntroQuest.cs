@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,7 +23,7 @@ public class MwonMwonIntroQuest : TalkableCharacter
         return null;
     }
 
-    private void Start()
+    public void BeginQuest()
     {
         talkRadius = 0f; // FIX - should be removed at some point
 
@@ -32,6 +33,8 @@ public class MwonMwonIntroQuest : TalkableCharacter
         else Spielberg.PlayCinematic("cine_tutorial_1");
 
         exitVolume.onTriggerEnter += ExitVolume_onTriggerEnter;
+        
+        SoundPlayer.PlayAtPosition("bgm_volcano", transform.position,.5f);
     }
 
     private void ExitVolume_onTriggerEnter(Collider obj)
