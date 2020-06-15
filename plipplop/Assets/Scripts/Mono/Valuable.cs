@@ -7,6 +7,7 @@ public class Valuable : Item, INoticeable, ICarryable
     [Header("Valuable")]
     public float distanceThreshold = 2f;
     public bool hidden = false;
+	public bool active = true;
 
 	public virtual void Awake()
     {
@@ -18,7 +19,7 @@ public class Valuable : Item, INoticeable, ICarryable
     }
 	public virtual bool IsVisible()
     {
-		return !hidden;// && !IsSurroundedBySameItem();
+		return !hidden && active && !IsSurroundedBySameItem();
     }
 	public virtual void SetVisible(bool value)
     {

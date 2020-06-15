@@ -107,8 +107,8 @@ NavMeshAgent:
   m_AutoRepath: 1
   m_Height: 1.8
   m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_WalkableMask: 5
+  m_ObstacleAvoidanceType: 1
 --- !u!54 &64330847092521571
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -174,7 +174,6 @@ MonoBehaviour:
   headTransform: {fileID: 137210366996285823}
   vOffset: 1
   hOffset: 1
-  size: 0.5
 --- !u!114 &1684127436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,7 +189,7 @@ MonoBehaviour:
   sight: {fileID: 0}
   look: {fileID: 0}
   agent: {fileID: 0}
-  agentMovement: {fileID: 0}
+  movement: {fileID: 0}
   animator: {fileID: 0}
   skeleton: {fileID: 0}
   emo: {fileID: 0}
@@ -239,7 +238,10 @@ MonoBehaviour:
   followingPath: 0
   chaseTarget: {fileID: 0}
   chaseTargetPosition: {x: 0, y: 0, z: 0}
+  point: {x: 0, y: 0, z: 0}
   orientation: {x: 0, y: 0, z: 0}
+  orientLerp: 5
+  cOrientLerp: 0
 --- !u!114 &1215592124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -366,21 +368,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SK_Tourist
       objectReference: {fileID: 0}
-    - target: {fileID: 3049276234239041946, guid: 85438989d6e08724ebf3e5ba8bdeb568,
+    - target: {fileID: -6057140222963153312, guid: 85438989d6e08724ebf3e5ba8bdeb568,
         type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5629209890089637745, guid: 85438989d6e08724ebf3e5ba8bdeb568,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2185281420412016359, guid: 85438989d6e08724ebf3e5ba8bdeb568,
-        type: 3}
-      propertyPath: m_BlendShapeWeights.Array.size
-      value: 8
-      objectReference: {fileID: 0}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 4055c018088f5e345801c283400af1db, type: 2}
     - target: {fileID: -4216859302048453862, guid: 85438989d6e08724ebf3e5ba8bdeb568,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -436,11 +428,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -6057140222963153312, guid: 85438989d6e08724ebf3e5ba8bdeb568,
+    - target: {fileID: 2185281420412016359, guid: 85438989d6e08724ebf3e5ba8bdeb568,
         type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 4055c018088f5e345801c283400af1db, type: 2}
+      propertyPath: m_BlendShapeWeights.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3049276234239041946, guid: 85438989d6e08724ebf3e5ba8bdeb568,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5629209890089637745, guid: 85438989d6e08724ebf3e5ba8bdeb568,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 85438989d6e08724ebf3e5ba8bdeb568, type: 3}
 --- !u!1 &7311536964611924945 stripped
