@@ -26,6 +26,11 @@ public class SpielbergAssistant : MonoBehaviour
     EAction? waitingOnInput;
     bool isWaitingOnDialogue;
 
+    public void ShutDownCinematic()
+    {
+        director.Stop();
+    }
+
     private void Awake()
     {
         director = GetComponent<PlayableDirector>();

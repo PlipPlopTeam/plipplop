@@ -104,10 +104,7 @@ public class DialogPlayer : MonoBehaviour
         currentLineIndex++;
         if (currentLineIndex >= currentDialogue.elements.Count)
         {
-            isPlaying = false;
-            DialogHooks.currentInterlocutor = null;
-            if (Game.i) Game.i.player.Deparalyze();
-            if (callback != null) callback.Invoke();
+            EndDialogue();
             return;
         }
         if (currentElement is Dialog.Pause)
@@ -120,6 +117,14 @@ public class DialogPlayer : MonoBehaviour
             if (!string.IsNullOrEmpty(currentLine.talker)) nameTag.text = currentLine.talker;
             teletypeRoutine = StartCoroutine(Teletype());
         }
+    }
+
+    public void EndDialogue()
+    {
+        isPlaying = false;
+        DialogHooks.currentInterlocutor = null;
+        if (Game.i) Game.i.player.Deparalyze();
+        if (callback != null) callback.Invoke();
     }
 
     public void PlaySampleDialogue()
