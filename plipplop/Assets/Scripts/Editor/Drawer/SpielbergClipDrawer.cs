@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(Spielberg.Clips.SwitchCamera))]
+[CustomPropertyDrawer(typeof(SpielbergClips.SwitchCamera))]
 public class SpielbergClipDrawer : PropertyDrawer
 {
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)

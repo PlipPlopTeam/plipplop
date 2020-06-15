@@ -1,4 +1,4 @@
-﻿using Spielberg.Clips;
+﻿using SpielbergClips;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 
-namespace Spielberg.Clips
+namespace SpielbergClips
 {
     public class SpielbergModalClip<TBehaviour> : SpielbergClip where TBehaviour : SpielbergClipBehaviour, new()
     {

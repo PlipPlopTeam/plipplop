@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Spielberg.Clips
+namespace SpielbergClips
 {
     public class DisableNPC : SpielbergModalClip<SpielbergDisableNPC> { }
 }
