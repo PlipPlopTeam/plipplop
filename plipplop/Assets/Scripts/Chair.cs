@@ -73,8 +73,8 @@ public class Chair : MonoBehaviour
 	public void Align(NonPlayableCharacter sitter, Spot spot)
 	{
 		sitter.transform.localPosition = new Vector3(spot.position.x, spot.position.y - spot.user.skeleton.GetButtHeight(), spot.position.z);
-		//sitter.movement.Orient(visual.up * spot.cRotation);
-		sitter.transform.rotation = Quaternion.Euler(transform.up * spot.cRotation);
+		sitter.movement.Orient(visual.up * spot.cRotation);
+		//sitter.transform.rotation = Quaternion.Euler(transform.up * (spot.cRotation + 180f));
 	}
 
 	public void Update()
