@@ -30,6 +30,24 @@ public class Cheats : Dictionary<string, System.Action>
         Add("GRIFFIN", Griffin);
         Add("BUBBLE", DisplayDefaultBubble);
         Add("POSTPROCESS", PostProcess);
+        Add("CHUT", SkipTutorial);
+    }
+
+    public void SkipTutorial()
+    {
+        var assist = Object.FindObjectOfType<SpielbergAssistant>();
+        if (assist != null) {
+            assist.ShutDownCinematic();
+        }
+        var dial = Object.FindObjectOfType<DialogPlayer>();
+        if (dial != null) {
+            dial.EndDialogue();
+        }
+
+        var mmquest = Object.FindObjectOfType<MwonMwonIntroQuest>();
+        if (mmquest != null) {
+            mmquest.stopGap.SetActive(false);
+        }
     }
 
     public void DisplayDefaultBubble()

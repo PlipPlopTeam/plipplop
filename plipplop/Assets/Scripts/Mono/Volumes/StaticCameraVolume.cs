@@ -15,14 +15,16 @@ public class StaticCameraVolume : Volume {
     int lookAtIndex = 0;
     Geometry.PositionAndRotation objective;
     Controller controller;
+
     public void Update()
     {
-        if(controller != null && !controller.IsPossessed())
+        var pc = Game.i.player.GetCurrentController();
+        if (controller != null && pc != null && !IsInside(pc.transform.position))
         {
-            if (Game.i.player.GetCurrentController() != null && !IsInside(Game.i.player.GetCurrentController().transform.position))
-            {
-                OnPlayerExit(controller);
-            }
+            OnPlayerExit(controller);
+        }
+        else if (controller == null && pc != null && IsInside(pc.transform.position)) {
+            OnPlayerEnter(pc);
         }
     }
 
@@ -48,19 +50,18 @@ public class StaticCameraVolume : Volume {
         // Stop control for 1 frame
         StartCoroutine(FreezeForSomeTime());
 
-        foreach (GameObject o in objectsToHide)
-        {
-            var fade = o.GetComponent<FadedApparition>();
-            if (fade != null)
-            {
-                fade.FadeOutThen(null);
-            }
-            else
-            {
-                o.SetActive(false);
+        if (objectsToHide != null) {
+            foreach (GameObject o in objectsToHide) {
+                if (o == null) continue;
+                var fade = o.GetComponent<FadedApparition>();
+                if (fade != null) {
+                    fade.FadeOutThen(null);
+                }
+                else {
+                    o.SetActive(false);
+                }
             }
         }
-
         controller = player;
     }
 

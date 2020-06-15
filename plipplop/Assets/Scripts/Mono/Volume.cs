@@ -32,7 +32,7 @@ public abstract class Volume : MonoBehaviour
         Gizmos.matrix = transform.worldToLocalMatrix;
     }
 #endif
-
+    
     public bool IsInside(Vector3 point)
     {
         point = bc.transform.InverseTransformPoint(point) - bc.center;
