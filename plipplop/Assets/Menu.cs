@@ -81,14 +81,21 @@ public class Menu : MonoBehaviour
 
     void SetButtonSelected(GameObject _b)
     {
-        _b.GetComponentInChildren<TextMeshProUGUI>().text += " <";
+        TextMeshProUGUI _t = _b.GetComponentInChildren<TextMeshProUGUI>();
+        if (_t)
+        {
+            _t.text += " <";
+        }
     }
 
     void RemoveButtonSelected(GameObject _b)
     {
         TextMeshProUGUI _t = _b.GetComponentInChildren<TextMeshProUGUI>();
-        string _s = _t.text;
-        _s = _s.Remove(_s.Length - 2);
-        _t.text = _s;
+        if (_t)
+        {
+            string _s = _t.text;
+            _s = _s.Remove(_s.Length - 2);
+            _t.text = _s;
+        }
     }
 }
