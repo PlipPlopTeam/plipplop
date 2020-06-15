@@ -124,7 +124,7 @@ public class NonPlayableCharacter : MonoBehaviour
 	private Activity show;
 	public void ShowOff(float time, Vector2 range, int slot)
 	{
-		show = gameObject.AddComponent<Activity>();
+		show = gameObject.AddComponent<ShowOffActivity>();
 		show.spectatorMax = slot;
 		show.full = true;
 		show.working = true;
