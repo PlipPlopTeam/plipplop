@@ -60,7 +60,7 @@ public abstract class TalkableCharacter : MonoBehaviour
     {
         if (isTalkingToMe) {
             var controller = Game.i.player.GetCurrentController();
-            if (controller != null) controller.transform.LookAt(this.transform);
+            if (controller != null) controller.transform.LookAt(new Vector3(this.transform.position.x, controller.transform.position.y,this.transform.position.z));
             if (Time.time - lastVowelTime > 0.4f) {
                 var letterIndex = vowels.FindIndex(o => o == DialogHooks.currentPronouncedLetter.ToUpper());
                 var oAmount = (letterIndex >= 0 ? (vowels.Count - (float)letterIndex) / vowels.Count : 0f) * 100f;
