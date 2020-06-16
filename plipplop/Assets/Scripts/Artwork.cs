@@ -25,10 +25,15 @@ public class Artwork : Activity
 	public override void Update()
 	{
 		base.Update();
+		Vector3 pos = transform.position 
+		+ transform.right * focusOffset.x 
+		+ transform.up * focusOffset.y 
+		+ transform.forward * focusOffset.z;
+
 		foreach (var s  in spectators)
 		{
-			s.movement.OrientToward(transform.position);
-			s.look.FocusOn(transform.position + focusOffset);
+			s.movement.OrientToward(pos);
+			s.look.FocusOn(pos);
 		}
 	}
 

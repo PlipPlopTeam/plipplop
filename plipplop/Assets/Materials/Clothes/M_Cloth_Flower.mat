@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: M_Cloth_Flower
-  m_Shader: {fileID: -6465566751694194690, guid: c9170e8f4fb2c834984516283b9c372b,
+  m_Shader: {fileID: -6465566751694194690, guid: 1a50dca04fb9e1540a396030d8d43518,
     type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -38,7 +38,20 @@ Material:
         m_Texture: {fileID: 2800000, guid: e3fe4ce7dee092342b4134ca7fd3587e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    m_Floats: []
+    - _MaskMap:
+        m_Texture: {fileID: 2800000, guid: 9752a903486678c4a8a5c6b8361b6a8e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal:
+        m_Texture: {fileID: 2800000, guid: 403f1286ffb85e9448af3192b63ed5db, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _UseMask: 1
     m_Colors:
     - Color_2B9E2DCC: {r: 1, g: 1, b: 1, a: 1}
+    - _AlbedoTiling: {r: 2, g: 2, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color0: {r: 1, g: 1, b: 1, a: 1}
+    - _Color1: {r: 0, g: 0, b: 0, a: 0}
+    - _DetailTiling: {r: 3, g: 3, b: 0, a: 0}

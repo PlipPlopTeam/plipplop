@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class Valuable : Item, INoticeable, ICarryable
 {
     [HideInInspector] public Vector3 origin;
+	public List<Transform> placesToBeSorted = new List<Transform>();
     [Header("Valuable")]
     public float distanceThreshold = 2f;
     public bool hidden = false;
@@ -11,8 +12,15 @@ public class Valuable : Item, INoticeable, ICarryable
 
 	public virtual void Awake()
     {
-        origin = transform.position;
-    }
+		if(placesToBeSorted.Count > 0)
+		{
+			origin = placesToBeSorted.PickRandom().position;
+		}
+		else
+		{
+			origin = transform.position;
+		}
+	}
 	public virtual void Notice()
     {
         // Does things..

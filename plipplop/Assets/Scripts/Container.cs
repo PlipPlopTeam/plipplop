@@ -95,6 +95,7 @@ public class Container : MonoBehaviour
 	{
 		if(item.visuals != null) item.visuals.SetActive(true);
 		item.Drop();
+		item.gameObject.layer = 0;
 		item.transform.SetParent(null);
 		if (onItemRemoved != null) onItemRemoved.Invoke();
 	}
