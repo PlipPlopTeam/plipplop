@@ -192,6 +192,7 @@ public class Launcher : MonoBehaviour
 		controller.Freeze();
 		controller.locomotion.StartFly();
 		controller.rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+		controller.transform.position = cart.transform.position; //set plip plop at path start position
 		PrepareLaunch(controller.gameObject,
 		(go) =>
 		{

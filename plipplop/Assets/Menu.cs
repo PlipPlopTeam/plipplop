@@ -34,6 +34,7 @@ public class Menu : MonoBehaviour
         //Game.i.Transition();
         
         Game.i.player.Paralyze();
+        //Game.i.player.baseController.RetractLegs();
 
         gameCanvas = GameObject.Find("GAME_CANVAS");
         

@@ -64,7 +64,6 @@ MonoBehaviour:
   face: {fileID: 8047810985327452236}
   visualsOffset: {x: 0, y: 0, z: 0}
   unpossessSpawnDistance: 0.75
-  legsExtendedAngularDrag: 5
   legsRetractedAngularDrag: 0.03
   jumpComboWindow: 0.5
   jumpComboHForceBonus: 1250
@@ -115,15 +114,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27bebb278a4489e489e5558d1c6671af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  physiqued: 1
   shape: 0
   rb: {fileID: 2932650472225342063}
   collider: {fileID: 2932650472225342060}
-  weight: 5
   type: 3
+  weight: 5
   visuals: {fileID: 0}
   origin: {x: 0, y: 0, z: 0}
+  placesToBeSorted: []
   distanceThreshold: 2
   hidden: 0
+  active: 1
 --- !u!114 &7286649357687551854
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,6 +138,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 938d530180d1dd44ba9c6c800dbe4e59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  physiqued: 1
+  shape: 0
+  rb: {fileID: 2932650472225342063}
+  collider: {fileID: 2932650472225342060}
+  type: 3
+  weight: 1
+  visuals: {fileID: 6564690223429448292}
+  origin: {x: 0, y: 0, z: 0}
+  placesToBeSorted: []
+  distanceThreshold: 2
+  hidden: 0
+  active: 1
   activated: 1
   working: 1
   userMax: 4
@@ -287,11 +301,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6394191480266241693, guid: 9aed549a97ecebe439f86c6d554d109a,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 209e166990199594bba4b5185535acfc, type: 2}
     - target: {fileID: 3312780394835150675, guid: 9aed549a97ecebe439f86c6d554d109a,
         type: 3}
       propertyPath: m_LocalRotation.y
@@ -312,6 +321,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 6394191480266241693, guid: 9aed549a97ecebe439f86c6d554d109a,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 209e166990199594bba4b5185535acfc, type: 2}
     - target: {fileID: 4848594794600692302, guid: 9aed549a97ecebe439f86c6d554d109a,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
