@@ -31,6 +31,7 @@ public class Cheats : Dictionary<string, System.Action>
         Add("BUBBLE", DisplayDefaultBubble);
         Add("POSTPROCESS", PostProcess);
         Add("CHUT", SkipTutorial);
+        Add("HAUTLESMAINS", ToggleInputs);
     }
 
     public void SkipTutorial()
@@ -189,5 +190,11 @@ public class Cheats : Dictionary<string, System.Action>
 	    {
 		    _d.active = !_d.active;
 	    }
+    }
+
+    public void ToggleInputs()
+    {
+	    GameObject _g = GameObject.Find("GAME_CANVAS").transform.GetChild(0).gameObject;
+	    _g.SetActive(!_g.activeSelf);
     }
 }
