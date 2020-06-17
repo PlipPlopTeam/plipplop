@@ -49,6 +49,7 @@ public class Balloon : Activity
 	{
 		base.StartUsing(user);
 		if (user.look != null) user.look.FocusOn(transform);
+		user.movement.Stop();
 
 		if (users.Count > 1) GetInPlace();
 		else
@@ -71,7 +72,7 @@ public class Balloon : Activity
 	{
 		float distance = 0f;
 		for(int i = 0; i < users.Count - 1; i++) distance += Vector3.Distance(users[i].transform.position, users[i + 1].transform.position);
-		return distance > distanceMax * users.Count;
+		return distance < distanceMax * users.Count;
 	}
 
     void GetInPlace()
@@ -88,12 +89,20 @@ public class Balloon : Activity
 			inPlace.Add(false);
 			float angle = ((Mathf.PI * 2f) / users.Count) * count;
 			Vector3 pos = new Vector3(Mathf.Cos(angle) * distance, 0f, Mathf.Sin(angle) * distance);
-			user.movement.GoThere(originPosition + pos);
-			user.movement.onDestinationReached += () =>
+
+			if(user.movement.GoThere(originPosition + pos, true))
+			{
+				user.movement.onDestinationReached += () =>
+				{
+					inPlace[spot] = true;
+					IsAllInPlace();
+				};
+			}
+			else
 			{
 				inPlace[spot] = true;
 				IsAllInPlace();
-			};
+			}
 			count++;
 		}
     }
