@@ -54,6 +54,9 @@ MonoBehaviour:
   maxAngleChange: 20
   move: 0
   maxMoveRange: 0.3
+  mask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &174152750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74,7 +77,7 @@ MonoBehaviour:
   visuals: {fileID: 7804735275308616969}
   refreshTime: 0.1
   speed: 4
-  treshold: 0.25
+  treshold: 0.1
   angleMax: 10
   fearObjectMagnitude: 0.2
   sizeRange: {x: 0.75, y: 1.5}
@@ -173,11 +176,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7804735275308616969}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 56886aec28b614e46970ea027807a022,
-        type: 3}
-      propertyPath: m_Name
-      value: KM_Seagull01
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 56886aec28b614e46970ea027807a022,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -238,45 +236,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1392005002230502742, guid: 56886aec28b614e46970ea027807a022,
+    - target: {fileID: -927199367670048503, guid: 56886aec28b614e46970ea027807a022,
         type: 3}
-      propertyPath: m_BlendShapeWeights.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1392005002230502742, guid: 56886aec28b614e46970ea027807a022,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 9ec5323141b38014bbdc7df598e3912e, type: 2}
-    - target: {fileID: 1392005002230502742, guid: 56886aec28b614e46970ea027807a022,
-        type: 3}
-      propertyPath: m_AABB.m_Center.y
-      value: 0.19281505
-      objectReference: {fileID: 0}
-    - target: {fileID: 1392005002230502742, guid: 56886aec28b614e46970ea027807a022,
-        type: 3}
-      propertyPath: m_AABB.m_Center.z
-      value: -0.017127648
-      objectReference: {fileID: 0}
-    - target: {fileID: 1392005002230502742, guid: 56886aec28b614e46970ea027807a022,
-        type: 3}
-      propertyPath: m_AABB.m_Extent.x
-      value: 0.5936042
-      objectReference: {fileID: 0}
-    - target: {fileID: 1392005002230502742, guid: 56886aec28b614e46970ea027807a022,
-        type: 3}
-      propertyPath: m_AABB.m_Extent.y
-      value: 0.3521266
-      objectReference: {fileID: 0}
-    - target: {fileID: 1392005002230502742, guid: 56886aec28b614e46970ea027807a022,
-        type: 3}
-      propertyPath: m_AABB.m_Extent.z
-      value: 0.32923937
-      objectReference: {fileID: 0}
-    - target: {fileID: 1392005002230502742, guid: 56886aec28b614e46970ea027807a022,
-        type: 3}
-      propertyPath: m_DirtyAABB
-      value: 0
+      propertyPath: m_Name
+      value: KM_Seagull01
       objectReference: {fileID: 0}
     - target: {fileID: 6632672040118322017, guid: 56886aec28b614e46970ea027807a022,
         type: 3}
@@ -319,6 +282,46 @@ PrefabInstance:
       value: 0.13581234
       objectReference: {fileID: 0}
     - target: {fileID: 6632672040118322017, guid: 56886aec28b614e46970ea027807a022,
+        type: 3}
+      propertyPath: m_DirtyAABB
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1392005002230502742, guid: 56886aec28b614e46970ea027807a022,
+        type: 3}
+      propertyPath: m_BlendShapeWeights.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1392005002230502742, guid: 56886aec28b614e46970ea027807a022,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 9ec5323141b38014bbdc7df598e3912e, type: 2}
+    - target: {fileID: 1392005002230502742, guid: 56886aec28b614e46970ea027807a022,
+        type: 3}
+      propertyPath: m_AABB.m_Center.y
+      value: 0.19281505
+      objectReference: {fileID: 0}
+    - target: {fileID: 1392005002230502742, guid: 56886aec28b614e46970ea027807a022,
+        type: 3}
+      propertyPath: m_AABB.m_Center.z
+      value: -0.017127648
+      objectReference: {fileID: 0}
+    - target: {fileID: 1392005002230502742, guid: 56886aec28b614e46970ea027807a022,
+        type: 3}
+      propertyPath: m_AABB.m_Extent.x
+      value: 0.5936042
+      objectReference: {fileID: 0}
+    - target: {fileID: 1392005002230502742, guid: 56886aec28b614e46970ea027807a022,
+        type: 3}
+      propertyPath: m_AABB.m_Extent.y
+      value: 0.3521266
+      objectReference: {fileID: 0}
+    - target: {fileID: 1392005002230502742, guid: 56886aec28b614e46970ea027807a022,
+        type: 3}
+      propertyPath: m_AABB.m_Extent.z
+      value: 0.32923937
+      objectReference: {fileID: 0}
+    - target: {fileID: 1392005002230502742, guid: 56886aec28b614e46970ea027807a022,
         type: 3}
       propertyPath: m_DirtyAABB
       value: 0

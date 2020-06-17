@@ -241,6 +241,7 @@ public class Bird : MonoBehaviour
 	{
 		onReached = null;
 		position = transform.position;
+		target = transform.position;
 	}
 
 	public void Idle()
