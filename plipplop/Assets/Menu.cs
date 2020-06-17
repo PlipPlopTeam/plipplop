@@ -80,8 +80,13 @@ public class Menu : MonoBehaviour
             {
                 RemoveButtonSelected(selectedObject);
             }
+            
             selectedObject = eventManager.currentSelectedGameObject;
-            SetButtonSelected(selectedObject);
+            
+            if (selectedObject != null)
+            {
+                SetButtonSelected(selectedObject);
+            }
         }
     }
 
