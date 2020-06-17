@@ -44,6 +44,8 @@ public class Menu : MonoBehaviour
         selectedObject = eventManager.currentSelectedGameObject;
         
         SetButtonSelected(selectedObject);
+        
+        //Aperture.GetCurrentlyActiveCamera().Set
     }
 
     public void Play()
@@ -74,7 +76,10 @@ public class Menu : MonoBehaviour
     {
         if (selectedObject != eventManager.currentSelectedGameObject)
         {
-            RemoveButtonSelected(selectedObject);
+            if (selectedObject != null)
+            {
+                RemoveButtonSelected(selectedObject);
+            }
             selectedObject = eventManager.currentSelectedGameObject;
             SetButtonSelected(selectedObject);
         }
