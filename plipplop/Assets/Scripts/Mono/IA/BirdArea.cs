@@ -8,8 +8,11 @@ public class BirdArea : BirdZone
 	public enum Shape { CIRCLE, RECTANGLE }
 	[Header("Area")]
 	public Shape shape;
-	public float range;
+	public float radius;
 	public Vector2 size;
+	[Header("Raycast")]
+	public float range = 1f;
+
 
 	public override bool Available()
 	{
@@ -22,7 +25,7 @@ public class BirdArea : BirdZone
 
 		if(shape == Shape.CIRCLE)
 		{
-			position = transform.position + Geometry.GetRandomPointInRange(range);
+			position = transform.position + Geometry.GetRandomPointInRange(radius);
 		}
 		else if (shape == Shape.RECTANGLE)
 		{
@@ -30,7 +33,7 @@ public class BirdArea : BirdZone
 			position = transform.position + offset;
 		}
 
-		RaycastHit[] hits = Physics.RaycastAll(position, Vector3.down);
+		RaycastHit[] hits = Physics.RaycastAll(position, Vector3.down, range);
 		for (int i = hits.Length - 1; i > 0; i--)
 		{
 			if (!hits[i].collider.isTrigger)
@@ -55,12 +58,14 @@ public class BirdArea : BirdZone
 	{
 		if (shape == BirdArea.Shape.CIRCLE)
 		{
-			Handles.DrawWireDisc(transform.position, Vector3.up, range);
+			Handles.DrawWireDisc(transform.position, Vector3.up, radius);
 		}
 		else if (shape == BirdArea.Shape.RECTANGLE)
 		{
 			Handles.DrawWireCube(transform.position, new Vector3(size.x, 0f, size.y));
 		}
+
+		Handles.DrawLine(transform.position, transform.position + Vector3.down * range);
 	}
 #endif
 }
