@@ -395,7 +395,8 @@ public abstract class Controller : MonoBehaviour
 
 	public void UnFreeze()
 	{
-		freeze--;
+        freeze--;
+        if (freeze < 0) freeze = 0;
 		RefreshFreeze();
 	}
 
