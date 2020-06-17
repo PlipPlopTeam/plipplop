@@ -31,7 +31,7 @@ public class Cheats : Dictionary<string, System.Action>
         Add("BUBBLE", DisplayDefaultBubble);
         Add("POSTPROCESS", PostProcess);
         Add("CHUT", SkipTutorial);
-        Add("HAUTLESMAINS", ToggleInputs);
+        Add("NOINPUTS", ToggleInputs);
     }
 
     public void SkipTutorial()
