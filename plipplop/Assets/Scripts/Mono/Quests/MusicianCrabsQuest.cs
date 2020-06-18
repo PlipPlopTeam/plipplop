@@ -57,7 +57,7 @@ public class MusicianCrabsQuest : TalkableCharacter
         }
     }
 
-    private void Update()
+    new private void Update()
     {
         base.Update();
         if (isFinished > 0 && !Game.i.player.IsParalyzed() && !crabDance.areDancing) {

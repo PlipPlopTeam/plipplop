@@ -49,6 +49,11 @@ public class Spielberg
         currentAssistant = null;
     }
 
+    public void KinoSetBlendShape(string objectName, int hashCode, string shapeName, float value)
+    {
+        currentAssistant.SetBlendShape(objectName, hashCode, shapeName, value);
+    }
+
     public void KinoSwitchCamera(string cameraName)
     {
         currentAssistant.SwitchCamera(cameraName);   
@@ -129,6 +134,11 @@ public class Spielberg
     public void KinoNPCPanic(string npcGoTo)
     {
         currentAssistant.NPCPanic(npcGoTo);
+    }
+
+    public void KinoNPCWonder(string npcGoTo)
+    {
+        currentAssistant.NPCWonder(npcGoTo);
     }
 
     public void KinoNPCUseActivity(string npc, string act)
