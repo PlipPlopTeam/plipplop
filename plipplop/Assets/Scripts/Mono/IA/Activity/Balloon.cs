@@ -162,9 +162,9 @@ public class Balloon : Activity
 					if (users[carrier].IsCarrying(this))
                     {
 						if (users.Count > 1) LookAtEachOthers();
-						else if (users.Count == 1) users[0].movement.OrientToward(users[0].transform.position + Geometry.GetRandomPointOnCircle(1f));
+						else if (users.Count == 1) users[0].movement.RandomOrient();
 
-                        users[carrier].movement.Stop();
+						users[carrier].movement.Stop();
                         throwTimer = timeBetweenThrows;
                         flying = false;
                     }

@@ -156,6 +156,11 @@ public class AgentMovement : Walker
 		Orient(dir);
 	}
 
+	public void RandomOrient()
+	{
+		OrientToward(transform.position + Geometry.GetRandomPointOnCircle(1f));
+	}
+
 	public void ActivateAgent()
 	{
 		agent.enabled = true;
