@@ -80,8 +80,13 @@ public class Locomotion : Walker
                 canJump = true;
             }
         }
-
     }
+
+	[ContextMenu("A")]
+	public void A()
+	{
+		locomotionAnimation.grounded = true;
+	}
 
 	public bool AreLegsRetracted()
     {
@@ -207,13 +212,28 @@ public class Locomotion : Walker
         // This one here is a small fix to avoid double-jump. Tweak the value as necessary
         if(canJump && (isImmerged || !hasJumped) && rigidbody.velocity.y <= 4) 
         {
-            rigidbody.AddForce(Vector3.up * preset.jump * (parentController.gravityMultiplier / 100f), ForceMode.Acceleration);
-            hasJumped = true;
-            SoundPlayer.Play("sfx_jump");
-            canJump = false;
-            jumpTimer = 0.5f;
+			hasJumped = true;
+			canJump = false;
+			jumpTimer = 0.5f;
+			PushUp(preset.jump * (parentController.gravityMultiplier / 100f));
+			SoundPlayer.Play("sfx_jump");
         }
     }
+
+	public void PushUp(float force)
+	{
+		rigidbody.AddForce(Vector3.up * force, ForceMode.Acceleration);
+	}
+
+	public void SetOverwater()
+	{
+		locomotionAnimation.isFlattened = false;
+		locomotionAnimation.grounded = true;
+		locomotionAnimation.isFlying = false;
+		locomotionAnimation.landed = true;
+		locomotionAnimation.DefaultWalkCycle();
+		//PushUp(10f);
+	}
 
     public void StartFly()
     {
@@ -227,12 +247,7 @@ public class Locomotion : Walker
     public bool IsGrounded(float range = 1f) // But better 😎
     {
         List<RaycastHit> hits = new List<RaycastHit>();
-
-        hits.AddRange(RaycastAllToGround(1f)); // MIDDLE
-        //hits.AddRange(RaycastAllToGround(1.2f, new Vector2(groundCheckDistanceRange, 0f)));
-        //hits.AddRange(RaycastAllToGround(1.2f, new Vector2(-groundCheckDistanceRange, 0f)));
-        //hits.AddRange(RaycastAllToGround(1.2f, new Vector2(0f, groundCheckDistanceRange))); // RIGHT
-        //hits.AddRange(RaycastAllToGround(1.2f, new Vector2(0f, -groundCheckDistanceRange))); // LEFT
+        hits.AddRange(RaycastAllToGround(range)); // MIDDLE
 
         foreach (RaycastHit h in hits)
         {
