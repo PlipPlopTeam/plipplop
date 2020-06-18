@@ -1199,8 +1199,9 @@ MonoBehaviour:
   priority: 0
   activated: 1
   shape: 0
-  range: 0.11
+  radius: 0
   size: {x: 0, y: 0}
+  range: 0.11
 --- !u!1 &5635840533989703918
 GameObject:
   m_ObjectHideFlags: 0
@@ -2231,8 +2232,9 @@ MonoBehaviour:
   priority: 0
   activated: 1
   shape: 0
-  range: 0.11
+  radius: 0
   size: {x: 0, y: 0}
+  range: 0.11
 --- !u!1 &5635840534561917946
 GameObject:
   m_ObjectHideFlags: 0
@@ -3138,7 +3140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   autoPossess: 0
-  beginCrouched: 0
+  beginCrouched: 1
   canRetractLegs: 1
   freezeUntilPossessed: 0
   useGravity: 1
@@ -3152,6 +3154,8 @@ MonoBehaviour:
   visualsOffset: {x: 0, y: 0, z: 0}
   unpossessSpawnDistance: 1
   legsRetractedAngularDrag: 0.1
+  angularForce: 2000
+  maxVelocityMagnitude: 1
 --- !u!1 &5635840535689076516
 GameObject:
   m_ObjectHideFlags: 0
