@@ -39,6 +39,10 @@ public class TopoSunbatheQuest : TalkableCharacter
                 && Vector3.Distance(controller.transform.position, touristToAnnoy.transform.position) < distance
                 && touristToAnnoy.activity is Serviette
             ) {
+                Pyromancer.PlayGameEffect("gfx_bottle_flip_success", controller.transform.position);
+                touristToAnnoy.activity.Exit(touristToAnnoy);
+                touristToAnnoy.emo.Show(Emotion.EVerb.HATE, "sunshade");
+                touristToAnnoy.graph.Move(6406); // Goes back to Venturing state
                 isFinished = true;
                 AddHat();
             }
