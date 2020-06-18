@@ -12,6 +12,7 @@ public class StaticCameraVolume : Volume {
 
     public List<GameObject> objectsToHide = new List<GameObject>();
 
+    bool isPlayerInside = false;
     int lookAtIndex = 0;
     Geometry.PositionAndRotation objective;
     Controller controller;
@@ -30,12 +31,16 @@ public class StaticCameraVolume : Volume {
 
     public override void OnPlayerEnter(Controller player)
     {
+        if (isPlayerInside) return;
+        isPlayerInside = true;
+
         objective = Game.i.aperture.AddStaticPosition(aim);
 
         if (isImmediate){
             Game.i.aperture.FixedUpdate();
             Game.i.aperture.fieldOfView.destination = FOV;
             Game.i.aperture.Teleport();
+            Game.i.aperture.Freeze();
         }
 
         if (!lookAtTarget) 
@@ -67,6 +72,9 @@ public class StaticCameraVolume : Volume {
 
     public override void OnPlayerExit(Controller player)
     {
+        if (!isPlayerInside) return;
+        isPlayerInside = false;
+
         if (isImmediate) Game.i.aperture.Unfreeze();
 
         Game.i.aperture.RemoveStaticPosition(objective);

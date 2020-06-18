@@ -20,7 +20,21 @@ public class BuildPlayerWindows64 : MonoBehaviour
     [MenuItem("Tools/Build world scene")]
     public static void BuildWorldScene()
     {
-        Build(buildLocation, new[] { "Assets/Scenes/Main.unity" });
+        Build(buildLocation, new[] { "Assets/Scenes/Main.unity", 
+            "MainChunk_A" ,
+            "MainChunk_B" ,
+            "MainChunk_C" ,
+            "MainChunk_D" ,
+            "MainChunk_E" ,
+            "MainChunk_F" ,
+            "MainChunk_G" ,
+            "MainChunk_H" ,
+            "MainChunk_I" ,
+            "MainChunk_J" ,
+            "MainChunk_K" ,
+            "MainChunk_L" ,
+            "MainChunk_M"
+        }); ;
     }
     [MenuItem("Tools/Build cinematic scene")]
     public static void BuildCinematic()

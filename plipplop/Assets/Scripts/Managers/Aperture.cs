@@ -50,6 +50,7 @@ public class Aperture
     }
 
     public Camera currentCamera { get { return cam; } }
+    public bool isFrozen { get { return freezes > 0; } }
 
     public Key<float> fieldOfView = new Key<float>();
     public Key<Vector3> position = new Key<Vector3>();
@@ -98,9 +99,9 @@ public class Aperture
     bool isTryingToRealignManually = false;
     float lastCameraInput;
 
-    bool freeze = false;
-    public void Freeze() {freeze = true;}
-    public void Unfreeze() {freeze = false;}
+    int freezes = 0;
+    public void Freeze() {freezes++; }
+    public void Unfreeze() {freezes--;  }
 
     public void Load(AperturePreset s)
     {
@@ -308,7 +309,7 @@ public class Aperture
 
 	public void FixedUpdate()
     {
-        if (freeze) {
+        if (isFrozen) {
             ShakeUpdate();
             if (shakeTimeRemaining > 0f) {
                 var cam = Game.i.aperture.currentCamera;
@@ -336,7 +337,6 @@ public class Aperture
         if (stackTransitionState < 1f) {
             stackTransitionState += Time.deltaTime * stackUpdateSpeed;
         }
-
 
         if (settings.constraintToTarget)
 		{

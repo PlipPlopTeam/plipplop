@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Spielberg
 {
+    public static event Action onCinematicEnded;
 
     SpielbergAssistant currentAssistant = null;
 
@@ -47,6 +48,7 @@ public class Spielberg
     {
         GameObject.Destroy(currentAssistant.gameObject);
         currentAssistant = null;
+        if (onCinematicEnded != null) onCinematicEnded.Invoke();
     }
 
     public void KinoSetBlendShape(string objectName, int hashCode, string shapeName, float value)

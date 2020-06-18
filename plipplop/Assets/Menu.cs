@@ -11,20 +11,15 @@ public class Menu : MonoBehaviour
 {
     
     public List<GameObject> introScene;
-
     public GameObject credits;
-
     public MwonMwonIntroQuest IntroQuest;
-    
     public GameObject gameCanvas;
-
-    private Vector3 creditsStartScale;
-
     public EventSystem eventManager;
-
     public List<Button> buttons;
     
-    private GameObject selectedObject;
+    GameObject selectedObject;
+    Vector3 creditsStartScale;
+    new Camera camera;
     
     private void Start()
     {
@@ -43,19 +38,32 @@ public class Menu : MonoBehaviour
         selectedObject = eventManager.currentSelectedGameObject;
         
         SetButtonSelected(selectedObject);
-        
-        //Aperture.GetCurrentlyActiveCamera().Set
+
+        // Camera work
+        camera = GetComponent<Camera>();
+        camera.enabled = false;
+
+        Game.i.aperture.Freeze();
+        Game.i.aperture.currentCamera.transform.parent = transform;
     }
 
     public void Play()
     {
         gameCanvas.SetActive(true);
 
-       IntroQuest.BeginQuest();
+        Game.i.player.Deparalyze();
+        Game.i.aperture.Unfreeze();
+
+        Spielberg.PlayCinematic("cine_intro");
+        Spielberg.onCinematicEnded += LaunchQuestAfterCinematic;
 
         gameObject.SetActive(false);
-        
-        Game.i.player.Deparalyze();
+    }
+
+    void LaunchQuestAfterCinematic()
+    {
+        Spielberg.onCinematicEnded -= LaunchQuestAfterCinematic;
+        IntroQuest.BeginQuest();
     }
 
     public void Credits()
@@ -73,6 +81,8 @@ public class Menu : MonoBehaviour
 
     private void Update()
     {
+        Game.i.aperture.currentCamera.transform.localPosition = Vector3.zero;
+        Game.i.aperture.currentCamera.transform.localRotation = Quaternion.identity;
         if (selectedObject != eventManager.currentSelectedGameObject)
         {
             if (selectedObject != null)
