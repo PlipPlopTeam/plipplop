@@ -83,6 +83,7 @@ public class Aperture
     float shakeForce = 0f;
     int updateEvery = 2;
     int lastUpdate = 0;
+    Vector3? previousGeneralCameraPosition = null;
 
     // Current angle on Y axis
     float hAngle;
@@ -300,9 +301,33 @@ public class Aperture
         return isCameraBeingRepositioned;
     }
 
+    public void DeclareNewGeneralCameraPosition()
+    {
+        previousGeneralCameraPosition = null;
+    }
+
 	public void FixedUpdate()
-	{
-		if (freeze) return;
+    {
+        if (freeze) {
+            ShakeUpdate();
+            if (shakeTimeRemaining > 0f) {
+                var cam = Game.i.aperture.currentCamera;
+                if (previousGeneralCameraPosition.HasValue) {
+                    cam.transform.position = previousGeneralCameraPosition.Value + shakeDisplacement;
+                }
+                else {
+                    previousGeneralCameraPosition = cam.transform.position;
+                }
+            }
+            else if (previousGeneralCameraPosition.HasValue) {
+                cam.transform.position = previousGeneralCameraPosition.Value;
+                previousGeneralCameraPosition = null;
+            }
+            return;
+        }
+        else {
+            previousGeneralCameraPosition = null;
+        }
 
         GameObject.Destroy(settings);
         settings = ComputeSettings();
@@ -782,7 +807,9 @@ public class Aperture
 
     public static Camera GetCurrentlyActiveCamera()
     {
-        var activeCams = Camera.allCameras.Where(o => { return o.isActiveAndEnabled; });
+        if (Camera.current) return Camera.current;
+
+        var activeCams = Camera.allCameras.OrderBy(o=>o.depth).Where(o => { return o.isActiveAndEnabled; });
         return activeCams.Count() > 0 ? activeCams.First() : null;
     }
 }

@@ -10,7 +10,7 @@ public class SpielbergScreenShakeClipBehaviour : SpielbergClipBehaviour
 
     public override void ExecuteBehaviour()
     {
-        Game.i.cinematics.KinoScreenShake(shakeForce, shakeTime);
+        Game.i.cinematics.KinoScreenShake(shakeTime, shakeForce);
     }
 
     public override string ToString()

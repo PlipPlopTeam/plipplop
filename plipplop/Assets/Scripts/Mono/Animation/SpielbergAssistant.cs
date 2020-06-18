@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
+using System.Linq;
 
 [RequireComponent(typeof(PlayableDirector))]
 public class SpielbergAssistant : MonoBehaviour
@@ -268,6 +269,12 @@ public class SpielbergAssistant : MonoBehaviour
         npc.emo.Show(Emotion.EVerb.SURPRISE, "plipplop");
     }
 
+    public void NPCWonder(string npcName)
+    {
+        var npc = GetNPCByName(npcName);
+        npc.emo.Show(Emotion.EVerb.SURPRISE, "mwonmwon");
+    }
+
     public void NPCCalm(string npcName)
     {
         var npc = GetNPCByName(npcName);
@@ -285,6 +292,12 @@ public class SpielbergAssistant : MonoBehaviour
         var npc = GetNPCByName(npcName);
 
         npc.movement.GoThere(targetPosition, true);
+    }
+
+    public void SetBlendShape(string objectName, int hashCode, string shapeName, float value)
+    {
+        var renderer= GameObject.Find(objectName).GetComponentsInChildren<SkinnedMeshRenderer>().Where(o => o.GetInstanceID() == hashCode).First();
+        renderer.SetBlendShapeWeight(renderer.sharedMesh.GetBlendShapeIndex(shapeName), value);
     }
 
     NonPlayableCharacter GetNPCByName(string npcName)
@@ -310,6 +323,7 @@ public class SpielbergAssistant : MonoBehaviour
     {
         Game.i.aperture.currentCamera.transform.parent = newCamera;
         if (newCamera != null) {
+            Game.i.aperture.DeclareNewGeneralCameraPosition();
             Game.i.aperture.currentCamera.transform.localPosition = Vector3.zero;
             Game.i.aperture.currentCamera.transform.localRotation = Quaternion.identity;
         }
