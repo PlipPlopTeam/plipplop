@@ -26,13 +26,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1959736695}
-  m_LocalRotation: {x: 0.097428344, y: 0.915604, z: -0.28461152, w: 0.26678336}
-  m_LocalPosition: {x: -6.77, y: 14.92, z: 3.44}
+  m_LocalRotation: {x: 0.04401703, y: 0.21030492, z: -0.045845583, w: 0.9755678}
+  m_LocalPosition: {x: -23.9, y: 3.13, z: -20.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1805985088041541702}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 34.971, y: 148.095, z: 1.8570001}
+  m_LocalEulerAnglesHint: {x: 6.037, y: 24.115002, z: -4.091}
 --- !u!20 &1959736699
 Camera:
   m_ObjectHideFlags: 0
@@ -212,8 +212,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1805985086499115371}
-  m_LocalRotation: {x: -0.017544696, y: 0.9394657, z: 0.3387158, w: 0.048662156}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.27243778, y: -0.6883346, z: -0.3160368, w: 0.5933751}
+  m_LocalPosition: {x: -0.11000061, y: -1.4099998, z: 0.5700073}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1805985088041541702}
@@ -260,13 +260,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1805985087131818267}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: 0.124989174, z: -0, w: 0.9921581}
+  m_LocalPosition: {x: -0.11, y: -1.41, z: 0.57}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1805985088041541702}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 14.360001, z: 0}
 --- !u!114 &1805985087131818269
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,7 +279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a200b19ca1a9685429ed7e043c28e904, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Resolution: 50
+  m_Resolution: 10
   m_Appearance:
     pathColor: {r: 0, g: 1, b: 0, a: 1}
     inactivePathColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
@@ -288,9 +288,11 @@ MonoBehaviour:
   m_Waypoints:
   - position: {x: 0, y: 0, z: 0}
     roll: 0
-  - position: {x: 5.043166, y: 12.728913, z: -22.093525}
+  - position: {x: -23.156698, y: 16.485064, z: -10.540509}
     roll: 0
-  - position: {x: 20.83817, y: 0.79946566, z: -41.86645}
+  - position: {x: -64.86507, y: 9.575014, z: -31.979916}
+    roll: -46.1
+  - position: {x: -88, y: -16.8, z: -46.1}
     roll: 0
 --- !u!1 &1805985088041541701
 GameObject:
@@ -380,13 +382,13 @@ MonoBehaviour:
   alignWithVelocity: 1
   rotationSpeed: 10
   delay: 2
-  arrivedProgression: 0.75
+  arrivedProgression: 0.85
   transitionCloseDuration: 1
   transitionWaitDuration: 1
   aim: {fileID: 1959736696}
   FOV: 70
-  isImmediate: 0
-  lookAtTarget: 0
+  isImmediate: 1
+  lookAtTarget: 1
 --- !u!135 &1805985088041541704
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -396,7 +398,7 @@ SphereCollider:
   m_GameObject: {fileID: 1805985088041541701}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
-  m_Radius: 1
+  m_Radius: 3.94
   m_Center: {x: 0, y: 0, z: 0}

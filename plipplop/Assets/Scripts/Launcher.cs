@@ -39,13 +39,9 @@ public class Launcher : MonoBehaviour
 	private Geometry.PositionAndRotation objective;
 	private Vector3 lastPosition;
 
-	public List<Aperture.StaticObjective> tests = new List<Aperture.StaticObjective>();
-
 	public void Update()
 	{
 		if (throwing) Move();
-
-		tests = Game.i.aperture.staticObjectives;
 	}
 
 	public void Move()
@@ -63,31 +59,31 @@ public class Launcher : MonoBehaviour
 	public void Frame()
 	{
 		cart.m_Position = progression * (path.m_Waypoints.Length - 1);
-
+		
 		if(thrownObject != null)
 		{
-			/*
 			if (alignWithVelocity) thrownObject.transform.Rotate(Vector3.up * rotationSpeed);
 			else thrownObject.transform.up = Vector3.up;
-			*/
 		}
-
+		
 		lastPosition = cart.gameObject.transform.position;
 	}
 
 	public void PrepareLaunch(GameObject obj, Action<GameObject> onArrivedEvent = null)
 	{
+		cart.m_Position = 0f;
+		obj.transform.position = cart.transform.position;
+		PlaceCamera();
+
 		if (delay > 0) StartCoroutine(WaitAndLaunch(delay, obj, onArrivedEvent));
 		else
 		{
-			PlaceCamera();
 			Launch(obj, onArrivedEvent);
 		}
 	}
 
 	IEnumerator WaitAndLaunch(float time, GameObject obj, Action<GameObject> onArrivedEvent = null)
 	{
-		PlaceCamera();
 		yield return new WaitForSeconds(time);
 		Launch(obj, onArrivedEvent);
 	}
@@ -99,7 +95,6 @@ public class Launcher : MonoBehaviour
 
 		if (isImmediate)
 		{
-			//Game.i.aperture.Freeze();
 			Game.i.aperture.FixedUpdate();
 			Game.i.aperture.fieldOfView.destination = FOV;
 			Game.i.aperture.Teleport();
@@ -192,7 +187,7 @@ public class Launcher : MonoBehaviour
 		controller.Freeze();
 		controller.locomotion.StartFly();
 		controller.rigidbody.constraints = RigidbodyConstraints.FreezeAll;
-		controller.transform.position = cart.transform.position; //set plip plop at path start position
+
 		PrepareLaunch(controller.gameObject,
 		(go) =>
 		{
