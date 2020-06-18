@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
+using SpielbergClips;
 using UnityEngine;
 
 public class MwonMwonIntroQuest : TalkableCharacter
@@ -12,11 +14,19 @@ public class MwonMwonIntroQuest : TalkableCharacter
     public StaticCameraVolume scm;
     public Launcher launcher;
     public CollisionEventTransmitter exitVolume;
+    
+    
 
     bool hasLaunchedCinematicPartTwo = false;
     bool hasFinishedTutorial = false;
     float radius = 0f;
 
+    private bool stopgapRemoved;
+
+    public AnimationCurve rumbleCurve;
+    public AnimationCurve explosionCurve;
+
+    public ParticleSystem splashPS;
 
     public override Dialog OnDialogTrigger()
     {
@@ -65,9 +75,59 @@ public class MwonMwonIntroQuest : TalkableCharacter
         
         if (hasFinishedTutorial) {
             talkRadius = radius;
-            stopGap.SetActive(false);
+            if (!stopgapRemoved)
+            {
+                stopgapRemoved = true;
+                StartCoroutine(StopGapAnim());
+            }
         }
         sphereTrigger.radius = talkRadius;
+    }
+
+    IEnumerator StopGapAnim()
+    {
+        //Play rumbble sound
+        //vibrer manette
+
+        Vector3 _pos = stopGap.transform.position;
+        Vector3 _rot = stopGap.transform.localEulerAngles;
+        
+        float _timer = 0;
+        
+        while (_timer < 1)
+        {
+            stopGap.transform.position = _pos + rumbleCurve.Evaluate(_timer)*UnityEngine.Random.insideUnitSphere / 10;
+            stopGap.transform.localEulerAngles = _rot + rumbleCurve.Evaluate(_timer)*UnityEngine.Random.insideUnitSphere;
+
+            Game.i.aperture.Shake(rumbleCurve.Evaluate(_timer)*2,1);
+            
+            _timer += Time.deltaTime/1.5f;
+            yield return null;
+        }
+
+        _timer = 0;
+        
+        splashPS.Play();
+
+        while (_timer < 1)
+        {
+            Game.i.aperture.Shake(explosionCurve.Evaluate(_timer)*3,1);
+
+            stopGap.transform.position = Vector3.Lerp(stopGap.transform.position, _pos + Vector3.up * 7, _timer);
+            
+            _timer += Time.deltaTime * 3;
+            yield return null;
+        }
+        //Play splash lave vfx
+        
+        //stopGap.transform.DOMove(stopGap.transform.position + Vector3.up * 7, .4f);
+
+        
+        //play popsound
+        
+        yield return new WaitForSecondsRealtime(.4f);
+
+        stopGap.SetActive(false);
     }
 
     public override void Load(byte[] data)
