@@ -75,6 +75,21 @@ public class NonPlayableCharacter : MonoBehaviour
 		spawnPosition = transform.position;
 	}
 
+	public void OnDisable()
+	{
+		if (activity != null)
+		{
+			activity.Exit(this);
+			activity = null;
+		}
+		if (chair != null)
+		{
+			GetUp();
+			chair = null;
+		}
+		feeder = null;
+	}
+
 	public void Set(NonPlayableCharacterSettings s)
 	{
 		settings = Instantiate(s);

@@ -52,7 +52,7 @@ public class Balloon : Activity
 		user.movement.Stop();
 
 		if (users.Count > 1) GetInPlace();
-		else
+		else if(users.Count == 1)
 		{
 			users[carrier].Collect(this, () => 
 			{
