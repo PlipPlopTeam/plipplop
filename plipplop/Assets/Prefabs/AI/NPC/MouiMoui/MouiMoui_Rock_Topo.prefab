@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1350236458
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1350236459}
+  m_Layer: 0
+  m_Name: CameraObjective
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1350236459
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1350236458}
+  m_LocalRotation: {x: 0.09600273, y: 0.9849228, z: -0.14301892, w: -0.016003342}
+  m_LocalPosition: {x: -1.884, y: 1.229, z: 2.922}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2684396662117313347}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 16.18, y: 183.521, z: 11.635}
 --- !u!1 &3408672007645081469
 GameObject:
   m_ObjectHideFlags: 0
@@ -40,8 +70,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2684396662117313347}
+  - component: {fileID: 1280540669}
   m_Layer: 0
-  m_Name: Topo
+  m_Name: MouiMoui_Rock_Topo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -54,14 +85,34 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4123019163677567356}
-  m_LocalRotation: {x: -0.0048911585, y: -0.83211416, z: -0.0388298, w: 0.55322176}
+  m_LocalRotation: {x: -0.0048881536, y: -0.8321149, z: -0.03883269, w: 0.5532205}
   m_LocalPosition: {x: 92.19, y: 0.03, z: 130.78}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2974185771293195627}
+  - {fileID: 1350236459}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -4.0160003, y: -112.69501, z: -2.0010002}
+--- !u!114 &1280540669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4123019163677567356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 218b807a6456fa948825345e6e3d2c34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  questUniqueId: sunbathe_quest
+  talkRadius: 2
+  staticCameraObjective: {fileID: 1350236459}
+  faceMesh: {fileID: 1333263466915912826}
+  touristToAnnoy: {fileID: 0}
+  distance: 2
+  rewardHelmet: {fileID: 0}
 --- !u!1001 &4406396080132022345
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -169,6 +220,12 @@ PrefabInstance:
 --- !u!4 &8672839061626997587 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 7de8bfc26b3d28a4893af0e230508efd,
+    type: 3}
+  m_PrefabInstance: {fileID: 4406396080132022345}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &1333263466915912826 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -5789907368561722317, guid: 7de8bfc26b3d28a4893af0e230508efd,
     type: 3}
   m_PrefabInstance: {fileID: 4406396080132022345}
   m_PrefabAsset: {fileID: 0}

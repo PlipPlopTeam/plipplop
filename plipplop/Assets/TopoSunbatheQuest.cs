@@ -9,7 +9,7 @@ public class TopoSunbatheQuest : TalkableCharacter
     public GameObject rewardHelmet;
 
     bool isFinished = false;
-    bool firstTimeTalking = false;
+    bool firstTimeTalking = true;
 
     public override Dialog OnDialogTrigger()
     {
@@ -19,10 +19,10 @@ public class TopoSunbatheQuest : TalkableCharacter
             return lib["sunbathe_beginning"];
         }
         if (isFinished) {
-            return lib["sunbathe_noResolution"];
+            return lib["sunbathe_end"];
         }
         else {
-            return lib["sunbathe_end"];
+            return lib["sunbathe_noResolution"];
         }
     }
 

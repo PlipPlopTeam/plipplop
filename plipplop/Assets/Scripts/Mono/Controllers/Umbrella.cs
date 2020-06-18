@@ -83,6 +83,13 @@ public class Umbrella : Controller
         if (-rigidbody.velocity.y > maxFallSpeed * Mathf.Max(p / 100f, GetCurrentClosure())) {
             rigidbody.velocity = Vector3.Scale(Vector3.one - Vector3.up, rigidbody.velocity) + Vector3.down * (maxFallSpeed * Mathf.Max(p / 100f, GetCurrentClosure()));
         }
+
+        if (isStuck && IsGrounded()) {
+            rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+        }
+        else {
+            rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
+        }
     }
 
     internal override void Update()
@@ -111,6 +118,7 @@ public class Umbrella : Controller
                 currentAnimationRoutine = StartCoroutine(OpenUmbrella());
             }
         }
+
     }
 
     internal override void BaseMove(Vector3 direction)

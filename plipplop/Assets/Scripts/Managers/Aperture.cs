@@ -551,6 +551,7 @@ public class Aperture
             foreach(var hit in hits) {
                 var fa = hit.collider.GetComponent<FadedApparition>();
                 if (fa) {
+                    if (Game.i.player.GetCurrentController().gameObject == fa.gameObject) continue;
                     objectsToFade.AddUnique(fa);
                     fa.StartFadingOut();
                 }
