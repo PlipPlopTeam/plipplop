@@ -10,19 +10,16 @@ public class Pause : MonoBehaviour
     
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))//mettre input manette
         {
             if (paused)
             {
                 StopPause();
-
             }
             else
             {
                 StartPause();
-
             }
-
         }
     }
 
