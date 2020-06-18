@@ -20,20 +20,20 @@ public class BuildPlayerWindows64 : MonoBehaviour
     [MenuItem("Tools/Build world scene")]
     public static void BuildWorldScene()
     {
-        Build(buildLocation, new[] { "Assets/Scenes/Main.unity", 
-            "MainChunk_A" ,
-            "MainChunk_B" ,
-            "MainChunk_C" ,
-            "MainChunk_D" ,
-            "MainChunk_E" ,
-            "MainChunk_F" ,
-            "MainChunk_G" ,
-            "MainChunk_H" ,
-            "MainChunk_I" ,
-            "MainChunk_J" ,
-            "MainChunk_K" ,
-            "MainChunk_L" ,
-            "MainChunk_M"
+        Build(buildLocation, new[] { "Assets/Scenes/Main.unity",
+            "Assets/Scenes/MainChunks/MainChunk_A.unity" ,
+            "Assets/Scenes/MainChunks/MainChunk_B.unity" ,
+            "Assets/Scenes/MainChunks/MainChunk_C.unity" ,
+            "Assets/Scenes/MainChunks/MainChunk_D.unity" ,
+            "Assets/Scenes/MainChunks/MainChunk_E.unity" ,
+            "Assets/Scenes/MainChunks/MainChunk_F.unity" ,
+            "Assets/Scenes/MainChunks/MainChunk_G.unity" ,
+            "Assets/Scenes/MainChunks/MainChunk_H.unity" ,
+            "Assets/Scenes/MainChunks/MainChunk_I.unity" ,
+            "Assets/Scenes/MainChunks/MainChunk_J.unity" ,
+            "Assets/Scenes/MainChunks/MainChunk_K.unity" ,
+            "Assets/Scenes/MainChunks/MainChunk_L.unity" ,
+            "Assets/Scenes/MainChunks/MainChunk_M.unity"
         }); ;
     }
     [MenuItem("Tools/Build cinematic scene")]

@@ -64,8 +64,8 @@ public class Menu : MonoBehaviour
 
     void LaunchQuestAfterCinematic()
     {
-        Spielberg.onCinematicEnded -= LaunchQuestAfterCinematic;
         IntroQuest.BeginQuest();
+        Spielberg.onCinematicEnded -= LaunchQuestAfterCinematic;
     }
 
     public void Credits()

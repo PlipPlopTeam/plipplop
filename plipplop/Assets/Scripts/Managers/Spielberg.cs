@@ -48,12 +48,13 @@ public class Spielberg
     {
         GameObject.Destroy(currentAssistant.gameObject);
         currentAssistant = null;
+
         if (onCinematicEnded != null) onCinematicEnded.Invoke();
     }
 
-    public void KinoSetBlendShape(string objectName, int hashCode, string shapeName, float value)
+    public void KinoSetBlendShape(string objectName, string childName, string shapeName, float value)
     {
-        currentAssistant.SetBlendShape(objectName, hashCode, shapeName, value);
+        currentAssistant.SetBlendShape(objectName, childName, shapeName, value);
     }
 
     public void KinoSwitchCamera(string cameraName)

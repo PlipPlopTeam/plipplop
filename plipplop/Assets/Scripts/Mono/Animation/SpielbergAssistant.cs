@@ -48,7 +48,6 @@ public class SpielbergAssistant : MonoBehaviour
 
     void OnCinematicEnded(PlayableDirector director)
     {
-        Debug.Log("Cinematic ended!");
         isPlaying = false;
 
         if (firstCamera) StartCoroutine(PrepareCinematicEnding());
@@ -73,6 +72,7 @@ public class SpielbergAssistant : MonoBehaviour
     public void Play()
     {
         if (isPlaying) {
+            Debug.Log("NOT PLAYING CINEMATIC, cause already playihg (is playing is true)");
             return;
         }
 
@@ -294,10 +294,16 @@ public class SpielbergAssistant : MonoBehaviour
         npc.movement.GoThere(targetPosition, true);
     }
 
-    public void SetBlendShape(string objectName, int hashCode, string shapeName, float value)
+    public void SetBlendShape(string objectName, string mouthName, string shapeName, float value)
     {
-        var renderer= GameObject.Find(objectName).GetComponentsInChildren<SkinnedMeshRenderer>().Where(o => o.GetInstanceID() == hashCode).First();
-        renderer.SetBlendShapeWeight(renderer.sharedMesh.GetBlendShapeIndex(shapeName), value);
+        try {
+            var renderer = GameObject.Find(objectName).GetComponentsInChildren<SkinnedMeshRenderer>().Where(o => o.gameObject.name==mouthName).First();
+            renderer.SetBlendShapeWeight(renderer.sharedMesh.GetBlendShapeIndex(shapeName), value);
+        }
+        catch(System.InvalidOperationException e) {
+            Debug.LogWarning("Spielberg minor error: " + e.ToString() + ". Please double check your objects exists before seeking them in the main scene.");
+        }
+        
     }
 
     NonPlayableCharacter GetNPCByName(string npcName)

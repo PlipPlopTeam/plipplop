@@ -10,7 +10,7 @@ public class SpielbergSetMwonMwonFaceShapeBehaviour : SpielbergClipBehaviour
 
     public override void ExecuteBehaviour()
     {
-        Game.i.cinematics.KinoSetBlendShape("SK_MwonMwonExterior", -475048, shapeName, shapeAmount);
+        Game.i.cinematics.KinoSetBlendShape("SK_MwonMwonExterior", "Mouth", shapeName, shapeAmount);
     }
 
     public override string ToString()
