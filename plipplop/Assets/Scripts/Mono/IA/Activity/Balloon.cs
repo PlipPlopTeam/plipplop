@@ -52,10 +52,11 @@ public class Balloon : Activity
 		user.movement.Stop();
 
 		if (users.Count > 1) GetInPlace();
-		else if(users.Count == 1)
+		else
 		{
 			users[carrier].Collect(this, () => 
 			{
+				/*
 				if (users.Count <= 1)
 				{
 					users[carrier].Sit();
@@ -64,6 +65,8 @@ public class Balloon : Activity
 				{
 					GetInPlace();
 				}
+				*/
+				GetInPlace();
 			});
 		}
 	}
@@ -126,7 +129,6 @@ public class Balloon : Activity
     public override void Update()
     {
         base.Update();
-        
         if(playing)
         {
 			if (throwTimer > 0f) throwTimer -= Time.deltaTime;
@@ -137,17 +139,21 @@ public class Balloon : Activity
 					if (GoodPositions())
 					{
 						int next = Next();
-						LookAtEachOthers();
+						if (users.Count > 1)
+						{
+							LookAtEachOthers();
+							users[carrier].transform.forward = -(users[carrier].transform.position - users[next].transform.position).normalized;
+						}
+
 						users[carrier].Drop();
 
-						// Throwing
-						users[carrier].transform.forward = -(users[carrier].transform.position - users[next].transform.position).normalized;
 						Throw();
-
-						// Next
-						carrier = next;
-						users[carrier].Collect(this);
 						flying = true;
+
+						Game.i.WaitAndDo(1f, () => {
+							carrier = next;
+							users[carrier].Collect(this);
+						});
 					}
 					else GetInPlace();
 				}
@@ -155,7 +161,9 @@ public class Balloon : Activity
                 {
 					if (users[carrier].IsCarrying(this))
                     {
-                        LookAtEachOthers();
+						if (users.Count > 1) LookAtEachOthers();
+						else if (users.Count == 1) users[0].movement.OrientToward(users[0].transform.position + Geometry.GetRandomPointOnCircle(1f));
+
                         users[carrier].movement.Stop();
                         throwTimer = timeBetweenThrows;
                         flying = false;
