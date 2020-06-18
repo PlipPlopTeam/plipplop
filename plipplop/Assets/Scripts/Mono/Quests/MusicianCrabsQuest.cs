@@ -6,6 +6,7 @@ public class MusicianCrabsQuest : TalkableCharacter
 {
     public CrabDance crabDance;
 
+    public GameObject crabHat;
 
     bool hasPlayerTheRightController { get {
             return Game.i.player.GetCurrentController() != null && Game.i.player.GetCurrentController() is Bucket;
@@ -61,7 +62,14 @@ public class MusicianCrabsQuest : TalkableCharacter
         base.Update();
         if (isFinished > 0 && !Game.i.player.IsParalyzed() && !crabDance.areDancing) {
             crabDance.StartDancing();
+            AddHat();
+            
         }
+    }
+    
+    void AddHat()
+    {
+        GameObject _crab = Instantiate(crabHat, Game.i.player.baseController.visuals.transform);
     }
 
     public override void Load(byte[] data)

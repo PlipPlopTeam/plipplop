@@ -52,9 +52,8 @@ public class TopoSunbatheQuest : TalkableCharacter
 
     void AddHat()
     {
-        GameObject _mouette = Instantiate(rewardHelmet, Game.i.player.baseController.visuals.transform);
-        _mouette.transform.localPosition = new Vector3(0, .2f, 0);
-        _mouette.transform.localEulerAngles = new Vector3(90, 180, 0);
+        GameObject _umbrella = Instantiate(rewardHelmet, Game.i.player.baseController.visuals.transform);
+        
     }
 
     // Start is called before the first frame update
