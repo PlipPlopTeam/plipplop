@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class Menu : MonoBehaviour
 {
@@ -57,6 +58,7 @@ public class Menu : MonoBehaviour
         Spielberg.PlayCinematic("cine_intro");
         Spielberg.onCinematicEnded += LaunchQuestAfterCinematic;
 
+        SoundPlayer.Play("sfx_pop_menu", .3f, Random.Range(.8f, 1.2f));
         gameObject.SetActive(false);
     }
 
@@ -72,10 +74,14 @@ public class Menu : MonoBehaviour
 
         credits.transform.localPosition = creditsStartScale;
         credits.transform.DOPunchScale(Vector3.one / 2, .5f);
+        
+        SoundPlayer.Play("sfx_pop_menu",.3f, Random.Range(.8f,1.2f));
     }
 
     public void Quit()
     {
+        SoundPlayer.Play("sfx_pop_menu",.3f, Random.Range(.8f,1.2f));
+
         Application.Quit();
     }
 
@@ -85,16 +91,25 @@ public class Menu : MonoBehaviour
         Game.i.aperture.currentCamera.transform.localRotation = Quaternion.identity;
         if (selectedObject != eventManager.currentSelectedGameObject)
         {
-            if (selectedObject != null)
+            if (eventManager.currentSelectedGameObject != null)
             {
-                RemoveButtonSelected(selectedObject);
+
+                if (selectedObject != null)
+                {
+                    RemoveButtonSelected(selectedObject);
+                }
+
+
+                selectedObject = eventManager.currentSelectedGameObject;
+
+                if (selectedObject != null)
+                {
+                    SetButtonSelected(selectedObject);
+                }
             }
-            
-            selectedObject = eventManager.currentSelectedGameObject;
-            
-            if (selectedObject != null)
+            else
             {
-                SetButtonSelected(selectedObject);
+                eventManager.SetSelectedGameObject(selectedObject);
             }
         }
     }
@@ -104,6 +119,8 @@ public class Menu : MonoBehaviour
         TextMeshProUGUI _t = _b.GetComponentInChildren<TextMeshProUGUI>();
         if (_t)
         {
+            SoundPlayer.Play("sfx_pop_menu",.3f, Random.Range(.8f,1.2f));
+
             _t.text += " <";
         }
     }
