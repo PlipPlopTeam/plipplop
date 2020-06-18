@@ -137,7 +137,7 @@ public class NonPlayableCharacter : MonoBehaviour
 
 	// SHOW OFF
 	private Activity show;
-	public void ShowOff(float time, Vector2 range, int slot)
+	public virtual void ShowOff(float time, Vector2 range, int slot)
 	{
 		show = gameObject.AddComponent<ShowOffActivity>();
 		show.spectatorMax = slot;
@@ -298,13 +298,9 @@ public class NonPlayableCharacter : MonoBehaviour
 	}
 	public void StoreCarriedItem(Container c)
 	{
-		if(carried != null && carried.Self().gameObject.GetComponent<Item>())
+		if(carried != null && carried.Self().gameObject.TryGetComponent<Item>(out Item item))
 		{
-			Item item = null;
-			if(carried.Self().gameObject.TryGetComponent<Item>(out item))
-			{
-				Store(c, item);
-			}
+			Store(c, item);
 		}
 	}
 
@@ -397,6 +393,7 @@ public class NonPlayableCharacter : MonoBehaviour
 				}
 				else
 				{
+					Drop();
 					this.food.Drop();
 					this.food = null;
 				}

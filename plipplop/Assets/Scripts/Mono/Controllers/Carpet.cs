@@ -60,6 +60,7 @@ public class Carpet : Controller
         }
 
         if (IsGrounded()) {
+
             if (currentZAccumulator != 0f) {
                 
                 // Animation
@@ -92,7 +93,7 @@ public class Carpet : Controller
             rigidbody.AddTorque(transform.up * direction.x * (turnForce * (0.3f + currentZAccumulator)) * Time.fixedDeltaTime, ForceMode.Acceleration);
         }
         else {
-            //spring.minDistance = 0f;
+            spring.minDistance = 0f;
         }
     }
 
@@ -103,6 +104,10 @@ public class Carpet : Controller
             if (collider.gameObject == gameObject) continue;
             collider.material = immobileMaterial;
         }
+        foreach (var rb in rigidbodies) {
+            rb.maxDepenetrationVelocity = 1f;
+        }
+
         // Code here
     }
 

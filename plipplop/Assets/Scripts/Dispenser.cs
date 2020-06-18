@@ -63,6 +63,7 @@ public class Dispenser : Feeder
         {
             client.feeder = null;
         }
+		clients.Clear();
     }
 
     public void Update()

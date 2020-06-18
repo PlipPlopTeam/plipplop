@@ -17,6 +17,14 @@ public class TheReef : NonPlayableCharacter
 		movement.Stop();
 		StartCoroutine(WaitAndKick());
 	}
+
+	public override void ShowOff(float time, Vector2 range, int slot)
+	{
+		base.ShowOff(time, range, slot);
+		movement.RandomOrient();
+		Drop();
+	}
+
 	IEnumerator WaitAndKick()
 	{
 		yield return new WaitForSeconds(0.5f);
@@ -47,7 +55,7 @@ public class TheReef : NonPlayableCharacter
 	public void Reassure(NonPlayableCharacter npc)
 	{
 		target = npc;
-
+		Drop();
 		target.graph.Pause();
 		target.movement.Stop();
 		movement.Stop();

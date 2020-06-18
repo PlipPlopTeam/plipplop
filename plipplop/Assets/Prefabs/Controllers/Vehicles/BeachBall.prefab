@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 2932650472225342061}
   - component: {fileID: 2932650472225342060}
   - component: {fileID: 2932650472225342063}
-  - component: {fileID: 2007550832}
   - component: {fileID: 7286649357687551854}
   - component: {fileID: 2887985434650187074}
   - component: {fileID: 1032220758}
@@ -102,30 +101,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &2007550832
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2932650472225342062}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27bebb278a4489e489e5558d1c6671af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  physiqued: 1
-  shape: 0
-  rb: {fileID: 2932650472225342063}
-  collider: {fileID: 2932650472225342060}
-  type: 3
-  weight: 5
-  visuals: {fileID: 0}
-  origin: {x: 0, y: 0, z: 0}
-  placesToBeSorted: []
-  distanceThreshold: 2
-  hidden: 0
-  active: 1
 --- !u!114 &7286649357687551854
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,20 +133,20 @@ MonoBehaviour:
   awarnessMultiplier: 0.8
   use:
     boredom: 1
-    hunger: 0
+    hunger: 1
     tiredness: 0
   spectate:
     boredom: 1
-    hunger: 0
+    hunger: 1
     tiredness: 0
   users: []
   spectators: []
   minDistanceBetween: 2
   maxDistanceBetween: 3
-  distanceMax: 1
+  distanceMax: 10
   timeBetweenThrows: 1
-  verticalForce: 9000
-  horizontalForce: 8000
+  verticalForce: 4500
+  horizontalForce: 6000
 --- !u!114 &2887985434650187074
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,11 +216,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: KM_Ball01
       objectReference: {fileID: 0}
-    - target: {fileID: 621814218485564262, guid: 9aed549a97ecebe439f86c6d554d109a,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 9aed549a97ecebe439f86c6d554d109a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -301,10 +271,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 621814218485564262, guid: 9aed549a97ecebe439f86c6d554d109a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3312780394835150675, guid: 9aed549a97ecebe439f86c6d554d109a,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.57735026
+      objectReference: {fileID: 0}
     - target: {fileID: 3312780394835150675, guid: 9aed549a97ecebe439f86c6d554d109a,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.7071068
+      value: 0.57735026
       objectReference: {fileID: 0}
     - target: {fileID: 3312780394835150675, guid: 9aed549a97ecebe439f86c6d554d109a,
         type: 3}
@@ -314,23 +294,23 @@ PrefabInstance:
     - target: {fileID: 3312780394835150675, guid: 9aed549a97ecebe439f86c6d554d109a,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071068
+      value: 0.57735026
       objectReference: {fileID: 0}
     - target: {fileID: 3312780394835150675, guid: 9aed549a97ecebe439f86c6d554d109a,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 90
       objectReference: {fileID: 0}
-    - target: {fileID: 6394191480266241693, guid: 9aed549a97ecebe439f86c6d554d109a,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 209e166990199594bba4b5185535acfc, type: 2}
     - target: {fileID: 4848594794600692302, guid: 9aed549a97ecebe439f86c6d554d109a,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 0746bd2b582382d4787ce9f3ec6998e4, type: 2}
+    - target: {fileID: 6394191480266241693, guid: 9aed549a97ecebe439f86c6d554d109a,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 209e166990199594bba4b5185535acfc, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9aed549a97ecebe439f86c6d554d109a, type: 3}
 --- !u!4 &2482614798847232048 stripped
