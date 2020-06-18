@@ -87,7 +87,6 @@ public abstract class Controller : MonoBehaviour
 	internal virtual void SpecificJump() {}
     internal virtual void OnJump()
     {
-		//if (!canRetractLegs) return;
 		if (AreLegsRetracted())
         {
             SpecificJump();
@@ -216,7 +215,10 @@ public abstract class Controller : MonoBehaviour
 		if (IsPossessed()) ExtendLegs();
 
 		immersion--;
+		if (immersion < 0) immersion = 0;
+
 		locomotion.isImmerged = isImmerged;
+		locomotion.SetOverwater();
 		canRetractLegs = savedCanRetractLegs;
 	}
 

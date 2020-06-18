@@ -27,18 +27,17 @@ public class KiteActivity : Activity
     public override void StartUsing(NonPlayableCharacter user)
     {
         base.StartUsing(user);
-        
         user.movement.Stop();
-        
-        user.look.FocusOn(kite.visuals.transform);
+		user.animator.SetBool("Holding", true);
 
-        user.movement.OrientToward(kite.visuals.transform.position);
-        
+		if (kite != null)
+		{
+			user.look.FocusOn(kite.visuals.transform);
+			user.movement.OrientToward(kite.visuals.transform.position);
+		}
         user.skeleton.Attach(transform, Cloth.ESlot.RIGHT_HAND);
-        
-        user.animator.SetBool("Holding", true);
-        kite.StartFly();
 
+        kite.StartFly();
         full = true;
     }
 
