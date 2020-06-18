@@ -32,9 +32,8 @@ public class Menu : MonoBehaviour
         
         //ajouter ouverture de l'écran pour laisser la scene se charger
         //Game.i.Transition();
-        
-        Game.i.player.Paralyze();
-        //Game.i.player.baseController.RetractLegs();
+
+        StartCoroutine(Delay());
 
         gameCanvas = GameObject.Find("GAME_CANVAS");
         
@@ -108,5 +107,13 @@ public class Menu : MonoBehaviour
             _s = _s.Remove(_s.Length - 2);
             _t.text = _s;
         }
+    }
+
+    IEnumerator Delay()
+    {
+        yield return null;
+        
+        Game.i.player.GetCurrentController().RetractLegs();
+        Game.i.player.Paralyze();
     }
 }
