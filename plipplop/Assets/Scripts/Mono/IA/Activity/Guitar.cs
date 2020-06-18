@@ -17,6 +17,7 @@ public class Guitar : Activity, ICarryable
 		player.Collect(this);
 		player.movement.onDestinationReached += () =>
 		{
+			user.Drop();
 			player.movement.Stop();
 			player.animator.SetBool("Guitaring", true);
 			player.animator.SetBool("Carrying", false);
@@ -25,7 +26,7 @@ public class Guitar : Activity, ICarryable
 			visuals.transform.SetParent(player.transform);
 			rb.isKinematic = true;
 			
-			visuals.transform.localPosition = new Vector3(-0.024f, 0.852f, 0.142f);
+			visuals.transform.localPosition = new Vector3(-0.001f, 0.987f, 0.186f);
 			visuals.transform.localEulerAngles =  new Vector3(-5.062f, 10.575f, 57.788f);
 			
 			Game.i.WaitAndDo(.5f, () =>
@@ -55,18 +56,19 @@ public class Guitar : Activity, ICarryable
 	public override void StopUsing(NonPlayableCharacter user)
 	{
 		base.StopUsing(user);
-		user.Drop();
+		
 		user.StopCollecting();
 
 		player.movement.onDestinationReached -= () =>
 		{
+			user.Drop();
 			player.movement.Stop();
 			player.animator.SetBool("Guitaring", true);
 			player.animator.SetBool("Carrying", false);
 			visuals.transform.parent = null;
 			visuals.transform.SetParent(player.transform);
 			rb.isKinematic = true;
-			visuals.transform.localPosition = new Vector3(-0.006f, 0.804f, 0.142f);
+			visuals.transform.localPosition = new Vector3(-0.001f, 0.987f, 0.186f);
 			visuals.transform.localEulerAngles =  new Vector3(-5.062f, 10.575f, 57.788f);
 			PlayMusic();
 		};
