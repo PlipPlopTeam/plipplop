@@ -184,5 +184,16 @@ public class Jumper : Controller
 	{
 		if (rigidbody.velocity.magnitude > breakVelocity && inAir && AreLegsRetracted()) Break();
 		inAir = false;
+		
+		
+			if (IsPossessed())
+			{
+				if (UnityEngine.Random.Range(0f, 1f) > .2f)
+				{
+					SoundPlayer.Play("sfx_guitar_impact", 1, 1);
+					//SoundPlayer.PlayAtPosition("sfx_guitar_impact", transform.position, 1, true);
+				}
+			}
+		
 	}
 }
