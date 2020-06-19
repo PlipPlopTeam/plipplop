@@ -107,14 +107,12 @@ public class MwonMwonIntroQuest : TalkableCharacter
 
         _timer = 0;
         
-        splashPS.Play();
+        if(splashPS != null) splashPS.Play();
 
         while (_timer < 1)
         {
             Game.i.aperture.Shake(explosionCurve.Evaluate(_timer)*3,1);
-
             stopGap.transform.position = Vector3.Lerp(stopGap.transform.position, _pos + Vector3.up * 7, _timer);
-            
             _timer += Time.deltaTime * 3;
             yield return null;
         }
@@ -126,7 +124,6 @@ public class MwonMwonIntroQuest : TalkableCharacter
         //play popsound
         
         yield return new WaitForSecondsRealtime(.4f);
-
         stopGap.SetActive(false);
     }
 
