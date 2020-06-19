@@ -75,13 +75,21 @@ public class MwonMwonIntroQuest : TalkableCharacter
         
         if (hasFinishedTutorial) {
             talkRadius = radius;
-            if (!stopgapRemoved)
+            if (DialogHooks.currentInterlocutor == null)
             {
-                stopgapRemoved = true;
-                StartCoroutine(StopGapAnim());
+                if (!stopgapRemoved)
+                {
+                    stopgapRemoved = true;
+                    StartCoroutine(StopGapAnim());
+                }
             }
         }
         sphereTrigger.radius = talkRadius;
+    }
+
+    public void RemoveStopGap()
+    {
+        StartCoroutine(StopGapAnim());
     }
 
     IEnumerator StopGapAnim()
