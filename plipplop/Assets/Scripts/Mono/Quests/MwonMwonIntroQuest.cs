@@ -35,8 +35,6 @@ public class MwonMwonIntroQuest : TalkableCharacter
 
     public void BeginQuest()
     {
-        talkRadius = 0f; // FIX - should be removed at some point
-
         radius = talkRadius;
         talkRadius = 0f;
         if (DBG_FirstCinematic) Spielberg.PlayCinematic(DBG_FirstCinematic);
@@ -60,6 +58,14 @@ public class MwonMwonIntroQuest : TalkableCharacter
     new void Update()
     {
         base.Update();
+
+        if (hasFinishedTutorial) {
+            if (!stopgapRemoved) {
+                stopgapRemoved = true;
+                StartCoroutine(StopGapAnim());
+            }
+        }
+
         if (hasLaunchedCinematicPartTwo) {
             if (Game.i.player.IsPossessingBaseController() && !hasFinishedTutorial) {
                 hasFinishedTutorial = true;
@@ -72,20 +78,15 @@ public class MwonMwonIntroQuest : TalkableCharacter
                 hasLaunchedCinematicPartTwo = true;
             }
         }
-        
-        if (hasFinishedTutorial) {
-            talkRadius = radius;
-            if (!stopgapRemoved)
-            {
-                stopgapRemoved = true;
-                StartCoroutine(StopGapAnim());
-            }
-        }
         sphereTrigger.radius = talkRadius;
     }
 
     IEnumerator StopGapAnim()
     {
+        while (DialogHooks.currentInterlocutor != null) {
+            yield return new WaitForEndOfFrame();
+        }
+
         //Play rumbble sound
         //vibrer manette
 
@@ -125,6 +126,7 @@ public class MwonMwonIntroQuest : TalkableCharacter
         
         yield return new WaitForSecondsRealtime(.4f);
         stopGap.SetActive(false);
+        talkRadius = radius;
     }
 
     public override void Load(byte[] data)
