@@ -20,8 +20,8 @@ public class MwonMwonIntroQuest : TalkableCharacter
     bool hasLaunchedCinematicPartTwo = false;
     bool hasFinishedTutorial = false;
     float radius = 0f;
-
-    private bool stopgapRemoved;
+    
+    bool stopgapRemoved;
 
     public AnimationCurve rumbleCurve;
     public AnimationCurve explosionCurve;
@@ -30,7 +30,16 @@ public class MwonMwonIntroQuest : TalkableCharacter
 
     public override Dialog OnDialogTrigger()
     {
-        return null;
+        var lib = Game.i.library.dialogs;
+        if (Game.i.player.IsPossessingBaseController()) {
+            return lib["collection_nude"];
+        }
+        else if (Game.i.player.GetCurrentController() is Ball) {
+            return lib["collection_complete"];
+        }
+        else {
+            return lib["collection_wrong_item"];
+        }
     }
 
     public void BeginQuest()
