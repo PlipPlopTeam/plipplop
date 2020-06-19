@@ -7,8 +7,6 @@ public class DBG_Teletype : MonoBehaviour
 {
     TextMeshProUGUI textMesh;
 
-    List<string> currentDialog = new List<string>();
-    int currentDialogIndex = 0;
 
     private void Awake()
     {

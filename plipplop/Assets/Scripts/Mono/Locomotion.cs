@@ -8,7 +8,6 @@ public class Locomotion : Walker
     public LocomotionPreset preset;
 	private float groundCheckOffset = 0.5f;
 	private float groundCheckRange = 1f;
-    private float groundCheckDistanceRange = 0.1f;
 	[HideInInspector] public float legsHeight { get { return 1f; } }
     private Vector3 legsOffset = Vector3.up * 0.5f;
 	[HideInInspector] public bool isFlattened = false;
@@ -16,7 +15,7 @@ public class Locomotion : Walker
     [HideInInspector] new public Rigidbody rigidbody;
     [HideInInspector] public Vector3 targetDirection;
     [HideInInspector] public bool isImmerged = false;
-    public event System.Action onLegAnimationEnd;
+    // public event System.Action onLegAnimationEnd; // Never used
 
     public LocomotionAnimation locomotionAnimation;
     Controller parentController;
@@ -52,7 +51,6 @@ public class Locomotion : Walker
         locomotionAnimation = new LocomotionAnimation(rigidbody, legsCollider, parentController.visuals);
         isInitialized = true;
 
-        onLegAnimationEnd += locomotionAnimation.onLegAnimationEnd;
     }
     
     private void Update()

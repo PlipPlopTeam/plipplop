@@ -159,8 +159,8 @@ public class Spielberg
         npc.emo.Show(verb, subjects, bubbleType);
     }   
 
-    public void KinoScreenShake(float time, float force)
+    public void KinoScreenShake(float time, float rumbleForce, float force)
     {
-        Game.i.aperture.Shake(force, time);
+        Game.i.aperture.Shake(force, rumbleForce, time);
     }
 }

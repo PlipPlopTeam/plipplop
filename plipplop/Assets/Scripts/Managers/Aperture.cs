@@ -651,11 +651,11 @@ public class Aperture
         return hDistanceToTarget;
     }
 
-    public void Shake(float intensity, float time)
+    public void Shake(float intensity, float rumbleForce, float time)
     {
         shakeForce = intensity;
         shakeTimeRemaining = time;
-        Game.i.player.Rumble(intensity, time);
+        Game.i.player.Rumble(rumbleForce, time);
     }
     
     void ShakeUpdate()

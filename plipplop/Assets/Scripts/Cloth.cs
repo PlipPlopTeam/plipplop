@@ -9,7 +9,7 @@ public class Cloth : MonoBehaviour
     public Transform root;
     public List<Transform> attachs = new List<Transform>();
     public Skeleton.Socket socket;
-	public Renderer renderer;
+	new public Renderer renderer;
 	public MaterialPropertyBlock property;
 
     public virtual void Destroy()

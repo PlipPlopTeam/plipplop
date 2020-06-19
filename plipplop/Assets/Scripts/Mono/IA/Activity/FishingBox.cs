@@ -61,7 +61,7 @@ public class FishingBox : Activity
 
 
 #if UNITY_EDITOR
-	void OnDrawGizmosSelected()
+	new void OnDrawGizmosSelected()
     {
         DrawArea(plunge.position, plunge.radius, Color.blue);
         DrawArea(stand.position, stand.radius, Color.green);

@@ -80,7 +80,7 @@ public class Cheats : Dictionary<string, System.Action>
 
     public void DebugShake()
     {
-        Game.i.aperture.Shake(0.2f, 1f);
+        Game.i.aperture.Shake(0.2f, 0.2f, 1f);
     }
 
 	public void BigHeads()

@@ -12,7 +12,6 @@ public class Balloon : Activity
     public float verticalForce = 50000f;
     public float horizontalForce = 25000f;
 
-	private Vector3 originPosition;
     private int carrier = 0;
     private float throwTimer;
     private List<bool> inPlace = new List<bool>();
@@ -93,7 +92,7 @@ public class Balloon : Activity
 			float angle = ((Mathf.PI * 2f) / users.Count) * count;
 			Vector3 pos = new Vector3(Mathf.Cos(angle) * distance, 0f, Mathf.Sin(angle) * distance);
 
-			if(user.movement.GoThere(originPosition + pos, true))
+			if(user.movement.GoThere(pos, true))
 			{
 				user.movement.onDestinationReached += () =>
 				{

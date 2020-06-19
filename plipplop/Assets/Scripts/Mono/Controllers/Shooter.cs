@@ -22,7 +22,7 @@ public class Shooter : Controller
     internal Vector3 look;
     internal float vertical;
     internal float fov;
-    internal Vector3 aimOffset;
+    // internal Vector3 aimOffset; // Never used
     internal float shakeTimer;
     internal float shakeDuration;
     internal float shakeIntensity;

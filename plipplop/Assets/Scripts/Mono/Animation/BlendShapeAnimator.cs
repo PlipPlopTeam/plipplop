@@ -5,7 +5,7 @@ using UnityEngine;
 public class BlendShapeAnimator : MonoBehaviour
 {
 
-    public SkinnedMeshRenderer renderer;
+    public new SkinnedMeshRenderer renderer;
     public int blendShapeAmount;
     public bool fixedTime = false;
     public float maxTime;

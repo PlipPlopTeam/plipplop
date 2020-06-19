@@ -10,7 +10,7 @@ public class Valuable : Item, INoticeable, ICarryable
     public bool hidden = false;
 	public bool active = true;
 
-	public virtual void Awake()
+	new public virtual void Awake()
     {
 		if(placesToBeSorted.Count > 0)
 		{

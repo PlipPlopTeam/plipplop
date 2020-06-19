@@ -8,7 +8,7 @@ public class Item : MonoBehaviour, ICarryable
     public bool physiqued = true;
     public EColliderShape shape;
     public Rigidbody rb;
-	public Collider collider;
+	public new Collider collider;
     [Space(5)]
 	public EType type = EType.OTHER;
     public float weight = 1f;
