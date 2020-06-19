@@ -10,7 +10,7 @@ public class Pause : MonoBehaviour
     
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))//mettre input manette
+        if (Game.i.mapping.IsPressed(EAction.PAUSE))
         {
             if (paused)
             {
@@ -22,8 +22,6 @@ public class Pause : MonoBehaviour
             }
         }
     }
-
-
 
     void StartPause()
     {
@@ -40,5 +38,10 @@ public class Pause : MonoBehaviour
         Time.fixedDeltaTime = .02f * Time.timeScale;
         paused = false;
         pauseMenu.SetActive(false);
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
     }
 }

@@ -11,5 +11,6 @@
     SHOUT,
     TALK,
     AIM,
-    SHOOT
+    SHOOT, 
+    PAUSE
 }
