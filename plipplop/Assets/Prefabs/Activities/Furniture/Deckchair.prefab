@@ -92,6 +92,7 @@ GameObject:
   - component: {fileID: 3744840916138228909}
   - component: {fileID: 925866113327000500}
   - component: {fileID: 8715344681228384371}
+  - component: {fileID: 7644369477389991825}
   m_Layer: 0
   m_Name: Deckchair
   m_TagString: Untagged
@@ -199,6 +200,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buyoyancy: 5
   waterline: -0.35
+--- !u!114 &7644369477389991825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4175127814306585225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27bebb278a4489e489e5558d1c6671af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  physiqued: 1
+  shape: 0
+  rb: {fileID: 3293007541466354032}
+  collider: {fileID: 3744840916138228909}
+  type: 3
+  weight: 1
+  visuals: {fileID: 7075289220273256438}
+  origin: {x: 0, y: 0, z: 0}
+  placesToBeSorted: []
+  distanceThreshold: 2
+  hidden: 0
+  active: 1
 --- !u!1 &7075289220273256438
 GameObject:
   m_ObjectHideFlags: 0

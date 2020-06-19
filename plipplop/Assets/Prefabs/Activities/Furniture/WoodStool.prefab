@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 1170759633443463699}
   - component: {fileID: 724694322}
   - component: {fileID: 7189308727662708755}
+  - component: {fileID: 265373605539259034}
   m_Layer: 0
   m_Name: WoodStool
   m_TagString: Untagged
@@ -169,6 +170,30 @@ MonoBehaviour:
   breakVelocity: 2
   body: {fileID: 6464283703768348792}
   chair: {fileID: 1170759633443463699}
+--- !u!114 &265373605539259034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5635061604690118775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27bebb278a4489e489e5558d1c6671af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  physiqued: 1
+  shape: 0
+  rb: {fileID: 7333589662012726302}
+  collider: {fileID: 3107659392204101884}
+  type: 3
+  weight: 1
+  visuals: {fileID: 2625789570624772693}
+  origin: {x: 0, y: 0, z: 0}
+  placesToBeSorted: []
+  distanceThreshold: 2
+  hidden: 0
+  active: 1
 --- !u!1001 &2075890086589551458
 PrefabInstance:
   m_ObjectHideFlags: 0
