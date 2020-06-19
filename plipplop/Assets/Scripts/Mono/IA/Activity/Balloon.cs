@@ -151,7 +151,7 @@ public class Balloon : Activity
 
 						Game.i.WaitAndDo(1f, () => {
 							carrier = next;
-							users[carrier].Collect(this);
+							if(users.Count > 0) users[carrier].Collect(this);
 						});
 					}
 					else GetInPlace();
