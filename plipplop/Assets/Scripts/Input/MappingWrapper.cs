@@ -27,6 +27,7 @@ public class MappingWrapper : Dictionary<EInput, Func<float>>
         keyCorrespondances.Add(EInput.KB_F, KeyCode.F);
         keyCorrespondances.Add(EInput.KB_X, KeyCode.X);
         keyCorrespondances.Add(EInput.KB_CTRL, KeyCode.LeftControl);
+        keyCorrespondances.Add(EInput.KB_ESCAPE, KeyCode.Escape);
 
 
         Add(EInput.NONE, () => { return 0f; });
