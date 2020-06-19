@@ -64,7 +64,6 @@ public abstract class TalkableCharacter : MonoBehaviour
             if (Time.time - lastVowelTime > 0.4f) {
                 var letterIndex = vowels.FindIndex(o => o == DialogHooks.currentPronouncedLetter.ToUpper());
                 var oAmount = (letterIndex >= 0 ? (vowels.Count - (float)letterIndex) / vowels.Count : 0f) * 100f;
-
                 if (blendShapeIndex.HasValue) faceMesh.SetBlendShapeWeight(blendShapeIndex.Value, oAmount);
                 if (oAmount > 0) lastVowelTime = Time.time;
             }

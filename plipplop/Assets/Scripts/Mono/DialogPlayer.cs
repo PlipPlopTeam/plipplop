@@ -271,6 +271,7 @@ public class DialogPlayer : MonoBehaviour
 
             if (currentCharIndex < line.pureText.Length) {
                 DialogHooks.currentPronouncedLetter = line.pureText[currentCharIndex].ToString();
+                SoundPlayer.Play("sfx_rock_voice", .2f,UnityEngine.Random.Range(.8f,1.2f));
             }
 
             currentCharIndex++;
