@@ -511,7 +511,7 @@ public class NonPlayableCharacter : MonoBehaviour
 	{
 		if(chair != null)
 		{
-			transform.SetParent(null);
+			if(transform != null) transform.SetParent(null);
 			chair.Exit(this);
 			chair = null;
 			ResetLayer();

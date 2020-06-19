@@ -31,6 +31,7 @@ public class SoundPlayer
         src.pitch = pitch;
         src.volume = volume;
         src.clip = clip;
+        src.dopplerLevel = 0f;
         src.Play();
 
         return src;
@@ -97,6 +98,7 @@ public class SoundPlayer
         source.spatialBlend = 1f;
         source.minDistance = 1f;
         source.maxDistance = 10f;
+        source.dopplerLevel = 0f;
         if (snd.loop == false) {
             g.AddComponent<DestroyAfter>().lifespan = clip.length + 1f;
         }
