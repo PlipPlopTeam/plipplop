@@ -7,6 +7,10 @@ using UnityEngine;
 public class Switches : ScriptableObject
 {
     [ColorField(1f, 0f, 0f)] [SerializeField] [ReadOnlyInGame]
+    private bool S_LOAD_EVERYTHING_ON_START = false;
+    public bool LOAD_EVERYTHING_ON_START { get {return S_LOAD_EVERYTHING_ON_START; } }
+
+    [ColorField(1f, 0f, 0f)] [SerializeField] [ReadOnlyInGame]
     private bool S_FADE_CHUNK_PROPS = false;
     public bool FADE_CHUNK_PROPS { get {return S_FADE_CHUNK_PROPS;} }
 

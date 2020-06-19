@@ -38,7 +38,7 @@ public class EmotionRenderer : MonoBehaviour
         // Face camera
         if(isDisplayingEmotion && Game.i.aperture != null)
         {
-            bubble.transform.forward = -(Game.i.aperture.position.current - bubble.transform.position);
+            bubble.transform.forward = -(Game.i.aperture.currentCamera.transform.position - bubble.transform.position);
             bubble.transform.position = headTransform.position + transform.forward * hOffset +Vector3.up*vOffset;
             bubble.isLeftSide = Game.i.aperture.GetCameraTransform().InverseTransformPoint(bubble.transform.position).x < Game.i.aperture.GetCameraTransform().InverseTransformPoint(headTransform.position).x;
 

@@ -804,12 +804,4 @@ public class Aperture
     {
         return vAngle;
     }
-
-    public static Camera GetCurrentlyActiveCamera()
-    {
-        if (Camera.current) return Camera.current;
-
-        var activeCams = Camera.allCameras.OrderBy(o=>o.depth).Where(o => { return o.isActiveAndEnabled; });
-        return activeCams.Count() > 0 ? activeCams.First() : null;
-    }
 }

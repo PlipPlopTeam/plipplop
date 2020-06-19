@@ -200,6 +200,7 @@ public class SoundPlayer
             var state = 0f;
             while (state < 1f)
             {
+                if (src == null) break;
                 state += Time.deltaTime * fadeSpeed;
                 src.volume = Mathf.Lerp(originalVolume, targetVolume, state);
                 yield return new WaitForEndOfFrame();

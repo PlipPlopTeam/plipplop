@@ -113,13 +113,13 @@ public class ChunkLoader
     }
     public void Update()
     {        
-        var c = Aperture.GetCurrentlyActiveCamera();
+        var c = Game.i.aperture.currentCamera.transform.position;
         if (c != null) {
             var playerCZ = playerChunkZone;
             foreach (var identifier in chunkZones.Keys) {
                 var cz = chunkZones[identifier];
                 cz.isPlayerInside = false;
-                if (cz.IsInsideChunk(c.transform.position)) {
+                if (cz.IsInsideChunk(c)) {
                     cz.isPlayerInside = true;
                     playerCZ = cz;
                     break;
@@ -178,6 +178,11 @@ public class ChunkLoader
     {
         chunkZones[csz.identifier] = csz;
         storedProps[csz.identifier] = new List<ChunkProp>();
+
+
+        if (Game.s.LOAD_EVERYTHING_ON_START) {
+            PreLoad(csz.identifier);
+        }
     }
 
     public void Register(FadedApparition fa)
@@ -190,12 +195,42 @@ public class ChunkLoader
         persistentProps.AddUnique(p);
     }
 
-    void Load(string identifier)
+    void PreLoad(string identifier)
+    {
+        Load(identifier, delegate {
+            Task.Run(async delegate {
+                    await UnloadWhenRegularized(identifier);
+                }
+            );
+        });
+    }
+
+    async Task UnloadWhenRegularized(string identifier)
+    {
+        try {
+            var csz = chunkZones[identifier];
+            while (isLoading) {
+                await Task.Delay(Mathf.RoundToInt(Time.deltaTime * 1000));
+                if (!csz.IsLoaded()) {
+                    return;
+                }
+            }
+            UnityMainThreadDispatcher.Instance().Enqueue(delegate { Unload(identifier); });
+        }
+        catch (System.Exception e) {
+            Debug.Log(e);
+        }
+    }
+
+    void Load(string identifier, System.Action callback=null)
     {
         if (!loadingChunks.Contains(identifier) && !chunkZones[identifier].IsLoaded()) {
             loadingChunks.Add(identifier);
             SceneManager.LoadSceneAsync(chunkZones[identifier].chunk, LoadSceneMode.Additive).completed += delegate {
                 OnChunkLoaded(identifier);
+                if (callback != null) {
+                    callback.Invoke();
+                }
             };
         }
     }
@@ -293,7 +328,7 @@ public class ChunkLoader
                     // Deferred loading
                     var props = scene.GetRootGameObjects();
                     // Nearest prop should load first
-                    props = props.OrderBy(prop => { return Vector3.Distance(prop.transform.position, Aperture.GetCurrentlyActiveCamera().transform.position); }).ToArray();
+                    props = props.OrderBy(prop => { return Vector3.Distance(prop.transform.position, Game.i.aperture.currentCamera.transform.position); }).ToArray();
 
                     foreach (var prop in props) {
                         prop.SetActive(false);

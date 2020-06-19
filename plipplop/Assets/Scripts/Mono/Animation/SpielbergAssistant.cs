@@ -83,7 +83,7 @@ public class SpielbergAssistant : MonoBehaviour
         ExecuteParalyzisState(playerStateOnStart);
 
         isPlaying = true;
-        lastCamera = Aperture.GetCurrentlyActiveCamera();
+        lastCamera = Camera.main;
 
         if (firstCamera) StartCoroutine(PrepareCinematic());
         else PlayInternal();
@@ -93,10 +93,7 @@ public class SpielbergAssistant : MonoBehaviour
     {
         if (isPlaying) {
             if (firstCamera) {
-                var currCamera = Aperture.GetCurrentlyActiveCamera();
-                if (!Object.ReferenceEquals(currCamera, lastCamera)) {
-                    lastCamera = currCamera;
-                }
+                lastCamera = Camera.main;
             }
 
 
@@ -178,7 +175,7 @@ public class SpielbergAssistant : MonoBehaviour
 
     IEnumerator PrepareCinematicEnding()
     {
-        var currCam = Aperture.GetCurrentlyActiveCamera();
+        var currCam = Camera.main;
         var aperture = Game.i.aperture;
 
         // Give current position to aperture
