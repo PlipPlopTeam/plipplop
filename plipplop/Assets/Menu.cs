@@ -26,7 +26,7 @@ public class Menu : MonoBehaviour
     
     private void Start()
     {
-        menuAudioSource = SoundPlayer.PlaySoundAttached("bgm_gymtonic", transform, .25f,false,true);
+        menuAudioSource = SoundPlayer.PlaySoundAttached("bgm_gymtonic", transform, .05f,false,true);
 
         
         creditsStartScale = credits.transform.localScale;
