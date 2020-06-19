@@ -30,30 +30,32 @@ public class KiteActivity : Activity
         user.movement.Stop();
 		user.animator.SetBool("Holding", true);
 
-		if (kite != null)
+		if (kite != null && kite.visuals != null)
 		{
 			user.look.FocusOn(kite.visuals.transform);
 			user.movement.OrientToward(kite.visuals.transform.position);
+			kite.StartFly();
 		}
-        user.skeleton.Attach(transform, Cloth.ESlot.RIGHT_HAND);
 
-        kite.StartFly();
-        full = true;
+		user.skeleton.Attach(transform, Cloth.ESlot.RIGHT_HAND);
+		full = true;
     }
 
     public override void Update()
     {
         base.Update();
 
-        if (users.Count > 0)
-        {
-            users[0].movement.OrientToward(kite.visuals.transform.position);
-        }
-
-        foreach (var _s  in spectators)
-        {
-            _s.movement.OrientToward(kite.visuals.transform.position);
-        }
+		if(kite != null && kite.visuals != null)
+		{
+			if (users.Count > 0)
+			{
+				users[0].movement.OrientToward(kite.visuals.transform.position);
+			}
+			foreach (var _s in spectators)
+			{
+				_s.movement.OrientToward(kite.visuals.transform.position);
+			}
+		}
     }
 
     public override void StopUsing(NonPlayableCharacter user)
