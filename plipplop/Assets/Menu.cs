@@ -21,9 +21,14 @@ public class Menu : MonoBehaviour
     GameObject selectedObject;
     Vector3 creditsStartScale;
     new Camera camera;
+
+    private AudioSource menuAudioSource;
     
     private void Start()
     {
+        menuAudioSource = SoundPlayer.PlaySoundAttached("bgm_gymtonic", transform, .25f,false,true);
+
+        
         creditsStartScale = credits.transform.localScale;
         
         //ajouter ouverture de l'écran pour laisser la scene se charger
@@ -50,6 +55,16 @@ public class Menu : MonoBehaviour
 
     public void Play()
     {
+        SoundPlayer.StopSound(menuAudioSource, true);
+
+        foreach (Radio _r in FindObjectsOfType<Radio>())
+        {
+            if (_r.musics.Count > 0)
+            {
+                _r.PlayMusic();
+            }
+        }
+        
         gameCanvas.SetActive(true);
 
         Game.i.player.Deparalyze();
