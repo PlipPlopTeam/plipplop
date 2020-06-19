@@ -6031,18 +6031,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65e6b04bbecb4b74eaf66a2cdb6d6782, type: 3}
---- !u!114 &426882113 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2183790451520795369, guid: 65e6b04bbecb4b74eaf66a2cdb6d6782,
-    type: 3}
-  m_PrefabInstance: {fileID: 426882112}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26a397576a9120b439d029d475bbdc04, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &426882114 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2183790451520795366, guid: 65e6b04bbecb4b74eaf66a2cdb6d6782,
@@ -8558,7 +8546,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Profile: {fileID: 11400000, guid: c8e3472f8e8997644bd1b3ddf70aecf4, type: 2}
   m_StaticLightingSkyUniqueID: 1
-  m_SkySettings: {fileID: 798643568}
+  m_SkySettings: {fileID: 1451196538}
   m_SkySettingsFromProfile: {fileID: 1332542512067647828, guid: c8e3472f8e8997644bd1b3ddf70aecf4,
     type: 2}
 --- !u!114 &699772736
@@ -9878,55 +9866,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 793046289}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &798643568
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59b6606ef2548734bb6d11b9d160bc7e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  active: 1
-  m_AdvancedMode: 0
-  rotation:
-    m_OverrideState: 0
-    m_Value: 0
-    min: 0
-    max: 360
-  skyIntensityMode:
-    m_OverrideState: 0
-    m_Value: 0
-  exposure:
-    m_OverrideState: 0
-    m_Value: 15
-  multiplier:
-    m_OverrideState: 0
-    m_Value: 1
-    min: 0
-  upperHemisphereLuxValue:
-    m_OverrideState: 0
-    m_Value: 0.6324094
-    min: 0
-  desiredLuxValue:
-    m_OverrideState: 0
-    m_Value: 20000
-  updateMode:
-    m_OverrideState: 0
-    m_Value: 0
-  updatePeriod:
-    m_OverrideState: 0
-    m_Value: 0
-    min: 0
-  includeSunInBaking:
-    m_OverrideState: 0
-    m_Value: 0
-  hdriSky:
-    m_OverrideState: 0
-    m_Value: {fileID: 8900000, guid: efa98b03d050dda42a6518aab634187e, type: 3}
 --- !u!43 &805622865
 Mesh:
   m_ObjectHideFlags: 0
@@ -15275,7 +15214,11 @@ PrefabInstance:
     - target: {fileID: 1684127436, guid: fa5f0935db8e39a41b60d0037a32d3f9, type: 3}
       propertyPath: assignedPath
       value: 
-      objectReference: {fileID: 426882113}
+      objectReference: {fileID: 0}
+    - target: {fileID: 1684127436, guid: fa5f0935db8e39a41b60d0037a32d3f9, type: 3}
+      propertyPath: activity
+      value: 
+      objectReference: {fileID: 3625417313942771175}
     - target: {fileID: 6435800329755219701, guid: fa5f0935db8e39a41b60d0037a32d3f9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -15299,7 +15242,7 @@ PrefabInstance:
     - target: {fileID: 6435800329755219701, guid: fa5f0935db8e39a41b60d0037a32d3f9,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.6055598
+      value: -0.9883155
       objectReference: {fileID: 0}
     - target: {fileID: 6435800329755219701, guid: fa5f0935db8e39a41b60d0037a32d3f9,
         type: 3}
@@ -15309,7 +15252,7 @@ PrefabInstance:
     - target: {fileID: 6435800329755219701, guid: fa5f0935db8e39a41b60d0037a32d3f9,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7957998
+      value: -0.15242201
       objectReference: {fileID: 0}
     - target: {fileID: 6435800329755219701, guid: fa5f0935db8e39a41b60d0037a32d3f9,
         type: 3}
@@ -15324,7 +15267,7 @@ PrefabInstance:
     - target: {fileID: 6435800329755219701, guid: fa5f0935db8e39a41b60d0037a32d3f9,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -74.538
+      value: -197.53499
       objectReference: {fileID: 0}
     - target: {fileID: 6435800329755219701, guid: fa5f0935db8e39a41b60d0037a32d3f9,
         type: 3}
@@ -17251,7 +17194,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  splashPS: {fileID: 1978911286466673632}
+  splashPS: {fileID: 0}
 --- !u!1 &1163051548
 GameObject:
   m_ObjectHideFlags: 0
@@ -22109,6 +22052,55 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 20317347075013805}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1451196538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59b6606ef2548734bb6d11b9d160bc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  active: 1
+  m_AdvancedMode: 0
+  rotation:
+    m_OverrideState: 0
+    m_Value: 0
+    min: 0
+    max: 360
+  skyIntensityMode:
+    m_OverrideState: 0
+    m_Value: 0
+  exposure:
+    m_OverrideState: 0
+    m_Value: 15
+  multiplier:
+    m_OverrideState: 0
+    m_Value: 1
+    min: 0
+  upperHemisphereLuxValue:
+    m_OverrideState: 0
+    m_Value: 0.6324094
+    min: 0
+  desiredLuxValue:
+    m_OverrideState: 0
+    m_Value: 20000
+  updateMode:
+    m_OverrideState: 0
+    m_Value: 0
+  updatePeriod:
+    m_OverrideState: 0
+    m_Value: 0
+    min: 0
+  includeSunInBaking:
+    m_OverrideState: 0
+    m_Value: 0
+  hdriSky:
+    m_OverrideState: 0
+    m_Value: {fileID: 8900000, guid: efa98b03d050dda42a6518aab634187e, type: 3}
 --- !u!43 &1451586200
 Mesh:
   m_ObjectHideFlags: 0
@@ -36452,13 +36444,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: c9cbd948c7f4b9142b5bf5121b216b7a, type: 3}
 --- !u!4 &1978911286466673631 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 4796228627802213180, guid: c9cbd948c7f4b9142b5bf5121b216b7a,
-    type: 3}
-  m_PrefabInstance: {fileID: 1978911286466673630}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &1978911286466673632 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 4796228627802214227, guid: c9cbd948c7f4b9142b5bf5121b216b7a,
+  m_CorrespondingSourceObject: {fileID: 8344126323278496667, guid: c9cbd948c7f4b9142b5bf5121b216b7a,
     type: 3}
   m_PrefabInstance: {fileID: 1978911286466673630}
   m_PrefabAsset: {fileID: 0}
@@ -38190,6 +38176,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3f2544e379d94e84ab677d36e8cd4154, type: 3}
+--- !u!114 &3625417313942771175 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5727107234630735005, guid: 3f2544e379d94e84ab677d36e8cd4154,
+    type: 3}
+  m_PrefabInstance: {fileID: 3625417313942771174}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebda1c927e5956243947b1e9d58ad72c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3648814446192650056
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -41590,6 +41588,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 791280221, guid: de262e4128bc94a44bdb0bf7000ecd03, type: 3}
+      propertyPath: m_BlendShapeWeights.Array.data[0]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 791280221, guid: de262e4128bc94a44bdb0bf7000ecd03, type: 3}
+      propertyPath: m_BlendShapeWeights.Array.data[1]
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9196283108953828410, guid: de262e4128bc94a44bdb0bf7000ecd03,
         type: 3}
       propertyPath: m_BlendShapeWeights.Array.data[0]
@@ -41609,14 +41615,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Quality
       value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 791280221, guid: de262e4128bc94a44bdb0bf7000ecd03, type: 3}
-      propertyPath: m_BlendShapeWeights.Array.data[0]
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 791280221, guid: de262e4128bc94a44bdb0bf7000ecd03, type: 3}
-      propertyPath: m_BlendShapeWeights.Array.data[1]
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: de262e4128bc94a44bdb0bf7000ecd03, type: 3}
