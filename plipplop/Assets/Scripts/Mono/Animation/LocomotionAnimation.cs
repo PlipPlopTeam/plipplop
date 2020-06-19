@@ -23,8 +23,6 @@ public class LocomotionAnimation
     Transform visualsTransform;
     Transform headDummy;
     bool areLegsRetracted = false;
-    float legsGrowSpeed = 10f;
-    float walkAnimationSwitchCooldown = 1f;
     float walkAnimationSwitchTimer = 0f;
 
     Dictionary<float, string> movementAnimationMagnitude = new Dictionary<float, string>();

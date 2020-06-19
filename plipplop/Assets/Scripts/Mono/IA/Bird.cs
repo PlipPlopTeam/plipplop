@@ -90,7 +90,6 @@ public class Bird : MonoBehaviour
 	private State state;
 	private bool faceDirection = false;
 	private NearObject objectOn = null;
-	private bool unfearable;
 	private BirdZone zone;
 
 	private List<NearObject> nearObjects = new List<NearObject>();
@@ -328,23 +327,17 @@ public class Bird : MonoBehaviour
 				position += transform.right * Mathf.Sin(Time.time + timeOffset) * 0.005f;
 				break;
 			case Bird.State.LANDED:
-				if(!unfearable)
-				{
-					foreach (NearObject no in nearObjects)
-					{
-						no.Update();
-						if (no.magnitude > fearObjectMagnitude)
-						{
-							ScaredFrom(no.transform.position);
-						}
-					}
-					if (objectOn != null)
-					{
-						objectOn.Update();
-						if (objectOn.magnitude > 0) FlyOff();
-					}
-				}
-				break;
+                foreach (NearObject no in nearObjects) {
+                    no.Update();
+                    if (no.magnitude > fearObjectMagnitude) {
+                        ScaredFrom(no.transform.position);
+                    }
+                }
+                if (objectOn != null) {
+                    objectOn.Update();
+                    if (objectOn.magnitude > 0) FlyOff();
+                }
+                break;
 		}
 	}
 

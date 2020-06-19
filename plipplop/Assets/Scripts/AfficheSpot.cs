@@ -95,14 +95,11 @@ public class AfficheSpot : MonoBehaviour
             case Shape.CIRCLE:
                 Vector3 _pos = Random.insideUnitCircle * range;
                 return transform.position + new Vector3(_pos.x, _pos.y, 0);
-                break;
             case Shape.RECTANGLE:
                 return transform.position + (transform.right * Random.Range(-size.x / 2, size.x / 2)) +
                        Random.Range(-size.y / 2, size.y / 2) * transform.up;
-                break;
             case Shape.POINT:
                 return transform.position;
-                break;
         }
 
         return Vector3.zero;

@@ -23,7 +23,7 @@ public class Serviette : Activity
 	}
 
 #if UNITY_EDITOR
-	void OnDrawGizmosSelected()
+	 new void OnDrawGizmosSelected()
 	{
 		Gizmos.color = new Color32(255, 215, 0, 255);
 		UnityEditor.Handles.DrawWireCube(transform.position + transform.forward * offset, Vector3.one * 0.25f);

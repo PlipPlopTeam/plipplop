@@ -13,7 +13,6 @@ public class EmotionRenderer : MonoBehaviour
     EmotionBubble bubble;
     Emotion emotion;
     float timer;
-    int frameIndex;
     Emotions library { get { return Game.i.library.emotions; } }
     bool isDisplayingEmotion { get { return bubble.gameObject.activeSelf; } }
 
@@ -76,7 +75,6 @@ public class EmotionRenderer : MonoBehaviour
     {
         emotion = newEmotion;
         timer = 0f;
-        frameIndex = 0;
         bubble.gameObject.SetActive(true);
         bubble.Set(emotion);
         bubble.animator.SetTrigger("popUp");
