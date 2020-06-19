@@ -52,6 +52,7 @@ public class NonPlayableCharacter : MonoBehaviour
 	[HideInInspector] public bool hasWaited;
 	public System.Action onWaitEnded;
 	public System.Action onCollect;
+	public System.Action onCollectFailed;
 
 	public void Awake()
 	{
@@ -367,12 +368,23 @@ public class NonPlayableCharacter : MonoBehaviour
 		carryableToCollect = null;
 		movement.StopChase();
 	}
-	public void Collect(ICarryable carryable, System.Action then = null)
+	public void CollectFailed()
+	{
+		StopCollecting();
+		if (onCollectFailed != null)
+		{
+			onCollectFailed.Invoke();
+			onCollectFailed = null;
+		}
+	}
+
+	public void Collect(ICarryable carryable, System.Action then = null, System.Action failed = null)
 	{
 		carryableToCollect = carryable;
-		movement.Chase(carryableToCollect.Self());
+		movement.Chase(carryableToCollect.Self(), () => CollectFailed());
 
 		if (then != null) onCollect += then;
+		if (failed != null) onCollect += then;
 	}
 
 	public void Consume(Food f)

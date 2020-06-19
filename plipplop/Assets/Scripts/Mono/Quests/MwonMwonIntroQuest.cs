@@ -99,7 +99,7 @@ public class MwonMwonIntroQuest : TalkableCharacter
             stopGap.transform.position = _pos + rumbleCurve.Evaluate(_timer)*UnityEngine.Random.insideUnitSphere / 10;
             stopGap.transform.localEulerAngles = _rot + rumbleCurve.Evaluate(_timer)*UnityEngine.Random.insideUnitSphere;
 
-            Game.i.aperture.Shake(rumbleCurve.Evaluate(_timer)*2, 0.2f, 1);
+            Game.i.aperture.Shake(rumbleCurve.Evaluate(_timer)*.07f,rumbleCurve.Evaluate(_timer)*2,1);
             
             _timer += Time.deltaTime/1.5f;
             yield return null;
@@ -111,7 +111,7 @@ public class MwonMwonIntroQuest : TalkableCharacter
 
         while (_timer < 1)
         {
-            Game.i.aperture.Shake(explosionCurve.Evaluate(_timer)*3, 0.2f, 1);
+            Game.i.aperture.Shake(explosionCurve.Evaluate(_timer)*.125f,explosionCurve.Evaluate(_timer)*3,1);
             stopGap.transform.position = Vector3.Lerp(stopGap.transform.position, _pos + Vector3.up * 7, _timer);
             _timer += Time.deltaTime * 3;
             yield return null;

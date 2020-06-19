@@ -15,14 +15,14 @@ namespace Behavior.NPC
 					case NonPlayableCharacter.ESubject.VALUABLE:
 						if (npc.valuable != null)
 						{
-							npc.Collect(npc.valuable);
+							npc.Collect(npc.valuable, null, () => { npc.valuable = null; });
 							npc.emo.Show(Emotion.EVerb.HATE, npc.valuable.Name());
 						}
 						break;
 					case NonPlayableCharacter.ESubject.FOOD:
 						if (npc.food != null)
 						{
-							npc.Collect(npc.food);
+							npc.Collect(npc.food, null, () => { npc.food = null; });
 							npc.emo.Show(Emotion.EVerb.SEARCH, npc.food.name);
 						}
 						break;

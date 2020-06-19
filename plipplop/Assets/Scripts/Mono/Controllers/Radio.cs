@@ -31,6 +31,14 @@ public class Radio : Vanilla
         jukebox.animateWithSound = false;
     }
 
+    internal override void Start()
+    {
+        base.Start();
+        
+        //currentMusic = Random.Range(0, musics.Count);
+        PlayMusic();
+    }
+    
     internal override void Shout()
     {
         SoundPlayer.PlaySoundAttached("sfx_radio_click", this.transform);
@@ -58,10 +66,15 @@ public class Radio : Vanilla
                 jukebox.SetAnimDelta(delta - Time.deltaTime);
             }
 
-            noiseSrc.volume = Mathf.Clamp01(rigidbody.velocity.magnitude * (1f - noiseBase) * (1f/ noiseReduxFactor)) + noiseBase;
-            jukebox.GetAttachedSource().volume = 1f - noiseSrc.volume;
-            pitch = 0.95f + noiseSrc.volume * 0.1f;
-            jukebox.GetAttachedSource().pitch = pitch;
+            if (noiseSrc != null)
+            {
+                noiseSrc.volume = Mathf.Clamp01(rigidbody.velocity.magnitude * (1f - noiseBase) * (1f / noiseReduxFactor)) + noiseBase;
+
+                jukebox.GetAttachedSource().volume = 1f - noiseSrc.volume;
+                pitch = 0.95f + noiseSrc.volume * 0.1f;
+                jukebox.GetAttachedSource().pitch = pitch;
+            }
+            
         }
         else {
             jukebox.SetAnimDelta(0f);
