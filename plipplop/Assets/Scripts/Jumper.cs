@@ -186,13 +186,9 @@ public class Jumper : Controller
 		inAir = false;
 		
 		
-			if (IsPossessed())
+			if (IsPossessed() && AreLegsRetracted())
 			{
-				if (UnityEngine.Random.Range(0f, 1f) > .2f)
-				{
-					SoundPlayer.Play("sfx_guitar_impact", 1, 1);
-					//SoundPlayer.PlayAtPosition("sfx_guitar_impact", transform.position, 1, true);
-				}
+				SoundPlayer.Play("sfx_guitar_impact", UnityEngine.Random.Range(.3f,.5f), UnityEngine.Random.Range(.85f,1.15f));
 			}
 		
 	}
