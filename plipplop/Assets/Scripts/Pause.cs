@@ -42,6 +42,7 @@ public class Pause : MonoBehaviour
 
     public void Quit()
     {
+        print("bisous");
         Application.Quit();
     }
 }

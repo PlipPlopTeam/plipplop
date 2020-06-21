@@ -83,6 +83,12 @@ public abstract class Controller : MonoBehaviour
         
 		ToggleFace(true);
 		foreach (Transform t in visuals.GetComponentsInChildren<Transform>()) t.gameObject.layer = 0;
+		
+		InputDisplay _inputDisplay = FindObjectOfType<InputDisplay>();
+		if (_inputDisplay != null)
+		{
+			_inputDisplay.ShowVanillaInputs();
+		}
 	}
 
 	internal virtual void SpecificJump() {}

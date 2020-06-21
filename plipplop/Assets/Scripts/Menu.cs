@@ -38,6 +38,8 @@ public class Menu : MonoBehaviour
 
         gameCanvas = GameObject.Find("GAME_CANVAS");
         
+        gameCanvas.GetComponentInChildren<InputDisplay>().HideInputs();
+
         gameCanvas.SetActive(false);
         
         eventManager.SetSelectedGameObject(buttons[0].gameObject);
