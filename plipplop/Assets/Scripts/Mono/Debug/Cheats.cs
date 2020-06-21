@@ -194,7 +194,6 @@ public class Cheats : Dictionary<string, System.Action>
 
     public void ToggleInputs()
     {
-	    GameObject _g = GameObject.Find("GAME_CANVAS").transform.GetChild(0).gameObject;
-	    _g.SetActive(!_g.activeSelf);
+	    Object.FindObjectOfType<InputDisplay>().HideInputs();
     }
 }

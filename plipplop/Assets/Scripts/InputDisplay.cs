@@ -35,6 +35,4 @@ public class InputDisplay : MonoBehaviour
             _image.SetActive(false);
         }
     }
-
-   
 }
