@@ -28,6 +28,7 @@ public class NonPlayableCharacterSettings : ScriptableObject
 	[Header("Behavior")]
 	public bool followPath;
 	public bool doAllActivities;
+	public bool canDoActivitiesTwice = false;
 	public List<string>  favoriteActivities = new List<string>();
 	/*
 #if UNITY_EDITOR
