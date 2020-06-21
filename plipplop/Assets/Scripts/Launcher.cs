@@ -147,6 +147,9 @@ public class Launcher : MonoBehaviour
 		thrownObject.transform.localPosition = Vector3.zero;
 		thrownObject.transform.localEulerAngles = Vector3.zero;
 		thrownObject.transform.up = -cart.gameObject.transform.forward;
+		
+		Game.i.aperture.Shake(.1f,1,.3f);
+
 
 		if (onArrivedEvent != null) onArrived += onArrivedEvent;	
 		if (throwGameEffect != "") Pyromancer.PlayGameEffect(throwGameEffect, thrownObject.transform.position);
@@ -165,6 +168,8 @@ public class Launcher : MonoBehaviour
 			{
 				this.onArrived.Invoke(this.thrownObject);
 				this.onArrived = null;
+				
+				Game.i.aperture.Shake(.05f,.5f,.15f);
 			}
 			this.arrived = false;
 			this.throwing = false;
