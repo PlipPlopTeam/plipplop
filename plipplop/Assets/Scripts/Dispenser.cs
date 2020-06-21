@@ -19,14 +19,17 @@ public class Dispenser : Feeder
         base.Catch(client);
 
         clients.Add(client);
-        client.movement.GoThere(transform.position + transform.forward * clients.Count * distanceBetween);
+        if(!client.movement.GoThere(transform.position + transform.forward * clients.Count * distanceBetween))
+        {
+            Serve(client);
+        }
+
         if(!serving) Next();
     }
 
     public override void Serve(NonPlayableCharacter client)
     {
         base.Serve(client);
-
         clients.Remove(client);
         serving = false;
 		serveTimer = timeToServe;
