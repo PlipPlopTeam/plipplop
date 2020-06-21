@@ -28,6 +28,8 @@ public class MwonMwonIntroQuest : TalkableCharacter
 
     public ParticleSystem splashPS;
 
+    public GameObject mwonmwonFace;
+
     public override Dialog OnDialogTrigger()
     {
         var lib = Game.i.library.dialogs;
@@ -54,6 +56,8 @@ public class MwonMwonIntroQuest : TalkableCharacter
         exitVolume.onTriggerEnter += ExitVolume_onTriggerEnter;
         
         SoundPlayer.PlayAtPosition("bgm_volcano", transform.position,.5f);
+
+        mwonmwonFace.SetActive(true);
     }
 
     private void ExitVolume_onTriggerEnter(Collider obj)
