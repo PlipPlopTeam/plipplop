@@ -24,6 +24,8 @@ public class Game : MonoBehaviour
     static public Game i;
     static public Switches s;
 
+    public bool disableChunkLoader = false;
+
     private void Awake()
     {
         if (!FindObjectOfType<Kickstarter>()) {
@@ -78,7 +80,7 @@ public class Game : MonoBehaviour
         mapping.Read();
         player.Update();
         aperture.Update();
-        chunkLoader.Update();
+        if (!disableChunkLoader) chunkLoader.Update();
         cheatCodeListener.ListenCheat();
     }
 

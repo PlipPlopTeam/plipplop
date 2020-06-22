@@ -16,7 +16,6 @@ public class Carpet : Controller
     public float centralBoneForce = 10000f;
 
     public Rigidbody[] rigidbodies;
-    public Rigidbody centralBone;
     public PhysicMaterial playMaterial;
     public PhysicMaterial immobileMaterial;
 
@@ -70,8 +69,6 @@ public class Carpet : Controller
 
                 var muscle = Mathf.Abs(Mathf.Sin((timeStarted-Time.time)*muscleSpeed));
                 spring.minDistance = muscle * maxExtension;
-
-                centralBone.AddForce(Vector3.up * centralBoneForce * muscle);
 
                 // Actual movement
                 var y = transform.eulerAngles.y;

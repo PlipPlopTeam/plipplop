@@ -33,6 +33,19 @@ public class Cheats : Dictionary<string, System.Action>
         Add("CHUT", SkipTutorial);
         Add("NOINPUTS", ToggleInputs);
         Add("RESPAWN", Respawn);
+        Add("LOADALL", LoadAllChunksDisableLoader);
+        Add("ONDEMAND", EnableLoader);
+    }
+
+    void LoadAllChunksDisableLoader()
+    {
+        Game.i.disableChunkLoader = true;
+        Game.i.chunkLoader.LoadEverythingAtOnce();
+    }
+
+    void EnableLoader()
+    {
+        Game.i.disableChunkLoader = false;
     }
 
     public void Respawn()

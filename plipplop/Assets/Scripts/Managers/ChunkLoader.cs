@@ -153,6 +153,17 @@ public class ChunkLoader
         ExecuteQueue();
     }
 
+    // Debugging purposes
+    public void LoadEverythingAtOnce()
+    {
+        foreach(var cz in chunkZones) {
+            if (isLoading) break;
+            if (!cz.Value.IsLoaded()) {
+                Load(cz.Key);
+            }
+        }
+    }
+
     // Executing deffered list jobs
     void ExecuteQueue()
     {
