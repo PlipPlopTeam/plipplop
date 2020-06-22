@@ -65,6 +65,7 @@ public class Shooter : Controller
             // Apply Camera Position and Rotation
             Game.i.aperture.currentCamera.transform.rotation = Quaternion.Lerp(Game.i.aperture.currentCamera.transform.rotation, Quaternion.Euler(look), Time.deltaTime * lerpRotation);
             Game.i.aperture.currentCamera.transform.position = Vector3.Lerp(Game.i.aperture.currentCamera.transform.position, o, Time.deltaTime * lerpPosition);
+            Game.i.aperture.position.current = Game.i.aperture.currentCamera.transform.position;
             Game.i.aperture.currentCamera.fieldOfView = Mathf.Lerp(Game.i.aperture.currentCamera.fieldOfView, fov, Time.deltaTime * lerpFOV);
 
             float r = Game.i.player.mapping.Axis(EAction.MOVE_RIGHT_LEFT);
@@ -74,6 +75,8 @@ public class Shooter : Controller
             if (IsGrounded()) rigidbody.AddForce(transform.right * r * Time.deltaTime * lateralSpeed);
 
             locomotion.locomotionAnimation.legs.transform.localEulerAngles = new Vector3(0f, r * 90f, 0f);
+
+            Game.i.aperture.FadeObjectsBeforeCamera();
         }
     }
 
@@ -86,6 +89,7 @@ public class Shooter : Controller
     public override void OnPossess()
     {
         base.OnPossess();
+        Game.i.aperture.Freeze();
         fov = defaultFOV;
 
         InputDisplay _inputDisplay = FindObjectOfType<InputDisplay>();

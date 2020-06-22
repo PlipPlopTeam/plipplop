@@ -324,6 +324,7 @@ public class Aperture
                 cam.transform.position = previousGeneralCameraPosition.Value;
                 previousGeneralCameraPosition = null;
             }
+
             return;
         }
         else {
@@ -555,9 +556,10 @@ public class Aperture
         position.current = cam.transform.TransformPoint(rCurrent);
     }
 
-    void FadeObjectsBeforeCamera()
+    public void FadeObjectsBeforeCamera()
     {
         if (target == null) return;
+        if (Game.i.player.GetCurrentController() == null) return;
 
         var camera3AxisDirection = position.current - target.position;
         var dist = camera3AxisDirection.magnitude;
