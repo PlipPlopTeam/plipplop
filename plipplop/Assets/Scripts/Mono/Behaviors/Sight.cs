@@ -14,7 +14,7 @@ public class Sight : MonoBehaviour
 	public Settings settings;
 	public Transform origin;
 	[Range(0f, 1f)] public float multiplier = 1f;
-	const float refresh = 1f;
+	const float refresh = 0.25f;
 
 
 	public Dictionary<string, float> memory = new Dictionary<string, float>();

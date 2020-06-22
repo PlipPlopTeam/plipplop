@@ -341,21 +341,30 @@ public class NonPlayableCharacter : MonoBehaviour
 		}
 	}
 
+	public void AutoCollect()
+	{
+		movement.StopChase();
+		Carry(carryableToCollect);
+		carryableToCollect = null;
+		if (onCollect != null)
+		{
+			onCollect.Invoke();
+			onCollect = null;
+		}
+	}
+
 	public void UpdateCollecting()
 	{
 		if(carryableToCollect != null)
 		{
-			if(range.IsInRange(carryableToCollect.Self().gameObject))
+			if (carryableToCollect.Self() != null)
 			{
-				movement.StopChase();
-				Carry(carryableToCollect);
-				carryableToCollect = null;
-				if(onCollect != null)
+				if (range.IsInRange(carryableToCollect.Self().gameObject))
 				{
-					onCollect.Invoke();
-					onCollect = null;
+					AutoCollect();
 				}
 			}
+			else AutoCollect();
 		}
 	}
 
