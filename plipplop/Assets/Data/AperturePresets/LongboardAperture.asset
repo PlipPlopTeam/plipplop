@@ -17,6 +17,8 @@ MonoBehaviour:
     isOverriden: 0
   - property: canBeReset
     isOverriden: 0
+  - property: obstructibleLayerMask
+    isOverriden: 0
   - property: fieldOfView
     isOverriden: 1
   - property: heightOffset
@@ -80,9 +82,11 @@ MonoBehaviour:
   fallback: {fileID: 11400000, guid: f9f31e75527c7d94eb82f73cfbb5fd04, type: 2}
   canBeControlled: 1
   canBeReset: 1
-  detectsSurroundings: 1
+  obstructibleLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
   fieldOfView: 75
-  heightOffset: 3
+  heightOffset: 0.5
   maximumHeightAboveTarget: 10
   additionalAngle: 0
   distance:
