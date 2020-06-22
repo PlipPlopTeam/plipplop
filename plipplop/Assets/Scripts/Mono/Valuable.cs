@@ -27,7 +27,7 @@ public class Valuable : Item, INoticeable, ICarryable
     }
 	public virtual bool IsVisible()
     {
-		return !hidden && active && !IsSurroundedBySameItem();
+		return !hidden && active/* && !IsSurroundedBySameItem()*/;
     }
 	public virtual void SetVisible(bool value)
     {
