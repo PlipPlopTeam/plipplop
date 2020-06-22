@@ -68,7 +68,10 @@ public class Activity : Valuable
 	public virtual void Exit(NonPlayableCharacter user)
     {
         user.activity = null;
-        user.previousActivity = this;
+
+		if (!user.settings.canDoActivitiesTwice) user.previousActivity = this;
+		else user.previousActivity = null;
+
 		user.sight.multiplier = 1f;
 
 		if (users.Contains(user)) StopUsing(user);

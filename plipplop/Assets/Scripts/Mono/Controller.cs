@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using Random = System.Random;
 
 [System.Serializable]
 public abstract class Controller : MonoBehaviour
@@ -81,6 +83,12 @@ public abstract class Controller : MonoBehaviour
         
 		ToggleFace(true);
 		foreach (Transform t in visuals.GetComponentsInChildren<Transform>()) t.gameObject.layer = 0;
+		
+		InputDisplay _inputDisplay = FindObjectOfType<InputDisplay>();
+		if (_inputDisplay != null)
+		{
+			_inputDisplay.ShowVanillaInputs();
+		}
 	}
 
 	internal virtual void SpecificJump() {}
@@ -137,6 +145,8 @@ public abstract class Controller : MonoBehaviour
 		if (AreLegsRetracted()) ExtendLegs();
 		else RetractLegs();
 	}
+    
+    
 
     internal bool AreLegsRetracted() { return locomotion.AreLegsRetracted(); }
     internal virtual bool IsGrounded(float rangeMultiplier = 1f) { return locomotion.IsGrounded(); }
@@ -422,6 +432,8 @@ public abstract class Controller : MonoBehaviour
 	{
 		rigidbody.useGravity = true;
 	}
+
+	
 
 #if UNITY_EDITOR
     // Draw a gizmo if i'm being possessed

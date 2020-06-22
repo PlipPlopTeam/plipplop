@@ -36,7 +36,7 @@ public class Radio : Vanilla
         base.Start();
         
         //currentMusic = Random.Range(0, musics.Count);
-        PlayMusic();
+       // PlayMusic();
     }
     
     internal override void Shout()
@@ -81,7 +81,7 @@ public class Radio : Vanilla
         }
     }
 
-    void PlayMusic()
+    public void PlayMusic()
     {
         if (musics.Count == 0) {
             Debug.LogError("Tried to play music with radio " + name + " but the music list is EMPTY!");

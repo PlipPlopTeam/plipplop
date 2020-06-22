@@ -28,6 +28,8 @@ public class MwonMwonIntroQuest : TalkableCharacter
 
     public ParticleSystem splashPS;
 
+    public GameObject mwonmwonFace;
+
     public override Dialog OnDialogTrigger()
     {
         var lib = Game.i.library.dialogs;
@@ -44,6 +46,8 @@ public class MwonMwonIntroQuest : TalkableCharacter
 
     public void BeginQuest()
     {
+        //GameObject.Find("GAME_CANVAS");
+        
         radius = talkRadius;
         talkRadius = 0f;
         if (DBG_FirstCinematic) Spielberg.PlayCinematic(DBG_FirstCinematic);
@@ -52,6 +56,8 @@ public class MwonMwonIntroQuest : TalkableCharacter
         exitVolume.onTriggerEnter += ExitVolume_onTriggerEnter;
         
         SoundPlayer.PlayAtPosition("bgm_volcano", transform.position,.5f);
+
+        mwonmwonFace.SetActive(true);
     }
 
     private void ExitVolume_onTriggerEnter(Collider obj)
@@ -69,7 +75,7 @@ public class MwonMwonIntroQuest : TalkableCharacter
         base.Update();
 
         if (hasFinishedTutorial) {
-            if (!stopgapRemoved) {
+            if (!stopgapRemoved && DialogHooks.currentInterlocutor==null) {
                 stopgapRemoved = true;
                 StartCoroutine(StopGapAnim());
             }
@@ -95,6 +101,8 @@ public class MwonMwonIntroQuest : TalkableCharacter
         while (DialogHooks.currentInterlocutor != null) {
             yield return new WaitForEndOfFrame();
         }
+        
+        //GameObject.Find("GAME_CANVAS").SetActive(true);
 
         //Play rumbble sound
         //vibrer manette
@@ -109,7 +117,7 @@ public class MwonMwonIntroQuest : TalkableCharacter
             stopGap.transform.position = _pos + rumbleCurve.Evaluate(_timer)*UnityEngine.Random.insideUnitSphere / 10;
             stopGap.transform.localEulerAngles = _rot + rumbleCurve.Evaluate(_timer)*UnityEngine.Random.insideUnitSphere;
 
-            Game.i.aperture.Shake(rumbleCurve.Evaluate(_timer)*.07f,rumbleCurve.Evaluate(_timer)*2,1);
+            Game.i.aperture.Shake(rumbleCurve.Evaluate(_timer)*.07f,rumbleCurve.Evaluate(_timer)*1.5f,1);
             
             _timer += Time.deltaTime/1.5f;
             yield return null;

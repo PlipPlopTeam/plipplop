@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class Pause : MonoBehaviour
 {
@@ -30,6 +32,8 @@ public class Pause : MonoBehaviour
         paused = true;
         
         pauseMenu.SetActive(true);
+
+        FindObjectOfType<EventSystem>().SetSelectedGameObject(pauseMenu.GetComponentInChildren<Button>().gameObject);
     }
 
     void StopPause()
@@ -42,6 +46,7 @@ public class Pause : MonoBehaviour
 
     public void Quit()
     {
+        print("bisous");
         Application.Quit();
     }
 }

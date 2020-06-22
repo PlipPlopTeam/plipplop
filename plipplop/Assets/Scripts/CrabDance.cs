@@ -26,7 +26,7 @@ public class CrabDance : MonoBehaviour
             areDancing = true;
             StartCoroutine(DanceDelay());
             
-            SoundPlayer.PlayAtPosition("bgm_crab_rave", transform.position, .4f, false, true);
+            SoundPlayer.PlayAtPosition("bgm_crab_rave", transform.position, .2f, false, true);
         }
     }
 

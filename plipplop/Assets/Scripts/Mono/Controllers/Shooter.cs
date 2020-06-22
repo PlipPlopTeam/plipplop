@@ -87,6 +87,12 @@ public class Shooter : Controller
     {
         base.OnPossess();
         fov = defaultFOV;
+
+        InputDisplay _inputDisplay = FindObjectOfType<InputDisplay>();
+        if (_inputDisplay != null)
+        {
+            _inputDisplay.ShowShooterInputs();
+        }
     }
 
     public override void Move(float fb, float rl)

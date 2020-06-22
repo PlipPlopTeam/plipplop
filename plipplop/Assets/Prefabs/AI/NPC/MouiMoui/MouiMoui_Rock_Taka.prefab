@@ -420,6 +420,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!135 &5901917511067502565
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3739622901984146936}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.3066292
+  m_Center: {x: 0.06, y: -0.16, z: -0.05}
 --- !u!1 &3915009018228165983
 GameObject:
   m_ObjectHideFlags: 0
@@ -469,7 +482,7 @@ MonoBehaviour:
   talkRadius: 2
   staticCameraObjective: {fileID: 222195419}
   faceMesh: {fileID: 5258874759365940646}
-  stuntManHelmet: {fileID: -927199367670048503, guid: 72b798d9bf480204fa1e0cbd9c47e324,
+  stuntManHelmet: {fileID: 7641712679271167409, guid: ebad48895a108c844a01b31f46de37dc,
     type: 3}
 --- !u!1 &4666892639116232165
 GameObject:
@@ -1438,6 +1451,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3943170226359180636}
     m_Modifications:
+    - target: {fileID: -927199367670048503, guid: e3f909a1c82276f498af1d79827e31d0,
+        type: 3}
+      propertyPath: m_Name
+      value: SK_Taka
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: e3f909a1c82276f498af1d79827e31d0,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1493,11 +1511,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: e3f909a1c82276f498af1d79827e31d0,
-        type: 3}
-      propertyPath: m_Name
-      value: SK_Taka
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3f909a1c82276f498af1d79827e31d0, type: 3}
 --- !u!1 &7850070064005026622 stripped
@@ -1512,6 +1525,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 4666892639606500593}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &3739622901984146936 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: e3f909a1c82276f498af1d79827e31d0,
+    type: 3}
+  m_PrefabInstance: {fileID: 4666892639606500593}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5079962535175582347
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1519,6 +1538,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3943170226359180636}
     m_Modifications:
+    - target: {fileID: 3764740218143155799, guid: 0382fe6e8dc36184d8f162f57bd6c1ab,
+        type: 3}
+      propertyPath: m_Name
+      value: Snail
+      objectReference: {fileID: 0}
     - target: {fileID: 4645133016123921503, guid: 0382fe6e8dc36184d8f162f57bd6c1ab,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1573,11 +1597,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3764740218143155799, guid: 0382fe6e8dc36184d8f162f57bd6c1ab,
-        type: 3}
-      propertyPath: m_Name
-      value: Snail
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0382fe6e8dc36184d8f162f57bd6c1ab, type: 3}
