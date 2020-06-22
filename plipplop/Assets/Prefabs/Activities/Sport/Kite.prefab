@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7411207402727220484}
   - component: {fileID: 926692690632261237}
   - component: {fileID: 5687793558835474278}
+  - component: {fileID: 7428947960931012704}
   m_Layer: 0
   m_Name: Kite
   m_TagString: Untagged
@@ -256,6 +257,35 @@ MonoBehaviour:
   users: []
   spectators: []
   kite: {fileID: 4921190021556312007}
+--- !u!114 &7428947960931012704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3365267156215363654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a52f01500a9590a4d99cb5c7e61c9b57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoPossess: 0
+  beginCrouched: 1
+  canRetractLegs: 1
+  freezeUntilPossessed: 0
+  useGravity: 1
+  animateHead: 1
+  gravityMultiplier: 22.482555
+  customExternalRigidbody: {fileID: 0}
+  customCamera: {fileID: 0}
+  locomotion: {fileID: 0}
+  visuals: {fileID: 9057464093488484932}
+  face: {fileID: 0}
+  visualsOffset: {x: 0, y: 0, z: 0}
+  unpossessSpawnDistance: 1
+  legsRetractedAngularDrag: 0.1
+  angularForce: 2000
+  maxVelocityMagnitude: 1
 --- !u!1 &8824192381437080294
 GameObject:
   m_ObjectHideFlags: 0
@@ -294,6 +324,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 9057464093488484932}
     m_Modifications:
+    - target: {fileID: -927199367670048503, guid: 786d7ff30de2bc54497e6cdb35cdb052,
+        type: 3}
+      propertyPath: m_Name
+      value: KM_Kite01
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 786d7ff30de2bc54497e6cdb35cdb052,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -348,11 +383,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: 786d7ff30de2bc54497e6cdb35cdb052,
-        type: 3}
-      propertyPath: m_Name
-      value: KM_Kite01
       objectReference: {fileID: 0}
     - target: {fileID: -1504981713932161579, guid: 786d7ff30de2bc54497e6cdb35cdb052,
         type: 3}
