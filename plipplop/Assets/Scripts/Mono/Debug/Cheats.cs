@@ -32,6 +32,18 @@ public class Cheats : Dictionary<string, System.Action>
         Add("POSTPROCESS", PostProcess);
         Add("CHUT", SkipTutorial);
         Add("NOINPUTS", ToggleInputs);
+        Add("RESPAWN", Respawn);
+    }
+
+    public void Respawn()
+    {
+        var spawn = Object.FindObjectOfType<SpawnMarker>().transform;
+        var pos = spawn.position;
+        var rot = spawn.rotation;
+
+        Game.i.player.TeleportBaseControllerAndPossess();
+        Game.i.player.GetCurrentController().transform.position = pos;
+        Game.i.player.GetCurrentController().transform.rotation = rot;
     }
 
     public void SkipTutorial()

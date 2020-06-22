@@ -271,14 +271,23 @@ public class Locomotion : Walker
         Vector3 o = new Vector3(offset.x, GetCheckOffset(), offset.y);
         List <RaycastHit> result = new List<RaycastHit>();
 
-        Vector3 start = transform.position + o;
-        Vector3 direction = groundCheckDirection;
-        float distance = o.y + groundCheckRange * range;
+        try {
+            Vector3 start = transform.position + o;
+            Vector3 direction = groundCheckDirection;
+            float distance = o.y + groundCheckRange * range;
 
-        RaycastHit[] hits = Physics.RaycastAll(start, direction, distance);
-        Debug.DrawRay(start, direction);
+            RaycastHit[] hits = Physics.RaycastAll(start, direction, distance);
+            Debug.DrawRay(start, direction);
 
-        foreach (RaycastHit h in hits) result.Add(h);
+            foreach (RaycastHit h in hits) result.Add(h);
+        }
+        catch(System.Exception e) {
+            Debug.LogError("ERROR when raycasting to ground!");
+            Debug.LogError(e);
+            Debug.LogError("transform: " + transform);
+            Debug.LogError("checkdir: " + groundCheckDirection);
+            Debug.LogError("range: " + groundCheckRange);
+        }
 
         return result;
 	}
