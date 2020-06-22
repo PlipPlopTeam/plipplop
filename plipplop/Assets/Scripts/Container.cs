@@ -83,6 +83,7 @@ public class Container : MonoBehaviour
 	{
 		Free(item);
 		items.Remove(item);
+		item.gameObject.layer = 0;
 	}
 	public virtual void Remove(int index)
 	{
