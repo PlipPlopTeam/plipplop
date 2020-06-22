@@ -78,6 +78,16 @@ public class NonPlayableCharacter : MonoBehaviour
 
 	public void OnDisable()
 	{
+		HardReset();
+	}
+	public void OnEnable()
+	{
+		HardReset();
+	}
+
+	public void HardReset()
+	{
+		ResetAnimator();
 		if (activity != null)
 		{
 			activity.Exit(this);
@@ -89,6 +99,22 @@ public class NonPlayableCharacter : MonoBehaviour
 			chair = null;
 		}
 		feeder = null;
+	}
+
+
+	public void ResetAnimator()
+	{
+		animator.SetBool("Carrying", false);
+		animator.SetBool("Fishing", false);
+		animator.SetBool("Sitting", false);
+		animator.SetBool("Chairing", false);
+		animator.SetBool("Dancing", false);
+		animator.SetBool("Consuming", false);
+		animator.SetBool("Holding", false);
+		animator.SetBool("Scared", false);
+		animator.SetBool("Tanning", false);
+		animator.SetBool("Guitaring", false);
+		animator.SetBool("Crafting", false);
 	}
 
 	public void Set(NonPlayableCharacterSettings s)
