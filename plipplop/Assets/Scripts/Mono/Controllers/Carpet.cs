@@ -6,9 +6,6 @@ using UnityEngine;
 
 public class Carpet : Controller
 {
-    public SpringJoint spring;
-    public float maxExtension = 0.7f;
-    public float muscleSpeed = 1f;
     public float accelerationSpeed = 4f;
     public float cruiseForce = 40f;
     public float turnForce = 10000f;
@@ -67,8 +64,7 @@ public class Carpet : Controller
                     timeStarted = Time.time;
                 }
 
-                var muscle = Mathf.Abs(Mathf.Sin((timeStarted-Time.time)*muscleSpeed));
-                spring.minDistance = muscle * maxExtension;
+                var muscle = Mathf.Abs(Mathf.Sin((timeStarted-Time.time)));
 
                 // Actual movement
                 var y = transform.eulerAngles.y;
@@ -78,19 +74,16 @@ public class Carpet : Controller
                     transform.Rotate(Vector3.up * y);
                 }
 
-                var force = transform.forward * cruiseForce * (1f - muscle) * currentZAccumulator * Time.fixedDeltaTime;
-                rigidbody.AddForce(force,ForceMode.Acceleration);
+                var force = transform.forward * cruiseForce * currentZAccumulator * Time.fixedDeltaTime;
+                Debug.DrawLine(transform.position, force, Color.green, 0.5f);
+                rigidbodies[0].AddForce(force,ForceMode.Acceleration);
             }
             else {
                 timeStarted = 0f;
-                spring.minDistance = 0f;
             }
 
             // Rotation
-            rigidbody.AddTorque(transform.up * direction.x * (turnForce * (0.3f + currentZAccumulator)) * Time.fixedDeltaTime, ForceMode.Acceleration);
-        }
-        else {
-            spring.minDistance = 0f;
+            rigidbodies[0].AddTorque(transform.up * direction.x * (turnForce * (0.3f + currentZAccumulator)) * Time.fixedDeltaTime, ForceMode.Acceleration);
         }
     }
 
@@ -129,11 +122,4 @@ public class Carpet : Controller
         head.localPosition = visualsOffset;
     }
 
-#if UNITY_EDITOR
-    private void OnDrawGizmosSelected()
-    {
-        var style = new GUIStyle(GUI.skin.box);
-        Handles.Label(transform.position + Vector3.up*2f, spring.minDistance.ToString(), style);
-    }
-#endif
 }
